@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<anjuta>
+    <plugin name="Anjuta Editor" mandatory="no">
+        <require group="Anjuta Plugin"
+                 attribute="Location"
+                 value="anjuta-editor:EditorPlugin"/>
+    </plugin>
+</anjuta>

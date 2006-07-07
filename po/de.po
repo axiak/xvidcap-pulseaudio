@@ -1,0 +1,24 @@
+# German translation of gnome-xvidcap.
+# Copyright (C) 2006 Karl H. Beckers <karl.h.beckers@gmx.net>
+# This file is distributed under the same license as the gnome-xvidcap package.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xvidcap HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-03-02 20:46+0200\n"
+"PO-Revision-Date: 2006-03-02 20:55+0200\n"
+"Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+#"Plural-Forms: nplurals=2; plural=(n != 1);"
+
+
+# Main window title
+#: gnome-xvidcap.glade:8
+msgid "window1"
+msgstr "Fenster Eins"
+

@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<gtodo>
+  <category title="Personal" place="0">
+    <item>
+      <attribute id="1150970358" priority="1" done="0" start_date="732484" enddate="99999999" notify="0" endtime="-60" last_edited="1150970358"/>
+      <summary>implement ask-user for filename dialog</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1151175973" priority="1" done="0" start_date="732486" enddate="99999999" notify="0" endtime="-60" last_edited="1151175973"/>
+      <summary>autocontinue may need to start capture again in capture.c</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1151656082" priority="1" done="0" start_date="732492" enddate="99999999" notify="0" endtime="-60" last_edited="1151656082"/>
+      <summary>multi-frame codec drop down does not auto-select</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1151942516" priority="1" done="0" start_date="732495" enddate="99999999" notify="0" endtime="-60" last_edited="1151942516"/>
+      <summary>localize</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1148768972" priority="1" done="1" start_date="732459" completed_date="732495" enddate="99999999" notify="0" endtime="-60" last_edited="1151943227"/>
+      <summary>--fps 25 yields 25.08 ... strange</summary>
+      <comment>can no longer reproduce</comment>
+    </item>
+    <item>
+      <attribute id="1150971802" priority="1" done="1" start_date="732484" completed_date="732495" notify="0" last_edited="1151944212"/>
+      <summary>bail out if pthread not there</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1150981402" priority="1" done="1" start_date="732484" completed_date="732495" enddate="99999999" notify="0" endtime="-60" last_edited="1151944227"/>
+      <summary>add check for gthread</summary>
+      <comment>glib should be sufficient</comment>
+    </item>
+    <item>
+      <attribute id="1149363903" priority="1" done="1" start_date="732465" completed_date="732495" notify="0" last_edited="1151944951"/>
+      <summary>check for libice-dev</summary>
+      <comment>I think there is some autoconf macro to check for X11 dev environment</comment>
+    </item>
+    <item>
+      <attribute id="1151330077" priority="1" done="0" start_date="732488" enddate="99999999" notify="0" endtime="-60" last_edited="1151945094"/>
+      <summary>error msg when using mjpeg with swf</summary>
+      <comment>smth. wrong with pix_fmt selection ... should select yuvj420p
+
+gnome_ui.c do_record_thread(): woke up
+capture.c TCbCaptureX11(): pic_no=0 - state=6
+capture.c TCbCaptureX11(): we're recording
+capture.c TCbCaptureX11(): opening file for captured frame(s)
+capture.c TCbCaptureX11(): create data structure for image
+capture.c captureFrameCreatingImage(): Entering
+capture.c captureFrameCreatingImage(): going to fetch image next
+capture.c captureFrameCreatingImage(): Leaving
+xtoffmpeg.c XImageToFFMPEG(): Entering
+xtoffmpeg.c XImageToFFMPEG(): doing x2ffmpeg init for targetCodec 6
+rgb mask 0000ffff bit_depth 6 max_val 63
+red mask 0000f800 bit_depth 5 shift 11 max_val 31
+green mask 000007e0 bit_depth 6 shift 5 max_val 63
+blue mask 0000001f bit_depth 5 shift 0 max_val 31
+alpha mask 00000000 bit_depth 0 shift 0 max_val 0
+xtoffmpeg.c XImageToFFMPEG(): got color info
+xtoffmpeg.c XImageToFFMPEG(): alpha_mask: 0x00000000
+xtoffmpeg.c XImageToFFMPEG(): alpha_shift: 0
+xtoffmpeg.c XImageToFFMPEG(): red_shift: 11
+xtoffmpeg.c XImageToFFMPEG(): green_shift: 5
+xtoffmpeg.c XImageToFFMPEG(): blue_shift: 0
+xtoffmpeg.c XImageToFFMPEG(): image-&gt;byte_order: 0, msb=1, lsb=0
+xtoffmpeg.c guess_input_pix_fmt(): 16 bit RGB565
+xtoffmpeg.c XImageToFFMPEG(): found AVOutputFormat swf it expects a number in the filename (0=no/1=yes) 0
+xtoffmpeg.c XImageToFFMPEG(): found based on: target 10 - targetCodec 6 - ffmpeg codec id 8
+xtoffmpeg.c add_video_stream(): Entering
+xtoffmpeg.c add_video_stream(): pix_fmt_mask 15, has alpha 0, input_pixfmt 9, output pixfmt 2
+xtoffmpeg.c add_video_stream(): bitrate = 300000
+xtoffmpeg.c add_video_stream(): Leaving
+[mjpeg @ 0x8390ba8]colorspace not supported in jpeg
+xtoffmpeg.c XImageToFFMPEG(): could not open video codec
+</comment>
+    </item>
+    <item>
+      <attribute id="1151942501" priority="1" done="1" start_date="732495" completed_date="732495" notify="0" last_edited="1151959140"/>
+      <summary>fix pausing for audio capture</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1150132234" priority="1" done="1" start_date="732474" completed_date="732495" notify="0" last_edited="1151959461"/>
+      <summary>the warning dialog can be closed where it shouldn't</summary>
+      <comment>when cancel is greyed out, the titlebar still works</comment>
+    </item>
+    <item>
+      <attribute id="1143926491" priority="1" done="1" start_date="732402" completed_date="732495" notify="0" last_edited="1151963266"/>
+      <summary>error 16 is possible</summary>
+      <comment>e.g. when compiled without ffmpeg and specifying avi extension or just specifying an otherwise unkonw extension like "gmbl".</comment>
+    </item>
+    <item>
+      <attribute id="1151959190" priority="1" done="1" start_date="732495" completed_date="732499" notify="0" last_edited="1152284234"/>
+      <summary>check a/v sync</summary>
+      <comment>fractional pts handling has changed in recent ffmpeg
+Also, it seems pausing non-sync worse</comment>
+    </item>
+  </category>
+  <category title="Business" place="1"/>
+  <category title="Unfiled" place="2"/>
+</gtodo>
