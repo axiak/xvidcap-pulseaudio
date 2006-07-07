@@ -1,0 +1,154 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+#export DH_VERBOSE=1
+
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+CFLAGS = -Wall -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+
+configure: configure-stamp
+configure-stamp: patch-stamp
+	dh_testdir
+
+	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr \
+	--mandir=\$${prefix}/share/man --host=$(DEB_HOST_GNU_TYPE) \
+	--build=$(DEB_BUILD_GNU_TYPE)
+
+	touch configure-stamp
+
+build: build-stamp
+build-stamp: configure-stamp
+	dh_testdir
+
+	$(MAKE)
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+
+	[ ! -f Makefile ] || $(MAKE) distclean
+
+#	debian/rules unpatch
+
+#	dh_clean src/XVidcap.ad
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs -A usr/share/bug/xvidcap 
+#usr/share/bug/gvidcap
+#	dh_installdirs -pxvidcap etc/X11/app-defaults
+
+	$(MAKE) install prefix=$(CURDIR)/debian/xvidcap/usr
+
+#	dh_movefiles --sourcedir=debian/xvidcap
+
+	rm -rf debian/xvidcap/usr/share/doc/xvidcap_1.1.4
+
+#	cp src/XVidcap.ad debian/xvidcap/etc/X11/app-defaults/XVidcap
+	cp debian/bts debian/xvidcap/usr/share/bug/xvidcap/control
+#	cp debian/bts debian/gvidcap/usr/share/bug/gvidcap/control
+
+# Prune empty directories
+	find debian -type d | xargs rmdir -p --ignore-fail-on-non-empty
+
+# Build architecture-independent files here.
+binary-indep: build install
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs -A README TODO.tasks README AUTHORS
+	dh_installmenu
+	dh_installman
+	dh_installchangelogs ChangeLog
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol -- -v1.1.4pre3
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure patch unpatch
+
+DEB_BUILD_ARCH	?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+DPATCH_ARCH	:= ${DEB_BUILD_ARCH}
+#PATCHLIST_ALL	 = $(shell test -f debian/patches/00list && grep -v ^\# debian/patches/00list)
+#PATCHLIST_ARCH	 = $(shell test -f debian/patches/00list.${DPATCH_ARCH} && grep -v ^\# debian/patches/00list.${DPATCH_ARCH})
+#PATCHLIST	?= $(shell echo ${PATCHLIST_ALL} ${PATCHLIST_ARCH})
+
+UNPATCHLIST	 = $(shell echo ${PATCHLIST} | tr ' ' '\n' | tac)
+
+# Expand them right now
+#PATCHLIST	:= ${PATCHLIST}
+#UNPATCHLIST	:= ${UNPATCHLIST}
+
+patch: patch-stamp
+patch-stamp:
+	test -d debian/patched || install -d debian/patched
+	@echo "Patches applied in the Debian version of ${PACKAGE}:" > $@T
+	@for patch in ${PATCHLIST}; do \
+		patchdir=$${patch%/*}; \
+		test "x$$patchdir" = "x$$patch" || \
+			install -d debian/patched/$$patchdir; \
+		stamp=debian/patched/$${patch%%.dpatch}.dpatch; \
+		test -e debian/patches/$$patch || ext=.dpatch; \
+		patch=debian/patches/$$patch$$ext; \
+		author=`sed -n "s,^#* *.*dpatch by *,,p" $$patch`; \
+		test -x $$patch || chmod +x $$patch; \
+		if test -f $$stamp; then \
+			echo "$$patch already applied."; \
+			echo -e "\n$$patch ($$author):" >> $@T; \
+			sed -n 's/^#* *DP: */  /p' $$patch >> $@T; \
+		else \
+			echo -n "applying patch $$patch..."; \
+			if $$patch -patch >$$stamp.new 2>&1; then \
+				mv $$stamp.new $$stamp; \
+				touch $$stamp; \
+				echo -e "\n$$patch ($$author):" >> $@T; \
+				sed -n 's/^#* *DP: */  /p' $$patch >> $@T; \
+				echo " ok."; \
+			else \
+				echo " failed."; \
+				exit 1; \
+			fi; \
+		fi; \
+	done
+	mv -f $@T $@
+
+unpatch:
+	@for patch in ${UNPATCHLIST}; do \
+		stamp=debian/patched/$${patch%%.dpatch}.dpatch; \
+		test -e debian/patches/$$patch || ext=.dpatch; \
+		patch=debian/patches/$$patch$$ext; \
+		test -x $$patch || chmod +x $$patch; \
+		if test -f $$stamp; then \
+			echo -n "reverting patch $$patch..."; \
+			if $$patch -unpatch 2>&1 >/dev/null; then \
+				rm -f $$stamp; \
+				echo " ok."; \
+			else \
+				echo " failed."; \
+				exit 1; \
+			fi; \
+		fi; \
+	done
+	rm -rf patch-stamp patch-stampT debian/patched

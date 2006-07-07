@@ -159,8 +159,6 @@ extern pthread_cond_t recording_condition_unpaused;
 static AVCodec *au_codec;
 static AVCodecContext *au_c;
 static AVFormatContext *ic;
-// static char *audio_grab_format = "audio_device";
-static Boolean grab_audio = TRUE;
 static AVInputFormat *grab_iformat;
 static AVOutputStream *au_out_st;
 static AVInputStream *au_in_st;
@@ -176,19 +174,200 @@ static int tret;
 
 // functions ...
 
+static void
+add_audio_stream (Job* job) {
+    #define DEBUGFUNCTION "add_audio_stream()"
+    Boolean grab_audio = TRUE;
+    AVFormatParameters params, *ap = &params;   // audio stream params
+    int err, ret;
+
+    if ( ( job->flags & FLG_REC_SOUND ) && ( job->au_targetCodec > 0 ) ) {
+        if (!strcmp(job->snd_device, "-")) {
+            job->snd_device = "pipe:";
+            grab_audio = FALSE;
+        } else {
+            grab_audio = TRUE;
+        }
+
+        // prepare input stream
+        memset(ap, 0, sizeof(*ap));
+        ap->device = job->snd_device;
+
+        if (grab_audio) {
+            ap->sample_rate = job->snd_rate;
+            ap->channels = job->snd_channels;
+
+            grab_iformat = av_find_input_format("audio_device");
+            if (av_open_input_file(&ic, "", grab_iformat, 0, ap) < 0) {
+                fprintf(stderr,
+                        "%s %s:Could not find audio grab device %s\n",
+                        DEBUGFILE, DEBUGFUNCTION, job->snd_device);
+                exit(1);
+            }
+        } else {
+            grab_iformat = av_find_input_format("mp3");
+            // FIXME: allow other file formats
+            err = av_open_input_file(&ic, ap->device, grab_iformat, 0, ap);
+            if (err < 0) {
+                fprintf(stderr, "%s %s: error opening input file %s: %i\n",
+                            DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
+                exit(1);
+            }
+        }
+        au_in_st = av_mallocz(sizeof(AVInputStream));
+        if (!au_in_st) {
+            fprintf(stderr,
+                    "%s %s: Could not alloc input stream ... aborting\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+        au_in_st->st = ic->streams[0];
+
+        // If not enough info to get the stream parameters, we decode
+        // the first frames to get it. (used in mpeg case for example) 
+        ret = av_find_stream_info(ic);
+        if (ret < 0) {
+            fprintf(stderr, "%s %s: %s: could not find codec parameters\n",
+                        DEBUGFILE, DEBUGFUNCTION, job->snd_device);
+            exit(1);
+        }
+        // init pts stuff
+        au_in_st->next_pts = 0;
+        au_in_st->is_start = 1;
+
+#ifdef DEBUG
+            dump_format(ic, 0, job->snd_device, 0);
+#endif // DEBUG
+
+        // OUTPUT
+        // setup output codec
+        au_c = avcodec_alloc_context();
+
+        // put sample parameters 
+        au_c->codec_id = tAuCodecs[job->au_targetCodec].ffmpeg_id;
+        au_c->codec_type = CODEC_TYPE_AUDIO;
+        au_c->bit_rate = job->snd_smplsize;
+        au_c->sample_rate = job->snd_rate;
+        au_c->channels = job->snd_channels;
+        // au_c->debug = 0x00000FFF;
+
+        // prepare output stream 
+        au_out_st = av_mallocz(sizeof(AVOutputStream));
+        if (!au_out_st) {
+            fprintf(stderr,
+                    "%s %s: Could not alloc stream ... aborting\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+        au_out_st->st = av_new_stream(output_file, 1);
+        if (!au_out_st->st) {
+            fprintf(stderr, "%s %s: Could not alloc stream\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+        au_out_st->st->codec = au_c;
+
+        if (fifo_init(&au_out_st->fifo, 2 * MAX_AUDIO_PACKET_SIZE)) {
+            fprintf(stderr,
+                    "%s %s: Can't initialize fifo for audio recording\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+        // This bit is important for inputs other than self-sampled.
+        // The sample rates and no of channels a user asks for
+        // are the ones he/she wants in the encoded mpeg. For self-
+        // sampled audio, these are also the values used for sampling.
+        // Hence there is no resampling necessary (case 1).
+        // When dubbing from a pipe or a different
+        // file, we might have different sample rates or no of
+        // channels
+        // in the input file.....
+        if (au_c->channels == au_in_st->st->codec->channels &&
+                    au_c->sample_rate == au_in_st->st->codec->sample_rate) {
+            au_out_st->audio_resample = 0;
+        } else {
+            if (au_c->channels != au_in_st->st->codec->channels &&
+                        au_in_st->st->codec->codec_id == CODEC_ID_AC3) {
+                // Special case for 5:1 AC3 input 
+                // and mono or stereo output 
+                // Request specific number of channels 
+                au_in_st->st->codec->channels = au_c->channels;
+                if (au_c->sample_rate ==
+                            au_in_st->st->codec->sample_rate)
+                    au_out_st->audio_resample = 0;
+                else {
+                    au_out_st->audio_resample = 1;
+                    au_out_st->resample =
+                        audio_resample_init(au_c->channels,
+                                                au_in_st->st->codec->
+                                                channels,
+                                                au_c->sample_rate,
+                                                au_in_st->st->codec->
+                                                sample_rate);
+                    if (!au_out_st->resample) {
+                        printf("%s %s: Can't resample. Aborting.\n",
+                                DEBUGFILE, DEBUGFUNCTION);
+                        exit(1);
+                    }
+                }
+                // Request specific number of channels 
+                au_in_st->st->codec->channels = au_c->channels;
+            } else {
+                au_out_st->audio_resample = 1;
+                au_out_st->resample =
+                    audio_resample_init(au_c->channels,
+                                            au_in_st->st->codec->channels,
+                                            au_c->sample_rate,
+                                            au_in_st->st->codec->
+                                            sample_rate);
+                if (!au_out_st->resample) {
+                    printf("%s %s: Can't resample. Aborting.\n", DEBUGFILE,
+                            DEBUGFUNCTION);
+                    exit(1);
+                }
+            }
+        }
+        au_in_st->decoding_needed = 1;
+        au_out_st->encoding_needed = 1;
+
+        // open encoder
+        au_codec =
+                avcodec_find_encoder(au_out_st->st->codec->codec_id);
+        if (avcodec_open(au_out_st->st->codec, au_codec) < 0) {
+            fprintf(stderr,
+                    "%s %s: Error while opening codec for output stream\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+        // open decoder
+        au_codec =
+                avcodec_find_decoder(ic->streams[0]->codec->codec_id);
+        if (!au_codec) {
+            fprintf(stderr,
+                    "%s %s: Unsupported codec (id=%d) for input stream\n",
+                    DEBUGFILE, DEBUGFUNCTION, ic->streams[0]->codec->codec_id);
+            exit(1);
+        }
+        if (avcodec_open(ic->streams[0]->codec, au_codec) < 0) {
+            fprintf(stderr,
+                    "%s %s: Error while opening codec for input stream\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+    }
+    #undef DEBUGFUNCTION
+}
+
 
 static void
 do_audio_out(AVFormatContext * s, AVOutputStream * ost,
              AVInputStream * ist, unsigned char *buf, int size)
 {
-#define FFMAX(a,b) ((a) > (b) ? (a) : (b))
-
+    #define DEBUGFUNCTION "do_audio_out()"
     uint8_t *buftmp;
     const int audio_out_size = 4 * MAX_AUDIO_PACKET_SIZE;
     int size_out, frame_bytes;
     AVCodecContext *enc;
-
-        double sync_ipts = (double)(au_in_st->pts /*+ input_files_ts_offset[ist->file_index] - start_time*/)/AV_TIME_BASE;
 
     // SC: dynamic allocation of buffers
     if (!audio_buf)
@@ -199,62 +378,6 @@ do_audio_out(AVFormatContext * s, AVOutputStream * ost,
         return;                 // Should signal an error !
 
     enc = ost->st->codec;
-
-
-/*
-    if( TRUE ){
-
-        double delta = sync_ipts * enc->sample_rate - ost->sync_opts
-                - fifo_size(&ost->fifo, ost->fifo.rptr)/(ost->st->codec->channels * 2);
-        double idelta= delta*au_in_st->st->codec->sample_rate / enc->sample_rate;
-        int byte_delta= ((int)idelta)*2*au_in_st->st->codec->channels;
-
-        //FIXME resample delay
-        if(fabs(delta) > 50){
-            if(ist->is_start){
-            printf("ist is start %i -- byte delta %i\n", ist->is_start, byte_delta);
-                if(byte_delta < 0){
-                    byte_delta= FFMAX(byte_delta, -size);
-                    size += byte_delta;
-                    buf  -= byte_delta;
-//                    if(verbose > 2)
-                        fprintf(stderr, "discarding %d audio samples\n", (int)-delta);
-                    if(!size)
-                        return;
-                    ist->is_start=0;
-                }else{
-                    static uint8_t *input_tmp= NULL;
-                    input_tmp= av_realloc(input_tmp, byte_delta + size);
-
-                    if(byte_delta + size <= MAX_AUDIO_PACKET_SIZE)
-                        ist->is_start=0;
-                    else
-                        byte_delta= MAX_AUDIO_PACKET_SIZE - size;
-
-                    memset(input_tmp, 0, byte_delta);
-                    memcpy(input_tmp + byte_delta, buf, size);
-                    buf= input_tmp;
-                    size += byte_delta;
-//                    if(verbose > 2)
-                        fprintf(stderr, "adding %d audio samples of silence\n", (int)delta);
-                }
-            }else if(FALSE){
-//                int comp= clip(delta, -audio_sync_method, audio_sync_method);
-//                assert(ost->audio_resample);
-//                if(verbose > 2)
-//                    fprintf(stderr, "compensating audio timestamp drift:%f compensation:%d in:%d\n", delta, comp, enc->sample_rate);
-//                fprintf(stderr, "drift:%f len:%d opts:%lld ipts:%lld fifo:%d\n", delta, -1, ost->sync_opts, (int64_t)(get_sync_ipts(ost) * enc->sample_rate), fifo_size(&ost->fifo, ost->fifo.rptr)/(ost->st->codec->channels * 2));
-//                av_resample_compensate(*(struct AVResampleContext**)ost->resample, comp, enc->sample_rate);
-            }
-        }
-    }else
-        ost->sync_opts= lrintf(sync_ipts * enc->sample_rate) - fifo_size(&ost->fifo, ost->fifo.rptr)/(ost->st->codec->channels * 2); //FIXME wrong
-*/
-
-
-
-
-
 
     // resampling is only used for pipe input here
     if (ost->audio_resample) {
@@ -297,23 +420,26 @@ do_audio_out(AVFormatContext * s, AVOutputStream * ost,
             if (pthread_mutex_trylock(&mp) == 0) {
                 // write the compressed frame in the media file 
                 if( av_interleaved_write_frame(s, &pkt) != 0) {
-//                if (av_write_frame(s, &pkt) != 0) {
-                    fprintf(stderr, "Error while writing audio frame\n");
+                    fprintf(stderr, "%s %s: Error while writing audio frame\n",
+                            DEBUGFILE, DEBUGFUNCTION);
                     exit(1);
                 }
 
                 if (pthread_mutex_unlock(&mp) > 0) {
                     fprintf(stderr,
-                            "Couldn't unlock mutex lock for writing audio frame\n");
+                            "%s %s: Couldn't unlock mutex lock for writing audio frame\n",
+                            DEBUGFILE, DEBUGFUNCTION);
                 }
             }
         }
     }
+    #undef DEBUGFUNCTION
 }
 
 
 void cleanup_thread_when_stopped()
 {
+    #define DEBUGFUNCTION "cleanup_thread_when_stopped()"
     int retval = 0;
 
     if (audio_out) av_free(audio_out);
@@ -321,11 +447,13 @@ void cleanup_thread_when_stopped()
 
     av_close_input_file(ic);
     pthread_exit(&retval);
+    #undef DEBUGFUNCTION
 }
 
 
 void capture_audio_thread(Job * job)
 {
+    #define DEBUGFUNCTION "capture_audio_thread()"
     unsigned long start, stop, start_s, stop_s;
     struct timeval thr_curr_time;
     long sleep;
@@ -364,30 +492,19 @@ void capture_audio_thread(Job * job)
             // sometimes we need to pause writing audio packets for a/v
             // sync (when audio_pts >= video_pts)
             // now, if we're reading from a file/pipe, we stop sampling or 
-            // 
             // else the audio track in the
             // video would become choppy (packets missing where they were
             // read but not written)
-            // (this workaround, of course, make piped input not really
-            // sync ... 1 min audio and 1 min
-            // video will not necessarily end at the same time ... but for 
-            // 
-            // most cases this is the lesser evil)
             // for real-time sampling we can't do that because otherwise
             // the input packets queue up
             // and will eventually be sampled (only later) and lead to
             // out-of-sync audio (video faster)
-            if (strcmp(job->snd_device, "pipe:") == 0
-                || audio_pts < video_pts) {
+            if (audio_pts < video_pts) {
                 // read a packet from it and output it in the fifo 
                 if (av_read_packet(ic, &pkt) < 0) {
-                    fprintf(stderr, "error reading audio packet\n");
+                    fprintf(stderr, "%s %s: error reading audio packet\n",
+                            DEBUGFILE, DEBUGFUNCTION);
                 }
-                /* 
-                 * else { printf ("input stream #%d, size=%d:\n",
-                 * pkt.stream_index, pkt.size); av_hex_dump(pkt.data,
-                 * pkt.size); } 
-                 */
                 len = pkt.size;
                 ptr = pkt.data;
                 while (len > 0) {
@@ -406,44 +523,30 @@ void capture_audio_thread(Job * job)
                                                  len);
                         if (retval < 0) {
                             fprintf(stderr,
-                                    "couldn't decode captured audio packet\n");
+                                    "%s %s: couldn't decode captured audio packet\n",
+                                    DEBUGFILE, DEBUGFUNCTION);
                             break;
                         }
-                        /* 
-                         * Some bug in mpeg audio decoder gives 
-                         */
-                        /* 
-                         * data_size < 0, it seems they are overflows 
-                         */
+                        // Some bug in mpeg audio decoder gives 
+                        // data_size < 0, it seems they are overflows 
                         if (data_size <= 0) {
-                            /* 
-                             * no audio frame 
-                             */
-                            fprintf (stderr, "no audio frame\n");
+                            // no audio frame 
+                            fprintf (stderr, "%s %s: no audio frame\n", DEBUGFILE,
+                                    DEBUGFUNCTION);
                             ptr += retval;
                             len -= retval;
                             continue;
                         }
                         data_buf = (uint8_t *) samples;
-                        // fractional pts handling for exact a/v sync
-/*                        av_frac_add(&(au_in_st->next_pts),
-                                    au_in_st->st->time_base.den *
-                                    data_size / (2 *
-                                                 au_in_st->st->codec->
-                                                 channels)); */
-                        // printf("setting pts fraction: %f\n",
-                        // (au_in_st->st->time_base.den * data_size / (2 * 
-                        // 
-                        // au_in_st->st->codec.channels))); 
                         au_in_st->next_pts += ((int64_t)AV_TIME_BASE/2 * data_size) /
                                 (au_in_st->st->codec->sample_rate * au_in_st->st->codec->channels);
                     } else {
+                        // FIXME: dunno about the following
                         au_in_st->next_pts += ((int64_t)AV_TIME_BASE/2 * data_size) /
                                 (au_in_st->st->codec->sample_rate * au_in_st->st->codec->channels);
                     }
                     ptr += retval;
                     len -= retval;
-//                    au_in_st->frame_decoded = 1;
 
                     do_audio_out(output_file, au_out_st, au_in_st,
                                  data_buf, data_size);
@@ -452,12 +555,13 @@ void capture_audio_thread(Job * job)
                 av_free_packet(&pkt);
             }                   // end outside if pts ...
             else {
-                if (av_read_packet(ic, &pkt) < 0) {
-                    fprintf(stderr, "error reading audio packet\n");
-                }
+                if ( strcmp(job->snd_device, "pipe:") < 0 )
+                    if (av_read_packet(ic, &pkt) < 0) {
+                        fprintf(stderr, "error reading audio packet\n");
+                    }
 #ifdef DEBUG
-                printf("xtoffmpeg: dropping audio frame %f %f\n",
-                        audio_pts, video_pts);
+                    printf("%s %s: dropping audio frame %f %f\n",
+                            DEBUGFILE, DEBUGFUNCTION, audio_pts, video_pts);
 #endif // DEBUG
             }
         }                       // end if VC_REC
@@ -469,11 +573,9 @@ void capture_audio_thread(Job * job)
         sleep = (1000000 / job->snd_rate) - (stop - start);
         // FIXME: perhaps this whole stuff is irrelevant. Haven't really
         // seen a situation
-        // FIXME: where the encoding was faster than the time needed for a 
-        // 
+        // where the encoding was faster than the time needed for a 
         // decent frame-rate
-        // FIXME: need to look into more details about audio/video sync in 
-        // 
+        // need to look into more details about audio/video sync in 
         // libavcodec/-format
         // the strange thing, however is: If I leave away the getting of
         // start/end time and
@@ -482,15 +584,11 @@ void capture_audio_thread(Job * job)
         if (sleep < 0)
             sleep = 0;
 
-        // printf ("starts %li start %li - stops %li stop %li\n", start_s, 
-        // 
-        // start, stop_s, stop);
-        // printf ("sleep %i microsecs .. frame took %i microsecs\n",
-        // sleep, (stop - start));
         usleep(sleep);
     }                           // end while(TRUE) loop
     retval = 1;
     pthread_exit(&retval);
+    #undef DEBUGFUNCTION
 }
 
 #endif                          // HAVE_FFMPEG_AUDIO
@@ -524,12 +622,7 @@ do_video_out(AVFormatContext * s, AVStream * ost,
     pkt.data = buf;
     pkt.size = size;
 
-//        pkt.pts = enc->coded_frame->pts;
-//        pkt.pts = av_rescale_q(enc->coded_frame->pts, 
-//                    enc->time_base, ost->time_base);
-
     if( av_interleaved_write_frame(s, &pkt) != 0) {
-//    if (av_write_frame(s, &pkt) != 0) {
         fprintf(stderr, "%s %s: Error while writing video frame\n",
                     DEBUGFILE, DEBUGFUNCTION);
         exit(1);
@@ -743,8 +836,11 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     st->codec->gop_size = 50;
 
     // FIXME: use avcodec_find_best_pix_fmt
-    for ( i = 0; codec->pix_fmts[i] != -1; i++ ) 
-        pix_fmt_mask |= codec->pix_fmts[i];
+    if ( &(codec->pix_fmts) != NULL ) {
+        for ( i = 0; codec->pix_fmts[i] != -1; i++ ) {
+            pix_fmt_mask |= (1 << codec->pix_fmts[i]);
+        }
+    }
     
     st->codec->pix_fmt = avcodec_find_best_pix_fmt(pix_fmt_mask, input_pixfmt,
             (input_pixfmt == PIX_FMT_ARGB32 ? 1 : 0), NULL);
@@ -801,6 +897,9 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
 
     #undef DEBUGFUNCTION
 }
+
+
+
 
 
 int guess_input_pix_fmt (XImage *image, ColorInfo *c_info) {
@@ -904,8 +1003,6 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 {
     #define DEBUGFUNCTION "XImageToFFMPEG()"
 
-//    AVFormatParameters fParams, *p_fParams = &fParams;  // video stream params
-    AVFormatParameters params, *ap = &params;   // audio stream params
     AVImageFormat *image_format = NULL;
     int err, ret;
 
@@ -1032,265 +1129,25 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         }
 
 #ifdef HAVE_FFMPEG_AUDIO
-//        printf("au_targetCodec = %i ... %i\n", job->au_targetCodec,
-//                (job->flags & FLG_REC_SOUND));
-        if ( ( job->flags & FLG_REC_SOUND ) && ( job->au_targetCodec > 0 ) ) {
-//            printf("in audio\n");
-            if (!strcmp(job->snd_device, "-")) {
-                job->snd_device = "pipe:";
-                grab_audio = FALSE;
-            } else {
-                grab_audio = TRUE;
-            }
-
-            // prepare input stream
-            // ----------------------------------------------------------------------------
-            memset(ap, 0, sizeof(*ap));
-            ap->device = job->snd_device;
-
-            if (grab_audio) {
-                ap->sample_rate = job->snd_rate;
-                ap->channels = job->snd_channels;
-
-                grab_iformat = av_find_input_format("audio_device");
-                // printf ("pointer to grab_iformat %p\n", grab_iformat);
-                // if (grab_iformat) printf ("input format %s , %s\n",
-                // grab_iformat->name, grab_iformat->long_name );
-                if (av_open_input_file(&ic, "", grab_iformat, 0, ap) < 0) {
-                    fprintf(stderr,
-                            "Could not find audio grab device %s\n",
-                            job->snd_device);
-                    exit(1);
-                }
-            } else {
-                /* 
-                 * ap->sample_rate = job->snd_rate; ap->channels =
-                 * job->snd_channels; ap->frame_rate = 25;
-                 * ap->frame_rate_base = 1; 
-                 */
-                /* 
-                 * open the input file with generic libav function 
-                 */
-                // err = av_open_input_file (&ic, job->snd_device,
-                // grab_iformat, 0, ap);
-
-                grab_iformat = av_find_input_format("mp3");
-                // FIXME: allow other file formats
-                printf("pointer to grab_iformat %p\n", grab_iformat);
-                if (grab_iformat)
-                    printf("input format %s , %s\n", grab_iformat->name,
-                           grab_iformat->long_name);
-
-                // err = av_open_input_file (&ic, job->snd_device,
-                // grab_iformat, 0, ap);
-                err =
-                    av_open_input_file(&ic, ap->device, grab_iformat, 0,
-                                       ap);
-                if (err < 0) {
-                    fprintf(stderr, "error opening input file %s: %i\n",
-                            job->snd_device, err);
-                    exit(1);
-                }
-            }
-            au_in_st = av_mallocz(sizeof(AVInputStream));
-            if (!au_in_st) {
-                fprintf(stderr,
-                        "audio.start_audio.recording(): Could not alloc input stream ... aborting\n");
-                exit(1);
-            }
-            au_in_st->st = ic->streams[0];
-
-            /* 
-             * If not enough info to get the stream parameters, we decode
-             * the first frames to get it. (used in mpeg case for example) 
-             */
-            ret = av_find_stream_info(ic);
-            if (ret < 0) {
-                fprintf(stderr, "%s: could not find codec parameters\n",
-                        job->snd_device);
-                exit(1);
-            }
-            // init pts stuff
-            au_in_st->next_pts = 0;
-            au_in_st->is_start = 1;
-/*            av_frac_init(&au_in_st->next_pts,
-                         0, 0,
-                         (uint64_t) au_in_st->st->time_base.num *
-                         au_in_st->st->codec->sample_rate);
-*/
-            /* 
-             * dump the file content 
-             */
-#ifdef DEBUG
-            dump_format(ic, 0, job->snd_device, 0);
-#endif // DEBUG
-
-            // OUTPUT
-            // setup output codec
-            // ------------------------------------------------------------
-            /* 
-             * prepare codec 
-             */
-            au_c = avcodec_alloc_context();
-            /* 
-             * put sample parameters 
-             */
-            // printf("job->au_targetCodec: %i ... ffmpeg_id: %i\n",
-            // job->au_targetCodec,
-            // tAuCodecs[job->au_targetCodec].ffmpeg_id);
-            au_c->codec_id = tAuCodecs[job->au_targetCodec].ffmpeg_id;
-            au_c->codec_type = CODEC_TYPE_AUDIO;
-            au_c->bit_rate = job->snd_smplsize;
-            au_c->sample_rate = job->snd_rate;
-            au_c->channels = job->snd_channels;
-            // au_c->debug = 0x00000FFF;
-
-            /* 
-             * prepare output stream 
-             */
-            au_out_st = av_mallocz(sizeof(AVOutputStream));
-            if (!au_out_st) {
-                fprintf(stderr,
-                        "audio.start_audio.recording(): Could not alloc stream ... aborting\n");
-                exit(1);
-            }
-            au_out_st->st = av_new_stream(output_file, 1);
-            if (!au_out_st->st) {
-                fprintf(stderr, "Could not alloc stream\n");
-                exit(1);
-            }
-            au_out_st->st->codec = au_c;
-
-            if (fifo_init(&au_out_st->fifo, 2 * MAX_AUDIO_PACKET_SIZE)) {
-                fprintf(stderr,
-                        "Can't initialize fifo for audio recording\n");
-                exit(1);
-            }
-            // This bit is important for inputs other than self-sampled.
-            // The sample rates and no of channels a user asks for
-            // are the ones he/she wants in the encoded mpeg. For self-
-            // sampled audio, these are also the values used for sampling.
-            // Hence there is no resampling necessary (case 1).
-            // Once we get support for dubbing from a pipe or a different
-            // file, we might have different sample rates or no of
-            // channels
-            // in the input file.....
-            if (au_c->channels == au_in_st->st->codec->channels &&
-                au_c->sample_rate == au_in_st->st->codec->sample_rate) {
-                au_out_st->audio_resample = 0;
-            } else {
-                if (au_c->channels != au_in_st->st->codec->channels &&
-                    au_in_st->st->codec->codec_id == CODEC_ID_AC3) {
-                    /* 
-                     * Special case for 5:1 AC3 input 
-                     */
-                    /* 
-                     * and mono or stereo output 
-                     */
-                    /* 
-                     * Request specific number of channels 
-                     */
-                    au_in_st->st->codec->channels = au_c->channels;
-                    if (au_c->sample_rate ==
-                        au_in_st->st->codec->sample_rate)
-                        au_out_st->audio_resample = 0;
-                    else {
-                        au_out_st->audio_resample = 1;
-                        au_out_st->resample =
-                            audio_resample_init(au_c->channels,
-                                                au_in_st->st->codec->
-                                                channels,
-                                                au_c->sample_rate,
-                                                au_in_st->st->codec->
-                                                sample_rate);
-                        if (!au_out_st->resample) {
-                            printf("Can't resample. Aborting.\n");
-                            exit(1);
-                            // av_abort ();
-                        }
-                    }
-                    /* 
-                     * Request specific number of channels 
-                     */
-                    au_in_st->st->codec->channels = au_c->channels;
-                } else {
-                    au_out_st->audio_resample = 1;
-                    au_out_st->resample =
-                        audio_resample_init(au_c->channels,
-                                            au_in_st->st->codec->channels,
-                                            au_c->sample_rate,
-                                            au_in_st->st->codec->
-                                            sample_rate);
-                    if (!au_out_st->resample) {
-                        printf("Can't resample. Aborting.\n");
-                        exit(1);
-                        // av_abort ();
-                    }
-                }
-            }
-            au_in_st->decoding_needed = 1;
-            au_out_st->encoding_needed = 1;
-
-            // open encoder
-            au_codec =
-                avcodec_find_encoder(au_out_st->st->codec->codec_id);
-            // printf("au_codec pointer: %p ... %i\n", au_codec,
-            // au_out_st->st->codec->codec_id);
-            if (avcodec_open(au_out_st->st->codec, au_codec) < 0) {
-                fprintf(stderr,
-                        "Error while opening codec for output stream\n");
-                exit(1);
-            }
-            // open decoder
-            au_codec =
-                avcodec_find_decoder(ic->streams[0]->codec->codec_id);
-            if (!au_codec) {
-                fprintf(stderr,
-                        "Unsupported codec (id=%d) for input stream\n",
-                        ic->streams[0]->codec->codec_id);
-                exit(1);
-            }
-            if (avcodec_open(ic->streams[0]->codec, au_codec) < 0) {
-                fprintf(stderr,
-                        "Error while opening codec for input stream\n");
-                exit(1);
-            }
+        add_audio_stream(job);
 
 #ifdef DEBUG
-            dump_format(output_file, 0, output_file->filename, 1);
+        dump_format(output_file, 0, output_file->filename, 1);
 #endif // DEBUG
 
-            /* 
-             * initialize a mutex lock to its default value 
-             */
-            ret = pthread_mutex_init(&mp, NULL);
+        // initialize a mutex lock to its default value 
+        ret = pthread_mutex_init(&mp, NULL);
 
-            /* 
-             * create and start capture thread 
-             */
-            /* 
-             * initialized with default attributes 
-             */
-            tret = pthread_attr_init(&tattr);
+        // create and start capture thread 
+        // initialized with default attributes 
+        tret = pthread_attr_init(&tattr);
 
-            /* 
-             * call an appropriate functions to alter a default value 
-             */
-            // tret = pthread_attr_setdetachstate(&tattr,
-            // PTHREAD_CREATE_DETACHED);
-
-            /* 
-             * create the thread 
-             */
-            tret =
-                pthread_create(&tid, &tattr, (void *) capture_audio_thread,
+        // create the thread 
+        tret =
+            pthread_create(&tid, &tattr, (void *) capture_audio_thread,
                                job);
-        }                       // end if flags & FLG_REC_SOUND
 
 #endif                          // HAVE_FFMPEG_AUDIO
-
-
-
 
         /* 
          * prepare pictures 

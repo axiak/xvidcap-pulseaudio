@@ -1,0 +1,435 @@
+.\" (c) Rasca, Berlin 1997-98 & in parts Karl H. Beckers 2003-04
+.\" Published under the GNU GPL V2
+.TH XVIDCAP 1 "January 2004" "GNU" "Version 1.1.3"
+.SH NAME
+video capturing program for X windows
+.SH SYNOPSIS
+.BI "xvidcap|gvidcap [-v] [--fps "<FPS> "] [--time "<seconds> "] [--frames "<frames> "]
+.BI "[--continue [yes|no]] [--cap_geometry "<WxH+X+Y> "] [--start_no "<start_number> "]
+.BI "[--compress "<level> "] [--use_clone] [--expand_to_24bit] [--quality "<quality> "]
+.BI "[--source "<x11|shm|v4l> "] [--file "<file> "] [--gui [yes|no]] [--audio [yes|no]]
+.BI "[--audio_in "<device|-> "] [--audio_bits "<bit_rate> "] 
+.BI "[--audio_rate "<sample_rate> "] [--audio_channels "<channels> "]
+
+.SH INTRODUCTION
+
+xvidcap is a tool that captures movement on a selected area of an X11
+screen to files. These files may be a number of individual image files 
+(one for each frame captured) or video files encoded on-the-fly through
+FFMPEG's libavcodec. You select between the two alternatives by specifying
+a corresponding output filename, ref. "--file" in the OPTIONS paragraph.
+On-the-fly encoding will also allow you to record audio along with the
+video. Recording to individual frames may be more convenient if you wish
+to preprocess the images before encoding, or if you need other video 
+codecs xvidcap does not support. Individual images can later be encoded 
+with tools like ffmpeg, mencoder, or transcode.
+
+Please note that FFMPEG follows it's own license, see: http://www.ffmpeg.org
+
+The utility comes with two alternative GUIs: An Xt-based front-end (xvidcap) 
+and a GTK2-based one (gvidcap). gvidcap is maintained somewhat better, esp.
+in terms of user-friendliness. However, xvidcap should always provide the
+same basic functionality. Keep in mind that GUI layouts and behaviours will
+differ.
+
+The colormap which the program uses depends on the way you select an area 
+to capture (see GUI CONTROLS). The default colormap is the colormap of the 
+root window. If you select a window or just parts of a window with the 
+select button the colormap of this window is used. Not all bit depths 
+and visuals are supported, which means you might not get the correct colors.
+
+For help, RFEs, or bug-reports please turn to
+http://www.sourceforge.net/projects/xvidcap/ .
+
+.SH OPTIONS
+
+.BI -v
+.br
+Runs xvidcap in verbose mode. This will provide more information about
+user settings, input and output codecs, performance and so forth. Messages
+like 'missing XX milli secs ..' while capturing mean you are missing 
+frames due to lack of ressources (dropped frames). This results in a video 
+that will play back too quickly. Note though, that verbose mode slows down 
+xvidcap and may actually be causing frame drops. Try running without 
+verbose mode and watch the "frame drop monitor" in gvidcap, ref. GUI CONTROLS
+below.
+
+.BI --fps " <fps> "
+.br
+Specifies the number of frames to be captured per second. This parameter 
+accepts floating point values, which allows for very low capture rates like
+e.g. '--fps 0.5' to record one frame every 2 seconds. Note that at the moment 
+xvidcap does not force valid frame rates for the given output format, hence 
+your playback timing may be messed up if you don't select valid frame rates.
+For MPEG1 valid frame rates are: 23.976 24 25 29.97 30 50 59.94 60.
+MPEG4 can use frame rates from 7.5 to 30.
+
+.BI --time " <seconds> "
+.br
+Specifies the maximum time to capture, if 0 xvidcap will capture until 
+stopped interactively. For any other value any recording session will
+stop automatically after the specified number of seconds. This parameter 
+conflicts with '--frames' (see below). If both are given on the command line, 
+the one given last beats the first. The program accepts floating point values, 
+e.g. '2.5'.
+
+.BI --frames " <number of frames> "
+.br
+Stops capturing after the specified number of frames are captured. If zero
+xvidcap will capture until stopped interactively, ref. '--time' above.
+
+.BI --continue " [yes|no] "
+.br
+When on-the-fly encoding is selected, maximum recording time or frames are
+specified, and the output filename is incrementable (see '--file' below),
+xvidcap can automatically continue to capture to a new file when one 
+exceeds the maximum recording time or number of frames. This will change
+the behaviour of '--time' and '--frames' because recording will not stop
+at the specified limits, but rather start a new video file. Again, this
+is disabled for capturing to individual files. If no argument to '--continue'
+is given, xvidcap assumes 'yes'.
+
+.BI --cap_geometry " <WIDTHxHEIGHT+XPOSITION+YPOSITION> "
+.br
+Override the default width and height of the capture frame. Use the 'Select'
+button to adjust the frame size to an given window. The minimum size is 20 x 20.
+
+.BI --start_no " <start_number> "
+.br
+Defines the start point which should be used for numbering files. The default 
+value is '0'.This parameter is used for capturing individual frames only.
+The numbering of movie files atm. always starts at zero.
+
+.BI --compress " <compression level> "
+.br
+Define the compression level used for storing individual frames. This is
+used as the level of native compression with image formats that support it 
+(PNG). Image formats that do not support native compression will be compressed
+using zlib, if the specified compression level is higher than zero. In this
+case a suffix of '.gz' is automatically appended to all file names. Valid
+values are 0 - 9 where zero disables the feature.
+WARNING: This will slow down capturing and not unlikely cause frame drops.
+
+.BI --use_clone
+.br
+Use the CLON chunk for MNG files if needed. This will slow down capturing,
+but saves bytes if two or more identicaly images are saved. This is
+not recommended if you capture a TV/Video clip, because there will never
+be two consecutive images which have the same CRC32 checksum.
+
+.BI --expand_to_24bit
+.br
+This will work only for PPM files. It expands 15 and 16bpp images
+to 24bpp. It should also work for TrueColor/8bpp images, but this is still
+not tested. Use this option if you want to make input files for the
+Berkeley MPEG encoder.
+
+.BI --quality " <quality> "
+.br
+Specify a value between 0 and 100 to define the quality setting for
+JPEG output or online encoding. The default value is 75. 
+
+.BI --source " <x11|shm> "
+.br
+Enable or disable the usage of the X11 shared memory extension. For shm support 
+both client and server have to run on the same host. 
+
+.BI --file " <file> "
+.br
+File name or pattern to use for saving the captured frames. A file name
+pattern contains printf()-like formatting information to make the file
+name incrementable, e.g. --file "out-%02d.xwd". This is necessary for 
+capturing to individual frames. xvidcap will replace the first printf()
+format string with the number of the frame currently captured. Thus, in
+the example given, it will write to files out-00.xwd, out-01.xwd, out02.xwd,
+etc. Here, the frame number to start with can be specified with '--start_no',
+see above.
+.br
+On-the-fly encoding does not need a file pattern. If you specify one
+nonetheless like --file "mymovie-%d.mpeg", xvidcap will replace the format
+string with the number of the current recording session (always starting
+the count from zero). This will enable you to manually in-/decrement that
+number, or use the autocontinue feature (ref. '--continue' above) effectively
+creating a series of video files.
+.br
+Output file types are selected based on the extension specified for the
+filename. The default file type is "X Window Dump". Valid extensions are:
+.br
+  Portable Anymap: .pnm .pgm .ppm
+  Multiple Network Graphics: .mng
+  Portable Network Graphics: .png
+  Joint Picture Expert Group: .jpg .jpeg
+  X Window Dump: .xwd
+  AVI video: .avi .mpeg .mpg
+  ASF video stream: .asf
+  Flash Video File: .flv .flv1
+.br
+Support for PNM and PNG is experimental and only Direct- and TrueColor 
+15bpp, 16bpp, and 24bpp, or PseudoColor 8bpp seems to work today. Selecting
+either of AVI, ASF or Flash Video enables on-the-fly encoding through
+FFMPEG. You can specify the codec to use through a 'codec' parameter in the 
+config file, cf. below.
+
+.BI --gui " [yes|no] "
+.br
+Start xvidcap with or without control GUI overriding what's in the
+preferences file. Running without GUI will automatically start a single
+capture session. It can be stopped by either specifying one of --time or
+--frames, or by hitting CTRL-C.
+
+.SH AUDIO SUPPORT
+
+On systems where FFMPEG supports audio capture, you will be able to add
+an audio stream to an encoded video (i.e. using an *.mpeg extension).
+Audio streams can either be captured from a compatible audio device (e.g. 
+/dev/dsp ) or from stdin (cf. --audio_in below). Audio can be enabled
+by specifying any of the audio parameters below on the command line or
+enabling audio support in gvidcap's preferences dialog. Once audio
+support has been saved to the preferences file, it will be activated
+automatically next time xvidcap starts, unless overridden.
+
+.BI --audio " [yes|no] "
+.br
+Enable or disable audio capture using default parameters or those saved to the
+preferences file.
+
+.BI --audio_in " <device|-> "
+.br
+Capture audio from the specified device or from stdin. The latter allows
+for dubbing a captured video using a command line like the following. The 
+default is /dev/dsp.
+
+cat some.mp3 | xvidcap --audio_in -
+
+.BI --audio_rate " <sample_rate> "
+.br
+Set the desired sample rate. The default is 22050 Hz. Note that when using
+stdin input the input file will be resampled as needed.
+
+.BI --audio_bits " <bit_rate> "
+.br
+Set the desired bit rate. The default is 32000 bit. Note that when using
+stdin input the input file will be resampled as needed.
+
+.BI --audio_channels " <number_of_channels> "
+.br
+Set the desired number of channels. The default is 1 for mono. Any value
+above 2 is probably only useful with stdin input and a 5-channel AC audio
+input file.
+
+.SH GUI CONTROLS
+
+\'File' menu: This menu contains entries for quitting, help and 
+options. If you quit the program all open files will be closed.
+(gvidcap pops up the menu at a right click on the 'Reset Frame Counter' button. It  
+has an additional menu-item to save your preferences and an autocontinue toggle. 
+Also, the 'Make Animated GIF' function has been moved to this menu in gvidcap.)
+
+\'Make Video' menu entry: Select this to execute 
+a program specified in the 'mkVideoCommand' resource. It could be used to start
+e.g.  a MPEG encoder or similar program. The following parameters are 
+passed to the executed application:
+.br
+- %s: file name of the frames, e.g. 'cap-%04d.xwd'
+.br
+- %d: number of the first saved frame
+.br
+- %d: number of the last saved frame
+.br
+- %d: width of the frame
+.br
+- %d: height of the frame
+.br
+- %f: frames per second
+.br
+- %d: time per frame (ms, TPF = 1000 / FPS)
+.br
+You can omit parameters from the right to the left but not in
+the other direction. This will work 'ppm2mpeg %s %d %d' but
+this will not 'ppm2mpeg %d %d %f'. Note that you might not need
+the ppm2mpeg or in fact the mkVideo feature at all, if your version
+has on-line MPEG encoding built in (again: Try a file extension of *.mpeg).
+Also, gvidcap does not honour X resources. Thus the 'mkVideoCommand' is
+not user-definable for gvidcap in this release.
+
+\'Reset frame counter' button: When capturing to individual frames press this button 
+to reset the internal picture number to the start number (default is '0'). 
+This will make xvidcap overwrite previously captured individual frames. The file
+name which is displayed in the label is the file name
+of the next frame which will be saved. While capturing the label
+is only updated if there is enough time to do it. When capturing to movie
+files, this button resets the count of the recording sessions, not the frames.
+(gvidcap: right-click to popup the file menu.)
+
+\'Stop recording' button: Stop a running recording session.
+
+\'Pause recording' button: Use this to halt a recording session until you
+release manually release this button again.
+
+\'Start recording' button: Start to capture from the selected area.
+
+\'Capture single frame' button: During a paused recording session this
+button captures a single frame per mouse click.
+
+\'Move cursor back one frame' and 'Move cursor to next frame' buttons: 
+The cursor is the picture number of the next frame to capture.
+
+\'Attach/Detach selection frame' button: This toggle controls whether
+or not the capture selection frame moves with the control panel.
+
+\'Select rectangular area' button: Click this icon to get a cross-hair
+cursor for selecting the area you want to capture. Clicking the cursor
+on an application will fit the selection frame to that application
+window's size and position. You can also click and drag the cursor to select
+a custom rectangle.
+
+\'Make animated GIF' button: This executes an animation program
+as defined in the X resources and plays the captured frames.
+Note this is not configurable in gvidcap. (gvidcap: This can be found
+in the file menu, right-click on the 'Reset Frame Count' button.)
+
+\'Edit current frame' button: Executes an image edit program
+as defined in the X resouces. Note this is not configurable in gvidcap.
+
+.SH X RESOURCES
+
+You can set some default values with the X resources (for example in
+your private '.Xdefaults' file). The syntax is 'xvidcap*<resource>: <value>'.
+Note that gvidcap as a GTK2 application completely ignores X resources.
+Some configuration options can also be saved to a private options
+file $HOME/.xvidcap.scf.
+
+.B fps
+.br
+Float, see OPTIONS
+.br
+options file example -> fps: 15.000000
+
+.B file
+.br
+String, see OPTIONS
+.br
+options file example -> file: test.mpeg
+
+.B capWidth
+and
+.B capHeight
+.br
+Integers, see the --cap_geometry option
+
+.B time
+.br
+Float, see OPTIONS
+.br
+options file example -> max_time: 0.000000
+
+.B frames
+.br
+Integer, see OPTIONS
+.br
+options file example -> max_frames: 0
+
+.B compress
+.br
+Integer, see OPTIONS
+.br
+options file example -> compression: 0
+
+.B startNo
+.br
+Integer, see OPTIONS
+
+.B source
+.br
+String, from where to read the data: x11, shm; see also OPTIONS
+
+.B quality
+.br
+Integer, see OPTIONS
+.br
+options file example -> quality: 75
+
+.B animateCommand
+.br
+String, animation command which should be executed if
+the 'Animation' button is pressed. The default value is 'animate "%s" &'.
+The '%s' is substituted by a file pattern, e.g. if the file name
+is 'cap-%03d.xwd' it is called with 'cap-???.xwd'. You can also
+add a '%d', but this must be after(!) the '%s'. The '%d' will
+be filled with the seconds per frame in milli seconds.
+
+.B editCommand
+.br
+String, edit command, which should be executed if the 'Edit'
+button is pressed. The default value is 'display "%s" %'. If
+you don't have the 'display' program from the ImageMagick
+package you can also use 'xv' or 'gimp' or what ever you want.
+
+.B mkVideoCommand
+.br
+String, see 'mkVideo' button, default: 'ppm2mpeg %s %d %d %d %d %f %d &'.
+
+.B helpCommand
+.br
+String, help command which should be executed if the 'Help' button
+is pressed. The default value
+is 'MANPATH=/usr/local/X11/man rxvt -e man xvidcap &'.
+
+.B useShm
+.br
+Integer, use shared memory, don't change manually (not yet implemented
+for Xresources)
+.br
+options file example -> shm: 16
+
+.B codec
+.br
+String, video codec used by ffmpeg, (not yet implemented for Xresources).
+Supported values atm are 'MPEG1', 'MJPEG', 'MS_DIV2', 'MS_DIV3', 'MPEG4', and 'FLASH_VIDEO'.
+Selecting MS_DIV2 will write an AVI file compatible with Windows
+Media Player, MS_DIV3 an ASF, FLASH_VIDEO will NOT write an *.swf file but rather a streamable
+*.flv file that can be imported into an *.swf file with Macromedia tools.
+.br
+options file example -> codec: MPEG4
+
+.B mouse_wanted
+.br
+Integer, defines whether or not to capture mouse-pointer movement
+using a pseudo mouse-pointer. Supported values are '0' to disable the
+feature, '1' to capture a white mouse-pointer, or '2' to capture a black
+mouse-pointer.
+.br
+options file example -> mouse_wanted: 2
+(not yet implemented for Xresources)
+
+.B audio
+.br
+Integer (0|1), toggles audio capture off|on.
+
+.B audio_in 
+.br
+String, see AUDIO SUPPORT above. 
+
+.B audio_rate 
+.br
+Integer, see AUDIO SUPPORT above. 
+
+.B audio_bits
+.br
+Integer, see AUDIO SUPPORT above. 
+
+.B audio_channels
+.br
+Integer, see AUDIO SUPPORT above. 
+
+.B continue
+.br
+Integer (0|1), toggles autocontinue off|on.
+
+.SH AUTHOR
+Rasca Gmelch, Karl H. Beckers
+.br
+http://www.sourceforge.net/projects/xvidcap/
+.br
+XVidCap is published under the GNU General Public License.
+

@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 ## Created by Anjuta
 
-SUBDIRS = src po
+SUBDIRS = src \
+    po \
+    man
 
 xvidcapdocdir = ${prefix}/doc/xvidcap
 xvidcapdoc_DATA = \

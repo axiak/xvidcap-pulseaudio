@@ -1,0 +1,17 @@
+Source: xvidcap
+Section: x11
+Priority: optional
+Maintainer: Christian Marillat <marillat@debian.org>
+Standards-Version: 3.6.1
+Build-Depends: debhelper (>> 3.3.4), libgtk2.0-dev,
+ libmp3lame-dev
+
+Package: xvidcap
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Screen video capture for X
+ A screen capture enabling you to capture videos off your X-Window desktop
+ for illustration or documentation purposes. It is intended to be a
+ standards-based alternative to tools like Lotus ScreenCam.
+ .
+ Video can be saved in MPEG or AVI files format.
