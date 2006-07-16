@@ -1221,205 +1221,206 @@ m4trace:configure.in:147: -1- AC_SUBST([FREEBSD_FALSE])
 m4trace:configure.in:157: -2- _m4_warn([obsolete], [The macro `AC_HELP_STRING' is obsolete.
 You should run autoupdate.], [autoconf/general.m4:219: AC_HELP_STRING is expanded from...
 configure.in:157: the top level])
-m4trace:configure.in:185: -1- AC_CHECK_LIB([Xmu], [XmuClientWindow], [], [echo "libXmu required for drawing the frame around the area to capture" && exit ])
-m4trace:configure.in:185: -1- AH_OUTPUT([HAVE_LIBXMU], [/* Define to 1 if you have the `Xmu\' library (-lXmu). */
+m4trace:configure.in:192: -1- AC_CHECK_LIB([Xmu], [XmuClientWindow], [], [echo "libXmu required for drawing the frame around the area to capture" && exit], [${ac_my_xmu_extra_libs}])
+m4trace:configure.in:192: -1- AH_OUTPUT([HAVE_LIBXMU], [/* Define to 1 if you have the `Xmu\' library (-lXmu). */
 #undef HAVE_LIBXMU])
-m4trace:configure.in:185: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBXMU])
-m4trace:configure.in:197: -1- AC_CHECK_LIB([m], [pow], [], [echo "libm required by ffmpeg"; static_avcodec=no; static_avformat=no; static_avutil=no])
-m4trace:configure.in:197: -1- AH_OUTPUT([HAVE_LIBM], [/* Define to 1 if you have the `m\' library (-lm). */
+m4trace:configure.in:192: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBXMU])
+m4trace:configure.in:204: -1- AC_CHECK_LIB([m], [pow], [], [echo "libm required by ffmpeg"; static_avcodec=no; static_avformat=no; static_avutil=no])
+m4trace:configure.in:204: -1- AH_OUTPUT([HAVE_LIBM], [/* Define to 1 if you have the `m\' library (-lm). */
 #undef HAVE_LIBM])
-m4trace:configure.in:197: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBM])
-m4trace:configure.in:219: -1- AC_CHECK_LIB_STATIC([avutil], [av_rescale], [], [unset ac_cv_lib_avutil_av_rescale ; static_avcodec=no ; LDFLAGS=$ac_my_ldflags_save ; CFLAGS=$ac_my_cflags_save])
-m4trace:configure.in:219: -1- AH_OUTPUT([HAVE_LIBAVUTIL], [/* Define to 1 if you have the `avutil\' library (-lavutil). */
+m4trace:configure.in:204: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBM])
+m4trace:configure.in:226: -1- AC_CHECK_LIB_STATIC([avutil], [av_rescale], [], [unset ac_cv_lib_avutil_av_rescale ; static_avcodec=no ; LDFLAGS=$ac_my_ldflags_save ; CFLAGS=$ac_my_cflags_save])
+m4trace:configure.in:226: -1- AH_OUTPUT([HAVE_LIBAVUTIL], [/* Define to 1 if you have the `avutil\' library (-lavutil). */
 #undef HAVE_LIBAVUTIL])
-m4trace:configure.in:219: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVUTIL])
-m4trace:configure.in:224: -1- AC_CHECK_LIB([avutil], [av_rescale])
-m4trace:configure.in:224: -1- AH_OUTPUT([HAVE_LIBAVUTIL], [/* Define to 1 if you have the `avutil\' library (-lavutil). */
+m4trace:configure.in:226: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVUTIL])
+m4trace:configure.in:231: -1- AC_CHECK_LIB([avutil], [av_rescale])
+m4trace:configure.in:231: -1- AH_OUTPUT([HAVE_LIBAVUTIL], [/* Define to 1 if you have the `avutil\' library (-lavutil). */
 #undef HAVE_LIBAVUTIL])
-m4trace:configure.in:224: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVUTIL])
-m4trace:configure.in:231: -1- AC_CHECK_LIB_STATIC([avcodec], [img_convert], [], [unset ac_cv_lib_avcodec_img_convert ; static_avcodec=no ; AC_CHECK_LIB(avcodec, img_convert,,,[$ac_my_avcodec_libs])], [$ac_my_avcodec_libs])
-m4trace:configure.in:231: -1- AH_OUTPUT([HAVE_LIBAVCODEC], [/* Define to 1 if you have the `avcodec\' library (-lavcodec). */
+m4trace:configure.in:231: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVUTIL])
+m4trace:configure.in:238: -1- AC_CHECK_LIB_STATIC([avcodec], [img_convert], [], [unset ac_cv_lib_avcodec_img_convert ; static_avcodec=no ; AC_CHECK_LIB(avcodec, img_convert,,,[$ac_my_avcodec_libs])], [$ac_my_avcodec_libs])
+m4trace:configure.in:238: -1- AH_OUTPUT([HAVE_LIBAVCODEC], [/* Define to 1 if you have the `avcodec\' library (-lavcodec). */
 #undef HAVE_LIBAVCODEC])
-m4trace:configure.in:231: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVCODEC])
-m4trace:configure.in:231: -1- AC_CHECK_LIB([avcodec], [img_convert], [], [], [$ac_my_avcodec_libs])
-m4trace:configure.in:231: -1- AH_OUTPUT([HAVE_LIBAVCODEC], [/* Define to 1 if you have the `avcodec\' library (-lavcodec). */
+m4trace:configure.in:238: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVCODEC])
+m4trace:configure.in:238: -1- AC_CHECK_LIB([avcodec], [img_convert], [], [], [$ac_my_avcodec_libs])
+m4trace:configure.in:238: -1- AH_OUTPUT([HAVE_LIBAVCODEC], [/* Define to 1 if you have the `avcodec\' library (-lavcodec). */
 #undef HAVE_LIBAVCODEC])
-m4trace:configure.in:231: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVCODEC])
-m4trace:configure.in:237: -1- AC_CHECK_LIB_STATIC([avformat], [avienc_init], [], [unset ac_cv_lib_avformat_avienc_init ; static_avformat=no ; AC_CHECK_LIB(avformat, avienc_init,,,[$ac_my_avformat_libs])], [$ac_my_avformat_libs])
-m4trace:configure.in:237: -1- AH_OUTPUT([HAVE_LIBAVFORMAT], [/* Define to 1 if you have the `avformat\' library (-lavformat). */
+m4trace:configure.in:238: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVCODEC])
+m4trace:configure.in:244: -1- AC_CHECK_LIB_STATIC([avformat], [avienc_init], [], [unset ac_cv_lib_avformat_avienc_init ; static_avformat=no ; AC_CHECK_LIB(avformat, avienc_init,,,[$ac_my_avformat_libs])], [$ac_my_avformat_libs])
+m4trace:configure.in:244: -1- AH_OUTPUT([HAVE_LIBAVFORMAT], [/* Define to 1 if you have the `avformat\' library (-lavformat). */
 #undef HAVE_LIBAVFORMAT])
-m4trace:configure.in:237: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVFORMAT])
-m4trace:configure.in:237: -1- AC_CHECK_LIB([avformat], [avienc_init], [], [], [$ac_my_avformat_libs])
-m4trace:configure.in:237: -1- AH_OUTPUT([HAVE_LIBAVFORMAT], [/* Define to 1 if you have the `avformat\' library (-lavformat). */
+m4trace:configure.in:244: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVFORMAT])
+m4trace:configure.in:244: -1- AC_CHECK_LIB([avformat], [avienc_init], [], [], [$ac_my_avformat_libs])
+m4trace:configure.in:244: -1- AH_OUTPUT([HAVE_LIBAVFORMAT], [/* Define to 1 if you have the `avformat\' library (-lavformat). */
 #undef HAVE_LIBAVFORMAT])
-m4trace:configure.in:237: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVFORMAT])
-m4trace:configure.in:244: -1- AC_CHECK_LIB_STATIC([avformat], [audio_init], [ac_my_have_ffmpeg_audio="1"], [unset ac_cv_lib_avformat_audio_init ; AC_CHECK_LIB(avformat, audio_init,[ac_my_have_ffmpeg_audio="1"],[ac_my_have_ffmpeg_audio="0"],[$ac_my_avformat_libs])], [$ac_my_avformat_libs])
-m4trace:configure.in:244: -1- AC_CHECK_LIB([avformat], [audio_init], [ac_my_have_ffmpeg_audio="1"], [ac_my_have_ffmpeg_audio="0"], [$ac_my_avformat_libs])
-m4trace:configure.in:250: -1- AM_CONDITIONAL([HAVE_LIBAVCODEC], [test x${ac_cv_lib_avcodec_img_convert} = xyes])
-m4trace:configure.in:250: -1- AC_SUBST([HAVE_LIBAVCODEC_TRUE])
-m4trace:configure.in:250: -1- AC_SUBST([HAVE_LIBAVCODEC_FALSE])
-m4trace:configure.in:257: -1- AM_CONDITIONAL([STATIC_AVFORMAT], [test x$static_avformat = xyes])
-m4trace:configure.in:257: -1- AC_SUBST([STATIC_AVFORMAT_TRUE])
-m4trace:configure.in:257: -1- AC_SUBST([STATIC_AVFORMAT_FALSE])
-m4trace:configure.in:258: -1- AM_CONDITIONAL([STATIC_AVCODEC], [test x$static_avcodec = xyes])
-m4trace:configure.in:258: -1- AC_SUBST([STATIC_AVCODEC_TRUE])
-m4trace:configure.in:258: -1- AC_SUBST([STATIC_AVCODEC_FALSE])
-m4trace:configure.in:259: -1- AM_CONDITIONAL([STATIC_AVUTIL], [test x$static_avutil = xyes])
-m4trace:configure.in:259: -1- AC_SUBST([STATIC_AVUTIL_TRUE])
-m4trace:configure.in:259: -1- AC_SUBST([STATIC_AVUTIL_FALSE])
-m4trace:configure.in:266: -1- AC_CHECK_LIB([mp3lame], [lame_init], [], [echo "To use mp3 audio codecs you need liblame/liblame-dev"])
-m4trace:configure.in:266: -1- AH_OUTPUT([HAVE_LIBMP3LAME], [/* Define to 1 if you have the `mp3lame\' library (-lmp3lame). */
+m4trace:configure.in:244: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBAVFORMAT])
+m4trace:configure.in:251: -1- AC_CHECK_LIB_STATIC([avformat], [audio_init], [ac_my_have_ffmpeg_audio="1"], [unset ac_cv_lib_avformat_audio_init ; AC_CHECK_LIB(avformat, audio_init,[ac_my_have_ffmpeg_audio="1"],[ac_my_have_ffmpeg_audio="0"],[$ac_my_avformat_libs])], [$ac_my_avformat_libs])
+m4trace:configure.in:251: -1- AC_CHECK_LIB([avformat], [audio_init], [ac_my_have_ffmpeg_audio="1"], [ac_my_have_ffmpeg_audio="0"], [$ac_my_avformat_libs])
+m4trace:configure.in:257: -1- AM_CONDITIONAL([HAVE_LIBAVCODEC], [test x${ac_cv_lib_avcodec_img_convert} = xyes])
+m4trace:configure.in:257: -1- AC_SUBST([HAVE_LIBAVCODEC_TRUE])
+m4trace:configure.in:257: -1- AC_SUBST([HAVE_LIBAVCODEC_FALSE])
+m4trace:configure.in:264: -1- AM_CONDITIONAL([STATIC_AVFORMAT], [test x$static_avformat = xyes])
+m4trace:configure.in:264: -1- AC_SUBST([STATIC_AVFORMAT_TRUE])
+m4trace:configure.in:264: -1- AC_SUBST([STATIC_AVFORMAT_FALSE])
+m4trace:configure.in:265: -1- AM_CONDITIONAL([STATIC_AVCODEC], [test x$static_avcodec = xyes])
+m4trace:configure.in:265: -1- AC_SUBST([STATIC_AVCODEC_TRUE])
+m4trace:configure.in:265: -1- AC_SUBST([STATIC_AVCODEC_FALSE])
+m4trace:configure.in:266: -1- AM_CONDITIONAL([STATIC_AVUTIL], [test x$static_avutil = xyes])
+m4trace:configure.in:266: -1- AC_SUBST([STATIC_AVUTIL_TRUE])
+m4trace:configure.in:266: -1- AC_SUBST([STATIC_AVUTIL_FALSE])
+m4trace:configure.in:273: -1- AC_CHECK_LIB([mp3lame], [lame_init], [], [echo "To use mp3 audio codecs you need liblame/liblame-dev"])
+m4trace:configure.in:273: -1- AH_OUTPUT([HAVE_LIBMP3LAME], [/* Define to 1 if you have the `mp3lame\' library (-lmp3lame). */
 #undef HAVE_LIBMP3LAME])
-m4trace:configure.in:266: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBMP3LAME])
-m4trace:configure.in:267: -1- AM_CONDITIONAL([HAVE_LIBMP3LAME], [test x$ac_cv_lib_mp3lame_lame_init = xyes])
-m4trace:configure.in:267: -1- AC_SUBST([HAVE_LIBMP3LAME_TRUE])
-m4trace:configure.in:267: -1- AC_SUBST([HAVE_LIBMP3LAME_FALSE])
-m4trace:configure.in:273: -1- AC_CHECK_LIB([pthread], [pthread_mutex_init])
-m4trace:configure.in:273: -1- AH_OUTPUT([HAVE_LIBPTHREAD], [/* Define to 1 if you have the `pthread\' library (-lpthread). */
+m4trace:configure.in:273: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBMP3LAME])
+m4trace:configure.in:274: -1- AM_CONDITIONAL([HAVE_LIBMP3LAME], [test x$ac_cv_lib_mp3lame_lame_init = xyes])
+m4trace:configure.in:274: -1- AC_SUBST([HAVE_LIBMP3LAME_TRUE])
+m4trace:configure.in:274: -1- AC_SUBST([HAVE_LIBMP3LAME_FALSE])
+m4trace:configure.in:280: -1- AC_CHECK_LIB([pthread], [pthread_mutex_init])
+m4trace:configure.in:280: -1- AH_OUTPUT([HAVE_LIBPTHREAD], [/* Define to 1 if you have the `pthread\' library (-lpthread). */
 #undef HAVE_LIBPTHREAD])
-m4trace:configure.in:273: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBPTHREAD])
-m4trace:configure.in:275: -1- AM_CONDITIONAL([HAVE_PTHREAD], [test x$ac_cv_lib_pthread_pthread_mutex_init = xyes])
-m4trace:configure.in:275: -1- AC_SUBST([HAVE_PTHREAD_TRUE])
-m4trace:configure.in:275: -1- AC_SUBST([HAVE_PTHREAD_FALSE])
-m4trace:configure.in:306: -1- AC_HEADER_STDC
-m4trace:configure.in:306: -1- AC_DEFINE_TRACE_LITERAL([STDC_HEADERS])
-m4trace:configure.in:306: -1- AH_OUTPUT([STDC_HEADERS], [/* Define to 1 if you have the ANSI C header files. */
+m4trace:configure.in:280: -1- AC_DEFINE_TRACE_LITERAL([HAVE_LIBPTHREAD])
+m4trace:configure.in:282: -1- AM_CONDITIONAL([HAVE_PTHREAD], [test x$ac_cv_lib_pthread_pthread_mutex_init = xyes])
+m4trace:configure.in:282: -1- AC_SUBST([HAVE_PTHREAD_TRUE])
+m4trace:configure.in:282: -1- AC_SUBST([HAVE_PTHREAD_FALSE])
+m4trace:configure.in:313: -1- AC_HEADER_STDC
+m4trace:configure.in:313: -1- AC_DEFINE_TRACE_LITERAL([STDC_HEADERS])
+m4trace:configure.in:313: -1- AH_OUTPUT([STDC_HEADERS], [/* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS])
-m4trace:configure.in:307: -1- AC_CHECK_HEADERS([fcntl.h limits.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h stdint.h])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_FCNTL_H], [/* Define to 1 if you have the <fcntl.h> header file. */
+m4trace:configure.in:314: -1- AC_CHECK_HEADERS([fcntl.h limits.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h stdint.h])
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_FCNTL_H], [/* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_LIMITS_H], [/* Define to 1 if you have the <limits.h> header file. */
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_LIMITS_H], [/* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_STRING_H], [/* Define to 1 if you have the <string.h> header file. */
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_STRING_H], [/* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_SYS_IOCTL_H], [/* Define to 1 if you have the <sys/ioctl.h> header file. */
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_SYS_IOCTL_H], [/* Define to 1 if you have the <sys/ioctl.h> header file. */
 #undef HAVE_SYS_IOCTL_H])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_SYS_TIME_H], [/* Define to 1 if you have the <sys/time.h> header file. */
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_SYS_TIME_H], [/* Define to 1 if you have the <sys/time.h> header file. */
 #undef HAVE_SYS_TIME_H])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_UNISTD_H], [/* Define to 1 if you have the <unistd.h> header file. */
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_UNISTD_H], [/* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H])
-m4trace:configure.in:307: -1- AH_OUTPUT([HAVE_STDINT_H], [/* Define to 1 if you have the <stdint.h> header file. */
+m4trace:configure.in:314: -1- AH_OUTPUT([HAVE_STDINT_H], [/* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H])
-m4trace:configure.in:308: -1- AC_CHECK_HEADERS([ctype.h stat.h errno.h])
-m4trace:configure.in:308: -1- AH_OUTPUT([HAVE_CTYPE_H], [/* Define to 1 if you have the <ctype.h> header file. */
+m4trace:configure.in:315: -1- AC_CHECK_HEADERS([ctype.h stat.h errno.h])
+m4trace:configure.in:315: -1- AH_OUTPUT([HAVE_CTYPE_H], [/* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H])
-m4trace:configure.in:308: -1- AH_OUTPUT([HAVE_STAT_H], [/* Define to 1 if you have the <stat.h> header file. */
+m4trace:configure.in:315: -1- AH_OUTPUT([HAVE_STAT_H], [/* Define to 1 if you have the <stat.h> header file. */
 #undef HAVE_STAT_H])
-m4trace:configure.in:308: -1- AH_OUTPUT([HAVE_ERRNO_H], [/* Define to 1 if you have the <errno.h> header file. */
+m4trace:configure.in:315: -1- AH_OUTPUT([HAVE_ERRNO_H], [/* Define to 1 if you have the <errno.h> header file. */
 #undef HAVE_ERRNO_H])
-m4trace:configure.in:323: -1- AC_C_CONST
-m4trace:configure.in:323: -1- AC_DEFINE_TRACE_LITERAL([const])
-m4trace:configure.in:323: -1- AH_OUTPUT([const], [/* Define to empty if `const\' does not conform to ANSI C. */
+m4trace:configure.in:330: -1- AC_C_CONST
+m4trace:configure.in:330: -1- AC_DEFINE_TRACE_LITERAL([const])
+m4trace:configure.in:330: -1- AH_OUTPUT([const], [/* Define to empty if `const\' does not conform to ANSI C. */
 #undef const])
-m4trace:configure.in:324: -1- AC_HEADER_TIME
-m4trace:configure.in:324: -1- AC_DEFINE_TRACE_LITERAL([TIME_WITH_SYS_TIME])
-m4trace:configure.in:324: -1- AH_OUTPUT([TIME_WITH_SYS_TIME], [/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
+m4trace:configure.in:331: -1- AC_HEADER_TIME
+m4trace:configure.in:331: -1- AC_DEFINE_TRACE_LITERAL([TIME_WITH_SYS_TIME])
+m4trace:configure.in:331: -1- AH_OUTPUT([TIME_WITH_SYS_TIME], [/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME])
-m4trace:configure.in:335: -1- AC_PROG_GCC_TRADITIONAL
-m4trace:configure.in:336: -1- AC_FUNC_MALLOC
-m4trace:configure.in:336: -1- AC_CHECK_HEADERS([stdlib.h])
-m4trace:configure.in:336: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
+m4trace:configure.in:342: -1- AC_PROG_GCC_TRADITIONAL
+m4trace:configure.in:343: -1- AC_FUNC_MALLOC
+m4trace:configure.in:343: -1- AC_CHECK_HEADERS([stdlib.h])
+m4trace:configure.in:343: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H])
-m4trace:configure.in:336: -1- AC_DEFINE_TRACE_LITERAL([HAVE_MALLOC])
-m4trace:configure.in:336: -1- AH_OUTPUT([HAVE_MALLOC], [/* Define to 1 if your system has a GNU libc compatible `malloc\' function, and
+m4trace:configure.in:343: -1- AC_DEFINE_TRACE_LITERAL([HAVE_MALLOC])
+m4trace:configure.in:343: -1- AH_OUTPUT([HAVE_MALLOC], [/* Define to 1 if your system has a GNU libc compatible `malloc\' function, and
    to 0 otherwise. */
 #undef HAVE_MALLOC])
-m4trace:configure.in:336: -1- AC_DEFINE_TRACE_LITERAL([HAVE_MALLOC])
-m4trace:configure.in:336: -1- AC_LIBSOURCE([malloc.c])
-m4trace:configure.in:336: -1- AC_SUBST([LIB@&t@OBJS])
-m4trace:configure.in:336: -1- AC_DEFINE_TRACE_LITERAL([malloc])
-m4trace:configure.in:336: -1- AH_OUTPUT([malloc], [/* Define to rpl_malloc if the replacement function should be used. */
+m4trace:configure.in:343: -1- AC_DEFINE_TRACE_LITERAL([HAVE_MALLOC])
+m4trace:configure.in:343: -1- AC_LIBSOURCE([malloc.c])
+m4trace:configure.in:343: -1- AC_SUBST([LIB@&t@OBJS])
+m4trace:configure.in:343: -1- AC_DEFINE_TRACE_LITERAL([malloc])
+m4trace:configure.in:343: -1- AH_OUTPUT([malloc], [/* Define to rpl_malloc if the replacement function should be used. */
 #undef malloc])
-m4trace:configure.in:337: -1- AC_FUNC_MMAP
-m4trace:configure.in:337: -1- AC_CHECK_HEADERS([stdlib.h unistd.h])
-m4trace:configure.in:337: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
+m4trace:configure.in:344: -1- AC_FUNC_MMAP
+m4trace:configure.in:344: -1- AC_CHECK_HEADERS([stdlib.h unistd.h])
+m4trace:configure.in:344: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H])
-m4trace:configure.in:337: -1- AH_OUTPUT([HAVE_UNISTD_H], [/* Define to 1 if you have the <unistd.h> header file. */
+m4trace:configure.in:344: -1- AH_OUTPUT([HAVE_UNISTD_H], [/* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H])
-m4trace:configure.in:337: -1- AC_CHECK_FUNCS([getpagesize])
-m4trace:configure.in:337: -1- AH_OUTPUT([HAVE_GETPAGESIZE], [/* Define to 1 if you have the `getpagesize\' function. */
+m4trace:configure.in:344: -1- AC_CHECK_FUNCS([getpagesize])
+m4trace:configure.in:344: -1- AH_OUTPUT([HAVE_GETPAGESIZE], [/* Define to 1 if you have the `getpagesize\' function. */
 #undef HAVE_GETPAGESIZE])
-m4trace:configure.in:337: -1- AC_DEFINE_TRACE_LITERAL([HAVE_MMAP])
-m4trace:configure.in:337: -1- AH_OUTPUT([HAVE_MMAP], [/* Define to 1 if you have a working `mmap\' system call. */
+m4trace:configure.in:344: -1- AC_DEFINE_TRACE_LITERAL([HAVE_MMAP])
+m4trace:configure.in:344: -1- AH_OUTPUT([HAVE_MMAP], [/* Define to 1 if you have a working `mmap\' system call. */
 #undef HAVE_MMAP])
-m4trace:configure.in:338: -1- AC_FUNC_REALLOC
-m4trace:configure.in:338: -1- AC_CHECK_HEADERS([stdlib.h])
-m4trace:configure.in:338: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
+m4trace:configure.in:345: -1- AC_FUNC_REALLOC
+m4trace:configure.in:345: -1- AC_CHECK_HEADERS([stdlib.h])
+m4trace:configure.in:345: -1- AH_OUTPUT([HAVE_STDLIB_H], [/* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H])
-m4trace:configure.in:338: -1- AC_DEFINE_TRACE_LITERAL([HAVE_REALLOC])
-m4trace:configure.in:338: -1- AH_OUTPUT([HAVE_REALLOC], [/* Define to 1 if your system has a GNU libc compatible `realloc\' function,
+m4trace:configure.in:345: -1- AC_DEFINE_TRACE_LITERAL([HAVE_REALLOC])
+m4trace:configure.in:345: -1- AH_OUTPUT([HAVE_REALLOC], [/* Define to 1 if your system has a GNU libc compatible `realloc\' function,
    and to 0 otherwise. */
 #undef HAVE_REALLOC])
-m4trace:configure.in:338: -1- AC_DEFINE_TRACE_LITERAL([HAVE_REALLOC])
-m4trace:configure.in:338: -1- AC_LIBSOURCE([realloc.c])
-m4trace:configure.in:338: -1- AC_SUBST([LIB@&t@OBJS])
-m4trace:configure.in:338: -1- AC_DEFINE_TRACE_LITERAL([realloc])
-m4trace:configure.in:338: -1- AH_OUTPUT([realloc], [/* Define to rpl_realloc if the replacement function should be used. */
+m4trace:configure.in:345: -1- AC_DEFINE_TRACE_LITERAL([HAVE_REALLOC])
+m4trace:configure.in:345: -1- AC_LIBSOURCE([realloc.c])
+m4trace:configure.in:345: -1- AC_SUBST([LIB@&t@OBJS])
+m4trace:configure.in:345: -1- AC_DEFINE_TRACE_LITERAL([realloc])
+m4trace:configure.in:345: -1- AH_OUTPUT([realloc], [/* Define to rpl_realloc if the replacement function should be used. */
 #undef realloc])
-m4trace:configure.in:339: -1- AC_CHECK_FUNCS([fdatasync gettimeofday memmove memset munmap strcasecmp strchr strdup strstr getopt_long])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_FDATASYNC], [/* Define to 1 if you have the `fdatasync\' function. */
+m4trace:configure.in:346: -1- AC_CHECK_FUNCS([fdatasync gettimeofday memmove memset munmap strcasecmp strchr strdup strstr getopt_long])
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_FDATASYNC], [/* Define to 1 if you have the `fdatasync\' function. */
 #undef HAVE_FDATASYNC])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_GETTIMEOFDAY], [/* Define to 1 if you have the `gettimeofday\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_GETTIMEOFDAY], [/* Define to 1 if you have the `gettimeofday\' function. */
 #undef HAVE_GETTIMEOFDAY])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_MEMMOVE], [/* Define to 1 if you have the `memmove\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_MEMMOVE], [/* Define to 1 if you have the `memmove\' function. */
 #undef HAVE_MEMMOVE])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_MEMSET], [/* Define to 1 if you have the `memset\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_MEMSET], [/* Define to 1 if you have the `memset\' function. */
 #undef HAVE_MEMSET])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_MUNMAP], [/* Define to 1 if you have the `munmap\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_MUNMAP], [/* Define to 1 if you have the `munmap\' function. */
 #undef HAVE_MUNMAP])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_STRCASECMP], [/* Define to 1 if you have the `strcasecmp\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_STRCASECMP], [/* Define to 1 if you have the `strcasecmp\' function. */
 #undef HAVE_STRCASECMP])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_STRCHR], [/* Define to 1 if you have the `strchr\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_STRCHR], [/* Define to 1 if you have the `strchr\' function. */
 #undef HAVE_STRCHR])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_STRDUP], [/* Define to 1 if you have the `strdup\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_STRDUP], [/* Define to 1 if you have the `strdup\' function. */
 #undef HAVE_STRDUP])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_STRSTR], [/* Define to 1 if you have the `strstr\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_STRSTR], [/* Define to 1 if you have the `strstr\' function. */
 #undef HAVE_STRSTR])
-m4trace:configure.in:339: -1- AH_OUTPUT([HAVE_GETOPT_LONG], [/* Define to 1 if you have the `getopt_long\' function. */
+m4trace:configure.in:346: -1- AH_OUTPUT([HAVE_GETOPT_LONG], [/* Define to 1 if you have the `getopt_long\' function. */
 #undef HAVE_GETOPT_LONG])
-m4trace:configure.in:350: -1- AM_CONDITIONAL([HAVE_GETOPT_LONG], [test x$ac_cv_func_getopt_long = xyes])
-m4trace:configure.in:350: -1- AC_SUBST([HAVE_GETOPT_LONG_TRUE])
-m4trace:configure.in:350: -1- AC_SUBST([HAVE_GETOPT_LONG_FALSE])
-m4trace:configure.in:351: -1- AM_CONDITIONAL([HAVE_MALLOC], [test x$ac_cv_func_malloc_0_nonnull = xyes])
-m4trace:configure.in:351: -1- AC_SUBST([HAVE_MALLOC_TRUE])
-m4trace:configure.in:351: -1- AC_SUBST([HAVE_MALLOC_FALSE])
-m4trace:configure.in:352: -1- AM_CONDITIONAL([HAVE_REALLOC], [test x$ac_cv_func_realloc_0_nonnull = xyes])
-m4trace:configure.in:352: -1- AC_SUBST([HAVE_REALLOC_TRUE])
-m4trace:configure.in:352: -1- AC_SUBST([HAVE_REALLOC_FALSE])
-m4trace:configure.in:354: -1- AM_CONDITIONAL([HAVE_FFMPEG_AUDIO], [test x${ac_my_have_ffmpeg_audio} = x1])
-m4trace:configure.in:354: -1- AC_SUBST([HAVE_FFMPEG_AUDIO_TRUE])
-m4trace:configure.in:354: -1- AC_SUBST([HAVE_FFMPEG_AUDIO_FALSE])
-m4trace:configure.in:365: -1- AH_OUTPUT([HAVE_SHMAT], [/* define if shared memory is available */
+m4trace:configure.in:357: -1- AM_CONDITIONAL([HAVE_GETOPT_LONG], [test x$ac_cv_func_getopt_long = xyes])
+m4trace:configure.in:357: -1- AC_SUBST([HAVE_GETOPT_LONG_TRUE])
+m4trace:configure.in:357: -1- AC_SUBST([HAVE_GETOPT_LONG_FALSE])
+m4trace:configure.in:358: -1- AM_CONDITIONAL([HAVE_MALLOC], [test x$ac_cv_func_malloc_0_nonnull = xyes])
+m4trace:configure.in:358: -1- AC_SUBST([HAVE_MALLOC_TRUE])
+m4trace:configure.in:358: -1- AC_SUBST([HAVE_MALLOC_FALSE])
+m4trace:configure.in:359: -1- AM_CONDITIONAL([HAVE_REALLOC], [test x$ac_cv_func_realloc_0_nonnull = xyes])
+m4trace:configure.in:359: -1- AC_SUBST([HAVE_REALLOC_TRUE])
+m4trace:configure.in:359: -1- AC_SUBST([HAVE_REALLOC_FALSE])
+m4trace:configure.in:361: -1- AM_CONDITIONAL([HAVE_FFMPEG_AUDIO], [test x${ac_my_have_ffmpeg_audio} = x1])
+m4trace:configure.in:361: -1- AC_SUBST([HAVE_FFMPEG_AUDIO_TRUE])
+m4trace:configure.in:361: -1- AC_SUBST([HAVE_FFMPEG_AUDIO_FALSE])
+m4trace:configure.in:372: -1- AH_OUTPUT([HAVE_SHMAT], [/* define if shared memory is available */
 #undef HAVE_SHMAT])
-m4trace:configure.in:366: -1- AC_DEFINE_TRACE_LITERAL([HAVE_SHMAT])
-m4trace:configure.in:367: -1- AH_OUTPUT([LINUX], [/* define if building on Linux */
+m4trace:configure.in:373: -1- AC_DEFINE_TRACE_LITERAL([HAVE_SHMAT])
+m4trace:configure.in:374: -1- AH_OUTPUT([LINUX], [/* define if building on Linux */
 #undef LINUX])
-m4trace:configure.in:368: -1- AC_DEFINE_TRACE_LITERAL([LINUX])
-m4trace:configure.in:369: -1- AH_OUTPUT([SOLARIS], [/* define if building on Solaris */
+m4trace:configure.in:375: -1- AC_DEFINE_TRACE_LITERAL([LINUX])
+m4trace:configure.in:376: -1- AH_OUTPUT([SOLARIS], [/* define if building on Solaris */
 #undef SOLARIS])
-m4trace:configure.in:370: -1- AC_DEFINE_TRACE_LITERAL([SOLARIS])
-m4trace:configure.in:371: -1- AH_OUTPUT([HPUX], [/* define if building on HP-UX */
+m4trace:configure.in:377: -1- AC_DEFINE_TRACE_LITERAL([SOLARIS])
+m4trace:configure.in:378: -1- AH_OUTPUT([HPUX], [/* define if building on HP-UX */
 #undef HPUX])
-m4trace:configure.in:372: -1- AC_DEFINE_TRACE_LITERAL([HPUX])
-m4trace:configure.in:373: -1- AH_OUTPUT([FREEBSD], [/* define if building on FreeBSD */
+m4trace:configure.in:379: -1- AC_DEFINE_TRACE_LITERAL([HPUX])
+m4trace:configure.in:380: -1- AH_OUTPUT([FREEBSD], [/* define if building on FreeBSD */
 #undef FREEBSD])
-m4trace:configure.in:374: -1- AC_DEFINE_TRACE_LITERAL([FREEBSD])
-m4trace:configure.in:375: -1- AH_OUTPUT([u_int32_t], [/* Solaris has uint32_t */
+m4trace:configure.in:381: -1- AC_DEFINE_TRACE_LITERAL([FREEBSD])
+m4trace:configure.in:382: -1- AH_OUTPUT([u_int32_t], [/* Solaris has uint32_t */
 #undef u_int32_t])
-m4trace:configure.in:376: -1- AC_DEFINE_TRACE_LITERAL([u_int32_t])
-m4trace:configure.in:377: -1- AH_OUTPUT([HAVE_FFMPEG_AUDIO], [/* this machine can support audio capture with ffmpeg */
+m4trace:configure.in:383: -1- AC_DEFINE_TRACE_LITERAL([u_int32_t])
+m4trace:configure.in:384: -1- AH_OUTPUT([HAVE_FFMPEG_AUDIO], [/* this machine can support audio capture with ffmpeg */
 #undef HAVE_FFMPEG_AUDIO])
-m4trace:configure.in:378: -1- AC_DEFINE_TRACE_LITERAL([HAVE_FFMPEG_AUDIO])
-m4trace:configure.in:391: -1- AC_CONFIG_FILES([
+m4trace:configure.in:385: -1- AC_DEFINE_TRACE_LITERAL([HAVE_FFMPEG_AUDIO])
+m4trace:configure.in:399: -1- AC_CONFIG_FILES([
 Makefile
 src/Makefile
 po/Makefile.in
+man/Makefile
 ])
-m4trace:configure.in:391: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
+m4trace:configure.in:399: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
 You should run autoupdate.], [])
-m4trace:configure.in:391: -1- AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
-m4trace:configure.in:391: -1- AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
-m4trace:configure.in:391: -1- _AC_AM_CONFIG_HEADER_HOOK([$ac_file])
-m4trace:configure.in:391: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.in:399: -1- AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
+m4trace:configure.in:399: -1- AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
+m4trace:configure.in:399: -1- _AC_AM_CONFIG_HEADER_HOOK([$ac_file])
+m4trace:configure.in:399: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS

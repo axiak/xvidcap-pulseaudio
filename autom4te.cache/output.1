@@ -8917,6 +8917,13 @@ if test "x${ac_cv_have_x}" = "x" ; then
     exit
 fi
 
+if ( ! ( test "x${ac_x_libraries}" = "x" ) ) ; then
+    ac_my_xmu_extra_libs="-L${ac_x_libraries}"
+fi
+if ( ! ( test "x${ac_x_includes}" = "x" ) ) ; then
+    ac_my_xmu_extra_libs="${ac_my_xmu_extra_libs} -I${ac_x_includes}"
+fi
+
 
 echo "$as_me:$LINENO: checking for XmuClientWindow in -lXmu" >&5
 echo $ECHO_N "checking for XmuClientWindow in -lXmu... $ECHO_C" >&6
@@ -8924,7 +8931,7 @@ if test "${ac_cv_lib_Xmu_XmuClientWindow+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lXmu  $LIBS"
+LIBS="-lXmu ${ac_my_xmu_extra_libs} $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -8989,7 +8996,7 @@ _ACEOF
   LIBS="-lXmu $LIBS"
 
 else
-  echo "libXmu required for drawing the frame around the area to capture" && exit 
+  echo "libXmu required for drawing the frame around the area to capture" && exit
 fi
 
 # libice test is present, but we need to bail out if not there
@@ -11829,7 +11836,7 @@ _ACEOF
 
 
 
-                              ac_config_files="$ac_config_files Makefile src/Makefile po/Makefile.in"
+                                        ac_config_files="$ac_config_files Makefile src/Makefile po/Makefile.in man/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -12511,6 +12518,7 @@ do
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "po/Makefile.in" ) CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
+  "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
   "intltool" ) CONFIG_COMMANDS="$CONFIG_COMMANDS intltool" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "default-1" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default-1" ;;
