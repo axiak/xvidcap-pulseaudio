@@ -181,7 +181,6 @@ add_audio_stream (Job* job) {
     AVFormatParameters params, *ap = &params;   // audio stream params
     int err, ret;
 
-    if ( ( job->flags & FLG_REC_SOUND ) && ( job->au_targetCodec > 0 ) ) {
         if (!strcmp(job->snd_device, "-")) {
             job->snd_device = "pipe:";
             grab_audio = FALSE;
@@ -354,7 +353,7 @@ add_audio_stream (Job* job) {
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
-    }
+
     #undef DEBUGFUNCTION
 }
 
@@ -1129,24 +1128,26 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         }
 
 #ifdef HAVE_FFMPEG_AUDIO
-        add_audio_stream(job);
+        if ( ( job->flags & FLG_REC_SOUND ) && ( job->au_targetCodec > 0 ) ) {
+
+            add_audio_stream(job);
 
 #ifdef DEBUG
-        dump_format(output_file, 0, output_file->filename, 1);
+            dump_format(output_file, 0, output_file->filename, 1);
 #endif // DEBUG
 
-        // initialize a mutex lock to its default value 
-        ret = pthread_mutex_init(&mp, NULL);
+            // initialize a mutex lock to its default value 
+            ret = pthread_mutex_init(&mp, NULL);
 
-        // create and start capture thread 
-        // initialized with default attributes 
-        tret = pthread_attr_init(&tattr);
+            // create and start capture thread 
+            // initialized with default attributes 
+            tret = pthread_attr_init(&tattr);
 
-        // create the thread 
-        tret =
-            pthread_create(&tid, &tattr, (void *) capture_audio_thread,
+            // create the thread 
+            tret =
+                pthread_create(&tid, &tattr, (void *) capture_audio_thread,
                                job);
-
+        }
 #endif                          // HAVE_FFMPEG_AUDIO
 
         /* 

@@ -1,9 +1,9 @@
 
 [Anjuta]
-Geometry=1388x999+6+44
+Geometry=1388x999+1410+44
 
 [File Loader]
-Files=file:///home/kb87850/Quellen/xvidcap/Makefile.am#28
+Files=file:///home/kb87850/Quellen/xvidcap/trunk/src/xtoffmpeg.c#1
 
 [Execution]
 Run in terminal=2
