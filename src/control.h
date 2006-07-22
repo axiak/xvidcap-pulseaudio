@@ -45,7 +45,7 @@ Boolean xvc_change_filename_display(int pic_no);
 void xvc_frame_change(int x, int y, int width, int height,
                       Boolean reposition_control);
 
-void xvc_capture_stop();
+Boolean xvc_capture_stop();
 void xvc_capture_start();
 
 

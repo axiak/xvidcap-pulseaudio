@@ -91,6 +91,7 @@ void x2ffmpeg_dump_ximage_info(XImage * img, FILE * fp);
 
 
 #ifdef HAVE_FFMPEG_AUDIO
+
 #define MAX_AUDIO_PACKET_SIZE (128 * 1024)
 
 #include <pthread.h>
@@ -169,7 +170,7 @@ static uint8_t *audio_out = NULL;
 static pthread_attr_t tattr;
 static pthread_mutex_t mp = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t tid = 0;
-static int tret;
+static int tret = 0;
 
 
 // functions ...
@@ -180,6 +181,10 @@ add_audio_stream (Job* job) {
     Boolean grab_audio = TRUE;
     AVFormatParameters params, *ap = &params;   // audio stream params
     int err, ret;
+
+#ifdef DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
 
         if (!strcmp(job->snd_device, "-")) {
             job->snd_device = "pipe:";
@@ -354,6 +359,9 @@ add_audio_stream (Job* job) {
             exit(1);
         }
 
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
     #undef DEBUGFUNCTION
 }
 
@@ -441,8 +449,22 @@ void cleanup_thread_when_stopped()
     #define DEBUGFUNCTION "cleanup_thread_when_stopped()"
     int retval = 0;
 
-    if (audio_out) av_free(audio_out);
-    if (audio_buf) av_free(audio_buf);
+    if (audio_out) {
+        av_free(audio_out);
+        audio_out = NULL;
+    }
+    if (audio_buf) {
+        av_free(audio_buf);
+        audio_buf = NULL;
+    }
+
+    avcodec_close(au_c);
+    av_free(au_c);
+    au_c = NULL;
+    grab_iformat = NULL;
+    au_out_st = NULL;
+    au_in_st = NULL;
+    au_codec = NULL;
 
     av_close_input_file(ic);
     pthread_exit(&retval);

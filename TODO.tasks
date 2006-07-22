@@ -105,6 +105,11 @@ xtoffmpeg.c add_video_stream(): Leaving
 xtoffmpeg.c XImageToFFMPEG(): could not open video codec
 </comment>
     </item>
+    <item>
+      <attribute id="1153491149" priority="1" done="0" start_date="732513" enddate="99999999" notify="0" endtime="-60" last_edited="1153491149"/>
+      <summary>make piped audio not use mp3 if lib not present</summary>
+      <comment></comment>
+    </item>
   </category>
   <category title="Business" place="1"/>
   <category title="Unfiled" place="2"/>

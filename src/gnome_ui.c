@@ -60,10 +60,15 @@
  */
 GtkWidget *xvc_ctrl_main_window = NULL;
 GtkWidget *xvc_ctrl_m1 = NULL;
+GtkWidget *xvc_result_dialog = NULL;
 
 extern AppData *app;
 extern GtkWidget *xvc_pref_main_window;
 extern GtkWidget *xvc_warn_main_window;
+
+extern xvCodec tCodecs[NUMCODECS];
+extern xvFFormat tFFormats[NUMCAPS];
+extern xvAuCodec tAuCodecs[NUMAUCODECS];
 
 
 static Job *jobp;
@@ -121,11 +126,11 @@ Boolean xvc_init_pre(int argc, char **argv)
     // gnome program initialization
     // make gnome init ignore command line options (we want to handle them
     // ourselves
-    char *nothing[] = { "", "" };
-    gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-                       2, &nothing,
-                       GNOME_PARAM_APP_DATADIR, PACKAGE_DATA_DIR, NULL);
-
+//    char *nothing[] = { "--disable-crash-dialog", "--help" };
+//    gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE,
+//                       2, nothing,
+//                       GNOME_PARAM_APP_DATADIR, PACKAGE_DATA_DIR, NULL);
+    gtk_init(&argc, &argv);
     return TRUE;
     #undef DEBUGFUNCTION
 }
@@ -402,19 +407,24 @@ Boolean xvc_change_filename_display(int pic_no)
 }
 
 
-void xvc_capture_stop()
+Boolean xvc_capture_stop()
 {
     #define DEBUGFUNCTION "xvc_capture_stop()"
     Job *job = xvc_job_ptr();
     gboolean rc;
     int status = 0;
 
+#ifdef DEBUG
     printf("%s %s: stopping\n", DEBUGFILE, DEBUGFUNCTION);
-        rc = stop_recording_nongui_stuff(job);
+#endif // DEBUG
+    rc = stop_recording_nongui_stuff(job);
+#ifdef DEBUG
     printf("%s %s: done stopping non-gui stuff\n", DEBUGFILE, DEBUGFUNCTION);
-        if (!(job->flags & FLG_NOGUI)) 
-            rc = stop_recording_gui_stuff(job);
-        
+#endif // DEBUG
+    if (!(job->flags & FLG_NOGUI)) 
+        rc = stop_recording_gui_stuff(job);
+    
+    return FALSE;
     #undef DEBUGFUNCTION
 }
 
@@ -660,7 +670,8 @@ void warning_submit()
     // current options
     if (!(app->flags & FLG_NOGUI)) {
         xvc_reset_ctrl_main_window_according_to_current_prefs();
-        stop_recording_gui_stuff(jobp);
+// FIXME: any bad side-effects from removing this?
+//        stop_recording_gui_stuff(jobp);
     }
 
     if (xvc_errors_delete_list(errors_after_cli)) {
@@ -934,7 +945,69 @@ gboolean stop_recording_nongui_stuff(Job * job)
     #undef DEBUGFUNCTION
 }
 
-gboolean stop_recording_gui_stuff(Job * job)
+
+void
+on_xvc_result_dialog_select_filename_button_clicked(GtkButton * button, gpointer user_data)
+{
+    #define DEBUGFUNCTION "on_xvc_result_select_filename_button_clicked()"
+    int result = 0; 
+    char* got_file_name = NULL;
+    
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL, *dialog = NULL;
+
+#ifdef DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
+    // load the interface
+    xml = glade_xml_new(GLADE_FILE, "xvc_save_filechooserdialog", NULL);
+    g_assert(xml);
+    // connect the signals in the interface 
+    glade_xml_signal_autoconnect(xml);
+
+    dialog = glade_xml_get_widget(xml, "xvc_save_filechooserdialog");
+    g_assert(dialog);
+    gtk_window_set_title(GTK_WINDOW(dialog), "Save Video As:");
+
+    result = gtk_dialog_run (GTK_DIALOG (dialog));
+
+    if ( result == GTK_RESPONSE_OK) { 
+        guint length;
+        gchar *path, *path_rev;
+        
+        got_file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); 
+        jobp->file = strdup(got_file_name); 
+
+        if ( xvc_result_dialog != NULL ) {
+            xml = NULL;
+            xml = glade_get_widget_tree(GTK_WIDGET(xvc_result_dialog));
+            g_assert(xml);
+        
+            w = NULL;
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_filename_label");
+            g_assert(w);
+            
+            gtk_label_set_text(GTK_LABEL(w), jobp->file);
+            
+            w = NULL;
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_save_button");
+            g_assert(w);
+            printf("setting save button sensitive\n");
+            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+        }
+    }
+    
+    gtk_widget_destroy (dialog);
+
+#ifdef DEBUG
+    printf("%s %s: Leaving with filename %s\n", DEBUGFILE, DEBUGFUNCTION, got_file_name);
+#endif // DEBUG
+    #undef DEBUGFUNCTION
+}
+
+
+static gboolean stop_recording_gui_stuff(Job * job)
 {
     #define DEBUGFUNCTION "stop_recording_gui_stuff()"
     GladeXML *xml = NULL;
@@ -962,7 +1035,8 @@ gboolean stop_recording_gui_stuff(Job * job)
     w = glade_xml_get_widget(xml, "xvc_ctrl_record_toggle");
     g_assert(w);
     gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
+    if ( gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w)) )
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
 
     w = glade_xml_get_widget(xml, "xvc_ctrl_filename_button");
     g_assert(w);
@@ -994,19 +1068,106 @@ gboolean stop_recording_gui_stuff(Job * job)
 
     w = glade_xml_get_widget(xml, "xvc_ctrl_pause_toggle");
     g_assert(w);
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
+    if ( gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w)) )
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
     w = glade_xml_get_widget(xml, "xvc_ctrl_stop_toggle");
     g_assert(w);
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), TRUE);
+    if ( ! gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w)) )
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), TRUE);
 
     GtkChangeLabel(jobp->pic_no);
 
 
-    // FIXME: popup dialog here
     if ( job->target < CAP_MF ) target = &(app->single_frame);
     else target = &(app->multi_frame);
     
     if (strlen(target->file) < 1) {
+        int result = 0; 
+        char* got_file_name;
+        char buf[100];
+    
+        GladeXML *xml = NULL;
+        GtkWidget *w = NULL;
+
+        // load the interface
+        xml = glade_xml_new(GLADE_FILE, "xvc_result_dialog", NULL);
+        g_assert(xml);
+        // connect the signals in the interface 
+        glade_xml_signal_autoconnect(xml);
+        // get the widget
+        xvc_result_dialog = glade_xml_get_widget(xml, "xvc_result_dialog");
+        g_assert(xvc_result_dialog);
+
+        // video format
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_video_format_label");
+        g_assert(w);
+        gtk_label_set_text(GTK_LABEL(w), tFFormats[jobp->target].longname);
+        
+        // video codec
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_video_codec_label");
+        g_assert(w);
+        gtk_label_set_text(GTK_LABEL(w), tCodecs[jobp->targetCodec].name);
+
+        // audio codec
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_audio_codec_label");
+        g_assert(w);
+        gtk_label_set_text(GTK_LABEL(w), tAuCodecs[jobp->au_targetCodec].name);
+
+        // set fps
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_label");
+        g_assert(w);
+        snprintf(buf, 99, "%.2f", ((float) job->fps / 100));
+        gtk_label_set_text(GTK_LABEL(w), buf);
+
+        // achieved fps ??????
+//        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_label");
+//        g_assert(w);
+//        gtk_label_set_text(GTK_LABEL(w), job->fps);
+
+        // fps ratio ??????
+//        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_label");
+//        g_assert(w);
+//        gtk_label_set_text(GTK_LABEL(w), job->fps);
+
+        // captured frames
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_total_frames_label");
+        g_assert(w);
+        snprintf(buf, 99, "%i", (jobp->pic_no / job->step) + 1);
+        gtk_label_set_text(GTK_LABEL(w), buf);
+
+        // captured time ??????
+//        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_label");
+//        g_assert(w);
+//        gtk_label_set_text(GTK_LABEL(w), job->fps);
+
+        do {
+            result = gtk_dialog_run (GTK_DIALOG (xvc_result_dialog));
+            
+            switch ( result ) {
+                case GTK_RESPONSE_OK:
+                    break;
+                case GTK_RESPONSE_HELP:
+                    break;
+                case GTK_RESPONSE_CANCEL:
+                    break;
+                case GTK_RESPONSE_CLOSE:
+                    break;
+                default:
+                    break;
+            }
+            printf("help: %i - ok: %i - cancel: %i - close: %i - actual: %i \n",
+                GTK_RESPONSE_HELP, GTK_RESPONSE_OK, GTK_RESPONSE_CANCEL, GTK_RESPONSE_CLOSE,
+                result);
+        } while ( result == GTK_RESPONSE_HELP );
+        
+        gtk_widget_destroy (xvc_result_dialog);
+        xvc_result_dialog = NULL;
+        
+    // FIXME: add file selector callback and right dialog results ...
+        // also fill widgets with proper values ... erm how do I do that?
+    
+    
+    
         printf("%s %s: need to popup dialog for renaming here. orig filename = %s\n",
                 DEBUGFILE, DEBUGFUNCTION, job->file);
     }
@@ -1024,7 +1185,8 @@ gboolean timer_stop_recording(Job * job)
 {
     #define DEBUGFUNCTION "timer_stop_recording()"
 
-    xvc_capture_stop();
+    job_set_state(VC_STOP);
+//    xvc_capture_stop();
     
     return FALSE;
     #undef DEBUGFUNCTION
@@ -1038,8 +1200,11 @@ on_xvc_ctrl_stop_toggle_toggled(GtkToggleToolButton * button,
     #define DEBUGFUNCTION "on_xvc_ctrl_stop_toggle_toggled()"
 
     if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button))) {
-printf("%s %s: stopp button toggled\n", DEBUGFILE, DEBUGFUNCTION);
-        xvc_capture_stop();
+#ifdef DEBUG
+        printf("%s %s: stopp button toggled\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+    job_set_state(VC_STOP);
+//        xvc_capture_stop();
     } else {
         // empty
     }
