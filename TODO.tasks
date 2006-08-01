@@ -2,11 +2,6 @@
 <gtodo>
   <category title="Personal" place="0">
     <item>
-      <attribute id="1150970358" priority="1" done="0" start_date="732484" enddate="99999999" notify="0" endtime="-60" last_edited="1150970358"/>
-      <summary>implement ask-user for filename dialog</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1151175973" priority="1" done="0" start_date="732486" enddate="99999999" notify="0" endtime="-60" last_edited="1151175973"/>
       <summary>autocontinue may need to start capture again in capture.c</summary>
       <comment/>
@@ -108,6 +103,26 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
     <item>
       <attribute id="1153491149" priority="1" done="0" start_date="732513" enddate="99999999" notify="0" endtime="-60" last_edited="1153491149"/>
       <summary>make piped audio not use mp3 if lib not present</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1153815777" priority="2" done="1" start_date="732517" completed_date="732517" notify="0" last_edited="1153824105"/>
+      <summary>if overload, time captured == 0 in result</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1153824120" priority="1" done="0" start_date="732517" enddate="99999999" notify="0" endtime="-60" last_edited="1153824120"/>
+      <summary>frame monitor idle add ... should not queue</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1153845404" priority="1" done="0" start_date="732517" enddate="99999999" notify="0" endtime="-60" last_edited="1153845404"/>
+      <summary>create a new job from app-data on record</summary>
+      <comment>this should save a lot of updating job in the UI and make sure we create the right job during startup of a recording session</comment>
+    </item>
+    <item>
+      <attribute id="1150970358" priority="1" done="1" start_date="732484" completed_date="732524" notify="0" last_edited="1154444280"/>
+      <summary>implement ask-user for filename dialog</summary>
       <comment></comment>
     </item>
   </category>

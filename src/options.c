@@ -19,9 +19,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- *
- * This file contains the Xt GUI's options dialog
- *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -102,6 +99,8 @@ Boolean xvc_write_options_file()
             ((app->flags & FLG_SHOW_TIME) ? 1 : 0));
     fprintf(fp, "# toggle autocontinue (0/1) \nauto_continue: %i\n",
             ((app->flags & FLG_AUTO_CONTINUE) ? 1 : 0));
+    fprintf(fp, "# always show results dialog (0/1) \nalways_show_results: %i\n",
+            ((app->flags & FLG_ALWAYS_SHOW_RESULTS) ? 1 : 0));
 
     fprintf(fp, "\n#options for single-frame capture ...\n");
     fprintf(fp,
@@ -386,14 +385,6 @@ Boolean xvc_read_options_file()
                 if (strcasecmp(token, "source") == 0) {
                     app->source = strdup(value);
                 } else if (strcasecmp(token, "nogui") == 0) {
-                    // this is somewhat inconsistent:
-                    // normally we always store a value in the app_data
-                    // structure
-                    // and only set flags later according to the
-                    // structure's content
-                    // here we don't have a variable in the structure and
-                    // set the
-                    // flag immediately
                     if (atoi(value) == 1)
                         app->flags |= FLG_NOGUI;
                     else if (atoi(value) == 0)
@@ -414,14 +405,6 @@ Boolean xvc_read_options_file()
                 } else if (strcasecmp(token, "mouse_wanted") == 0) {
                     app->mouseWanted = atoi(value);
                 } else if (strcasecmp(token, "save_geometry") == 0) {
-                    // this is somewhat inconsistent:
-                    // normally we always store a value in the app_data
-                    // structure
-                    // and only set flags later according to the
-                    // structure's content
-                    // here we don't have a variable in the structure and
-                    // set the
-                    // flag immediately
                     if (atoi(value) == 1)
                         app->flags |= FLG_SAVE_GEOMETRY;
                     else if (atoi(value) == 0)
@@ -449,6 +432,9 @@ Boolean xvc_read_options_file()
                 } else if (strcasecmp(token, "auto_continue") == 0) {
                     if (value)
                         app->flags |= FLG_AUTO_CONTINUE;
+                } else if (strcasecmp(token, "always_show_results") == 0) {
+                    if (value)
+                        app->flags |= FLG_ALWAYS_SHOW_RESULTS;
 
                     // now single-frame capture options
                 } else if (strcasecmp(token, "sf_file") == 0) {

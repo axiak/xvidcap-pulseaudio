@@ -74,6 +74,7 @@ extern xvAuCodec tAuCodecs[NUMAUCODECS];
 static Job *jobp;
 static guint stop_timer_id = 0;
 static long start_time = 0, pause_time = 0, time_captured = 0;
+static char* target_file_name = NULL;
 
 static xvErrorListItem *errors_after_cli = NULL;
 static int OK_attempts = 0;
@@ -917,29 +918,49 @@ gboolean stop_recording_nongui_stuff(Job * job)
 {
     #define DEBUGFUNCTION "stop_recording_nongui_stuff()"
     int status = 0, state = 0;
+    struct timeval curr_time;
+    long stop_time = 0;
 
-    if (recording_thread_running) {
+#ifdef DEBUG
+    printf("%s %s: Entering with thread running %i\n", 
+        DEBUGFILE, DEBUGFUNCTION, recording_thread_running);
+#endif // DEBUG
 
-    // non-gui stuff
-    // signal potentially paused thread
     state = VC_STOP;
     if (job->flags & FLG_AUTO_CONTINUE) {
         state |= VC_CONTINUE;
     }
     job_set_state(state);
 
-    pthread_mutex_lock(&recording_mutex);
-    pthread_cond_broadcast(&recording_condition_unpaused);
-    printf("%s %s: done signalling\n", DEBUGFILE, DEBUGFUNCTION);
+    if (recording_thread_running) {
+
+        // non-gui stuff
+        // signal potentially paused thread
+        pthread_mutex_lock(&recording_mutex);
+        pthread_cond_broadcast(&recording_condition_unpaused);
+#ifdef DEBUG
+        printf("%s %s: done signalling\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
     
-    pthread_mutex_unlock(&recording_mutex);
+        pthread_mutex_unlock(&recording_mutex);
     
-    pthread_join(recording_thread, (void **) &status);
-    printf("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);    
+        pthread_join(recording_thread, (void **) &status);
+#ifdef DEBUG
+        printf("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);    
+#endif // DEBUG
     }
     
-        if (stop_timer_id)
-            g_source_remove(stop_timer_id);
+    gettimeofday(&curr_time, NULL);
+    stop_time =
+        curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
+    time_captured += (stop_time - start_time);
+
+    if (stop_timer_id)
+        g_source_remove(stop_timer_id);
+
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
 
     return FALSE;
     #undef DEBUGFUNCTION
@@ -951,7 +972,6 @@ on_xvc_result_dialog_select_filename_button_clicked(GtkButton * button, gpointer
 {
     #define DEBUGFUNCTION "on_xvc_result_select_filename_button_clicked()"
     int result = 0; 
-    char* got_file_name = NULL;
     
     GladeXML *xml = NULL;
     GtkWidget *w = NULL, *dialog = NULL;
@@ -976,8 +996,7 @@ on_xvc_result_dialog_select_filename_button_clicked(GtkButton * button, gpointer
         guint length;
         gchar *path, *path_rev;
         
-        got_file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); 
-        jobp->file = strdup(got_file_name); 
+        target_file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); 
 
         if ( xvc_result_dialog != NULL ) {
             xml = NULL;
@@ -988,7 +1007,7 @@ on_xvc_result_dialog_select_filename_button_clicked(GtkButton * button, gpointer
             w = glade_xml_get_widget(xml, "xvc_result_dialog_filename_label");
             g_assert(w);
             
-            gtk_label_set_text(GTK_LABEL(w), jobp->file);
+            gtk_label_set_text(GTK_LABEL(w), target_file_name);
             
             w = NULL;
             w = glade_xml_get_widget(xml, "xvc_result_dialog_save_button");
@@ -1001,7 +1020,7 @@ on_xvc_result_dialog_select_filename_button_clicked(GtkButton * button, gpointer
     gtk_widget_destroy (dialog);
 
 #ifdef DEBUG
-    printf("%s %s: Leaving with filename %s\n", DEBUGFILE, DEBUGFUNCTION, got_file_name);
+    printf("%s %s: Leaving with filename %s\n", DEBUGFILE, DEBUGFUNCTION, target_file_name);
 #endif // DEBUG
     #undef DEBUGFUNCTION
 }
@@ -1081,8 +1100,9 @@ static gboolean stop_recording_gui_stuff(Job * job)
     if ( job->target < CAP_MF ) target = &(app->single_frame);
     else target = &(app->multi_frame);
     
-    if (strlen(target->file) < 1) {
-        int result = 0; 
+    if (strlen(target->file) < 1 || ( app->flags & FLG_ALWAYS_SHOW_RESULTS ) > 0) {
+        int result = 0;
+        float fps_ratio = 0; 
         char* got_file_name;
         char buf[100];
     
@@ -1119,15 +1139,35 @@ static gboolean stop_recording_gui_stuff(Job * job)
         snprintf(buf, 99, "%.2f", ((float) job->fps / 100));
         gtk_label_set_text(GTK_LABEL(w), buf);
 
-        // achieved fps ??????
-//        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_label");
-//        g_assert(w);
-//        gtk_label_set_text(GTK_LABEL(w), job->fps);
+        // achieved fps 
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_actual_fps_label");
+        g_assert(w);
+        {
+            char* str_template = NULL;
+            int total_frames = (jobp->pic_no / job->step) + 1;
+            float actual_fps = ((float) total_frames) / ((float) time_captured / 1000);
 
-        // fps ratio ??????
-//        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_label");
-//        g_assert(w);
-//        gtk_label_set_text(GTK_LABEL(w), job->fps);
+            if (actual_fps > (jobp->fps / 100)) actual_fps = jobp->fps / 100;
+            fps_ratio = actual_fps / ((float) job->fps / 100);
+            
+            if (fps_ratio > (((float)LM_NUM_DAS - LM_LOW_THRESHOLD) / 10 )) {
+                str_template = "%.2f";
+            } else if (fps_ratio > (((float)LM_NUM_DAS - LM_MEDIUM_THRESHOLD) / 10 )) {
+                str_template = "<span background=\"#EEEE00\">%.2f</span>";
+            } else {
+                str_template = "<span background=\"#EE0000\">%.2f</span>";
+            }
+            
+            snprintf(buf, 99, str_template, actual_fps);
+            gtk_label_set_markup(GTK_LABEL(w), buf);
+        }
+        
+        // fps ratio
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_ratio_progressbar");
+        g_assert(w);
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(w), fps_ratio);
+        snprintf(buf, 99, "%.2f %%", fps_ratio * 100);
+        gtk_progress_bar_set_text(GTK_PROGRESS_BAR(w), buf);
 
         // captured frames
         w = glade_xml_get_widget(xml, "xvc_result_dialog_total_frames_label");
@@ -1135,41 +1175,83 @@ static gboolean stop_recording_gui_stuff(Job * job)
         snprintf(buf, 99, "%i", (jobp->pic_no / job->step) + 1);
         gtk_label_set_text(GTK_LABEL(w), buf);
 
-        // captured time ??????
-//        w = glade_xml_get_widget(xml, "xvc_result_dialog_fps_label");
-//        g_assert(w);
-//        gtk_label_set_text(GTK_LABEL(w), job->fps);
+        // captured time
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_video_length_label");
+        g_assert(w);
+        snprintf(buf, 99, "%.2f seconds", ((float) time_captured / 1000));
+        gtk_label_set_text(GTK_LABEL(w), buf);
+
+        if ( strlen(target->file) > 0) {
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_select_filename_button");
+            g_assert(w);
+            gtk_widget_hide(GTK_WIDGET(w));
+            
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_filename_label");
+            g_assert(w);
+            gtk_widget_hide(GTK_WIDGET(w));
+
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_no_button");
+            g_assert(w);
+            gtk_widget_hide(GTK_WIDGET(w));
+
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_save_button");
+            g_assert(w);
+            gtk_widget_hide(GTK_WIDGET(w));
+
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_show_next_time_checkbutton");
+            g_assert(w);
+            gtk_widget_show(GTK_WIDGET(w));
+
+            w = glade_xml_get_widget(xml, "xvc_result_dialog_close_button");
+            g_assert(w);
+            gtk_widget_show(GTK_WIDGET(w));
+        }
 
         do {
             result = gtk_dialog_run (GTK_DIALOG (xvc_result_dialog));
             
             switch ( result ) {
                 case GTK_RESPONSE_OK:
+                    if (target_file_name != NULL) {
+                        char cmd_buf[PATH_MAX * 2 + 5];
+                        int errnum = 0;
+                        
+                        snprintf(cmd_buf, (PATH_MAX * 2 + 5), "mv %s %s",
+                            jobp->file, target_file_name);
+                        errnum = system((char *) cmd_buf);
+                        if (errnum != 0) {
+                            GtkWidget *err_dialog = gtk_message_dialog_new (GTK_WINDOW(xvc_ctrl_main_window),
+                                  GTK_DIALOG_DESTROY_WITH_PARENT,
+                                  GTK_MESSAGE_ERROR,
+                                  GTK_BUTTONS_CLOSE,
+                                  "Error moving file from '%s' to '%s'\n%s",
+                                  jobp->file, 
+                                  target_file_name, 
+                                  g_strerror(errnum));
+                            gtk_dialog_run (GTK_DIALOG (err_dialog));
+                            gtk_widget_destroy (err_dialog);
+                        }
+                    }
+                case GTK_RESPONSE_CANCEL:
+                case GTK_RESPONSE_CLOSE:
+                    w = glade_xml_get_widget(xml, "xvc_result_dialog_show_next_time_checkbutton");
+                    g_assert(w);
+                    if (! gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(w) ) )
+                        app->flags &= ~FLG_ALWAYS_SHOW_RESULTS;
                     break;
                 case GTK_RESPONSE_HELP:
-                    break;
-                case GTK_RESPONSE_CANCEL:
-                    break;
-                case GTK_RESPONSE_CLOSE:
+                    if (app->help_cmd != NULL)
+                        system((char *) app->help_cmd);
                     break;
                 default:
                     break;
             }
-            printf("help: %i - ok: %i - cancel: %i - close: %i - actual: %i \n",
-                GTK_RESPONSE_HELP, GTK_RESPONSE_OK, GTK_RESPONSE_CANCEL, GTK_RESPONSE_CLOSE,
-                result);
         } while ( result == GTK_RESPONSE_HELP );
         
         gtk_widget_destroy (xvc_result_dialog);
         xvc_result_dialog = NULL;
         
-    // FIXME: add file selector callback and right dialog results ...
-        // also fill widgets with proper values ... erm how do I do that?
-    
-    
-    
-        printf("%s %s: need to popup dialog for renaming here. orig filename = %s\n",
-                DEBUGFILE, DEBUGFUNCTION, job->file);
+    // FIXME: realize move in a way that gives me real error codes
     }
 
 #ifdef DEBUG
@@ -1199,11 +1281,13 @@ on_xvc_ctrl_stop_toggle_toggled(GtkToggleToolButton * button,
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_stop_toggle_toggled()"
 
-    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button))) {
 #ifdef DEBUG
-        printf("%s %s: stopp button toggled\n", DEBUGFILE, DEBUGFUNCTION);
+    printf("%s %s: stopp button toggled\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
-    job_set_state(VC_STOP);
+
+    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button))) {
+        job_set_state(VC_STOP);
+
 //        xvc_capture_stop();
     } else {
         // empty
@@ -1309,15 +1393,18 @@ gboolean start_recording_nongui_stuff(Job * job)
         job->pic_no = job->start_no;
     }
 
-    if (job->max_time != 0 && (job->state & VC_PAUSE) == 0) {
-        // install a timer which stops recording
-        // we need milli secs ..
+    if ((job->state & VC_PAUSE) == 0) {
+//    if (job->max_time != 0 && (job->state & VC_PAUSE) == 0) {
         gettimeofday(&curr_time, NULL);
         time_captured = 0;
         start_time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
-        stop_timer_id =
-            gtk_timeout_add((guint32) (job->max_time * 1000),
+        if (job->max_time != 0) {
+            // install a timer which stops recording
+            // we need milli secs ..
+            stop_timer_id =
+                gtk_timeout_add((guint32) (job->max_time * 1000),
                             (GtkFunction) timer_stop_recording, job);
+        }
     }
 
     // initialize recording thread
@@ -1369,16 +1456,16 @@ on_xvc_ctrl_pause_toggle_toggled(GtkToggleToolButton * button,
 #endif
 
     if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button))) {
+        gettimeofday(&curr_time, NULL);
+        pause_time =
+            curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
+        if ((jobp->state & VC_REC) != 0) {
+            time_captured += (pause_time - start_time);
+        } else {
+            time_captured = 0;
+        }
         // stop timer handling only if max_time is configured
         if (jobp->max_time != 0) {
-            gettimeofday(&curr_time, NULL);
-            pause_time =
-                curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
-            if ((jobp->state & VC_REC) != 0) {
-                time_captured = (pause_time - start_time) + time_captured;
-            } else {
-                time_captured = 0;
-            }
             if (stop_timer_id)
                 g_source_remove(stop_timer_id);
         }
@@ -1443,13 +1530,13 @@ on_xvc_ctrl_pause_toggle_toggled(GtkToggleToolButton * button,
             gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
         }
 
+        gettimeofday(&curr_time, NULL);
+        start_time =
+            curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
         // restart timer handling only if max_time is configured
         if (jobp->max_time != 0) {
             // install a timer which stops recording
             // we need milli secs ..
-            gettimeofday(&curr_time, NULL);
-            start_time =
-                curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
             stop_timer_id = g_timeout_add((guint32)
                                           (jobp->max_time * 1000 -
                                            time_captured), (GtkFunction)

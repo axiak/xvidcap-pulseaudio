@@ -282,13 +282,6 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
     xvc_frame_rectangle.x = x;
     xvc_frame_rectangle.y = y;
 
-    printf("gnome_frame.c ... rectangle width %i\n",
-           xvc_frame_rectangle.width);
-    printf("gnome_frame.c ... rectangle height %i\n",
-           xvc_frame_rectangle.height);
-    printf("gnome_frame.c ... rectangle x %i\n", xvc_frame_rectangle.x);
-    printf("gnome_frame.c ... rectangle y %i\n", xvc_frame_rectangle.y);
-
     // create frame
     if (!(flags & FLG_NOGUI)) {
 

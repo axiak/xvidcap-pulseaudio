@@ -1,9 +1,0 @@
-
-[Anjuta]
-Geometry=1388x999+6+44
-
-[File Loader]
-Files=file:///home/kb87850/Quellen/xvidcap/trunk/src/gnome_ui.c#952%%%file:///home/kb87850/Quellen/xvidcap/trunk/src/gnome_options.c#211%%%file:///home/kb87850/Quellen/xvidcap/trunk/src/job.h#40%%%file:///home/kb87850/Quellen/xvidcap/trunk/src/capture.c#733%%%file:///home/kb87850/Quellen/xvidcap/trunk/src/control.h#48%%%file:///home/kb87850/Quellen/xvidcap/trunk/src/xtoffmpeg.c#468
-
-[Execution]
-Run in terminal=2

@@ -549,7 +549,7 @@
 		    <widget class="GtkTable" id="xvc_pref_nb_tab_general_frame_table">
 		      <property name="border_width">4</property>
 		      <property name="visible">True</property>
-		      <property name="n_rows">5</property>
+		      <property name="n_rows">6</property>
 		      <property name="n_columns">3</property>
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">4</property>
@@ -757,6 +757,28 @@
 			  <property name="right_attach">1</property>
 			  <property name="top_attach">4</property>
 			  <property name="bottom_attach">5</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckButton" id="xvc_pref_always_show_results_checkbutton">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">Alyway Show Result Dialog</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
+			  <property name="top_attach">5</property>
+			  <property name="bottom_attach">6</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -3577,7 +3599,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
 	<widget class="GtkTable" id="table1">
 	  <property name="border_width">4</property>
 	  <property name="visible">True</property>
-	  <property name="n_rows">6</property>
+	  <property name="n_rows">7</property>
 	  <property name="n_columns">4</property>
 	  <property name="homogeneous">False</property>
 	  <property name="row_spacing">4</property>
@@ -4070,6 +4092,27 @@ Length:&lt;/b&gt;</property>
 	      <property name="right_attach">4</property>
 	      <property name="top_attach">5</property>
 	      <property name="bottom_attach">6</property>
+	      <property name="x_options">fill</property>
+	      <property name="y_options"></property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkCheckButton" id="xvc_result_dialog_show_next_time_checkbutton">
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">Show this dialog next time</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">True</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">0</property>
+	      <property name="right_attach">4</property>
+	      <property name="top_attach">6</property>
+	      <property name="bottom_attach">7</property>
 	      <property name="x_options">fill</property>
 	      <property name="y_options"></property>
 	    </packing>

@@ -118,7 +118,7 @@ void xvc_app_data_set_defaults(AppData * lapp)
 {
     // initialize general options
     lapp->cap_pos_x = lapp->cap_pos_y = -1;
-    lapp->flags = 0;
+    lapp->flags = FLG_ALWAYS_SHOW_RESULTS;
     lapp->device = "/dev/video0";
     lapp->source = "x11";
     lapp->mouseWanted = 1;

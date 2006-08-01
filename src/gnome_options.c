@@ -161,6 +161,16 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         lapp->flags &= ~FLG_AUTO_CONTINUE; 
     }
 
+    // always show results
+    w = NULL;
+    w = glade_xml_get_widget(xml, "xvc_pref_always_show_results_checkbutton");
+    g_assert(w);
+    if ( gtk_toggle_button_get_active ( GTK_TOGGLE_BUTTON( w ) ) ) { 
+        lapp->flags |= FLG_ALWAYS_SHOW_RESULTS; 
+    } else { 
+        lapp->flags &= ~FLG_ALWAYS_SHOW_RESULTS; 
+    }
+
 
     // sf
     // file name 
@@ -2136,6 +2146,16 @@ xvc_create_pref_dialog(AppData * lapp)
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_autocontinue_checkbutton");
     if ((pref_app.flags & FLG_AUTO_CONTINUE) != 0) {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), TRUE);
+    } else {
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), FALSE);
+    }
+
+
+    // always show result dialog
+    w = NULL;
+    w = glade_xml_get_widget(xml, "xvc_pref_always_show_results_checkbutton");
+    if ((pref_app.flags & FLG_ALWAYS_SHOW_RESULTS) != 0) {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), TRUE);
     } else {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), FALSE);
