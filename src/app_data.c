@@ -44,6 +44,7 @@
 
 #include "app_data.h"
 #include "codecs.h"
+#include "xvidcap-intl.h"
 
 #define DEBUGFILE "app_data.c"
 
@@ -166,9 +167,9 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->multi_frame.file = "test-%04d.mpeg";
 
     lapp->multi_frame.edit_cmd =
-        "xterm -e 'echo \"none specified\" ; sleep 20'";
+        _("xterm -e 'echo \"none specified\" ; sleep 20'");
     lapp->multi_frame.video_cmd =
-        "xterm -e 'echo \"not needed for multi-frame capture\" ; sleep 20'";
+        _("xterm -e 'echo \"not needed for multi-frame capture\" ; sleep 20'");
     lapp->multi_frame.play_cmd = "mplayer \"${XVFILE}\" &";
 #endif // HAVE_LIBAVCODEC
 
@@ -296,7 +297,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (lapp->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, lapp->current_mode);
     
     lapp->current_mode = 0;
@@ -1086,7 +1087,7 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (lapp->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, lapp->current_mode);
     
     lapp->current_mode = 0;
@@ -1185,28 +1186,28 @@ void xverror_2_action(void *err)
 const xvError two = {
     2,
     XV_ERR_ERROR,
-    "No V4L available",
-    "Video for Linux is selected as the capture source but V4L is not available with this binary.",
+    N_("No V4L available"),
+    N_("Video for Linux is selected as the capture source but V4L is not available with this binary."),
     xverror_2_action,
-    "Disable Video for Linux capture source"
+    N_("Disable Video for Linux capture source")
 };
 
 const xvError three = {
     3,
     XV_ERR_FATAL,
-    "V4L device inaccessible",
-    "Can't open the specified Video for Linux device.",
+    N_("V4L device inaccessible"),
+    N_("Can't open the specified Video for Linux device."),
     xverror_exit_action,
-    "Quit"
+    N_("Quit")
 };
 
 const xvError four = {
     4,
     XV_ERR_FATAL,
-    "V4L can't capture",
-    "The specified Video for Linux device can't capture to memory.",
+    N_("V4L can't capture"),
+    N_("The specified Video for Linux device can't capture to memory."),
     xverror_exit_action,
-    "Quit"
+    N_("Quit")
 };
 
 void xverror_5_action(void *err)
@@ -1238,10 +1239,10 @@ void xverror_5_action(void *err)
 const xvError five = {
     5,
     XV_ERR_ERROR,
-    "Capture size exceeds V4L limits",
-    "The specified capture size exceeds the limits for Video for Linux capture.",
+    N_("Capture size exceeds V4L limits"),
+    N_("The specified capture size exceeds the limits for Video for Linux capture."),
     xverror_5_action,
-    "Increase or decrease the capture area to conform to V4L's limits"
+    N_("Increase or decrease the capture area to conform to V4L's limits")
 };
 
 void xverror_6_action(void *err)
@@ -1262,10 +1263,10 @@ void xverror_6_action(void *err)
 const xvError six = {
     6,
     XV_ERR_WARN,
-    "Capture area outside screen",
-    "The specified capture area reaches beyond the visible screen.",
+    N_("Capture area outside screen"),
+    N_("The specified capture area reaches beyond the visible screen."),
     xverror_6_action,
-    "Clip capture size to visible screen"
+    N_("Clip capture size to visible screen")
 };
 
 void xverror_7_action(void *err)
@@ -1322,7 +1323,7 @@ const xvError ten = {
     "File name is NULL",
     "The filename string variable used for single-frame capture is a null pointer. This should never be possible at this stage.",
     xverror_exit_action,
-    "Quit"
+    N_("Quit")
 };
 
 const xvError eleven = {
@@ -1331,7 +1332,7 @@ const xvError eleven = {
     "File name is NULL",
     "The filename string variable used for multi-frame capture is a null pointer. This should never be possible at this stage.",
     xverror_exit_action,
-    "Quit"
+    N_("Quit")
 };
 
 // error twelve is for zero length filenames with target
@@ -1359,7 +1360,7 @@ void xverror_12_action(void *err)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
     
     cerr->app->current_mode = 0;
@@ -1469,7 +1470,7 @@ void xverror_16_action(void *err) {
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
     
     cerr->app->current_mode = 0;
@@ -1624,7 +1625,7 @@ const xvError twentyseven = {
     "Invalid frame-rate for selected codec",
     "You selected multi-frame capture mode but the requested frame-rate is not valid for the selected codec. This would result in the video playing back too slowly or quickly.",
     xverror_exit_action,
-    "Quit"
+    N_("Quit")
 };
 
 void xverror_28_action(void *err)
@@ -1661,7 +1662,7 @@ void xverror_29_action(void *err)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
     
     cerr->app->current_mode = 0;
@@ -1713,7 +1714,7 @@ void xverror_31_action(void *err)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
     
     cerr->app->current_mode = 0;
@@ -1765,7 +1766,7 @@ void xverror_33_action(void *err)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
     
     cerr->app->current_mode = 0;
@@ -1817,7 +1818,7 @@ void xverror_35_action(void *err)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
     
     cerr->app->current_mode = 0;
@@ -1869,7 +1870,7 @@ void xverror_40_action(void *err)
 #else // HAVE_LIBAVCODEC
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n", 
+        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
                 DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
     
     cerr->app->current_mode = 0;

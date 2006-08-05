@@ -27,11 +27,12 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtkimage.h>
+#include <gtk/gtksignal.h>
 #include <math.h>
 
-#include "gtk/gtksignal.h"
 #include "xv_error_item.h"
 #include "app_data.h"
+#include "xvidcap-intl.h"
 
 enum {
     XV_ERROR_ITEM_SIGNAL,
@@ -239,11 +240,11 @@ void xv_error_item_set_error(XvErrorItem * ei, xvError * err)
             snprintf(ttag, 128, "???? (%i):", err->code);
         }
         gtk_label_set_text(GTK_LABEL(ei->title_tag), strdup(ttag));
-        gtk_label_set_text(GTK_LABEL(ei->title_text), err->short_msg);
+        gtk_label_set_text(GTK_LABEL(ei->title_text), _(err->short_msg));
         gtk_text_buffer_set_text(gtk_text_view_get_buffer
                                  (GTK_TEXT_VIEW(ei->desc_text)),
-                                 err->long_msg, -1);
-        gtk_label_set_text(GTK_LABEL(ei->action_text), err->action_msg);
+                                 _(err->long_msg), -1);
+        gtk_label_set_text(GTK_LABEL(ei->action_text), _(err->action_msg));
     }
 
 }

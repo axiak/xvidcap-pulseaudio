@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2006-03-02 20:46+0200\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
-"Language-Team: German\n"
+"Language-Team: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,12 +24,12 @@ msgstr "Karl H. Beckers"
 #: app_data.c:169
 # default command to edit video captured in multi-frame mode
 msgid "xterm -e 'echo \"none specified\" ; sleep 20'"
-msgstr "xterm -e 'echo \"Keine Anwendung angegeben\" ; sleep 20'"
+msgstr "xterm -e 'echo \"none specified\" ; sleep 20'"
 
 #: app_data.c:171
 # default command for encoding in multi-frame mode
 msgid "xterm -e 'echo \"not needed for multi-frame capture\" ; sleep 20'"
-msgstr "xterm -e 'echo \"Bei Echtzeit-Enkodierung nicht erforderlich\" ; sleep 20'"
+msgstr ""
 
 #: app_data.c:299 app_data.c:1089 app_data.c:1362 app_data.c:1472
 #: app_data.c:1664 app_data.c:1716 app_data.c:1768 app_data.c:1820
@@ -39,14 +39,14 @@ msgid ""
 "%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... "
 "correcting, but smth's wrong\n"
 msgstr ""
-"%s %s: Gewählte Aufnahme Art nicht Einzelbild (%i), aber ffmpeg ist nicht vorhanden ... "
-"korrigiere, aber irgendetwas ist faul.\n"
+"%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... "
+"correcting, but smth's wrong\n"
 
 #: app_data.c:1188
 # user selected capture from a V4L device but V4L support is not present
 # this is the error's short name
 msgid "No V4L available"
-msgstr "V4L nicht verfügbar"
+msgstr "No V4L available"
 
 #: app_data.c:1189
 # user selected capture from a V4L device but V4L support is not present
@@ -55,73 +55,72 @@ msgid ""
 "Video for Linux is selected as the capture source but V4L is not available "
 "with this binary."
 msgstr ""
-"\"Video for Linux\" wurde als Aufnahmequelle ausgewählt, aber die nötige "
-"Unterstützung ist in diese Anwendung nicht hineinkompiliert."
+"Video for Linux is selected as the capture source but V4L is not available "
+"with this binary."
 
 #: app_data.c:1191
 # user selected capture from a V4L device but V4L support is not present
 # this is the error's action message
 msgid "Disable Video for Linux capture source"
-msgstr "\"Video for Linux\" nicht verwenden"
+msgstr "Disable Video for Linux capture source"
 
 #: app_data.c:1197
 # selected V4L device not accessible
 # this is the error's short name
 msgid "V4L device inaccessible"
-msgstr "V4L Gerät nicht verwendbar"
+msgstr "V4L device inaccessible"
 
 #: app_data.c:1198
 # selected V4L device not accessible
 # this is the error's description
 msgid "Can't open the specified Video for Linux device."
-msgstr "Kann das angegebene \"Video for Linux\" Gerät nicht ansprechen."
+msgstr "Can't open the specified Video for Linux device."
 
 #: app_data.c:1200 app_data.c:1209 app_data.c:1325 app_data.c:1334
 #: app_data.c:1627
 # selected V4L device not accessible ... and other errors
 # this is the error's action message
 msgid "Quit"
-msgstr "Beenden"
+msgstr "Quit"
 
 #: app_data.c:1206
 # error short name
 msgid "V4L can't capture"
-msgstr "Kann nicht per V4L aufnehmen"
+msgstr "V4L can't capture"
 
 #: app_data.c:1207
 # error description
 msgid "The specified Video for Linux device can't capture to memory."
-msgstr "Das angegebene \"Video for Linux\" Gerät kann nicht in Hauptspeicher aufnehmen."
+msgstr "The specified Video for Linux device can't capture to memory."
 
 #: app_data.c:1241
 # error short name
 msgid "Capture size exceeds V4L limits"
-msgstr "Aufnahme-Bereichs jenseits V4L Beschränkungen"
+msgstr "Capture size exceeds V4L limits"
 
 #: app_data.c:1242
 # error description
 msgid ""
 "The specified capture size exceeds the limits for Video for Linux capture."
 msgstr ""
-"Die angegebene Größe des Aufnahme-Bereichst liegt ausserhalb der Beschränkungen für die Aufnahme von \"Video for Linux\" Geräten."
+"The specified capture size exceeds the limits for Video for Linux capture."
 
 #: app_data.c:1244
 # error action message
 msgid "Increase or decrease the capture area to conform to V4L's limits"
-msgstr "Den Aufnahme-Bereich vergrößern oder verkleinern, um den V4L Beschränkungen gerecht zu werden"
+msgstr "Increase or decrease the capture area to conform to V4L's limits"
 
 #: app_data.c:1265
 # error short name
 msgid "Capture area outside screen"
-msgstr "Aufnahme-Bereich ausserhalb des Bildschirms"
+msgstr "Capture area outside screen"
 
 #: app_data.c:1266
 # error description
 msgid "The specified capture area reaches beyond the visible screen."
-msgstr "Der angegebene Aufnahme-Bereich ragt aus dem sichtbaren Bildbereich heraus."
+msgstr "The specified capture area reaches beyond the visible screen."
 
 #: app_data.c:1268
 # error action message
 msgid "Clip capture size to visible screen"
-msgstr "Aufnahme-Bereich auf sichtbaren Bereich beschränken"
-
+msgstr "Clip capture size to visible screen"

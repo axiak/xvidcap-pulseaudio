@@ -150,8 +150,7 @@ typedef struct _xvError {
     // ending in a '.' (or smth.)
     void (*action) (void *);    // default action 
     char *action_msg;           // describes what the default action does
-    // formulate like you're completing the sentence: The default action
-    // is to .....
+    // formulate like you're completing the sentence: to resolve this I will ...
 } xvError;
 
 typedef struct _xvErrorListItem {

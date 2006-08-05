@@ -3365,7 +3365,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
   <property name="authors">karl</property>
   <property name="documenters">karl</property>
   <property name="artists">karl</property>
-  <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">karl</property>
+  <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
   <property name="logo">xvidcap_logo.png</property>
 </widget>
 

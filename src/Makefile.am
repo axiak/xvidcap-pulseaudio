@@ -50,7 +50,8 @@ xvidcap_SOURCES = \
     job.c \
     job.h \
     xv_error_item.c \
-    xv_error_item.h
+    xv_error_item.h \
+    xvidcap-intl.h
 
 xvidcap_LDFLAGS = -export-dynamic
 

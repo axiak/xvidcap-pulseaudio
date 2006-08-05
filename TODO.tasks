@@ -116,14 +116,15 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
       <comment/>
     </item>
     <item>
-      <attribute id="1153845404" priority="1" done="0" start_date="732517" enddate="99999999" notify="0" endtime="-60" last_edited="1153845404"/>
-      <summary>create a new job from app-data on record</summary>
-      <comment>this should save a lot of updating job in the UI and make sure we create the right job during startup of a recording session</comment>
-    </item>
-    <item>
       <attribute id="1150970358" priority="1" done="1" start_date="732484" completed_date="732524" notify="0" last_edited="1154444280"/>
       <summary>implement ask-user for filename dialog</summary>
-      <comment></comment>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1153845404" priority="1" done="0" start_date="732517" enddate="99999999" notify="0" endtime="-60" last_edited="1154809740"/>
+      <summary>create a new job from app-data on record</summary>
+      <comment>this should save a lot of updating job in the UI and make sure we create the right job during startup of a recording session.
+Might not work after all due to flags and stuff ... check well</comment>
     </item>
   </category>
   <category title="Business" place="1"/>
