@@ -1,7 +1,7 @@
 /* 
  * codecs.c,
  *
- * Copyright (C) 2004 Karl, Frankfurt
+ * Copyright (C) 2004-06 Karl, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <string.h>
 #include <locale.h>
 #include <ctype.h>
+#include <libintl.h>
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -30,9 +31,12 @@
 
 #include "app_data.h"
 #include "codecs.h"
+#include "xvidcap-intl.h"
 
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
+
+#define DEBUGFILE "codecs.c"
 
 xvCodec tCodecs[NUMCODECS];
 xvFFormat tFFormats[NUMCAPS];
@@ -41,7 +45,7 @@ xvAuCodec tAuCodecs[NUMAUCODECS];
 
 const xvCodec none = {
     "NONE",
-    "NONE",
+    N_("NONE"),
     CODEC_NONE,
     CODEC_ID_NONE,
     0,
@@ -53,7 +57,7 @@ const xvCodec none = {
 #ifdef HAVE_LIBAVCODEC
 const xvCodec pgm = {
     "PGM",
-    "Portable Graymap",
+    N_("Portable Graymap"),
     CODEC_PGM,
     CODEC_ID_PGM,
     300000,
@@ -64,7 +68,7 @@ const xvCodec pgm = {
 
 const xvCodec ppm = {
     "PPM",
-    "Portable Pixmap",
+    N_("Portable Pixmap"),
     CODEC_PPM,
     CODEC_ID_PPM,
     300000,
@@ -75,7 +79,7 @@ const xvCodec ppm = {
 
 const xvCodec png = {
     "PNG",
-    "Portable Network Graphics",
+    N_("Portable Network Graphics"),
     CODEC_PNG,
     CODEC_ID_PNG,
     300000,
@@ -86,7 +90,7 @@ const xvCodec png = {
 
 const xvCodec jpeg = {
     "JPEG",
-    "Joint Picture Expert Group",
+    N_("Joint Picture Expert Group"),
     CODEC_JPEG,
     CODEC_ID_JPEGLS,
     300000,
@@ -97,7 +101,7 @@ const xvCodec jpeg = {
 
 const xvCodec mpeg1 = {
     "MPEG1",
-    "MPEG 1",
+    N_("MPEG 1"),
     CODEC_MPEG1,
     CODEC_ID_MPEG1VIDEO,
     300000,
@@ -108,7 +112,7 @@ const xvCodec mpeg1 = {
 
 const xvCodec mjpeg = {
     "MJPEG",
-    "MJPEG",
+    N_("MJPEG"),
     CODEC_MJPEG,
     CODEC_ID_MJPEG,
     300000,
@@ -120,7 +124,7 @@ const xvCodec mjpeg = {
 
 const xvCodec mpeg4 = {
     "MPEG4",
-    "MPEG 4 (DIVX)",
+    N_("MPEG 4 (DIVX)"),
     CODEC_MPEG4,
     CODEC_ID_MPEG4,
     300000,
@@ -131,7 +135,7 @@ const xvCodec mpeg4 = {
 
 const xvCodec ms_div2 = {
     "MS_DIV2",
-    "Microsoft DIVX 2",
+    N_("Microsoft DIVX 2"),
     CODEC_MSDIV2,
     CODEC_ID_MSMPEG4V2,
     300000,
@@ -143,7 +147,7 @@ const xvCodec ms_div2 = {
 
 const xvCodec ms_div3 = {
     "MS_DIV3",
-    "Microsoft DIVX 3",
+    N_("Microsoft DIVX 3"),
     CODEC_MSDIV3,
     CODEC_ID_MSMPEG4V3,
     300000,
@@ -155,7 +159,7 @@ const xvCodec ms_div3 = {
 
 const xvCodec flv1 = {
     "FLASH_VIDEO",
-    "Flash Video",
+    N_("Flash Video"),
     CODEC_FLV,
     CODEC_ID_FLV1,
     300000,
@@ -167,7 +171,7 @@ const xvCodec flv1 = {
 
 const xvCodec dv = {
     "DV",
-    "DV Video",
+    N_("DV Video"),
     CODEC_DV,
     CODEC_ID_DVVIDEO,
     300000,
@@ -178,7 +182,7 @@ const xvCodec dv = {
 
 const xvCodec mpeg2 = {
     "MPEG2",
-    "MPEG2 Video",
+    N_("MPEG2 Video"),
     CODEC_MPEG2,
     CODEC_ID_MPEG2VIDEO,
     300000,
@@ -189,7 +193,7 @@ const xvCodec mpeg2 = {
 
 const xvCodec svq1 = {
     "SVQ1",
-    "Soerensen VQ 1",
+    N_("Soerensen VQ 1"),
     CODEC_SVQ1,
     CODEC_ID_SVQ1,
     300000,
@@ -205,7 +209,7 @@ const xvCodec svq1 = {
 
 const xvAuCodec none_aucodec = {
     "NONE",
-    "NONE",
+    N_("NONE"),
     AU_CODEC_NONE,
     CODEC_ID_NONE
 };
@@ -214,7 +218,7 @@ const xvAuCodec none_aucodec = {
 #ifdef HAVE_FFMPEG_AUDIO
 const xvAuCodec mp2 = {
     "MP2",
-    "MPEG2",
+    N_("MPEG2"),
     AU_CODEC_MP2,
     CODEC_ID_MP2
 };
@@ -222,7 +226,7 @@ const xvAuCodec mp2 = {
 #ifdef HAVE_LIBMP3LAME
 const xvAuCodec mp3 = {
     "MP3",
-    "MPEG2 Layer 3",
+    N_("MPEG2 Layer 3"),
     AU_CODEC_MP3,
     CODEC_ID_MP3
 };
@@ -230,7 +234,7 @@ const xvAuCodec mp3 = {
 
 const xvAuCodec pcm16 = {
     "PCM16",
-    "PCM",
+    N_("PCM"),
     AU_CODEC_PCM16,
     CODEC_ID_PCM_S16LE
 };
@@ -242,7 +246,7 @@ const xvAuCodec pcm16 = {
 
 const xvFFormat none_format = {
     "NONE",
-    "NONE",
+    N_("NONE"),
     "NONE",
     NULL,
     CODEC_NONE,
@@ -254,7 +258,7 @@ const xvFFormat none_format = {
 
 const xvFFormat xwd = {
     "xwd",
-    "X11 Window Dump",
+    N_("X11 Window Dump"),
     NULL,
     "xwd",
     CODEC_NONE,
@@ -267,7 +271,7 @@ const xvFFormat xwd = {
 #ifdef HAVE_LIBAVCODEC
 const xvFFormat pgm_format = {
     "pgm",
-    "Portable Graymap File",
+    N_("Portable Graymap File"),
     NULL,
     "pgm",
     CODEC_PGM,
@@ -278,8 +282,8 @@ const xvFFormat pgm_format = {
 };
 
 const xvFFormat ppm_format = {
-    "pgm",
-    "Portable Anymap File",
+    "ppm",
+    N_("Portable Anymap File"),
     NULL,
     "ppm",
     CODEC_PPM,
@@ -291,7 +295,7 @@ const xvFFormat ppm_format = {
 
 const xvFFormat png_format = {
     "png",
-    "Portable Network Graphics File",
+    N_("Portable Network Graphics File"),
     NULL,
     "png",
     CODEC_PNG,
@@ -303,7 +307,7 @@ const xvFFormat png_format = {
 
 const xvFFormat jpeg_format = {
     "jpg",
-    "Joint Picture Expert Group",
+    N_("Joint Picture Expert Group"),
     NULL,
     "jpg|jpeg",
     CODEC_JPEG,
@@ -315,7 +319,7 @@ const xvFFormat jpeg_format = {
 
 const xvFFormat avi = {
     "avi",
-    "Microsoft Audio Video Interleaved File",
+    N_("Microsoft Audio Video Interleaved File"),
     "avi",
     "avi",
     CODEC_MSDIV2,
@@ -336,7 +340,7 @@ const xvFFormat avi = {
 
 const xvFFormat divx = {
     "divx",
-    "General AVI file (DIVX default)",
+    N_("General AVI file (DIVX default)"),
     "avi",
     "mpeg|mpg",
     CODEC_MPEG4,
@@ -357,7 +361,7 @@ const xvFFormat divx = {
 
 const xvFFormat asf = {
     "asf",
-    "Microsoft Advanced Streaming Format",
+    N_("Microsoft Advanced Streaming Format"),
     "asf",
     "asf",
     CODEC_MSDIV3,
@@ -378,7 +382,7 @@ const xvFFormat asf = {
 
 const xvFFormat ff_flv1 = {
     "flv1",
-    "Macromedia Flash Video Stream",
+    N_("Macromedia Flash Video Stream"),
     "flv1",
     "flv|flv1",
     CODEC_FLV,
@@ -390,7 +394,7 @@ const xvFFormat ff_flv1 = {
 
 const xvFFormat swf = {
     "swf",
-    "Macromedia Shockwave Flash File",
+    N_("Macromedia Shockwave Flash File"),
     "swf",
     "swf",
     CODEC_FLV,
@@ -412,7 +416,7 @@ const xvFFormat swf = {
 
 const xvFFormat dv_format = {
     "dv",
-    "DV Video Format",
+    N_("DV Video Format"),
     "dv",
     "dv",
     CODEC_DV,
@@ -429,7 +433,7 @@ const xvFFormat dv_format = {
 
 const xvFFormat mpeg = {
     "mpeg",
-    "MPEG1 System Format",
+    N_("MPEG1 System Format"),
     "mpeg",
     "m1v|vcd",
     CODEC_MPEG1,
@@ -446,7 +450,7 @@ const xvFFormat mpeg = {
 
 const xvFFormat svcd = {
     "mpeg2",
-    "MPEG2 PS Format",
+    N_("MPEG2 PS Format"),
     "svcd",
     "m2v|svcd",
     CODEC_MPEG2,
@@ -463,7 +467,7 @@ const xvFFormat svcd = {
 
 const xvFFormat mov = {
     "mov",
-    "Quicktime Format",
+    N_("Quicktime Format"),
     "mov",
     "mov|qt",
     CODEC_MPEG4,
@@ -644,6 +648,7 @@ int xvc_codec_get_target_from_filename(char *file)
  */
 int xvc_codec_is_valid_fps(int fps, int codec)
 {
+    #define DEBUGFUNCTION "xvc_codec_is_valid_fps()"
     char *element = NULL;
 
     if (tCodecs[codec].allowed_fps) {
@@ -652,7 +657,8 @@ int xvc_codec_is_valid_fps(int fps, int codec)
             int f = xvc_get_int_from_float_string(element);
             if (f < 0)
                 fprintf(stderr,
-                        "Non-fatal error in the definition of valid fps for codec %s\n",
+                        "%s %s: Non-fatal error in the definition of valid fps for codec %s\n",
+                        DEBUGFILE, DEBUGFUNCTION,
                         tCodecs[codec].name);
             else if (f == fps)
                 return 1;
@@ -674,7 +680,8 @@ int xvc_codec_is_valid_fps(int fps, int codec)
 
             if (start < 0 || end < 0) {
                 fprintf(stderr,
-                        "Non-fatal error in the definition of valid fps ranges for codec %s\n",
+                        "%s %s: Non-fatal error in the definition of valid fps ranges for codec %s\n",
+                        DEBUGFILE, DEBUGFUNCTION,
                         tCodecs[codec].name);
             } else if (start <= fps && fps <= end)
                 return 1;
@@ -683,6 +690,7 @@ int xvc_codec_is_valid_fps(int fps, int codec)
     }
     // FIXME: what kind of error do I want to report with the return code?
     return 0;
+    #undef DEBUGFUNCTION
 }
 
 

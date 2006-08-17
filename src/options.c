@@ -29,9 +29,11 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <ctype.h>
+
 #include "job.h"
 #include "app_data.h"
 #include "codecs.h"
+#include "xvidcap-intl.h"
 
 #define OPS_FILE ".xvidcaprc"
 
@@ -60,34 +62,34 @@ Boolean xvc_write_options_file()
         return FALSE;
     }
 
-    fprintf(fp, "#\n# xvidcap configuration file\n\n");
+    fprintf(fp, _("#\n# xvidcap configuration file\n\n"));
 
     // general options
-    fprintf(fp, "#general options ...\n");
+    fprintf(fp, _("#general options ...\n"));
     fprintf(fp,
-            "# default capture mode (0 = single-frame, 1 = multi-frame\ndefault_mode: %i\n",
+            _("# default capture mode (0 = single-frame, 1 = multi-frame\ndefault_mode: %i\n"),
 #ifdef HAVE_LIBAVCODEC
             app->default_mode);
 #else // HAVE_LIBAVCODEC
             0);
 #endif // HAVE_LIBAVCODEC
-    fprintf(fp, "# capture source\nsource: %s\n", app->source);
-    fprintf(fp, "# hide GUI\nnogui: %d\n",
+    fprintf(fp, _("# capture source\nsource: %s\n"), app->source);
+    fprintf(fp, _("# hide GUI\nnogui: %d\n"),
             ((app->flags & FLG_NOGUI) ? 1 : 0));
 #ifdef HAVE_FFMPEG_AUDIO
-    fprintf(fp, "# device to grab audio from\naudio_in: %s\n",
+    fprintf(fp, _("# device to grab audio from\naudio_in: %s\n"),
             ((strcmp(app->snddev, "pipe:") == 0) ? "-" : app->snddev));
 #endif // HAVE_FFMPEG_AUDIO
-    fprintf(fp, "# command to display help\nhelp_cmd: %s\n",
+    fprintf(fp, _("# command to display help\nhelp_cmd: %s\n"),
             app->help_cmd);
     fprintf(fp,
-            "# what kind of mouse pointer should be recorded? 0 = none, 1 = white, 2 = black\n");
+            _("# what kind of mouse pointer should be recorded? 0 = none, 1 = white, 2 = black\n"));
     fprintf(fp, "mouse_wanted: %i\n", app->mouseWanted);
     fprintf(fp,
-            "# should cap_geometry be saved to prefs?\nsave_geometry: %d\n",
+            _("# should cap_geometry be saved to prefs?\nsave_geometry: %d\n"),
             ((app->flags & FLG_SAVE_GEOMETRY) ? 1 : 0));
     if ((app->flags & FLG_SAVE_GEOMETRY) > 0) {
-        fprintf(fp, "# area to capture as in --capture_geometry\n");
+        fprintf(fp, _("# area to capture as in --capture_geometry\n"));
         fprintf(fp, "cap_geometry: %ix%i", job->area->width,
                 job->area->height);
         if (job->area->x >= 0 && job->area->y >= 0)
@@ -95,17 +97,17 @@ Boolean xvc_write_options_file()
         else
             fprintf(fp, "\n");
     }
-    fprintf(fp, "# show time rather than frame count\nshow_time: %d\n",
+    fprintf(fp, _("# show time rather than frame count\nshow_time: %d\n"),
             ((app->flags & FLG_SHOW_TIME) ? 1 : 0));
-    fprintf(fp, "# toggle autocontinue (0/1) \nauto_continue: %i\n",
+    fprintf(fp, _("# toggle autocontinue (0/1) \nauto_continue: %i\n"),
             ((app->flags & FLG_AUTO_CONTINUE) ? 1 : 0));
-    fprintf(fp, "# always show results dialog (0/1) \nalways_show_results: %i\n",
+    fprintf(fp, _("# always show results dialog (0/1) \nalways_show_results: %i\n"),
             ((app->flags & FLG_ALWAYS_SHOW_RESULTS) ? 1 : 0));
 
-    fprintf(fp, "\n#options for single-frame capture ...\n");
+    fprintf(fp, _("\n#options for single-frame capture ...\n"));
     fprintf(fp,
-            "# file pattern\n# this defines the filetype to write via the extension provided\n");
-    fprintf(fp, "# valid extensions are: ");
+            _("# file pattern\n# this defines the filetype to write via the extension provided\n"));
+    fprintf(fp, _("# valid extensions are: "));
 #ifdef HAVE_LIBAVCODEC
     for (n = CAP_NONE; n < CAP_FFM; n++) {
 #else
@@ -131,8 +133,8 @@ Boolean xvc_write_options_file()
     fprintf(fp, "\n");
     fprintf(fp, "sf_file: %s\n", app->single_frame.file);
     fprintf(fp,
-            "# file format - use AUTO to select format through file extension\n");
-    fprintf(fp, "# Otherwise specify one of the following: ");
+            _("# file format - use AUTO to select format through file extension\n"));
+    fprintf(fp, _("# Otherwise specify one of the following: "));
 #ifdef HAVE_LIBAVCODEC
     for (n = (CAP_NONE + 1); n < CAP_MF; n++) {
 #else
@@ -154,8 +156,8 @@ Boolean xvc_write_options_file()
     fprintf(fp, "sf_format: %s\n",
             tFFormats[app->single_frame.target].name);
     fprintf(fp,
-            "# video codec used by ffmpeg - use AUTO to auto-detect codec\n");
-    fprintf(fp, "# Otherwise specify one of the following: ");
+            _("# video codec used by ffmpeg - use AUTO to auto-detect codec\n"));
+    fprintf(fp, _("# Otherwise specify one of the following: "));
 #ifdef HAVE_LIBAVCODEC
     for (n = (CODEC_NONE + 1); n < CODEC_MF; n++) {
 #else
@@ -175,39 +177,39 @@ Boolean xvc_write_options_file()
     }
     fprintf(fp, "\n#sf_codec: %s\n",
             tCodecs[app->single_frame.targetCodec].name);
-    fprintf(fp, "# audio codec (for future use)\nsf_au_codec: %s\n",
+    fprintf(fp, _("# audio codec (for future use)\nsf_au_codec: %s\n"),
             "NONE");
-    fprintf(fp, "# frames per second\nsf_fps: %.2f\n",
+    fprintf(fp, _("# frames per second\nsf_fps: %.2f\n"),
             ((float) app->single_frame.fps / 100));
-    fprintf(fp, "# max time (0 = unlimited)\nsf_max_time: %i\n",
+    fprintf(fp, _("# max time (0 = unlimited)\nsf_max_time: %i\n"),
             app->single_frame.time);
-    fprintf(fp, "# max frames (0 = unlimited)\nsf_max_frames: %d\n",
+    fprintf(fp, _("# max frames (0 = unlimited)\nsf_max_frames: %d\n"),
             app->single_frame.frames);
-    fprintf(fp, "# number to start counting individual frames from\n");
+    fprintf(fp, _("# number to start counting individual frames from\n"));
     fprintf(fp, "sf_start_no: %i\n", app->single_frame.start_no);
-    fprintf(fp, "# quality (JPEG/MPEG)\nsf_quality: %d\n",
+    fprintf(fp, _("# quality (JPEG/MPEG)\nsf_quality: %d\n"),
             app->single_frame.quality);
     fprintf(fp,
-            "# toggle audio capture (0/1) (for future use)\nsf_audio: 0\n");
+            _("# toggle audio capture (0/1) (for future use)\nsf_audio: 0\n"));
     fprintf(fp,
-            "# sample rate for audio capture (for future use)\nsf_audio_rate: 0\n");
+            _("# sample rate for audio capture (for future use)\nsf_audio_rate: 0\n"));
     fprintf(fp,
-            "# bit rate for audio capture (for future use)\nsf_audio_bits: 0\n");
+            _("# bit rate for audio capture (for future use)\nsf_audio_bits: 0\n"));
     fprintf(fp,
-            "# number of channels to use in audio capture (for future use)\n");
+            _("# number of channels to use in audio capture (for future use)\n"));
     fprintf(fp, "sf_audio_channels: 0\n");
-    fprintf(fp, "# command to display captured frames as animation\n");
+    fprintf(fp, _("# command to display captured frames as animation\n"));
     fprintf(fp, "sf_animate_cmd: %s\n", app->single_frame.play_cmd);
-    fprintf(fp, "# command to edit current frame\n");
+    fprintf(fp, _("# command to edit current frame\n"));
     fprintf(fp, "sf_edit_cmd: %s\n", app->single_frame.edit_cmd);
-    fprintf(fp, "# command to encode captured frames\n");
+    fprintf(fp, _("# command to encode captured frames\n"));
     fprintf(fp, "sf_video_cmd: %s\n", app->single_frame.video_cmd);
 
 #ifdef HAVE_LIBAVCODEC
-    fprintf(fp, "\n#options for multi-frame capture ...\n");
+    fprintf(fp, _("\n#options for multi-frame capture ...\n"));
     fprintf(fp,
-            "# file pattern\n# this defines the filetype to write via the extension provided\n");
-    fprintf(fp, "# valid extensions are: ");
+            _("# file pattern\n# this defines the filetype to write via the extension provided\n"));
+    fprintf(fp, _("# valid extensions are: "));
     for (n = CAP_FFM; n < NUMCAPS; n++) {
         if (tFFormats[n].extensions) {
             element = xvc_next_element(tFFormats[n].extensions);
@@ -222,8 +224,8 @@ Boolean xvc_write_options_file()
     fprintf(fp, "\n");
     fprintf(fp, "mf_file: %s\n", app->multi_frame.file);
     fprintf(fp,
-            "# file format - use AUTO to select format through file extension\n");
-    fprintf(fp, "# Otherwise specify one of the following: ");
+            _("# file format - use AUTO to select format through file extension\n"));
+    fprintf(fp, _("# Otherwise specify one of the following: "));
     for (n = CAP_MF; n < NUMCAPS; n++) {
         if (tFFormats[n].name) {
             element = xvc_next_element(tFFormats[n].name);
@@ -241,8 +243,8 @@ Boolean xvc_write_options_file()
     fprintf(fp, "mf_format: %s\n",
             tFFormats[app->multi_frame.target].name);
     fprintf(fp,
-            "# video codec used by ffmpeg - use AUTO to auto-detect codec\n");
-    fprintf(fp, "# Otherwise specify one of the following: ");
+            _("# video codec used by ffmpeg - use AUTO to auto-detect codec\n"));
+    fprintf(fp, _("# Otherwise specify one of the following: "));
     for (n = CODEC_MF; n < NUMCODECS; n++) {
         if (tCodecs[n].name) {
             element = xvc_next_element(tCodecs[n].name);
@@ -259,8 +261,8 @@ Boolean xvc_write_options_file()
     fprintf(fp, "\nmf_codec: %s\n",
             tCodecs[app->multi_frame.targetCodec].name);
     fprintf(fp,
-            "# audio codec used by ffmpeg - use AUTO to auto-detect audio codec\n");
-    fprintf(fp, "# Otherwise specify one of the following: ");
+            _("# audio codec used by ffmpeg - use AUTO to auto-detect audio codec\n"));
+    fprintf(fp, _("# Otherwise specify one of the following: "));
     for (n = (AU_CODEC_NONE + 1); n < NUMAUCODECS; n++) {
         if (tAuCodecs[n].name) {
             element = xvc_next_element(tAuCodecs[n].name);
@@ -278,33 +280,33 @@ Boolean xvc_write_options_file()
     fprintf(fp, "\nmf_au_codec: %s\n",
             tAuCodecs[app->multi_frame.au_targetCodec].name);
 #endif // HAVE_FFMPEG_AUDIO
-    fprintf(fp, "# frames per second\nmf_fps: %.2f\n",
+    fprintf(fp, _("# frames per second\nmf_fps: %.2f\n"),
             ((float) app->multi_frame.fps / 100));
-    fprintf(fp, "# max time (0 = unlimited)\nmf_max_time: %i\n",
+    fprintf(fp, _("# max time (0 = unlimited)\nmf_max_time: %i\n"),
             app->multi_frame.time);
-    fprintf(fp, "# max frames (0 = unlimited)\nmf_max_frames: %d\n",
+    fprintf(fp, _("# max frames (0 = unlimited)\nmf_max_frames: %d\n"),
             app->multi_frame.frames);
     fprintf(fp,
-            "# number to start counting individual frames from (for future use)\n");
+            _("# number to start counting individual frames from (for future use)\n"));
     fprintf(fp, "mf_start_no: %i\n", app->multi_frame.start_no);
-    fprintf(fp, "# quality (JPEG/MPEG)\nmf_quality: %d\n",
+    fprintf(fp, _("# quality (JPEG/MPEG)\nmf_quality: %d\n"),
             app->multi_frame.quality);
 #ifdef HAVE_FFMPEG_AUDIO
-    fprintf(fp, "# toggle audio capture (0/1)\nmf_audio: %i\n",
+    fprintf(fp, _("# toggle audio capture (0/1)\nmf_audio: %i\n"),
             ((app->multi_frame.audioWanted == 1) ? 1 : 0));
-    fprintf(fp, "# sample rate for audio capture\nmf_audio_rate: %i\n",
+    fprintf(fp, _("# sample rate for audio capture\nmf_audio_rate: %i\n"),
             app->multi_frame.sndrate);
-    fprintf(fp, "# bit rate for audio capture\nmf_audio_bits: %i\n",
+    fprintf(fp, _("# bit rate for audio capture\nmf_audio_bits: %i\n"),
             app->multi_frame.sndsize);
-    fprintf(fp, "# number of channels to use in audio capture\n");
+    fprintf(fp, _("# number of channels to use in audio capture\n"));
     fprintf(fp, "mf_audio_channels: %i\n", app->multi_frame.sndchannels);
 #endif                          // HAVE_FFMPEG_AUDIO
-    fprintf(fp, "# command to display captured frames as animation\n");
+    fprintf(fp, _("# command to display captured frames as animation\n"));
     fprintf(fp, "mf_animate_cmd: %s\n", app->multi_frame.play_cmd);
-    fprintf(fp, "# command to edit current movie\n");
+    fprintf(fp, _("# command to edit current movie\n"));
     fprintf(fp, "mf_edit_cmd: %s\n", app->multi_frame.edit_cmd);
     fprintf(fp,
-            "# command to encode captured frames (subject to change)\n");
+            _("# command to encode captured frames (subject to change)\n"));
     fprintf(fp, "mf_video_cmd: %s\n", app->multi_frame.video_cmd);
 #endif                          // HAVE_LIBAVCODEC
 
@@ -392,7 +394,7 @@ Boolean xvc_read_options_file()
                     else {
                         app->flags &= ~FLG_NOGUI;
                         fprintf(stderr,
-                                "reading unsupported GUI preferences from options file\nresetting to GUI not hidden\n");
+                                _("reading unsupported GUI preferences from options file\nresetting to GUI not hidden\n"));
                     }
                 }
 #ifdef HAVE_FFMPEG_AUDIO
@@ -412,7 +414,7 @@ Boolean xvc_read_options_file()
                     else {
                         app->flags &= ~FLG_SAVE_GEOMETRY;
                         fprintf(stderr,
-                                "reading unsupported save_geometry preferences from options file\nresetting to capture geometry not saved\n");
+                                _("reading unsupported save_geometry preferences from options file\nresetting to capture geometry not saved\n"));
                     }
                 } else if (strcasecmp(token, "cap_geometry") == 0) {
                     sscanf(value, "%dx%d+%d+%d", &(app->cap_width),
@@ -427,7 +429,7 @@ Boolean xvc_read_options_file()
                     else {
                         app->flags &= ~FLG_SHOW_TIME;
                         fprintf(stderr,
-                                "reading unsupported show_time value from options file\nresetting to display frame counter\n");
+                                _("reading unsupported show_time value from options file\nresetting to display frame counter\n"));
                     }
                 } else if (strcasecmp(token, "auto_continue") == 0) {
                     if (value)
@@ -522,7 +524,7 @@ Boolean xvc_read_options_file()
                     }
                     if (a < CAP_NONE) {
                         fprintf(stderr,
-                                "reading unsupported target from options file\nresetting to target auto-detection\n");
+                                _("reading unsupported target from options file\nresetting to target auto-detection\n"));
                         a = CAP_NONE;
                     }
                     if (a >= CAP_NONE)
@@ -538,7 +540,7 @@ Boolean xvc_read_options_file()
                         a = CODEC_NONE;
                     if (a < CODEC_NONE) {
                         fprintf(stderr,
-                                "reading unsupported target codec (%i) from options file\nresetting to codec auto-detection\n",
+                                _("reading unsupported target codec (%i) from options file\nresetting to codec auto-detection\n"),
                                 a);
                         a = CODEC_NONE;
                     }
@@ -556,7 +558,7 @@ Boolean xvc_read_options_file()
                         a = AU_CODEC_NONE;
                     if (a < AU_CODEC_NONE) {
                         fprintf(stderr,
-                                "reading unsupported target audio codec (%i) from options file\nresetting to audio codec auto-detection\n",
+                                _("reading unsupported target audio codec (%i) from options file\nresetting to audio codec auto-detection\n"),
                                 a);
                         a = AU_CODEC_NONE;
                     }
@@ -591,10 +593,10 @@ Boolean xvc_read_options_file()
                         app->multi_frame.audioWanted = 1;
                     } else {
                         fprintf(stderr,
-                                "Invalid parameter 'audio: %s' in preferences file\n",
+                                _("Invalid parameter 'audio: %s' in preferences file\n"),
                                 value);
                         fprintf(stderr,
-                                "Disabling audio capture unless overridden by command line\n");
+                                _("Disabling audio capture unless overridden by command line\n"));
                         app->multi_frame.audioWanted = 0;
                     }
                 } else if (strcasecmp(token, "mf_audio_rate") == 0) {

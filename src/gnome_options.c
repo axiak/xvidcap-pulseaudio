@@ -312,7 +312,7 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         int a, codec = -1;
     
         for (a = 0; a < NUMCODECS && codec < 0; a++ ) { 
-            if ( strcasecmp(selected_codec, tCodecs[a].longname )==0) codec = a; 
+            if ( strcasecmp(selected_codec, _(tCodecs[a].longname) )==0) codec = a; 
         }
         lapp->multi_frame.targetCodec = codec; 
     } 
@@ -1549,7 +1549,7 @@ on_xvc_pref_mf_codec_combobox_changed(GtkComboBox * cb, gpointer user_data)
 
     if (codec_selected) {
         for (a = 0; a < NUMCODECS && codec < 0; a++ ) { 
-            if (strcasecmp(codec_selected, tCodecs[a].longname )==0) codec = a; 
+            if (strcasecmp(codec_selected, _(tCodecs[a].longname) )==0) codec = a; 
         }
     }
     
@@ -2018,7 +2018,7 @@ xvc_create_pref_dialog(AppData * lapp)
         GError *error = NULL;
 
         for (a = 1; a < NUMCAPS; a++) {
-            sprintf(buf, "%s (%s)", tFFormats[a].longname,
+            sprintf(buf, "%s (%s)", _(tFFormats[a].longname),
                     xvc_next_element(tFFormats[a].extensions));
             utf8text =
                 g_convert((gchar *) buf, strlen(buf), "UTF-8",
@@ -2226,8 +2226,8 @@ xvc_create_pref_dialog(AppData * lapp)
 //            sf_format_items =
 //                g_list_append(sf_format_items, format_combo_entries[a]);
             if (strncasecmp(format_combo_entries[a], 
-                    tFFormats[pref_app.single_frame.target].longname, 
-                    strlen(tFFormats[pref_app.single_frame.target].longname) )==0) {
+                    _(tFFormats[pref_app.single_frame.target].longname), 
+                    strlen(_(tFFormats[pref_app.single_frame.target].longname)) )==0) {
                 n = a;
             }
             gtk_combo_box_append_text(GTK_COMBO_BOX(w), format_combo_entries[a]);
@@ -2464,8 +2464,8 @@ xvc_create_pref_dialog(AppData * lapp)
 #endif // DEBUG
         
             if (strncasecmp(format_combo_entries[a], 
-                    tFFormats[mf_t_format].longname, 
-                    strlen(tFFormats[mf_t_format].longname) )==0) {
+                    _(tFFormats[mf_t_format].longname), 
+                    strlen(_(tFFormats[mf_t_format].longname)) )==0) {
                 n = a - CAP_MF + 1;
             }
             gtk_combo_box_append_text(GTK_COMBO_BOX(w), format_combo_entries[a]);

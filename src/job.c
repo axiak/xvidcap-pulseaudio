@@ -44,6 +44,7 @@
 #include "colors.h"
 #include "codecs.h"
 #include "control.h"
+#include "xvidcap-intl.h"
 #ifdef HAVE_LIBAVCODEC
 # include "xtoffmpeg.h"
 #endif // HAVE_LIBAVCODEC
@@ -353,15 +354,15 @@ job_set_sound_dev(char *snd, int rate, int size, int channels){
                 switch (errno) {
                     case EACCES:
                         fprintf(stderr,
-                                "Insufficient permission to access sound input from %s\n",
+                                _("Insufficient permission to access sound input from %s\n"),
                                 snd);
-                        fprintf(stderr, "Sound disabled!\n");
+                        fprintf(stderr, _("Sound disabled!\n"));
                         job->flags &= ~FLG_REC_SOUND;
                         break;
                     default:
                         fprintf(stderr,
-                                "Error accessing sound input from %s\n", snd);
-                        fprintf(stderr, "Sound disabled!\n");
+                                _("Error accessing sound input from %s\n"), snd);
+                        fprintf(stderr, _("Sound disabled!\n"));
                         job->flags &= ~FLG_REC_SOUND;
                         break;
                 }
@@ -519,7 +520,7 @@ void xvc_job_validate()
         Boolean changed = FALSE;
     
         if (job->flags & FLG_RUN_VERBOSE) { 
-            fprintf(stdout, "%s %s: Original dimensions: %i * %i\n",
+            fprintf(stdout, _("%s %s: Original dimensions: %i * %i\n"),
                         DEBUGFILE, DEBUGFUNCTION, job->area->width, job->area->height); 
         } 
         if ((job->area->width % 2) > 0) { 
@@ -543,7 +544,7 @@ void xvc_job_validate()
             xvc_frame_change(job->area->x, job->area->y, job->area->width, job->area->height, FALSE); 
             if (job->flags & FLG_RUN_VERBOSE) { 
                 fprintf(stdout, 
-                        "%s %s(): Modified dimensions: %i * %i\n", 
+                        _("%s %s(): Modified dimensions: %i * %i\n"), 
                         DEBUGFILE, DEBUGFUNCTION, job->area->width, job->area->height); 
             } 
         }

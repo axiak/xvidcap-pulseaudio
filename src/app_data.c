@@ -1279,10 +1279,10 @@ void xverror_7_action(void *err)
 const xvError seven = {
     7,
     XV_ERR_WARN,
-    "Invalid Mouse Capture Option",
-    "The specified value for the mouse capture option is not one of the valid values (0 = no capture, 1 = white mouse pointer, 2 = black mouse pointer).",
+    N_("Invalid Mouse Capture Option"),
+    N_("The specified value for the mouse capture option is not one of the valid values (0 = no capture, 1 = white mouse pointer, 2 = black mouse pointer)."),
     xverror_7_action,
-    "Set Mouse Capture Option to '1' for a white mouse pointer"
+    N_("Set Mouse Capture Option to '1' for a white mouse pointer")
 };
 
 void xverror_8_action(void *err)
@@ -1295,10 +1295,10 @@ void xverror_8_action(void *err)
 const xvError eight = {
     8,
     XV_ERR_WARN,
-    "Invalid Capture Source",
-    "An unsupported capture source was selected.",
+    N_("Invalid Capture Source"),
+    N_("An unsupported capture source was selected."),
     xverror_8_action,
-    "Reset capture source to default value 'x11'"
+    N_("Reset capture source to fail-safe 'x11'")
 };
 
 void xverror_9_action(void *err)
@@ -1311,10 +1311,10 @@ void xverror_9_action(void *err)
 const xvError nine = {
     9,
     XV_ERR_WARN,
-    "Invalid default capture mode",
-    "The default capture mode specified is neither \"single-frame\" nor \"mult-frame\".",
+    N_("Invalid default capture mode"),
+    N_("The default capture mode specified is neither \"single-frame\" nor \"mult-frame\"."),
     xverror_9_action,
-    "Reset default capture mode to \"single-frame\""
+    N_("Reset default capture mode to \"single-frame\"")
 };
 
 const xvError ten = {
@@ -1329,8 +1329,8 @@ const xvError ten = {
 const xvError eleven = {
     11,
     XV_ERR_FATAL,
-    "File name is NULL",
-    "The filename string variable used for multi-frame capture is a null pointer. This should never be possible at this stage.",
+    N_("File name is NULL"),
+    N_("The filename string variable used for multi-frame capture is a null pointer. This should never be possible at this stage."),
     xverror_exit_action,
     N_("Quit")
 };
@@ -1405,10 +1405,10 @@ void xverror_12_action(void *err)
 const xvError twelve = {
     12,
     XV_ERR_ERROR,
-    "File name empty",
-    "You selected single-frame capture without specifying a filename.",
+    N_("File name empty"),
+    N_("You selected single-frame capture without specifying a filename."),
     xverror_12_action,
-    "Set the filename used for single-frame capture to a default value based on the current capture mode and target"
+    N_("Set the filename used for single-frame capture to a default value based on the current capture mode and target")
 };
 
 // error twentytwo is for zero length filenames with target
@@ -1417,10 +1417,10 @@ const xvError twelve = {
 const xvError thirteen = {
     13,
     XV_ERR_ERROR,
-    "File format Auto-detection with empty file name",
-    "You want to be asked for a filename to save your video to after recording and also want to auto-detect the file type based on filename. That won't work.",
+    N_("File format Auto-detection with empty file name"),
+    N_("You want to be asked for a filename to save your video to after recording and also want to auto-detect the file type based on filename. That won't work."),
     xverror_12_action,
-    "Set the filename used for multi-frame capture to a default value based on the current capture mode and target"
+    N_("Set the filename used for multi-frame capture to a default value based on the current capture mode and target")
 };
 
 void xverror_14_action(void *err)
@@ -1437,19 +1437,19 @@ void xverror_14_action(void *err)
 const xvError fourteen = {
     14,
     XV_ERR_WARN,
-    "File name empty, ask user",
-    "You specified an empty filename for multi-frame capture. Since you have configured a fixed output file-format xvidcap can ask you for a filename to use after recording. We'll need to disable the autocontinue function you selected, though.",
+    N_("File name empty, ask user"),
+    N_("You specified an empty filename for multi-frame capture. Since you have configured a fixed output file-format xvidcap can ask you for a filename to use after recording. We'll need to disable the autocontinue function you selected, though."),
     xverror_14_action,
-    "Enable \"ask user for filename\" mode for multi-frame capture and disable autocontinue"
+    N_("Enable \"ask user for filename\" mode for multi-frame capture and disable autocontinue")
 };
 
 const xvError fifteen = {
     15,
     XV_ERR_INFO,
-    "File name empty, ask user",
-    "You specified an empty filename for multi-frame capture. Since you have configured a fixed output file-format xvidcap can ask you for a filename to use after each recording.",
+    N_("File name empty, ask user"),
+    N_("You specified an empty filename for multi-frame capture. Since you have configured a fixed output file-format xvidcap can ask you for a filename to use after each recording."),
     xverror_null_action,
-    "Ignore, everything is set up alright"
+    N_("Ignore, everything is set up alright")
 };
 
 
@@ -1487,19 +1487,19 @@ void xverror_16_action(void *err) {
 const xvError sixteen = {
     16,
     XV_ERR_ERROR,
-    "Invalid file format",
-    "You selected an unknown or invalid file format for single-frame capture. Check the --format-help option.",
+    N_("Invalid file format"),
+    N_("You selected an unknown or invalid file format for single-frame capture. Check the --format-help option."),
     xverror_16_action,
-    "Reset to default format for single-frame capture (XWD)"
+    N_("Reset to default format for single-frame capture (XWD)")
 };
 
 const xvError seventeen = {
     17,
     XV_ERR_ERROR,
-    "Invalid file format",
-    "You selected an unknown or invalid file format for multi-frame capture. Check the --format-help option.",
+    N_("Invalid file format"),
+    N_("You selected an unknown or invalid file format for multi-frame capture. Check the --format-help option."),
     xverror_16_action,
-    "Reset to default format for multi-frame caputre (MPEG4)"
+    N_("Reset to default format for multi-frame caputre (MPEG4)")
 };
 
 void xverror_18_action(void *err)
@@ -1512,10 +1512,10 @@ void xverror_18_action(void *err)
 const xvError eighteen = {
     18,
     XV_ERR_ERROR,
-    "Single-Frame Capture with Multi-Frame File Format",
-    "You selected single-frame capture mode but specified a target file format which is used for multi-frame capture.",
+    N_("Single-Frame Capture with Multi-Frame File Format"),
+    N_("You selected single-frame capture mode but specified a target file format which is used for multi-frame capture."),
     xverror_18_action,
-    "Reset file format to default for single-frame capture"
+    N_("Reset file format to default for single-frame capture")
 };
 
 #ifdef HAVE_LIBAVCODEC
@@ -1529,38 +1529,38 @@ void xverror_19_action(void *err)
 const xvError nineteen = {
     19,
     XV_ERR_ERROR,
-    "Multi-Frame Capture with Single-Frame File Format",
-    "You selected multi-frame capture mode but specified a target file format which is used for single-frame capture.",
+    N_("Multi-Frame Capture with Single-Frame File Format"),
+    N_("You selected multi-frame capture mode but specified a target file format which is used for single-frame capture."),
     xverror_19_action,
-    "Reset file format to default for multi-frame capture"
+    N_("Reset file format to default for multi-frame capture")
 };
 #endif                          // HAVE_LIBAVCODEC
 
 const xvError twenty = {
     20,
     XV_ERR_INFO,
-    "Single-Frame Capture with invalid target codec",
-    "You selected single-frame capture mode and specified a target codec not valid with the file format.",
+    N_("Single-Frame Capture with invalid target codec"),
+    N_("You selected single-frame capture mode and specified a target codec not valid with the file format."),
     xverror_null_action,
-    "Ignore because single-frame capture types always have a well-defined codec"
+    N_("Ignore because single-frame capture types always have a well-defined codec")
 };
 
 const xvError twentyone = {
     21,
     XV_ERR_INFO,
-    "File Format auto-detection may conflict with explicit codec",
-    "For single-frame capture you requested auto-detection of the output file format and explicitly specified a target codec. Your codec selection may not be valid for the file format eventually detected, in which case it will be overridden by the format's default codec.",
+    N_("File Format auto-detection may conflict with explicit codec"),
+    N_("For single-frame capture you requested auto-detection of the output file format and explicitly specified a target codec. Your codec selection may not be valid for the file format eventually detected, in which case it will be overridden by the format's default codec."),
     xverror_null_action,
-    "Ignore"
+    N_("Ignore")
 };
 
 const xvError twentytwo = {
     22,
     XV_ERR_INFO,
-    "File Format auto-detection may conflict with explicit codec",
-    "For multi-frame capture you requested auto-detection of the output file format and explicitly specified a target codec. Your codec selection may not be valid for the file format eventually detected, in which case it will be overridden by the format's default codec.",
+    N_("File Format auto-detection may conflict with explicit codec"),
+    N_("For multi-frame capture you requested auto-detection of the output file format and explicitly specified a target codec. Your codec selection may not be valid for the file format eventually detected, in which case it will be overridden by the format's default codec."),
     xverror_null_action,
-    "Ignore"
+    N_("Ignore")
 };
 
 #ifdef HAVE_LIBAVCODEC
@@ -1575,10 +1575,10 @@ void xverror_23_action(void *err)
 const xvError twentythree = {
     23,
     XV_ERR_ERROR,
-    "Multi-Frame Capture with invalid codec",
-    "You selected multi-frame capture mode and specified a target codec not valid with the file format.",
+    N_("Multi-Frame Capture with invalid codec"),
+    N_("You selected multi-frame capture mode and specified a target codec not valid with the file format."),
     xverror_23_action,
-    "Reset multi-frame target codec to default for file format"
+    N_("Reset multi-frame target codec to default for file format")
 };
 #endif // HAVE_LIBAVCODEC
 
@@ -1594,10 +1594,10 @@ const xvError twentyfour = {
 const xvError twentyfive = {
     25,
     XV_ERR_INFO,
-    "File Format auto-detection may conflict with explicit audio codec",
-    "For multi-frame capture you requested auto-detection of the output file format and explicitly specified a target audio codec. Your audio codec selection may not be valid for the file format eventually detected, in which case it will be overridden by the format's default audio codec.",
+    N_("File Format auto-detection may conflict with explicit audio codec"),
+    N_("For multi-frame capture you requested auto-detection of the output file format and explicitly specified a target audio codec. Your audio codec selection may not be valid for the file format eventually detected, in which case it will be overridden by the format's default audio codec."),
     xverror_null_action,
-    "Ignore"
+    N_("Ignore")
 };
 
 #ifdef HAVE_FFMPEG_AUDIO
@@ -1612,18 +1612,18 @@ void xverror_26_action(void *err)
 const xvError twentysix = {
     26,
     XV_ERR_ERROR,
-    "Multi-Frame Capture with invalid audio codec",
-    "You selected multi-frame capture mode and specified a target audio codec not valid with the file format.",
+    N_("Multi-Frame Capture with invalid audio codec"),
+    N_("You selected multi-frame capture mode and specified a target audio codec not valid with the file format."),
     xverror_26_action,
-    "Reset multi-frame target audio codec to default for file format"
+    N_("Reset multi-frame target audio codec to default for file format")
 };
 #endif // HAVE_FFMPEG_AUDIO
 
 const xvError twentyseven = {
     27,
     XV_ERR_FATAL,
-    "Invalid frame-rate for selected codec",
-    "You selected multi-frame capture mode but the requested frame-rate is not valid for the selected codec. This would result in the video playing back too slowly or quickly.",
+    N_("Invalid frame-rate for selected codec"),
+    N_("You selected multi-frame capture mode but the requested frame-rate is not valid for the selected codec. This would result in the video playing back too slowly or quickly."),
     xverror_exit_action,
     N_("Quit")
 };
@@ -1638,10 +1638,10 @@ void xverror_28_action(void *err)
 const xvError twentyeight = {
     28,
     XV_ERR_WARN,
-    "Requested Frame Rate <= zero",
-    "You selected single-frame capture but the frame rate you requested is not greater than zero.",
+    N_("Requested Frame Rate <= zero"),
+    N_("You selected single-frame capture but the frame rate you requested is not greater than zero."),
     xverror_28_action,
-    "Set frame rate to '1'"
+    N_("Set frame rate to '1'")
 };
 
 void xverror_29_action(void *err)
@@ -1681,19 +1681,19 @@ void xverror_29_action(void *err)
 const xvError twentynine = {
     29,
     XV_ERR_WARN,
-    "Requested Maximum Capture Time < zero",
-    "For single-frame capture you specified a maximum capture time which is less than zero seconds.",
+    N_("Requested Maximum Capture Time < zero"),
+    N_("For single-frame capture you specified a maximum capture time which is less than zero seconds."),
     xverror_29_action,
-    "Set the maximum capture time for single-frame capture to unlimited"
+    N_("Set the maximum capture time for single-frame capture to unlimited")
 };
 
 const xvError thirty = {
     30,
     XV_ERR_WARN,
-    "Requested Maximum Capture Time < zero",
-    "For multi-frame capture you specified a maximum capture time which is less than zero seconds.",
+    N_("Requested Maximum Capture Time < zero"),
+    N_("For multi-frame capture you specified a maximum capture time which is less than zero seconds."),
     xverror_29_action,
-    "Set the maximum capture time for multi-frame capture to unlimited"
+    N_("Set the maximum capture time for multi-frame capture to unlimited")
 };
 
 void xverror_31_action(void *err)
@@ -1733,19 +1733,19 @@ void xverror_31_action(void *err)
 const xvError thirtyone = {
     31,
     XV_ERR_WARN,
-    "Requested Maximum Frames < zero",
-    "For single-frame capture you specified a maximum number of frames which is less than zero.",
+    N_("Requested Maximum Frames < zero"),
+    N_("For single-frame capture you specified a maximum number of frames which is less than zero."),
     xverror_31_action,
-    "Set maximum number of frames to unlimited for single-frame capture"
+    N_("Set maximum number of frames to unlimited for single-frame capture")
 };
 
 const xvError thirtytwo = {
     32,
     XV_ERR_WARN,
-    "Requested Maximum Frames < zero",
-    "For multi-frame capture you specified a maximum number of frames which is less than zero.",
+    N_("Requested Maximum Frames < zero"),
+    N_("For multi-frame capture you specified a maximum number of frames which is less than zero."),
     xverror_31_action,
-    "Set maximum number of frames to unlimited for multi-frame capture"
+    N_("Set maximum number of frames to unlimited for multi-frame capture")
 };
 
 void xverror_33_action(void *err)
@@ -1785,19 +1785,19 @@ void xverror_33_action(void *err)
 const xvError thirtythree = {
     33,
     XV_ERR_WARN,
-    "Requested Start Number < zero",
-    "For single-frame capture you specified a start number for frame numbering which is less than zero.",
+    N_("Requested Start Number < zero"),
+    N_("For single-frame capture you specified a start number for frame numbering which is less than zero."),
     xverror_33_action,
-    "Set start number for frame numbering of single-frame capture to '0'"
+    N_("Set start number for frame numbering of single-frame capture to '0'")
 };
 
 const xvError thirtyfour = {
     34,
     XV_ERR_WARN,
-    "Requested Start Number < zero",
-    "For multi-frame capture you specified a start number for frame numbering which is less than zero.",
+    N_("Requested Start Number < zero"),
+    N_("For multi-frame capture you specified a start number for frame numbering which is less than zero."),
     xverror_33_action,
-    "Set start number for frame numbering of multi-frame capture to '0'"
+    N_("Set start number for frame numbering of multi-frame capture to '0'")
 };
 
 void xverror_35_action(void *err)
@@ -1837,19 +1837,19 @@ void xverror_35_action(void *err)
 const xvError thirtyfive = {
     35,
     XV_ERR_WARN,
-    "Requested Frame Increment <= zero",
-    "For single-frame capture you specified an increment for frame numbering which is not greater than zero.",
+    N_("Requested Frame Increment <= zero"),
+    N_("For single-frame capture you specified an increment for frame numbering which is not greater than zero."),
     xverror_35_action,
-    "Set increment for frame numbering of single-frame capture to '1'"
+    N_("Set increment for frame numbering of single-frame capture to '1'")
 };
 
 const xvError thirtysix = {
     36,
     XV_ERR_WARN,
-    "Requested Frame Increment <> one",
-    "For multi-frame capture you specified an increment for frame numbering which is not exactly one.",
+    N_("Requested Frame Increment <> one"),
+    N_("For multi-frame capture you specified an increment for frame numbering which is not exactly one."),
     xverror_35_action,
-    "Set increment for frame numbering of multi-frame capture to '1'"
+    N_("Set increment for frame numbering of multi-frame capture to '1'")
 };
 
 void xverror_40_action(void *err)
@@ -1889,19 +1889,19 @@ void xverror_40_action(void *err)
 const xvError fourty = {
     40,
     XV_ERR_WARN,
-    "Quality value not a valid percentage",
-    "For single-frame capture the value for recording quality is not a percentage between 1 and 100.",
+    N_("Quality value not a valid percentage"),
+    N_("For single-frame capture the value for recording quality is not a percentage between 1 and 100."),
     xverror_40_action,
-    "Set recording quality to '75'"
+    N_("Set recording quality to '75'")
 };
 
 const xvError fourtyone = {
     41,
     XV_ERR_WARN,
-    "Quality value not a valid percentage",
-    "For single-frame capture the value for recording quality is not a percentage between 1 and 100.",
+    N_("Quality value not a valid percentage"),
+    N_("For multi-frame capture the value for recording quality is not a percentage between 1 and 100."),
     xverror_40_action,
-    "Set recording quality to '75'"
+    N_("Set recording quality to '75'")
 };
 
 #ifdef HAVE_FFMPEG_AUDIO
@@ -1932,19 +1932,19 @@ void xverror_42_action(void *err)
 const xvError fourtytwo = {
     42,
     XV_ERR_WARN,
-    "Audio Capture not supported by File Format",
-    "You selected audio capture but ingle-frame captures do not support it.",
+    N_("Audio Capture not supported by File Format"),
+    N_("You selected audio capture but single-frame captures do not support it."),
     xverror_42_action,
-    "Disable audio capture for single-frame capture"
+    N_("Disable audio capture for single-frame capture")
 };
 
 const xvError fourtythree = {
     43,
     XV_ERR_WARN,
-    "Audio Capture not supported by File Format",
-    "For multi-frame capture you selected audio support but picked a file format without support for audio.",
+    N_("Audio Capture not supported by File Format"),
+    N_("For multi-frame capture you selected audio support but picked a file format without support for audio."),
     xverror_42_action,
-    "Disable audio capture for multi-frame capture"
+    N_("Disable audio capture for multi-frame capture")
 };
 #endif // HAVE_FFMPEG_AUDIO
 
@@ -2166,19 +2166,19 @@ void xvc_errors_write_error_msg(int code, int print_action_or_not)
 
     switch (err->type) {
     case 1:
-        type = "FATAL ERROR";
+        type = _("FATAL ERROR");
         break;
     case 2:
-        type = "ERROR";
+        type = _("ERROR");
         break;
     case 3:
-        type = "WARNING";
+        type = _("WARNING");
         break;
     case 4:
-        type = "INFO";
+        type = _("INFO");
         break;
     default:
-        type = "UNKNOWN";
+        type = _("UNKNOWN");
     }
     // FIXME: pretty print later ...
     sprintf(scratch, "== %s \0", type);
@@ -2188,7 +2188,7 @@ void xvc_errors_write_error_msg(int code, int print_action_or_not)
     }
     fprintf(stderr, "\n");
 
-    sprintf(scratch, "CODE %i:\0", err->code);
+    sprintf(scratch, _("CODE %i:\0"), err->code);
     fprintf(stderr, "%s", scratch);
     for (i = strlen(scratch); i < pre; i++) {
         fprintf(stderr, " ");
@@ -2207,7 +2207,7 @@ void xvc_errors_write_error_msg(int code, int print_action_or_not)
     }
 
     if (app->flags & FLG_RUN_VERBOSE) {
-        sprintf(scratch, "DESC:\0");
+        sprintf(scratch, _("DESC:\0"));
         fprintf(stderr, "%s", scratch);
         for (i = strlen(scratch); i < pre; i++) {
             fprintf(stderr, " ");
@@ -2246,7 +2246,7 @@ void xvc_errors_write_action_msg(int code)
     int i, inc, pre = 10, len = 80;
     char scratch[50], buf[5000];
 
-    sprintf(scratch, "ACTION:\0");
+    sprintf(scratch, _("ACTION:\0"));
     fprintf(stderr, "%s", scratch);
     for (i = strlen(scratch); i < pre; i++) {
         fprintf(stderr, " ");

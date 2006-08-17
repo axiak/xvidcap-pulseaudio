@@ -213,25 +213,25 @@ void xv_error_item_set_error(XvErrorItem * ei, xvError * err)
             gtk_image_set_from_stock(GTK_IMAGE(ei->image),
                                      "gtk-dialog-error",
                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, "FATAL\nERROR (%i):", err->code);
+            snprintf(ttag, 128, _("FATAL\nERROR (%i):"), err->code);
             break;
         case XV_ERR_ERROR:
             gtk_image_set_from_stock(GTK_IMAGE(ei->image),
                                      "gtk-dialog-warning",
                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, "ERROR (%i):", err->code);
+            snprintf(ttag, 128, _("ERROR (%i):"), err->code);
             break;
         case XV_ERR_WARN:
             gtk_image_set_from_stock(GTK_IMAGE(ei->image),
                                      "gtk-dialog-info",
                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, "WARNING (%i):", err->code);
+            snprintf(ttag, 128, _("WARNING (%i):"), err->code);
             break;
         case XV_ERR_INFO:
             gtk_image_set_from_stock(GTK_IMAGE(ei->image),
                                      "gtk-dialog-info",
                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, "INFO (%i):", err->code);
+            snprintf(ttag, 128, _("INFO (%i):"), err->code);
             break;
         default:
             gtk_image_set_from_stock(GTK_IMAGE(ei->image),

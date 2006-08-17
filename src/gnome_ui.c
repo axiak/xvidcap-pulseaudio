@@ -1121,7 +1121,7 @@ static gboolean stop_recording_gui_stuff(Job * job)
         // video format
         w = glade_xml_get_widget(xml, "xvc_result_dialog_video_format_label");
         g_assert(w);
-        gtk_label_set_text(GTK_LABEL(w), tFFormats[jobp->target].longname);
+        gtk_label_set_text(GTK_LABEL(w), _(tFFormats[jobp->target].longname));
         
         // video codec
         w = glade_xml_get_widget(xml, "xvc_result_dialog_video_codec_label");
@@ -2194,8 +2194,8 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
         w = glade_xml_get_widget(mwxml, "xvc_ctrl_back_button");
         g_assert(w);
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(w),
-                             "Move cursor back one frame",
-                             "Move cursor back one frame");
+                             _("Move cursor back one frame"),
+                             _("Move cursor back one frame"));
         if (jobp->pic_no >= jobp->step)
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
         else
@@ -2204,15 +2204,15 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
         w = glade_xml_get_widget(mwxml, "xvc_ctrl_forward_button");
         g_assert(w);
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(w),
-                             "Move cursor to next frame",
-                             "Move cursor to next frame");
+                             _("Move cursor to next frame"),
+                             _("Move cursor to next frame"));
         gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
 
         w = glade_xml_get_widget(mwxml, "xvc_ctrl_filename_button");
         g_assert(w);
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(w),
-                             "Left Click: Reset frame counter and filename\nRight Click: Popup Menu",
-                             "Left Click: Reset frame counter and filename\nRight Click: Popup Menu");
+                             _("Left Click: Reset frame counter and filename\nRight Click: Popup Menu"),
+                             _("Left Click: Reset frame counter and filename\nRight Click: Popup Menu"));
     } else {
         GtkWidget *next = NULL, *previous = NULL, *filename = NULL;
         next = glade_xml_get_widget(mwxml, "xvc_ctrl_forward_button");
@@ -2236,15 +2236,15 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
         }
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips),
                              GTK_WIDGET(previous),
-                             "Move cursor to previous movie",
-                             "Move cursor to previous movie");
+                             _("Move cursor to previous movie"),
+                             _("Move cursor to previous movie"));
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(next),
-                             "Move cursor to next movie",
-                             "Move cursor to next movie");
+                             _("Move cursor to next movie"),
+                             _("Move cursor to next movie"));
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips),
                              GTK_WIDGET(filename),
-                             "Left Click: Reset movie counter to zero\nRight Click: Popup Menu",
-                             "Left Click: Reset movie counter to zero\nRight Click: Popup Menu");
+                             _("Left Click: Reset movie counter to zero\nRight Click: Popup Menu"),
+                             _("Left Click: Reset movie counter to zero\nRight Click: Popup Menu"));
     }
     
     

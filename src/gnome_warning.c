@@ -60,10 +60,10 @@ static guint scheduled_warning_resize_id = 0;
 static xvErrorListItem *warning_elist = NULL;
 
 
-const char *XVC_WARN_LABEL_TEXT =
+/*const char *XVC_WARN_LABEL_TEXT =
     "Your input bears a number of inconsistencies! \nPlease review the list below and click \"OK\" to accept the suggested actions or \"Cancel\" to return to the Preferences dialog.";
+*/
 
-    
 // GtkWidget *vbox2; 
 GtkWidget *xvc_warn_main_window;
 extern AppData *app;

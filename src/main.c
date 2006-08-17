@@ -42,9 +42,11 @@
 #include <stdio.h>
 #include <libintl.h>
 #include <ctype.h>
+
 #include "control.h"
 #include "codecs.h"
 #include "job.h"
+#include "xvidcap-intl.h"
 
 #define DEBUGFILE "main.c"
 
@@ -73,53 +75,53 @@ void usage(char *prog)
     char *element;
 
     printf
-        ("Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n",
+        (_("Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
          prog, VERSION);
-    printf("[--fps #.#] frames per second (float)\n");
-    printf("[--verbose #] verbose level, '-v' is --verbose 1\n");
-    printf("[--time #.#] time to record in seconds (float)\n");
-    printf("[--frames #] frames to record, don't use it with --time\n");
+    printf(_("[--fps #.#] frames per second (float)\n"));
+    printf(_("[--verbose #] verbose level, '-v' is --verbose 1\n"));
+    printf(_("[--time #.#] time to record in seconds (float)\n"));
+    printf(_("[--frames #] frames to record, don't use it with --time\n"));
     printf
-        ("[--continue [yes|no]] autocontinue after maximum frames/time\n");
+        (_("[--continue [yes|no]] autocontinue after maximum frames/time\n"));
     printf
-        ("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n");
-    printf("[--start_no #] start number for the file names\n");
+        (_("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"));
+    printf(_("[--start_no #] start number for the file names\n"));
 #ifdef HAVE_SHMAT
-    printf("[--source <src>] select input source: x11, shm\n");
+    printf(_("[--source <src>] select input source: x11, shm\n"));
 #endif // HAVE_SHMAT
-    printf("[--file <file>] file pattern, e.g. out%%03d.xwd\n");
-    printf("[--gui [yes|no]] turn on/off gui\n");
+    printf(_("[--file <file>] file pattern, e.g. out%%03d.xwd\n"));
+    printf(_("[--gui [yes|no]] turn on/off gui\n"));
 #ifdef HAVE_LIBAVCODEC
     printf
-        ("[--sf|--mf] request single-frame or multi-frame capture mode\n");
+        (_("[--sf|--mf] request single-frame or multi-frame capture mode\n"));
 #endif                          // HAVE_LIBAVCODEC
     printf
-        ("[--auto] cause auto-detection of output format, video-, and audio codec\n");
+        (_("[--auto] cause auto-detection of output format, video-, and audio codec\n"));
     printf
-        ("[--codec <codec>] specify codec to use for multi-frame capture\n");
+        (_("[--codec <codec>] specify codec to use for multi-frame capture\n"));
     printf
-        ("[--codec-help] list available codecs for multi-frame capture\n");
+        (_("[--codec-help] list available codecs for multi-frame capture\n"));
     printf
-        ("[--format <format>] specify file format to override the extension in the filename\n");
-    printf("[--format-help] list available file formats\n");
+        (_("[--format <format>] specify file format to override the extension in the filename\n"));
+    printf(_("[--format-help] list available file formats\n"));
 #ifdef HAVE_FFMPEG_AUDIO
     printf
-        ("[--aucodec <codec>] specify audio codec to use for multi-frame capture\n");
+        (_("[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"));
     printf
-        ("[--aucodec-help] list available audio codecs for multi-frame capture\n");
-    printf("[--audio [yes|no]] turn on/off audio capture\n");
+        (_("[--aucodec-help] list available audio codecs for multi-frame capture\n"));
+    printf(_("[--audio [yes|no]] turn on/off audio capture\n"));
     printf
-        ("[--audio_in <src>] specify audio input device or '-' for pipe input\n");
-    printf("[--audio_rate #] sample rate for audio capture\n");
-    printf("[--audio_bits #] bit rate for audio capture\n");
-    printf("[--audio_channels #] number of audio channels\n");
+        (_("[--audio_in <src>] specify audio input device or '-' for pipe input\n"));
+    printf(_("[--audio_rate #] sample rate for audio capture\n"));
+    printf(_("[--audio_bits #] bit rate for audio capture\n"));
+    printf(_("[--audio_channels #] number of audio channels\n"));
 #endif                          // HAVE_FFMPEG_AUDIO
 
-    printf("Supported output formats:\n");
+    printf(_("Supported output formats:\n"));
     for (n = CAP_NONE; n < NUMCAPS; n++) {
         if (tFFormats[n].extensions) {
-            printf(" %s", tFFormats[n].longname);
-            for (m = strlen(tFFormats[n].longname); m < 40; m++)
+            printf(" %s", _(tFFormats[n].longname));
+            for (m = strlen(_(tFFormats[n].longname)); m < 40; m++)
                 printf(" ");
             printf("(");
             element = xvc_next_element(tFFormats[n].extensions);
@@ -236,7 +238,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                  */
 #else
                 fprintf(stderr,
-                        "Only 'x11' is supported as a capture source with this binary.\n");
+                        _("Only 'x11' is supported as a capture source with this binary.\n"));
                 usage(_argv[0]);
 #endif // HAVE_SHMAT
                 break;
@@ -287,7 +289,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 }
 #else
                 fprintf(stderr,
-                        "Audio support not present in this binary.\n");
+                        _("Audio support not present in this binary.\n"));
                 usage(_argv[0]);
 #endif                          // HAVE_FFMPEG_AUDIO
                 break;
@@ -297,7 +299,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 app->snddev = strdup(optarg);
 #else
                 fprintf(stderr,
-                        "Audio support not present in this binary.\n");
+                        _("Audio support not present in this binary.\n"));
                 usage(_argv[0]);
 #endif                          // HAVE_FFMPEG_AUDIO
                 break;
@@ -307,7 +309,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 tmp_capture_options->sndrate = atoi(optarg);
 #else
                 fprintf(stderr,
-                        "Audio support not present in this binary.\n");
+                        _("Audio support not present in this binary.\n"));
                 usage(_argv[0]);
 #endif                          // HAVE_FFMPEG_AUDIO
                 break;
@@ -317,7 +319,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 tmp_capture_options->sndsize = atoi(optarg);
 #else
                 fprintf(stderr,
-                        "Audio support not present in this binary.\n");
+                        _("Audio support not present in this binary.\n"));
                 usage(_argv[0]);
 #endif                          // HAVE_FFMPEG_AUDIO
                 break;
@@ -327,7 +329,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 tmp_capture_options->sndchannels = atoi(optarg);
 #else
                 fprintf(stderr,
-                        "Audio support not present in this binary.\n");
+                        _("Audio support not present in this binary.\n"));
                 usage(_argv[0]);
 #endif                          // HAVE_FFMPEG_AUDIO
                 break;
@@ -390,11 +392,11 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     char tmp_codec[512];
 
                     printf
-                        ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n",
+                        (_("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
                          _argv[0], VERSION);
 
 #ifdef HAVE_LIBAVCODEC
-                    printf("Available codecs for single-frame capture: ");
+                    printf(_("Available codecs for single-frame capture: "));
 
                     for (n = 1; n < CAP_MF; n++) {
                         for (m = 0; m < strlen(tCodecs[n].name); m++) {
@@ -407,7 +409,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     }
                     printf("\n");
 
-                    printf("Available codecs for multi-frame capture: ");
+                    printf(_("Available codecs for multi-frame capture: "));
 
                     for (n = CAP_MF; n < NUMCODECS; n++) {
                         for (m = 0; m < strlen(tCodecs[n].name); m++) {
@@ -420,7 +422,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     }
                     printf("\n");
 #else
-                    printf("Available codecs for single-frame capture: ");
+                    printf(_("Available codecs for single-frame capture: "));
 
                     for (n = 1; n < NUMCODECS; n++) {
                         for (m = 0; m < strlen(tCodecs[n].name); m++) {
@@ -435,7 +437,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
 #endif                          // HAVE_LIBAVCODEC
 
                     printf
-                        ("Specify 'auto' to use the file format's default codec.\n");
+                        (_("Specify 'auto' to use the file format's default codec.\n"));
                     exit(1);
                 }
                 break;
@@ -460,15 +462,15 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                             tmp_capture_options->target = m;
                         } else {
                             fprintf(stderr,
-                                    "Specified file format '%s' not supported with this binary.",
+                                    _("Specified file format '%s' not supported with this binary."),
                                     optarg);
                             fprintf(stderr,
-                                    "Resetting to file format auto-detection.\n");
+                                    _("Resetting to file format auto-detection.\n"));
                             tmp_capture_options->target = 0;
                         }
                     } else {
                         fprintf(stderr,
-                                "Unknown file format '%s' specified.\n",
+                                _("Unknown file format '%s' specified.\n"),
                                 optarg);
                         usage(_argv[0]);
                     }
@@ -480,9 +482,9 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     char tmp_format[512];
 
                     printf
-                        ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n",
+                        (_("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
                          _argv[0], VERSION);
-                    printf("Available file formats: ");
+                    printf(_("Available file formats: "));
 
                     for (n = CAP_NONE; n < NUMCAPS; n++) {
                         if (tFFormats[n].extensions) {
@@ -498,7 +500,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     }
                     printf("\n");
                     printf
-                        ("Specify 'auto' to force file format auto-detection.\n");
+                        (_("Specify 'auto' to force file format auto-detection.\n"));
                     exit(1);
                 }
                 break;
@@ -528,7 +530,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 }
 #else
                 fprintf(stderr,
-                        "Audio support not present in this binary.\n");
+                        _("Audio support not present in this binary.\n"));
                 usage(_argv[0]);
 #endif                          // HAVE_FFMPEG_AUDIO
                 break;
@@ -539,10 +541,10 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     char tmp_codec[512];
 
                     printf
-                        ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04\n",
+                        (_("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
                          _argv[0], VERSION);
                     printf
-                        ("Available audio codecs for multi-frame capture: ");
+                        (_("Available audio codecs for multi-frame capture: "));
 
                     for (n = 1; n < NUMAUCODECS; n++) {
                         for (m = 0; m < strlen(tAuCodecs[n].name); m++) {
@@ -555,12 +557,12 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     }
                     printf("\n");
                     printf
-                        ("Specify 'auto' to use the file format's default audio codec.\n");
+                        (_("Specify 'auto' to use the file format's default audio codec.\n"));
                     exit(1);
                 }
 #else
                 fprintf(stderr,
-                        "Audio support not present in this binary.\n");
+                        _("Audio support not present in this binary.\n"));
                 usage(_argv[0]);
 #endif                          // HAVE_FFMPEG_AUDIO
                 break;
@@ -681,7 +683,7 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
     // merge cli options with app
     if (xvc_merge_cap_type_and_app_data(tmp_capture_options, app) < 1) {
         fprintf(stderr,
-                "%s %s: Unrecoverable error while merging options, please contact the xvidcap project.\n", DEBUGFILE, DEBUGFUNCTION);
+                _("%s %s: Unrecoverable error while merging options, please contact the xvidcap project.\n"), DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
 
@@ -703,62 +705,63 @@ void print_current_settings(CapTypeOptions * target)
     char *mp;
     switch (app->mouseWanted) {
     case 2:
-        mp = "black";
+        mp = _("black");
         break;
     case 1:
-        mp = "white";
+        mp = _("white");
         break;
     default:
-        mp = "none";
+        mp = _("none");
     }
 
     // FIXME: make the options output take new app_data structure with
     // parallel capTypeOptions into account
 
-    printf("Current settings:\n");
-    printf(" flags = %d\n", app->flags);
+    printf(_("Current settings:\n"));
+    printf(_(" flags = %d\n"), app->flags);
 #ifdef HAVE_LIBAVCODEC
-    printf(" capture mode = %s\n",
-           ((app->current_mode == 0) ? "single-frame" : "multi-frame"));
+    printf(_(" capture mode = %s\n"),
+           ((app->current_mode == 0) ? _("single-frame") : _("multi-frame")));
 #endif                          // HAVE_LIBAVCODEC
-    printf(" position = %ix%i", app->cap_width, app->cap_height);
+    printf(_(" position = %ix%i"), app->cap_width, app->cap_height);
     if (app->cap_pos_x >= 0)
         printf("+%i+%i", app->cap_pos_x, app->cap_pos_y);
     printf("\n");
-    printf(" frames per second = %.2f\n", ((float) target->fps / 100));
-    printf(" file pattern = %s\n", target->file);
-    printf(" file format = %s\n",
+    printf(_(" frames per second = %.2f\n"), ((float) target->fps / 100));
+    printf(_(" file pattern = %s\n"), target->file);
+    printf(_(" file format = %s\n"),
            ((target->target ==
-             CAP_NONE) ? "AUTO" : tFFormats[target->target].longname));
-    printf(" video encoding = %s\n",
+             CAP_NONE) ? "AUTO" : _(tFFormats[target->target].longname)));
+    printf(_(" video encoding = %s\n"),
            ((target->targetCodec ==
              CODEC_NONE) ? "AUTO" : tCodecs[target->targetCodec].name));
 #ifdef HAVE_FFMPEG_AUDIO
-    printf(" audio codec = %s\n",
+    printf(_(" audio codec = %s\n"),
            ((target->au_targetCodec ==
              CODEC_NONE) ? "AUTO" : tAuCodecs[target->au_targetCodec].
             name));
 #endif // HAVE_FFMPEG_AUDIO
-    printf(" verbose level = %d\n", app->verbose);
-    printf(" frames to store = %d\n", target->frames);
-    printf(" time to capture = %i sec\n", target->time);
-    printf(" autocontinue = %s\n",
+    printf(_(" verbose level = %d\n"), app->verbose);
+    printf(_(" frame start no = %d\n"), target->start_no);
+    printf(_(" frames to store = %d\n"), target->frames);
+    printf(_(" time to capture = %i sec\n"), target->time);
+    printf(_(" autocontinue = %s\n"),
            ((app->flags & FLG_AUTO_CONTINUE) ? "yes" : "no"));
-    printf(" input source = %s (%d)\n", app->source,
+    printf(_(" input source = %s (%d)\n"), app->source,
            app->flags & FLG_SOURCE);
-    printf(" capture pointer = %s\n", mp);
+    printf(_(" capture pointer = %s\n"), mp);
 #ifdef HAVE_FFMPEG_AUDIO
-    printf(" capture audio = %s\n",
+    printf(_(" capture audio = %s\n"),
            ((target->audioWanted == 1) ? "yes" : "no"));
-    printf(" - input = %s\n", app->snddev);
-    printf(" - sample rate = %i\n", target->sndrate);
-    printf(" - bit rate = %i\n", target->sndsize);
-    printf(" - channels = %i\n", target->sndchannels);
+    printf(_(" - input = %s\n"), app->snddev);
+    printf(_(" - sample rate = %i\n"), target->sndrate);
+    printf(_(" - bit rate = %i\n"), target->sndsize);
+    printf(_(" - channels = %i\n"), target->sndchannels);
 #endif                          // HAVE_FFMPEG_AUDIO
-    printf(" animate command = %s\n", target->play_cmd);
-    printf(" make video command= %s\n", target->video_cmd);
-    printf(" edit frame command= %s\n", target->edit_cmd);
-    printf(" help command = %s\n", app->help_cmd);
+    printf(_(" animate command = %s\n"), target->play_cmd);
+    printf(_(" make video command= %s\n"), target->video_cmd);
+    printf(_(" edit frame command= %s\n"), target->edit_cmd);
+    printf(_(" help command = %s\n"), app->help_cmd);
 }
 
 
@@ -793,7 +796,7 @@ int main(int argc, char *argv[])
     // possibly to set some fallback options read from a rc file or
     // Xdefaults
     if (!xvc_init_pre(argc, argv)) {
-        fprintf(stderr, "%s %s: can't do GUI pre-initialization ... aborting\n", DEBUGFILE, DEBUGFUNCTION);
+        fprintf(stderr, _("%s %s: can't do GUI pre-initialization ... aborting\n"), DEBUGFILE, DEBUGFUNCTION);
         exit(2);
     }
     // xvc initialization
@@ -813,7 +816,7 @@ int main(int argc, char *argv[])
         errors_after_cli = xvc_app_data_validate(app, 1, &rc);
         if (rc == -1) {
             fprintf(stderr,
-                    "%s %s: Unrecoverable error while validating options, please contact the xvidcap project.\n", DEBUGFILE, DEBUGFUNCTION);
+                    _("%s %s: Unrecoverable error while validating options, please contact the xvidcap project.\n"), DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
     }
@@ -821,15 +824,15 @@ int main(int argc, char *argv[])
     // these are the hooks for a GUI to create the GUI,
     // the selection frame, and do some initialization ...
     if (!xvc_ui_create()) {
-        fprintf(stderr, "%s %s: can't create GUI ... aborting\n", DEBUGFILE, DEBUGFUNCTION);
+        fprintf(stderr, _("%s %s: can't create GUI ... aborting\n"), DEBUGFILE, DEBUGFUNCTION);
         exit(2);
     }
     if (!xvc_frame_create()) {
-        fprintf(stderr, "%s %s: can't create selection Frame ... aborting\n", DEBUGFILE, DEBUGFUNCTION);
+        fprintf(stderr, _("%s %s: can't create selection Frame ... aborting\n"), DEBUGFILE, DEBUGFUNCTION);
         exit(2);
     }
     if (!xvc_ui_init(errors_after_cli)) {
-        fprintf(stderr, "%s %s: can't initialize GUI ... aborting\n", DEBUGFILE, DEBUGFUNCTION);
+        fprintf(stderr, _("%s %s: can't initialize GUI ... aborting\n"), DEBUGFILE, DEBUGFUNCTION);
         exit(2);
     }
 

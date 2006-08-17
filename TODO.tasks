@@ -126,6 +126,21 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
       <comment>this should save a lot of updating job in the UI and make sure we create the right job during startup of a recording session.
 Might not work after all due to flags and stuff ... check well</comment>
     </item>
+    <item>
+      <attribute id="1155841855" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841855"/>
+      <summary>internationalize glade ui</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1155841861" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841861"/>
+      <summary>tooltips in glade</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1155841871" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841871"/>
+      <summary>scale capture</summary>
+      <comment></comment>
+    </item>
   </category>
   <category title="Business" place="1"/>
   <category title="Unfiled" place="2"/>

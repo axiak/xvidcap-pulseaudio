@@ -46,6 +46,7 @@
 #include "colors.h"
 #include "frame.h"
 #include "codecs.h"
+#include "xvidcap-intl.h"
 
 // ffmpeg stuff
 #include <ffmpeg/avcodec.h>
@@ -204,7 +205,7 @@ add_audio_stream (Job* job) {
             grab_iformat = av_find_input_format("audio_device");
             if (av_open_input_file(&ic, "", grab_iformat, 0, ap) < 0) {
                 fprintf(stderr,
-                        "%s %s:Could not find audio grab device %s\n",
+                        _("%s %s:Could not find audio grab device %s\n"),
                         DEBUGFILE, DEBUGFUNCTION, job->snd_device);
                 exit(1);
             }
@@ -213,7 +214,7 @@ add_audio_stream (Job* job) {
             // FIXME: allow other file formats
             err = av_open_input_file(&ic, ap->device, grab_iformat, 0, ap);
             if (err < 0) {
-                fprintf(stderr, "%s %s: error opening input file %s: %i\n",
+                fprintf(stderr, _("%s %s: error opening input file %s: %i\n"),
                             DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
                 exit(1);
             }
@@ -221,7 +222,7 @@ add_audio_stream (Job* job) {
         au_in_st = av_mallocz(sizeof(AVInputStream));
         if (!au_in_st) {
             fprintf(stderr,
-                    "%s %s: Could not alloc input stream ... aborting\n",
+                    _("%s %s: Could not alloc input stream ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -231,7 +232,7 @@ add_audio_stream (Job* job) {
         // the first frames to get it. (used in mpeg case for example) 
         ret = av_find_stream_info(ic);
         if (ret < 0) {
-            fprintf(stderr, "%s %s: %s: could not find codec parameters\n",
+            fprintf(stderr, _("%s %s: %s: could not find codec parameters\n"),
                         DEBUGFILE, DEBUGFUNCTION, job->snd_device);
             exit(1);
         }
@@ -259,13 +260,13 @@ add_audio_stream (Job* job) {
         au_out_st = av_mallocz(sizeof(AVOutputStream));
         if (!au_out_st) {
             fprintf(stderr,
-                    "%s %s: Could not alloc stream ... aborting\n",
+                    _("%s %s: Could not alloc stream ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
         au_out_st->st = av_new_stream(output_file, 1);
         if (!au_out_st->st) {
-            fprintf(stderr, "%s %s: Could not alloc stream\n",
+            fprintf(stderr, _("%s %s: Could not alloc stream\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -273,7 +274,7 @@ add_audio_stream (Job* job) {
 
         if (fifo_init(&au_out_st->fifo, 2 * MAX_AUDIO_PACKET_SIZE)) {
             fprintf(stderr,
-                    "%s %s: Can't initialize fifo for audio recording\n",
+                    _("%s %s: Can't initialize fifo for audio recording\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -309,7 +310,7 @@ add_audio_stream (Job* job) {
                                                 au_in_st->st->codec->
                                                 sample_rate);
                     if (!au_out_st->resample) {
-                        printf("%s %s: Can't resample. Aborting.\n",
+                        printf(_("%s %s: Can't resample. Aborting.\n"),
                                 DEBUGFILE, DEBUGFUNCTION);
                         exit(1);
                     }
@@ -325,7 +326,7 @@ add_audio_stream (Job* job) {
                                             au_in_st->st->codec->
                                             sample_rate);
                 if (!au_out_st->resample) {
-                    printf("%s %s: Can't resample. Aborting.\n", DEBUGFILE,
+                    printf(_("%s %s: Can't resample. Aborting.\n"), DEBUGFILE,
                             DEBUGFUNCTION);
                     exit(1);
                 }
@@ -339,7 +340,7 @@ add_audio_stream (Job* job) {
                 avcodec_find_encoder(au_out_st->st->codec->codec_id);
         if (avcodec_open(au_out_st->st->codec, au_codec) < 0) {
             fprintf(stderr,
-                    "%s %s: Error while opening codec for output stream\n",
+                    _("%s %s: Error while opening codec for output stream\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -348,13 +349,13 @@ add_audio_stream (Job* job) {
                 avcodec_find_decoder(ic->streams[0]->codec->codec_id);
         if (!au_codec) {
             fprintf(stderr,
-                    "%s %s: Unsupported codec (id=%d) for input stream\n",
+                    _("%s %s: Unsupported codec (id=%d) for input stream\n"),
                     DEBUGFILE, DEBUGFUNCTION, ic->streams[0]->codec->codec_id);
             exit(1);
         }
         if (avcodec_open(ic->streams[0]->codec, au_codec) < 0) {
             fprintf(stderr,
-                    "%s %s: Error while opening codec for input stream\n",
+                    _("%s %s: Error while opening codec for input stream\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -427,14 +428,14 @@ do_audio_out(AVFormatContext * s, AVOutputStream * ost,
             if (pthread_mutex_trylock(&mp) == 0) {
                 // write the compressed frame in the media file 
                 if( av_interleaved_write_frame(s, &pkt) != 0) {
-                    fprintf(stderr, "%s %s: Error while writing audio frame\n",
+                    fprintf(stderr, _("%s %s: Error while writing audio frame\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                     exit(1);
                 }
 
                 if (pthread_mutex_unlock(&mp) > 0) {
                     fprintf(stderr,
-                            "%s %s: Couldn't unlock mutex lock for writing audio frame\n",
+                            _("%s %s: Couldn't unlock mutex lock for writing audio frame\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                 }
             }
@@ -523,7 +524,7 @@ void capture_audio_thread(Job * job)
             if (audio_pts < video_pts) {
                 // read a packet from it and output it in the fifo 
                 if (av_read_packet(ic, &pkt) < 0) {
-                    fprintf(stderr, "%s %s: error reading audio packet\n",
+                    fprintf(stderr, _("%s %s: error reading audio packet\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                 }
                 len = pkt.size;
@@ -544,7 +545,7 @@ void capture_audio_thread(Job * job)
                                                  len);
                         if (retval < 0) {
                             fprintf(stderr,
-                                    "%s %s: couldn't decode captured audio packet\n",
+                                    _("%s %s: couldn't decode captured audio packet\n"),
                                     DEBUGFILE, DEBUGFUNCTION);
                             break;
                         }
@@ -552,7 +553,7 @@ void capture_audio_thread(Job * job)
                         // data_size < 0, it seems they are overflows 
                         if (data_size <= 0) {
                             // no audio frame 
-                            fprintf (stderr, "%s %s: no audio frame\n", DEBUGFILE,
+                            fprintf (stderr, _("%s %s: no audio frame\n"), DEBUGFILE,
                                     DEBUGFUNCTION);
                             ptr += retval;
                             len -= retval;
@@ -578,10 +579,10 @@ void capture_audio_thread(Job * job)
             else {
                 if ( strcmp(job->snd_device, "pipe:") < 0 )
                     if (av_read_packet(ic, &pkt) < 0) {
-                        fprintf(stderr, "error reading audio packet\n");
+                        fprintf(stderr, _("error reading audio packet\n"));
                     }
 #ifdef DEBUG
-                    printf("%s %s: dropping audio frame %f %f\n",
+                    printf(_("%s %s: dropping audio frame %f %f\n"),
                             DEBUGFILE, DEBUGFUNCTION, audio_pts, video_pts);
 #endif // DEBUG
             }
@@ -644,7 +645,7 @@ do_video_out(AVFormatContext * s, AVStream * ost,
     pkt.size = size;
 
     if( av_interleaved_write_frame(s, &pkt) != 0) {
-        fprintf(stderr, "%s %s: Error while writing video frame\n",
+        fprintf(stderr, _("%s %s: Error while writing video frame\n"),
                     DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
@@ -826,7 +827,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     st = av_new_stream(oc, 0);
     if (!st) {
         fprintf(stderr,
-                "%s %s: Could not alloc output stream\n", DEBUGFILE, DEBUGFUNCTION);
+                _("%s %s: Could not alloc output stream\n"), DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
 
@@ -836,7 +837,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     // find the video encoder 
     codec = avcodec_find_encoder(st->codec->codec_id);
     if (!codec) {
-        fprintf(stderr, "%s %s: video codec not found\n", 
+        fprintf(stderr, _("%s %s: video codec not found\n"), 
                     DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
@@ -904,7 +905,9 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
                 st->codec->bit_rate);
 #endif
 
-    // st->codec->me_method = ME_EPZS;
+/*    st->codec->me_method = ME_ZERO;
+    st->codec->qmin = 1;
+    st->codec->qmax = 1; */
     // st->codec->debug = 0x00000FFF;
 /*     out_st->time_base.num = out_st->codec->time_base.num;
      out_st->time_base.den = out_st->codec->time_base.den;
@@ -951,7 +954,7 @@ int guess_input_pix_fmt (XImage *image, ColorInfo *c_info) {
 
             } else {
                 fprintf(stderr,
-                        "%s %s: rgb ordering at image depth %i not supported ... aborting\n",
+                        _("%s %s: rgb ordering at image depth %i not supported ... aborting\n"),
                         DEBUGFILE, DEBUGFUNCTION, image->bits_per_pixel);
                 fprintf(stderr,
                         "%s %s: color masks: r 0x%.6lX g 0x%.6lX b 0x%.6lX\n",
@@ -970,7 +973,7 @@ int guess_input_pix_fmt (XImage *image, ColorInfo *c_info) {
                 input_pixfmt = PIX_FMT_RGB24;
             } else {
                 fprintf(stderr,
-                        "%s %s: rgb ordering at image depth %i not supported ... aborting\n",
+                        _("%s %s: rgb ordering at image depth %i not supported ... aborting\n"),
                         DEBUGFILE, DEBUGFUNCTION,
                         image->bits_per_pixel);
                 fprintf(stderr,
@@ -995,7 +998,7 @@ int guess_input_pix_fmt (XImage *image, ColorInfo *c_info) {
                 input_pixfmt = PIX_FMT_ARGB32;
             } else {
                 fprintf(stderr,
-                        "%s %s: image depth %i not supported ... aborting\n",
+                        _("%s %s: image depth %i not supported ... aborting\n"),
                         DEBUGFILE, DEBUGFUNCTION,
                         image->bits_per_pixel);
                 exit(1);
@@ -1003,7 +1006,7 @@ int guess_input_pix_fmt (XImage *image, ColorInfo *c_info) {
             break;
         default:
             fprintf(stderr,
-                    "%s %s: image depth %i not supported ... aborting\n",
+                    _("%s %s: image depth %i not supported ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION,
                     image->bits_per_pixel);
             exit(1);
@@ -1103,7 +1106,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         output_file = av_alloc_format_context();
         if (!output_file) {
             fprintf(stderr,
-                    "%s %s: Error allocating memory for format context ... aborting\n",
+                    _("%s %s: Error allocating memory for format context ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -1112,7 +1115,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         // FIXME: do I need to free this?
         if (!output_file->priv_data && output_file->oformat->priv_data_size > 0) { 
             fprintf (stderr, 
-                    "%s %s: Error allocating private data for format context ... aborting\n",
+                    _("%s %s: Error allocating private data for format context ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION); 
             exit (1); 
         } 
@@ -1134,7 +1137,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         // if (av_set_parameters (output_file, p_fParams) < 0) {
         if (av_set_parameters(output_file, NULL) < 0) {
             fprintf(stderr,
-                    "%s %s: Invalid encoding parameters ... aborting\n",
+                    _("%s %s: Invalid encoding parameters ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -1144,7 +1147,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 //        c = out_st->codec;
 
         if (avcodec_open(out_st->codec, codec) < 0) {
-            fprintf(stderr, "%s %s: could not open video codec\n",
+            fprintf(stderr, _("%s %s: could not open video codec\n"),
                         DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -1205,7 +1208,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         outpic_buf = av_malloc(image_size);
         if (!outpic_buf) {
             fprintf(stderr,
-                    "%s %s: Could not allocate buffer for output frame! ... aborting\n",
+                    _("%s %s: Could not allocate buffer for output frame! ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -1232,7 +1235,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         outbuf = malloc(image_size);
         if (!outbuf) {
             fprintf(stderr,
-                    "%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n",
+                    _("%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
@@ -1247,7 +1250,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             // open the file 
             if (url_fopen(&output_file->pb, output_file->filename, URL_WRONLY) < 0) {
                 fprintf(stderr,
-                        "%s %s: Could not open '%s' ... aborting\n", DEBUGFILE, DEBUGFUNCTION,
+                        _("%s %s: Could not open '%s' ... aborting\n"), DEBUGFILE, DEBUGFUNCTION,
                         output_file->filename);
                 exit(1);
             }
@@ -1255,7 +1258,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             if (av_write_header(output_file) < 0) {
                 dump_format(output_file, 0, output_file->filename, 1);
                 fprintf(stderr,
-                        "%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n",
+                        _("%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n"),
                         DEBUGFILE, DEBUGFUNCTION);
                 exit(1);
             }
@@ -1290,7 +1293,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             // open the file 
             if (url_fopen(&output_file->pb, output_file->filename, URL_WRONLY) < 0) {
                 fprintf(stderr,
-                        "%s %s: Could not open '%s' ... aborting\n", DEBUGFILE, DEBUGFUNCTION,
+                        _("%s %s: Could not open '%s' ... aborting\n"), DEBUGFILE, DEBUGFUNCTION,
                         output_file->filename);
                 exit(1);
             }
@@ -1298,7 +1301,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             if (av_write_header(output_file) < 0) {
                 dump_format(output_file, 0, output_file->filename, 1);
                 fprintf(stderr,
-                        "%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n",
+                        _("%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n"),
                         DEBUGFILE, DEBUGFUNCTION);
                 exit(1);
             }
@@ -1336,7 +1339,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             for (y = 0; y < out_st->codec->height; y++) {
                 if (!memcpy(out, in, out_st->codec->width)) {
                     fprintf(stderr,
-                            "%s %s: error preprocessing 8bit pseudo color input ... aborting\n",
+                            _("%s %s: error preprocessing 8bit pseudo color input ... aborting\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                     exit(1);
                 }
@@ -1354,7 +1357,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
     if ( img_convert((AVPicture *)p_outpic, out_st->codec->pix_fmt,
                 (AVPicture *)p_inpic, input_pixfmt, out_st->codec->width, out_st->codec->height) < 0) {
         fprintf(stderr,
-                "%s %s: pixel format conversion not handled ... aborting\n",
+                _("%s %s: pixel format conversion not handled ... aborting\n"),
                 DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
@@ -1381,7 +1384,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
     out_size = avcodec_encode_video(out_st->codec, outbuf, image_size, p_outpic);
     if (out_size < 0) {
         fprintf(stderr,
-                "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n", 
+                _("%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"), 
                 DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf, image_size, p_outpic);
         exit(1);
     }
@@ -1390,7 +1393,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
     if (job->flags & FLG_REC_SOUND) {
         if (pthread_mutex_lock(&mp) > 0) {
             fprintf(stderr,
-                    "mutex lock for writing video frame failed ... aborting\n");
+                    _("mutex lock for writing video frame failed ... aborting\n"));
             exit(1);
         }
     }
@@ -1416,7 +1419,7 @@ if (out_size > 0 ) {
 //    printf("releasing the mutex lock\n");
         if (pthread_mutex_unlock(&mp) > 0) {
             fprintf(stderr,
-                    "couldn't release the mutex for writing video frame ... aborting\n");
+                    _("couldn't release the mutex for writing video frame ... aborting\n"));
         }
     }
 #endif                          // HAVE_FFMPEG_AUDIO
