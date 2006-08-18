@@ -580,7 +580,19 @@ on_xvc_ctrl_main_window_delete_event(GtkWidget * widget,
 
     #define DEBUGFUNCTION "on_xvc_ctrl_main_window_delete_event()"
 
-    if (jobp && (jobp->state & VC_STOP) == 0 ) xvc_capture_stop (jobp);
+    if (jobp && (jobp->state & VC_STOP) == 0 ) {
+        job_set_state(VC_STOP);
+
+        // signal potentially paused thread
+        pthread_mutex_lock(&recording_mutex);
+        pthread_cond_broadcast(&recording_condition_unpaused);    
+        pthread_mutex_unlock(&recording_mutex);
+
+    // xvc_capture_stop (jobp);
+    }
+    while (recording_thread_running) {
+        usleep(100);
+    }
     xvc_destroy_gtk_frame();
     gtk_main_quit();            // FIXME: why does this seem to be
     // necessary with libglade where
@@ -1046,6 +1058,10 @@ static gboolean stop_recording_gui_stuff(Job * job)
     g_assert(xml);
 
     // GUI stuff
+    w = glade_xml_get_widget(xml, "xvc_ctrl_pause_toggle");
+    g_assert(w);
+    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
+    
     // gtk_widget_set_sensitive(GTK_WIDGET(MI_file), TRUE);
     w = glade_xml_get_widget(xml, "xvc_ctrl_select_toggle");
     g_assert(w);
@@ -1268,6 +1284,12 @@ gboolean timer_stop_recording(Job * job)
     #define DEBUGFUNCTION "timer_stop_recording()"
 
     job_set_state(VC_STOP);
+
+        // signal potentially paused thread
+        pthread_mutex_lock(&recording_mutex);
+        pthread_cond_broadcast(&recording_condition_unpaused);    
+        pthread_mutex_unlock(&recording_mutex);
+
 //    xvc_capture_stop();
     
     return FALSE;
@@ -1286,7 +1308,13 @@ on_xvc_ctrl_stop_toggle_toggled(GtkToggleToolButton * button,
 #endif // DEBUG
 
     if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button))) {
+    
         job_set_state(VC_STOP);
+
+        // signal potentially paused thread
+        pthread_mutex_lock(&recording_mutex);
+        pthread_cond_broadcast(&recording_condition_unpaused);    
+        pthread_mutex_unlock(&recording_mutex);
 
 //        xvc_capture_stop();
     } else {

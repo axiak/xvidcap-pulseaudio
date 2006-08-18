@@ -7,11 +7,6 @@
       <comment/>
     </item>
     <item>
-      <attribute id="1151942516" priority="1" done="0" start_date="732495" enddate="99999999" notify="0" endtime="-60" last_edited="1151942516"/>
-      <summary>localize</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1148768972" priority="1" done="1" start_date="732459" completed_date="732495" enddate="99999999" notify="0" endtime="-60" last_edited="1151943227"/>
       <summary>--fps 25 yields 25.08 ... strange</summary>
       <comment>can no longer reproduce</comment>
@@ -55,11 +50,6 @@ Also, it seems pausing non-sync worse</comment>
     <item>
       <attribute id="1153068417" priority="1" done="0" start_date="732508" enddate="99999999" notify="0" endtime="-60" last_edited="1153068417"/>
       <summary>fix man page</summary>
-      <comment/>
-    </item>
-    <item>
-      <attribute id="1151656082" priority="1" done="1" start_date="732492" completed_date="732508" notify="0" last_edited="1153078218"/>
-      <summary>multi-frame codec drop down does not auto-select</summary>
       <comment/>
     </item>
     <item>
@@ -127,18 +117,8 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
 Might not work after all due to flags and stuff ... check well</comment>
     </item>
     <item>
-      <attribute id="1155841855" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841855"/>
-      <summary>internationalize glade ui</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1155841871" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841871"/>
       <summary>scale capture</summary>
-      <comment/>
-    </item>
-    <item>
-      <attribute id="1155860367" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155860367"/>
-      <summary>result dialog doesn't popup if pause button is toggled</summary>
       <comment/>
     </item>
     <item>
@@ -165,6 +145,26 @@ click ok</comment>
       <summary>warning dialog text</summary>
       <comment>	... does not match all situations.
 sometimes cancel takes you back to the preferences dialog, sometimes it's "preferneces"</comment>
+    </item>
+    <item>
+      <attribute id="1151942516" priority="1" done="1" start_date="732495" completed_date="732541" notify="0" last_edited="1155902238"/>
+      <summary>localize</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1155841855" priority="1" done="1" start_date="732540" completed_date="732541" notify="0" last_edited="1155902278"/>
+      <summary>internationalize glade ui</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1151656082" priority="1" done="0" start_date="732492" notify="0" last_edited="1155903339"/>
+      <summary>multi-frame codec drop down does not auto-select</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1155860367" priority="1" done="1" start_date="732541" completed_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155913385"/>
+      <summary>result dialog doesn't popup if pause button is toggled</summary>
+      <comment>this is because the recording thread is paused and does not return</comment>
     </item>
   </category>
   <category title="Business" place="1"/>
