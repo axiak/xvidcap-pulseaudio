@@ -1686,8 +1686,9 @@ on_xvc_ctrl_lock_toggle_toggled(GtkToggleToolButton *
     if (gtk_toggle_tool_button_get_active(togglebutton)) {
         xvc_frame_lock = 1;     // button pressed = move frame with
         // control
-        gtk_tooltips_set_tip(tooltips, GTK_WIDGET(togglebutton),
-                             _("Detach selection frame"), NULL);
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (togglebutton), tooltips, 
+                             _("Detach selection frame"), 
+                             _("Detach selection frame"));
 
         gtk_window_set_gravity(GTK_WINDOW(xvc_ctrl_main_window),
                                GDK_GRAVITY_NORTH_WEST);
@@ -1709,8 +1710,9 @@ on_xvc_ctrl_lock_toggle_toggled(GtkToggleToolButton *
                          frame_rectangle->height, FALSE);
     } else {
         xvc_frame_lock = 0;
-        gtk_tooltips_set_tip(tooltips, GTK_WIDGET(togglebutton),
-                             _("Attach selection frame"), NULL);
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (togglebutton), tooltips, 
+                             _("Attach selection frame"), 
+                             _("Attach selection frame"));
     }
     #undef DEBUGFUNCTION
 }
@@ -2193,9 +2195,9 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
         w = NULL;
         w = glade_xml_get_widget(mwxml, "xvc_ctrl_back_button");
         g_assert(w);
-        gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(w),
-                             _("Move cursor back one frame"),
-                             _("Move cursor back one frame"));
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (w), tooltips, 
+                            _("Move cursor back one frame"), 
+                            _("Move cursor back one frame"));
         if (jobp->pic_no >= jobp->step)
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
         else
@@ -2203,7 +2205,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
 
         w = glade_xml_get_widget(mwxml, "xvc_ctrl_forward_button");
         g_assert(w);
-        gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(w),
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (w), tooltips, 
                              _("Move cursor to next frame"),
                              _("Move cursor to next frame"));
         gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
@@ -2213,8 +2215,20 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(w),
                              _("Left Click: Reset frame counter and filename\nRight Click: Popup Menu"),
                              _("Left Click: Reset frame counter and filename\nRight Click: Popup Menu"));
+
+        w = glade_xml_get_widget(mwxml, "xvc_ctrl_edit_button");
+        g_assert(w);
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (w), tooltips, 
+                             _("Edit current individual frame"),
+                             _("Edit current individual frame"));
+
+        w = glade_xml_get_widget(mwxml, "xvc_ctrl_step_button");
+        g_assert(w);
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (w), tooltips, 
+                             _("Capture single frame"),
+                             _("Capture single frame"));
     } else {
-        GtkWidget *next = NULL, *previous = NULL, *filename = NULL;
+        GtkWidget *next = NULL, *previous = NULL, *filename = NULL, *w = NULL;
         next = glade_xml_get_widget(mwxml, "xvc_ctrl_forward_button");
         g_assert(next);
         previous = glade_xml_get_widget(mwxml, "xvc_ctrl_back_button");
@@ -2234,17 +2248,28 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
             gtk_widget_set_sensitive(GTK_WIDGET(next), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(previous), FALSE);
         }
-        gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips),
-                             GTK_WIDGET(previous),
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (previous), tooltips, 
                              _("Move cursor to previous movie"),
                              _("Move cursor to previous movie"));
-        gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_WIDGET(next),
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (next), tooltips, 
                              _("Move cursor to next movie"),
                              _("Move cursor to next movie"));
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips),
                              GTK_WIDGET(filename),
                              _("Left Click: Reset movie counter to zero\nRight Click: Popup Menu"),
                              _("Left Click: Reset movie counter to zero\nRight Click: Popup Menu"));
+                             
+        w = glade_xml_get_widget(mwxml, "xvc_ctrl_edit_button");
+        g_assert(w);
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (w), tooltips, 
+                             _("Edit current movie"),
+                             _("Edit current movie"));
+
+        w = glade_xml_get_widget(mwxml, "xvc_ctrl_step_button");
+        g_assert(w);
+        gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (w), tooltips, 
+                             NULL,
+                             NULL);
     }
     
     

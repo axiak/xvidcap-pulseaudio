@@ -5,7 +5,7 @@
 
 <widget class="GtkWindow" id="xvc_ctrl_main_window">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">XVidCap</property>
+  <property name="title" translatable="no">XVidCap</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -33,7 +33,7 @@
 	  <property name="width_request">130</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">test-file-name</property>
+	  <property name="label" translatable="no">test-file-name</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -74,6 +74,7 @@
 	  <child>
 	    <widget class="GtkToggleToolButton" id="xvc_ctrl_stop_toggle">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Stop recording</property>
 	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-media-stop</property>
@@ -92,6 +93,7 @@
 	  <child>
 	    <widget class="GtkToggleToolButton" id="xvc_ctrl_pause_toggle">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Pause recording</property>
 	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-media-pause</property>
@@ -123,6 +125,7 @@
 	  <child>
 	    <widget class="GtkToggleToolButton" id="xvc_ctrl_record_toggle">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Start recording</property>
 	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-media-record</property>
@@ -154,6 +157,7 @@
 	  <child>
 	    <widget class="GtkToolButton" id="xvc_ctrl_step_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-media-next</property>
@@ -218,6 +222,7 @@
 	  <child>
 	    <widget class="GtkToggleToolButton" id="xvc_ctrl_lock_toggle">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Detach selection frame</property>
 	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-dialog-authentication</property>
@@ -236,6 +241,7 @@
 	  <child>
 	    <widget class="GtkToggleToolButton" id="xvc_ctrl_select_toggle">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Select rectangular area to capture</property>
 	      <property name="label" translatable="yes"></property>
 	      <property name="use_underline">True</property>
 	      <property name="stock_id">gtk-color-picker</property>
@@ -586,6 +592,7 @@
 		      <child>
 			<widget class="GtkRadioButton" id="xvc_pref_default_capture_mode_sf_radiobutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Use Single-Frame Capture as default, i.e. if nothing else is explicitly specified.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Single-Frame</property>
 			  <property name="use_underline">True</property>
@@ -608,6 +615,7 @@
 		      <child>
 			<widget class="GtkRadioButton" id="xvc_pref_default_capture_mode_mf_radiobutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Use Multi-Frame Capture as default, i.e. if nothing else is explicitly specified.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Multi-Frame</property>
 			  <property name="use_underline">True</property>
@@ -631,6 +639,7 @@
 		      <child>
 			<widget class="GtkCheckButton" id="xvc_pref_capture_mouse_checkbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Enable Capturing of Mouse Pointer Movement.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Capture _Mouse Pointer:</property>
 			  <property name="use_underline">True</property>
@@ -654,6 +663,7 @@
 		      <child>
 			<widget class="GtkRadioButton" id="xvc_pref_capture_mouse_black_radiobutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Capture the Mouse Pointer as a black arrow.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">black</property>
 			  <property name="use_underline">True</property>
@@ -676,6 +686,7 @@
 		      <child>
 			<widget class="GtkRadioButton" id="xvc_pref_capture_mouse_white_radiobutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Capture the Mouse Pointer as a white arrow.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">white</property>
 			  <property name="use_underline">True</property>
@@ -699,6 +710,7 @@
 		      <child>
 			<widget class="GtkCheckButton" id="xvc_pref_save_geometry_checkbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Save size and position of the Capture Area to the preferences file.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Save Capture _Geometry</property>
 			  <property name="use_underline">True</property>
@@ -721,6 +733,8 @@
 		      <child>
 			<widget class="GtkCheckButton" id="xvc_pref_shared_mem_checkbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Use Shared Memory access to X11. 
+Xserver and client need to be running on the same machine.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Use _Shared Memory</property>
 			  <property name="use_underline">True</property>
@@ -743,6 +757,7 @@
 		      <child>
 			<widget class="GtkCheckButton" id="xvc_pref_autocontinue_checkbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Enable the autocontinue feature for Multi-Frame Capture.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Auto_continue</property>
 			  <property name="use_underline">True</property>
@@ -765,6 +780,8 @@
 		      <child>
 			<widget class="GtkCheckButton" id="xvc_pref_always_show_results_checkbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Always show the result dialog after capture.
+Otherwise only show it if required for asking the user for a filename.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">Alyway Show Result Dialog</property>
 			  <property name="use_underline">True</property>
@@ -1009,6 +1026,7 @@ Second:</property>
 		      <child>
 			<widget class="GtkSpinButton" id="xvc_pref_sf_start_no_spinbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Start numbering captured frames at the number provided.</property>
 			  <property name="can_focus">True</property>
 			  <property name="climb_rate">1</property>
 			  <property name="digits">0</property>
@@ -1030,6 +1048,8 @@ Second:</property>
 		      <child>
 			<widget class="GtkSpinButton" id="xvc_pref_sf_max_time_spinbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Set the maximum time to record in number of seconds. 
+A value of zero makes a capture session run until stopped interactively.</property>
 			  <property name="can_focus">True</property>
 			  <property name="climb_rate">1</property>
 			  <property name="digits">0</property>
@@ -1109,6 +1129,7 @@ Frames:</property>
 		      <child>
 			<widget class="GtkSpinButton" id="xvc_pref_sf_frame_increment_spinbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Increment the counter for frame numbering by the number provided.</property>
 			  <property name="can_focus">True</property>
 			  <property name="climb_rate">1</property>
 			  <property name="digits">0</property>
@@ -1130,6 +1151,8 @@ Frames:</property>
 		      <child>
 			<widget class="GtkSpinButton" id="xvc_pref_sf_max_frames_spinbutton">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Set the maximum number of frames to record. 
+A value of zero makes a capture session run until stopped interactively.</property>
 			  <property name="can_focus">True</property>
 			  <property name="climb_rate">1</property>
 			  <property name="digits">0</property>
@@ -1206,6 +1229,7 @@ Frames:</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="xvc_pref_sf_format_auto_checkbutton">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Check here for auto-detection of the file format based on the filename.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">auto</property>
 			      <property name="use_underline">True</property>
@@ -1226,7 +1250,7 @@ Frames:</property>
 			  <child>
 			    <widget class="GtkComboBox" id="xvc_pref_sf_format_combobox">
 			      <property name="visible">True</property>
-			      <property name="items" translatable="yes">dummy</property>
+			      <property name="items" translatable="no">dummy</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
 			    </widget>
@@ -1284,6 +1308,7 @@ Frames:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_sf_filename_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter a target filename or pattern here.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -1304,8 +1329,9 @@ Frames:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_sf_filename_select_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to open a file selector.</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">...</property>
+			      <property name="label" translatable="no">...</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -1530,6 +1556,8 @@ Second:</property>
 			  <child>
 			    <widget class="GtkSpinButton" id="xvc_pref_mf_max_time_spinbutton">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Set the maximum time to record in number of seconds. 
+A value of zero makes a capture session run until stopped interactively.</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
 			      <property name="digits">0</property>
@@ -1580,6 +1608,8 @@ Frames:</property>
 			  <child>
 			    <widget class="GtkSpinButton" id="xvc_pref_mf_max_frames_spinbutton">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Set the maximum number of frames to record. 
+A value of zero makes a capture session run until stopped interactively.</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
 			      <property name="digits">0</property>
@@ -1624,7 +1654,7 @@ Frames:</property>
 
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_fps_combobox">
-				  <property name="items" translatable="yes">dummy</property>
+				  <property name="items" translatable="no">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				</widget>
@@ -1682,6 +1712,7 @@ Frames:</property>
 			      <child>
 				<widget class="GtkCheckButton" id="xvc_pref_mf_codec_auto_checkbutton">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Check here for auto-detection of the default codec based on the file format.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">auto</property>
 				  <property name="use_underline">True</property>
@@ -1702,7 +1733,7 @@ Frames:</property>
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_codec_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="yes">dummy</property>
+				  <property name="items" translatable="no">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="changed" handler="on_xvc_pref_mf_codec_combobox_changed" last_modification_time="Thu, 09 Mar 2006 16:37:24 GMT"/>
@@ -1761,6 +1792,7 @@ Frames:</property>
 			      <child>
 				<widget class="GtkCheckButton" id="xvc_pref_mf_format_auto_checkbutton">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Check here for auto-detection of the file format based on the filename.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">auto</property>
 				  <property name="use_underline">True</property>
@@ -1781,7 +1813,7 @@ Frames:</property>
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_format_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="yes">dummy</property>
+				  <property name="items" translatable="no">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="changed" handler="on_xvc_pref_mf_format_combobox_changed" last_modification_time="Thu, 09 Mar 2006 16:36:11 GMT"/>
@@ -1840,6 +1872,7 @@ Frames:</property>
 			      <child>
 				<widget class="GtkEntry" id="xvc_pref_mf_filename_entry">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Enter a target filename or pattern here.</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
 				  <property name="visibility">True</property>
@@ -1860,8 +1893,9 @@ Frames:</property>
 			      <child>
 				<widget class="GtkButton" id="xvc_pref_mf_filename_select_button">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Click to open a file selector.</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">...</property>
+				  <property name="label" translatable="no">...</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -1951,6 +1985,7 @@ Frames:</property>
 			  <child>
 			    <widget class="GtkCheckButton" id="xvc_pref_mf_audio_checkbutton">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Toggle audio capture on/off.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Enable 
 _Audio</property>
@@ -2124,6 +2159,7 @@ Rate:</property>
 			      <child>
 				<widget class="GtkEntry" id="xvc_pref_mf_audio_input_device_entry">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Enter an  audio device name here.</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">True</property>
 				  <property name="visibility">True</property>
@@ -2143,8 +2179,9 @@ Rate:</property>
 			      <child>
 				<widget class="GtkButton" id="xvc_pref_mf_audio_input_device_select_button">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Click to open a file selector.</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="yes">...</property>
+				  <property name="label" translatable="no">...</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -2176,6 +2213,7 @@ Rate:</property>
 			      <child>
 				<widget class="GtkCheckButton" id="xvc_pref_mf_audio_codec_auto_checkbutton">
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Check here for auto-detection of the default audio codec based on the file format.</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">auto</property>
 				  <property name="use_underline">True</property>
@@ -2196,7 +2234,7 @@ Rate:</property>
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_audio_codec_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="yes">dummy</property>
+				  <property name="items" translatable="no">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				</widget>
@@ -2241,6 +2279,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkSpinButton" id="xvc_pref_mf_audio_sample_rate_spinbutton">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Set the audio capture sample rate.</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
 			      <property name="digits">0</property>
@@ -2262,6 +2301,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkSpinButton" id="xvc_pref_mf_audio_bit_rate_spinbutton">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Set the audio capture bit rate.</property>
 			      <property name="can_focus">True</property>
 			      <property name="climb_rate">1</property>
 			      <property name="digits">0</property>
@@ -2404,6 +2444,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_commands_help_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter the command used to display the help screen.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -2423,6 +2464,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_commands_help_try_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to test the help command.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">try</property>
 			      <property name="use_underline">True</property>
@@ -2588,6 +2630,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_commands_sf_play_try_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to test the playback command.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">try</property>
 			      <property name="use_underline">True</property>
@@ -2608,6 +2651,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_commands_sf_play_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter the command to be executed for playing back the recorded video.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -2629,6 +2673,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_commands_sf_encode_try_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to test the encoding command.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">try</property>
 			      <property name="use_underline">True</property>
@@ -2649,6 +2694,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_commands_sf_encode_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter the command to be executed for encoding the recorded individual frames.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -2670,6 +2716,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_commands_sf_edit_try_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to test the edit command.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">try</property>
 			      <property name="use_underline">True</property>
@@ -2690,6 +2737,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_commands_sf_edit_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter the command to be executed for editing the current frame.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -2859,6 +2907,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_commands_mf_play_try_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to test the playback command.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">try</property>
 			      <property name="use_underline">True</property>
@@ -2879,6 +2928,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_commands_mf_play_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter the command to be executed for playing back the recorded video.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -2900,6 +2950,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_commands_mf_encode_try_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to test the transcode command.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">try</property>
 			      <property name="use_underline">True</property>
@@ -2920,6 +2971,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_commands_mf_encode_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter the command to be executed for transcoding the recorded video.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -2941,6 +2993,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkButton" id="xvc_pref_commands_mf_edit_try_button">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Click to test the edit command.</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">try</property>
 			      <property name="use_underline">True</property>
@@ -2961,6 +3014,7 @@ Rate:</property>
 			  <child>
 			    <widget class="GtkEntry" id="xvc_pref_commands_mf_edit_entry">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Enter the command to be executed for editing the recorded video.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
@@ -3100,6 +3154,7 @@ Rate:</property>
 	  <child>
 	    <widget class="GtkButton" id="button1">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Open the preferences dialog to revisit your settings</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-preferences</property>
@@ -3127,6 +3182,7 @@ Rate:</property>
 	  <child>
 	    <widget class="GtkButton" id="button3">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Clicking &quot;OK&quot; applies all the default actions suggested by the error messages.</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-ok</property>
@@ -3356,13 +3412,13 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
 <widget class="GtkAboutDialog" id="xvc_about_main_window">
   <property name="visible">True</property>
   <property name="destroy_with_parent">True</property>
-  <property name="name" translatable="yes">xvidcap</property>
-  <property name="copyright" translatable="yes">by KHB</property>
-  <property name="comments" translatable="yes">dies ist ein Kommentar</property>
+  <property name="name" translatable="yes">XVidCap</property>
+  <property name="copyright" translatable="yes">Rasca, Karl H. Beckers</property>
+  <property name="comments" translatable="yes"></property>
   <property name="wrap_license">False</property>
   <property name="website">http://xvidcap.sourceforge.net</property>
   <property name="website_label" translatable="yes">website</property>
-  <property name="authors">karl</property>
+  <property name="authors">Karl H. Beckers</property>
   <property name="documenters">karl</property>
   <property name="artists">karl</property>
   <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
@@ -3551,6 +3607,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
 	  <child>
 	    <widget class="GtkButton" id="xvc_result_dialog_no_button">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Don't save the video. Note: the temporary file will not be deleted but may be overwritten on next capture.</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-delete</property>
@@ -3577,6 +3634,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
 	    <widget class="GtkButton" id="xvc_result_dialog_save_button">
 	      <property name="visible">True</property>
 	      <property name="sensitive">False</property>
+	      <property name="tooltip" translatable="yes">Save video to filename specified above.</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-save</property>
@@ -3782,7 +3840,7 @@ Success Ratio:&lt;/b&gt;</property>
 	      <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
 	      <property name="fraction">0</property>
 	      <property name="pulse_step">0.10000000149</property>
-	      <property name="text" translatable="yes">X %</property>
+	      <property name="text" translatable="no">X %</property>
 	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 	    </widget>
 	    <packing>
@@ -3797,7 +3855,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_video_codec_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">MSMPEG4</property>
+	      <property name="label" translatable="no">MSMPEG4</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3825,7 +3883,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_fps_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">10</property>
+	      <property name="label" translatable="no">10</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3853,7 +3911,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_audio_codec_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">MP3</property>
+	      <property name="label" translatable="no">MP3</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3881,7 +3939,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_actual_fps_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">&lt;span foreground='red'&gt;9,6&lt;/span&gt;</property>
+	      <property name="label" translatable="no">&lt;span foreground='red'&gt;9,6&lt;/span&gt;</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3909,7 +3967,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_video_format_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Microsoft AVI File</property>
+	      <property name="label" translatable="no">Microsoft AVI File</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3966,7 +4024,7 @@ Frames:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_total_frames_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">87</property>
+	      <property name="label" translatable="no">87</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -4051,6 +4109,7 @@ Length:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkButton" id="xvc_result_dialog_select_filename_button">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Select a filename to save the video as.</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-save-as</property>
@@ -4099,6 +4158,7 @@ Length:&lt;/b&gt;</property>
 
 	  <child>
 	    <widget class="GtkCheckButton" id="xvc_result_dialog_show_next_time_checkbutton">
+	      <property name="tooltip" translatable="yes">Uncheck this to only show this dialog when required to ask for a target filename. This setting can also be changed from the preferences dialog.</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">Show this dialog next time</property>
 	      <property name="use_underline">True</property>

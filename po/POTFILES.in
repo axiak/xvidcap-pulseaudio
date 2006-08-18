@@ -3,8 +3,10 @@
 src/app_data.c
 src/codecs.c
 src/gnome_ui.c
+src/gnome_options.c
 src/job.c
 src/main.c
 src/options.c
 src/xtoffmpeg.c
 src/xv_error_item.c
+src/gnome-xvidcap.glade

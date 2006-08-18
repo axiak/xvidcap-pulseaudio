@@ -129,17 +129,42 @@ Might not work after all due to flags and stuff ... check well</comment>
     <item>
       <attribute id="1155841855" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841855"/>
       <summary>internationalize glade ui</summary>
-      <comment></comment>
-    </item>
-    <item>
-      <attribute id="1155841861" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841861"/>
-      <summary>tooltips in glade</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
       <attribute id="1155841871" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841871"/>
       <summary>scale capture</summary>
-      <comment></comment>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1155860367" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155860367"/>
+      <summary>result dialog doesn't popup if pause button is toggled</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1155863373" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155863373"/>
+      <summary>error item spacing</summary>
+      <comment>platz f&#xFC;r linke spalte in deutsch zu wenig und action text nicht umgebrochen.
+
+xvidcap --mf --file "" --codec mpeg4 --format avi</comment>
+    </item>
+    <item>
+      <attribute id="1155863432" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155863432"/>
+      <summary>segmentation fault</summary>
+      <comment>xvidcap --mf --file "" --codec mpeg4 --format avi
+in the warning dialog click preferences
+click ok</comment>
+    </item>
+    <item>
+      <attribute id="1155841861" priority="1" done="1" start_date="732540" completed_date="732541" notify="0" last_edited="1155863478"/>
+      <summary>tooltips in glade</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1155901525" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155901525"/>
+      <summary>warning dialog text</summary>
+      <comment>	... does not match all situations.
+sometimes cancel takes you back to the preferences dialog, sometimes it's "preferneces"</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

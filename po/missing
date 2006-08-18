@@ -1,2 +1,5 @@
-src/callbacks.c
-src/gnome-xvidcap.glade
+ffmpeg-svn5528/libavcodec/liba52/bitstream.h
+ffmpeg-svn5528/libavcodec/ps2/idct_mmi.c
+ffmpeg-svn5528/libavcodec/sparc/dsputil_vis.c
+ffmpeg-svn5528/libavcodec/sparc/vis.h
+ffmpeg-svn5528/libavutil/bswap.h
