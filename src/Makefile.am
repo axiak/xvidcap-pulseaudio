@@ -14,8 +14,8 @@ INCLUDES = \
 
 AM_CFLAGS =\
 	 -Wall\
-##	 -DDEBUG -DDEBUG2\
 	 -g
+#	 -DDEBUG -DDEBUG2
 
 bin_PROGRAMS = xvidcap
 

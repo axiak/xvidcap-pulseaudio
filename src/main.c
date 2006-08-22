@@ -696,7 +696,7 @@ void cleanup_when_interrupted(int signal)
 {
     Job *job = xvc_job_ptr();
     
-    if (job) xvc_capture_stop(job);
+    if (job) xvc_capture_stop_signal(TRUE);
 }
 
 

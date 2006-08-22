@@ -5,7 +5,7 @@
 
 <widget class="GtkWindow" id="xvc_ctrl_main_window">
   <property name="visible">True</property>
-  <property name="title" translatable="no">XVidCap</property>
+  <property name="title">XVidCap</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -33,7 +33,7 @@
 	  <property name="width_request">130</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="no">test-file-name</property>
+	  <property name="label">test-file-name</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -504,6 +504,7 @@
 	    <widget class="GtkButton" id="xvc_pref_ok_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
@@ -1250,7 +1251,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 			  <child>
 			    <widget class="GtkComboBox" id="xvc_pref_sf_format_combobox">
 			      <property name="visible">True</property>
-			      <property name="items" translatable="no">dummy</property>
+			      <property name="items">dummy</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
 			    </widget>
@@ -1331,7 +1332,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">Click to open a file selector.</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="no">...</property>
+			      <property name="label">...</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -1654,7 +1655,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_fps_combobox">
-				  <property name="items" translatable="no">dummy</property>
+				  <property name="items">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				</widget>
@@ -1722,6 +1723,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
 				  <signal name="toggled" handler="on_xvc_pref_mf_codec_auto_checkbutton_toggled" last_modification_time="Thu, 09 Mar 2006 16:35:12 GMT"/>
+				  <signal name="toggled" handler="on_xvc_pref_mf_format_combobox_changed" after="yes" last_modification_time="Tue, 22 Aug 2006 07:41:29 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -1733,7 +1735,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_codec_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="no">dummy</property>
+				  <property name="items">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="changed" handler="on_xvc_pref_mf_codec_combobox_changed" last_modification_time="Thu, 09 Mar 2006 16:37:24 GMT"/>
@@ -1802,6 +1804,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
 				  <signal name="toggled" handler="on_xvc_pref_mf_format_auto_checkbutton_toggled" last_modification_time="Thu, 09 Mar 2006 16:35:04 GMT"/>
+				  <signal name="toggled" handler="on_xvc_pref_mf_filename_entry_changed" after="yes" last_modification_time="Tue, 22 Aug 2006 07:15:22 GMT"/>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -1813,7 +1816,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_format_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="no">dummy</property>
+				  <property name="items">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				  <signal name="changed" handler="on_xvc_pref_mf_format_combobox_changed" last_modification_time="Thu, 09 Mar 2006 16:36:11 GMT"/>
@@ -1895,7 +1898,7 @@ A value of zero makes a capture session run until stopped interactively.</proper
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Click to open a file selector.</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="no">...</property>
+				  <property name="label">...</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -2181,7 +2184,7 @@ Rate:</property>
 				  <property name="visible">True</property>
 				  <property name="tooltip" translatable="yes">Click to open a file selector.</property>
 				  <property name="can_focus">True</property>
-				  <property name="label" translatable="no">...</property>
+				  <property name="label">...</property>
 				  <property name="use_underline">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
@@ -2234,7 +2237,7 @@ Rate:</property>
 			      <child>
 				<widget class="GtkComboBox" id="xvc_pref_mf_audio_codec_combobox">
 				  <property name="visible">True</property>
-				  <property name="items" translatable="no">dummy</property>
+				  <property name="items">dummy</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
 				</widget>
@@ -3139,7 +3142,7 @@ Rate:</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="helpbutton1">
+	    <widget class="GtkButton" id="xvc_warn_help_button">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
@@ -3152,7 +3155,7 @@ Rate:</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button1">
+	    <widget class="GtkButton" id="xvc_warn_pref_button">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Open the preferences dialog to revisit your settings</property>
 	      <property name="can_default">True</property>
@@ -3166,9 +3169,8 @@ Rate:</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button2">
+	    <widget class="GtkButton" id="xvc_warn_cancel_button">
 	      <property name="visible">True</property>
-	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-cancel</property>
@@ -3180,10 +3182,11 @@ Rate:</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button3">
+	    <widget class="GtkButton" id="xvc_warn_ok_button">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Clicking &quot;OK&quot; applies all the default actions suggested by the error messages.</property>
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
@@ -3621,6 +3624,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
 	  <child>
 	    <widget class="GtkButton" id="xvc_result_dialog_close_button">
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-close</property>
 	      <property name="use_stock">True</property>
@@ -3840,7 +3844,7 @@ Success Ratio:&lt;/b&gt;</property>
 	      <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
 	      <property name="fraction">0</property>
 	      <property name="pulse_step">0.10000000149</property>
-	      <property name="text" translatable="no">X %</property>
+	      <property name="text">X %</property>
 	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 	    </widget>
 	    <packing>
@@ -3855,7 +3859,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_video_codec_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="no">MSMPEG4</property>
+	      <property name="label">MSMPEG4</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3883,7 +3887,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_fps_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="no">10</property>
+	      <property name="label">10</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3911,7 +3915,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_audio_codec_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="no">MP3</property>
+	      <property name="label">MP3</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3939,7 +3943,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_actual_fps_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="no">&lt;span foreground='red'&gt;9,6&lt;/span&gt;</property>
+	      <property name="label">&lt;span foreground='red'&gt;9,6&lt;/span&gt;</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -3967,7 +3971,7 @@ Success Ratio:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_video_format_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="no">Microsoft AVI File</property>
+	      <property name="label">Microsoft AVI File</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -4024,7 +4028,7 @@ Frames:&lt;/b&gt;</property>
 	  <child>
 	    <widget class="GtkLabel" id="xvc_result_dialog_total_frames_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="no">87</property>
+	      <property name="label">87</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>

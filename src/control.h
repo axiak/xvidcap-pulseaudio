@@ -40,12 +40,13 @@ Boolean xvc_ui_init(xvErrorListItem * errors);
 int xvc_ui_run(void);
 
 
-void xvc_idle_add(void *, void *);
+void xvc_idle_add(void *, void *, Boolean queue_events);
 Boolean xvc_change_filename_display(int pic_no);
 void xvc_frame_change(int x, int y, int width, int height,
                       Boolean reposition_control);
 
 Boolean xvc_capture_stop();
+void xvc_capture_stop_signal(Boolean wait_for_termination);
 void xvc_capture_start();
 
 

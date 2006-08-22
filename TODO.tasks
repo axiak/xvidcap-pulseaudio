@@ -101,20 +101,9 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
       <comment/>
     </item>
     <item>
-      <attribute id="1153824120" priority="1" done="0" start_date="732517" enddate="99999999" notify="0" endtime="-60" last_edited="1153824120"/>
-      <summary>frame monitor idle add ... should not queue</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1150970358" priority="1" done="1" start_date="732484" completed_date="732524" notify="0" last_edited="1154444280"/>
       <summary>implement ask-user for filename dialog</summary>
       <comment/>
-    </item>
-    <item>
-      <attribute id="1153845404" priority="1" done="0" start_date="732517" enddate="99999999" notify="0" endtime="-60" last_edited="1154809740"/>
-      <summary>create a new job from app-data on record</summary>
-      <comment>this should save a lot of updating job in the UI and make sure we create the right job during startup of a recording session.
-Might not work after all due to flags and stuff ... check well</comment>
     </item>
     <item>
       <attribute id="1155841871" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841871"/>
@@ -127,13 +116,6 @@ Might not work after all due to flags and stuff ... check well</comment>
       <comment>platz f&#xFC;r linke spalte in deutsch zu wenig und action text nicht umgebrochen.
 
 xvidcap --mf --file "" --codec mpeg4 --format avi</comment>
-    </item>
-    <item>
-      <attribute id="1155863432" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155863432"/>
-      <summary>segmentation fault</summary>
-      <comment>xvidcap --mf --file "" --codec mpeg4 --format avi
-in the warning dialog click preferences
-click ok</comment>
     </item>
     <item>
       <attribute id="1155841861" priority="1" done="1" start_date="732540" completed_date="732541" notify="0" last_edited="1155863478"/>
@@ -157,14 +139,139 @@ sometimes cancel takes you back to the preferences dialog, sometimes it's "prefe
       <comment/>
     </item>
     <item>
-      <attribute id="1151656082" priority="1" done="0" start_date="732492" notify="0" last_edited="1155903339"/>
-      <summary>multi-frame codec drop down does not auto-select</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1155860367" priority="1" done="1" start_date="732541" completed_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155913385"/>
       <summary>result dialog doesn't popup if pause button is toggled</summary>
       <comment>this is because the recording thread is paused and does not return</comment>
+    </item>
+    <item>
+      <attribute id="1153845404" priority="1" done="1" start_date="732517" completed_date="732543" notify="0" last_edited="1156092112"/>
+      <summary>create a new job from app-data on record</summary>
+      <comment>this should save a lot of updating job in the UI and make sure we create the right job during startup of a recording session.
+Might not work after all due to flags and stuff ... check well  
+.... prolly not</comment>
+    </item>
+    <item>
+      <attribute id="1156160924" priority="1" done="1" start_date="732544" completed_date="732544" notify="0" last_edited="1156160929"/>
+      <summary>segfault</summary>
+      <comment>seems to be the same as this:
+kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --mf --file test.swf --audio no --codec flash_video --format flv1
+Segmentation fault
+
+segfault on opening of preferences
+
+bt:
+#0  0xb73a92a3 in strlen () from /lib/tls/i686/cmov/libc.so.6
+(gdb) bt
+#0  0xb73a92a3 in strlen () from /lib/tls/i686/cmov/libc.so.6
+#1  0xb73a8fe5 in strdup () from /lib/tls/i686/cmov/libc.so.6
+#2  0x08068bc0 in mf_audio_codec_combo_set_contents_from_format (format=-1220109604) at gnome_options.c:1058
+#3  0x0806b108 in xvc_create_pref_dialog (lapp=0x0) at gnome_options.c:2298
+#4  0xb75d7423 in g_cclosure_marshal_VOID__VOID () from /usr/lib/libgobject-2.0.so.0
+#5  0xb75cb79f in g_closure_invoke () from /usr/lib/libgobject-2.0.so.0
+#6  0xb75da2ea in g_signal_stop_emission () from /usr/lib/libgobject-2.0.so.0
+#7  0xb75dbb19 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
+#8  0xb75dbe89 in g_signal_emit () from /usr/lib/libgobject-2.0.so.0
+#9  0xb7bd5bed in gtk_widget_activate () from /usr/lib/libgtk-x11-2.0.so.0
+#10 0xb7b0254f in gtk_menu_shell_activate_item () from /usr/lib/libgtk-x11-2.0.so.0
+#11 0xb7b02821 in gtk_menu_shell_activate_item () from /usr/lib/libgtk-x11-2.0.so.0
+#12 0xb7af8fd4 in gtk_menu_reorder_child () from /usr/lib/libgtk-x11-2.0.so.0
+#13 0xb7af38e0 in _gtk_marshal_BOOLEAN__BOXED () from /usr/lib/libgtk-x11-2.0.so.0
+#14 0xb75cb16f in g_cclosure_new_swap () from /usr/lib/libgobject-2.0.so.0
+#15 0xb75cb79f in g_closure_invoke () from /usr/lib/libgobject-2.0.so.0
+#16 0xb75da9ce in g_signal_stop_emission () from /usr/lib/libgobject-2.0.so.0
+#17 0xb75db886 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
+#18 0xb75dbe89 in g_signal_emit () from /usr/lib/libgobject-2.0.so.0
+#19 0xb7bd5dcf in gtk_widget_activate () from /usr/lib/libgtk-x11-2.0.so.0
+#20 0xb7af205d in gtk_propagate_event () from /usr/lib/libgtk-x11-2.0.so.0
+#21 0xb7af246b in gtk_main_do_event () from /usr/lib/libgtk-x11-2.0.so.0
+#22 0xb7871dec in _gdk_events_queue () from /usr/lib/libgdk-x11-2.0.so.0
+#23 0xb755a8d6 in g_main_context_dispatch () from /usr/lib/libglib-2.0.so.0
+#24 0xb755d996 in g_main_context_check () from /usr/lib/libglib-2.0.so.0
+#25 0xb755dcb8 in g_main_loop_run () from /usr/lib/libglib-2.0.so.0
+#26 0xb7af1765 in gtk_main () from /usr/lib/libgtk-x11-2.0.so.0
+#27 0x08061365 in xvc_ui_run () at gnome_ui.c:388
+#28 0x0806e702 in main (argc=10, argv=0xbfbbf824) at main.c:846
+
+
+</comment>
+    </item>
+    <item>
+      <attribute id="1156161003" priority="1" done="1" start_date="732544" completed_date="732545" notify="0" last_edited="1156242276"/>
+      <summary>if allowed audio codecs list is empty, no audio</summary>
+      <comment>make it insensitive and reenable if changed
+</comment>
+    </item>
+    <item>
+      <attribute id="1156176794" priority="1" done="1" start_date="732544" completed_date="732545" notify="0" last_edited="1156242280"/>
+      <summary>toggling the auto checkbuttons should recalculate comboboxes</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1156171496" priority="1" done="1" start_date="732544" completed_date="732545" notify="0" last_edited="1156242320"/>
+      <summary>segfault</summary>
+      <comment>~/xvidcap/bin/xvidcap --mf --file test.swf --audio yes --codec mpeg4</comment>
+    </item>
+    <item>
+      <attribute id="1156171632" priority="1" done="1" start_date="732544" completed_date="732545" enddate="99999999" notify="0" endtime="-60" last_edited="1156242353"/>
+      <summary>segfault</summary>
+      <comment>~/xvidcap/bin/xvidcap --mf --file test.swf --audio yes --codec flash_video --format flv1
+
+preferences-&gt;recheck audio --&gt; OK</comment>
+    </item>
+    <item>
+      <attribute id="1155863432" priority="1" done="1" start_date="732541" completed_date="732545" enddate="99999999" notify="0" endtime="-60" last_edited="1156242410"/>
+      <summary>segmentation fault</summary>
+      <comment>xvidcap --mf --file "" --codec mpeg4 --format avi
+in the warning dialog click preferences
+click ok
+
+</comment>
+    </item>
+    <item>
+      <attribute id="1156160957" priority="1" done="1" start_date="732544" completed_date="732545" notify="0" last_edited="1156242630"/>
+      <summary>if codec/format dd list is empty selection is not set to NULL</summary>
+      <comment>should be fixed</comment>
+    </item>
+    <item>
+      <attribute id="1156161042" priority="1" done="1" start_date="732544" completed_date="732545" enddate="99999999" notify="0" endtime="-60" last_edited="1156242766"/>
+      <summary>make sure fps fit codec selection</summary>
+      <comment>can't reproduce problem</comment>
+    </item>
+    <item>
+      <attribute id="1151656082" priority="1" done="1" start_date="732492" completed_date="732545" notify="0" last_edited="1156242802"/>
+      <summary>multi-frame codec drop down does not auto-select</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1156242492" priority="1" done="1" start_date="732545" completed_date="732545" notify="0" last_edited="1156244137"/>
+      <summary>warning popup source not passed correctly</summary>
+      <comment>if a pref warning popup comes up when clicking OK in the preferences, it has preferences button sensitive rather than the cancel button.
+clicking prefernces will create a new preferences UI rather than reusing the old one</comment>
+    </item>
+    <item>
+      <attribute id="1156244179" priority="1" done="0" start_date="732545" enddate="99999999" notify="0" endtime="-60" last_edited="1156244179"/>
+      <summary>filename button does not reclaim space</summary>
+      <comment>if you first have a very long filename (like with ask-user-for-filename) and then a short one, the button stays wide</comment>
+    </item>
+    <item>
+      <attribute id="1153824120" priority="1" done="1" start_date="732517" completed_date="732545" notify="0" last_edited="1156245937"/>
+      <summary>frame monitor idle add ... should not queue</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1156092080" priority="1" done="0" start_date="732543" enddate="99999999" notify="0" endtime="-60" last_edited="1156261050"/>
+      <summary>odditiy with audio capture</summary>
+      <comment>kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --mf --file test.avi
+kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --mf --file test.avi --audio yes
+kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --mf --file test.swf --audio yes
+xtoffmpeg.c add_audio_stream(): Konnte das Eingangsger&#xE4;t f&#xFC;r Ton-Aufnahme /dev/dsp nicht finden
+kb87850@ubuntu:~/Quellen/xvidcap/trunk$
+
+audio_init fehlte ... war wohl f&#xFC;r avi implizit ...
+
+jetzt tut's audio mit flash dennoch nicht
+
+</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

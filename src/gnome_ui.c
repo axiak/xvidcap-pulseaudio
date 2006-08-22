@@ -392,8 +392,9 @@ int xvc_ui_run()
 }
 
 
-void xvc_idle_add(void *func, void *data) {
-    g_idle_add(func, data);
+void xvc_idle_add(void *func, void *data, Boolean queue_events) {
+    if ( queue_events || !gtk_events_pending())
+        g_idle_add(func, data);
 }
 
 
@@ -404,6 +405,21 @@ Boolean xvc_change_filename_display(int pic_no)
     GtkChangeLabel(pic_no);
     return FALSE;
     
+    #undef DEBUGFUNCTION
+}
+
+
+void xvc_capture_stop_signal(Boolean wait) {
+    #define DEBUGFUNCTION "xvc_capture_stop_signal()"
+
+    job_set_state(VC_STOP);
+
+    if (wait) {
+        while (recording_thread_running) {
+            usleep(100);
+        }
+    }
+
     #undef DEBUGFUNCTION
 }
 
@@ -581,18 +597,9 @@ on_xvc_ctrl_main_window_delete_event(GtkWidget * widget,
     #define DEBUGFUNCTION "on_xvc_ctrl_main_window_delete_event()"
 
     if (jobp && (jobp->state & VC_STOP) == 0 ) {
-        job_set_state(VC_STOP);
-
-        // signal potentially paused thread
-        pthread_mutex_lock(&recording_mutex);
-        pthread_cond_broadcast(&recording_condition_unpaused);    
-        pthread_mutex_unlock(&recording_mutex);
-
-    // xvc_capture_stop (jobp);
+        xvc_capture_stop_signal(TRUE);
     }
-    while (recording_thread_running) {
-        usleep(100);
-    }
+
     xvc_destroy_gtk_frame();
     gtk_main_quit();            // FIXME: why does this seem to be
     // necessary with libglade where
@@ -619,7 +626,7 @@ on_xvc_ctrl_m1_mitem_preferences_activate(GtkMenuItem * menuitem,
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_preferences_activate()"
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+    printf("%s %s: Entering with app %p\n", DEBUGFILE, DEBUGFUNCTION, app);
 #endif // DEBUG
 
     xvc_create_pref_dialog(app);
@@ -914,7 +921,6 @@ void do_record_thread(Job * job) {
 
         if (pause > 0 ) usleep( pause * 1000);
     }
-//    stop_recording_gui_stuff(job);
     
 #ifdef DEBUG
         printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -945,17 +951,6 @@ gboolean stop_recording_nongui_stuff(Job * job)
     job_set_state(state);
 
     if (recording_thread_running) {
-
-        // non-gui stuff
-        // signal potentially paused thread
-        pthread_mutex_lock(&recording_mutex);
-        pthread_cond_broadcast(&recording_condition_unpaused);
-#ifdef DEBUG
-        printf("%s %s: done signalling\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-    
-        pthread_mutex_unlock(&recording_mutex);
-    
         pthread_join(recording_thread, (void **) &status);
 #ifdef DEBUG
         printf("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);    
@@ -1283,14 +1278,7 @@ gboolean timer_stop_recording(Job * job)
 {
     #define DEBUGFUNCTION "timer_stop_recording()"
 
-    job_set_state(VC_STOP);
-
-        // signal potentially paused thread
-        pthread_mutex_lock(&recording_mutex);
-        pthread_cond_broadcast(&recording_condition_unpaused);    
-        pthread_mutex_unlock(&recording_mutex);
-
-//    xvc_capture_stop();
+    xvc_capture_stop_signal(FALSE);
     
     return FALSE;
     #undef DEBUGFUNCTION
@@ -1308,15 +1296,19 @@ on_xvc_ctrl_stop_toggle_toggled(GtkToggleToolButton * button,
 #endif // DEBUG
 
     if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button))) {
+        if (recording_thread_running) 
+            xvc_capture_stop_signal(FALSE);
+        else {
+            GladeXML *xml = NULL;
+            GtkWidget *w = NULL;
     
-        job_set_state(VC_STOP);
-
-        // signal potentially paused thread
-        pthread_mutex_lock(&recording_mutex);
-        pthread_cond_broadcast(&recording_condition_unpaused);    
-        pthread_mutex_unlock(&recording_mutex);
-
-//        xvc_capture_stop();
+            xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
+            g_assert(xml);
+            w = glade_xml_get_widget(xml, "xvc_ctrl_pause_toggle");
+            g_assert(w);
+            if ( gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w)) )
+                gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
+        }
     } else {
         // empty
     }
@@ -1528,15 +1520,10 @@ on_xvc_ctrl_pause_toggle_toggled(GtkToggleToolButton * button,
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
         }
     } else {
-        // signal paused thread
         job_remove_state(VC_PAUSE | VC_STEP);
         // step is always only active if a running recording session is
         // paused
         // so releasing pause can always deactivate it
-        
-        pthread_mutex_lock(&recording_mutex);
-        pthread_cond_broadcast(&recording_condition_unpaused);
-        pthread_mutex_unlock(&recording_mutex);
 
         w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
         g_assert(w);
@@ -1587,12 +1574,7 @@ on_xvc_ctrl_step_button_clicked(GtkButton * button, gpointer user_data)
         if (!(jobp->state & (VC_PAUSE | VC_REC)))
             return;
 
-        // signal paused thread
         job_merge_state(VC_STEP);
-        
-        pthread_mutex_lock(&recording_mutex);
-        pthread_cond_broadcast(&recording_condition_unpaused);    
-        pthread_mutex_unlock(&recording_mutex);
 
         // FIXME: what is the following condition meant to achieve?
         // if (jobp->pic_no == jobp->step ) {
@@ -2084,9 +2066,9 @@ on_xvc_ctrl_main_window_key_press_event(GtkWidget * widget,
     g_assert(event);
     kevent = (GdkEventKey *) event;
 
-//#ifdef DEBUG
+#ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-//#endif // DEBUG
+#endif // DEBUG
 
     xml = glade_get_widget_tree(xvc_ctrl_main_window);
     g_assert(xml);

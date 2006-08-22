@@ -197,12 +197,21 @@ add_audio_stream (Job* job) {
         // prepare input stream
         memset(ap, 0, sizeof(*ap));
         ap->device = job->snd_device;
+        
+        // this is required to guarantee import of the audio input format context
+        // for some strange reason this only works here and not further down
+        // with av_register_all
+        audio_init();
 
         if (grab_audio) {
             ap->sample_rate = job->snd_rate;
             ap->channels = job->snd_channels;
 
             grab_iformat = av_find_input_format("audio_device");
+            printf("%s %s: grab iformat %p\n", DEBUGFILE, DEBUGFUNCTION, grab_iformat);
+    if (grab_iformat)
+            printf("%s %s: grab iformat name %s\n", DEBUGFILE, DEBUGFUNCTION, grab_iformat->name);
+            
             if (av_open_input_file(&ic, "", grab_iformat, 0, ap) < 0) {
                 fprintf(stderr,
                         _("%s %s:Could not find audio grab device %s\n"),

@@ -572,7 +572,7 @@ long checkCaptureDuration(Job * job, long time, long time1)
     if (time1 < 1)
         time1 = 1;
     if (!(job->flags & FLG_NOGUI))
-        xvc_idle_add( xvc_frame_monitor, (void *) time1);
+        xvc_idle_add( xvc_frame_monitor, (void *) time1, FALSE);
     // calculate the remaining time we have till capture of next frame
     time1 = job->time_per_frame - time1;
 
@@ -642,7 +642,7 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
                        DEBUGFILE, DEBUGFUNCTION, job->pic_no,
                        job->max_frames);
             if (!(job->flags & FLG_NOGUI))
-                xvc_idle_add( xvc_change_filename_display, (void *) job->pic_no );
+                xvc_idle_add( xvc_change_filename_display, (void *) job->pic_no, FALSE );
 
             // we need to stop the capture to go through the necessary
             // cleanup routines for writing a correct file. If we have
@@ -743,7 +743,7 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
         job->pic_no += job->step;
         // if we're not short on time, update frame count
         if (!(job->flags & FLG_NOGUI))
-            xvc_idle_add( xvc_change_filename_display, (void * )job->pic_no );
+            xvc_idle_add( xvc_change_filename_display, (void * )job->pic_no, FALSE );
 
         // the following means VC_STATE != VC_REC
         // this can only happen in capture.c if we were capturing and are
@@ -771,7 +771,7 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
         // set the sensitive stuff for the control panel if we don't
         // autocontinue 
         if ((orig_state & VC_CONTINUE) == 0)
-            xvc_idle_add( xvc_capture_stop, job );
+            xvc_idle_add( xvc_capture_stop, job, FALSE );
 
         // clean up the save routines in xtoXXX.c 
         if (job->clean)
@@ -863,7 +863,7 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
                        DEBUGFILE, DEBUGFUNCTION, job->pic_no,
                        job->max_frames);
             if (!(job->flags & FLG_NOGUI))
-                xvc_idle_add( xvc_change_filename_display, (void *) job->pic_no );
+                xvc_idle_add( xvc_change_filename_display, (void *) job->pic_no, FALSE );
 
             // we need to stop the capture to go through the necessary
             // cleanup routines for writing a correct file. If we have
@@ -965,7 +965,7 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
 
         job->pic_no += job->step;
         if (!(job->flags & FLG_NOGUI))
-            xvc_idle_add( xvc_change_filename_display, (void * )job->pic_no );
+            xvc_idle_add( xvc_change_filename_display, (void * )job->pic_no, FALSE );
 
         // the following means VC_STATE != VC_REC
         // this can only happen in capture.c if we were capturing and are
@@ -997,7 +997,7 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
         // set the sensitive stuff for the control panel if we don't
         // autocontinue 
         if ((orig_state & VC_CONTINUE) == 0)
-            xvc_idle_add( xvc_capture_stop, job );
+            xvc_idle_add( xvc_capture_stop, job, FALSE );
 
         // clean up the save routines in xtoXXX.c 
         if (job->clean)

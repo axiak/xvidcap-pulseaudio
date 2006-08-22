@@ -300,7 +300,7 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
 {
     #undef DEBUGFUNCTION
     #define DEBUGFUNCTION "xvc_create_warning_with_errors()"
-    GtkWidget *viewport = NULL, *vbox = NULL;
+    GtkWidget *viewport = NULL, *vbox = NULL, *w = NULL;
     GladeXML *xml = NULL;
     int count_fatal_messages = 0;
     int ind = 0;
@@ -327,7 +327,6 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
     // store the toplevel widget for further reference
     xvc_warn_main_window =
         glade_xml_get_widget(xml, "xvc_warn_main_window");
-
     g_assert(xvc_warn_main_window);
 
     // set the error list
@@ -357,6 +356,35 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
 
     // FIXME: depending on where we're called from make different buttons
     // visible/sensitive
+
+    switch( called_from_where ) {
+        case 0:
+            w = NULL;
+            w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
+            g_assert(w);
+            gtk_widget_hide(w);
+            
+            w = NULL;
+            w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
+            g_assert(w);
+            gtk_widget_show(w);
+            break;
+        case 1:
+        case 2:
+            w = NULL;
+            w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
+            g_assert(w);
+            gtk_widget_show(w);
+            
+            w = NULL;
+            w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
+            g_assert(w);
+            gtk_widget_hide(w);
+            break;
+        default:
+            break;
+    }
+printf("%s %s: called from where %i\n", DEBUGFILE, DEBUGFUNCTION, called_from_where);
 
     // auto-resize the dialog ... this is one ugly hack but the only way
     // to do it
