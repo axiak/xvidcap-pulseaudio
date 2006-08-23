@@ -106,11 +106,6 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
       <comment/>
     </item>
     <item>
-      <attribute id="1155841871" priority="1" done="0" start_date="732540" enddate="99999999" notify="0" endtime="-60" last_edited="1155841871"/>
-      <summary>scale capture</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1155863373" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155863373"/>
       <summary>error item spacing</summary>
       <comment>platz f&#xFC;r linke spalte in deutsch zu wenig und action text nicht umgebrochen.
@@ -204,7 +199,7 @@ bt:
     <item>
       <attribute id="1156176794" priority="1" done="1" start_date="732544" completed_date="732545" notify="0" last_edited="1156242280"/>
       <summary>toggling the auto checkbuttons should recalculate comboboxes</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
       <attribute id="1156171496" priority="1" done="1" start_date="732544" completed_date="732545" notify="0" last_edited="1156242320"/>
@@ -240,7 +235,7 @@ click ok
     <item>
       <attribute id="1151656082" priority="1" done="1" start_date="732492" completed_date="732545" notify="0" last_edited="1156242802"/>
       <summary>multi-frame codec drop down does not auto-select</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
       <attribute id="1156242492" priority="1" done="1" start_date="732545" completed_date="732545" notify="0" last_edited="1156244137"/>
@@ -256,7 +251,7 @@ clicking prefernces will create a new preferences UI rather than reusing the old
     <item>
       <attribute id="1153824120" priority="1" done="1" start_date="732517" completed_date="732545" notify="0" last_edited="1156245937"/>
       <summary>frame monitor idle add ... should not queue</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
       <attribute id="1156092080" priority="1" done="0" start_date="732543" enddate="99999999" notify="0" endtime="-60" last_edited="1156261050"/>
@@ -272,6 +267,26 @@ audio_init fehlte ... war wohl f&#xFC;r avi implizit ...
 jetzt tut's audio mit flash dennoch nicht
 
 </comment>
+    </item>
+    <item>
+      <attribute id="1156331867" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332510"/>
+      <summary>add validation of rescale input</summary>
+      <comment>also cli input and preference file handling</comment>
+    </item>
+    <item>
+      <attribute id="1156332633" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332633"/>
+      <summary>revisit FIXMEs</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1156332643" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332643"/>
+      <summary>revisit i18n</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1155841871" priority="1" done="1" start_date="732540" completed_date="732546" notify="0" last_edited="1156333409"/>
+      <summary>scale capture</summary>
+      <comment></comment>
     </item>
   </category>
   <category title="Business" place="1"/>

@@ -171,6 +171,11 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         lapp->flags &= ~FLG_ALWAYS_SHOW_RESULTS; 
     }
 
+    // rescale
+    w = NULL;
+    w = glade_xml_get_widget(xml, "xvc_pref_rescale_hscale");
+    g_assert(w);
+    lapp->rescale = gtk_range_get_value (GTK_RANGE (w));
 
     // sf
     // file name 
@@ -2301,6 +2306,13 @@ xvc_create_pref_dialog(AppData * lapp)
     } else {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), FALSE);
     }
+
+
+    // rescale
+    w = NULL;
+    w = glade_xml_get_widget(xml, "xvc_pref_rescale_hscale");
+    if (w != NULL) gtk_range_set_value(GTK_RANGE(w), pref_app.rescale);
+
 
 #ifdef DEBUG
     printf("%s %s: Set widgets for general tab\n", DEBUGFILE, DEBUGFUNCTION);

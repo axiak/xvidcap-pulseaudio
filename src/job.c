@@ -131,6 +131,7 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
     job->max_frames = cto->frames;
     job->max_time = cto->time;
     job->quality = cto->quality;
+    job->rescale = app->rescale;
     job->bpp = cto->bpp;
 #ifdef HAVE_FFMPEG_AUDIO
     if (cto->audioWanted != 0)

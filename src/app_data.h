@@ -99,6 +99,7 @@ typedef struct {
     int cap_height;             // height
     int cap_pos_x;              // x position of the capture frame
     int cap_pos_y;              // y position of the capture frame
+    int rescale;
     int mouseWanted;            // capture mouse pointer: 0 none , 
     // 1 white , 2 black
     char *source;               // video capture source

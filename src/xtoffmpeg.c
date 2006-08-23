@@ -37,6 +37,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <sys/time.h>           // for timeval struct and related functions
+#include <math.h>
 
 #include <X11/Intrinsic.h>
 
@@ -66,13 +67,16 @@ extern xvAuCodec tAuCodecs[NUMAUCODECS];
 static AVCodec *codec;                  // params for the codecs video 
 static AVFrame *p_inpic;                // a AVFrame as wrapper around the
                                         // original image data 
-static AVFrame *p_outpic;               // and one for the image converted to
+static AVFrame *p_outpic, *p_resample;  // and one for the image converted to
                                         // yuv420p 
-static uint8_t *outpic_buf;             // data buffer for output frame
+static uint8_t *outpic_buf, *resample_buf;  // data buffer for output frame
 static uint8_t *outbuf;                 // output buffer for encoded frame 
+static int outbuf_size;                 // the size of the outbuf may be
+                                        // other than image_size
 static AVFormatContext *output_file;    // output file via avformat 
 static AVOutputFormat *file_oformat;    // ... plus related data 
 static AVStream *out_st = NULL;         // ... 
+static ImgReSampleContext *img_resample_ctx; // for image resampling
 
 static int image_size, input_pixfmt;    // size of yuv image, pix_fmt of
                                         // original image 
@@ -82,7 +86,6 @@ static double audio_pts, video_pts;
 
 static ColorInfo c_info;
 static uint8_t *scratchbuf8bit;
-
 
 #ifdef DEBUG
 void dump8bit(XImage * image, u_int32_t * ct);
@@ -823,11 +826,12 @@ void prepareOutputFile(char *jFileName, AVFormatContext * oc, int number)
  * add a video output stream 
  */
 AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfmt,
-                           int codec_id, int fps, int quality)
+                           int codec_id, Job *job)
 {
     #define DEBUGFUNCTION "add_video_stream()"
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
+    int fps = job->fps / 100, quality = job->quality;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -855,8 +859,23 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     st->codec->bit_rate = 400000;
     // resolution must be a multiple of two ... this is taken care of
     //elsewhere 
-    st->codec->width = image->width;
-    st->codec->height = image->height;
+    printf("%s %s: rescale %i %%\n", DEBUGFILE, DEBUGFUNCTION, job->rescale);
+    if (job->rescale != 100) {
+        int n;
+        double r;
+        r = sqrt( 100 / job->rescale );
+        
+        n = image->width / r;
+        if ( n % 2 > 0 ) n--;
+        st->codec->width = n; 
+        
+        n = image->height / r;
+        if ( n % 2 > 0 ) n--;
+        st->codec->height = n; 
+    } else {
+        st->codec->width = image->width;
+        st->codec->height = image->height;
+    }
     // time base: this is the fundamental unit of time (in seconds) in
     // terms of which frame timestamps are represented. for fixed-fps
     // content, timebase should be 1/framerate and timestamp increments
@@ -1134,7 +1153,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         // prepare stream 
         out_st =
             add_video_stream(output_file, image, input_pixfmt, tCodecs[job->targetCodec].ffmpeg_id,
-                             (job->fps / 100), job->quality);
+                             job);
 
         // FIXME: set params
         // memset (p_fParams, 0, sizeof(*p_fParams));
@@ -1191,10 +1210,10 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         p_inpic = avcodec_alloc_frame();
 
         if (input_pixfmt == PIX_FMT_PAL8) {
-            scratchbuf8bit = malloc(avpicture_get_size(input_pixfmt, out_st->codec->width, out_st->codec->height));
+            scratchbuf8bit = malloc(avpicture_get_size(input_pixfmt, image->width, image->height));
 
-            avpicture_fill((AVPicture *)p_inpic, scratchbuf8bit, input_pixfmt, out_st->codec->width,
-                           out_st->codec->height);
+            avpicture_fill((AVPicture *)p_inpic, scratchbuf8bit, input_pixfmt, image->width,
+                           image->height);
             p_inpic->data[1] = job->color_table;
 #ifdef DEBUG
                 printf("%s %s: first 4 colors a r g b each: 0x%.8X 0x%.8X 0x%.8X 0x%.8X\n",
@@ -1205,8 +1224,8 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
                         *((u_int32_t *) (job->color_table) + 3));
 #endif // DEBUG 
         } else {
-            avpicture_fill((AVPicture *)p_inpic, (uint8_t *) image->data, input_pixfmt, out_st->codec->width,
-                           out_st->codec->height);
+            avpicture_fill((AVPicture *)p_inpic, (uint8_t *) image->data, input_pixfmt, image->width,
+                           image->height);
         }
 
         //output picture
@@ -1223,7 +1242,48 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         }
         avpicture_fill((AVPicture *)p_outpic, outpic_buf, out_st->codec->pix_fmt, out_st->codec->width,
                            out_st->codec->height);
-        
+
+        /* 
+         * prepare output buffer for encoded frames 
+         */
+        if (image_size < FF_MIN_BUFFER_SIZE) outbuf_size = FF_MIN_BUFFER_SIZE;
+        else outbuf_size = image_size;
+        outbuf = malloc(outbuf_size);
+        if (!outbuf) {
+            fprintf(stderr,
+                    _("%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+
+        // img resampling
+        // FIXME: real conditions here
+        if (TRUE && ! img_resample_ctx) {
+            p_resample = avcodec_alloc_frame();
+
+            resample_buf = av_malloc(
+                            avpicture_get_size(
+                                    out_st->codec->pix_fmt, 
+                                    image->width, 
+                                    image->height));
+            if (!resample_buf) {
+                fprintf(stderr,
+                        _("%s %s: Could not allocate buffer for resizing frame! ... aborting\n"),
+                        DEBUGFILE, DEBUGFUNCTION);
+                exit(1);
+            }
+            avpicture_fill((AVPicture *)p_resample, resample_buf, out_st->codec->pix_fmt, image->width,
+                           image->height);
+            
+
+            img_resample_ctx = img_resample_init(out_st->codec->width, 
+                                                out_st->codec->height, 
+                                                image->width,
+                                                image->height);
+        }
+
+
+
 /*
         frame = avcodec_alloc_frame();
         frame->type = FF_BUFFER_TYPE_SHARED;
@@ -1237,17 +1297,6 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         frame->linesize[2] = out_st->codec->width / 2;
         frame->linesize[3] = 0;
 */
-
-        /* 
-         * prepare output buffer for encoded frames 
-         */
-        outbuf = malloc(image_size);
-        if (!outbuf) {
-            fprintf(stderr,
-                    _("%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
-        }
 
         // file preparation needs to be done once for multi-frame capture
         // and multiple times for single-frame capture
@@ -1363,38 +1412,54 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
     }
 
 
-    if ( img_convert((AVPicture *)p_outpic, out_st->codec->pix_fmt,
-                (AVPicture *)p_inpic, input_pixfmt, out_st->codec->width, out_st->codec->height) < 0) {
-        fprintf(stderr,
-                _("%s %s: pixel format conversion not handled ... aborting\n"),
-                DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
-    }
-    
-#ifdef DEBUG
     {
-        FILE *lfp;
+        AVFrame *target_pic;
+        
+        if (job->rescale != 100) target_pic = p_resample;
+        else target_pic = p_outpic;
 
-        lfp = fopen("/tmp/pic.yuv", "w");
-        fwrite(outpic_buf, image_size, 1, lfp);
-        fclose(lfp);
-    }
+        if ( img_convert((AVPicture *) target_pic, out_st->codec->pix_fmt,
+                    (AVPicture *)p_inpic, input_pixfmt, 
+                    image->width, image->height) < 0) {
+            fprintf(stderr,
+                    _("%s %s: pixel format conversion not handled ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+
+#ifdef DEBUG
+        {
+            FILE *lfp;
+
+            lfp = fopen("/tmp/pic.yuv", "w");
+            fwrite(outpic_buf, image_size, 1, lfp);
+            fclose(lfp);
+        }
 #endif                          /* DEBUG */
+    
+    }
+
+    // img resampling
+    // FIXME: real conditions here
+    if (job->rescale != 100) {
+        img_resample(img_resample_ctx, (AVPicture*) p_outpic, (AVPicture*) p_resample);
+    }
+
 
     /* 
      * encode the image 
      */
 #ifdef DEBUG
-    printf("%s %s: calling encode_video with codec %p, outbuf %p, image size %i, output frame %p\n",
+    printf("%s %s: calling encode_video with codec %p, outbuf %p, outbuf size %i, output frame %p\n",
                 DEBUGFILE, DEBUGFUNCTION,
-                out_st->codec, outbuf, image_size, p_outpic);
+                out_st->codec, outbuf, outbuf, p_outpic);
 #endif // DEBUG
 
-    out_size = avcodec_encode_video(out_st->codec, outbuf, image_size, p_outpic);
+    out_size = avcodec_encode_video(out_st->codec, outbuf, outbuf_size, p_outpic);
     if (out_size < 0) {
         fprintf(stderr,
                 _("%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"), 
-                DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf, image_size, p_outpic);
+                DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf, outbuf_size, p_outpic);
         exit(1);
     }
 
@@ -1460,6 +1525,11 @@ void FFMPEGClean(Job * job)
         }
     }
 #endif                          // HAVE_FFMPEG_AUDIO
+
+    if (img_resample_ctx) {
+        img_resample_close(img_resample_ctx);
+        img_resample_ctx = NULL;
+    }
 
     if (out_st) {
         avcodec_close(out_st->codec);

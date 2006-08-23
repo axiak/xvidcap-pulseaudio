@@ -84,6 +84,7 @@ typedef struct _Job {
     XColor *colors;
     XWindowAttributes win_attr;
     XRectangle *area;
+    int rescale;
 } Job;
 
 /* 

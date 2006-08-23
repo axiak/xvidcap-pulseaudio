@@ -93,6 +93,7 @@ void xvc_app_data_init(AppData * lapp)
     lapp->cap_height = 0;       // height
     lapp->cap_pos_x = 0;        // x position of the capture frame
     lapp->cap_pos_y = 0;        // y position of the capture frame
+    lapp->rescale = 0;
     lapp->mouseWanted = 0;      // capture mouse pointer: 0 none , 1 white,
                                 // 2 black
     lapp->source = NULL;        // video capture source
@@ -128,6 +129,7 @@ void xvc_app_data_set_defaults(AppData * lapp)
 #endif // HAVE_FFMPEG_AUDIO
     lapp->cap_width = 192;
     lapp->cap_height = 144;
+    lapp->rescale = 100;
     lapp->default_mode = 0;
 
     // initialzie options specific to either single- or multi-frame
@@ -226,6 +228,7 @@ void xvc_app_data_copy(AppData * tapp, AppData * sapp)
     tapp->cap_height = sapp->cap_height;    // height
     tapp->cap_pos_x = sapp->cap_pos_x;  // x position of the capture frame
     tapp->cap_pos_y = sapp->cap_pos_y;  // y position of the capture frame
+    tapp->rescale = sapp->rescale;
     tapp->mouseWanted = sapp->mouseWanted;  // capture mouse pointer:
     // 0 none , 1 white , 2
     // black
