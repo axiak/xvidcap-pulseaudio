@@ -533,6 +533,7 @@ void preferences_submit()
     Display *mydisplay = NULL;
     Window root;
     XWindowAttributes win_attr;
+    Job *job = xvc_job_ptr();
 
     xvc_app_data_copy(app, &pref_app);
 
@@ -552,6 +553,7 @@ void preferences_submit()
 
     if (!XGetWindowAttributes(mydisplay, root, &win_attr))
         perror("Can't get window attributes!\n");
+    if (!job) job = xvc_job_new();
     xvc_job_set_from_app_data(app, mydisplay, win_attr);
     // validate the job parameters
     xvc_job_validate();
@@ -584,7 +586,6 @@ void xvc_pref_reset_OK_attempts()
 void xvc_pref_do_OK()
 {
     #define DEBUGFUNCTION "xvc_pref_do_OK()"
-    
     int count_non_info_messages = 0, rc = 0;
 
     errors_after_cli = xvc_app_data_validate(&pref_app, 0, &rc);
@@ -642,7 +643,7 @@ on_xvc_pref_main_window_response(GtkDialog * dialog, gint response_id,
 {
     #define DEBUGFUNCTION "on_xvc_pref_main_window_response()"
 
-    Job *job = xvc_job_ptr ();
+    Job *job;
     
     //printf("response id : %i \n", response_id); 
     switch (response_id) { 
@@ -677,7 +678,9 @@ on_xvc_pref_main_window_response(GtkDialog * dialog, gint response_id,
 #endif // DEBUG
 
             xvc_pref_do_OK (); 
-            xvc_change_filename_display (job->pic_no); 
+            
+            job = xvc_job_ptr ();
+            if (job) xvc_change_filename_display (job->pic_no); 
             break;
             
         case GTK_RESPONSE_CANCEL: 
@@ -699,7 +702,18 @@ gboolean
 on_xvc_pref_main_window_delete_event(GtkWidget * widget, GdkEvent * event,
                         gpointer user_data)
 {
-    return FALSE;
+    GladeXML *xml = NULL;
+    GtkWidget *cancel_button = NULL;
+    
+    xml = glade_get_widget_tree(GTK_WIDGET(xvc_pref_main_window));
+    g_assert(xml);
+    cancel_button = glade_xml_get_widget(xml, "xvc_pref_cancel_button");
+    g_assert(cancel_button);
+    
+    if ( GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(cancel_button)) )
+        return FALSE;
+    else 
+        return TRUE;
 }
 
 void 

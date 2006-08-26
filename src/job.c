@@ -78,7 +78,6 @@ int job_quality(void);
  */
 Job *xvc_job_new()
 {
-    #undef DEBUGFUNCTION
     #define DEBUGFUNCTION "xvc_job_new()"
     
     job = (Job *) malloc(sizeof(Job));
@@ -87,6 +86,7 @@ Job *xvc_job_new()
         exit(1);
     }
     return (job);
+    #undef DEBUGFUNCTION
 }
 
 
@@ -101,8 +101,9 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
 
     // make sure we do have a job
     if (job == NULL) {
-        perror
-            ("%s %s: job is still NULL ... this should never happen!");
+        fprintf
+            (stderr, "%s %s: job is still NULL ... this should never happen!",
+                    DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
     // switch sf or mf

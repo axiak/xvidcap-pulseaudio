@@ -71,7 +71,6 @@ extern xvFFormat tFFormats[NUMCAPS];
 extern xvAuCodec tAuCodecs[NUMAUCODECS];
 
 
-static Job *jobp;
 static guint stop_timer_id = 0;
 static long start_time = 0, pause_time = 0, time_captured = 0;
 static char* target_file_name = NULL;
@@ -458,7 +457,7 @@ void xvc_capture_start()
     gboolean rc;
 
     rc = start_recording_nongui_stuff(job);
-    if (!(jobp->flags & FLG_NOGUI))
+    if (!(job->flags & FLG_NOGUI))
         rc = start_recording_gui_stuff(job);
 
     #undef DEBUGFUNCTION
@@ -546,6 +545,7 @@ void GtkChangeLabel(int pic_no)
     int filename_length = 0;
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
+    Job *jobp = xvc_job_ptr();
 
     // generate the string to display in the filename button
     if (jobp->flags & FLG_MULTI_IMAGE) {
@@ -598,8 +598,8 @@ gboolean
 on_xvc_ctrl_main_window_delete_event(GtkWidget * widget,
                                      GdkEvent * event, gpointer user_data)
 {
-
     #define DEBUGFUNCTION "on_xvc_ctrl_main_window_delete_event()"
+    Job *jobp = xvc_job_ptr();
 
     if (jobp && (jobp->state & VC_STOP) == 0 ) {
         xvc_capture_stop_signal(TRUE);
@@ -649,6 +649,7 @@ on_xvc_ctrl_m1_mitem_save_preferences_activate(GtkMenuItem *
                                                gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_save_preferences_activate()"
+    Job *jobp = xvc_job_ptr();
 
     xvc_write_options_file(jobp);
     #undef DEBUGFUNCTION
@@ -662,6 +663,7 @@ void warning_submit()
     Display *mydisplay = NULL;
     Window root;
     XWindowAttributes win_attr;
+    Job *jobp = xvc_job_ptr();
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -834,6 +836,7 @@ on_xvc_ctrl_m1_mitem_autocontinue_activate(GtkMenuItem * menuitem,
                                            gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_autocontinue_activate()"
+    Job *jobp = xvc_job_ptr();
 
     if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(menuitem))) {
         if ((!xvc_is_filename_mutable(jobp->file))
@@ -857,18 +860,19 @@ on_xvc_ctrl_m1_mitem_make_activate(GtkMenuItem * menuitem,
                                    gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_make_activate()"
+    Job *jobp = xvc_job_ptr();
 
     if (!app->current_mode) {
         xvc_command_execute(app->single_frame.video_cmd, 0, 0,
                             jobp->file, jobp->start_no, jobp->pic_no,
-                            jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
     } else {
         xvc_command_execute(app->multi_frame.video_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
-                            jobp->pic_no, jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->pic_no, jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
     }
     #undef DEBUGFUNCTION
@@ -1041,6 +1045,7 @@ static gboolean stop_recording_gui_stuff(Job * job)
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
     CapTypeOptions *target = NULL;
+    Job *jobp = xvc_job_ptr();
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1264,14 +1269,14 @@ static gboolean stop_recording_gui_stuff(Job * job)
                     if (!app->current_mode) {
                         xvc_command_execute(app->single_frame.play_cmd, 1, 0,
                             jobp->file, jobp->start_no, jobp->pic_no,
-                            jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
                     } else {
                         xvc_command_execute(app->multi_frame.play_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
-                            jobp->pic_no, jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->pic_no, jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
                     }
                     break;
@@ -1342,6 +1347,7 @@ gboolean start_recording_gui_stuff(Job * job)
     #define DEBUGFUNCTION "start_recording_gui_stuff()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
+    Job *jobp = xvc_job_ptr();
 
     xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
     g_assert(xml);
@@ -1486,6 +1492,7 @@ on_xvc_ctrl_pause_toggle_toggled(GtkToggleToolButton * button,
     struct timeval curr_time;
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
+    Job *jobp = xvc_job_ptr();
 
     xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
     g_assert(xml);
@@ -1590,6 +1597,7 @@ on_xvc_ctrl_step_button_clicked(GtkButton * button, gpointer user_data)
     #define DEBUGFUNCTION "on_xvc_ctrl_step_button_clicked()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
+    Job *jobp = xvc_job_ptr();
 
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
         if (!(jobp->state & (VC_PAUSE | VC_REC)))
@@ -1620,6 +1628,7 @@ void
 on_xvc_ctrl_filename_button_clicked(GtkButton * button, gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_step_button_clicked()"
+    Job *jobp = xvc_job_ptr();
 
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
         if (jobp->pic_no != jobp->start_no
@@ -1642,7 +1651,8 @@ void
 on_xvc_ctrl_back_button_clicked(GtkButton * button, gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_back_button_clicked()"
-
+    Job *jobp = xvc_job_ptr();
+    
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
         if (jobp->pic_no >= jobp->step) {
             jobp->pic_no -= jobp->step;
@@ -1673,6 +1683,7 @@ on_xvc_ctrl_forward_button_clicked(GtkButton * button, gpointer user_data)
     #define DEBUGFUNCTION "on_xvc_ctrl_forward_button_clicked()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
+    Job *jobp = xvc_job_ptr();
 
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
         jobp->pic_no += jobp->step;
@@ -1754,6 +1765,7 @@ on_xvc_ctrl_select_toggle_toggled(GtkToggleToolButton *
                                   togglebutton, gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_select_toggle_toggled()"
+    Job *jobp = xvc_job_ptr();
     
     if (gtk_toggle_tool_button_get_active(togglebutton)) {
         Display *display =
@@ -1966,18 +1978,19 @@ on_xvc_ctrl_m1_mitem_animate_activate(GtkButton * button,
                                       gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_animate_activate()"
-    
+    Job *jobp = xvc_job_ptr();
+
     if (!app->current_mode) {
         xvc_command_execute(app->single_frame.play_cmd, 1, 0,
                             jobp->file, jobp->start_no, jobp->pic_no,
-                            jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
     } else {
         xvc_command_execute(app->multi_frame.play_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
-                            jobp->pic_no, jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->pic_no, jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
     }
     #undef DEBUGFUNCTION
@@ -1988,18 +2001,19 @@ void
 on_xvc_ctrl_edit_button_clicked(GtkToolButton * button, gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_edit_button_clicked()"
+    Job *jobp = xvc_job_ptr();
     
     if (!app->current_mode) {
         xvc_command_execute(app->single_frame.edit_cmd, 2,
                             jobp->pic_no, jobp->file, jobp->start_no,
-                            jobp->pic_no, jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->pic_no, jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
     } else {
         xvc_command_execute(app->multi_frame.edit_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
-                            jobp->pic_no, jobp->win_attr.width,
-                            jobp->win_attr.height, jobp->fps,
+                            jobp->pic_no, jobp->area->width,
+                            jobp->area->height, jobp->fps,
                             (int) (1000 / (jobp->fps / 100)));
     }
     #undef DEBUGFUNCTION
@@ -2145,6 +2159,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
     GladeXML *mwxml = NULL, *menuxml = NULL;
     GtkWidget *w = NULL;
     GtkTooltips *tooltips;
+    Job *jobp = xvc_job_ptr();
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);

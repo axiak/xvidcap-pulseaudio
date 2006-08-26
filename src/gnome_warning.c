@@ -66,6 +66,7 @@ static xvErrorListItem *warning_elist = NULL;
 GtkWidget *xvc_warn_main_window;
 extern AppData *app;
 extern GtkWidget *xvc_ctrl_m1;
+extern GtkWidget *xvc_pref_main_window;
 
 
 /* 
@@ -206,6 +207,16 @@ on_xvc_warn_main_window_response(GtkDialog * dialog, gint response_id,
         mitem = glade_xml_get_widget(xml, "xvc_ctrl_m1_mitem_preferences");
         g_assert(mitem);
         gtk_menu_item_activate(GTK_MENU_ITEM(mitem));
+
+        xml = NULL;
+        xml = glade_get_widget_tree(xvc_pref_main_window);
+        g_assert(xml);
+        mitem = glade_xml_get_widget(xml, "xvc_pref_cancel_button");
+        g_assert(mitem);
+        gtk_widget_set_sensitive(GTK_WIDGET(mitem), FALSE);
+
+        warning_elist = xvc_errors_delete_list(warning_elist);
+        xvc_pref_reset_OK_attempts();
 
         gtk_widget_destroy(xvc_warn_main_window);
         break;

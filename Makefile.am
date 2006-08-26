@@ -14,7 +14,8 @@ xvidcapdoc_DATA = \
 	INSTALL\
 	NEWS
 
-EXTRA_DIST = $(xvidcapdoc_DATA)
+EXTRA_DIST = $(xvidcapdoc_DATA) \
+    autogen.sh
 
 # Copy all the spec files. Of cource, only one is actually used.
 dist-hook:
