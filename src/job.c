@@ -45,9 +45,9 @@
 #include "codecs.h"
 #include "control.h"
 #include "xvidcap-intl.h"
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 # include "xtoffmpeg.h"
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 
 #define DEBUGFILE "job.c"
@@ -106,11 +106,11 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
         exit(1);
     }
     // switch sf or mf
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (app->current_mode != 0)
         cto = &(app->multi_frame);
     else
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         cto = &(app->single_frame);
     // various manual settings
     // need to have the flags set to smth. before other functions try to
@@ -284,7 +284,7 @@ void xvc_job_set_save_function(Visual * vis, int type)
     printf("%s %s: entering with type: %i\n", DEBUGFILE, DEBUGFUNCTION, type);
 #endif // DEBUG2
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (type >= CAP_MF) {
         job->clean = FFMPEGClean;
         if (job->targetCodec == CODEC_NONE) {
@@ -302,7 +302,7 @@ void xvc_job_set_save_function(Visual * vis, int type)
         job->get_colors = FFMPEGcolorTable;
         job->save = XImageToFFMPEG;
     } else 
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
     {
         job->save = XImageToXWD;
         job->get_colors = XWDcolorTable;
@@ -515,15 +515,12 @@ void xvc_job_validate()
         printf ("Output not a video file or no counter in filename\nDisabling autocontinue!\n"); 
     } 
     
-#ifdef HAVE_LIBAVCODEC 
+#ifdef USE_FFMPEG 
     // make sure we have even width and height for ffmpeg 
     if (job->target >= CAP_MF) { 
         Boolean changed = FALSE;
+        int orig_width = job->area->width, orig_height = job->area->height;
     
-        if (job->flags & FLG_RUN_VERBOSE) { 
-            fprintf(stdout, _("%s %s: Original dimensions: %i * %i\n"),
-                        DEBUGFILE, DEBUGFUNCTION, job->area->width, job->area->height); 
-        } 
         if ((job->area->width % 2) > 0) { 
             job->area->width--; 
             changed = TRUE; 
@@ -544,6 +541,8 @@ void xvc_job_validate()
         if (changed) { 
             xvc_frame_change(job->area->x, job->area->y, job->area->width, job->area->height, FALSE); 
             if (job->flags & FLG_RUN_VERBOSE) { 
+                fprintf(stdout, _("%s %s: Original dimensions: %i * %i\n"),
+                        DEBUGFILE, DEBUGFUNCTION, orig_width, orig_height); 
                 fprintf(stdout, 
                         _("%s %s(): Modified dimensions: %i * %i\n"), 
                         DEBUGFILE, DEBUGFUNCTION, job->area->width, job->area->height); 
@@ -551,7 +550,7 @@ void xvc_job_validate()
         }
 
     } 
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 }
 

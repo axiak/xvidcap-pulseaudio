@@ -71,12 +71,12 @@ static int sf_t_format = 0;
 static int sf_t_codec = 0;
 static int sf_t_au_codec = 0;
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 static int mf_fps_widget_save_old_codec = -1; 
 static int mf_t_format = 0;
 static int mf_t_codec = 0;
 static int mf_t_au_codec = 0;
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 static int OK_attempts = 0;
 static xvErrorListItem *errors_after_cli = NULL;
@@ -270,7 +270,7 @@ static void read_app_data_from_pref_gui(AppData * lapp)
                 GTK_SPIN_BUTTON (w));
 
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 
     // mf
     
@@ -392,7 +392,6 @@ static void read_app_data_from_pref_gui(AppData * lapp)
 
     lapp->multi_frame.quality = gtk_range_get_value(GTK_RANGE (w));
 
-printf("%s %s: here\n");
 #ifdef HAVE_FFMPEG_AUDIO
     // mf audio settings 
     // au_targetCodec 
@@ -422,12 +421,11 @@ printf("%s %s: here\n");
         printf("%s %s: saving audio codec: %i \n", 
                     DEBUGFILE, DEBUGFUNCTION, lapp->multi_frame.au_targetCodec); 
 #endif // DEBUG 
-printf("%s %s: selected audio codec: %s\n", selected_aucodec);
+printf("%s %s: selected audio codec: %s\n", DEBUGFILE, DEBUGFUNCTION, selected_aucodec);
         g_assert( aucodec >= 0 );
         lapp->multi_frame.au_targetCodec = aucodec;
     }
 
-printf("%s %s: here 2\n");
     // audio wanted 
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_mf_audio_checkbutton");
@@ -468,7 +466,7 @@ printf("%s %s: here 2\n");
     lapp->multi_frame.sndchannels = gtk_range_get_value (GTK_RANGE (w));
 #endif // HAVE_FFMPEG_AUDIO
 
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
      
     // commands 
     // help cmd 
@@ -500,7 +498,7 @@ printf("%s %s: here 2\n");
 
     lapp->single_frame.edit_cmd = strdup((char*) gtk_entry_get_text(GTK_ENTRY(w))); 
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     // mf commands 
     // mf playback command 
     w = NULL;
@@ -522,7 +520,7 @@ printf("%s %s: here 2\n");
     g_assert(w);
 
     lapp->multi_frame.edit_cmd = strdup((char*) gtk_entry_get_text(GTK_ENTRY(w))); 
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
  
     #undef DEBUGFUNCTION
 }
@@ -785,11 +783,11 @@ on_xvc_pref_sf_filename_entry_changed(GtkEntry * entry, gpointer user_data)
 
         valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(sf_format_list_store), &iter);
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         if ( i > 0 && i < CAP_MF ) {
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
         if ( i > 0 && i < NUMCAPS ) {
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
             while (valid) {
                 gchar *str_data;
 
@@ -860,7 +858,7 @@ on_xvc_pref_sf_format_auto_checkbutton_toggled(GtkToggleButton * togglebutton,
 void
 on_xvc_pref_mf_filename_entry_changed(GtkEntry * entry, gpointer user_data)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     #define DEBUGFUNCTION "on_xvc_pref_mf_filename_entry_changed()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
@@ -878,8 +876,8 @@ on_xvc_pref_mf_filename_entry_changed(GtkEntry * entry, gpointer user_data)
     // change of filename
     w = glade_xml_get_widget(xml, "xvc_pref_mf_filename_entry");
     g_assert(w);
-    if ( w != entry ) {
-        entry = w;
+    if ( w != GTK_WIDGET(entry) ) {
+        entry = GTK_ENTRY(w);
     }
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_mf_format_auto_checkbutton");
@@ -930,7 +928,7 @@ on_xvc_pref_mf_filename_entry_changed(GtkEntry * entry, gpointer user_data)
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
     #undef DEBUGFUNCTION
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 }
 
 
@@ -1095,9 +1093,6 @@ static void mf_audio_codec_combo_set_contents_from_format(int format)
     if (w != NULL) {
         int a;
         char *au_codec_string = NULL;
-#ifdef HAVE_FFMPEG_AUDIO
-        GtkWidget *au_check = NULL;
-#endif // HAVE_FFMPEG_AUDIO
 
         GtkListStore *mf_au_codec_list_store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(w)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry present in glade
@@ -1134,7 +1129,7 @@ static void mf_audio_codec_combo_set_contents_from_format(int format)
 }
 
 static int mf_format_combo_get_target_from_text(char *text) {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     int a, b = -1;
 
     for ( a = (CAP_MF-1); a < (NUMCAPS-1) && b < 0; a++ ) { 
@@ -1142,7 +1137,7 @@ static int mf_format_combo_get_target_from_text(char *text) {
     } 
     
     return (b + 1); 
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
     return 0;
 }
 
@@ -1152,7 +1147,7 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
 {
     #define DEBUGFUNCTION "on_xvc_pref_mf_format_combobox_changed()"
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 
     GladeXML *xml = NULL;
     GtkWidget *codec_combobox = NULL, *w = NULL;
@@ -1161,7 +1156,6 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
 #endif // HAVE_FFMPEG_AUDIO
     char *format_selected = NULL;
     int a;
-    gchar *path;
 
     // FIXME: save previously selected format to avoid doing all this if unchanged
 
@@ -1169,9 +1163,11 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
     g_assert(xml);
     w = glade_xml_get_widget(xml, "xvc_pref_mf_format_combobox");
     g_assert(w);
-    if ( w != combobox ) {
+    if ( w != GTK_WIDGET(combobox) ) {
+#ifdef DEBUG
         printf("%s %s: change combobox %p %p\n", DEBUGFILE, DEBUGFUNCTION, w, combobox);
-        combobox = w;
+#endif // DEBUG
+        combobox = GTK_COMBO_BOX(w);
     }
 
     format_selected = (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(combobox)); 
@@ -1363,7 +1359,7 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     #undef DEBUGFUNCTION
 }
@@ -1513,7 +1509,7 @@ on_xvc_pref_mf_audio_checkbutton_toggled(GtkToggleButton * togglebutton,
 
 static void set_mf_fps_widget_from_codec(int codec)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 
     #define DEBUGFUNCTION "set_mf_fps_widget_from_codec()"
     GladeXML *xml = NULL;
@@ -1676,14 +1672,14 @@ static void set_mf_fps_widget_from_codec(int codec)
 #endif // DEBUG
 
     #undef DEBUGFUNCTION
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 }
 
 
 void 
 on_xvc_pref_mf_codec_combobox_changed(GtkComboBox * cb, gpointer user_data)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     #define DEBUGFUNCTION "on_xvc_pref_mf_codec_combobox_changed()"
 
 #ifdef DEBUG
@@ -1705,7 +1701,7 @@ on_xvc_pref_mf_codec_combobox_changed(GtkComboBox * cb, gpointer user_data)
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
     #undef DEBUGFUNCTION
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 }
 
 
@@ -1826,7 +1822,7 @@ on_xvc_pref_commands_sf_edit_try_button_clicked(GtkButton * button, gpointer use
 void
 on_xvc_pref_commands_mf_play_try_button_clicked(GtkButton * button, gpointer user_data)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     #define DEBUGFUNCTION "on_xvc_pref_commands_mf_play_try_button_clicked()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
@@ -1851,14 +1847,14 @@ on_xvc_pref_commands_mf_play_try_button_clicked(GtkButton * button, gpointer use
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
     #undef DEBUGFUNCTION
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 }
 
 
 void
 on_xvc_pref_commands_mf_encode_try_button_clicked(GtkButton * button, gpointer user_data)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     #define DEBUGFUNCTION "on_xvc_pref_commands_mf_encode_try_button_clicked()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
@@ -1883,14 +1879,14 @@ on_xvc_pref_commands_mf_encode_try_button_clicked(GtkButton * button, gpointer u
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
     #undef DEBUGFUNCTION
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 }
 
 
 void
 on_xvc_pref_commands_mf_edit_try_button_clicked(GtkButton * button, gpointer user_data)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     #define DEBUGFUNCTION "on_xvc_pref_commands_mf_edit_try_button_clicked()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
@@ -1915,7 +1911,7 @@ on_xvc_pref_commands_mf_edit_try_button_clicked(GtkButton * button, gpointer use
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
     #undef DEBUGFUNCTION
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 }
 
 
@@ -1946,9 +1942,6 @@ on_xvc_pref_sf_filename_select_button_clicked(GtkButton * button, gpointer user_
     result = gtk_dialog_run (GTK_DIALOG (dialog));
 
     if ( result == GTK_RESPONSE_OK) { 
-        guint length;
-        gchar *path, *path_rev;
-        
         got_file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); 
         
         xml = NULL;
@@ -1998,9 +1991,6 @@ on_xvc_pref_mf_filename_select_button_clicked(GtkButton * button, gpointer user_
     result = gtk_dialog_run (GTK_DIALOG (dialog));
 
     if ( result == GTK_RESPONSE_OK) { 
-        guint length;
-        gchar *path, *path_rev;
-        
         got_file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); 
         
         xml = NULL;
@@ -2050,9 +2040,6 @@ on_xvc_pref_mf_audio_input_device_select_button_clicked(GtkButton * button,
     result = gtk_dialog_run (GTK_DIALOG (dialog));
 
     if ( result == GTK_RESPONSE_OK) { 
-        guint length;
-        gchar *path, *path_rev;
-        
         got_file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); 
         
         xml = NULL;
@@ -2117,7 +2104,7 @@ xvc_create_pref_dialog(AppData * lapp)
         sf_t_au_codec = tFFormats[sf_t_format].def_au_codec;
 #endif // HAVE_FFMPEG_AUDIO
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     mf_t_format = pref_app.multi_frame.target;
     if (!mf_t_format)
         mf_t_format =
@@ -2130,22 +2117,22 @@ xvc_create_pref_dialog(AppData * lapp)
     if (!mf_t_au_codec)
         mf_t_au_codec = tFFormats[mf_t_format].def_au_codec;
 #endif // HAVE_FFMPEG_AUDIO
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 #ifdef DEBUG
     printf("%s %s: Determined Formats sf/mf %i/%i and Codecs sf/mf %i/%i Audio Codecs sf/mf %i/%i\n", DEBUGFILE, DEBUGFUNCTION,
         sf_t_format, 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         mf_t_format, 
 #else 
         0,
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
         sf_t_codec,
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         mf_t_codec, 
 #else 
         0,
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
         sf_t_au_codec
 #ifdef HAVE_FFMPEG_AUDIO
         , mf_t_au_codec
@@ -2187,7 +2174,7 @@ xvc_create_pref_dialog(AppData * lapp)
 #endif // DEBUG
 
     // default capture mode radio buttons
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (pref_app.default_mode == 0) {
         w = NULL;
         w = glade_xml_get_widget(xml,
@@ -2201,7 +2188,7 @@ xvc_create_pref_dialog(AppData * lapp)
         if (w != NULL)
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), TRUE);
     }
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     w = NULL;
     w = glade_xml_get_widget(xml,
                     "xvc_pref_default_capture_mode_sf_radiobutton");
@@ -2215,7 +2202,7 @@ xvc_create_pref_dialog(AppData * lapp)
                     "xvc_pref_default_capture_mode_mf_radiobutton");
     if (w != NULL)
         gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 
     // mouse wanted radio buttons
@@ -2357,7 +2344,7 @@ xvc_create_pref_dialog(AppData * lapp)
     w = glade_xml_get_widget(xml, "xvc_pref_sf_format_combobox");
 
     if (w != NULL) {
-        int a, n;
+        int a, n = -1;
         GtkWidget *check = NULL;
         GtkListStore *sf_format_list_store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(w)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry present in glade
@@ -2365,11 +2352,11 @@ xvc_create_pref_dialog(AppData * lapp)
         g_assert(sf_format_list_store);
         gtk_list_store_clear(GTK_LIST_STORE(sf_format_list_store));
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         for (a = 0; a < (CAP_MF - 1); a++)
 #else
         for (a = 0; a < (NUMCAPS - 1); a++)
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         {
 #ifdef DEBUG
             printf("%s %s: Adding this text (item %i) to sf format combobox %s\n", DEBUGFILE, DEBUGFUNCTION,
@@ -2414,7 +2401,7 @@ xvc_create_pref_dialog(AppData * lapp)
     // multi_frame
 
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     // fps
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_mf_fps_hscale");
@@ -2602,7 +2589,7 @@ xvc_create_pref_dialog(AppData * lapp)
     w = glade_xml_get_widget(xml, "xvc_pref_mf_format_combobox");
 
     if (w != NULL) {
-        int a, n;
+        int a, n = -1;
         GtkWidget *check = NULL;
         GtkListStore *mf_format_list_store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(w)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry present in glade
@@ -2647,7 +2634,7 @@ xvc_create_pref_dialog(AppData * lapp)
         gtk_entry_set_text ( GTK_ENTRY( w ), strdup(pref_app.multi_frame.file) );
     }
 
-#else // no HAVE_LIBAVCODEC
+#else // no USE_FFMPEG
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_nb_tab_multi_frame_vbox");
     g_assert(w);
@@ -2657,7 +2644,7 @@ xvc_create_pref_dialog(AppData * lapp)
     w = glade_xml_get_widget(xml, "xvc_pref_nb_tab_single_frame_label");
     g_assert(w);
     gtk_label_set_markup_with_mnemonic(GTK_LABEL(w), _("C_apture"));
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 
 
@@ -2693,7 +2680,7 @@ xvc_create_pref_dialog(AppData * lapp)
         gtk_entry_set_text ( GTK_ENTRY( w ), strdup(pref_app.single_frame.edit_cmd) );
     }
     
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     // mf play command
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_commands_mf_play_entry");
@@ -2717,12 +2704,12 @@ xvc_create_pref_dialog(AppData * lapp)
     if (w != NULL) {
         gtk_entry_set_text ( GTK_ENTRY( w ), strdup(pref_app.multi_frame.edit_cmd) );
     }
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_nb_tab_commands_mf_frame");
     g_assert(w);
     gtk_widget_hide(GTK_WIDGET(w));
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 
 #ifdef DEBUG

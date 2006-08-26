@@ -180,7 +180,7 @@ void XImageToXWD(FILE * fp, XImage * image, Job * job)
         head.window_bdrwidth = (CARD32) win_attr.border_width;
 
         if (*(char *) &little_endian)
-            swap_n_4byte((char *) &head, sizeof(head) / sizeof(long));
+            swap_n_4byte((unsigned char *) &head, sizeof(head) / sizeof(long));
     }
     if (fwrite((char *) &head, sizeof(head), 1, fp) < 1)
         perror(file);

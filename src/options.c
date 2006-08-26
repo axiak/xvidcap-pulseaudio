@@ -68,11 +68,11 @@ Boolean xvc_write_options_file()
     fprintf(fp, _("#general options ...\n"));
     fprintf(fp,
             _("# default capture mode (0 = single-frame, 1 = multi-frame\ndefault_mode: %i\n"),
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
             app->default_mode);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
             0);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
     fprintf(fp, _("# capture source\nsource: %s\n"), app->source);
     fprintf(fp, _("# hide GUI\nnogui: %d\n"),
             ((app->flags & FLG_NOGUI) ? 1 : 0));
@@ -103,16 +103,18 @@ Boolean xvc_write_options_file()
             ((app->flags & FLG_AUTO_CONTINUE) ? 1 : 0));
     fprintf(fp, _("# always show results dialog (0/1) \nalways_show_results: %i\n"),
             ((app->flags & FLG_ALWAYS_SHOW_RESULTS) ? 1 : 0));
+    fprintf(fp, _("# rescale the captured area to n percent of the original\n"));
+    fprintf(fp, "rescale: %i\n", (app->rescale));
 
     fprintf(fp, _("\n#options for single-frame capture ...\n"));
     fprintf(fp,
             _("# file pattern\n# this defines the filetype to write via the extension provided\n"));
     fprintf(fp, _("# valid extensions are: "));
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     for (n = CAP_NONE; n < CAP_FFM; n++) {
 #else
     for (n = CAP_NONE; n < NUMCAPS; n++) {
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         if (tFFormats[n].extensions) {
             element = xvc_next_element(tFFormats[n].extensions);
             while (element != NULL) {
@@ -121,13 +123,13 @@ Boolean xvc_write_options_file()
                 if (element != NULL)
                     fprintf(fp, ", ");
             }
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
             if (n < (CAP_FFM - 1))
                 fprintf(fp, ", ");
 #else
             if (n < (NUMCAPS - 1))
                 fprintf(fp, ", ");
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         }
     }
     fprintf(fp, "\n");
@@ -135,11 +137,11 @@ Boolean xvc_write_options_file()
     fprintf(fp,
             _("# file format - use AUTO to select format through file extension\n"));
     fprintf(fp, _("# Otherwise specify one of the following: "));
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     for (n = (CAP_NONE + 1); n < CAP_MF; n++) {
 #else
     for (n = (CAP_NONE + 1); n < NUMCAPS; n++) {
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         if (tFFormats[n].name) {
             element = xvc_next_element(tFFormats[n].name);
             while (element != NULL) {
@@ -158,11 +160,11 @@ Boolean xvc_write_options_file()
     fprintf(fp,
             _("# video codec used by ffmpeg - use AUTO to auto-detect codec\n"));
     fprintf(fp, _("# Otherwise specify one of the following: "));
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     for (n = (CODEC_NONE + 1); n < CODEC_MF; n++) {
 #else
     for (n = (CODEC_NONE + 1); n < NUMCODECS; n++) {
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         if (tCodecs[n].name) {
             element = xvc_next_element(tCodecs[n].name);
             while (element != NULL) {
@@ -205,7 +207,7 @@ Boolean xvc_write_options_file()
     fprintf(fp, _("# command to encode captured frames\n"));
     fprintf(fp, "sf_video_cmd: %s\n", app->single_frame.video_cmd);
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     fprintf(fp, _("\n#options for multi-frame capture ...\n"));
     fprintf(fp,
             _("# file pattern\n# this defines the filetype to write via the extension provided\n"));
@@ -308,7 +310,7 @@ Boolean xvc_write_options_file()
     fprintf(fp,
             _("# command to encode captured frames (subject to change)\n"));
     fprintf(fp, "mf_video_cmd: %s\n", app->multi_frame.video_cmd);
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
     fclose(fp);
 
@@ -377,13 +379,13 @@ Boolean xvc_read_options_file()
                 }
 
                 // general options first ...
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
                 if (strcasecmp(token, "default_mode") == 0) {
                     app->default_mode = atoi(value);
                 } else 
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
                 app->default_mode = 0;
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
                 if (strcasecmp(token, "source") == 0) {
                     app->source = strdup(value);
                 } else if (strcasecmp(token, "nogui") == 0) {
@@ -435,8 +437,18 @@ Boolean xvc_read_options_file()
                     if (value)
                         app->flags |= FLG_AUTO_CONTINUE;
                 } else if (strcasecmp(token, "always_show_results") == 0) {
-                    if (value)
+                    if (atoi(value) == 1)
                         app->flags |= FLG_ALWAYS_SHOW_RESULTS;
+                    else if (atoi(value) == 0)
+                        app->flags &= ~FLG_ALWAYS_SHOW_RESULTS;
+                    else {
+                        app->flags |= FLG_ALWAYS_SHOW_RESULTS;
+                        fprintf(stderr,
+                                _("reading unsupported always_show_results value from options file\nresetting to always show results.\n"));
+                    }
+                } else if (strcasecmp(token, "rescale") == 0) {
+                    if (value)
+                        app->rescale = atoi(value);
 
                     // now single-frame capture options
                 } else if (strcasecmp(token, "sf_file") == 0) {
@@ -505,7 +517,7 @@ Boolean xvc_read_options_file()
                 } else if (strcasecmp(token, "sf_video_cmd") == 0) {
                     app->single_frame.video_cmd = strdup(value);
                 }
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
                 // now multi-frame capture options
                 else if (strcasecmp(token, "mf_file") == 0) {
                     app->multi_frame.file = strdup(value);
@@ -617,7 +629,7 @@ Boolean xvc_read_options_file()
                 } else if (strcasecmp(token, "mf_video_cmd") == 0) {
                     app->multi_frame.video_cmd = strdup(value);
                 }
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
             }
         }
     } else {                    // !fp

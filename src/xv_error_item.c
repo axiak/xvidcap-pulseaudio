@@ -90,6 +90,8 @@ static void xv_error_item_init(XvErrorItem * ei)
     GtkWidget *frame;
     GtkWidget *hbox;
     GtkWidget *table;
+    GtkWidget *title_text_spacer;
+    int i, max_width = 0;
 
     // gtk_container_set_border_width (GTK_CONTAINER(ei), 1);
 
@@ -124,12 +126,47 @@ static void xv_error_item_init(XvErrorItem * ei)
     gtk_widget_show(table);
     gtk_box_pack_start(GTK_BOX(hbox), table, TRUE, TRUE, 0);
 
+    // calculate maximum width for left column, esp. for i18n
+    for (i = 0; i < 5; i++) {
+        char buf[256];
+        PangoLayout *layout = NULL;
+        int width, height;
+        
+        switch (i) {
+            case 0:
+                snprintf(buf, 255, _("FATAL\nERROR (%i):"), 100);
+                break;
+            case 1:
+                snprintf(buf, 255, _("ERROR (%i):"), 100);
+                break;
+            case 2:
+                snprintf(buf, 255, _("WARNING (%i):"), 100);
+                break;
+            case 3:
+                snprintf(buf, 255, _("INFO (%i):"), 100);
+                break;
+            case 4:
+                snprintf(buf, 255, _("???? (%i):"), 100);
+                break;
+        }
+        
+        title_text_spacer = gtk_label_new(buf);
+
+        layout = gtk_widget_create_pango_layout(title_text_spacer, buf);
+        g_assert(layout);
+        pango_layout_get_pixel_size(layout, &width, &height);
+        g_object_unref(layout);
+        gtk_widget_destroy(title_text_spacer);
+        
+        if ( width > max_width ) max_width = width;
+    }
+
     ei->title_tag = gtk_label_new("ERROR (n):");
     gtk_widget_show(ei->title_tag);
     gtk_table_attach(GTK_TABLE(table), ei->title_tag, 0, 1, 0, 1,
                      (GtkAttachOptions) (GTK_FILL),
                      (GtkAttachOptions) (GTK_FILL), 0, 0);
-    gtk_widget_set_size_request(ei->title_tag, 80, -1);
+    gtk_widget_set_size_request(ei->title_tag, max_width, -1);
     gtk_misc_set_alignment(GTK_MISC(ei->title_tag), 0, 0);
     gtk_misc_set_padding(GTK_MISC(ei->title_tag), 2, 1);
 
@@ -137,8 +174,8 @@ static void xv_error_item_init(XvErrorItem * ei)
     gtk_widget_show(ei->title_text);
     gtk_table_attach(GTK_TABLE(table), ei->title_text, 1, 2, 0, 1,
                      (GtkAttachOptions) (GTK_FILL),
-                     (GtkAttachOptions) (GTK_FILL), 0, 0);
-    gtk_widget_set_size_request(ei->title_text, 200, -1);
+                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+//    gtk_widget_set_size_request(ei->title_text, 200, -1);
     gtk_label_set_line_wrap(GTK_LABEL(ei->title_text), TRUE);
     gtk_misc_set_alignment(GTK_MISC(ei->title_text), 0, 0);
     gtk_misc_set_padding(GTK_MISC(ei->title_text), 2, 1);
@@ -153,6 +190,7 @@ static void xv_error_item_init(XvErrorItem * ei)
 
     ei->desc_text = gtk_text_view_new();
     gtk_widget_modify_base(ei->desc_text, GTK_STATE_NORMAL, &g_col);
+    gtk_widget_set_size_request(ei->desc_text, 200, -1);    
     gtk_widget_show(ei->desc_text);
     gtk_table_attach(GTK_TABLE(table), ei->desc_text, 1, 2, 1, 2,
                      (GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
@@ -182,7 +220,8 @@ static void xv_error_item_init(XvErrorItem * ei)
     gtk_table_attach(GTK_TABLE(table), ei->action_text, 1, 2, 2, 3,
                      (GtkAttachOptions) (GTK_FILL),
                      (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
-    gtk_widget_set_size_request(ei->action_text, 200, -1);
+    gtk_label_set_line_wrap(GTK_LABEL(ei->action_text), TRUE);
+//    gtk_widget_set_size_request(ei->action_text, 200, -1);
     gtk_misc_set_alignment(GTK_MISC(ei->action_text), 0, 0);
     gtk_misc_set_padding(GTK_MISC(ei->action_text), 2, 1);
 

@@ -54,7 +54,7 @@ const xvCodec none = {
     NULL
 };
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 const xvCodec pgm = {
     "PGM",
     N_("Portable Graymap"),
@@ -202,7 +202,7 @@ const xvCodec svq1 = {
     // this is the same here
     NULL
 };
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
 
 // audio codecs
@@ -214,7 +214,7 @@ const xvAuCodec none_aucodec = {
     CODEC_ID_NONE
 };
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
 const xvAuCodec mp2 = {
     "MP2",
@@ -239,7 +239,7 @@ const xvAuCodec pcm16 = {
     CODEC_ID_PCM_S16LE
 };
 #endif                          // HAVE_FFMPEG_AUDIO
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
 
 // file formats
@@ -252,8 +252,8 @@ const xvFFormat none_format = {
     CODEC_NONE,
     NULL,
     AU_CODEC_NONE,
-    NULL,
-    NULL
+    NULL /*,
+    NULL */
 };
 
 const xvFFormat xwd = {
@@ -264,11 +264,11 @@ const xvFFormat xwd = {
     CODEC_NONE,
     NULL,
     AU_CODEC_NONE,
-    NULL,
-    NULL
+    NULL /*,
+    NULL */
 };
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 const xvFFormat pgm_format = {
     "pgm",
     N_("Portable Graymap File"),
@@ -277,8 +277,8 @@ const xvFFormat pgm_format = {
     CODEC_PGM,
     "PGM",
     AU_CODEC_NONE,
-    NULL,
-    NULL
+    NULL /*,
+    NULL */
 };
 
 const xvFFormat ppm_format = {
@@ -289,8 +289,8 @@ const xvFFormat ppm_format = {
     CODEC_PPM,
     "PPM",
     AU_CODEC_NONE,
-    NULL,
-    NULL
+    NULL /*,
+    NULL */
 };
 
 const xvFFormat png_format = {
@@ -301,8 +301,8 @@ const xvFFormat png_format = {
     CODEC_PNG,
     "PNG",
     AU_CODEC_NONE,
-    NULL,
-    NULL
+    NULL /*,
+    NULL */
 };
 
 const xvFFormat jpeg_format = {
@@ -313,8 +313,8 @@ const xvFFormat jpeg_format = {
     CODEC_JPEG,
     "JPEG",
     AU_CODEC_NONE,
-    NULL,
-    jpeg_init
+    NULL /*,
+    jpeg_init */
 };
 
 const xvFFormat avi = {
@@ -327,15 +327,15 @@ const xvFFormat avi = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16",
+    "MP2|MP3|PCM16" //,
 #else
-    "MP2|PCM16",
+    "MP2|PCM16" //,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    avienc_init
+//    avienc_init
 };
 
 const xvFFormat divx = {
@@ -348,15 +348,15 @@ const xvFFormat divx = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16",
+    "MP2|MP3|PCM16" //,
 #else
-    "MP2|PCM16",
+    "MP2|PCM16" //,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    avienc_init
+//    avienc_init
 };
 
 const xvFFormat asf = {
@@ -369,15 +369,15 @@ const xvFFormat asf = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_NONE,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3",
+    "MP2|MP3" //,
 #else
-    "MP2",
+    "MP2" //,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    asf_init
+//    asf_init
 };
 
 const xvFFormat ff_flv1 = {
@@ -387,9 +387,19 @@ const xvFFormat ff_flv1 = {
     "flv|flv1",
     CODEC_FLV,
     "FLASH_VIDEO",
+#ifdef HAVE_FFMPEG_AUDIO
+#ifdef HAVE_LIBMP3LAME
+    AU_CODEC_MP3,
+    "MP3"
+#else
     AU_CODEC_NONE,
-    NULL,
-    flvenc_init
+    NULL
+#endif // HAVE_LIBMP3LAME
+#else
+    AU_CODEC_NONE,
+    NULL
+#endif // HAVE_FFMPEG_AUDIO
+    /*, flvenc_init */
 };
 
 const xvFFormat swf = {
@@ -402,16 +412,16 @@ const xvFFormat swf = {
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
-    "MP2|MP3",
+    "MP2|MP3" //,
 #else
     AU_CODEC_MP2,
-    "MP2",
+    "MP2" //,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    swf_init
+//    swf_init
 };
 
 const xvFFormat dv_format = {
@@ -423,12 +433,12 @@ const xvFFormat dv_format = {
     "DV",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "PCM16",
+    "PCM16" //,
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    ff_dv_init
+//    ff_dv_init
 };
 
 const xvFFormat mpeg = {
@@ -440,12 +450,12 @@ const xvFFormat mpeg = {
     "MPEG1",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "MP2",
+    "MP2" //,
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    mpegps_init
+//    mpegps_init
 };
 
 const xvFFormat svcd = {
@@ -457,12 +467,12 @@ const xvFFormat svcd = {
     "MPEG2",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "MP2",
+    "MP2" //,
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    mpegps_init
+//    mpegps_init
 };
 
 const xvFFormat mov = {
@@ -475,17 +485,17 @@ const xvFFormat mov = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16",
+    "MP2|MP3|PCM16" //,
 #else
-    "MP2|PCM16",
+    "MP2|PCM16" //,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL,
+    NULL //,
 #endif                          // HAVE_FFMPEG_AUDIO
-    mpegps_init
+//    mpegps_init
 };
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
 
 /* 
@@ -498,7 +508,7 @@ void xvc_codecs_init()
     // these are absolutely required to be in the same order as the
     // enumeration of CAP_* types in codecs.h
     tCodecs[i++] = none;
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     tCodecs[i++] = pgm;
     tCodecs[i++] = ppm;
     tCodecs[i++] = png;
@@ -512,14 +522,14 @@ void xvc_codecs_init()
     tCodecs[i++] = dv;
     tCodecs[i++] = mpeg2;
     tCodecs[i++] = svq1;
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
     // dto.
     // the target item of the array will be found by CAP_XXX - CAP_FFM
     i = 0;
     tFFormats[i++] = none_format;
     tFFormats[i++] = xwd;
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     tFFormats[i++] = pgm_format;
     tFFormats[i++] = ppm_format;
     tFFormats[i++] = png_format;
@@ -534,19 +544,21 @@ void xvc_codecs_init()
     tFFormats[i++] = mpeg;
     tFFormats[i++] = svcd;
     tFFormats[i++] = mov;
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
     // audio codecs
     i = 0;
     tAuCodecs[i++] = none_aucodec;
+#ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
     tAuCodecs[i++] = mp2;
 #ifdef HAVE_LIBMP3LAME
+
     tAuCodecs[i++] = mp3;
 #endif                          // HAVE_LIBMP3LAME
     tAuCodecs[i++] = pcm16;
 #endif                          // HAVE_FFMPEG_AUDIO
-
+#endif // USE_FFMPEG
 }
 
 /* 

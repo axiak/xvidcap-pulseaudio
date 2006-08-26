@@ -156,7 +156,6 @@ GtkWidget *glade_create_led_meter(gchar * widget_name, gchar * string1,
 Boolean xvc_ui_create()
 {
     #define DEBUGFUNCTION "xvc_ui_create()"
-    int pos_x, pos_y;
     Display *dpy;
     GladeXML *xml;
 
@@ -252,6 +251,13 @@ Boolean xvc_frame_create()
 
     return TRUE;
     #undef DEBUGFUNCTION
+}
+
+
+void
+xvc_frame_destroy()
+{
+    xvc_destroy_gtk_frame();
 }
 
 
@@ -429,7 +435,6 @@ Boolean xvc_capture_stop()
     #define DEBUGFUNCTION "xvc_capture_stop()"
     Job *job = xvc_job_ptr();
     gboolean rc;
-    int status = 0;
 
 #ifdef DEBUG
     printf("%s %s: stopping\n", DEBUGFILE, DEBUGFUNCTION);
@@ -600,7 +605,7 @@ on_xvc_ctrl_main_window_delete_event(GtkWidget * widget,
         xvc_capture_stop_signal(TRUE);
     }
 
-    xvc_destroy_gtk_frame();
+    xvc_frame_destroy();
     gtk_main_quit();            // FIXME: why does this seem to be
     // necessary with libglade where
     // it was not previously
@@ -710,7 +715,7 @@ void warning_submit()
 
 
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 
 void xvc_toggle_cap_type()
 {
@@ -782,14 +787,14 @@ void xvc_undo_toggle_cap_type()
 
     #undef DEBUGFUNCTION
 }
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
 
 void
 on_xvc_ctrl_m1_mitem_sf_capture_activate(GtkMenuItem * menuitem,
                                          gpointer user_data)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_sf_capture_activate()"
 
@@ -801,14 +806,14 @@ on_xvc_ctrl_m1_mitem_sf_capture_activate(GtkMenuItem * menuitem,
     }
 
     #undef DEBUGFUNCTION
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 }
 
 void
 on_xvc_ctrl_m1_mitem_mf_capture_activate(GtkMenuItem * menuitem,
                                          gpointer user_data)
 {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_mf_capture_activate()"
     
@@ -820,7 +825,7 @@ on_xvc_ctrl_m1_mitem_mf_capture_activate(GtkMenuItem * menuitem,
     }
     
     #undef DEBUGFUNCTION
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 }
 
 
@@ -935,7 +940,7 @@ void do_record_thread(Job * job) {
 gboolean stop_recording_nongui_stuff(Job * job)
 {
     #define DEBUGFUNCTION "stop_recording_nongui_stuff()"
-    int status = 0, state = 0;
+    int /* status = 0,*/ state = 0;
     struct timeval curr_time;
     long stop_time = 0;
 
@@ -951,7 +956,7 @@ gboolean stop_recording_nongui_stuff(Job * job)
     job_set_state(state);
 
     if (recording_thread_running) {
-        pthread_join(recording_thread, (void **) &status);
+        pthread_join(recording_thread, NULL /* (void **) &status*/ );
 #ifdef DEBUG
         printf("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);    
 #endif // DEBUG
@@ -1000,9 +1005,6 @@ on_xvc_result_dialog_select_filename_button_clicked(GtkButton * button, gpointer
     result = gtk_dialog_run (GTK_DIALOG (dialog));
 
     if ( result == GTK_RESPONSE_OK) { 
-        guint length;
-        gchar *path, *path_rev;
-        
         target_file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)); 
 
         if ( xvc_result_dialog != NULL ) {
@@ -1107,14 +1109,18 @@ static gboolean stop_recording_gui_stuff(Job * job)
 
     GtkChangeLabel(jobp->pic_no);
 
+#ifdef USE_FFMPEG
+    if ( job->target >= CAP_MF ) target = &(app->multi_frame);
+    else
+#endif // USE_FFMPEG
+        target = &(app->single_frame);
 
-    if ( job->target < CAP_MF ) target = &(app->single_frame);
-    else target = &(app->multi_frame);
     
-    if (strlen(target->file) < 1 || ( app->flags & FLG_ALWAYS_SHOW_RESULTS ) > 0) {
+    if ( ( strlen(target->file) < 1 || 
+                ( app->flags & FLG_ALWAYS_SHOW_RESULTS ) > 0 ) &&
+                ( job->flags & FLG_AUTO_CONTINUE ) == 0 ) {
         int result = 0;
         float fps_ratio = 0; 
-        char* got_file_name;
         char buf[100];
     
         GladeXML *xml = NULL;
@@ -1254,10 +1260,25 @@ static gboolean stop_recording_gui_stuff(Job * job)
                     if (app->help_cmd != NULL)
                         system((char *) app->help_cmd);
                     break;
+                case GTK_RESPONSE_ACCEPT:
+                    if (!app->current_mode) {
+                        xvc_command_execute(app->single_frame.play_cmd, 1, 0,
+                            jobp->file, jobp->start_no, jobp->pic_no,
+                            jobp->win_attr.width,
+                            jobp->win_attr.height, jobp->fps,
+                            (int) (1000 / (jobp->fps / 100)));
+                    } else {
+                        xvc_command_execute(app->multi_frame.play_cmd, 2,
+                            jobp->movie_no, jobp->file, jobp->start_no,
+                            jobp->pic_no, jobp->win_attr.width,
+                            jobp->win_attr.height, jobp->fps,
+                            (int) (1000 / (jobp->fps / 100)));
+                    }
+                    break;
                 default:
                     break;
             }
-        } while ( result == GTK_RESPONSE_HELP );
+        } while ( result == GTK_RESPONSE_HELP || result == GTK_RESPONSE_ACCEPT );
         
         gtk_widget_destroy (xvc_result_dialog);
         xvc_result_dialog = NULL;
@@ -1877,7 +1898,7 @@ on_xvc_ctrl_select_toggle_toggled(GtkToggleToolButton *
             printf("Original Selection geometry: %dx%d+%d+%d\n",
                    jobp->win_attr.width, jobp->win_attr.height, x, y);
         }
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         // 
         // make sure we have even width and height for ffmpeg
         // 
@@ -1910,7 +1931,7 @@ on_xvc_ctrl_select_toggle_toggled(GtkToggleToolButton *
                 }
             }
         }
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
         xvc_change_gtk_frame(x, y, jobp->win_attr.width,
                              jobp->win_attr.height, FALSE);
@@ -2109,7 +2130,6 @@ on_xvc_ctrl_m1_mitem_about_activate(GtkMenuItem * menuitem,
                                           gpointer user_data)
 {
     GladeXML *xml = NULL;
-    GtkWidget *w = NULL;
 
     // load the interface
     xml = glade_xml_new(GLADE_FILE, "xvc_about_main_window", NULL);
@@ -2141,7 +2161,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
     // first: the autocontinue menu item
     //
     // make autocontinue menuitem invisible if no ffmpeg
-#ifndef HAVE_LIBAVCODEC
+#ifndef USE_FFMPEG
     w = NULL;
     w = glade_xml_get_widget(menuxml,
                                  "xvc_ctrl_m1_mitem_autocontinue");
@@ -2154,7 +2174,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
     g_return_if_fail(w != NULL);
     gtk_widget_hide(GTK_WIDGET(w));
 
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // the rest in case we have ffmpeg
     if ((jobp->flags & FLG_MULTI_IMAGE) != 0) {
         w = glade_xml_get_widget(menuxml,
@@ -2183,7 +2203,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
         gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
         gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), FALSE);
     }
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 
     //
@@ -2287,7 +2307,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
     // capture type radio buttons
     //
     // make capture type radio buttons invisible if no ffmpeg
-#ifndef HAVE_LIBAVCODEC
+#ifndef USE_FFMPEG
     w = NULL;
     w = glade_xml_get_widget(menuxml, "xvc_ctrl_m1_mitem_sf_capture");
     g_return_if_fail(w != NULL);
@@ -2297,7 +2317,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
     w = glade_xml_get_widget(menuxml, "xvc_ctrl_m1_mitem_mf_capture");
     g_return_if_fail(w != NULL);
     gtk_widget_hide(GTK_WIDGET(w));
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     if (app->current_mode == 0) {
         w = NULL;
         w = glade_xml_get_widget(menuxml, "xvc_ctrl_m1_mitem_sf_capture");
@@ -2310,7 +2330,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
         g_return_if_fail(w != NULL);
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
     }
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     #undef DEBUGFUNCTION
 }

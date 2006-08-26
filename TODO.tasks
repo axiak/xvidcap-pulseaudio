@@ -2,11 +2,6 @@
 <gtodo>
   <category title="Personal" place="0">
     <item>
-      <attribute id="1151175973" priority="1" done="0" start_date="732486" enddate="99999999" notify="0" endtime="-60" last_edited="1151175973"/>
-      <summary>autocontinue may need to start capture again in capture.c</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1148768972" priority="1" done="1" start_date="732459" completed_date="732495" enddate="99999999" notify="0" endtime="-60" last_edited="1151943227"/>
       <summary>--fps 25 yields 25.08 ... strange</summary>
       <comment>can no longer reproduce</comment>
@@ -91,11 +86,6 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
 </comment>
     </item>
     <item>
-      <attribute id="1153491149" priority="1" done="0" start_date="732513" enddate="99999999" notify="0" endtime="-60" last_edited="1153491149"/>
-      <summary>make piped audio not use mp3 if lib not present</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1153815777" priority="2" done="1" start_date="732517" completed_date="732517" notify="0" last_edited="1153824105"/>
       <summary>if overload, time captured == 0 in result</summary>
       <comment/>
@@ -104,13 +94,6 @@ xtoffmpeg.c XImageToFFMPEG(): could not open video codec
       <attribute id="1150970358" priority="1" done="1" start_date="732484" completed_date="732524" notify="0" last_edited="1154444280"/>
       <summary>implement ask-user for filename dialog</summary>
       <comment/>
-    </item>
-    <item>
-      <attribute id="1155863373" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155863373"/>
-      <summary>error item spacing</summary>
-      <comment>platz f&#xFC;r linke spalte in deutsch zu wenig und action text nicht umgebrochen.
-
-xvidcap --mf --file "" --codec mpeg4 --format avi</comment>
     </item>
     <item>
       <attribute id="1155841861" priority="1" done="1" start_date="732540" completed_date="732541" notify="0" last_edited="1155863478"/>
@@ -269,23 +252,106 @@ jetzt tut's audio mit flash dennoch nicht
 </comment>
     </item>
     <item>
-      <attribute id="1156331867" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332510"/>
-      <summary>add validation of rescale input</summary>
-      <comment>also cli input and preference file handling</comment>
-    </item>
-    <item>
       <attribute id="1156332633" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332633"/>
       <summary>revisit FIXMEs</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
       <attribute id="1156332643" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332643"/>
       <summary>revisit i18n</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
       <attribute id="1155841871" priority="1" done="1" start_date="732540" completed_date="732546" notify="0" last_edited="1156333409"/>
       <summary>scale capture</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156353110" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156353110"/>
+      <summary>soerensen encoding buggy</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156331867" priority="1" done="1" start_date="732546" completed_date="732548" notify="0" last_edited="1156494557"/>
+      <summary>add validation of rescale input</summary>
+      <comment>also cli input and preference file handling
+
+done pref file</comment>
+    </item>
+    <item>
+      <attribute id="1156496119" priority="1" done="0" start_date="732548" enddate="99999999" notify="0" endtime="-60" last_edited="1156496119"/>
+      <summary>can get to xvidcap without resolving errors</summary>
+      <comment>in warning dialog click preferences,
+there click cancel</comment>
+    </item>
+    <item>
+      <attribute id="1156496072" priority="1" done="1" start_date="732548" completed_date="732548" notify="0" last_edited="1156497742"/>
+      <summary>error for v4l without v4l loops</summary>
+      <comment>clicking OK recycles</comment>
+    </item>
+    <item>
+      <attribute id="1155863373" priority="1" done="1" start_date="732541" completed_date="732548" notify="0" last_edited="1156499347"/>
+      <summary>error item spacing</summary>
+      <comment>platz f&#xFC;r linke spalte in deutsch zu wenig und action text nicht umgebrochen.
+
+xvidcap --mf --file "" --codec mpeg4 --format avi</comment>
+    </item>
+    <item>
+      <attribute id="1156351462" priority="1" done="1" start_date="732546" completed_date="732548" notify="0" last_edited="1156499869"/>
+      <summary>make audio codec recalculate on click auto</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1153491149" priority="1" done="1" start_date="732513" completed_date="732548" notify="0" last_edited="1156501177"/>
+      <summary>make piped audio not use mp3 if lib not present</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156351012" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156501224"/>
+      <summary>mutex assertion</summary>
+      <comment>xvidcap: pthread_mutex_lock.c:108: __pthread_mutex_lock: Assertion `mutex-&gt;__data.__owner == 0' failed.
+
+this seems to be happening more often with heavy load
+may need testing withouth SMP</comment>
+    </item>
+    <item>
+      <attribute id="1156348991" priority="1" done="1" start_date="732546" completed_date="732548" notify="0" last_edited="1156505685"/>
+      <summary>capture tab in pref window not translated</summary>
+      <comment>without USE_FFMPEG
+
+ebenso Action in Warning Dialog (und evtl. Details?)</comment>
+    </item>
+    <item>
+      <attribute id="1151175973" priority="1" done="1" start_date="732486" completed_date="732548" notify="0" last_edited="1156506607"/>
+      <summary>autocontinue may need to start capture again in capture.c</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156595704" priority="1" done="1" start_date="732549" completed_date="732549" notify="0" last_edited="1156596195"/>
+      <summary>flv format supports mp3 audio, now</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1156595743" priority="1" done="1" start_date="732549" completed_date="732549" notify="0" last_edited="1156597073"/>
+      <summary>make shm default if possible and --mf</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1156599684" priority="1" done="0" start_date="732549" enddate="99999999" notify="0" endtime="-60" last_edited="1156599726"/>
+      <summary>ppm/pgm does not work</summary>
+      <comment>kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --sf --file /tmp/test-%04d.pgm
+[pgm @ 0x83c7dfc]encoded frame too large
+xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e0, outbuf 0x871d498, Gr&#xF6;&#xDF;e 27648, frame 0x8710170
+</comment>
+    </item>
+    <item>
+      <attribute id="1156600047" priority="1" done="0" start_date="732549" enddate="99999999" notify="0" endtime="-60" last_edited="1156600047"/>
+      <summary>width and height passed to ppm2mpeg.sh are screensize</summary>
+      <comment>not capture size</comment>
+    </item>
+    <item>
+      <attribute id="1156597070" priority="1" done="1" start_date="732549" completed_date="732549" notify="0" last_edited="1156600081"/>
+      <summary>add play button to results dialog</summary>
       <comment></comment>
     </item>
   </category>

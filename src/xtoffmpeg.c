@@ -27,7 +27,7 @@
 
 #define DEBUGFILE "xtoffmpeg.c"
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -204,16 +204,19 @@ add_audio_stream (Job* job) {
         // this is required to guarantee import of the audio input format context
         // for some strange reason this only works here and not further down
         // with av_register_all
-        audio_init();
+//        audio_init();
 
         if (grab_audio) {
             ap->sample_rate = job->snd_rate;
             ap->channels = job->snd_channels;
 
             grab_iformat = av_find_input_format("audio_device");
+
+#ifdef DEBUG
             printf("%s %s: grab iformat %p\n", DEBUGFILE, DEBUGFUNCTION, grab_iformat);
-    if (grab_iformat)
-            printf("%s %s: grab iformat name %s\n", DEBUGFILE, DEBUGFUNCTION, grab_iformat->name);
+            if (grab_iformat)
+                printf("%s %s: grab iformat name %s\n", DEBUGFILE, DEBUGFUNCTION, grab_iformat->name);
+#endif // DEBUG
             
             if (av_open_input_file(&ic, "", grab_iformat, 0, ap) < 0) {
                 fprintf(stderr,
@@ -222,9 +225,7 @@ add_audio_stream (Job* job) {
                 exit(1);
             }
         } else {
-            grab_iformat = av_find_input_format("mp3");
-            // FIXME: allow other file formats
-            err = av_open_input_file(&ic, ap->device, grab_iformat, 0, ap);
+            err = av_open_input_file(&ic, ap->device, NULL, 0, ap);
             if (err < 0) {
                 fprintf(stderr, _("%s %s: error opening input file %s: %i\n"),
                             DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
@@ -491,7 +492,7 @@ void capture_audio_thread(Job * job)
     unsigned long start, stop, start_s, stop_s;
     struct timeval thr_curr_time;
     long sleep;
-    int retval, len, data_size;
+    int retval = -1, len, data_size;
     uint8_t *ptr, *data_buf;
     short samples[AVCODEC_MAX_AUDIO_FRAME_SIZE / 2];
     AVPacket pkt;
@@ -565,8 +566,10 @@ void capture_audio_thread(Job * job)
                         // data_size < 0, it seems they are overflows 
                         if (data_size <= 0) {
                             // no audio frame 
+#ifdef DEBUG
                             fprintf (stderr, _("%s %s: no audio frame\n"), DEBUGFILE,
                                     DEBUGFUNCTION);
+#endif // DEBUG
                             ptr += retval;
                             len -= retval;
                             continue;
@@ -858,8 +861,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     // put sample parameters 
     st->codec->bit_rate = 400000;
     // resolution must be a multiple of two ... this is taken care of
-    //elsewhere 
-    printf("%s %s: rescale %i %%\n", DEBUGFILE, DEBUGFUNCTION, job->rescale);
+    // elsewhere but needs to be ensured for rescaled dimensions, too
     if (job->rescale != 100) {
         int n;
         double r;
@@ -1055,8 +1057,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 {
     #define DEBUGFUNCTION "XImageToFFMPEG()"
 
-    AVImageFormat *image_format = NULL;
-    int err, ret;
+    int ret;
 
 #ifdef DEBUG
         printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1110,9 +1111,9 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         // register all libav* related stuff
         av_register_all();
 
-        // next call the right init() function for the file format (e.g.
+/*        // next call the right init() function for the file format (e.g.
         // avienc_init()) 
-        if ( tFFormats[job->target].init ) (*tFFormats[job->target].init) ();  
+        if ( tFFormats[job->target].init ) (*tFFormats[job->target].init) ();   */
         // guess AVOutputFormat
         if ( job->target >= CAP_MF )
             file_oformat =
@@ -1391,7 +1392,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             int y;              // , x;
             uint8_t *in, *out;
 
-            in = image->data;
+            in = (uint8_t*) image->data;
             out = scratchbuf8bit;
 
             for (y = 0; y < out_st->codec->height; y++) {
@@ -1760,4 +1761,4 @@ void dump8bit(XImage * image, u_int32_t * ct)
 
 
 
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG

@@ -218,7 +218,8 @@ dnl fi
 # if cache empty (not tested or failed) and want static avcodec (then it failed) ...
 if ( `test \( \( x${ac_cv_lib_avutil_av_rescale+set} = x \) -a \( x$static_avutil = xyes \) \)` ) ; then
 	# build embedded ffmpeg
-	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} --enable-mp3lame --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ${MAKE-make} )
+## new swscaler might be interesting ##	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} --enable-gpl --enable-mp3lame --enable-pthreads --enable-swscaler --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ${MAKE-make} )
+	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} --enable-mp3lame --enable-pthreads --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ${MAKE-make} )
 	# try to link it statically, or reset cache, set static_avcodec=no
 	top_srcdir=`pwd`
 	ac_my_ldflags_save=${LDFLAGS} ; LDFLAGS="${LDFLAGS} -L$top_srcdir/ffmpeg/libavcodec -L$top_srcdir/ffmpeg/libavformat -L$top_srcdir/ffmpeg/libavutil"
@@ -241,21 +242,23 @@ AC_CHECK_LIB_STATIC(avcodec, img_convert,,[unset ac_cv_lib_avcodec_img_convert ;
 static_avformat=$static_avcodec
 ac_my_avformat_libs=""
 test x`(uname -s)` = xSunOS && ac_my_avformat_libs="-lnsl -lsocket"
-AC_CHECK_LIB_STATIC(avformat, avienc_init,,[unset ac_cv_lib_avformat_avienc_init ; static_avformat=no ; AC_CHECK_LIB(avformat, avienc_init,,,[$ac_my_avformat_libs])],[$ac_my_avformat_libs])
+AC_CHECK_LIB_STATIC(avformat, av_write_header,,[unset ac_cv_lib_avformat_av_write_header ; static_avformat=no ; AC_CHECK_LIB(avformat, av_write_header,,,[$ac_my_avformat_libs])],[$ac_my_avformat_libs])
 
-#check for audio suport in FFMPEG
-# thanks to Daniel Stonier for pointing out a typo and thus fixing a bug
-# with audio detection in shared library libavformat
-if ( test x${ac_cv_lib_avformat_avienc_init} = xyes ) ; then
-	test x`(uname -s)` = xSunOS && ac_my_avformat_libs="-lnsl -lsocket"
-	AC_CHECK_LIB_STATIC(avformat, audio_init,[ac_my_have_ffmpeg_audio="1"],[unset ac_cv_lib_avformat_audio_init ; AC_CHECK_LIB(avformat, audio_init,[ac_my_have_ffmpeg_audio="1"],[ac_my_have_ffmpeg_audio="0"],[$ac_my_avformat_libs])],[$ac_my_avformat_libs])
-fi
 
-if ( `test \(\(x${ac_cv_lib_avcodec_img_convert} = xyes\) -a \(x$ac_cv_lib_avformat_avienc_init = xyes\) -a \(x$ac_cv_lib_avutil_av_rescale = xyes\)\)` ) ; then
+# only use ffmpeg if ALL required libs are present
+if ( `test x$ac_cv_lib_avcodec_img_convert = xyes -a x$ac_cv_lib_avformat_av_write_header = xyes -a x$ac_cv_lib_avutil_av_rescale = xyes` ) ; then
+    ac_cv_lib_avcodec_img_convert=yes
+else
     ac_cv_lib_avcodec_img_convert=no
 fi
-AM_CONDITIONAL(HAVE_LIBAVCODEC, [test x${ac_cv_lib_avcodec_img_convert} = xyes])
 
+#check for audio suport in FFMPEG (only if that is present in the first place)
+# thanks to Daniel Stonier for pointing out a typo and thus fixing a bug
+# with audio detection in shared library libavformat
+if ( test x${ac_cv_lib_avcodec_img_convert} = xyes ) ; then
+	test x`(uname -s)` = xSunOS && ac_my_avcodec_libs="-lnsl -lsocket"
+	AC_CHECK_LIB_STATIC(avcodec, avcodec_decode_audio,[ac_my_have_ffmpeg_audio="1"],[unset ac_cv_lib_avcodec_avcodec_decode_audio ; AC_CHECK_LIB(avcodec, avcodec_decode_audio,[ac_my_have_ffmpeg_audio="1"],[ac_my_have_ffmpeg_audio="0"],[$ac_my_avcodec_libs])],[$ac_my_avcodec_libs])
+fi
 
 ################################################################
 # which libs were found statically
@@ -369,6 +372,9 @@ AM_CONDITIONAL(HAVE_FFMPEG_AUDIO,[test x${ac_my_have_ffmpeg_audio} = x1])
 # generic preproc defines
 ################################################################
 
+
+AH_TEMPLATE([USE_FFMPEG], [define if libavcodec is usable])
+test x${ac_cv_lib_avcodec_img_convert} = "xyes" && AC_DEFINE([USE_FFMPEG], [1])
 AH_TEMPLATE([HAVE_SHMAT], [define if shared memory is available])
 test x${ac_cv_func_shmat} = "xyes" && AC_DEFINE([HAVE_SHMAT], [1])
 AH_TEMPLATE([LINUX], [define if building on Linux])

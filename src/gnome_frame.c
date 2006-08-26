@@ -61,7 +61,6 @@ void do_reposition_control(GtkWidget *toplevel) {
     int max_width = 0, max_height = 0;
     int pwidth = 0, pheight = 0, x = 0, y = 0, topHeight = 0, width = 0, leftWidth = 0, height = 0;
     GdkScreen *myscreen;
-    Display *dpy;
 
         myscreen = GTK_WINDOW(toplevel)->screen;
         g_assert(myscreen);
@@ -76,7 +75,7 @@ void do_reposition_control(GtkWidget *toplevel) {
 
         gdk_window_get_size(GDK_WINDOW(gtk_frame_left->window), &leftWidth, &height);
         gdk_window_get_size(GDK_WINDOW(gtk_frame_top->window), &width, &topHeight);
-        gtk_window_get_position(GTK_WINDOW(gtk_frame_top),(guint*) &x,(guint*) &y);
+        gtk_window_get_position(GTK_WINDOW(gtk_frame_top),(gint*) &x,(gint*) &y);
 
 #ifdef DEBUG
     printf("%s %s: x %i y%i pheight %i pwidht %i height %i width%i\n", DEBUGFILE, DEBUGFUNCTION,
@@ -89,7 +88,6 @@ void do_reposition_control(GtkWidget *toplevel) {
         } else {
             GladeXML *xml = NULL;
             GtkWidget *w = NULL;
-            gboolean ignore = TRUE;
 
             xml = glade_get_widget_tree(GTK_WIDGET(toplevel));
             g_assert(xml);
@@ -128,7 +126,6 @@ void xvc_change_gtk_frame(int x, int y, int width, int height,
 {
     #define DEBUGFUNCTION "xvc_change_gtk_frame()"
     int max_width, max_height;
-    int pwidth, pheight, px1, py1, px2, py2;
     extern GtkWidget *xvc_ctrl_main_window;
     GdkScreen *myscreen;
     Display *dpy;
@@ -186,9 +183,11 @@ void xvc_change_gtk_frame(int x, int y, int width, int height,
                                     FRAME_WIDTH, height);
         gtk_window_move(GTK_WINDOW(gtk_frame_right), (x + width), y);
 
+#ifdef HasVideo4Linux
         // if we have a v4l blind, move it, too
         if (gtk_frame_center != NULL)
             gtk_window_move(GTK_WINDOW(gtk_frame_center), x, y);
+#endif // HasVideo4Linux
     }
     // store coordinates in rectangle for further reference
     xvc_frame_rectangle.x = x;
@@ -487,6 +486,7 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
         gtk_widget_show(GTK_WIDGET(gtk_frame_right));
         gtk_window_move(GTK_WINDOW(gtk_frame_right), (x + pwidth), y);
 
+#ifdef HasVideo4Linux
         if (flags & FLG_USE_V4L) {
             gtk_frame_center = gtk_dialog_new();
 
@@ -516,6 +516,7 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
             // XtNlabel, "Source: Video4Linux", NULL);
             // XtPopup(blind, XtGrabNone); 
         }
+#endif // HasVideo4Linux
         // connect event-handler to configure event of gtk control window
         // to redraw the
         // selection frame if the control is moved and the frame is locked

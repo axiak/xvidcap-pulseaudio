@@ -97,7 +97,7 @@ static void getCurrentPointer(int *x, int *y, Job * mjob)
     mrootwindow = DefaultRootWindow(dpy);
 
     if (XQueryPointer(dpy, mrootwindow, &mrootwindow, &childwindow,
-                      x, y, &dummy, &dummy, &dummy)) {
+                      x, y, &dummy, &dummy,(unsigned int*) &dummy)) {
         // if the XQueryPointer was successfull, we have everything we
         // need in the variables passed as result pointers
     } else {
@@ -142,7 +142,7 @@ static void paintMousePointer(int *x, int *y, XImage * image)
         && (*y - mjob->area->y) >= 0
         && *y < (mjob->area->height + mjob->area->y)) {
         int line;
-        uint8_t *im_data = image->data;
+        uint8_t *im_data = (uint8_t*) image->data;
 
         // move the cursor to the right starting position
         // first: shift to right line

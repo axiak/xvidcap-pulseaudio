@@ -14,7 +14,7 @@
  */
 enum tCodecIDs {
     CODEC_NONE,
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     CODEC_PGM,
     CODEC_PPM,
     CODEC_PNG,
@@ -28,12 +28,12 @@ enum tCodecIDs {
     CODEC_DV,
     CODEC_MPEG2,
     CODEC_SVQ1,
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
     NUMCODECS
 };
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 #define CODEC_MF CODEC_MPEG1
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
 typedef struct _xvCodec {
     char *name;
@@ -78,7 +78,7 @@ typedef struct _xvAuCodec {
 enum tcap_formats {
     CAP_NONE,
     CAP_XWD,
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     CAP_PGM,
     CAP_PPM,
     CAP_PNG,
@@ -92,14 +92,14 @@ enum tcap_formats {
     CAP_MPG,
     CAP_SVCD,
     CAP_MOV,
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
     NUMCAPS
 };
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 #define CAP_FFM CAP_PGM
 #define CAP_MF CAP_AVI
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
 
 
@@ -112,7 +112,7 @@ typedef struct _xvFFormat {
     char *allowed_vid_codecs;
     int def_au_codec;
     char *allowed_au_codecs;
-    int (*init) (void);
+//    int (*init) (void);
 } xvFFormat;
 
 

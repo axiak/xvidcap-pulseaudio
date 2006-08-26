@@ -107,9 +107,9 @@ void xvc_app_data_init(AppData * lapp)
     lapp->current_mode = -1;    // dto. ... this is set after evaluation
     // of cli options
     xvc_cap_type_options_init(&(lapp->single_frame));
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     xvc_cap_type_options_init(&(lapp->multi_frame));
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 }
 
 
@@ -122,7 +122,11 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->cap_pos_x = lapp->cap_pos_y = -1;
     lapp->flags = FLG_ALWAYS_SHOW_RESULTS;
     lapp->device = "/dev/video0";
+#ifdef HAVE_SHMAT
+    lapp->source = "shm";
+#else
     lapp->source = "x11";
+#endif
     lapp->mouseWanted = 1;
 #ifdef HAVE_FFMPEG_AUDIO    
     lapp->snddev = "/dev/dsp";
@@ -130,7 +134,7 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->cap_width = 192;
     lapp->cap_height = 144;
     lapp->rescale = 100;
-    lapp->default_mode = 0;
+    lapp->default_mode = 1;
 
     // initialzie options specific to either single- or multi-frame
     // capture
@@ -155,11 +159,11 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->single_frame.play_cmd =
         "animate \"${XVFILE}\" -delay $((XVTIME/10)) &";
     lapp->single_frame.video_cmd =
-        "ppm2mpeg \"${XVFILE}\" ${XVFFRAME} ${XVLFRAME} ${XVWIDTH} ${XVHEIGHT} ${XVFPS} ${XVTIME} &";
+        "ppm2mpeg.sh \"${XVFILE}\" ${XVFFRAME} ${XVLFRAME} ${XVWIDTH} ${XVHEIGHT} ${XVFPS} ${XVTIME} &";
     lapp->single_frame.edit_cmd = "gimp \"${XVFILE}\" &";
     lapp->help_cmd = "xterm -e man xvidcap &";
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
     lapp->multi_frame.audioWanted = 1;
     lapp->multi_frame.sndrate = 22050;
@@ -173,7 +177,7 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->multi_frame.video_cmd =
         _("xterm -e 'echo \"not needed for multi-frame capture\" ; sleep 20'");
     lapp->multi_frame.play_cmd = "mplayer \"${XVFILE}\" &";
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 }
 
@@ -246,9 +250,9 @@ void xvc_app_data_copy(AppData * tapp, AppData * sapp)
     tapp->current_mode = sapp->current_mode;    // dto.
     xvc_cap_type_options_copy(&(tapp->single_frame),
                               &(sapp->single_frame));
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     xvc_cap_type_options_copy(&(tapp->multi_frame), &(sapp->multi_frame));
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 }
 
@@ -269,11 +273,14 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
 {
     #undef DEBUGFUNCTION
     #define DEBUGFUNCTION "xvc_app_data_validate()"
-    CapTypeOptions *target = NULL, *non_target = NULL;
+    CapTypeOptions *target = NULL;
+#ifdef USE_FFMPEG
+    CapTypeOptions *non_target = NULL;
+#endif
     xvErrorListItem *errors = NULL;
-    int t_codec, t_format, nt_codec, nt_format;
+    int t_codec, t_format;
 #ifdef HAVE_FFMPEG_AUDIO
-    int nt_au_codec, t_au_codec;
+    int t_au_codec;
 #endif // HAVE_FFMPEG_AUDIO
 
     // capture size related
@@ -284,7 +291,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     // we need current_mode determined by now
     if (lapp->current_mode < 0) {
         *rc = -1;
@@ -297,7 +304,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         target = &(lapp->multi_frame);
         non_target = &(lapp->single_frame);
     }
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (lapp->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -305,7 +312,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     
     lapp->current_mode = 0;
     target = &(lapp->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 
     // flags related
@@ -446,6 +453,15 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
 
     // current_mode must be selected by now
 
+    // start: rescale
+    if (lapp->rescale < 1 || lapp->rescale > 100 ) {
+        errors = xvc_errors_append(37, errors, lapp);
+        if (!errors) {
+            *rc = -1;
+            return NULL;
+        }
+    }
+    // end: rescale
 
     /* 
      * Now check target capture type options
@@ -534,7 +550,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         *rc = 1;
         return errors;
     }
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     else if (lapp->current_mode == 0 && t_format >= CAP_MF) {
         errors = xvc_errors_append(18, errors, lapp);
         if (!errors) {
@@ -561,7 +577,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
             return NULL;
         }
     }
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
     if (target->target == CAP_NONE && target->targetCodec != CODEC_NONE) {
         // if target is auto-detected we also want to auto-detect
@@ -577,7 +593,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         // allowed_vid_codecs
         // is not NULL
     } 
-#ifdef HAVE_LIBAVCODEC    
+#ifdef USE_FFMPEG    
     else if (tFFormats[t_format].allowed_vid_codecs &&
                (!xvc_is_element(tFFormats[t_format].allowed_vid_codecs,
                                 tCodecs[t_codec].name))) {
@@ -639,7 +655,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         }
     }
 #endif // HAVE_FFMPEG_AUDIO
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
     // end: target
 
     // targetCodec ... check for suitable format is above with target
@@ -748,7 +764,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
 
 
     // if we don't have FFMPEG, we can only have one capture type, i.e. the target
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (mode == 0) {
         /* 
          * Now check non-target capture type options
@@ -1050,7 +1066,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
          */
 
     }
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 
     if (errors)
@@ -1079,7 +1095,7 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     // we need current_mode determined by now
     if (lapp->current_mode < 0)
         return 0;
@@ -1087,7 +1103,7 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
         target = &(lapp->single_frame);
     else
         target = &(lapp->multi_frame);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (lapp->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1095,7 +1111,7 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
     
     lapp->current_mode = 0;
     target = &(lapp->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     // set the capture options of the right mode to the specified values
     if (cto->file != NULL)
@@ -1183,7 +1199,8 @@ const xvError one = {
 void xverror_2_action(void *err)
 {
     xvErrorListItem *cerr = (xvErrorListItem *) err;
-    cerr->app->flags &= ~FLG_USE_V4L;
+    cerr->app->flags &= ~FLG_SOURCE;
+    cerr->app->source = "x11";
 }
 
 const xvError two = {
@@ -1192,7 +1209,7 @@ const xvError two = {
     N_("No V4L available"),
     N_("Video for Linux is selected as the capture source but V4L is not available with this binary."),
     xverror_2_action,
-    N_("Disable Video for Linux capture source")
+    N_("Set capture source to 'x11'")
 };
 
 const xvError three = {
@@ -1293,6 +1310,7 @@ void xverror_8_action(void *err)
     xvErrorListItem *cerr = (xvErrorListItem *) err;
 
     cerr->app->flags &= ~FLG_SOURCE;
+    cerr->app->source = "x11";
 }
 
 const xvError eight = {
@@ -1355,12 +1373,12 @@ void xverror_12_action(void *err)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1368,7 +1386,7 @@ void xverror_12_action(void *err)
     
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     if (target->target > 0 && target->target < NUMCAPS) {
         char tmp_fn[512];
@@ -1385,14 +1403,14 @@ void xverror_12_action(void *err)
         tmp_fn[i] = '\0';
         fn = strdup(tmp_fn);
     } else {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         if (cerr->app->current_mode == 0)
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
             fn = "test-%04d.xwd";
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         else
             fn = "test-%04d.mpeg";
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
         target->target = 0;
     }
 
@@ -1464,13 +1482,13 @@ void xverror_16_action(void *err) {
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0) {
         cerr->app->single_frame.target = CAP_XWD;
     } else {
         cerr->app->multi_frame.target = CAP_DIVX;        
     }
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1478,7 +1496,7 @@ void xverror_16_action(void *err) {
     
     cerr->app->current_mode = 0;
     cerr->app->single_frame.target = CAP_XWD;
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1521,7 +1539,7 @@ const xvError eighteen = {
     N_("Reset file format to default for single-frame capture")
 };
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 void xverror_19_action(void *err)
 {
     xvErrorListItem *cerr = (xvErrorListItem *) err;
@@ -1537,7 +1555,7 @@ const xvError nineteen = {
     xverror_19_action,
     N_("Reset file format to default for multi-frame capture")
 };
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
 const xvError twenty = {
     20,
@@ -1566,7 +1584,7 @@ const xvError twentytwo = {
     N_("Ignore")
 };
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
 void xverror_23_action(void *err)
 {
     xvErrorListItem *cerr = (xvErrorListItem *) err;
@@ -1583,7 +1601,7 @@ const xvError twentythree = {
     xverror_23_action,
     N_("Reset multi-frame target codec to default for file format")
 };
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
 const xvError twentyfour = {
     24,
@@ -1657,12 +1675,12 @@ void xverror_29_action(void *err)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1670,7 +1688,7 @@ void xverror_29_action(void *err)
     
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     target->time = 0;
 
@@ -1709,12 +1727,12 @@ void xverror_31_action(void *err)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1722,7 +1740,7 @@ void xverror_31_action(void *err)
     
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     target->frames = 0;
 
@@ -1761,12 +1779,12 @@ void xverror_33_action(void *err)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1774,7 +1792,7 @@ void xverror_33_action(void *err)
     
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     target->start_no = 0;
 
@@ -1813,12 +1831,12 @@ void xverror_35_action(void *err)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1826,7 +1844,7 @@ void xverror_35_action(void *err)
     
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     target->step = 1;
 
@@ -1855,6 +1873,32 @@ const xvError thirtysix = {
     N_("Set increment for frame numbering of multi-frame capture to '1'")
 };
 
+void xverror_37_action(void *err)
+{
+    #define DEBUGFUNCTION "xverror_37_action()"
+    xvErrorListItem *cerr = (xvErrorListItem *) err;
+
+#ifdef DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
+    cerr->app->rescale = 100;
+
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+    #undef DEBUGFUNCTION
+}
+
+const xvError thirtyseven = {
+    37,
+    XV_ERR_WARN,
+    N_("Requested invalid Rescale Percentage"),
+    N_("You requested rescaling of the input area to a relative size but did not specify a valid percentage. Valid values are between 1 and 100 "),
+    xverror_37_action,
+    N_("Set rescale percentage to '100'")
+};
+
 void xverror_40_action(void *err)
 {
     #define DEBUGFUNCTION "xverror_40_action()"
@@ -1865,12 +1909,12 @@ void xverror_40_action(void *err)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // HAVE_LIBAVCODEC
+#else // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
         printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
@@ -1878,7 +1922,7 @@ void xverror_40_action(void *err)
     
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 
     target->quality = 1;
 
@@ -1980,15 +2024,15 @@ void xvc_errors_init()
     xvErrors[i++] = sixteen;
     xvErrors[i++] = seventeen;
     xvErrors[i++] = eighteen;
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     xvErrors[i++] = nineteen;
 #endif
     xvErrors[i++] = twenty;
     xvErrors[i++] = twentyone;
     xvErrors[i++] = twentytwo;
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     xvErrors[i++] = twentythree;
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
     xvErrors[i++] = twentyfour;
     xvErrors[i++] = twentyfive;
@@ -2004,7 +2048,7 @@ void xvc_errors_init()
     xvErrors[i++] = thirtyfour;
     xvErrors[i++] = thirtyfive;
     xvErrors[i++] = thirtysix;
-//    xvErrors[i++] = thirtyseven;
+    xvErrors[i++] = thirtyseven;
 //    xvErrors[i++] = thirtyeight;
 //    xvErrors[i++] = thirtynine;
     xvErrors[i++] = fourty;

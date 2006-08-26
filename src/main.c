@@ -43,6 +43,10 @@
 #include <libintl.h>
 #include <ctype.h>
 
+#ifdef USE_FFMPEG
+#include <ffmpeg/avcodec.h>
+#endif // USE_FFMPEG
+
 #include "control.h"
 #include "codecs.h"
 #include "job.h"
@@ -85,16 +89,17 @@ void usage(char *prog)
         (_("[--continue [yes|no]] autocontinue after maximum frames/time\n"));
     printf
         (_("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"));
+    printf(_("[--rescale #] relative output size in percent compared to input (1-100)\n"));
     printf(_("[--start_no #] start number for the file names\n"));
 #ifdef HAVE_SHMAT
     printf(_("[--source <src>] select input source: x11, shm\n"));
 #endif // HAVE_SHMAT
     printf(_("[--file <file>] file pattern, e.g. out%%03d.xwd\n"));
     printf(_("[--gui [yes|no]] turn on/off gui\n"));
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     printf
         (_("[--sf|--mf] request single-frame or multi-frame capture mode\n"));
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
     printf
         (_("[--auto] cause auto-detection of output format, video-, and audio codec\n"));
     printf
@@ -186,6 +191,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
         {"aucodec", required_argument, NULL, 0},
         {"aucodec-help", no_argument, NULL, 0},
         {"auto", no_argument, NULL, 0},
+        {"rescale", required_argument, NULL, 0},
         {NULL, 0, NULL, 0},
     };
     int opt_index = 0, c;
@@ -354,14 +360,14 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                     }
                 }
                 break;
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
             case 17:           // single-frame
                 app->current_mode = 0;
                 break;
             case 18:           // multi-frame
                 app->current_mode = 1;
                 break;
-#endif // HAVE_LIBAVCODEC
+#endif // USE_FFMPEG
             case 19:           // codec
                 {
                     int n, m = 0;
@@ -395,7 +401,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                         (_("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
                          _argv[0], VERSION);
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
                     printf(_("Available codecs for single-frame capture: "));
 
                     for (n = 1; n < CAP_MF; n++) {
@@ -434,7 +440,7 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                             printf(", ");
                     }
                     printf("\n");
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
 
                     printf
                         (_("Specify 'auto' to use the file format's default codec.\n"));
@@ -573,6 +579,9 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 tmp_capture_options->au_targetCodec = 0;
 #endif // HAVE_FFMPEG_AUDIO
                 break;
+            case 26:           // rescale
+                app->rescale = atoi(optarg);
+                break;
             default:
                 usage(_argv[0]);
                 break;
@@ -622,11 +631,11 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
     else {
         current_mode_by_filename =
             xvc_codec_get_target_from_filename(tmp_capture_options->file);
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         if (current_mode_by_filename >= CAP_MF)
             current_mode_by_filename = 1;
         else
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         if (current_mode_by_filename > 0)
             current_mode_by_filename = 0;
         // if we can't determine capture type by filename treat as not
@@ -640,11 +649,11 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
     if (tmp_capture_options->target < 0)
         current_mode_by_target = -1;
     else {
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
         if (tmp_capture_options->target >= CAP_MF)
             current_mode_by_target = 1;
         else
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
         if (tmp_capture_options->target > 0)
             current_mode_by_target = 0;
         // if we have an invalide target treat as not
@@ -719,14 +728,15 @@ void print_current_settings(CapTypeOptions * target)
 
     printf(_("Current settings:\n"));
     printf(_(" flags = %d\n"), app->flags);
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     printf(_(" capture mode = %s\n"),
            ((app->current_mode == 0) ? _("single-frame") : _("multi-frame")));
-#endif                          // HAVE_LIBAVCODEC
+#endif                          // USE_FFMPEG
     printf(_(" position = %ix%i"), app->cap_width, app->cap_height);
     if (app->cap_pos_x >= 0)
         printf("+%i+%i", app->cap_pos_x, app->cap_pos_y);
     printf("\n");
+    printf(_(" rescale output to = %i\n"), app->rescale);
     printf(_(" frames per second = %.2f\n"), ((float) target->fps / 100));
     printf(_(" file pattern = %s\n"), target->file);
     printf(_(" file format = %s\n"),
@@ -845,7 +855,7 @@ int main(int argc, char *argv[])
     // this is a hook for the GUI's main loop
     resultCode = xvc_ui_run();
 
-#ifdef HAVE_LIBAVCODEC
+#ifdef USE_FFMPEG
     av_free_static();
 #endif
 
