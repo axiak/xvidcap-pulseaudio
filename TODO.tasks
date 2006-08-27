@@ -64,7 +64,7 @@ xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e
 </comment>
     </item>
     <item>
-      <attribute id="1156622581" priority="1" done="0" start_date="732549" enddate="99999999" notify="0" endtime="-60" last_edited="1156622581"/>
+      <attribute id="1156622581" priority="1" done="1" start_date="732549" completed_date="732550" notify="0" last_edited="1156677116"/>
       <summary>add intltool-* to extra dists</summary>
       <comment></comment>
     </item>

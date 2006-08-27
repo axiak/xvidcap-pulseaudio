@@ -134,7 +134,11 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->cap_width = 192;
     lapp->cap_height = 144;
     lapp->rescale = 100;
+#ifdef USE_FFMPEG
     lapp->default_mode = 1;
+#else 
+    lapp->default_mode = 0;
+#endif // USE_FFMPEG
 
     // initialzie options specific to either single- or multi-frame
     // capture
