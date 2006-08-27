@@ -15,7 +15,10 @@ xvidcapdoc_DATA = \
 	NEWS
 
 EXTRA_DIST = $(xvidcapdoc_DATA) \
-    autogen.sh
+    autogen.sh \
+    intltool-extract.in \
+    intltool-merge.in \
+    intltool-update.in
 
 # Copy all the spec files. Of cource, only one is actually used.
 dist-hook:

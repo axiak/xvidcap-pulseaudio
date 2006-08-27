@@ -63,6 +63,11 @@ may need testing withouth SMP</comment>
 xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e0, outbuf 0x871d498, Gr&#xF6;&#xDF;e 27648, frame 0x8710170
 </comment>
     </item>
+    <item>
+      <attribute id="1156622581" priority="1" done="0" start_date="732549" enddate="99999999" notify="0" endtime="-60" last_edited="1156622581"/>
+      <summary>add intltool-* to extra dists</summary>
+      <comment></comment>
+    </item>
   </category>
   <category title="Business" place="1"/>
   <category title="Unfiled" place="2"/>
