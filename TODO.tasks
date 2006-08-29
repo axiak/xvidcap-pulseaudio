@@ -56,14 +56,6 @@ this seems to be happening more often with heavy load
 may need testing withouth SMP</comment>
     </item>
     <item>
-      <attribute id="1156599684" priority="1" done="0" start_date="732549" enddate="99999999" notify="0" endtime="-60" last_edited="1156599726"/>
-      <summary>ppm/pgm does not work</summary>
-      <comment>kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --sf --file /tmp/test-%04d.pgm
-[pgm @ 0x83c7dfc]encoded frame too large
-xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e0, outbuf 0x871d498, Gr&#xF6;&#xDF;e 27648, frame 0x8710170
-</comment>
-    </item>
-    <item>
       <attribute id="1156622581" priority="1" done="1" start_date="732549" completed_date="732550" notify="0" last_edited="1156677116"/>
       <summary>add intltool-* to extra dists</summary>
       <comment/>
@@ -79,6 +71,14 @@ xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e
       <comment>23.97 is not accepted as a valid framerate
 
 ffmpeg changed fractional time handling</comment>
+    </item>
+    <item>
+      <attribute id="1156599684" priority="1" done="1" start_date="732549" completed_date="732552" notify="0" last_edited="1156866152"/>
+      <summary>ppm/pgm does not work</summary>
+      <comment>kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --sf --file /tmp/test-%04d.pgm
+[pgm @ 0x83c7dfc]encoded frame too large
+xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e0, outbuf 0x871d498, Gr&#xF6;&#xDF;e 27648, frame 0x8710170
+</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

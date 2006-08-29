@@ -2,6 +2,7 @@
 2006-08-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/codecs.c: removed fraction fps rates till xvidcap is adapted
 		to changed fractional timing handling in ffmpeg
+	* src/xtoffmpeg.c: fixed ppm/pgm encoding
 
 2006-08-28  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* debian/files,debian/changelog,debian/rules: version bump

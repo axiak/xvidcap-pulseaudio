@@ -1247,8 +1247,8 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         /* 
          * prepare output buffer for encoded frames 
          */
-        if (image_size < FF_MIN_BUFFER_SIZE) outbuf_size = FF_MIN_BUFFER_SIZE;
-        else outbuf_size = image_size;
+        if ((image_size + 200) < FF_MIN_BUFFER_SIZE) outbuf_size = FF_MIN_BUFFER_SIZE;
+        else outbuf_size = image_size + 200;
         outbuf = malloc(outbuf_size);
         if (!outbuf) {
             fprintf(stderr,
