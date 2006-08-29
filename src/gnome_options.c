@@ -297,7 +297,7 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         int i, n = -1;
     
         for ( i = CAP_MF; i < NUMCAPS && n < 0; i++ ) { 
-            if ( strcasecmp(format_combo_entries[i],selected_format)==0 ) 
+            if ( strcasecmp(format_combo_entries[i-1],selected_format)==0 ) 
                 n = i + 1; 
 #ifdef DEBUG
             printf("%s %s: %s = %s ? %i\n", DEBUGFILE, DEBUGFUNCTION, format_combo_entries[i], selected_format, i);

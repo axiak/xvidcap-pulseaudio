@@ -1,4 +1,8 @@
-xvidcap (1.1.4-pre3) unstable; urgency=low
+xvidcap (1.1.4-rc1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Karl H. Beckers <karl.h.beckers@gmx.net>  Fri, 27 Aug 2006 22:40:42 +0200
 
   * New upstream release.
 

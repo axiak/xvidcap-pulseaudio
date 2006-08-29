@@ -107,7 +107,9 @@ const xvCodec mpeg1 = {
     300000,
     24,
     NULL,
-    "23.976|24|25|29.97|30|50|59.94|60"
+    "24|25|30|50|60"
+    // FIXME: adapt to ffmpeg's new fractional fps handling
+    //    "23.976|24|25|29.97|30|50|59.94|60"
 };
 
 const xvCodec mjpeg = {
@@ -177,7 +179,10 @@ const xvCodec dv = {
     300000,
     25,
     NULL,
-    "25|29.97"
+    "25"
+    // FIXME: adapt to ffmpeg's new fractional fps handling
+    //    "25|29.97"
+    
 };
 
 const xvCodec mpeg2 = {
@@ -188,7 +193,9 @@ const xvCodec mpeg2 = {
     300000,
     24,
     NULL,
-    "23.976|24|25|29.97|30|50|59.94|60"
+    "24|25|30|50|60"
+    // FIXME: adapt to ffmpeg's new fractional fps handling
+    //    "23.976|24|25|29.97|30|50|59.94|60"
 };
 
 const xvCodec svq1 = {
