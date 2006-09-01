@@ -421,7 +421,6 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         printf("%s %s: saving audio codec: %i \n", 
                     DEBUGFILE, DEBUGFUNCTION, lapp->multi_frame.au_targetCodec); 
 #endif // DEBUG 
-printf("%s %s: selected audio codec: %s\n", DEBUGFILE, DEBUGFUNCTION, selected_aucodec);
         g_assert( aucodec >= 0 );
         lapp->multi_frame.au_targetCodec = aucodec;
     }

@@ -490,10 +490,11 @@ const xvFFormat mov = {
     CODEC_MPEG4,
     "MPEG4|SVQ1|DV",
 #ifdef HAVE_FFMPEG_AUDIO
-    AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
+    AU_CODEC_MP3,
     "MP2|MP3|PCM16" //,
 #else
+    AU_CODEC_PCM16,
     "MP2|PCM16" //,
 #endif                          // HAVE_LIBMP3LAME
 #else
