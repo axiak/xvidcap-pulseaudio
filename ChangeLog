@@ -1,4 +1,7 @@
 
+2006-09-01  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in: fixed remainder of bug # 1109935
+
 2006-08-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/codecs.c: removed fraction fps rates till xvidcap is adapted
 		to changed fractional timing handling in ffmpeg

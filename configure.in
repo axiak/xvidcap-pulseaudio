@@ -204,6 +204,42 @@ fi
 AC_CHECK_LIB(m,pow,,echo "libm required by ffmpeg"; static_avcodec=no; static_avformat=no; static_avutil=no)
 #########################################################
 
+################################################################
+# check for libmp3lame
+################################################################
+
+AC_CHECK_LIB(mp3lame, lame_init,,
+					[echo "To use mp3 audio codecs you need liblame/liblame-dev"])
+AM_CONDITIONAL(HAVE_LIBMP3LAME, test x$ac_cv_lib_mp3lame_lame_init = xyes)
+
+################################################################
+# check for threading libraries
+################################################################
+
+AC_CHECK_LIB(pthread, pthread_mutex_init)
+# set config.h define
+AM_CONDITIONAL(HAVE_PTHREAD,[test x$ac_cv_lib_pthread_pthread_mutex_init = xyes])
+if ( `test x${ac_cv_lib_pthread_pthread_mutex_init} = xno` ) ; then
+	# haven't found libpthread
+	if ( `test x${FREEBSD_TRUE} = "x"` ) ; then
+		# On FreeBSD try -lc_r ... thanks to Oyvind Hallsteinsen
+		if ( test -x /sbin/sysctl ) ; then
+	 		ac_my_freebsd_release=`/sbin/sysctl -n kern.osreldate`
+		else
+	 		ac_my_freebsd_release=`/usr/sbin/sysctl -n kern.osreldate`
+		fi	
+		if ( expr ${ac_my_freebsd_release} \< 500016 ) ; then
+			LIBS="${LIBS} -pthread"
+		else
+			LIBS="${LIBS} -lc_r"
+		fi
+	else
+		# if we don't have threads, we can't record 
+        echo "xvidcap requires libpthread for recording. This machine doesn't have the libraries and/or header files installed."
+        exit
+	fi
+fi
+
 #########################################################
 # avcodec/avformat
 # test static linking first, if requested ... if not, or not found, reset cache
@@ -215,11 +251,13 @@ dnl 	AC_CHECK_LIB_STATIC(avutil, av_rescale,,[unset ac_cv_lib_avutil_av_rescale]
 dnl 	static_avutil=$ac_my_static_avutil_save
 dnl fi
 
+test x$ac_cv_lib_mp3lame_lame_init = xyes && ac_my_ffmpeg_cfg_lame_switch="--enable-mp3lame"
+
 # if cache empty (not tested or failed) and want static avcodec (then it failed) ...
 if ( `test \( \( x${ac_cv_lib_avutil_av_rescale+set} = x \) -a \( x$static_avutil = xyes \) \)` ) ; then
 	# build embedded ffmpeg
 ## new swscaler might be interesting ##	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} --enable-gpl --enable-mp3lame --enable-pthreads --enable-swscaler --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ${MAKE-make} )
-	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} --enable-mp3lame --enable-pthreads --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ${MAKE-make} )
+	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} ${ac_my_ffmpeg_cfg_lame_switch} --enable-pthreads --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ${MAKE-make} )
 	# try to link it statically, or reset cache, set static_avcodec=no
 	top_srcdir=`pwd`
 	ac_my_ldflags_save=${LDFLAGS} ; LDFLAGS="${LDFLAGS} -L$top_srcdir/ffmpeg/libavcodec -L$top_srcdir/ffmpeg/libavformat -L$top_srcdir/ffmpeg/libavutil"
@@ -267,42 +305,6 @@ fi
 AM_CONDITIONAL(STATIC_AVFORMAT,[test x$static_avformat = xyes])
 AM_CONDITIONAL(STATIC_AVCODEC,[test x$static_avcodec = xyes])
 AM_CONDITIONAL(STATIC_AVUTIL,[test x$static_avutil = xyes])
-
-################################################################
-# check for libmp3lame
-################################################################
-
-AC_CHECK_LIB(mp3lame, lame_init,,
-					[echo "To use mp3 audio codecs you need liblame/liblame-dev"])
-AM_CONDITIONAL(HAVE_LIBMP3LAME, test x$ac_cv_lib_mp3lame_lame_init = xyes)
-
-################################################################
-# check for threading libraries
-################################################################
-
-AC_CHECK_LIB(pthread, pthread_mutex_init)
-# set config.h define
-AM_CONDITIONAL(HAVE_PTHREAD,[test x$ac_cv_lib_pthread_pthread_mutex_init = xyes])
-if ( `test x${ac_cv_lib_pthread_pthread_mutex_init} = xno` ) ; then
-	# haven't found libpthread
-	if ( `test x${FREEBSD_TRUE} = "x"` ) ; then
-		# On FreeBSD try -lc_r ... thanks to Oyvind Hallsteinsen
-		if ( test -x /sbin/sysctl ) ; then
-	 		ac_my_freebsd_release=`/sbin/sysctl -n kern.osreldate`
-		else
-	 		ac_my_freebsd_release=`/usr/sbin/sysctl -n kern.osreldate`
-		fi	
-		if ( expr ${ac_my_freebsd_release} \< 500016 ) ; then
-			LIBS="${LIBS} -pthread"
-		else
-			LIBS="${LIBS} -lc_r"
-		fi
-	else
-		# if we don't have threads, we can't record 
-        echo "xvidcap requires libpthread for recording. This machine doesn't have the libraries and/or header files installed."
-        exit
-	fi
-fi
 
 ################################################################
 ################################################################
