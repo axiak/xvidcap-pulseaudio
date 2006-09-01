@@ -847,9 +847,11 @@ on_xvc_ctrl_m1_mitem_autocontinue_activate(GtkMenuItem * menuitem,
                                            (menuitem), FALSE);
         } else {
             jobp->flags |= FLG_AUTO_CONTINUE;
+            app->flags |= FLG_AUTO_CONTINUE;
         }
     } else {
         jobp->flags &= ~FLG_AUTO_CONTINUE;
+        app->flags &= ~FLG_AUTO_CONTINUE;
     }
     #undef DEBUGFUNCTION
 }
@@ -2196,7 +2198,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
                                  "xvc_ctrl_m1_mitem_autocontinue");
         g_assert(w);
 
-        if (jobp->flags & FLG_AUTO_CONTINUE) {
+        if ((jobp->flags & FLG_AUTO_CONTINUE) != 0) {
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
             gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(w), TRUE);
         } else {

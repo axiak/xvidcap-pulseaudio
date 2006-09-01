@@ -434,8 +434,15 @@ Boolean xvc_read_options_file()
                                 _("reading unsupported show_time value from options file\nresetting to display frame counter\n"));
                     }
                 } else if (strcasecmp(token, "auto_continue") == 0) {
-                    if (value)
+                    if (atoi(value) == 1)
                         app->flags |= FLG_AUTO_CONTINUE;
+                    else if (atoi(value) == 0)
+                        app->flags &= ~FLG_AUTO_CONTINUE;
+                    else {
+                        app->flags |= FLG_AUTO_CONTINUE;
+                        fprintf(stderr,
+                                _("reading unsupported auto_continue value from options file\nresetting to autocontinue enabled.\n"));
+                    }
                 } else if (strcasecmp(token, "always_show_results") == 0) {
                     if (atoi(value) == 1)
                         app->flags |= FLG_ALWAYS_SHOW_RESULTS;
