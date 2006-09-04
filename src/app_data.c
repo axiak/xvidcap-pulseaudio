@@ -616,46 +616,49 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         // return errors;
     }
 #ifdef HAVE_FFMPEG_AUDIO
-    if (t_format < CAP_FFM && target->au_targetCodec != CODEC_NONE) {
-        errors = xvc_errors_append(24, errors, lapp);
-        if (!errors) {
-            *rc = -1;
-            return NULL;
-        }
-    } else
-    if (target->target == CODEC_NONE
-            && target->au_targetCodec != CODEC_NONE) {
-        // if target is auto-detected we also want to auto-detect
-        // au_targetCodec
-        errors = xvc_errors_append(25, errors, lapp);
-        if (!errors) {
-            *rc = -1;
-            return NULL;
-        }
-    } 
-    // a failure of xvc_is_element (...) is only relevant if
-    // allowed_au_codecs
-    // is not NULL
-    else if (tFFormats[t_format].allowed_au_codecs &&
-               (!xvc_is_element(tFFormats[t_format].allowed_au_codecs,
+    // only check audio settings if audio capture is enabled
+    if ( target->audioWanted == 1 ) {
+        if (t_format < CAP_FFM && target->au_targetCodec != CODEC_NONE) {
+            errors = xvc_errors_append(24, errors, lapp);
+            if (!errors) {
+                *rc = -1;
+                return NULL;
+            }
+        } else
+        if (target->target == CODEC_NONE
+                && target->au_targetCodec != CODEC_NONE) {
+            // if target is auto-detected we also want to auto-detect
+            // au_targetCodec
+            errors = xvc_errors_append(25, errors, lapp);
+            if (!errors) {
+                *rc = -1;
+                return NULL;
+            }
+        } 
+        // a failure of xvc_is_element (...) is only relevant if
+        // allowed_au_codecs
+        // is not NULL
+        else if (tFFormats[t_format].allowed_au_codecs &&
+                (!xvc_is_element(tFFormats[t_format].allowed_au_codecs,
                                 tAuCodecs[t_au_codec].name))) {
-        errors = xvc_errors_append(26, errors, lapp);
-        if (!errors) {
-            *rc = -1;
-            return NULL;
-        }
-        // FIXME: do I need to return here?
-        // *rc = 1;
-        // return errors;
-    } 
-    else if (tFFormats[t_format].allowed_au_codecs == NULL
-               && target->audioWanted) {
-        errors =
-            xvc_errors_append((lapp->current_mode == 0) ? 42 : 43, errors,
-                              lapp);
-        if (!errors) {
-            *rc = -1;
-            return NULL;
+            errors = xvc_errors_append(26, errors, lapp);
+            if (!errors) {
+                *rc = -1;
+                return NULL;
+            }
+            // FIXME: do I need to return here?
+            // *rc = 1;
+            // return errors;
+        } 
+        else if (tFFormats[t_format].allowed_au_codecs == NULL
+                && target->audioWanted) {
+            errors =
+                xvc_errors_append((lapp->current_mode == 0) ? 42 : 43, errors,
+                                lapp);
+            if (!errors) {
+                *rc = -1;
+                return NULL;
+            }
         }
     }
 #endif // HAVE_FFMPEG_AUDIO
@@ -918,46 +921,49 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
             // return errors;
         }
 #ifdef HAVE_FFMPEG_AUDIO
-        // does au_targetCodec match target
-        if (t_format < CAP_FFM && non_target->au_targetCodec != CODEC_NONE) {
-            errors = xvc_errors_append(24, errors, lapp);
-            if (!errors) {
-                *rc = -1;
-                return NULL;
-            }
-        } else
+        // only check audio settings if audio capture is enabled
+        if ( non_target->audioWanted == 1 ) {
+            // does au_targetCodec match target
+            if (t_format < CAP_FFM && non_target->au_targetCodec != CODEC_NONE) {
+                errors = xvc_errors_append(24, errors, lapp);
+                if (!errors) {
+                    *rc = -1;
+                    return NULL;
+                }
+            } else
 
-        if (non_target->target == CODEC_NONE
-                && non_target->au_targetCodec != CODEC_NONE) {
-            // if target is auto-detected we also want to auto-detect
-            // au_targetCodec
-            errors = xvc_errors_append(25, errors, lapp);
-            if (!errors) {
-                *rc = -1;
-                return NULL;
-            }
-            // a failure of xvc_is_element (...) is only relevant if
-            // allowed_au_codecs
-            // is not NULL
-        } else if (tFFormats[t_format].allowed_au_codecs &&
-                   (!xvc_is_element(tFFormats[t_format].allowed_au_codecs,
+            if (non_target->target == CODEC_NONE
+                    && non_target->au_targetCodec != CODEC_NONE) {
+                // if target is auto-detected we also want to auto-detect
+                // au_targetCodec
+                errors = xvc_errors_append(25, errors, lapp);
+                if (!errors) {
+                    *rc = -1;
+                    return NULL;
+                }
+                // a failure of xvc_is_element (...) is only relevant if
+                // allowed_au_codecs
+                // is not NULL
+            } else if (tFFormats[t_format].allowed_au_codecs &&
+                    (!xvc_is_element(tFFormats[t_format].allowed_au_codecs,
                                     tAuCodecs[t_au_codec].name))) {
-            errors = xvc_errors_append(26, errors, lapp);
-            if (!errors) {
-                *rc = -1;
-                return NULL;
-            }
-            // FIXME: do I need to return here?
-            // *rc = 1;
-            // return errors;
-        } else if (tFFormats[t_format].allowed_au_codecs == NULL
-                   && non_target->audioWanted) {
-            errors =
-                xvc_errors_append((lapp->current_mode == 1) ? 42 : 43,
-                                  errors, lapp);
-            if (!errors) {
-                *rc = -1;
-                return NULL;
+                errors = xvc_errors_append(26, errors, lapp);
+                if (!errors) {
+                    *rc = -1;
+                    return NULL;
+                }
+                // FIXME: do I need to return here?
+                // *rc = 1;
+                // return errors;
+            } else if (tFFormats[t_format].allowed_au_codecs == NULL
+                    && non_target->audioWanted) {
+                errors =
+                    xvc_errors_append((lapp->current_mode == 1) ? 42 : 43,
+                                    errors, lapp);
+                if (!errors) {
+                    *rc = -1;
+                    return NULL;
+                }
             }
         }
 #endif // HAVE_FFMPEG_AUDIO        

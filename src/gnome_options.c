@@ -82,6 +82,8 @@ static int OK_attempts = 0;
 static xvErrorListItem *errors_after_cli = NULL;
 
 
+static int mf_format_combo_get_target_from_text(char *text);
+
 // first callbacks here ...
 // 
 // 
@@ -294,19 +296,9 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         g_assert(w);
 
         char *selected_format = (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(w)); 
-        int i, n = -1;
-    
-        for ( i = CAP_MF; i < NUMCAPS && n < 0; i++ ) { 
-            if ( strcasecmp(format_combo_entries[i-1],selected_format)==0 ) 
-                n = i + 1; 
-#ifdef DEBUG
-            printf("%s %s: %s = %s ? %i\n", DEBUGFILE, DEBUGFUNCTION, format_combo_entries[i], selected_format, i);
-#endif // DEBUG
-        }
-#ifdef DEBUG
-        printf("%s %s: found format %s as %i \n", DEBUGFILE, DEBUGFUNCTION, selected_format, n);
-#endif // DEBUG
+        int n = -1;
 
+        n = mf_format_combo_get_target_from_text(selected_format);
         g_assert( n >= 1 );
         lapp->multi_frame.target = n;
     }
@@ -401,7 +393,7 @@ static void read_app_data_from_pref_gui(AppData * lapp)
     
     if ( gtk_toggle_button_get_active ( GTK_TOGGLE_BUTTON( w ) ) ) { 
         lapp->multi_frame.au_targetCodec = 0; 
-    } else { 
+    } else {    
         w = NULL;
         w = glade_xml_get_widget(xml, "xvc_pref_mf_audio_codec_combobox");
         g_assert(w);
@@ -419,7 +411,7 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         } 
 #ifdef DEBUG 
         printf("%s %s: saving audio codec: %i \n", 
-                    DEBUGFILE, DEBUGFUNCTION, lapp->multi_frame.au_targetCodec); 
+                    DEBUGFILE, DEBUGFUNCTION, aucodec); 
 #endif // DEBUG 
         g_assert( aucodec >= 0 );
         lapp->multi_frame.au_targetCodec = aucodec;
@@ -1145,11 +1137,11 @@ static int mf_format_combo_get_target_from_text(char *text) {
 #ifdef USE_FFMPEG
     int a, b = -1;
 
-    for ( a = (CAP_MF-1); a < (NUMCAPS-1) && b < 0; a++ ) { 
-        if (strcasecmp(format_combo_entries[a], text)==0) b = a; 
+    for ( a = CAP_MF; a < NUMCAPS && b < 0; a++ ) { 
+        if (strcasecmp(format_combo_entries[a-1], text)==0) b = a; 
     } 
     
-    return (b + 1); 
+    return b; 
 #endif // USE_FFMPEG
     return 0;
 }
