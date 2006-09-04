@@ -90,6 +90,7 @@ void usage(char *prog)
     printf
         (_("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"));
     printf(_("[--rescale #] relative output size in percent compared to input (1-100)\n"));
+    printf(_("[--quality #] recording quality (1-100)\n"));
     printf(_("[--start_no #] start number for the file names\n"));
 #ifdef HAVE_SHMAT
     printf(_("[--source <src>] select input source: x11, shm\n"));

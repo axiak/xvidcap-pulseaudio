@@ -2,11 +2,6 @@
 <gtodo>
   <category title="Personal" place="0">
     <item>
-      <attribute id="1153068417" priority="1" done="0" start_date="732508" enddate="99999999" notify="0" endtime="-60" last_edited="1153068417"/>
-      <summary>fix man page</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1155901525" priority="1" done="0" start_date="732541" enddate="99999999" notify="0" endtime="-60" last_edited="1155901525"/>
       <summary>warning dialog text</summary>
       <comment>	... does not match all situations.
@@ -40,11 +35,6 @@ jetzt tut's audio mit flash dennoch nicht
     <item>
       <attribute id="1156332643" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332643"/>
       <summary>revisit i18n</summary>
-      <comment/>
-    </item>
-    <item>
-      <attribute id="1156353110" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156353110"/>
-      <summary>soerensen encoding buggy</summary>
       <comment/>
     </item>
     <item>
@@ -83,6 +73,21 @@ xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e
     <item>
       <attribute id="1157041213" priority="1" done="0" start_date="732554" enddate="99999999" notify="0" endtime="-60" last_edited="1157041213"/>
       <summary>revisit bitrate calculation</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156353110" priority="1" done="1" start_date="732546" completed_date="732555" notify="0" last_edited="1157109121"/>
+      <summary>soerensen encoding buggy</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1157113162" priority="1" done="0" start_date="732555" enddate="99999999" notify="0" endtime="-60" last_edited="1157113162"/>
+      <summary>results dialog with fps &lt; 1</summary>
+      <comment>makes results dialog act weird</comment>
+    </item>
+    <item>
+      <attribute id="1153068417" priority="1" done="1" start_date="732508" completed_date="732558" notify="0" last_edited="1157369461"/>
+      <summary>fix man page</summary>
       <comment></comment>
     </item>
   </category>
