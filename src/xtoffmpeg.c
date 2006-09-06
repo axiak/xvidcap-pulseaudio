@@ -401,9 +401,9 @@ add_audio_stream (Job* job) {
             exit(1);
         }
 
-//#ifdef DEBUG
+#ifdef DEBUG
     printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE, DEBUGFUNCTION, output_file->nb_streams);
-//#endif // DEBUG
+#endif // DEBUG
     #undef DEBUGFUNCTION
 }
 
@@ -971,9 +971,9 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
      out_st->time_base.den = out_st->codec->time_base.den;
      out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / out_st->time_base.den; */
 
-//#ifdef DEBUG
+#ifdef DEBUG
     printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE, DEBUGFUNCTION, oc->nb_streams);
-//#endif // DEBUG
+#endif // DEBUG
 
     return st;
 
