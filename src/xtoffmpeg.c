@@ -55,6 +55,34 @@
 #define PIX_FMT_ARGB32 PIX_FMT_RGBA32   // this is just my personal
 // convenience
 
+
+typedef struct PacketDesc {
+	    int64_t pts;
+	        int64_t dts;
+		    int size;
+		        int unwritten_size;
+			    int flags;
+			        struct PacketDesc *next;
+} PacketDesc;
+
+typedef struct {
+	    FifoBuffer fifo;
+	        uint8_t id;
+		    int max_buffer_size; /* in bytes */
+		        int buffer_index;
+			    PacketDesc *predecode_packet;
+			        PacketDesc *premux_packet;
+				    PacketDesc **next_packet;
+				        int packet_number;
+					    uint8_t lpcm_header[3];
+					        int lpcm_align;
+						    uint8_t *fifo_iframe_ptr;
+						        int align_iframe;
+							    int64_t vobu_start_pts;
+} StreamInfo;
+
+
+
 /* 
  * globals
  *
@@ -373,9 +401,9 @@ add_audio_stream (Job* job) {
             exit(1);
         }
 
-#ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+//#ifdef DEBUG
+    printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE, DEBUGFUNCTION, output_file->nb_streams);
+//#endif // DEBUG
     #undef DEBUGFUNCTION
 }
 
@@ -943,9 +971,9 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
      out_st->time_base.den = out_st->codec->time_base.den;
      out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / out_st->time_base.den; */
 
-#ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+//#ifdef DEBUG
+    printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE, DEBUGFUNCTION, oc->nb_streams);
+//#endif // DEBUG
 
     return st;
 
@@ -1148,6 +1176,12 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
                     DEBUGFILE, DEBUGFUNCTION); 
             exit (1); 
         } 
+//	output_file->packet_size= mux_packet_size;
+//    	output_file->mux_rate= mux_rate;
+        output_file->preload= (int)(0.5 * AV_TIME_BASE);
+	output_file->max_delay= (int)(0.7 * AV_TIME_BASE);
+//	output_file->loop_output = loop_output;
+
         
         // add the video stream and initialize the codecs 
         //
@@ -1321,6 +1355,8 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
                         DEBUGFILE, DEBUGFUNCTION);
                 exit(1);
             }
+
+
         }
         
 #ifdef DEBUG
@@ -1473,6 +1509,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         }
     }
 #endif                          // HAVE_FFMPEG_AUDIO
+
     /* 
      * write frame to file 
      */

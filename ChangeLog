@@ -5,6 +5,7 @@
 	* src: app_data.c, app_data.h, gnome_ui.c, gnome_options.c: fix
 		command execution (animate etc.) to handle floating point
 		values for time_pre_frame, needed for fps < 1
+	* src/xtoffmpeg.c: fixed buffer underflows with m2v format
 
 2006-09-05  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/gnome_ui.c: fix results dialog's calculation of actual
