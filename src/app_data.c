@@ -2337,17 +2337,21 @@ void xvc_errors_write_action_msg(int code)
  * width : width
  * height : height
  * fps : fps
- * time : time per frame
  *
  */
 void
 xvc_command_execute(char *command, int flag, int number, char *file,
                     int fframe, int lframe, int width, int height,
-                    int fps, int time)
+                    int fps)
 {
+    #define DEBUGFUNCTION "xvc_command_execute()"
     int buflength = (PATH_MAX * 5) + 1;
     char buf[buflength];
     char *myfile = NULL;
+
+#ifdef DEBUG
+    printf("%s %s: Entering with flag '%i'\n", DEBUGFILE, DEBUGFUNCTION, flag);
+#endif // DEBUG
 
     switch (flag) {
     case 0:
@@ -2397,13 +2401,16 @@ xvc_command_execute(char *command, int flag, int number, char *file,
         break;
 
     }
-    snprintf(buf, buflength,
-             "XVFFRAME=\"%i\" XVLFRAME=\"%i\" XVWIDTH=\"%i\" XVHEIGHT=\"%i\" XVFPS=\"%f\" XVTIME=\"%i\" XVFILE=\"%s\" ; %s",
-             fframe, lframe, width, height, ((float) fps / 100), time,
+    
+    snprintf(buf, buflength, 
+             "XVFFRAME=\"%i\" XVLFRAME=\"%i\" XVWIDTH=\"%i\" XVHEIGHT=\"%i\" XVFPS=\"%f\" XVTIME=\"%f\" XVFILE=\"%s\" ; %s",
+             fframe, lframe, width, height, ((float) fps / 100), 
+             (float) 1000 / ((float) fps / 100),
              myfile, command);
 
-
-    // printf("calling: '%s'\n", buf);
+#ifdef DEBUG
+    printf("%s %s: calling: '%s'\n", DEBUGFILE, DEBUGFUNCTION, buf);
+#endif // DEBUG
     system(buf);
 
     // sf-animate: flag 1
@@ -2413,7 +2420,11 @@ xvc_command_execute(char *command, int flag, int number, char *file,
     // ${XVHEIGHT} ${XVFPS} ${XVTIME} &
     // sf-edit: flag 2
     // gimp "${XVFILE}" &
-
+    
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG    
+    #undef DEBUGFUNCTION
 }
 
 

@@ -54,6 +54,7 @@
 
 #define DEBUGFILE "main.c"
 
+typedef void (*sighandler_t)(int);
 
 /* 
  * GLOBAL VARIABLES 
@@ -601,12 +602,12 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
     if (argc != optind)
         usage(_argv[0]);
 
+    #undef DEBUGFUNCTION
 }
 
 
 CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
 {
-    #undef DEBUGFUNCTION
     #define DEBUGFUNCTION "merge_cli_options()"
     int current_mode_by_filename = -1, current_mode_by_target = -1;
     CapTypeOptions *target;
@@ -699,14 +700,49 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
 
     return target;
 
+    #undef DEBUGFUNCTION
 }
 
 
-void cleanup_when_interrupted(int signal)
-{
-    Job *job = xvc_job_ptr();
+static sighandler_t
+my_signal_add(int sig_nr, sighandler_t sighandler) {
+    struct sigaction neu_sig, alt_sig;
     
-    if (job) xvc_capture_stop_signal(TRUE);
+    neu_sig.sa_handler = sighandler;
+    sigemptyset(&neu_sig.sa_mask);
+    neu_sig.sa_flags = SA_ONESHOT;
+    if (sigaction(sig_nr, &neu_sig, &alt_sig) < 0)
+        return SIG_ERR;
+    return alt_sig.sa_handler;
+}
+
+
+void 
+xvc_signal_handler(int signal)
+{
+    #define DEBUGFUNCTION "xvc_signal_handler()"
+    Job * job = NULL;
+#ifdef DEBUG
+            printf("%s %s: Entering with sigal %i\n",
+                    DEBUGFILE, DEBUGFUNCTION, signal);
+#endif // DEBUG
+    
+    switch (signal) {
+        case SIGINT:
+            job = xvc_job_ptr();
+            if (job) xvc_capture_stop_signal(TRUE);
+            break;
+        case SIGALRM:
+            my_signal_add(SIGALRM, xvc_signal_handler);
+            break;
+        default:
+            break;
+    }
+
+#ifdef DEBUG
+            printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+    #undef DEBUGFUNCTION
 }
 
 
@@ -851,7 +887,10 @@ int main(int argc, char *argv[])
         print_current_settings(target);
     }
 
-    signal(SIGINT, cleanup_when_interrupted);
+    // signal handling for --gui no operation (CTRL-C) and 
+    // unsleeping the recoring thread on stop
+    my_signal_add(SIGALRM, xvc_signal_handler);
+    my_signal_add(SIGINT, xvc_signal_handler);
 
     // this is a hook for the GUI's main loop
     resultCode = xvc_ui_run();

@@ -1754,8 +1754,7 @@ on_xvc_pref_commands_sf_play_try_button_clicked(GtkButton * button, gpointer use
     xvc_command_execute (curr_play_cmd, 1, 0, 
             pref_app.single_frame.file, pref_app.single_frame.start_no,
             (pref_app.single_frame.start_no+1), pref_app.cap_width,
-            pref_app.cap_height, pref_app.single_frame.fps, 
-            (int) (1000 / (pref_app.single_frame.fps/100)) ); 
+            pref_app.cap_height, pref_app.single_frame.fps); 
     
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1784,8 +1783,7 @@ on_xvc_pref_commands_sf_encode_try_button_clicked(GtkButton * button, gpointer u
     xvc_command_execute (curr_encode_cmd, 0, 0, 
             pref_app.single_frame.file, pref_app.single_frame.start_no,
             (pref_app.single_frame.start_no+1), pref_app.cap_width,
-            pref_app.cap_height, pref_app.single_frame.fps, 
-            (int) (1000 / (pref_app.single_frame.fps/100)) ); 
+            pref_app.cap_height, pref_app.single_frame.fps); 
     
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1814,8 +1812,7 @@ on_xvc_pref_commands_sf_edit_try_button_clicked(GtkButton * button, gpointer use
     xvc_command_execute (curr_edit_cmd, 2,
             pref_app.single_frame.start_no, pref_app.single_frame.file,
             pref_app.single_frame.start_no, (pref_app.single_frame.start_no+1), 
-            pref_app.cap_width, pref_app.cap_height, pref_app.single_frame.fps, 
-            (int) (1000 / (pref_app.single_frame.fps/100)) ); 
+            pref_app.cap_width, pref_app.cap_height, pref_app.single_frame.fps); 
     
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1845,8 +1842,7 @@ on_xvc_pref_commands_mf_play_try_button_clicked(GtkButton * button, gpointer use
     xvc_command_execute (curr_play_cmd, 2, 0,
             pref_app.multi_frame.file, pref_app.multi_frame.start_no,
             (pref_app.multi_frame.start_no+1), pref_app.cap_width,
-            pref_app.cap_height, pref_app.multi_frame.fps, (int) (1000 /
-            (pref_app.multi_frame.fps/100)) ); 
+            pref_app.cap_height, pref_app.multi_frame.fps); 
     
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1877,8 +1873,7 @@ on_xvc_pref_commands_mf_encode_try_button_clicked(GtkButton * button, gpointer u
     xvc_command_execute (curr_encode_cmd, 2, 0, 
             pref_app.multi_frame.file, pref_app.multi_frame.start_no,
             (pref_app.multi_frame.start_no+1), pref_app.cap_width,
-            pref_app.cap_height, pref_app.multi_frame.fps, (int) (1000 /
-            (pref_app.multi_frame.fps/100)) ); 
+            pref_app.cap_height, pref_app.multi_frame.fps); 
     
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1909,8 +1904,7 @@ on_xvc_pref_commands_mf_edit_try_button_clicked(GtkButton * button, gpointer use
     xvc_command_execute (curr_edit_cmd, 2, 0,
             pref_app.multi_frame.file, pref_app.multi_frame.start_no,
             (pref_app.multi_frame.start_no+1), pref_app.cap_width,
-            pref_app.cap_height, pref_app.multi_frame.fps, (int) (1000 /
-            (pref_app.multi_frame.fps/100)) ); 
+            pref_app.cap_height, pref_app.multi_frame.fps); 
     
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);

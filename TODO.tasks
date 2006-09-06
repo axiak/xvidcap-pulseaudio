@@ -81,13 +81,23 @@ xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e
       <comment/>
     </item>
     <item>
-      <attribute id="1157113162" priority="1" done="0" start_date="732555" enddate="99999999" notify="0" endtime="-60" last_edited="1157113162"/>
+      <attribute id="1153068417" priority="1" done="1" start_date="732508" completed_date="732558" notify="0" last_edited="1157369461"/>
+      <summary>fix man page</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1157113162" priority="1" done="1" start_date="732555" completed_date="732559" notify="0" last_edited="1157471419"/>
       <summary>results dialog with fps &lt; 1</summary>
       <comment>makes results dialog act weird</comment>
     </item>
     <item>
-      <attribute id="1153068417" priority="1" done="1" start_date="732508" completed_date="732558" notify="0" last_edited="1157369461"/>
-      <summary>fix man page</summary>
+      <attribute id="1157470884" priority="1" done="1" start_date="732559" completed_date="732560" notify="0" last_edited="1157525452"/>
+      <summary>don't wait for next capture when stop pressed</summary>
+      <comment>may need to wake sleeping thread</comment>
+    </item>
+    <item>
+      <attribute id="1157525451" priority="1" done="1" start_date="732560" completed_date="732560" notify="0" last_edited="1157527178"/>
+      <summary>floating point exception when fps &lt; 1</summary>
       <comment></comment>
     </item>
   </category>

@@ -189,7 +189,7 @@ Boolean xvc_is_filename_mutable(char *);
 int xvc_get_int_from_float_string(char *input);
 void xvc_command_execute(char *command, int flag, int number,
                          char *file, int fframe, int lframe,
-                         int width, int height, int fps, int time);
+                         int width, int height, int fps);
 
 
 #endif                          // __APP_DATA_H__

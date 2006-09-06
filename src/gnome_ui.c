@@ -36,6 +36,7 @@
 #include <gnome.h>
 #include <glade/glade.h>
 #include <pthread.h>
+#include <signal.h>
 
 #include "led_meter.h"
 #include "job.h"
@@ -79,7 +80,8 @@ static xvErrorListItem *errors_after_cli = NULL;
 static int OK_attempts = 0;
 
 // those are for recording video in thread
-pthread_mutex_t recording_mutex, update_filename_mutex;
+pthread_mutex_t recording_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t update_filename_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t recording_condition_unpaused;
 static pthread_t recording_thread;
 static pthread_attr_t recording_thread_attr;
@@ -416,8 +418,26 @@ Boolean xvc_change_filename_display(int pic_no)
 
 void xvc_capture_stop_signal(Boolean wait) {
     #define DEBUGFUNCTION "xvc_capture_stop_signal()"
+    int status = -1;
+#ifdef DEBUG
+    printf("%s %s: Entering, should we wait? %i\n",
+                DEBUGFILE, DEBUGFUNCTION, wait);
+#endif // DEBUG
 
     job_set_state(VC_STOP);
+
+    if (recording_thread_running) {
+#ifdef DEBUG
+        printf("%s %s: stop pressed while recording\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+        // stop waiting for next frame to capture
+        status = pthread_kill(recording_thread, SIGALRM);
+#ifdef DEBUG
+        printf("%s %s: thread %p kill with rc %i\n", 
+                    DEBUGFILE, DEBUGFUNCTION, (void*) recording_thread, status);
+#endif // DEBUG
+    }
 
     if (wait) {
         while (recording_thread_running) {
@@ -425,6 +445,9 @@ void xvc_capture_stop_signal(Boolean wait) {
         }
     }
 
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
     #undef DEBUGFUNCTION
 }
 
@@ -868,14 +891,12 @@ on_xvc_ctrl_m1_mitem_make_activate(GtkMenuItem * menuitem,
         xvc_command_execute(app->single_frame.video_cmd, 0, 0,
                             jobp->file, jobp->start_no, jobp->pic_no,
                             jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
     } else {
         xvc_command_execute(app->multi_frame.video_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
                             jobp->pic_no, jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
     }
     #undef DEBUGFUNCTION
 }
@@ -905,7 +926,6 @@ on_xvc_ctrl_m1_mitem_quit_activate(GtkMenuItem * menuitem,
 }
 
 
-
 void do_record_thread(Job * job) {
     #define DEBUGFUNCTION "do_record_thread()"
 
@@ -915,7 +935,7 @@ void do_record_thread(Job * job) {
     printf("%s %s: Entering with state = %i and tid = %i\n", DEBUGFILE, DEBUGFUNCTION, job->state, recording_thread);
 #endif // DEBUG
     recording_thread_running = TRUE;
-    
+
     while ((job->state & VC_READY) == 0) {
 #ifdef DEBUG
     printf("%s %s: going for next frame\n", DEBUGFILE, DEBUGFUNCTION);
@@ -946,7 +966,7 @@ void do_record_thread(Job * job) {
 gboolean stop_recording_nongui_stuff(Job * job)
 {
     #define DEBUGFUNCTION "stop_recording_nongui_stuff()"
-    int /* status = 0,*/ state = 0;
+    int state = 0;
     struct timeval curr_time;
     long stop_time = 0;
 
@@ -963,9 +983,9 @@ gboolean stop_recording_nongui_stuff(Job * job)
 
     if (recording_thread_running) {
         pthread_join(recording_thread, NULL /* (void **) &status*/ );
-#ifdef DEBUG
+//#ifdef DEBUG
         printf("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);    
-#endif // DEBUG
+//#endif // DEBUG
     }
     
     gettimeofday(&curr_time, NULL);
@@ -1168,10 +1188,10 @@ static gboolean stop_recording_gui_stuff(Job * job)
         g_assert(w);
         {
             char* str_template = NULL;
-            int total_frames = (jobp->pic_no / job->step) + 1;
+            float total_frames = ((float) jobp->pic_no / (float) job->step) + 1;
             float actual_fps = ((float) total_frames) / ((float) time_captured / 1000);
 
-            if (actual_fps > (jobp->fps / 100)) actual_fps = jobp->fps / 100;
+            if (actual_fps > ((float) jobp->fps / 100)) actual_fps = (float) jobp->fps / 100;
             fps_ratio = actual_fps / ((float) job->fps / 100);
             
             if (fps_ratio > (((float)LM_NUM_DAS - LM_LOW_THRESHOLD) / 10 )) {
@@ -1272,14 +1292,12 @@ static gboolean stop_recording_gui_stuff(Job * job)
                         xvc_command_execute(app->single_frame.play_cmd, 1, 0,
                             jobp->file, jobp->start_no, jobp->pic_no,
                             jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
                     } else {
                         xvc_command_execute(app->multi_frame.play_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
                             jobp->pic_no, jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
                     }
                     break;
                 default:
@@ -1986,14 +2004,12 @@ on_xvc_ctrl_m1_mitem_animate_activate(GtkButton * button,
         xvc_command_execute(app->single_frame.play_cmd, 1, 0,
                             jobp->file, jobp->start_no, jobp->pic_no,
                             jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
     } else {
         xvc_command_execute(app->multi_frame.play_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
                             jobp->pic_no, jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
     }
     #undef DEBUGFUNCTION
 }
@@ -2009,14 +2025,12 @@ on_xvc_ctrl_edit_button_clicked(GtkToolButton * button, gpointer user_data)
         xvc_command_execute(app->single_frame.edit_cmd, 2,
                             jobp->pic_no, jobp->file, jobp->start_no,
                             jobp->pic_no, jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
     } else {
         xvc_command_execute(app->multi_frame.edit_cmd, 2,
                             jobp->movie_no, jobp->file, jobp->start_no,
                             jobp->pic_no, jobp->area->width,
-                            jobp->area->height, jobp->fps,
-                            (int) (1000 / (jobp->fps / 100)));
+                            jobp->area->height, jobp->fps);
     }
     #undef DEBUGFUNCTION
 }

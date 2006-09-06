@@ -57,7 +57,8 @@ void xvc_check_start_options();
 
 Boolean xvc_frame_monitor(int measured_time);
 
-
+// this one is defined in main.c because it is not GUI dependant
+void xvc_signal_handler(int signal);
 
 
 #endif                          // __XVC_CONTROL_H__
