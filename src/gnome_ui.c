@@ -1162,6 +1162,18 @@ static gboolean stop_recording_gui_stuff(Job * job)
         xvc_result_dialog = glade_xml_get_widget(xml, "xvc_result_dialog");
         g_assert(xvc_result_dialog);
 
+        // width
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_width_label");
+        g_assert(w);
+        snprintf(buf, 99, "%i", job->area->width);
+        gtk_label_set_text(GTK_LABEL(w), buf);
+
+        // height
+        w = glade_xml_get_widget(xml, "xvc_result_dialog_height_label");
+        g_assert(w);
+        snprintf(buf, 99, "%i", job->area->height);
+        gtk_label_set_text(GTK_LABEL(w), buf);
+
         // video format
         w = glade_xml_get_widget(xml, "xvc_result_dialog_video_format_label");
         g_assert(w);

@@ -8,6 +8,8 @@
 		no obmc, fast ffmpeg operation)
 	* ffmpeg-svn19513/libavformat/movenc.c: fixed NULL pointer,
 		need to watch this gets fixed upstream
+	* src: gnome_ui.c, gnome-xvidcap.glade: added width and height
+		to the results dialog
 	
 2006-09-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: control.h, gnome_ui.c, main.c: wake up sleeping capture
