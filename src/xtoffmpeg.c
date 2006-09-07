@@ -932,7 +932,8 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
             input_pixfmt, st->codec->pix_fmt);
 #endif // DEBUG
 
-
+    // flags
+    //
 // FIXME: should be smth. like this:    
 /*if(   (video_global_header&1)
        || (video_global_header==0 && (oc->oformat->flags & AVFMT_GLOBALHEADER))){
@@ -945,6 +946,8 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     }
 */
     
+    st->codec->flags |= ( CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST );
+    st->codec->flags &= ~CODEC_FLAG_OBMC;
     // some formats want stream headers to be seperate
     if (oc->oformat->name && ( !strcmp(oc->oformat->name, "mp4")
         || !strcmp(oc->oformat->name, "mov")
@@ -963,6 +966,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
                 st->codec->bit_rate);
 #endif
 
+    st->codec->mb_decision = 2;
 /*    st->codec->me_method = ME_ZERO;
     st->codec->qmin = 1;
     st->codec->qmax = 1; */
@@ -1151,6 +1155,12 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             snprintf(tmp_fn, 29, "test-%%d.%s", xvc_next_element(tFFormats[job->target].extensions));
             file_oformat = guess_format(NULL, tmp_fn, NULL);
         }
+	if (!file_oformat) {
+            fprintf(stderr,
+                    _("%s %s: Couldn't determin output format ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
       
 #ifdef DEBUG
         printf("%s %s: found AVOutputFormat %s it expects a number in the filename (0=no/1=yes) %i\n", 
@@ -1168,14 +1178,16 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             exit(1);
         }
         output_file->oformat = file_oformat;
-        output_file->priv_data = av_mallocz (output_file->oformat->priv_data_size); 
-        // FIXME: do I need to free this?
-        if (!output_file->priv_data && output_file->oformat->priv_data_size > 0) { 
-            fprintf (stderr, 
-                    _("%s %s: Error allocating private data for format context ... aborting\n"),
-                    DEBUGFILE, DEBUGFUNCTION); 
-            exit (1); 
-        } 
+	if (output_file->oformat->priv_data_size > 0) {
+        	output_file->priv_data = av_mallocz (output_file->oformat->priv_data_size); 
+        	// FIXME: do I need to free this?
+        	if (!output_file->priv_data) { 
+            		fprintf (stderr, 
+                    		_("%s %s: Error allocating private data for format context ... aborting\n"),
+                    		DEBUGFILE, DEBUGFUNCTION); 
+            	exit (1); 
+        	} 
+	}
 //	output_file->packet_size= mux_packet_size;
 //    	output_file->mux_rate= mux_rate;
         output_file->preload= (int)(0.5 * AV_TIME_BASE);

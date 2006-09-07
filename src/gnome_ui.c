@@ -983,9 +983,9 @@ gboolean stop_recording_nongui_stuff(Job * job)
 
     if (recording_thread_running) {
         pthread_join(recording_thread, NULL /* (void **) &status*/ );
-//#ifdef DEBUG
+#ifdef DEBUG
         printf("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);    
-//#endif // DEBUG
+#endif // DEBUG
     }
     
     gettimeofday(&curr_time, NULL);

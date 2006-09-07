@@ -1,4 +1,14 @@
 
+2006-09-07  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/gnome_ui.c: removed unconditional debug output
+	* src/codecs.c: fixed bug in the definition of the flv format
+	* src/xtoffmpeg.c: added check for file_oformat != NULL, and 
+		did some optimization to get rid of the "clipping
+		dct coefficient message" (use trellis quant, mbd=2,
+		no obmc, fast ffmpeg operation)
+	* ffmpeg-svn19513/libavformat/movenc.c: fixed NULL pointer,
+		need to watch this gets fixed upstream
+	
 2006-09-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: control.h, gnome_ui.c, main.c: wake up sleeping capture
 		thread when hitting stop

@@ -390,7 +390,7 @@ const xvFFormat asf = {
 const xvFFormat ff_flv1 = {
     "flv1",
     N_("Macromedia Flash Video Stream"),
-    "flv1",
+    "flv",
     "flv|flv1",
     CODEC_FLV,
     "FLASH_VIDEO",
