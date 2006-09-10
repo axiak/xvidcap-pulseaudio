@@ -179,25 +179,17 @@ test x$static_avcodec = xyes && static_avutil=yes
 
 if test "x${ac_cv_have_x}" = "x" ; then
     echo "xvidcap needs X11 runtime and build environment"
-    exit
+    exit 1
 fi
 
-# first check for Xmu without tweaking
-AC_CHECK_LIB(Xmu,XmuClientWindow,,[unset ac_cv_lib_Xmu_XmuClientWindow; AC_CHECK_LIB(Xmu,XmuClientWindow,LDFLAGS="${LDFLAGS} -L{ac_x_libraries}",echo "libXmu required for drawing the frame around the area to capture" && exit 1,[-L${ac_x_libraries}])])
+# first check for Xmu without tweaking, then in X11 paths
+AC_CHECK_LIB(Xmu,XmuClientWindow,,[unset ac_cv_lib_Xmu_XmuClientWindow; echo "Couldn't find libXmu in LD_LIBRARY_PATH, checking X11 paths"; AC_CHECK_LIB(Xmu,XmuClientWindow,LDFLAGS="${LDFLAGS} -L${ac_x_libraries} -Xlinker -R${ac_x_libraries}"; LIBS="${LIBS} -lXmu",echo "libXmu required for drawing the frame around the area to capture" && exit 1,[-L${ac_x_libraries}])])
 
-#if ( ! ( test "x${ac_x_libraries}" = "x" ) ) ; then
-#    ac_my_xmu_extra_libs="-L${ac_x_libraries}"
-#fi
-#if ( ! ( test "x${ac_x_includes}" = "x" ) ) ; then
-#    ac_my_xmu_extra_libs="${ac_my_xmu_extra_libs} -I${ac_x_includes}"
-#fi
-
-#AC_CHECK_LIB(Xmu,XmuClientWindow,,echo "libXmu required for drawing the frame around the area to capture" && exit,[${ac_my_xmu_extra_libs}])
 ## libice test is present, but we need to bail out if not there
 
 if test "x${ac_cv_lib_ICE_IceConnectionNumber+set}" = "x"; then
   echo "Your X11 environment is missing libice."
-  exit
+  exit 1
 fi
 #########################################################
 
@@ -239,7 +231,7 @@ if ( `test x${ac_cv_lib_pthread_pthread_mutex_init} = xno` ) ; then
 	else
 		# if we don't have threads, we can't record 
         echo "xvidcap requires libpthread for recording. This machine doesn't have the libraries and/or header files installed."
-        exit
+        exit 1
 	fi
 fi
 
@@ -323,7 +315,7 @@ AC_CHECK_HEADERS([fcntl.h limits.h stdlib.h string.h sys/ioctl.h sys/time.h unis
 AC_CHECK_HEADERS([ctype.h stat.h errno.h])
 if ( `test x${ac_cv_header_ctype_h} = xno` ) ; then
 	echo "FATAL ERROR: header file ctype.h not found and required!"
-	exit
+	exit 1
 fi
 
 ################################################################
