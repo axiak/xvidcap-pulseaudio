@@ -56,33 +56,6 @@
 // convenience
 
 
-typedef struct PacketDesc {
-	    int64_t pts;
-	        int64_t dts;
-		    int size;
-		        int unwritten_size;
-			    int flags;
-			        struct PacketDesc *next;
-} PacketDesc;
-
-typedef struct {
-	    FifoBuffer fifo;
-	        uint8_t id;
-		    int max_buffer_size; /* in bytes */
-		        int buffer_index;
-			    PacketDesc *predecode_packet;
-			        PacketDesc *premux_packet;
-				    PacketDesc **next_packet;
-				        int packet_number;
-					    uint8_t lpcm_header[3];
-					        int lpcm_align;
-						    uint8_t *fifo_iframe_ptr;
-						        int align_iframe;
-							    int64_t vobu_start_pts;
-} StreamInfo;
-
-
-
 /* 
  * globals
  *
@@ -491,6 +464,10 @@ void cleanup_thread_when_stopped()
     #define DEBUGFUNCTION "cleanup_thread_when_stopped()"
     int retval = 0;
 
+#ifdef DEBUG
+	printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
     if (audio_out) {
         av_free(audio_out);
         audio_out = NULL;
@@ -499,17 +476,20 @@ void cleanup_thread_when_stopped()
         av_free(audio_buf);
         audio_buf = NULL;
     }
-
-    avcodec_close(au_c);
-    av_free(au_c);
-    au_c = NULL;
     grab_iformat = NULL;
-    au_out_st = NULL;
-    au_in_st = NULL;
-    au_codec = NULL;
+    if (au_in_st) {
+	av_free(au_in_st);
+	au_in_st = NULL;
+    }
 
     av_close_input_file(ic);
+
+#ifdef DEBUG
+	printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
     pthread_exit(&retval);
+
     #undef DEBUGFUNCTION
 }
 
@@ -524,7 +504,6 @@ void capture_audio_thread(Job * job)
     uint8_t *ptr, *data_buf;
     short samples[AVCODEC_MAX_AUDIO_FRAME_SIZE / 2];
     AVPacket pkt;
-
 
     signal(SIGUSR1, cleanup_thread_when_stopped);
 
@@ -1557,7 +1536,6 @@ if (out_size > 0 ) {
 void FFMPEGClean(Job * job)
 {
 #define DEBUGFUNCTION "FFMPEGClean()"
-    int j;
 
 #ifdef DEBUG
         printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1576,42 +1554,48 @@ void FFMPEGClean(Job * job)
     }
 #endif                          // HAVE_FFMPEG_AUDIO
 
-    if (img_resample_ctx) {
-        img_resample_close(img_resample_ctx);
-        img_resample_ctx = NULL;
-    }
-
-    if (out_st) {
-        avcodec_close(out_st->codec);
-        out_st = NULL;
-    }
-
     if (output_file) {
         /* 
          * write trailer 
          */
         av_write_trailer(output_file);
-        /* 
-         * free stream(s) ... probably always only one 
-         */
-        for (j = 0; j < output_file->nb_streams; j++) {
-            av_free(output_file->streams[j]);
-            output_file->streams[j] = NULL;
-        }
+    }
 
+    if (output_file) {
+	int i;
         /* 
          * close file if multi-frame capture ... otherwise closed already
          */
         if (job->target >= CAP_MF) 
             url_fclose(&output_file->pb);
+	/*
+	 * free streams
+	 */
+	for (i = 0; i < output_file->nb_streams; i++) {
+		if (output_file->streams[i]->codec) {
+			avcodec_close(output_file->streams[i]->codec);
+	    		av_free(output_file->streams[i]->codec);
+			output_file->streams[i]->codec = NULL;
+		}
+		av_free(output_file->streams[i]);
+		if (out_st) out_st = NULL;
+#ifdef HAVE_FFMPEG_AUDIO
+		if (au_out_st) au_out_st = NULL;
+#endif // HAVE_FFMPEG_AUDIO
+	}
         /* 
          * free format context 
          */
         av_free(output_file->priv_data);
+	output_file->priv_data = NULL;
         av_free(output_file);
         output_file = NULL;
     }
 
+    if (img_resample_ctx) {
+        img_resample_close(img_resample_ctx);
+        img_resample_ctx = NULL;
+    }
 
     if (outpic_buf) {
         av_free(outpic_buf);
@@ -1636,6 +1620,9 @@ void FFMPEGClean(Job * job)
     }
 
     codec = NULL;
+#ifdef HAVE_FFMPEG_AUDIO
+    au_codec = NULL;
+#endif // HAVE_FFMPEG_AUDIO
 
 //    av_free_static();
 #ifdef DEBUG

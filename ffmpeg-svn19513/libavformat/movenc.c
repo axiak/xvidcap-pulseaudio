@@ -1520,8 +1520,7 @@ static int mov_write_packet(AVFormatContext *s, AVPacket *pkt)
     if (trk->vosLen == 0 && enc->extradata_size > 0) {
         trk->vosLen = enc->extradata_size;
         trk->vosData = av_malloc(trk->vosLen);
-	if ( trk->vosData && enc->extradata && trk->vosLen) 
-        	memcpy(trk->vosData, enc->extradata, trk->vosLen);
+        memcpy(trk->vosData, enc->extradata, trk->vosLen);
     }
 
     if (enc->codec_id == CODEC_ID_H264 && trk->vosLen > 0 && *(uint8_t *)trk->vosData != 1) {

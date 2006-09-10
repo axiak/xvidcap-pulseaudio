@@ -2,6 +2,9 @@
 2006-09-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in: fixed libXmu detection in X11R6 paths,
 		including setting runtime search path
+	* ffmpeg-svn19513/libavformat/movenc.c, src/xtoffmpeg.c:
+		fixed root cause for segfault in movenc.c and
+		revert to original
 
 2006-09-07  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/gnome_ui.c: removed unconditional debug output
