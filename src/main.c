@@ -820,7 +820,7 @@ int main(int argc, char *argv[])
     #undef DEBUGFUNCTION
     #define DEBUGFUNCTION "main()"
     xvErrorListItem *errors_after_cli = NULL;
-    int resultCode;
+    int resultCode, i;
     CapTypeOptions s_tmp_capture_options, *target;
 
 #ifdef HasDGA
@@ -848,6 +848,22 @@ int main(int argc, char *argv[])
     }
     // xvc initialization
     xvc_init(&s_tmp_capture_options, argc, argv);
+    // gtk_init may replace argv values with NULL ... that's bad for getopt_long
+    for (i = argc; i > 0; i--) {
+        int j;
+//        printf("arg %i = %s\n", i, argv[i]);
+        if (argv[i-1] == NULL) {
+            if (i == argc) argc--;
+            else {
+                for (j = i; j < argc; j++) {
+                    argv[i-1] = argv[i];
+                }
+                argv[argc-1] = NULL;
+                argc--;
+            }
+        }
+    }
+//    printf("argc %i\n", argc);
 
     // read options file now 
     xvc_read_options_file(app);

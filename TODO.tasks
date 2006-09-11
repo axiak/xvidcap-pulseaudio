@@ -33,11 +33,6 @@ jetzt tut's audio mit flash dennoch nicht
       <comment/>
     </item>
     <item>
-      <attribute id="1156332643" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332643"/>
-      <summary>revisit i18n</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1156351012" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156501224"/>
       <summary>mutex assertion</summary>
       <comment>xvidcap: pthread_mutex_lock.c:108: __pthread_mutex_lock: Assertion `mutex-&gt;__data.__owner == 0' failed.
@@ -98,7 +93,31 @@ xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e
     <item>
       <attribute id="1157525451" priority="1" done="1" start_date="732560" completed_date="732560" notify="0" last_edited="1157527178"/>
       <summary>floating point exception when fps &lt; 1</summary>
-      <comment></comment>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156332643" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1157957173"/>
+      <summary>revisit i18n</summary>
+      <comment>watch typos, Vincenzo sent -- remove blanks -- translator_credits</comment>
+    </item>
+    <item>
+      <attribute id="1157960346" priority="1" done="0" start_date="732565" enddate="99999999" notify="0" endtime="-60" last_edited="1157981213"/>
+      <summary>bad color error</summary>
+      <comment>this happens if when changing the frame, you single-click on a window title ... but only with compiz/cgwd, not metacity. filed issue 0000090 at bugs.compiz.net
+
+
+Exiting... (Quit)
+The program 'xvidcap' received an X Window System error.
+This probably reflects a bug in the program.
+The error was 'BadColor (invalid Colormap parameter)'.
+  (Details: serial 523419 error_code 12 request_code 91 minor_code 0)
+  (Note to programmers: normally, X errors are reported asynchronously;
+   that is, you will receive the error a while after causing it.
+   To debug your program, run it with the --sync command line
+   option to change this behavior. You can then get a meaningful
+   backtrace from your debugger if you break on the gdk_x_error() function.)
+kb87850@ubuntu:~/Quellen/xvidcap/trunk$
+</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

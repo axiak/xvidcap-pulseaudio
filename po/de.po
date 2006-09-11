@@ -882,7 +882,7 @@ msgstr "Microsoft Audio Video Interleaved Datei"
 
 #: src/codecs.c:343
 msgid "General AVI file (DIVX default)"
-msgstr "General AVI Datei (DIVX voreingestellt)"
+msgstr "Allgemeine AVI Datei (DIVX voreingestellt)"
 
 #: src/codecs.c:364
 msgid "Microsoft Advanced Streaming Format"
@@ -894,7 +894,7 @@ msgstr "Macromedia Flash Video Stream"
 
 #: src/codecs.c:407
 msgid "Macromedia Shockwave Flash File"
-msgstr "Macromedia Shockwave Flash File"
+msgstr "Macromedia Shockwave Flash Datei"
 
 #: src/codecs.c:429
 msgid "DV Video Format"
