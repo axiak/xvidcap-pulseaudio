@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="no"?>
+<omf>
+  <resource>
+    <creator>
+     karl.h.beckers@gmx.net (Karl H. Beckers)
+    </creator>
+    <title>
+     XVidcap Manual
+    </title>
+    <date>
+     2006-09-18
+    </date>
+    <version identifier="0.1" date="2006-09-18" description="First release."/>
+    <subject category="Applications|Multimedia|Video"/>
+    <description>
+	blah
+    </description>
+    <type>
+     manual
+    </type>
+    <format mime="text/xml" dtd="-//OASIS//DTD DocBook XML V4.1.2//EN"/>
+    <identifier url=""/>
+    <language code="C"/>
+    <relation seriesid="8dd8b64e-475c-11db-9627-e58d7b02ba9f"/>
+    <rights type="GNU FDL" license.version="1.1" license="http://www.gnu.org/licenses/fdl.html" holder="Karl H. Beckers"/>
+  </resource>
+</omf>

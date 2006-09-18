@@ -22,6 +22,17 @@ AC_PATH_XTRA
 #########################################################
 #########################################################
 
+#SCROLLKEEPER##############################################
+#########################################################
+SCROLLKEEPER_BUILD_REQUIRED=0.3.5
+AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
+
+AC_PATH_PROG(SK_CONFIG,scrollkeeper-config,no)
+if test x$SK_CONFIG = xno; then
+  AC_MSG_ERROR(Couldn't find scrollkeeper-config. Please install the scrollkeeper package: http://scrollkeeper.sourceforge.net)
+fi
+#########################################################
+#########################################################
 
 #i18n####################################################
 #########################################################
@@ -395,8 +406,11 @@ test x${HAVE_FFMPEG_AUDIO_TRUE} = "x" && AC_DEFINE([HAVE_FFMPEG_AUDIO], [1])
 
 
 AC_OUTPUT([
-Makefile
-src/Makefile
-po/Makefile.in
+doc/Makefile
+doc/xvidcap-manual/Makefile
+doc/xvidcap-manual/C/Makefile
 man/Makefile
+po/Makefile.in
+src/Makefile
+Makefile
 ])

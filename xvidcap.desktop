@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=XVidCap
+GenericName=X11 Screencam
+Comment=X11 Screencam
+Comment[de]=X11 Videoaufnahme
+Icon=xvidcap.png
+TryExec=xvidcap
+Exec=xvidcap
+Terminal=false
+Categories=GTK;Application;AudioVideo;Video;

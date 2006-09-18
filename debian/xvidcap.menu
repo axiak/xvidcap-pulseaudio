@@ -1,0 +1,8 @@
+?package(xvidcap):\
+    needs="x11"\
+    section="Apps/Viewers"\
+    title="XVidCap"\
+    hints="Video"\
+    longtitle="X11 ScreenCam"\
+    icon="/usr/share/xvidcap/xvidcap.png"\
+    command="/usr/bin/xvidcap"

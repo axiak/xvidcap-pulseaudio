@@ -1,0 +1,9 @@
+#! /bin/sh
+
+set -e
+
+# register docbook docs with scrollkeeper
+if [ "$1" = "configure" ]; then
+    scrollkeeper-update -q
+fi
+
