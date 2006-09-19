@@ -722,10 +722,10 @@ xvc_signal_handler(int signal)
 {
     #define DEBUGFUNCTION "xvc_signal_handler()"
     Job * job = NULL;
-#ifdef DEBUG
+//#ifdef DEBUG
             printf("%s %s: Entering with sigal %i\n",
                     DEBUGFILE, DEBUGFUNCTION, signal);
-#endif // DEBUG
+//#endif // DEBUG
     
     switch (signal) {
         case SIGINT:
