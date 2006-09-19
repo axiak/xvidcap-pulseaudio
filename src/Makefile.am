@@ -3,7 +3,8 @@
 ## Created by Anjuta
 
 gladedir = $(datadir)/xvidcap/glade
-glade_DATA = gnome-xvidcap.glade 
+glade_DATA = gnome-xvidcap.glade \
+	pixmaps/xvidcap_logo.png
 
 INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
