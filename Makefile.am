@@ -1,15 +1,17 @@
 ## Process this file with automake to produce Makefile.in
 ## Created by Anjuta
 
-SUBDIRS = src \
+doc_SUBDIRS = doc
+SUBDIRS = $(doc_SUBDIRS) \
+    src \
     po \
-    man \
-    doc
+    man
 
 pkgdata_DATA = xvidcap.desktop \
-	xvidcap.png
+	xvidcap.png \
+    ppm2mpeg.sh
 
-xvidcapdocdir = ${prefix}/doc/xvidcap
+xvidcapdocdir = ${datadir}/doc/xvidcap
 xvidcapdoc_DATA = \
 	README\
 	COPYING\
@@ -47,5 +49,13 @@ install-exec-hook:
 
 uninstall-hook:
 	rm $(datadir)/pixmaps/xvidcap.png ; \
-	rm $(datadir)/applications/xvidcap.desktop
+	rm $(datadir)/applications/xvidcap.desktop ; \
+    rm -r $(datadir)/doc/xvidcap ; \
+    rm -r $(datadir)/xvidcap
 
+
+install-doc: 
+	cd doc && $(MAKE) $(AM_MAKEFLAGS) install-doc
+
+uninstall-doc: 
+	cd doc && $(MAKE) $(AM_MAKEFLAGS) uninstall-doc

@@ -64,6 +64,7 @@ app-dist-hook:
 	fi
 
 install-data-local: omf
+#install-doc-local: omf
 	$(mkinstalldirs) $(DESTDIR)$(docdir)
 	for file in $(xml_files); do \
 	  cp $(srcdir)/$$file $(DESTDIR)$(docdir); \
@@ -76,11 +77,15 @@ install-data-local: omf
 	  done \
 	fi
 
-install-data-hook: install-data-hook-omf
+#install-data-hook: install-data-hook-omf
+install-doc: install-doc-omf
 
-uninstall-local: uninstall-local-doc uninstall-local-omf
+#uninstall-local: uninstall-local-doc uninstall-local-omf
+uninstall-doc: uninstall-doc-omf
 
-uninstall-local-doc:
+uninstall-local:
+#uninstall-local-doc: 
+#uninstall-local-doc: uninstall-local-omf
 	-if test "$(figdir)"; then \
 	  for file in $(srcdir)/$(figdir)/*.png; do \
 	    basefile=`echo $$file | sed -e  's,^.*/,,'`; \

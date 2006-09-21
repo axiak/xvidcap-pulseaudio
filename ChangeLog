@@ -7,6 +7,11 @@
 		statements
 	* src/app_data.c: fixed missing localization for error messages
 		on stdout (--gui no operation)
+	* Makefile.am, configure.in, doc: omf.make, Makefile.am,
+		xmldocs.make, doc/xvidcap-manual/Makefile.am,
+		doc/xvidcap-manual/C/xvidcap-manual.xml: do no longer
+		register doc with scrollkeeper on "install" target,
+		use "make install-doc"
 
 2006-09-19  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, doc/xvidcap-manual/C: xvidcap-manual.xml, 

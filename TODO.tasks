@@ -122,6 +122,11 @@ kb87850@ubuntu:~/Quellen/xvidcap/trunk$
     <item>
       <attribute id="1158669691" priority="1" done="1" start_date="732573" completed_date="732575" notify="0" last_edited="1158821331"/>
       <summary>CTRL-C with --gui no does not clean up?</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1158821898" priority="1" done="1" start_date="732575" completed_date="732575" notify="0" last_edited="1158854871"/>
+      <summary>--cpu und --tune-cpu testen mit ffpmeg</summary>
       <comment></comment>
     </item>
   </category>

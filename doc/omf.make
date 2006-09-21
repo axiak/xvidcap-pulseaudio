@@ -37,14 +37,16 @@ omf_timestamp: $(omffile)
 	done
 	touch omf_timestamp
 
-install-data-hook-omf:
+#install-data-hook-omf:
+install-doc-omf:
 	$(mkinstalldirs) $(DESTDIR)$(omf_dest_dir)
 	for file in $(omffile); do \
 		$(INSTALL_DATA) $(srcdir)/$$file.out $(DESTDIR)$(omf_dest_dir)/$$file; \
 	done
 	-scrollkeeper-update -p $(scrollkeeper_localstate_dir) -o $(DESTDIR)$(omf_dest_dir)
 
-uninstall-local-omf:
+#uninstall-local-omf:
+uninstall-doc-omf:
 	-for file in $(srcdir)/*.omf; do \
 		basefile=`basename $$file`; \
 		rm -f $(omf_dest_dir)/$$basefile; \
