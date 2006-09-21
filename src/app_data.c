@@ -2252,14 +2252,14 @@ void xvc_errors_write_error_msg(int code, int print_action_or_not)
     }
 
     if (strlen(err->short_msg) > 52)
-        inc = find_line_length(err->short_msg, ' ', (len - pre));
+        inc = find_line_length(_(err->short_msg), ' ', (len - pre));
     else
-        inc = strlen(err->short_msg);
-    strncpy(buf, err->short_msg, inc);
+        inc = strlen(_(err->short_msg));
+    strncpy(buf, _(err->short_msg), inc);
     buf[inc] = '\0';
     fprintf(stderr, "%s\n", buf);
-    if (strlen(err->short_msg) > inc) {
-        strncpy(buf, (err->short_msg + inc), 5000);
+    if (strlen(_(err->short_msg)) > inc) {
+        strncpy(buf, (_(err->short_msg) + inc), 5000);
         lineprint(buf, 1, pre, (len - pre));
     }
 
@@ -2270,15 +2270,15 @@ void xvc_errors_write_error_msg(int code, int print_action_or_not)
             fprintf(stderr, " ");
         }
 
-        if (strlen(err->long_msg) > (len - pre))
-            inc = find_line_length(err->long_msg, ' ', (len - pre));
+        if (strlen(_(err->long_msg)) > (len - pre))
+            inc = find_line_length(_(err->long_msg), ' ', (len - pre));
         else
-            inc = strlen(err->long_msg);
-        strncpy(buf, err->long_msg, inc);
+            inc = strlen(_(err->long_msg));
+        strncpy(buf, _(err->long_msg), inc);
         buf[inc] = '\0';
         fprintf(stderr, "%s\n", buf);
-        if (strlen(err->long_msg) > inc) {
-            strncpy(buf, (err->long_msg + inc), 5000);
+        if (strlen(_(err->long_msg)) > inc) {
+            strncpy(buf, (_(err->long_msg) + inc), 5000);
             lineprint(buf, 1, pre, (len - pre));
         }
     }
@@ -2309,15 +2309,15 @@ void xvc_errors_write_action_msg(int code)
         fprintf(stderr, " ");
     }
 
-    if (strlen(err->action_msg) > (len - pre))
-        inc = find_line_length(err->action_msg, ' ', (len - pre));
+    if (strlen(_(err->action_msg)) > (len - pre))
+        inc = find_line_length(_(err->action_msg), ' ', (len - pre));
     else
-        inc = strlen(err->action_msg);
-    strncpy(buf, err->action_msg, inc);
+        inc = strlen(_(err->action_msg));
+    strncpy(buf, _(err->action_msg), inc);
     buf[inc] = '\0';
     fprintf(stderr, "%s\n", buf);
-    if (strlen(err->action_msg) > inc) {
-        strncpy(buf, (err->action_msg + inc), 5000);
+    if (strlen(_(err->action_msg)) > inc) {
+        strncpy(buf, (_(err->action_msg) + inc), 5000);
         lineprint(buf, 1, pre, (len - pre));
     }
 

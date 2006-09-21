@@ -1,4 +1,13 @@
 
+2006-09-21  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_ui.c, capture.c, main.c: made --gui no operation
+		exit on CTRL-C from main.c rather than capture.c 
+		(because I didn't find the place anymore myself ;) and
+		this is more readable). Also added more telling debug
+		statements
+	* src/app_data.c: fixed missing localization for error messages
+		on stdout (--gui no operation)
+
 2006-09-19  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, doc/xvidcap-manual/C: xvidcap-manual.xml, 
 	  xvidcap-manual-C.omf:

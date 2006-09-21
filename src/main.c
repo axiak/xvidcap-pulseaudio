@@ -722,15 +722,16 @@ xvc_signal_handler(int signal)
 {
     #define DEBUGFUNCTION "xvc_signal_handler()"
     Job * job = NULL;
-//#ifdef DEBUG
-            printf("%s %s: Entering with sigal %i\n",
-                    DEBUGFILE, DEBUGFUNCTION, signal);
-//#endif // DEBUG
+#ifdef DEBUG
+            printf("%s %s: Entering with thread %i sigal %i\n",
+                    DEBUGFILE, DEBUGFUNCTION, pthread_self(), signal);
+#endif // DEBUG
     
     switch (signal) {
         case SIGINT:
             job = xvc_job_ptr();
             if (job) xvc_capture_stop_signal(TRUE);
+            exit(0);
             break;
         case SIGALRM:
             my_signal_add(SIGALRM, xvc_signal_handler);
@@ -740,7 +741,7 @@ xvc_signal_handler(int signal)
     }
 
 #ifdef DEBUG
-            printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+            printf("%s %s: Leaving with signal %i\n", DEBUGFILE, DEBUGFUNCTION, signal);
 #endif // DEBUG
     #undef DEBUGFUNCTION
 }

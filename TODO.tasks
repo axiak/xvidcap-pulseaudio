@@ -119,6 +119,11 @@ The error was 'BadColor (invalid Colormap parameter)'.
 kb87850@ubuntu:~/Quellen/xvidcap/trunk$
 </comment>
     </item>
+    <item>
+      <attribute id="1158669691" priority="1" done="1" start_date="732573" completed_date="732575" notify="0" last_edited="1158821331"/>
+      <summary>CTRL-C with --gui no does not clean up?</summary>
+      <comment></comment>
+    </item>
   </category>
   <category title="Business" place="1"/>
   <category title="Unfiled" place="2"/>

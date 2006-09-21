@@ -434,8 +434,8 @@ void xvc_capture_stop_signal(Boolean wait) {
         // stop waiting for next frame to capture
         status = pthread_kill(recording_thread, SIGALRM);
 #ifdef DEBUG
-        printf("%s %s: thread %p kill with rc %i\n", 
-                    DEBUGFILE, DEBUGFUNCTION, (void*) recording_thread, status);
+        printf("%s %s: thread %i kill with rc %i\n", 
+                    DEBUGFILE, DEBUGFUNCTION, (int) recording_thread, status);
 #endif // DEBUG
     }
 
@@ -938,19 +938,22 @@ void do_record_thread(Job * job) {
 
     while ((job->state & VC_READY) == 0) {
 #ifdef DEBUG
-    printf("%s %s: going for next frame\n", DEBUGFILE, DEBUGFUNCTION);
+    printf("%s %s: going for next frame with state %i\n", DEBUGFILE, DEBUGFUNCTION, job->state);
 #endif
         if ((job->state & VC_PAUSE) && !(job->state & VC_STEP)) {
             pthread_mutex_lock(&recording_mutex);
             pthread_cond_wait(&recording_condition_unpaused, &recording_mutex);
             pthread_mutex_unlock(&recording_mutex);
-        }
 #ifdef DEBUG
-        printf("%s %s: woke up\n", DEBUGFILE, DEBUGFUNCTION);
+        printf("%s %s: unpaused\n", DEBUGFILE, DEBUGFUNCTION);
 #endif // DEBUG
+        }
         pause = job->capture(job, NULL);
 
         if (pause > 0 ) usleep( pause * 1000);
+#ifdef DEBUG
+        printf("%s %s: woke up\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
     }
     
 #ifdef DEBUG

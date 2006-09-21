@@ -805,7 +805,6 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
 
         if (job->flags & FLG_NOGUI) {
             XCloseDisplay(dpy);
-            exit(0);
         }
     }
 
@@ -1031,7 +1030,6 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
 
         if (job->flags & FLG_NOGUI) {
             XCloseDisplay(dpy);
-            exit(0);
         }
     }
 
