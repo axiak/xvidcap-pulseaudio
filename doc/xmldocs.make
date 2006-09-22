@@ -63,8 +63,8 @@ app-dist-hook:
 	  done \
 	fi
 
-install-data-local: omf
-#install-doc-local: omf
+install-data-local: omf install-data-local-omf
+#install-doc-local: omf 
 	$(mkinstalldirs) $(DESTDIR)$(docdir)
 	for file in $(xml_files); do \
 	  cp $(srcdir)/$$file $(DESTDIR)$(docdir); \

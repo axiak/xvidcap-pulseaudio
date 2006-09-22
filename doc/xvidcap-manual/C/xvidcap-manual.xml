@@ -99,7 +99,7 @@
 	</releaseinfo>
 	<legalnotice>
 	    <title>Feedback</title>
-	    <para>To report a bug or make a suggestion regarding the <application>&app;</application> application or this manual, follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap's site at SF.net</ulink>.
+	    <para>To report a bug or make a suggestion regarding the <application>&app;</application> application or this manual, follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">&app;'s site at SF.net</ulink>.
 	    </para>
 	    <!-- Translators may also add here feedback address for translations -->
 	</legalnotice>
@@ -154,17 +154,17 @@
 	    </para>
 	</caution>
 
-	<!-- FIXME: how to link to man pages?? -->
 	<para>
 	    Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before 
 	    encoding, or if you need other video codecs &app; does not support. Individual images can later be encoded 
 	    with tools like <ulink type="help" url="man:ffmpeg">ffmpeg</ulink>, 
-	    <ulink type="help" url="man:mencoder">mencoder</ulink>, or <ulink type="help" url="man:transcode">transcode</ulink>.
+	    <ulink type="help" url="man:mencoder">mencoder</ulink>, or 
+	    <ulink type="help" url="man:transcode">transcode</ulink>.
 	</para>
 	    
 	<para>
 	    To report a bug or make a suggestion regarding the <application>&app;</application> application or this manual, 
-	    follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap's site at SF.net</ulink>.
+	    follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">&app;'s site at SF.net</ulink>.
 	</para>
     </sect1>
     
@@ -180,7 +180,7 @@
 		<varlistentry>
 		    <term><guimenu>Applications</guimenu> menu</term>
 		    <listitem>
-			<para>Choose <menuchoice><guisubmenu>Multi-Media</guisubmenu><guimenuitem>XVidCap</guimenuitem></menuchoice>. </para>
+			<para>Choose <menuchoice><guisubmenu>Multi-Media</guisubmenu><guimenuitem>XVidCap Screen Capture</guimenuitem></menuchoice>. </para>
 		    </listitem>
 		</varlistentry>
 		<varlistentry>
@@ -197,7 +197,7 @@
 	    <title>When You Start &app;</title>
 	    <para>When you start <application>&app;</application>, the following windows are displayed:</para>
 
-	    <figure id="gedit-window">
+	    <figure id="xvidcap-window">
 		<title>&app; Control</title>
 		<screenshot>
 		    <mediaobject>
@@ -215,13 +215,13 @@
 		the selection frame enclosing the area to capture.
 	    </para>
 	    
-	    <table frame="all">
+	    <table frame="all" id="xvidcap-get-started-u-start-TBL">
 		<title>
 		    &app;'s main control elements: 
 		</title>
 		<tgroup cols="2" align="char" charoff="50" char=".">
 		    <tbody>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-filename">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -232,7 +232,6 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>
-
 			    </entry>
 			    <entry>
 				<para>
@@ -242,7 +241,7 @@
 				</para>
 				<para>
 				    When in &sf-cap; mode a left click resets the frame count to the start. A right-click while
-				    not capturing will pop up the main menu.
+				    not capturing will pop up the <ulink type="help" url="ghelp:xvidcap?xvidcap-menu">main menu</ulink>.
 				</para>
 				<tip>
 				    <title>Default Capture Mode</title>
@@ -251,8 +250,7 @@
 			    
 			    </entry>
 			</row>
-
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-frame-drop-meter">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -280,7 +278,7 @@
 			    
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-stop">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -291,16 +289,14 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
 				    The <guilabel>Stop Button</guilabel> stops a running recording session.
 				</para>
-			
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-pause">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -318,10 +314,9 @@
 				    The <guilabel>Pause Button</guilabel> pauses a running or continues a paused recording session.
 				    You can also select this before starting to record to start paused.
 				</para>
-			
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-record">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -332,16 +327,14 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
 				    The <guilabel>Record Button</guilabel> starts a recording session.
 				</para>
-			
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-step">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -352,17 +345,15 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
 				    The <guilabel>Single Snapshot Button</guilabel> is only active in a paused &sf-cap; mode capturing session.
 				    Then it allows you to take individual snapshots on a click of this button.
 				</para>
-			
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-back">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -373,7 +364,6 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
@@ -396,7 +386,7 @@
 			
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-fwd">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -407,38 +397,15 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
 				    The <guilabel>Forward Button</guilabel> does the opposite of the rewind button in that it 
 				    increments the current frame's index number or the movie index number depending on capture mode.
 				</para>
-			
 			    </entry>
 			</row>
-			<row>
-			    <entry>
-				<screenshot>
-				    <mediaobject>
-					<imageobject>
-					    <imagedata fileref="figures/fwd-button.png" format="PNG"/>
-					</imageobject>
-					<textobject> <phrase>Forward Button</phrase>
-					</textobject>
-				    </mediaobject>
-				</screenshot>			
-			
-			    </entry>
-			    <entry>
-				<para>
-				    The <guilabel>Forward Button</guilabel> does the opposite of the rewind button in that it 
-				    increments the current frame's index number or the movie index number depending on capture mode.
-				</para>
-			
-			    </entry>
-			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-lock">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -449,7 +416,6 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
@@ -457,10 +423,9 @@
 				    main control if selected. If deselected, the capture selection will stay where it is when
 				    the main control moves.
 				</para>
-			
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-selector">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -471,7 +436,6 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
@@ -517,10 +481,9 @@
 					</caution>
 				    </listitem>
 				</itemizedlist>
-			
 			    </entry>
 			</row>
-			<row>
+			<row id="xvidcap-get-started-u-start-TBL-edit">
 			    <entry>
 				<screenshot>
 				    <mediaobject>
@@ -531,7 +494,6 @@
 					</textobject>
 				    </mediaobject>
 				</screenshot>			
-			
 			    </entry>
 			    <entry>
 				<para>
@@ -545,20 +507,596 @@
 			
 			    </entry>
 			</row>
-		
-		
 		    </tbody>
 		</tgroup>
 	    </table>
-	    
-	    
-	    
     
 	</sect2>
 	
+	<sect2 id="xvidcap-menu">
+
+	    <title>Main Menu</title>
+	    <para>A right-click on the filename display pops up the following menu:</para>
+
+	    <figure id="xvidcap-menu-screenshot">
+		<title>Main Menu</title>
+		<screenshot>
+		    <mediaobject>
+			<imageobject>
+			    <imagedata fileref="figures/menu.png" format="PNG"/>
+			</imageobject>
+			<textobject> <phrase>Main Menu</phrase>
+			</textobject>
+		    </mediaobject>
+		</screenshot>
+	    </figure>
+	    
+	    <table frame="all" id="xvidcap-menu-TBL">
+		<title>
+		    the main menu's items: 
+		</title>
+		<tgroup cols="2" align="char" charoff="50" char=".">
+		    <tbody>
+			<row id="xvidcap-menu-TBL-prefs">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-prefs.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Preferences Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>
+			    </entry>
+			    <entry>
+				<para>
+				    open the preferences dialog
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-save-prefs">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-save-prefs.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Save Preferences Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    save the current settings
+				</para>
+				<tip>
+				    <title>Volatile Settings</title>
+				    <para>
+					Note that <application>&app;</application> does not save changed preferences automatically. You can
+					modify settings, exit <application>&app;</application>, and return to your previous settings by just
+					restarting <application>&app;</application>. If you want to make changes to your settings persistent,
+					select this. It will write your settings to a file <filename>.xvidcaprc</filename>
+					in your home directory.
+				    </para>
+				</tip>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-mf">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-mf.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Multi-Frame Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    select multi-frame capture mode
+				</para>
+				<tip>
+				    <title>Parallel Settings for Capture Modes</title>
+				    <para>
+					Keep in mind that you can have distinct settings for &mf-cap; and &sf-cap; 
+					modes configured and stored in parallel. Choosing this menuitem or the next
+					toggles between the two modes and their respective settings.
+				    </para>
+				</tip>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-sf">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-sf.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Single-Frame Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    select single-frame capture mode
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-autocontinue">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-cont.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Autocontinue Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    toggle autocontinue feature on/off
+				</para>
+				<para>
+				    This is selectable only in &mf-cap; mode
+				    and only if the filename is mutable. Refer to <ulink>the autocontinue prefernces
+				    setting</ulink> for more information.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-make-video">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-make-video.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Make Video Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    execute encoding command set in preferences
+				</para>
+				<para>
+				    In &mf-cap; mode this is not at all
+				    needed and not set by default. It can, however, be set to allow executing a custom
+				    transcoding command if output is needed in a format other than <application>&app;</application> can generate.
+				    The script used in &sf-cap; mode by default is provided by <application>&app;</application> but may need to be
+				    copied to your executable path to make it available. Refer to <ulink>the commands
+				    preferences tab</ulink> for more information on setting encoding commands.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-animate">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-animate.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Animate/Play Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    execute playback command set in preferences
+				</para>
+				<para>
+				    In &mf-cap; mode this is <application>mplayer</application>
+				    and <application>animate</application> (part of ImageMagick) by default. Refer to <ulink>the commands
+				    preferences tab</ulink> for more information on setting encoding commands.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-help">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-help.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Help Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    pop up online help
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-about">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-about.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>About Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    pop up &app;'s about dialog
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-menu-TBL-quit">
+			    <entry>
+				<screenshot>
+				    <mediaobject>
+					<imageobject>
+					    <imagedata fileref="figures/menu-quit.png" format="PNG"/>
+					</imageobject>
+					<textobject> <phrase>Quit Menuitem</phrase>
+					</textobject>
+				    </mediaobject>
+				</screenshot>				
+			    </entry>
+			    <entry>
+				<para>
+				    exit &app;
+				</para>
+			    </entry>
+			</row>
+		    </tbody>
+		</tgroup>
+	    </table>
+
+	</sect2>
+	
+	
     </sect1>
     
+    <sect1 id="xvidcap-prefs">
+	<title>Preferences</title>
     
+	<para>
+	    You can start the Preferences dialog either by right-clicking on the main control's
+	    filename display and selecting <quote>Preferences</quote> or pressing CTRL-P. The
+	    dialog itself is divided into four tabs.
+	</para>
+	
+	<sect2 id="xvidcap-prefs-general">
+	    <title>General Preferences</title>
+
+	    <para>
+		The first tab of the preferences dialog contains miscellaneous settings around
+		general behaviour of <application>&app;</application>.
+	    </para>
+
+	    <figure id="xvidcap-prefs-general-screenshot">
+		<title>General Preferences</title>
+		<screenshot>
+		    <mediaobject>
+			<imageobject>
+			    <imagedata fileref="figures/prefs-general.png" format="PNG"/>
+			</imageobject>
+			<textobject> <phrase>General Preferences</phrase>
+			</textobject>
+		    </mediaobject>
+		</screenshot>
+	    </figure>
+	    
+	    <table frame="all" id="xvidcap-prefs-general-TBL">
+		<title>
+		    the general settings are: 
+		</title>
+		<tgroup cols="2" align="char" charoff="50" char=".">
+		    <tbody>
+			<row id="xvidcap-prefs-general-TBL-dflt-mode">
+			    <entry>
+				<para>
+				    Default Capture Mode
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    This setting governs which capture mode is used by <application>&app;</application> by default, i. e. if
+				    no other settings give <application>&app;</application> a clue.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-TBL-cap-mouse">
+			    <entry>
+				<para>
+				    Capture Mouse Pointer
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Check this to capture mouse pointer position. Once checked, you can select
+				    whether you want to capture a black or a white mouse pointer. This is 
+				    required because &app; does not have a way of capturing the real, current
+				    mouse pointer, only its position. Therefore <application>&app;</application> generates a dummy mouse
+				    pointer in the captured movie.
+				</para>
+				<caution>
+				    <title>Custom Mouse Pointer Shapes</title>
+				    <para>
+					For above mentioned reasons, <application>&app;</application> cannot capture the shape of you
+					mouse pointer. If, therefore, the application you're capturing 
+					changes the shape of your mouse pointer to a specific shape you
+					will loose that in the captured movie. If the logic of the captured
+					content heavily relies on this you will want to ensure you either
+					have other means of showing the mouse pointer shape or elaborate
+					on it in your spoken comments.
+				    </para>
+				</caution>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-TBL-save-cap-geometry">
+			    <entry>
+				<para>
+				    Save Capture Geometry
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Check this if you want to store size and position of the currently 
+				    selected area to capture along with other preferences on selecting
+				    <quote>Save Preferences</quote> from the main menu.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-TBL-use-shm">
+			    <entry>
+				<para>
+				    Use Shared Memory
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Check this if capturing frames should make use of X11's shared
+				    memory extension.
+				</para>
+				<caution>
+				    <title>Shared Memory X11 Access</title>
+				    <para>
+					Use of shared memory is enabled by default if the machine where
+					<application>&app;</application> was built supported shared memory access in X11, which is
+					typically the case, nowadays. You will need to turn this off, however, if
+					X11 server and client are not running on the same machine, e. g. 
+					if you are on a X terminal thin client.
+				    </para>
+				</caution>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-TBL-autocontinue">
+			    <entry>
+				<para>
+				    Autocontinue
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    If recording in &mf-cap; mode and using a maximum number of frames to 
+				    capture or a maximum capture duration, <application>&app;</application> can automatically continue
+				    capturing to a new video once the specified maximum number of frames or
+				    capture duration have been reached. This can effectively create a series
+				    of movies split to chunks of the specified maximum length. To use this
+				    you need to specify a <ulink>mutable target filename</ulink>.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-TBL-always-show-results">
+			    <entry>
+				<para>
+				    Always Show Results Dialog
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Check this to always show a dialog with an overview of capture results
+				    on stopping a capture session. The dialog will always be shown if 
+				    required (e. g. to specify a target filename). This makes the dialog
+				    be shown where it would not strictly be required. By default the results
+				    dialog is always displayed. If, however, you have unchecked the 
+				    <quote>Show this dialog next time</quote> in the results dialog before,
+				    you can turn it back on here.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-TBL-rescale">
+			    <entry>
+				<para>
+				    Rescale Output Percentage
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Use this to make the output video smaller than the original size of the
+				    portion of the screen captured. The percentage specified here is the 
+				    size of the output relative to the input. For example, specifying
+				    <quote>25</quote> will make the output width and height half the 
+				    original each. Thus the image size of the output will be 25 percent of
+				    the captured area.
+				</para>
+			    </entry>
+			</row>
+		    </tbody>
+		</tgroup>
+	    </table>
+	</sect2>
+	
+	<sect2 id="xvidcap-prefs-sf">
+	    <title>Single-Frame Capture Preferences</title>
+
+	    <para>
+		This tab contains the settings for &sf-cap; mode. Because &sf-cap; mode does
+		not support audio capture, only video settings are configurable here.
+	    </para>
+
+	    <figure id="xvidcap-prefs-sf-screenshot">
+		<title>Single-Frame Capture Preferences</title>
+		<screenshot>
+		    <mediaobject>
+			<imageobject>
+			    <imagedata fileref="figures/prefs-sf.png" format="PNG"/>
+			</imageobject>
+			<textobject> <phrase>Single-Frame Capture Preferences</phrase>
+			</textobject>
+		    </mediaobject>
+		</screenshot>
+	    </figure>
+	    
+	    <table frame="all" id="xvidcap-prefs-sf-TBL">
+		<title>
+		    the &sf-cap; mode settings are: 
+		</title>
+		<tgroup cols="2" align="char" charoff="50" char=".">
+		    <tbody>
+			<row id="xvidcap-prefs-sf-TBL-file-name">
+			    <entry>
+				<para>
+				    File Name
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Enter a file name pattern here to use for saving the individual
+				    frames captured. The file name must contain a pattern that will
+				    be replaced by the actual frame count for each individual file.
+				    The patterns used here are those understood by 
+				    <ulink type="help" url="man:fprintf">fprintf</ulink>. 
+				    A file name containing this kind of pattern will henceforth be
+				    called a <quote>mutable</quote> file name.
+				</para>
+				<tip>
+				    <title>File Name Selection</title>
+				    <para>
+					Instead of typing in a filename you can also click on the file
+					selector button (<guibutton>...</guibutton>). Be sure to put a
+					numeric pattern in the file name afterwards, though. If in 
+					doubt use <quote>%5d</quote> somewhere in your file name.
+				    </para>
+				</tip>				
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-sf-TBL-format">
+			    <entry>
+				<para>
+				    File Format
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+				    automatically select an appropriate output format based on the
+				    filename specified. For example, if you specify <quote>test-%4d.png</quote>
+				    the output format will be <quote>Portable Network Graphics File (png)</quote>.
+				    If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
+				    menu allows for manually selecting a format, possibly overriding 
+				    <application>&app;'s</application> decision.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-sf-TBL-fps">
+			    <entry>
+				<para>
+				    Frames per Second
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The number of frames to capture per second. This control can either be 
+				    a scale or a dropdown menu, if the selected codec only supports certain
+				    frame rates.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-sf-TBL-max-time">
+			    <entry>
+				<para>
+				    Maximum Time
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Maximum time to record in seconds
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-sf-TBL-max-frames">
+			    <entry>
+				<para>
+				    Maximum Frames
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Maximum frames to capture
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-sf-TBL-frame-start">
+			    <entry>
+				<para>
+				    Frame Start Number
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Start counting frames with this number
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-sf-TBL-frame-increment">
+			    <entry>
+				<para>
+				    Frame Number Increment
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    When capturing increment the frame count by the specified number
+				    for each frame captured.
+				</para>
+				<caution>
+				    <title>Deprecated Settings</title>
+				    <para>
+					Due to the limited use of <quote>Frame Start Number</quote> and
+					<quote>Frame Number Increment</quote> those settings may go away
+					in future versions.
+				    </para>
+				</caution>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-sf-TBL-quality">
+			    <entry>
+				<para>
+				    Quality
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Desired output quality
+				</para>
+			    </entry>
+			</row>
+		    </tbody>
+		</tgroup>
+	    </table>
+	</sect2>
+	
+	
+	
+	
+    </sect1>
     
     
     
