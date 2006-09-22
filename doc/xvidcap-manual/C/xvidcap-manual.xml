@@ -645,7 +645,8 @@
 				</para>
 				<para>
 				    This is selectable only in &mf-cap; mode
-				    and only if the filename is mutable. Refer to <ulink>the autocontinue prefernces
+				    and only if the filename is mutable. Refer to 
+				    <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">the autocontinue prefernces
 				    setting</ulink> for more information.
 				</para>
 			    </entry>
@@ -671,7 +672,8 @@
 				    needed and not set by default. It can, however, be set to allow executing a custom
 				    transcoding command if output is needed in a format other than <application>&app;</application> can generate.
 				    The script used in &sf-cap; mode by default is provided by <application>&app;</application> but may need to be
-				    copied to your executable path to make it available. Refer to <ulink>the commands
+				    copied to your executable path to make it available. Refer to 
+				    <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">the commands
 				    preferences tab</ulink> for more information on setting encoding commands.
 				</para>
 			    </entry>
@@ -694,7 +696,8 @@
 				</para>
 				<para>
 				    In &mf-cap; mode this is <application>mplayer</application>
-				    and <application>animate</application> (part of ImageMagick) by default. Refer to <ulink>the commands
+				    and <application>animate</application> (part of ImageMagick) by default. Refer to 
+				    <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">the commands
 				    preferences tab</ulink> for more information on setting encoding commands.
 				</para>
 			    </entry>
@@ -731,7 +734,7 @@
 			    </entry>
 			    <entry>
 				<para>
-				    pop up &app;'s about dialog
+				    pop up <application>&app;'s</application> about dialog
 				</para>
 			    </entry>
 			</row>
@@ -749,7 +752,7 @@
 			    </entry>
 			    <entry>
 				<para>
-				    exit &app;
+				    exit <application>&app;</application>
 				</para>
 			    </entry>
 			</row>
@@ -821,7 +824,7 @@
 				<para>
 				    Check this to capture mouse pointer position. Once checked, you can select
 				    whether you want to capture a black or a white mouse pointer. This is 
-				    required because &app; does not have a way of capturing the real, current
+				    required because <application>&app;</application> does not have a way of capturing the real, current
 				    mouse pointer, only its position. Therefore <application>&app;</application> generates a dummy mouse
 				    pointer in the captured movie.
 				</para>
@@ -889,7 +892,7 @@
 				    capturing to a new video once the specified maximum number of frames or
 				    capture duration have been reached. This can effectively create a series
 				    of movies split to chunks of the specified maximum length. To use this
-				    you need to specify a <ulink>mutable target filename</ulink>.
+				    you need to specify a <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">mutable target filename</ulink>.
 				</para>
 			    </entry>
 			</row>
@@ -1013,9 +1016,7 @@
 			    </entry>
 			    <entry>
 				<para>
-				    The number of frames to capture per second. This control can either be 
-				    a scale or a dropdown menu, if the selected codec only supports certain
-				    frame rates.
+				    The number of frames to capture per second.
 				</para>
 			    </entry>
 			</row>
@@ -1093,8 +1094,574 @@
 	    </table>
 	</sect2>
 	
+	<sect2 id="xvidcap-prefs-mf">
+	    <title>Multi-Frame Capture Preferences</title>
+
+	    <para>
+		This tab contains the settings for &mf-cap; mode.
+	    </para>
+
+	    <figure id="xvidcap-prefs-mf-screenshot">
+		<title>Multi-Frame Capture Preferences</title>
+		<screenshot>
+		    <mediaobject>
+			<imageobject>
+			    <imagedata fileref="figures/prefs-mf.png" format="PNG"/>
+			</imageobject>
+			<textobject> <phrase>Multi-Frame Capture Preferences</phrase>
+			</textobject>
+		    </mediaobject>
+		</screenshot>
+	    </figure>
+	    
+	    <table frame="all" id="xvidcap-prefs-mf-TBL">
+		<title>
+		    the &mf-cap; mode video settings are: 
+		</title>
+		<tgroup cols="2" align="char" charoff="50" char=".">
+		    <tbody>
+			<row id="xvidcap-prefs-mf-TBL-file-name">
+			    <entry>
+				<para>
+				    File Name
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Enter a file name or file name pattern here to use for saving the individual
+				    frames captured. For &mf-cap; the string supplied here only needs to be
+				    a <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">mutable filename</ulink> 
+				    if the <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">autocontinue feature</ulink>
+				    is to be used. Otherwise a simple filename is sufficient here, which may also be
+				    selected through the file selector button (<guibutton>...</guibutton>).
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-format">
+			    <entry>
+				<para>
+				    File Format
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+				    automatically select an appropriate output format based on the
+				    filename specified. For example, if you specify <quote>test.avi</quote>
+				    the output format will be <quote>Microsoft Audio Video Interleaved File (avi)</quote>.
+				    If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
+				    menu allows for manually selecting a format, possibly overriding 
+				    <application>&app;'s</application> decision.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-vid-codec">
+			    <entry>
+				<para>
+				    Video Codec
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+				    automatically select an appropriate video codec for the output format selected.
+				    For example, if <quote>Microsoft Audio Video Interleaved File (avi)</quote> is
+				    selected the video codec will be <quote>Microsoft DIVX 2</quote>.
+				    If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
+				    menu allows for manually selecting a codec, possibly overriding 
+				    <application>&app;'s</application> decision.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-fps">
+			    <entry>
+				<para>
+				    Frames per Second
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The number of frames to capture per second. This control can either be 
+				    a scale or a dropdown menu, if the selected codec only supports certain
+				    frame rates.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-max-time">
+			    <entry>
+				<para>
+				    Maximum Time
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Maximum time to record in seconds
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-max-frames">
+			    <entry>
+				<para>
+				    Maximum Frames
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Maximum frames to capture
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-quality">
+			    <entry>
+				<para>
+				    Quality
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Desired output quality
+				</para>
+			    </entry>
+			</row>
+		    </tbody>
+		</tgroup>
+	    </table>
+
+	    <table frame="all" id="xvidcap-prefs-mf-TBL-audio">
+		<title>
+		    the &mf-cap; mode audio settings are: 
+		</title>
+		<tgroup cols="2" align="char" charoff="50" char=".">
+		    <tbody>
+			<row id="xvidcap-prefs-mf-TBL-audio-enable">
+			    <entry>
+				<para>
+				    Enable Audio
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Check this to capture audio along with video frames.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-audio-device">
+			    <entry>
+				<para>
+				    Input Device
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Type in the name of the input device to caputer audio from or
+				    select it through the file selector button (<guibutton>...</guibutton>).
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-audio-codec">
+			    <entry>
+				<para>
+				    Audio Codec
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+				    automatically select an appropriate audio codec for the video output format selected.
+				    For example, if <quote>Microsoft Audio Video Interleaved File (avi)</quote> is
+				    selected the audio codec will be <quote>MPEG2</quote>.
+				    If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
+				    menu allows for manually selecting a codec, possibly overriding 
+				    <application>&app;'s</application> decision.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-audio-smpl-rate">
+			    <entry>
+				<para>
+				    Sample Rate
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Audio sample rate. If you're using piped input audio the audio stream
+				    is resampled to the specified rate if required.
+				</para>
+				<tip>
+				    <title>Piped Audio Input</title>
+				    <para>
+					Instead of capturing audio from a real-time audio source, you can
+					also pipe a pre-recorded audio file to <application>&app;</application>. This way you can
+					effectively dub your recording with a given audio track. To do
+					this you need to:
+				    </para>
+				    <para>
+					<application>cat</application> my.mp3 | <application>&app;</application>
+					<parameter>--mf</parameter> <parameter>--audio yes</parameter>
+					<parameter>--audio_in -</parameter> <parameter>--file test.avi</parameter>
+				    </para>
+				    <para>
+					When you start the recording session in <application>&app;</application> it will sample audio
+					from the piped file.
+				    </para>
+				</tip>				
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-audio-bit-rate">
+			    <entry>
+				<para>
+				    Bit Rate
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Audio bit rate. If you're using piped input audio the audio stream
+				    is resampled to the specified rate if required.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-mf-TBL-audio-channels">
+			    <entry>
+				<para>
+				    Channels
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    Number of audio channels. If you're using piped input audio the audio stream
+				    is resampled to the specified number of channels if required.
+				</para>
+				<caution>
+				    <title>Audio Capture Quality</title>
+				    <para>
+					Note that the default settings are optimized for size rather
+					than quality. For better quality you will probably want to double
+					sample- and bit rate and potentially the number of channels, too.
+				    </para>
+				</caution>
+			    </entry>
+			</row>			
+		    </tbody>
+		</tgroup>
+	    </table>
 	
+	</sect2>
 	
+	<sect2 id="xvidcap-prefs-cmd">
+	    <title>Command Preferences</title>
+
+	    <para>
+		This tab contains various settings regarding which commands to execute
+		for certain actions.
+	    </para>
+
+	    <figure id="xvidcap-prefs-cmd-screenshot">
+		<title>Command Preferences</title>
+		<screenshot>
+		    <mediaobject>
+			<imageobject>
+			    <imagedata fileref="figures/prefs-commands.png" format="PNG"/>
+			</imageobject>
+			<textobject> <phrase>Command Preferences</phrase>
+			</textobject>
+		    </mediaobject>
+		</screenshot>
+	    </figure>
+	    
+	    <table frame="all" id="xvidcap-prefs-cmd-TBL">
+		<title>
+		    possible commands to set are: 
+		</title>
+		<tgroup cols="2" align="char" charoff="50" char=".">
+		    <tbody>
+			<row id="xvidcap-prefs-cmd-TBL-help">
+			    <entry>
+				<para>
+				    Help Command
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The command here is executed when the main menu's <guimenuitem>help</guimenuitem> item is selected.
+				    Since <application>&app;</application> now uses yelp for viewing the manual, this setting is going
+				    to go away. All other help buttons are context sensitive.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-cmd-TBL-sf-playback">
+			    <entry>
+				<para>
+				    Single Frame Playback Command
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The command specified here is executed when the item <guimenuitem>Animate / Play</guimenuitem>
+				    is selected from the main menu or the play button is pressed on the capture
+				    results dialog while in &sf-cap; mode. 
+				</para>
+				<tip>
+				    <title>Specifying Commands</title>
+				    <para>
+					Any command can be configured here. It could theoretically be
+					completely unrelated to video capture. You will always want to
+					make sure that the called application is in your path and that
+					you end your command line with the <application>&amp;</application> to avoid that <application>&app;</application>
+					waits for the called application to finish before continuing
+					itself.
+				    </para>
+				    <para>
+					<application>&app;</application> makes the following environment variables available to
+					the called application:
+				    </para>
+				    <table frame="non" id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL">
+					<tgroup cols="2" align="char" charoff="50" char=".">
+					    <tbody>
+						<row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-fframe">
+						    <entry>
+							<para>
+							    XVFFRAME
+							</para>
+						    </entry>
+						    <entry>
+							<para>
+							    number of the first frame captured
+							</para>
+						    </entry>
+						</row>
+						<row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-lframe">
+						    <entry>
+							<para>
+							    XVLFRAME
+							</para>
+						    </entry>
+						    <entry>
+							<para>
+							    number of the last frame captured
+							</para>
+						    </entry>
+						</row>
+						<row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-width">
+						    <entry>
+							<para>
+							    XVWIDTH
+							</para>
+						    </entry>
+						    <entry>
+							<para>
+							    width of the area captured
+							</para>
+						    </entry>
+						</row>
+						<row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-height">
+						    <entry>
+							<para>
+							    XVHEIGHT
+							</para>
+						    </entry>
+						    <entry>
+							<para>
+							    height of the area captured
+							</para>
+						    </entry>
+						</row>
+						<row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-fps">
+						    <entry>
+							<para>
+							    XVFPS
+							</para>
+						    </entry>
+						    <entry>
+							<para>
+							    desired (!) frame rate
+							</para>
+						    </entry>
+						</row>
+						<row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-time">
+						    <entry>
+							<para>
+							    XVTIME
+							</para>
+						    </entry>
+						    <entry>
+							<para>
+							    desired (!) time per frame
+							</para>
+						    </entry>
+						</row>
+						<row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-filename">
+						    <entry>
+							<para>
+							    XVFILE
+							</para>
+						    </entry>
+						    <entry>
+							<para>
+							    file name
+							</para>
+						    </entry>
+						</row>
+					    </tbody>
+					</tgroup>
+				    </table>
+				    <para>
+					The file name, however, needs special treatment for &sf-cap;. Here the 
+					pattern used for <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">mutable file names</ulink>
+					is sent literally as specified for the Single Frame Encoding Command further down only.
+					For the Single Frame Playback Command the pattern is converted to wildcards, i. e.
+					<quote>test-%4d.png</quote> becomes <quote>test-????.png</quote>. For the
+					Single Frame Edit Command the pattern is replaced with the number of the
+					current frame, i. e. <quote>test-%4d.png</quote> becomes <quote>test-0001.png</quote>.
+					For all Multi Frame commands the latter is used where if the filename is mutable
+					and the number used is the index number of the most recently recorded video as
+					with the <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">autocontinue feature</ulink>.
+				    </para>
+				</tip>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-cmd-TBL-sf-encode">
+			    <entry>
+				<para>
+				    Single Frame Encoding command
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The command here is executed when the main menu's <guimenuitem>Make Video</guimenuitem> 
+				    item is selected while in &sf-cap; mode.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-cmd-TBL-sf-edit">
+			    <entry>
+				<para>
+				    Single Frame Edit Command
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The command here is executed when the main control's <guibutton>Edit Button</guibutton>
+				    is clicked while in &sf-cap; mode.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-cmd-TBL-mf-playback">
+			    <entry>
+				<para>
+				    Multi Frame Playback Command
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The command specified here is executed when the item <guimenuitem>Animate / Play</guimenuitem>
+				    is selected from the main menu or the play button is pressed on the capture
+				    results dialog while in &mf-cap; mode. 
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-cmd-TBL-mf-encode">
+			    <entry>
+				<para>
+				    Multi Frame Encoding command
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The command here is executed when the main menu's <guimenuitem>Make Video</guimenuitem> 
+				    item is selected while in &mf-cap; mode.
+				</para>
+			    </entry>
+			</row>
+			<row id="xvidcap-prefs-cmd-TBL-mf-edit">
+			    <entry>
+				<para>
+				    Multi Frame Edit Command
+				</para>
+			    </entry>
+			    <entry>
+				<para>
+				    The command here is executed when the main control's <guibutton>Edit Button</guibutton>
+				    is clicked while in &mf-cap; mode.
+				</para>
+			    </entry>
+			</row>
+		    </tbody>
+		</tgroup>
+	    </table>
+	</sect2>
+	
+    </sect1>
+    
+    <sect1 id="xvidcap-results">
+	<title>Capture Results Dialog</title>
+    
+	<para>
+	    When you first stop a recording session, a dialog will pop up displaying
+	    the results of the capture session. This popup can be prevented from
+	    appearing again by unchecking the <guibutton>Show Next Time</guibutton>
+	    checkbox or <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-always-show-results">this button</ulink>
+	    in the preferences dialog.
+	</para>
+	<para>
+	    The dialog itself can take one of two forms depending on whether or not
+	    you configured <application>&app;</application> to ask you for a target file name after the capture.
+	</para>
+	<tip>
+	    <title>Ask User For File Name</title>
+	    <para>
+		For the time being, the only way to configure <application>&app;</application> to ask the user
+		to specify a file name after the capture rather than providing one
+		up-front it by providing an empty file name either through the
+		command line using <parameter>--file ""</parameter> or in the preferences
+		dialog. This requires manually specifying an output file format.
+		In this configuration <application>&app;</application> will store the video in a temporary file
+		in your home directory which can lateron be renamed / moved to the
+		desired destination. This is not compatible with autocontinue.
+	    </para>
+	</tip>
+
+	<para>
+	    If <application>&app;</application> is configured to ask the user for a file name, the results dialog
+	    will look like this:
+	</para>
+	<figure id="xvidcap-results-ask-screenshot">
+	    <title>Capture Results Dialog with Ask User For File name</title>
+	    <screenshot>
+		<mediaobject>
+		    <imageobject>
+			<imagedata fileref="figures/results-dialog-ask.png" format="PNG"/>
+		    </imageobject>
+		    <textobject> <phrase>Capture Results Dialog with Ask User For File name</phrase>
+		    </textobject>
+		</mediaobject>
+	    </screenshot>
+	</figure>
+	
+	<para>
+	    Besides the overview of the used settings and information about the desired
+	    and achieved frame rates, you can select name and location of the file you
+	    want the video to be stored in through clicking <guibutton>Save As</guibutton>. 
+	    Once a file has been selected, the label next to the button will display the
+	    absolute file name. You can also choose to preview the video through
+	    <guibutton>Play</guibutton> or abandon it through <guibutton>Delete</guibutton>.
+	    Note that the latter does not immediately delete the temporary file, though.
+	</para>
+	
+	<para>
+	    Normally, the results dialog will look like this:
+	</para>
+	<figure id="xvidcap-results-screenshot">
+	    <title>Normal Capture Results Dialog</title>
+	    <screenshot>
+		<mediaobject>
+		    <imageobject>
+			<imagedata fileref="figures/results-dialog.png" format="PNG"/>
+		    </imageobject>
+		    <textobject> <phrase>Normal Capture Results Dialog</phrase>
+		    </textobject>
+		</mediaobject>
+	    </screenshot>
+	</figure>
 	
     </sect1>
     
@@ -1104,114 +1671,112 @@
     
     
     
-    
-    
-    
+    <!--    
     <sect1 id="c1-s1">
-	<title>section 1</title>
-	<para>may or may not exist</para>
+    <title>section 1</title>
+    <para>may or may not exist</para>
 
-	<example>
-	    <title>sample command line session</title>
-	    <screen id="sc1">
-		<prompt>$</prompt> <userinput>ncftp ftp://ftp.cygnus.com/pub/home/rosalia/</userinput>
-		<prompt>ncftp></prompt> <userinput>cd docware/RPMS/i386/</userinput>
-		<prompt>ncftp></prompt> <userinput>mget *.rpm</userinput>
-		<prompt>ncftp></prompt> <userinput>quit</userinput>
-	    </screen>	    
-	</example>
+    <example>
+    <title>sample command line session</title>
+    <screen id="sc1">
+    <prompt>$</prompt> <userinput>ncftp ftp://ftp.cygnus.com/pub/home/rosalia/</userinput>
+    <prompt>ncftp></prompt> <userinput>cd docware/RPMS/i386/</userinput>
+    <prompt>ncftp></prompt> <userinput>mget *.rpm</userinput>
+    <prompt>ncftp></prompt> <userinput>quit</userinput>
+    </screen>	    
+    </example>
 	    
-	<tip>
-	    <title>sample tip with parameters</title>		
-	    <para>
-		sample parameter details -------
-		To validate DocBook without displaying the document, add the
-		argument <parameter class="option">--noout</parameter> to the
-		<application>xmllint</application> command.
-	    </para>	    
-	</tip>
+    <tip>
+    <title>sample tip with parameters</title>		
+    <para>
+    sample parameter details 
+    To validate DocBook without displaying the document, add the
+    argument <parameter class="option">-noout</parameter> to the
+    <application>xmllint</application> command.
+    </para>	    
+    </tip>
 	    
-	<example id="ex1">
-	    <title>A simple C program</title>
-	    <programlisting role="C">
-		#include &lt;stdio.h&gt;
-		main()
-		{
-		printf("Hello, world!\n");
-		}
-	    </programlisting>
-	</example>	    
+    <example id="ex1">
+    <title>A simple C program</title>
+    <programlisting role="C">
+    #include &lt;stdio.h&gt;
+    main()
+    {
+    printf("Hello, world!\n");
+    }
+    </programlisting>
+    </example>	    
 	       
-	<figure id="app-FIG-shot1">
-	    <title>Screenshot</title>
-	    <screenshot>
-		<mediaobject>
-		    <imageobject>
-			<imagedata fileref="figures/example_screenshot.png" format="PNG"/>
-		    </imageobject>
-		    <textobject>
-			<phrase>Shows the application screenshot with several buttons.</phrase>
-		    </textobject>
-		    <caption>
-			<para>Screenshot of a program</para>
-		    </caption>
-		</mediaobject>
-	    </screenshot>
-	</figure>	    
+    <figure id="app-FIG-shot1">
+    <title>Screenshot</title>
+    <screenshot>
+    <mediaobject>
+    <imageobject>
+    <imagedata fileref="figures/example_screenshot.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+    <phrase>Shows the application screenshot with several buttons.</phrase>
+    </textobject>
+    <caption>
+    <para>Screenshot of a program</para>
+    </caption>
+    </mediaobject>
+    </screenshot>
+    </figure>	    
 	    
 	    
     </sect1>
     <sect1 id="a1-s1">
-	<title>doinker</title>
-	<para>this is an <emphasis>example</emphasis></para>
+    <title>doinker</title>
+    <para>this is an <emphasis>example</emphasis></para>
 	    
-	<table frame="all">
-	    <title>Convergence of dynamical equations and constraints for
-	    various choices of constrained edges</title>
-	    <tgroup cols="5" align="char" charoff="50" char=".">
-		<thead>
-		    <row>
-			<entry>Constrained edges</entry>
-			<entry>Model</entry>
-			<entry># of iter.</entry>
-			<entry>E <subscript>i</subscript><superscript>2</superscript></entry>
-			<entry>C <subscript>i</subscript><superscript>2</superscript></entry>
-		    </row>
-		</thead>
-		<tbody>
-		    <row>
-			<entry>AD, AF, AG, AA'</entry>
-			<entry>Flat space</entry>
-			<entry>5</entry>
-			<entry>1.15<superscript>-24</superscript></entry>
-			<entry>1.77<superscript>-19</superscript></entry>
-		    </row>
-		    <row>
-			<entry>AD, AF, AG, AA'</entry>
-			<entry>Kasner universe</entry>
-			<entry>6</entry>
-			<entry>1.43<superscript>-19</superscript></entry>
-			<entry>1.77<superscript>-8</superscript></entry>
-		    </row>
-		    <row>
-			<entry>AB, AC, AE, AA'</entry>
-			<entry>Flat space</entry>
-			<entry>4</entry>
-			<entry>1.15<superscript>-24</superscript></entry>
-			<entry>4.09<superscript>-24</superscript></entry>
-		    </row>
-		    <row>
-			<entry>AB, AC, AE, AA'</entry>
-			<entry>Kasner universe</entry>
-			<entry>7</entry>
-			<entry>1.33<superscript>-19</superscript></entry>
-			<entry>8.07<superscript>-7</superscript></entry>
-		    </row>
-		</tbody>
-	    </tgroup>
-	</table>
+    <table frame="all">
+    <title>Convergence of dynamical equations and constraints for
+    various choices of constrained edges</title>
+    <tgroup cols="5" align="char" charoff="50" char=".">
+    <thead>
+    <row>
+    <entry>Constrained edges</entry>
+    <entry>Model</entry>
+    <entry># of iter.</entry>
+    <entry>E <subscript>i</subscript><superscript>2</superscript></entry>
+    <entry>C <subscript>i</subscript><superscript>2</superscript></entry>
+    </row>
+    </thead>
+    <tbody>
+    <row>
+    <entry>AD, AF, AG, AA'</entry>
+    <entry>Flat space</entry>
+    <entry>5</entry>
+    <entry>1.15<superscript>-24</superscript></entry>
+    <entry>1.77<superscript>-19</superscript></entry>
+    </row>
+    <row>
+    <entry>AD, AF, AG, AA'</entry>
+    <entry>Kasner universe</entry>
+    <entry>6</entry>
+    <entry>1.43<superscript>-19</superscript></entry>
+    <entry>1.77<superscript>-8</superscript></entry>
+    </row>
+    <row>
+    <entry>AB, AC, AE, AA'</entry>
+    <entry>Flat space</entry>
+    <entry>4</entry>
+    <entry>1.15<superscript>-24</superscript></entry>
+    <entry>4.09<superscript>-24</superscript></entry>
+    </row>
+    <row>
+    <entry>AB, AC, AE, AA'</entry>
+    <entry>Kasner universe</entry>
+    <entry>7</entry>
+    <entry>1.33<superscript>-19</superscript></entry>
+    <entry>8.07<superscript>-7</superscript></entry>
+    </row>
+    </tbody>
+    </tgroup>
+    </table>
 	    
     </sect1>
-    
+    -->    
 </article>
 		

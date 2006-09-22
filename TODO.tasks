@@ -127,6 +127,16 @@ kb87850@ubuntu:~/Quellen/xvidcap/trunk$
     <item>
       <attribute id="1158821898" priority="1" done="1" start_date="732575" completed_date="732575" notify="0" last_edited="1158854871"/>
       <summary>--cpu und --tune-cpu testen mit ffpmeg</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1158952913" priority="1" done="0" start_date="732576" enddate="99999999" notify="0" endtime="-60" last_edited="1158952913"/>
+      <summary>make install (in deb building) puts wrong URL in omf</summary>
+      <comment></comment>
+    </item>
+    <item>
+      <attribute id="1158952937" priority="1" done="0" start_date="732576" enddate="99999999" notify="0" endtime="-60" last_edited="1158952937"/>
+      <summary>put right yelp calls in help buttons everywhere</summary>
       <comment></comment>
     </item>
   </category>

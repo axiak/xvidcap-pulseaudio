@@ -1,4 +1,7 @@
 
+2006-09-22  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* doc: first draft of manual
+
 2006-09-21  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, capture.c, main.c: made --gui no operation
 		exit on CTRL-C from main.c rather than capture.c 

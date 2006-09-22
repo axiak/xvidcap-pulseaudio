@@ -165,7 +165,7 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->single_frame.video_cmd =
         "ppm2mpeg.sh \"${XVFILE}\" ${XVFFRAME} ${XVLFRAME} ${XVWIDTH} ${XVHEIGHT} ${XVFPS} ${XVTIME} &";
     lapp->single_frame.edit_cmd = "gimp \"${XVFILE}\" &";
-    lapp->help_cmd = "xterm -e man xvidcap &";
+    lapp->help_cmd = "yelp ghelp:xvidcap &";
 
 #ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
