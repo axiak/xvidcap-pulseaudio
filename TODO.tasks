@@ -130,14 +130,19 @@ kb87850@ubuntu:~/Quellen/xvidcap/trunk$
       <comment/>
     </item>
     <item>
-      <attribute id="1158952913" priority="1" done="0" start_date="732576" enddate="99999999" notify="0" endtime="-60" last_edited="1158952913"/>
+      <attribute id="1158952913" priority="1" done="1" start_date="732576" completed_date="732577" notify="0" last_edited="1158974912"/>
       <summary>make install (in deb building) puts wrong URL in omf</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
-      <attribute id="1158952937" priority="1" done="0" start_date="732576" enddate="99999999" notify="0" endtime="-60" last_edited="1158952937"/>
+      <attribute id="1158974939" priority="1" done="0" start_date="732577" enddate="99999999" notify="0" endtime="-60" last_edited="1158974939"/>
+      <summary>investigate porting manpage to docbook</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1158952937" priority="1" done="0" start_date="732576" enddate="99999999" notify="0" endtime="-60" last_edited="1159033930"/>
       <summary>put right yelp calls in help buttons everywhere</summary>
-      <comment></comment>
+      <comment>for some reason the links jump to strange places (somewhat above or below the actual target)</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

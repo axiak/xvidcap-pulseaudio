@@ -1008,6 +1008,41 @@ gboolean stop_recording_nongui_stuff(Job * job)
 }
 
 
+// this handles the shortcut keybindings 
+void
+do_results_help() {
+    system((char *) "yelp ghelp:xvidcap?xvidcap-results &");
+}
+
+gint
+on_xvc_result_dialog_key_press_event(GtkWidget * widget,
+                                        GdkEvent * event)
+{
+    #define DEBUGFUNCTION "on_xvc_result_dialog_key_press_event()"
+    GdkEventKey *kevent = NULL;
+
+    g_assert(widget);
+    g_assert(event);
+    kevent = (GdkEventKey *) event;
+
+#ifdef DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
+    if (kevent->keyval == 65470) {
+        do_results_help();
+    }
+    
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
+    // Tell calling code that we have not handled this event; pass it on. 
+    return FALSE;
+    #undef DEBUGFUNCTION
+}
+
+
 void
 on_xvc_result_dialog_select_filename_button_clicked(GtkButton * button, gpointer user_data)
 {
@@ -1299,8 +1334,7 @@ static gboolean stop_recording_gui_stuff(Job * job)
                         app->flags &= ~FLG_ALWAYS_SHOW_RESULTS;
                     break;
                 case GTK_RESPONSE_HELP:
-                    if (app->help_cmd != NULL)
-                        system((char *) app->help_cmd);
+                    do_results_help();
                     break;
                 case GTK_RESPONSE_ACCEPT:
                     if (!app->current_mode) {
@@ -2155,6 +2189,13 @@ on_xvc_ctrl_main_window_key_press_event(GtkWidget * widget,
         xml = glade_get_widget_tree(xvc_ctrl_m1);
         g_assert(xml);
         mitem = glade_xml_get_widget(xml, "xvc_ctrl_m1_mitem_quit");
+        g_assert(mitem);
+        gtk_menu_item_activate(GTK_MENU_ITEM(mitem));
+        return TRUE;
+    } else if (kevent->keyval == 65470) {
+        xml = glade_get_widget_tree(xvc_ctrl_m1);
+        g_assert(xml);
+        mitem = glade_xml_get_widget(xml, "xvc_ctrl_m1_mitem_help");
         g_assert(mitem);
         gtk_menu_item_activate(GTK_MENU_ITEM(mitem));
         return TRUE;

@@ -2,6 +2,10 @@
 2006-09-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/xmldocs.make: added appid and changed directories to
 		make appid for references work
+	* src: gnome_ui.c, gnome_options.c, gnome-xvidcap.glade:
+		added correct hooks for opening help browser. Also
+		enabled F1 shortcut and made help for preferences
+		dialog open for active tab
 
 2006-09-22  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc: first draft of manual

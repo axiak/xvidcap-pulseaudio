@@ -624,7 +624,81 @@ void xvc_pref_do_OK()
 
 static void doHelp()
 {
-    if ( pref_app.help_cmd != NULL ) system((char*) pref_app.help_cmd);
+    #define DEBUGFUNCTION "doHelp()"
+    GladeXML *xml = NULL;
+    GtkWidget *notebook = NULL;
+    int cur_tab = -1;
+    const char* cmd = NULL;
+    
+    xml = glade_get_widget_tree(GTK_WIDGET(xvc_pref_main_window));
+    g_assert(xml);
+
+    notebook = glade_xml_get_widget(xml, "xvc_pref_notebook");
+    g_assert(notebook);
+    
+    cur_tab = gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook));
+#ifdef HAVE_LIBAVCODEC
+    switch (cur_tab) {
+        case 0:
+            cmd = "yelp ghelp:xvidcap?xvidcap-prefs-general &";
+            break;
+        case 1:
+            cmd = "yelp ghelp:xvidcap?xvidcap-prefs-sf &";
+            break;
+        case 2:
+            cmd = "yelp ghelp:xvidcap?xvidcap-prefs-mf &";
+            break;
+        case 3:
+            cmd = "yelp ghelp:xvidcap?xvidcap-prefs-cmd &";
+            break;
+    }
+#else // HAVE_LIBAVCODEC
+    switch (cur_tab) {
+        case 0:
+            cmd = "yelp ghelp:xvidcap?xvidcap-prefs-general &";
+            break;
+        case 1:
+            cmd = "yelp ghelp:xvidcap?xvidcap-prefs-sf &";
+            break;
+        case 2:
+            cmd = "yelp ghelp:xvidcap?xvidcap-prefs-cmd &";
+            break;
+    }
+#endif // HAVE_LIBAVCODEC
+    
+    if (cmd) system(cmd);
+    
+    #undef DEBUGFUNCTION
+}
+
+
+// this handles the shortcut keybindings 
+gint
+on_xvc_pref_main_window_key_press_event(GtkWidget * widget,
+                                        GdkEvent * event)
+{
+    #define DEBUGFUNCTION "on_xvc_pref_main_window_key_press_event()"
+    GdkEventKey *kevent = NULL;
+
+    g_assert(widget);
+    g_assert(event);
+    kevent = (GdkEventKey *) event;
+
+#ifdef DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
+    if (kevent->keyval == 65470) {
+        doHelp();
+    }
+    
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+
+    // Tell calling code that we have not handled this event; pass it on. 
+    return FALSE;
+    #undef DEBUGFUNCTION
 }
 
 

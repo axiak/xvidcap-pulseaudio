@@ -462,6 +462,7 @@
   <signal name="destroy" handler="on_xvc_pref_main_window_destroy" last_modification_time="Thu, 09 Mar 2006 16:33:21 GMT"/>
   <signal name="close" handler="on_xvc_pref_main_window_close" last_modification_time="Thu, 09 Mar 2006 16:33:42 GMT"/>
   <signal name="response" handler="on_xvc_pref_main_window_response" last_modification_time="Thu, 09 Mar 2006 16:33:47 GMT"/>
+  <signal name="key_press_event" handler="on_xvc_pref_main_window_key_press_event" last_modification_time="Sat, 23 Sep 2006 17:29:49 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="xvc_pref_dialog_vbox1">
@@ -3632,6 +3633,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
   <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
+  <signal name="key_press_event" handler="on_xvc_result_dialog_key_press_event" last_modification_time="Sat, 23 Sep 2006 17:30:02 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox3">
