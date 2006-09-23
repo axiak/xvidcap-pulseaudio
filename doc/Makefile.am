@@ -1,4 +1,4 @@
-SUBDIRS = xvidcap-manual
+SUBDIRS = xvidcap
 
 EXTRA_DIST = xmldocs.make \
 	omf.make

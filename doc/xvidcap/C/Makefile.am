@@ -1,7 +1,7 @@
 figdir = figures
-docname = xvidcap-manual
+docname = xvidcap
 lang = C
-omffile = xvidcap-manual-C.omf
+omffile = xvidcap-C.omf
 include $(top_srcdir)/doc/xmldocs.make
 
 dist-hook: app-dist-hook

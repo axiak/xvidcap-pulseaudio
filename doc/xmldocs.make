@@ -36,7 +36,8 @@
 # ************* Begin of section some packagers may need to modify  **************
 # This variable (docdir) specifies where the documents should be installed.
 # This default value should work for most packages.
-docdir = $(datadir)/doc/@PACKAGE@/xml/$(docname)/$(lang)
+appid = xvidcap
+docdir = $(datadir)/gnome/help/$(appid)/$(lang)
 
 # **************  You should not have to edit below this line  *******************
 xml_files = $(entities) $(docname).xml

@@ -410,8 +410,8 @@ test x${HAVE_FFMPEG_AUDIO_TRUE} = "x" && AC_DEFINE([HAVE_FFMPEG_AUDIO], [1])
 
 AC_OUTPUT([
 doc/Makefile
-doc/xvidcap-manual/Makefile
-doc/xvidcap-manual/C/Makefile
+doc/xvidcap/Makefile
+doc/xvidcap/C/Makefile
 man/Makefile
 po/Makefile.in
 src/Makefile
