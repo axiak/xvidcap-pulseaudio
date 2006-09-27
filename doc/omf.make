@@ -47,11 +47,12 @@ install-data-local-omf:
 install-doc-omf:
 	-scrollkeeper-update -p $(scrollkeeper_localstate_dir) -o $(DESTDIR)$(omf_dest_dir)
 
-#uninstall-local-omf:
-uninstall-doc-omf:
+uninstall-local-omf:
 	-for file in $(srcdir)/*.omf; do \
 		basefile=`basename $$file`; \
 		rm -f $(omf_dest_dir)/$$basefile; \
 	done
 	-rmdir $(omf_dest_dir)
+
+uninstall-doc-omf:
 	-scrollkeeper-update -p $(scrollkeeper_localstate_dir)

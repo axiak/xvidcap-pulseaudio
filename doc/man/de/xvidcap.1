@@ -1,0 +1,197 @@
+.TH xvidcap 1  "September 2006" 
+.SH NAME
+XVidCap \- Record X11 screen portions to video
+.SH SYNOPSIS
+\fBxvidcap\fR [\-v] [ \-\-mf | \-\-sf ] [\-\-file\fB file name pattern\fR |\- ] [\-\-fps\fB frames per second\fR] [\-\-cap_geometry\fB geometry\fR] [\-\-rescale\fB size percentage\fR] [\-\-quality\fB quality percentage\fR] [\-\-source x11|shm ] [\-\-time\fB maximum duration in seconds\fR] [\-\-frames\fB maximum frames\fR] [\-\-start_no\fB initial frame number\fR] [\-\-continue yes|no ] [\-\-gui yes|no ] [\-\-auto] [\-\-codec\fB video codec\fR] [\-\-codec\-help] [\-\-format\fB output file format\fR] [\-\-format\-help] [\-\-audio yes|no ] [\-\-aucodec\fB audio codec\fR] [\-\-aucodec\-help] [\-\-audio_in\fB audio capture device\fR |\- ] [\-\-audio_bits\fB audio bit rate\fR] [\-\-audio_rate\fB audio sample rate\fR] [\-\-audio_channels\fB audio channels\fR]
+.SH INTRODUCTION
+xvidcap is a tool that captures movement on a selected area of an X11
+screen to files. It can operate in two distinct modes: (1) \fIsingle\-frame\fR
+capture or (2) \fImulti\-frame\fR capture. In single\-frame capture mode 
+xvidcap takes a configurable number of screenshots per second and 
+saves them to individual files. In multi\-frame capture mode xvidcap 
+also takes a number of screenshots per second, but encodes them to a single video in real time. 
+Audio capture is only available with multi\-frame formats.
+.PP
+Recording in single\-frame capture mode may be more convenient if you wish to preprocess the 
+images before encoding, or if you need other video codecs xvidcap 
+does not support. Individual images can later be encoded with tools like ffmpeg, mencoder, 
+or transcode.
+.PP
+For help, feature requests, or bug\-reports please turn to 
+http://www.sourceforge.net/projects/xvidcap/
+.SH OPTIONS
+These programs follow the usual GNU command line syntax, 
+with long options starting with two dashes (\fB\-\-\fR). 
+A summary of options is included below.
+.TP 
+\fB\-v\fR
+Runs xvidcap in verbose mode. This will provide more information about
+user settings, input and output codecs, performance and so forth. Messages
+like "missing XX milli secs .." while capturing mean you are missing 
+frames due to lack of ressources (dropped frames). This results in a video 
+that will play back too quickly. Note though, that verbose mode slows down 
+xvidcap and may actually be \fIcausing\fR frame drops. Try running without 
+verbose mode and watch the frame drop monitor.
+.TP 
+\fB\-\-mf\fR | \fB\-\-sf\fR
+xvidcap tries to be smart about what capture mode you want. If you 
+specify \fB\-\-file test.avi\fR xvidcap will assume you want multi\-frame capture.
+You can explicitly specify capture mode on the command line with this
+switch. If, for example, you have your settings properly configured and
+saved with multi\-frame capture as the default mode, calling \fBxvidcap \-\-sf\fR
+will start xvidcap in single\-frame capture mode with all stored settings. The
+default is multi\-frame capture.
+.TP 
+\fB\-\-file \fIfile name pattern\fB\fR
+File name or pattern to use for saving the captured frames. A file name
+pattern contains printf()\-like formatting (ref. \fBman printf\fR) 
+information to make the file name incrementable, e.g. \fB\-\-file out\-%02d.xwd\fR. 
+This is necessary for single\-frame capture. xvidcap will 
+replace the first printf() format string with the number of the frame currently captured. 
+Thus, in the example given, it will write to files \fBout\-00.xwd\fR, 
+\fBout\-01.xwd\fR, \fBout\-02.xwd\fR,
+etc. The frame number to start with can be specified with \fB\-\-start_no\fR,
+see above.
+
+Multi\-frame capture does not need a file pattern. If you specify one
+nonetheless like \fB\-\-file mymovie\-%d.mpeg\fR, xvidcap
+will replace the format string with the number of the current recording session 
+(always starting the count from zero). This will enable you to manually in\-/decrement that
+number, or use the autocontinue feature (ref. \fB\-\-continue\fR above) effectively
+creating a series of video files.
+.TP 
+\fB\-\-fps\fI frames per second\fB\fR
+Specifies the number of frames to be captured per second. This parameter 
+accepts floating point values, which allows for very low capture rates like
+e.g. \fB\-\-fps 0.5\fR to record one frame every 2 seconds. This is only possible
+in single\-frame mode. Codecs used for multi\-frame modes usually only
+accept certain frame rates as valid. Note that fractional frame rates for 
+codecs like MPEG1 which only accept very specific fractions are disabled 
+in this version due to an inconsistency with fractional timing between 
+xvidcap and libavcodec. Only integer frames rates will be accepted here.
+.TP 
+\fB\-\-cap_geometry\fI geometry\fB\fR
+Specify the geometry as for e. g. xterm, i. e. like this:
+\fIwidth\fRx\fIheight\fR+\fIx\-position\fR+\fIy\-position\fR
+
+This overrides the default width and height of the capture frame. Use the picker
+button of the GUI rather than this command line option to adjust the frame size to a 
+given window. Capture sizes below 20 x 20 don't seem to work well with 
+most multi\-frame capture codecs.
+.TP 
+\fB\-\-rescale\fI size percentage\fB\fR
+Rescale the output to a percentage of the original input. A value of \fB25\fR, e. g.
+makes the output size be 25 percent of the original input area.
+.TP 
+\fB\-\-quality\fI quality percentage\fB\fR
+Specify a value between \fB0\fR and \fB100\fR to define the quality encoding. The 
+default value is \fB75\fR. 
+.TP 
+\fB\-\-source\fR x11|shm
+Enable or disable the usage of the X11 shared memory extension. For shared 
+memory support both client and server have to run on the same host. If shared
+memory support is available, xvidcap will use it by default. If your X server and
+client do not run on the same machine, you need to disable it by passing \fB\-\-source x11\fR.
+.TP 
+\fB\-\-time\fI maximum duration in seconds\fB\fR
+Specifies the maximum time to capture, if \fB0\fR xvidcap will capture until 
+stopped interactively. For any other value any recording session will
+stop automatically after the specified number of seconds. This parameter 
+conflicts with \fB\-\-frames\fR (see below). If both are given xvidcap stop capturing
+if either applies. The program accepts floating point values, e.g. \fB2.5\fR.
+.TP 
+\fB\-\-frames\fI maximum frames\fB\fR
+Stops capturing after the specified number of frames are captured. If \fB0\fR
+xvidcap will capture until stopped interactively, ref. \fB\-\-time\fR above.
+.TP 
+\fB\-\-start_no\fI initial frame number\fB\fR
+Defines the start number which should be used for numbering files. The default 
+value is \fB0\fR.This parameter is used for single\-frame capture only.
+The numbering of movie files for \fB\-\-continue\fR always starts at zero.
+.TP 
+\fB\-\-continue\fR yes|no
+When multi\-frame capture is selected, maximum recording time or frames are
+specified, and the output filename is incrementable (see \fB\-\-file\fR below),
+xvidcap can automatically continue to capture to a new file when one 
+exceeds the maximum recording time or number of frames. This will change
+the behaviour of \fB\-\-time\fR and \fB\-\-frames\fR because recording will not stop
+at the specified limits, but rather start a new video file. The feature is 
+esp. useful if you want to automatically split your recording into chunks of
+e. g. five minutes. If no argument \fB\-\-continue\fR is given, xvidcap defaults to \fBno\fR.
+Because single\-frame capture needs an incrementable filename to count the
+individual frames, this feature is disabled for single\-frame capture. 
+.TP 
+\fB\-\-gui\fR yes|no
+Start xvidcap with or without control GUI overriding what's in the
+preferences file. Running without GUI will automatically start a single
+capture session. It can be stopped by either specifying one of \fB\-\-time\fR or
+\fB\-\-frames\fR, or by hitting CTRL\-C.
+.TP 
+\fB\-\-auto\fR
+xvidcap supports automatic detection of parameters for
+output format, video\- and audio codec. If any of those settings are saved as fixed
+values in the stored preferences, they can be overriden by specifying the parameter
+\fBauto\fR to any of the arguments \fB\-\-format\fR, \fB\-\-codec\fR,
+or \fB\-\-aucodec\fR. This argument is a shorthand for setting all three to
+automatic detection.
+.TP 
+\fB\-\-codec\fI video codec\fB\fR
+Override preferences and automatic codec selection with the explicitly
+specified codec.
+.TP 
+\fB\-\-codec\-help\fR
+List valid codecs.
+.TP 
+\fB\-\-format\fI output file format\fB\fR
+Override preferences and automatic format selection with the explicitly
+specified file format.
+.TP 
+\fB\-\-format\-help\fR
+List valid file formats.
+.SH "AUDIO OPTIONS"
+The following options relate to audio capture which is available with
+multi\-frame output formats only. There audio streams can either be captured 
+from a compatible audio device (e.g. \fB/dev/dsp\fR) or from 
+STDIN (ref. \fB\-\-audio_in\fR below).
+.TP 
+\fB\-\-audio\fR yes|no
+Enable or disable audio capture using default parameters or those saved to the
+preferences file. If supported this is enabled by default for multi\-frame capture.
+.TP 
+\fB\-\-aucodec\fI audio codec\fB\fR
+Override preferences and automatic codec selection with the explicitly
+specified audio codec.
+.TP 
+\fB\-\-aucodec\-help\fR
+List valid audio codecs.
+.TP 
+\fB\-\-audio_in\fI audio capture device\fB|\-\fR
+Capture audio from the specified device or from stdin. The latter allows
+for dubbing a captured video using a command line like the following. The 
+default is \fB/dev/dsp\fR.
+
+cat some.mp3 | xvidcap \-\-audio_in \-
+.TP 
+\fB\-\-audio_bits\fI audio bit rate\fB\fR
+Set the desired bit rate. The default is \fB32000\fR bit. Note that when using
+STDIN input the input file will be resampled as needed.
+.TP 
+\fB\-\-audio_rate\fI audio sample rate\fB\fR
+Set the desired sample rate. The default is \fB22050\fR Hz. Note that when using
+STDIN input the input file will be resampled as needed.
+.TP 
+\fB\-\-audio_channels\fI audio channels\fB\fR
+Set the desired number of channels. The default is \fB1\fR for mono. Any value
+above \fB2\fR is probably only useful with STDIN input and a 5\-channel AC audio
+input file or very good and rare recording equipment.
+.SH AUTHORS
+xvidcap was written by Rasca Gmelch and Karl H. Beckers.
+.PP
+This manual page was written by Karl H. Beckers karl.h.beckers@gmx.net for 
+the xvidcap project.
+.PP
+Permission is granted to copy, distribute and/or modify this document under 
+the terms of the GNU Free Documentation 
+License, Version 1.1 or any later version published by the Free 
+Software Foundation; with no Invariant Sections, no Front\-Cover 
+Texts and no Back\-Cover Texts.

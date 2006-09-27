@@ -1,4 +1,9 @@
 
+2006-09-27  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* doc/man/*, doc/xmldocs.make, doc/omf.make: Migrated manpage
+		to docbook and docbook2x-man generation. Also added
+		architecture for manpage localization.
+
 2006-09-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/xmldocs.make: added appid and changed directories to
 		make appid for references work

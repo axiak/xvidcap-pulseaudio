@@ -36,7 +36,18 @@ fi
 MK=''; AC_SUBST(MK)
 #########################################################
 #########################################################
+AC_PATH_PROG(DOCBOOK2X_MAN,docbook2x-man,no)
+if test x$DOCBOOK2X_MAN = xno; then
+  AC_MSG_ERROR(Couldn't find docbook2x-man to generate current man pages. Will install pre-generated ones if present.)
+fi
+#MANPAGES###############################################
+#########################################################
 
+#########################################################
+#########################################################
+
+#########################################################
+########################################################
 #i18n####################################################
 #########################################################
 GETTEXT_PACKAGE=xvidcap
@@ -412,7 +423,9 @@ AC_OUTPUT([
 doc/Makefile
 doc/xvidcap/Makefile
 doc/xvidcap/C/Makefile
-man/Makefile
+doc/man/Makefile
+doc/man/C/Makefile
+doc/man/de/Makefile
 po/Makefile.in
 src/Makefile
 Makefile

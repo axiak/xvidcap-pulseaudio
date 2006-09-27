@@ -84,7 +84,7 @@ install-doc: install-doc-omf
 #uninstall-local: uninstall-local-doc uninstall-local-omf
 uninstall-doc: uninstall-doc-omf
 
-uninstall-local:
+uninstall-local: uninstall-local-omf
 #uninstall-local-doc: 
 #uninstall-local-doc: uninstall-local-omf
 	-if test "$(figdir)"; then \

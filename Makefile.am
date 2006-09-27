@@ -4,8 +4,7 @@
 doc_SUBDIRS = doc
 SUBDIRS = $(doc_SUBDIRS) \
     src \
-    po \
-    man
+    po 
 
 pkgdata_DATA = xvidcap.desktop \
 	xvidcap.png \

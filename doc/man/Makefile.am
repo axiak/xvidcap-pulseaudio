@@ -1,8 +1,5 @@
-SUBDIRS = xvidcap \
-	man
-
-EXTRA_DIST = xmldocs.make \
-	omf.make
+SUBDIRS = C \
+	de
 
 install-doc-recursive:
 
