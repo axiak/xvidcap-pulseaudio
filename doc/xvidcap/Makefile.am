@@ -1,4 +1,5 @@
-SUBDIRS = C
+SUBDIRS = C \
+	de
 
 install-doc-recursive:
 

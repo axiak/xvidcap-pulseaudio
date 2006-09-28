@@ -23,8 +23,9 @@ EXTRA_DIST = $(xvidcapdoc_DATA) \
     autogen.sh \
     intltool-extract.in \
     intltool-merge.in \
-    intltool-update.in 
-# FIXME: do I need to add xvidcap.desktop and xvidcap.png to extra_dist even if they are in pkgdatadir_DATA?
+    intltool-update.in \
+    xvidcap.png \
+    xvidcap.desktop
 
 # Copy all the spec files. Of cource, only one is actually used.
 dist-hook:
