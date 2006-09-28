@@ -4,6 +4,7 @@
 		generation and install
 	* doc/xvidcap/de/*: prepared German translation of manual
 	* Makefile.am: added xvidcap.png and xvidcap.desktop to EXTRA_DIST
+	* Makefile.am: added ppm2mpeg.sh to EXTRA_DIST
 
 2006-09-27  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/man/*, doc/xmldocs.make, doc/omf.make: Migrated manpage

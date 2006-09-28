@@ -25,7 +25,8 @@ EXTRA_DIST = $(xvidcapdoc_DATA) \
     intltool-merge.in \
     intltool-update.in \
     xvidcap.png \
-    xvidcap.desktop
+    xvidcap.desktop \
+    ppm2mpeg.sh
 
 # Copy all the spec files. Of cource, only one is actually used.
 dist-hook:
