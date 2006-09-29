@@ -1,10 +1,20 @@
 
+2006-09-29  Imanol Garcia <imanol.garcia.c@gmail.com>
+	* po/es.po: added Spanish translation
+
 2006-09-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/man/*/Makefile.am, doc/man.make, configure.in: optimized manpage 
 		generation and install
 	* doc/xvidcap/de/*: prepared German translation of manual
 	* Makefile.am: added xvidcap.png and xvidcap.desktop to EXTRA_DIST
 	* Makefile.am: added ppm2mpeg.sh to EXTRA_DIST
+	* src: gnome_warning.c, gnome_ui.c, app_data.h, app_data.c, 
+		gnome_options.c, main.c, options.c, gnome-xvidcap.glade:
+		removed help command setting everywhere
+	* doc/xvidcap/C: figures/xvidcap-warning.png,
+		figures/prefs-commands.png, xvidcap.xml: removed help command
+		setting from the docs, too. Added section for warning dialog.
+	* configure.in: included Spanish translation
 
 2006-09-27  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/man/*, doc/xmldocs.make, doc/omf.make: Migrated manpage

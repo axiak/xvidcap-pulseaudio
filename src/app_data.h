@@ -106,7 +106,6 @@ typedef struct {
 #ifdef HAVE_FFMPEG_AUDIO
     char *snddev;               // audio capture source
 #endif // HAVE_FFMPEG_AUDIO
-    char *help_cmd;             // command to use for displaying help
     // information
     char *device;               // v4l device to capture from
     int default_mode;           // 0 = single_frame, 1 =

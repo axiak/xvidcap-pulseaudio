@@ -80,8 +80,6 @@ Boolean xvc_write_options_file()
     fprintf(fp, _("# device to grab audio from\naudio_in: %s\n"),
             ((strcmp(app->snddev, "pipe:") == 0) ? "-" : app->snddev));
 #endif // HAVE_FFMPEG_AUDIO
-    fprintf(fp, _("# command to display help\nhelp_cmd: %s\n"),
-            app->help_cmd);
     fprintf(fp,
             _("# what kind of mouse pointer should be recorded? 0 = none, 1 = white, 2 = black\n"));
     fprintf(fp, "mouse_wanted: %i\n", app->mouseWanted);
@@ -404,9 +402,7 @@ Boolean xvc_read_options_file()
                     app->snddev = strdup(value);
                 }
 #endif // HAVE_FFMPEG_AUDIO
-                else if (strcasecmp(token, "help_cmd") == 0) {
-                    app->help_cmd = strdup(value);
-                } else if (strcasecmp(token, "mouse_wanted") == 0) {
+                else if (strcasecmp(token, "mouse_wanted") == 0) {
                     app->mouseWanted = atoi(value);
                 } else if (strcasecmp(token, "save_geometry") == 0) {
                     if (atoi(value) == 1)

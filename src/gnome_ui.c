@@ -906,9 +906,7 @@ on_xvc_ctrl_m1_mitem_help_activate(GtkMenuItem * menuitem,
                                    gpointer user_data)
 {
     #define DEBUGFUNCTION "on_xvc_ctrl_m1_mitem_help_activate()"
-
-    if (app->help_cmd != NULL)
-        system((char *) app->help_cmd);
+    system("yelp ghelp:xvidcap &");
     #undef DEBUGFUNCTION
 }
 

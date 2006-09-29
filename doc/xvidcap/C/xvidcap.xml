@@ -1372,20 +1372,6 @@
                 </title>
                 <tgroup cols="2" align="char" charoff="50" char=".">
                     <tbody>
-                        <row id="xvidcap-prefs-cmd-TBL-help">
-                            <entry>
-                                <para>
-                                    Help Command
-                                </para>
-                            </entry>
-                            <entry>
-                                <para>
-                                    The command here is executed when the main menu's <guimenuitem>help</guimenuitem> item is selected.
-                                    Since <application>&app;</application> now uses yelp for viewing the manual, this setting is going
-                                    to go away. All other help buttons are context sensitive.
-                                </para>
-                            </entry>
-                        </row>
                         <row id="xvidcap-prefs-cmd-TBL-sf-playback">
                             <entry>
                                 <para>
@@ -1662,7 +1648,121 @@
 
     </sect1>
     
-    
+    <sect1 id="xvidcap-warning">
+        <title>The Preferences Warning Dialog</title>
+        <para>
+            Whenever <application>&app;</application> determines that the settings you have chosen will
+            not work well, it will display those issues in a standardized format. Unless you run
+            <application>&app;</application> with the <parameter>--gui no</parameter> parameter,
+            it will pop up the following dialog:
+        </para>
+
+            <figure id="xvidcap-warn-window">
+                <title>Preferences Warning Dialog</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/xvidcap-warning.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Preferences Warning Dialog</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+        <tip>
+            <title>GUI-less operation</title>
+            <para>
+                When running from the command line with the <parameter>--gui no</parameter> parameter,
+                those warnings will be displayed in plain text on the terminal. You will not be seeing the
+                <quote>Details</quote> section unless you also specified <parameter>-v</parameter>.
+            </para>
+        </tip>
+
+            <table frame="all" id="xvidcap-warn-situations-TBL">
+                <title>
+                    There are a few situations in which such messages can be displayed:
+                </title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-warn-situations-TBL-start">
+                            <entry>
+                                <para>On start</para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    When <application>&app;</application> is started, it checks the 
+                                    consistency of the settings for the current capture mode and will
+                                    report on issues it finds there. You will not be able to cancel out
+                                    of this dialog, but have to revisit your preferences.
+                                </para>
+                                <para>
+                                    <application>&app;</application> <emphasis>only</emphasis>
+                                    checks on the current capture mode and will not care
+                                    about inconsistencies with the respective other mode. Therefore,
+                                    there is the second situation.
+                                </para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-warn-situations-TBL-change-mode">
+                            <entry>
+                                <para>On change of capture mode</para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    If you change the current capture mode through the 
+                                    <ulink type="help" url="ghelp:xvidcap?menu xvidcap-menu-TBL-mf">menu</ulink> 
+                                    <application>&app;</application> will check the consistency of the settings 
+                                    for the new capture mode and will report on issues it finds there. If you 
+                                    cancel the warning dialog, you will return to your previous capture mode
+                                    selection.
+                                </para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-warn-situations-TBL-preferences">
+                            <entry>
+                                <para>When submitting changed preferences</para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    When you leave the preferences dialog <application>&app;</application> 
+                                    will check the settings for both capture modes. Cancelling the warning
+                                    dialog will take you back to the preferences dialog.
+                                </para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <para>
+                In the Preferences Warning Dialog you will find one or more messages consisting of three
+                rows each. The first row contains a message type or severity, a unique numeric ID and a 
+                short name for the error. The second row gives a more detailed description, and the third
+                row tells about the action <application>&app;</application> is going to take if you
+                chose to click <guibutton>OK</guibutton>.
+            </para>
+
+            <para>
+                Such an action might be to automatically correct the issue by chosing a plausible default,
+                to ignore the issue if it is not severe or to quit <application>&app;</application> if no
+                solution can automatically be determined.
+            </para>
+
+            <para>
+                The severity of an issue can be <quote>INFO</quote> for purely informational messages
+                where no change is made to any settings, <quote>WARNING</quote> where a minor change
+                to current settings is suggested, <quote>ERROR</quote> where a major change to current
+                settings is required, or <quote>FATAL ERROR</quote>. A fatal error is always an error
+                where the suggested action is to quit <application>&app;</application>. You will not
+                see issues of severity <quote>INFO</quote> unless you run <application>&app;</application>
+                in verbose mode.
+            </para>
+    </sect1>
+
+
+
+
     <!--    
     <sect1 id="c1-s1">
     <title>section 1</title>

@@ -100,7 +100,6 @@ void xvc_app_data_init(AppData * lapp)
 #ifdef HAVE_FFMPEG_AUDIO
     lapp->snddev = NULL;        // audio capture source
 #endif // HAVE_FFMPEG_AUDIO
-    lapp->help_cmd = NULL;      // command to use for displaying help
     // information
     lapp->device = NULL;        // v4l device to capture from
     lapp->default_mode = 0;     // 0 = single_frame, 1 = multi_frame
@@ -165,7 +164,6 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->single_frame.video_cmd =
         "ppm2mpeg.sh \"${XVFILE}\" ${XVFFRAME} ${XVLFRAME} ${XVWIDTH} ${XVHEIGHT} ${XVFPS} ${XVTIME} &";
     lapp->single_frame.edit_cmd = "gimp \"${XVFILE}\" &";
-    lapp->help_cmd = "yelp ghelp:xvidcap &";
 
 #ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
@@ -244,9 +242,6 @@ void xvc_app_data_copy(AppData * tapp, AppData * sapp)
 #ifdef HAVE_FFMPEG_AUDIO
     tapp->snddev = strdup(sapp->snddev);    // audio capture source
 #endif // HAVE_FFMPEG_AUDIO
-    tapp->help_cmd = strdup(sapp->help_cmd);    // command to use for
-    // displaying help
-    // information
     tapp->device = strdup(sapp->device);    // v4l device to capture
     // from
     tapp->default_mode = sapp->default_mode;    // 0 = single_frame, 1 =

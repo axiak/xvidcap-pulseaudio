@@ -809,7 +809,6 @@ void print_current_settings(CapTypeOptions * target)
     printf(_(" animate command = %s\n"), target->play_cmd);
     printf(_(" make video command= %s\n"), target->video_cmd);
     printf(_(" edit frame command= %s\n"), target->edit_cmd);
-    printf(_(" help command = %s\n"), app->help_cmd);
 }
 
 

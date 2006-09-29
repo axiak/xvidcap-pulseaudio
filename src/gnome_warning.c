@@ -136,8 +136,7 @@ on_xvc_warn_main_window_destroy(GtkButton * button, gpointer user_data)
 
 static void doHelp()
 {
-    if (app->help_cmd != NULL)
-        system((char *) app->help_cmd);
+    system("yelp ghelp:xvidcap?xvidcap-warning &");
 }
 
 

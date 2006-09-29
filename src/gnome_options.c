@@ -460,13 +460,7 @@ static void read_app_data_from_pref_gui(AppData * lapp)
 #endif // USE_FFMPEG
      
     // commands 
-    // help cmd 
-    w = NULL;
-    w = glade_xml_get_widget(xml, "xvc_pref_commands_help_entry");
-    g_assert(w);
 
-    lapp->help_cmd = strdup((char*) gtk_entry_get_text(GTK_ENTRY(w))); 
-    
     // sf commands 
     // sf playback command 
     w = NULL;
@@ -2721,14 +2715,6 @@ xvc_create_pref_dialog(AppData * lapp)
 
 
 
-    // help command
-    w = NULL;
-    w = glade_xml_get_widget(xml, "xvc_pref_commands_help_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text ( GTK_ENTRY( w ), strdup(pref_app.help_cmd) );
-    }
-    
     // sf play command
     w = NULL;
     w = glade_xml_get_widget(xml, "xvc_pref_commands_sf_play_entry");
