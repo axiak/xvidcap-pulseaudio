@@ -427,6 +427,7 @@ doc/xvidcap/de/Makefile
 doc/man/Makefile
 doc/man/C/Makefile
 doc/man/de/Makefile
+doc/man/it/Makefile
 po/Makefile.in
 src/Makefile
 Makefile

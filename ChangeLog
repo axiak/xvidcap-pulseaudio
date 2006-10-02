@@ -1,9 +1,14 @@
 
+2006-10-02  Vincenzo Reale <smart2128@baslug.org>
+	* doc/man/it/xvidcap.1.xml: Italian manpage
+
 2006-10-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: codecs.c, gnome_ui.c, main.c, Makefile.am: some compatibility
 		fixes for Solaris (not all yet, though)
 	* src/gnome_options.c: eliminate use of gtk_combo_box_get_active_text
 		to depend on gtk+-2.0 v. 2.4 only (rather than 2.6)
+	* configure.in, doc/man/Makefile, doc/man/it: Makefile.am, xvidcap.1:
+		support for Italian manpage
 
 2006-09-29  Imanol Garcia <imanol.garcia.c@gmail.com>
 	* po/es.po: added Spanish translation

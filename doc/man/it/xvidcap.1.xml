@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry revision="1.1.4">
+    <refmeta>
+        <refentrytitle>xvidcap</refentrytitle>
+        <manvolnum>1</manvolnum>
+        <refmiscinfo>Settembre 2006</refmiscinfo>
+    </refmeta>
+    <refnamediv id='name'>
+        <refname>XVidCap</refname>
+        <refpurpose>Registra in video porzioni di schermo X11</refpurpose>
+    </refnamediv>
+    <!-- body begins here -->
+    <refsynopsisdiv id='synopsis'>
+        <cmdsynopsis>
+            <command>xvidcap</command>    
+            <arg choice='opt'>-v</arg>
+
+            <arg choice='opt'><arg choice='plain'>--mf</arg>|<arg choice='plain'>--sf</arg></arg>
+            <arg choice='opt'>--file<replaceable> modello di nome file</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice='opt'>--fps<replaceable> fotogrammi al secondo</replaceable></arg>
+
+            <arg choice='opt'>--cap_geometry<replaceable> geometria</replaceable></arg>
+            <arg choice='opt'>--rescale<replaceable> dimensioni in percentuale</replaceable></arg>
+            <arg choice='opt'>--quality<replaceable> qualità in percentuale</replaceable></arg>
+            <arg choice='opt'>--source<arg choice="plain"> x11|shm<!-- |v4l --></arg></arg>
+
+            <arg choice='opt'>--time<replaceable> durata massima in secondi</replaceable></arg>
+            <arg choice='opt'>--frames<replaceable> numero massimo di fotogrammi</replaceable></arg>
+            <arg choice='opt'>--start_no<replaceable> numero iniziale di fotogrammi</replaceable></arg>
+
+            <arg choice='opt'>--continue<arg choice="plain"> sì|no</arg></arg>
+            <arg choice='opt'>--gui<arg choice="plain"> sì|no</arg></arg>
+
+            <arg choice='opt'>--auto</arg>
+
+            <arg choice='opt'>--codec<replaceable> codificatore video</replaceable></arg>
+            <arg choice='opt'>--codec-help</arg>
+            <arg choice='opt'>--format<replaceable> formato file di uscita</replaceable></arg>
+            <arg choice='opt'>--format-help</arg>
+
+            <arg choice='opt'>--audio<arg choice="plain"> sì|no</arg></arg>
+            <arg choice='opt'>--aucodec<replaceable> codificatore audio</replaceable></arg>
+            <arg choice='opt'>--aucodec-help</arg>
+            <arg choice='opt'>--audio_in<replaceable> dispositivo di acquisizione audio</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice='opt'>--audio_bits<replaceable> bitrate audio</replaceable></arg>
+            <arg choice='opt'>--audio_rate<replaceable> campionamento audio</replaceable></arg>
+            <arg choice='opt'>--audio_channels<replaceable> canali audio</replaceable></arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+
+    <refsect1 id='intro'><title>Introduzione</title>
+        <para>
+            <application>xvidcap</application> è uno strumento acquisisce su file il movimento presente in un'area selezionata
+            di uno schermo X11. Può essere usato in due diverse modalità: (1) acquisizione a <emphasis>fotogramma singolo</emphasis>
+            o (2) acquisizione a <emphasis>fotogrammi multipli</emphasis>. Nella modalità di acquisizione a fotogramma
+            singolo, <application>xvidcap</application> cattura un numero configurabile di schermate per secondo e 
+            le salva in file distinti. Anche nella modalità di acquisizione a fotogrammi multipli, <application>xvidcap</application> 
+            cattura un numero di schermate per secondo, ma le codifica in un singolo video in tempo reale. 
+            L'acquisizione audio è disponibile solo con il formato a fotogrammi multipli.
+        </para>
+        <para>
+            La registrazione in modalità di acquisizione a fotogramma singolo potrebbe essere più conveniente se si desidera preprocessare le 
+            immagini prima della codifica, o se si vuole usare codificatori video che <application>xvidcap</application> 
+            non supporta. Le immagini singole possono essere successivamente codificate con strumenti quali ffmpeg, mencoder, 
+            o transcode.
+        </para>
+        <para>
+            Per aiuto, richieste di nuove funzionalità, o segnalazione di bug, vai su 
+            <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink>
+        </para>
+    </refsect1>
+
+    <refsect1 id='options'><title>Opzioni</title>
+
+        <para>
+            Questi programmi seguono la solita sintassi della linea di comando GNU, 
+            con opzioni lunghe che iniziano con due trattini (<literal>--</literal>).  
+            Un riepilogo delle opzioni è incluso di seguito.
+        </para> 
+        <variablelist remap='IP'>
+            <varlistentry>
+                <term><option>-v</option></term>
+                <listitem>
+                    <para>
+                        Esegue <application>xvidcap</application> in modalità prolissa. Ciò fornirà ulteriori informazioni
+                        su impostazioni utente, codificatori audio e video, prestazioni ed altro. Messaggi
+                        del tipo <quote>"XX millisecondi mancanti..."</quote> durante l'acquisizione significano che si stanno 
+                        perdendo fotogrammi per mancanza di risorse (fotogrammi scartati). Ciò dovrebbe manifestarsi con una riproduzione 
+                        troppo veloce dei video. Occorre notare, che la modalità prolissa rallenta 
+                        <application>xvidcap</application> e potrebbe <emphasis>causare</emphasis> perdita di fotogrammi. Provare 
+                        ad eseguirlo senza la modalità prolissa e guardare l'indicatore dei fotogrammi scartati.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--mf</option> | <option>--sf</option></term>
+                <listitem>
+                    <para>
+                        <application>xvidcap</application> prova ad determinare autonomamente la modalità di acquisizione desiderata. Se si specifica 
+                        <literal>--file test.avi</literal> xvidcap supporrà la scelta dell'acquisizione a fotogrammi multipli.
+                        Si può specificare espressamente la modalità di acquisizione dalla linea di comando con questa
+                        opzione. Se, per esempio, si ha una configurazione appropriata e salvata con la modalità di acquisizione
+                        a fotogrammi multipli quale modalità predefinita, l'esecuzione di <literal>xvidcap --sf</literal>
+                        avvierà <application>xvidcap</application> in modalità di acquisizione a fotogramma singolo con tutte le impostazioni memorizzate.
+                        La modalità predefinita è l'acquisizione a fotogrammi multipli.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--file <replaceable>modello di nome file</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Nome file o modello da usare per il salvataggio dei fotogrammi acquisiti. Un modello di nome
+                        file contiene formattazioni alla maniera di printf() (rif. <literal>man printf</literal>) 
+                        informazioni per rendere incrementabile il nome file, es. <literal>--file out-%02d.xwd</literal>. 
+                        Ciò è necessario per l'acquisizione a fotogramma singolo. <application>xvidcap</application> 
+                        sostituirà la prima stringa di formato printf() con il numero dei fotogrammi attualmente acquisiti. 
+                        Nell'esempio dato, creerà i file <filename>out-00.xwd</filename>, 
+                        <filename>out-01.xwd</filename>, <filename>out-02.xwd</filename>,
+                        ecc. Il numero di fotogrammi di partenza può essere specificato con <literal>--start_no</literal>,
+                        vedere sopra.
+                    </para>
+                    <para>
+                        L'acquisizione a fotogrammi multipli non richiede un modello di file. Specificandone uno,
+                        tuttavia, come <literal>--file miofilmato-%d.mpeg</literal>, <application>xvidcap</application>
+                        sostituirà la stringa di formato con il numero della sessione di registrazione attuale 
+                        (iniziando sempre il conteggio da zero). Ciò permetterà di incrementare/decrementare manualmente
+                        tale numero, o usare la funzionalità di continuazione automatica (rif. <literal>--continue</literal> sopra) creando
+                        effettivamente una di serie di file video.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--fps<replaceable> fotogrammi al secondo</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Specifica il numero di fotogrammi da acquisire per ogni secondo. Questo parametro 
+                        accetta valori in virgola mobile, e permette velocità di acquisizione molto basse come
+                        ad es. <literal>--fps 0.5</literal> per registrare un fotogramma ogni 2 secondi. Ciò è possibile solo
+                        in modalità a fotogramma singolo. I codificatori usati per la modalità a fotogrammi multipli di solito accettano
+                        solo alcune velocità come valide. Notare che le velocità frazionali dei fotogrammi per 
+                        codificatori quali MPEG1 che accettano solo frazioni molto specifiche sono disabilitate 
+                        in questa versione a causa di un'inconsistenza del conteggio del tempo frazionale tra 
+                        <application>xvidcap</application> e libavcodec. Saranno accettate solo velocità intere dei fotogrammi.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--cap_geometry<replaceable> geometria</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Specifica la geometria come ad es. <application>xterm</application>, in questo modo:
+                        <replaceable>larghezza</replaceable>x<replaceable>altezza</replaceable>+<replaceable>posizione-x</replaceable>+<replaceable>posizione-y</replaceable>
+                    </para>
+                    <para>
+                        Ignora la larghezza e l'altezza predefinita del fotogramma acquisito. Usa il pulsante
+                        selettore dell'interfaccia grafica al posto di questa opzione della linea di comando per regolare la dimensione del fotogramma
+                        per una data finestra. Le dimensioni di acquisizione inferiori a 20 x 20 non funzionano correttamente
+                        con la gran parte dei codificatori per l'acquisizione a fotogrammi multipli.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--rescale<replaceable> dimensioni in percentuale</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Ridimensiona l'uscita a una percentuale dell'ingresso originale. Una valore di <literal>25</literal>, es.
+                        fa sì che la dimensione d'uscita sia il 25 percento dell'area di ingresso originale.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--quality<replaceable> qualità in percentuale</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Specifica un valore tra <literal>0</literal> e <literal>100</literal> per definire la qualità della codifica. Il 
+                        valore predefinito è <literal>75</literal>. 
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--source</option> x11|shm<!-- |v4l --></term>
+                <listitem>
+                    <para>
+                        Abilita o disabilita l'utilizzo dell'estensione memoria condivisa di X11. Per il supporto della 
+                        memoria condivisa sia client che server devono essere in esecuzione sulla stessa macchina. Se il supporto
+                        della memoria condivisa è disponibile, <application>xvidcap</application> lo utilizzerà in maniera predefinita. Se il server X e
+                        il client non sono in esecuzione sulla stessa macchina, è necessario disabilitare il supporto specificando <literal>--source x11</literal>.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--time<replaceable> durata massima in secondi</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Specifica il tempo massimo di acquisizione, se <literal>0</literal> <application>xvidcap</application> acquisirà fino 
+                        all'interruzione manuale. Per ogni altro valore, ogni sessione di registrazione si interromperà
+                        automaticamente dopo il numero specificato di secondi. Questo parametro 
+                        è in conflitto con <literal>--frames</literal> (vedere di seguito). Se entrambi sono specificati xvidcap interromperà
+                        l'acquisizione. Il programma accetta valori in virgola mobile, es. <literal>2.5</literal>.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--frames<replaceable> numero massimo di fotogrammi</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Ferma l'acquisizione dopo un numero specificato di fotogrammi acquisiti. Se <literal>0</literal>
+                        xvidcap acquisirà fino all'interruzione manuale, rif. <literal>--time</literal> sopra.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--start_no<replaceable> numero iniziale di fotogrammi</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Definisce il numero iniziale che dovrebbe essere usato per la numerazione dei file. Il valore 
+                        predefinito è <literal>0</literal>. Questo parametro è utilizzato solo per l'acquisizione a fotogramma singolo.
+                        La numerazione dei filmati per <literal>--continue</literal> inizia sempre da zero.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--continue</option> sì|no</term>
+                <listitem>
+                    <para>
+                        Quando è selezionata l'acquisizione a fotogrammi multipli, tempo massimo di registrazione o fotogrammi sono
+                        specificati, e il nome file di uscita è incrementabile (vedere <literal>--file</literal> di seguito),
+                        <application>xvidcap</application> può continuare automaticamente l'acquisizione in un nuovo file quando uno 
+                        eccede il tempo massimo di registrazione o il numero di fotogrammi. Ciò cambierà
+                        il comportamento di <literal>--time</literal> e <literal>--frames</literal> perché la registrazione non si fermerà
+                        ai limiti specificati, ma inizierà un nuovo file video. La funzionalità è 
+                        utile se si desidera dividere automaticamente le proprie registrazioni in spezzoni di
+                        es. cinque minuti Se nessun argomento <literal>--continue</literal> viene specificato, <application>xvidcap</application> è impostato su <literal>no</literal>.
+                        Poiché l'acquisizione a fotogramma singolo necessita di un nome file incrementabile per contare i
+                        singoli fotogrammi, questa funzionalità è disabilitata per questo tipo di acquisizione. 
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--gui</option> sì|no</term>
+                <listitem>
+                    <para>
+                        Avvia xvidcap con o senza l'interfaccia grafica ignorando quanto contenuto nel
+                        file delle preferenze. L'esecuzione senza interfaccia grafica avvierà automaticamente una singola
+                        sessione di acquisizione. Può essere interrotta specificando <literal>--time</literal> o
+                        <literal>--frames</literal>, o premendo CTRL-C.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--auto</option></term>
+                <listitem>
+                    <para>
+                        <application>xvidcap</application> supporta il rilevamento automatico dei parametri per
+                        formato di uscita, codificatore video e audio. Se ognuna di queste impostazioni viene salvata con valore
+                        fisso nelle preferenze memorizzate, è possibile non tenerne conto specificando il parametro
+                        <literal>auto</literal> per ognuno degli argomenti di <literal>--format</literal>, <literal>--codec</literal>,
+                        o <literal>--aucodec</literal>. Questo argomento è una scorciatoia per il rilevamento automatico
+                        dei tre parametri.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--codec<replaceable> codificatore video</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Non tiene conto delle preferenze e della selezione automatica del codificatore utilizzando il codificatore
+                        video espressamente specificato.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--codec-help</option></term>
+                <listitem>
+                    <para>
+                        Elenca i codificatori validi.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--format<replaceable> formato file di uscita</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Non tiene conto delle preferenze e della selezione automatica del formato utilizzando il formato
+                        espressamente specificato.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--format-help</option></term>
+                <listitem>
+                    <para>
+                        Elenca i formati file validi.
+                    </para> 
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+        
+    <refsect1 id='audio_options'><title>Opzioni audio</title>
+
+        <para>
+            Le seguenti opzioni riguardano l'acquisizione audio che è disponibile solo con
+            i formati di uscita a fotogrammi multipli. Questi flussi audio possono essere inoltre acquisiti 
+            da un dispositivo audio compatibile (es. <filename>/dev/dsp</filename>) o da 
+            STDIN (rif. <literal>--audio_in</literal> in seguito).
+        </para> 
+        
+        <variablelist remap="IP">    
+            <varlistentry>
+                <term><option>--audio</option> sì|no</term>
+                <listitem>
+                    <para>
+                        Abilita o disabilita l'acquisizione audio utilizzando i parametri predefiniti o quelli salvati nel
+                        file delle preferenze. Se supportata, è abilitata in maniera predefinita per l'acquisizione a fotogrammi multipli.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--aucodec<replaceable> codificatore audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Non tiene conto delle preferenze e della selezione automatica del codificatore utilizzando il
+                        codificatore audio espressamente specificato.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--aucodec-help</option></term>
+                <listitem>
+                    <para>
+                        Elenca i codificatori audio validi.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_in<replaceable> dispositivo di acquisizione audio</replaceable>|-</option></term>
+                <listitem>
+                    <para>
+                        Acquisizione audio da un dispositivo specificato o da stdin. Questa opzione consente
+                        il doppiaggio di un video acquisito usando un comando come il seguente. Il 
+                        valore predefinito è <filename>/dev/dsp</filename>.
+                    </para> 
+                    <para>
+                        <command>cat qualche.mp3 | xvidcap --audio_in -</command>
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_bits<replaceable> bitrate audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Imposta il bitrate desiderato. Il valore predefinito è <literal>32000</literal> bit. Notare che, utilizzando
+                        lo STDIN, il file d'ingresso sarà ricampionato come richiesto.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_rate<replaceable> campionamento audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Imposta il campionamento desiderato. Il valore predefinito è <literal>22050</literal> Hz. Notare che, utilizzando
+                        lo STDIN, il file d'ingresso sarà ricampionato come richiesto.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_channels<replaceable> canali audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Imposta il numero di canali desiderato. Il valore predefinito è <literal>1</literal> per mono. Ogni valore
+                        superiore a <literal>2</literal> è probabilmente utile solo in caso di ingresso da STDIN e file audio AC a 5 canali
+                        o strumenti di registrazione di alta qualità e scarsa diffusione.
+                    </para> 
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+
+    <refsect1 id='author'><title>Autori</title>
+        <para>
+            <application>xvidcap</application> è stato scritto da Rasca Gmelch e Karl H. Beckers.
+        </para>
+        <para>
+            Questa pagina di manuale è stata scritta da Karl H. Beckers <email>karl.h.beckers@gmx.net</email> per 
+            il progetto <application>xvidcap</application>.
+        </para>
+        
+        <para>
+            Tradotta da Vincenzo Reale (smart2128@baslug.org)
+        </para>
+        
+        <para>
+            È consentito copiare, distribuire e/o modificare il contenuto della guida rispettando
+            i termini della GNU Free Documentation License, versione 1.1
+            o qualsiasi altra versione successiva pubblicata dalla Free Software
+            Foundation; senza sezioni immodificabili, senza testi di copertina e di retrocopertina.
+        </para> 
+    </refsect1>
+</refentry>
+
