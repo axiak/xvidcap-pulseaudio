@@ -25,6 +25,11 @@
 #endif
 
 #include <sys/time.h>           // for timeval struct and related
+
+#ifdef SOLARIS
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#endif //SOLARIS
 #include <X11/cursorfont.h>
 #include <X11/Xmu/WinUtil.h>
 #ifdef HAVE_SHMAT

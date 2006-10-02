@@ -710,7 +710,7 @@ my_signal_add(int sig_nr, sighandler_t sighandler) {
     
     neu_sig.sa_handler = sighandler;
     sigemptyset(&neu_sig.sa_mask);
-    neu_sig.sa_flags = SA_ONESHOT;
+    neu_sig.sa_flags = SA_RESETHAND;
     if (sigaction(sig_nr, &neu_sig, &alt_sig) < 0)
         return SIG_ERR;
     return alt_sig.sa_handler;

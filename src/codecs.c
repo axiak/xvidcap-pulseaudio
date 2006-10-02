@@ -18,16 +18,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <locale.h>
-#include <ctype.h>
-#include <libintl.h>
-
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#ifdef SOLARIS
+#include <strings.h>
+#else
+#include <string.h>
+#endif
+#include <locale.h>
+#include <ctype.h>
+#include <libintl.h>
 
 #include "app_data.h"
 #include "codecs.h"

@@ -82,9 +82,49 @@ static int OK_attempts = 0;
 static xvErrorListItem *errors_after_cli = NULL;
 
 
-static int mf_format_combo_get_target_from_text(char *text);
 
-// first callbacks here ...
+// utility functions here ...
+//
+
+static int mf_format_combo_get_target_from_text(char *text) {
+#ifdef USE_FFMPEG
+    int a, b = -1;
+
+    for ( a = CAP_MF; a < NUMCAPS && b < 0; a++ ) { 
+        if (strcasecmp(format_combo_entries[a-1], text)==0) b = a; 
+    } 
+    
+    return b; 
+#endif // USE_FFMPEG
+    return 0;
+}
+
+
+static char* xvc_get_active_string_from_list_combobox(GtkComboBox *combobox) {
+    GtkTreeIter iter;
+    GtkListStore *list_store = NULL;
+    gboolean valid;
+    char *selection = NULL; 
+
+    if (!combobox) return (char*) NULL;
+
+    list_store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combobox)));
+    g_assert(list_store);
+    valid = gtk_combo_box_get_active_iter (GTK_COMBO_BOX(combobox), &iter);
+
+    if (valid) {
+        // Make sure you terminate calls to gtk_tree_model_get()
+        // with a '-1' value
+        gtk_tree_model_get (GTK_TREE_MODEL(list_store), &iter,
+                        0, &selection,
+                        -1);
+    } 
+
+    return selection;
+}
+
+
+// callbacks here ...
 // 
 // 
 
@@ -194,25 +234,28 @@ static void read_app_data_from_pref_gui(AppData * lapp)
 
     if ( gtk_toggle_button_get_active ( GTK_TOGGLE_BUTTON( w ) ) ) { 
         lapp->single_frame.target = 0; 
-    } else { 
+    } else {
+        char *selected_format = NULL; 
+        int n, m = -1;
+
         w = NULL;
         w = glade_xml_get_widget(xml, "xvc_pref_sf_format_combobox");
         g_assert(w);
     
-        char *selected_format = (char*) gtk_combo_box_get_active_text(GTK_COMBO_BOX(w));
-        int n, m = -1;
-    
-        for ( n = 0; n < NUMCAPS && m < 0; n++) {
-            char *format = format_combo_entries[n]; 
-            if ( strcasecmp(format, selected_format)==0 ) m = n; 
+        selected_format = xvc_get_active_string_from_list_combobox(GTK_COMBO_BOX(w));
+
+        if (selected_format) {
+            for ( n = 0; n < NUMCAPS && m < 0; n++) {
+                char *format = format_combo_entries[n]; 
+                if ( strcasecmp(format, selected_format)==0 ) m = n; 
 #ifdef DEBUG
-            printf("%s %s: %s = %s ?\n", DEBUGFILE, DEBUGFUNCTION, format, selected_format);
+                printf("%s %s: %s = %s ?\n", DEBUGFILE, DEBUGFUNCTION, format, selected_format);
 #endif // DEBUG
-        }
-    
+            }
 #ifdef DEBUG
             printf("%s %s: found new target: %i\n", DEBUGFILE, DEBUGFUNCTION, m);
 #endif // DEBUG
+        }
 
         g_assert( m >= 0 );
         lapp->single_frame.target = m; 
@@ -291,14 +334,19 @@ static void read_app_data_from_pref_gui(AppData * lapp)
     if ( gtk_toggle_button_get_active ( GTK_TOGGLE_BUTTON( w ) ) ) { 
         lapp->multi_frame.target = 0; 
     } else {
+        char *selected_format = NULL; 
+        int n = -1;
+
         w = NULL;
         w = glade_xml_get_widget(xml, "xvc_pref_mf_format_combobox");
         g_assert(w);
 
-        char *selected_format = (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(w)); 
-        int n = -1;
+        selected_format = xvc_get_active_string_from_list_combobox(GTK_COMBO_BOX(w));
 
-        n = mf_format_combo_get_target_from_text(selected_format);
+        if (selected_format) {
+            n = mf_format_combo_get_target_from_text(selected_format);
+        } 
+
         g_assert( n >= 1 );
         lapp->multi_frame.target = n;
     }
@@ -311,22 +359,27 @@ static void read_app_data_from_pref_gui(AppData * lapp)
     if ( gtk_toggle_button_get_active ( GTK_TOGGLE_BUTTON( w ) ) ) { 
         lapp->multi_frame.targetCodec = 0; 
     } else { 
+        char *selected_codec = NULL; 
+        int a, codec = -1;
+
         w = NULL;
         w = glade_xml_get_widget(xml, "xvc_pref_mf_codec_combobox");
         g_assert(w);
-    
-        char *selected_codec = (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(w)); 
-        int a, codec = -1;
 
-        for (a = 0; a < NUMCODECS && codec < 0; a++ ) { 
-            if ( strcasecmp(selected_codec, tCodecs[a].longname )==0) codec = a; 
+        selected_codec = xvc_get_active_string_from_list_combobox(GTK_COMBO_BOX(w));
+
+        if (selected_codec) {
+            for (a = 0; a < NUMCODECS && codec < 0; a++ ) { 
+                if ( strcasecmp(selected_codec, tCodecs[a].longname )==0) codec = a; 
 #ifdef DEBUG
-            printf("%s %s: %s = %s ?\n", DEBUGFILE, DEBUGFUNCTION, tCodecs[a].longname, selected_codec);
+                printf("%s %s: %s = %s ?\n", DEBUGFILE, DEBUGFUNCTION, tCodecs[a].longname, selected_codec);
 #endif // DEBUG
-        }
+            }
 #ifdef DEBUG
-        printf("%s %s: found codec %s as %i \n", DEBUGFILE, DEBUGFUNCTION, selected_codec, codec);
+            printf("%s %s: found codec %s as %i \n", DEBUGFILE, DEBUGFUNCTION, selected_codec, codec);
 #endif // DEBUG
+        } 
+
         g_assert( codec >= 0 );
         lapp->multi_frame.targetCodec = codec;
     } 
@@ -345,9 +398,13 @@ static void read_app_data_from_pref_gui(AppData * lapp)
         gtk_object_get(GTK_OBJECT(hscale), "visible", &hscale_visible, NULL);
 
         if ( combobox_visible ) {
-            lapp->multi_frame.fps = xvc_get_int_from_float_string(
-                            (char*) gtk_combo_box_get_active_text( 
-                                        GTK_COMBO_BOX(combobox))); 
+            char *selected_fps = NULL; 
+
+            selected_fps = xvc_get_active_string_from_list_combobox(GTK_COMBO_BOX(combobox));
+
+            if (selected_fps) {
+                lapp->multi_frame.fps = xvc_get_int_from_float_string(selected_fps); 
+            }
         } else if ( hscale_visible ) {
             lapp->multi_frame.fps = (int) (gtk_range_get_value ( GTK_RANGE(hscale) ) * 100); 
         }
@@ -393,26 +450,31 @@ static void read_app_data_from_pref_gui(AppData * lapp)
     
     if ( gtk_toggle_button_get_active ( GTK_TOGGLE_BUTTON( w ) ) ) { 
         lapp->multi_frame.au_targetCodec = 0; 
-    } else {    
-        w = NULL;
-        w = glade_xml_get_widget(xml, "xvc_pref_mf_audio_codec_combobox");
-        g_assert(w);
-    
-        char *selected_aucodec = (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(w)); 
+    } else {
+        char *selected_aucodec = NULL; 
         int a, aucodec = -1;
-    
-        for (a = 0; a < NUMAUCODECS && aucodec < 0; a++ ) { 
+
+        w = NULL;
+        w = glade_xml_get_widget(xml, "xvc_pref_umf_audio_codec_combobox");
+        g_assert(w);
+
+        selected_aucodec = xvc_get_active_string_from_list_combobox(GTK_COMBO_BOX(w));
+
+        if (selected_aucodec) {
+            for (a = 0; a < NUMAUCODECS && aucodec < 0; a++ ) { 
 #ifdef DEBUG
-            printf("%s %s: selected_aucodec: %s - a: %i - tAuCodec[a].longname: %s \n", 
+                printf("%s %s: selected_aucodec: %s - a: %i - tAuCodec[a].longname: %s \n", 
                     DEBUGFILE, DEBUGFUNCTION, selected_aucodec, a, tAuCodecs[a].longname );
 #endif // DEBUG 
-            if ( strcasecmp(selected_aucodec, tAuCodecs[a].longname)==0) 
-                aucodec = a; 
-        } 
+                if ( strcasecmp(selected_aucodec, tAuCodecs[a].longname)==0) 
+                    aucodec = a; 
+            } 
 #ifdef DEBUG 
-        printf("%s %s: saving audio codec: %i \n", 
+            printf("%s %s: saving audio codec: %i \n", 
                     DEBUGFILE, DEBUGFUNCTION, aucodec); 
 #endif // DEBUG 
+        } 
+
         g_assert( aucodec >= 0 );
         lapp->multi_frame.au_targetCodec = aucodec;
     }
@@ -1201,20 +1263,6 @@ static void mf_audio_codec_combo_set_contents_from_format(int format)
     #undef DEBUGFUNCTION
 }
 
-static int mf_format_combo_get_target_from_text(char *text) {
-#ifdef USE_FFMPEG
-    int a, b = -1;
-
-    for ( a = CAP_MF; a < NUMCAPS && b < 0; a++ ) { 
-        if (strcasecmp(format_combo_entries[a-1], text)==0) b = a; 
-    } 
-    
-    return b; 
-#endif // USE_FFMPEG
-    return 0;
-}
-
-
 void
 on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_data)
 {
@@ -1229,6 +1277,9 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
 #endif // HAVE_FFMPEG_AUDIO
     char *format_selected = NULL;
     int a;
+    GtkTreeIter iter;
+    GtkListStore *mf_format_list_store = NULL;
+    gboolean valid;
 
     // FIXME: save previously selected format to avoid doing all this if unchanged
 
@@ -1243,9 +1294,17 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
         combobox = GTK_COMBO_BOX(w);
     }
 
-    format_selected = (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(combobox)); 
+    mf_format_list_store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combobox)));
+    g_assert(mf_format_list_store);
+    valid = gtk_combo_box_get_active_iter (GTK_COMBO_BOX(combobox), &iter);
+    if (valid) {
+        // Make sure you terminate calls to gtk_tree_model_get()
+        // with a '-1' value
+        gtk_tree_model_get (GTK_TREE_MODEL(mf_format_list_store), &iter,
+                    0, &format_selected,
+                    -1);
+    } 
     if (!format_selected) return;
-    
 
     codec_combobox = glade_xml_get_widget(xml, "xvc_pref_mf_codec_combobox");
     g_assert(codec_combobox);
@@ -1278,11 +1337,11 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
         GtkWidget *au_codec_auto = NULL;
         GtkListStore *mf_au_codec_list_store;
 
-        old_selected_aucodec = gtk_combo_box_get_active_text( GTK_COMBO_BOX(au_combobox));
+        old_selected_aucodec = xvc_get_active_string_from_list_combobox( GTK_COMBO_BOX(au_combobox));
         if (old_selected_aucodec) old_selected_aucodec = strdup(old_selected_aucodec);
 #endif // HAVE_FFMPEG_AUDIO
 
-        old_selected_codec = gtk_combo_box_get_active_text( GTK_COMBO_BOX(codec_combobox));
+        old_selected_codec = xvc_get_active_string_from_list_combobox( GTK_COMBO_BOX(codec_combobox));
         if (old_selected_codec) old_selected_codec = strdup(old_selected_codec);
         
         mf_codec_combo_set_contents_from_format (a);
@@ -1321,7 +1380,7 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
         }
         // previously selected codec is not in list of valid codecs for the new
         // format, select the default codec after all
-        if ( (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(codec_combobox)) == NULL) {
+        if ( xvc_get_active_string_from_list_combobox( GTK_COMBO_BOX(codec_combobox)) == NULL) {
             n = 0;
             valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(mf_codec_list_store), &iter);
 
@@ -1401,7 +1460,7 @@ on_xvc_pref_mf_format_combobox_changed(GtkComboBox * combobox, gpointer user_dat
         }
         // previously selected audio codec is not in list of valid codecs for the new
         // format, select the default audio codec after all
-        if ( (char*) gtk_combo_box_get_active_text( GTK_COMBO_BOX(au_combobox)) == NULL &&
+        if ( xvc_get_active_string_from_list_combobox( GTK_COMBO_BOX(au_combobox)) == NULL &&
                     tFFormats[a].def_au_codec != AU_CODEC_NONE) {
             n = 0;
             valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL(mf_au_codec_list_store), &iter);
@@ -1611,7 +1670,7 @@ static void set_mf_fps_widget_from_codec(int codec)
 
     if ( combobox_visible ) {
         curr_fps_val = xvc_get_int_from_float_string(
-                            (char*) gtk_combo_box_get_active_text( 
+                            xvc_get_active_string_from_list_combobox( 
                                         GTK_COMBO_BOX(combobox))); 
     } else if ( hscale_visible ) {
         curr_fps_val = (int) (gtk_range_get_value ( GTK_RANGE(hscale) ) * 100); 
@@ -1760,7 +1819,7 @@ on_xvc_pref_mf_codec_combobox_changed(GtkComboBox * cb, gpointer user_data)
 #endif // DEBUG
 
     int a, codec = -1; 
-    char* codec_selected = (char*) gtk_combo_box_get_active_text(cb);
+    char* codec_selected = xvc_get_active_string_from_list_combobox(cb);
 
     if (codec_selected) {
         for (a = 0; a < NUMCODECS && codec < 0; a++ ) { 

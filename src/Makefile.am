@@ -56,5 +56,10 @@ xvidcap_SOURCES = \
 xvidcap_LDFLAGS = -export-dynamic
 
 xvidcap_LDADD = $(PACKAGE_LIBS)
+if SOLARIS
+xvidcap_LDFLAGS = 
+
+xvidcap_LDADD += -lXext -lX11 
+endif
 
 EXTRA_DIST = $(glade_DATA)
