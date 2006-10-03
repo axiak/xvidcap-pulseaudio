@@ -53,13 +53,14 @@ xvidcap_SOURCES = \
     xv_error_item.h \
     xvidcap-intl.h
 
-xvidcap_LDFLAGS = -export-dynamic
 
 xvidcap_LDADD = $(PACKAGE_LIBS)
+
 if SOLARIS
 xvidcap_LDFLAGS = 
-
 xvidcap_LDADD += -lXext -lX11 
+else
+xvidcap_LDFLAGS = -export-dynamic
 endif
 
 EXTRA_DIST = $(glade_DATA)

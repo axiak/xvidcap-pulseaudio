@@ -1,4 +1,9 @@
 
+2006-10-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* doc/man/C/xvidcap.1.xml, doc/man/de/xvidcap.1.xml, 
+		doc/man/it/xvidcap.1.xml: corrected encoding specification
+		to UTF-8
+
 2006-10-02  Vincenzo Reale <smart2128@baslug.org>
 	* doc/man/it/xvidcap.1.xml: Italian manpage
 
