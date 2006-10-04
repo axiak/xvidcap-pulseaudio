@@ -1,4 +1,10 @@
 
+2006-10-04  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* doc/man: man.make, it/xvidcap.1.xml, it/xvidcap.1, de/xvidcap.1.xml,
+		C/xvidcap.1.xml: changed encoding 
+		back to ISO_8859-1 because man is in trouble otherwise. Will
+		need to find a permanent fix when Asian languages come up.
+
 2006-10-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/man/C/xvidcap.1.xml, doc/man/de/xvidcap.1.xml, 
 		doc/man/it/xvidcap.1.xml: corrected encoding specification

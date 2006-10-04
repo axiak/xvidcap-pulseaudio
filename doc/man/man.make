@@ -23,7 +23,7 @@ install:
 			continue ; \
 		fi ; \
 	else \
-		$(DOCBOOK2X_MAN) --encoding=utf8 "$$i.xml" ; \
+		$(DOCBOOK2X_MAN) "$$i.xml" ; \
 	fi ; \
 	xv_MANVOLNUM=`echo $$i | sed -e 's,^[^\.]*\.,,'` ; \
 	if test x$(xv_LANG) = xC; then \
