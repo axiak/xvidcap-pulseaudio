@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
 <refentry revision="1.1.4">
@@ -125,7 +125,7 @@
                     </para>
                     <para>
                         Multi-frame capture does not need a file pattern. If you specify one
-                        nonetheless like <literal>--file mymovie-%d.mpeg</literal>, <application>xvidcap</application>
+                        nonetheless like <literal>--file mymovie-%d.mpeg</literal> for example, <application>xvidcap</application>
                         will replace the format string with the number of the current recording session 
                         (always starting the count from zero). This will enable you to manually in-/decrement that
                         number, or use the autocontinue feature (ref. <literal>--continue</literal> below) effectively
@@ -196,7 +196,7 @@
                 <term><option>--time<replaceable> maximum duration in seconds</replaceable></option></term>
                 <listitem>
                     <para>
-                        Specifies the maximum time to capture, if <literal>0</literal> <application>xvidcap</application> will capture until 
+                        Specifies the maximum time to capture, a value of <literal>0</literal> will cause <application>xvidcap</application> to capture until 
                         stopped interactively. For any other value any recording session will
                         stop automatically after the specified number of seconds. This parameter 
                         conflicts with <literal>--frames</literal> (see below). If both are given <application>xvidcap</application> will stop capturing

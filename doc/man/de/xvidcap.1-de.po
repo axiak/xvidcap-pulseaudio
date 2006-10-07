@@ -1,0 +1,1113 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2006-10-08  0:55+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
+"Language-Team: LANGUAGE <LL@example.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# type: Content of: <refentry><refsect1><para><application>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "xvidcap"
+msgstr "xvidcap"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "1"
+msgstr "1"
+
+# type: Content of: <refentry><refmeta><refmiscinfo>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "September 2006"
+msgstr "September 2006"
+
+# type: Content of: <refentry><refnamediv><refname>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "XVidCap"
+msgstr "XVidCap"
+
+# type: Content of: <refentry><refnamediv><refpurpose>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Record X11 screen portions to video"
+msgstr "Nimmt Bereiche der X11 Anzeige als Video auf"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "-v"
+msgstr "-v"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--mf"
+msgstr "--mf"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "|"
+msgstr "|"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--sf"
+msgstr "--sf"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--file"
+msgstr "--file"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "file name pattern"
+msgstr "Dateinamensmuster"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "|-"
+msgstr "|-"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--fps"
+msgstr "--fps"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "frames per second"
+msgstr "Frames pro Sekunde"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--cap_geometry"
+msgstr "--cap_geometry"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "geometry"
+msgstr "Aufnahmebereich"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--rescale"
+msgstr "--rescale"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "size percentage"
+msgstr "prozentuale Größe"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--quality"
+msgstr "--quality"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "quality percentage"
+msgstr "prozentuale Qualität"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--source"
+msgstr "--source"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "x11|shm"
+msgstr "x11|shm"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--time"
+msgstr "--time"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "maximum duration in seconds"
+msgstr "maximale Aufnahmedauer in Sekunden"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--frames"
+msgstr "--frames"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "maximum frames"
+msgstr "maximale Anzahl Frames"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--start_no"
+msgstr "--start_no"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "initial frame number"
+msgstr "Anfang der Frame-Nummerierung"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--continue"
+msgstr "--continue"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "yes|no"
+msgstr "yes|no"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--gui"
+msgstr "--gui"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--auto"
+msgstr "--auto"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--codec"
+msgstr "--codec"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "video codec"
+msgstr "Video Codec"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--codec-help"
+msgstr "--codec-help"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--format"
+msgstr "--format"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "output file format"
+msgstr "Ausgabe-Dateiformat"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--format-help"
+msgstr "--format-help"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--audio"
+msgstr "--audio"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--aucodec"
+msgstr "--aucodec"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "audio codec"
+msgstr "Ton Codec"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--aucodec-help"
+msgstr "--aucodec-help"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--audio_in"
+msgstr "--audio_in"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "audio capture device"
+msgstr "Ton-Aufnahmegerät"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--audio_bits"
+msgstr "--audio_bits"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "audio bit rate"
+msgstr "Ton Bit Rate"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--audio_rate"
+msgstr "--audio_rate"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "audio sample rate"
+msgstr "Ton Abtastrate"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--audio_channels"
+msgstr "--audio_channels"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "audio channels"
+msgstr "Ton Kanäle"
+
+# type: Content of: <refentry><refsect1><title>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Introduction"
+msgstr "Beschreibung"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "is a tool that captures movement on a selected area of an X11 screen to files. It can operate in two distinct modes: (1)"
+msgstr "ist ein Werkzeug, welches Bewegungen in einem ausgewählten  Bereich einer X11 Anzeige speichert. Es kann auf zwei unterschiedliche Arten arbeiten: (1)"
+
+# type: Content of: <refentry><refsect1><para><emphasis>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "single-frame"
+msgstr "Einzelbild-Aufnahme"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "capture or (2)"
+msgstr "(single-frame capture) oder (2)"
+
+# type: Content of: <refentry><refsect1><para><emphasis>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "multi-frame"
+msgstr "Film-Aufnahme"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "capture. In single-frame capture mode"
+msgstr "(multi-frame capture). Bei der Einzelbild-Aufnahme macht"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "takes a configurable number of screenshots per second and saves them to individual files. In multi-frame capture mode"
+msgstr "eine konfigurierbare Anzahl von Bildschirmfotos pro Sekunde und speichert sie als einzelne Bild-Dateien. Bei der Film-Aufnahme macht"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "also takes a number of screenshots per second, but encodes them to a single video in real time. Audio capture is only available with multi-frame formats."
+msgstr "ebenfalls eine Anzahl von Bildschirmfotos pro Sekunde, kodiert sie aber zur Laufzeit zu einem Film und speichert diesen in einer einzelnen Video-Datei. Ton-Aufnahme ist bei Einzelbild-Aufnahme nicht möglich."
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before encoding, or if you need other video codecs"
+msgstr "Die Einzelbild-Aufnahme kann unter Umständen geeigneter sein, wenn die Bilder vor dem Kodieren bearbeitet werden sollen oder wenn Video Codecs benötigt werden, die"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "does not support. Individual images can later be encoded with tools like ffmpeg, mencoder, or transcode."
+msgstr "nicht unterstützt. Die einzelnen Bilder können später mit Werzeugen wie ffmpeg, mendocer oder transcode zu einem Film kodiert werden."
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "For help, feature requests, or bug-reports please turn to"
+msgstr "Für weitere Hilfe, Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an"
+
+# type: Content of: <refentry><refsect1><para><ulink>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "http://www.sourceforge.net/projects/xvidcap/"
+msgstr "http://www.sourceforge.net/projects/xvidcap/"
+
+# type: Content of: <refentry><refsect1><title>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Options"
+msgstr "Optionen"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "This program follows the usual GNU command line syntax, with long options starting with two dashes ("
+msgstr "Dieses Program folgt der gängigen GNU Befehlszeilen-Syntax bei der lange Optionen mit zwei Bindestrichen ("
+
+# type: Content of: <refentry><refsect1><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--"
+msgstr "--"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "). A summary of options is included below."
+msgstr ") beginnen. Folgende Optionen sind möglich:"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Runs"
+msgstr "Lässt"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "in verbose mode. This will provide more information about user settings, input and output codecs, performance and so forth. Messages like"
+msgstr "ausführlichere Meldungen im Terminal ausgeben. Dies wird detailiertere Informationen bzgl. Einstellungen, Codecs, Aufnahme-Leistung etc. auflisten. Meldungen wie"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><quote>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "\"missing XX milli secs ..\""
+msgstr "\"missing XX milli secs ..\""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "while capturing mean you are missing frames due to lack of ressources (dropped frames). This results in a video that will play back too quickly. Note though, that verbose mode slows down"
+msgstr "während der Aufnahme bedeuten, dass mangels Rechenleistung Einzelbilder bei der Aufnahme verloren gehen. Dies führt zu einem Video, welches bei der Wiedergabe zu schnell abgespielt wird. Merke jedoch, dass die ausführlichen Meldungen"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "and may actually be"
+msgstr "verlangsamen und den Verlust von Einzelbildern sogar"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><emphasis>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "causing"
+msgstr "verursachen"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "frame drops. Try running without verbose mode and watch the frame drop monitor."
+msgstr "können. Versuchen Sie die ausführlichen Meldungen abzuschalten und den Bild-Verlust Messer im Auge zu behalten."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "tries to be smart about what capture mode you want. If you specify"
+msgstr "versucht zu erkennen welche Art von Aufnahme erwünscht ist. Bei der Angabe von"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--file test.avi"
+msgstr "--file test.avi"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "will assume you want multi-frame capture. You can explicitly specify capture mode on the command line with this switch. If, for example, you have your settings properly configured and saved with multi-frame capture as the default mode, calling"
+msgstr "wird es davon ausgehen, dass die die Film-Aufnahme ist. Mit diesem Schalter kann die gewünschte Art der Aufnahme explizit angegeben werden. Wenn, zum Beispiel, in den gespeicherten Einstellungen die Film-Aufnahme als Standard eingestellt ist, wird"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "xvidcap --sf"
+msgstr "xvidcap --sf"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "will start"
+msgstr "dafür sorgen, dass"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "in single-frame capture mode with all stored settings. The default is multi-frame capture."
+msgstr "für die Einzelbild-Aufnahme gestartet wird. Film-Aufnahme ist programm-seitig als Standard eingestellt."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "File name or pattern to use for saving the captured frames. A file name pattern contains printf()-like formatting (ref."
+msgstr "Dateiname oder Muster zur Verwendung beim Abspeichern der aufgenommenen Bilder. Ein Muster enthält Formatierungsangaben wie sie von printf() verwendet werden (s."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "man printf"
+msgstr "man printf"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ") information to make the file name incrementable, e.g."
+msgstr "), um es zu ermöglichen, den Dateinamen hochzuzählen, z. B."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--file out-%02d.xwd"
+msgstr "--file out-%02d.xwd"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ". This is necessary for single-frame capture."
+msgstr ". Bei der Einzelbild-Aufnahme ist dies nötig."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "will replace the first printf() format string with the number of the frame currently captured. Thus, in the example given, it will write to files"
+msgstr "wird das erste Vorkommen einer printf() Formatierungs-Information durch die Nummer des aktuellen Einzelbilds ersetzen. Im obigen Beispiel etwa werden Dateien"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><filename>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "out-00.xwd"
+msgstr "out-00.xwd"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ","
+msgstr ","
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><filename>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "out-01.xwd"
+msgstr "out-01.xwd"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><filename>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "out-02.xwd"
+msgstr "out-02.xwd"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ", etc. The frame number to start with can be specified with"
+msgstr "etc. geschrieben. Die Anfangsnummer der Nummerierung kann mit"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ", see above."
+msgstr "angegeben werden, s. oben."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Multi-frame capture does not need a file pattern. If you specify one nonetheless like"
+msgstr "Film-Aufnahmen benötigen kein hochzählbaren Dateinamen. Wenn dennoch ein Muster im Dateinamen enthalten ist, wie etwa"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--file mymovie-%d.mpeg"
+msgstr "--file mymovie-%d.mpeg"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "for example,"
+msgstr ", wird"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "will replace the format string with the number of the current recording session (always starting the count from zero). This will enable you to manually in-/decrement that number, or use the autocontinue feature (ref."
+msgstr "die Formatierungsangabe durch die Nummer der aktuellen Aufnahme-Sitzung (die Nummerierung beginnt immer bei Null) ersetzen. Dies ermöglicht es, diese Nummer manuell heraufzusetzen oder die automatische Aufnahme-Fortsetzung zu verwenden (s. unten bei"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "below) effectively creating a series of video files."
+msgstr "), um damit eine Serie von Filmen zu erzeugen."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Specifies the number of frames to be captured per second. This parameter accepts floating point values, which allows for very low capture rates like e.g."
+msgstr "Gibt die Anzahl von Einzelbildern (Frames) an, die pro Sekunde aufgenommen werden sollen. Diese Option akzeptiert Fliesskomma-Werte als Parameter, was es ermöglicht, sehr kleine Raten anzugeben (z. B."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--fps 0.5"
+msgstr "--fps 0.5"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "to record one frame every 2 seconds. This is only possible in single-frame mode. Codecs used for multi-frame modes usually only accept certain frame rates as valid. Note that fractional frame rates for codecs like MPEG1 which only accept very specific fractions are disabled in this version due to an inconsistency with fractional timing between"
+msgstr "), um etwa ein Bild nur alle zwei Sekunden aufzunehmen. Dies ist allerdings nur bei der Einzelbildaufnahme möglich, da die bei der Film-Aufnahme verwendeten Video Codecs in der Regel nur bestimmte Bildraten als gültig akzeptieren. Fliesskomma-Werte für Codecs wie MPEG1, die nur ganz bestimmte Raten zulassen, sind in dieser Version deaktiviert. Es existiert eine Inkonsistenz bei der Behandlung von Fliesskomma Bildraten zwischen libavcodec und"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "and libavcodec. Only integer frames rates will be accepted here."
+msgstr ". In diesen Fällen werden nur ganzzahlige Bildraten akzeptiert."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Specify the geometry as for e. g."
+msgstr "Gibt den Aufnahmebereich an wie eine Fenstergeometrie etwa für"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><application>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "xterm"
+msgstr "xterm"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ", i. e. like this:"
+msgstr ", also wie folgt:"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "width"
+msgstr "Breite"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "x"
+msgstr "x"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "height"
+msgstr "Höhe"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "+"
+msgstr "+"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "x-position"
+msgstr "Horizontale Position"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><replaceable>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "y-position"
+msgstr "Vertikale Position"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "This overrides the default width and height of the capture frame. Use the picker button of the GUI rather than this command line option to adjust the frame size to a given window. Capture sizes below 20 x 20 don't seem to work well with most multi-frame capture codecs."
+msgstr "Diese Option überschreibt die Standard-Einstellung für Breite und Höhe des Aufnahmebereichs. Verwenden Sie statt dieser Option die Bereichswähler-Schaltfläche, um die Grösse an die eines bestehenden Fensters anzugleichen. Aufnahmebereiche kleiner 20 x 20 Bildpunkte scheinen mit den meisten bei der Film-Aufnahme verwendeten Video Codecs nicht gut zu funktionieren."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Rescale the output to a percentage of the original input. A value of"
+msgstr "Ändert die Grösse des ausgegebenen Films relativ zur Eingangsgrösse des Aufnahmebereichs. Ein Wert von bspw."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "25"
+msgstr "25"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ", e. g. makes the output size be 25 percent of the original input area."
+msgstr "erzeugt ein Video, dessen Bilder eine Grösse von 25 Prozent der Originalgrösse haben."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Specify a value between"
+msgstr "Geben Sie einen Wert zwischen"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "0"
+msgstr "0"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "and"
+msgstr "und"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "100"
+msgstr "100"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "to define the quality encoding. The default value is"
+msgstr "an für die Qualität der Kodierung. Der Vorgabewert liegt bei"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "75"
+msgstr "75"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "."
+msgstr "."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Enable or disable the usage of the X11 shared memory extension. For shared memory support both client and server have to run on the same host. If shared memory support is available,"
+msgstr "Schaltet die Verwendung der X11 \"shared memory\" Erweiterung an oder aus. Wenn die Erweiterung unterstützt wird, verwendet"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "will use it by default. If your X server and client do not run on the same machine, you need to disable it by passing"
+msgstr "sie per Vorgabe. Dafür müssen X Server und Client jedoch auf dem gleichen Rechner laufen. Ist dies nicht der Fall, müssen Sie die Verwendung ausschalten, etwa per"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "--source x11"
+msgstr "--source x11"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Specifies the maximum time to capture, a value of"
+msgstr "Gibt die maximale Dauer einer einzelnen Aufnahmesitzung an. Wenn der Wert auf"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "will cause"
+msgstr "dafür sorgen, dass"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "to capture until stopped interactively. For any other value any recording session will stop automatically after the specified number of seconds. This parameter conflicts with"
+msgstr "die Aufnahme fortsetzen bis sie interaktiv beendet wird. Bei jedem anderen Wert wird die Aufnahme nach der angegebenen Anzahl Sekunden automatisch beendet. Dieser Parameter kolliediert ggf. mit"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "(see below). If both are given"
+msgstr "(s. unten). Wenn beide spezifiziert sind, wird "
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "will stop capturing when either applies. The program accepts floating point values, e.g."
+msgstr "die Aufnahme bei der ersten eintretenden Begrenzung beendet. Das Programm akzeptiert Fliesskomma-Werte wie"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "2.5"
+msgstr "2.5"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Stops capturing after the specified number of frames are captured. If"
+msgstr "Beendet die Aufnahme automatisch nach der angegebenen Anzahl Einzelbilder. Wenn der Wert auf"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "xvidcap will capture until stopped interactively, ref."
+msgstr "die Aufnahme fortsetzen bis sie interaktiv beendet wird, s."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "above."
+msgstr "oben."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Defines the start number which should be used for numbering files. The default value is"
+msgstr "Geben Sie hier die Zahl an, die als erstes bei der Einzelbild-Aufnahme für die Nummerierung von Einzelbildern und Dateien verwendet werden soll. Der Vorgabewert ist"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ".This parameter is used for single-frame capture only. The numbering of movie files for"
+msgstr ". Dieser Parameter wird nur von der Einzelbild-Aufnahme verwendet. Die Zählung der Video Dateien bei der Film-Aufnahme unter Verwendung von"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "always starts at zero."
+msgstr "beginnt immer bei"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "When multi-frame capture is selected, maximum recording time or frames are specified, and the output filename is incrementable (see"
+msgstr "Wenn bei der Film-Aufnahme eine maximale Aufnahmedauer oder eine maximale Anzahl von Einzelbildern angegeben ist und der Dateiname hochzählbar ist (s."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "below),"
+msgstr "oben), kann"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "can automatically continue to capture to a new file when one exceeds the maximum recording time or number of frames. This will change the behaviour of"
+msgstr "die Aufnahme nach der automatischen Beendigung ebenso automatisch mit einer neuen Zieldatei fortsetzen. Dies ändert das Verhalten von"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "because recording will not stop at the specified limits, but rather start a new video file. The feature is esp. useful if you want to automatically split your recording into chunks of e. g. five minutes. If no argument"
+msgstr "da die Aufnahme beim Erreichen der angegebenen Begrenzungen nicht länger komplett stoppt, sondern ein neues Video beginnt. Diese Funktionalität ist besonders dann nützlich, wenn man die Aufnahme automatisch in vorgegebene Abschnitte (etwa zu je fünf Minuten) stückeln möchte. Wenn keine Option"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "is given,"
+msgstr "angegeben ist, verwendet "
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "defaults to"
+msgstr "für die automatische Fortsetzung den Vorgabewert"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "no"
+msgstr "no"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ". Because single-frame capture needs an incrementable filename to count the individual frames, this feature is disabled for single-frame capture."
+msgstr ". Bei der Einzelbild-Aufnahme ist diese Funktionalität ebenfalls abgeschaltet, weil hier der hochzählbare Dateiname für die Nummerierung der Einzelbilder verwendet wird."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Start"
+msgstr "Starte"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "with or without control GUI overriding what's in the preferences file. Running without GUI will automatically start a single capture session. It can be stopped by either specifying one of"
+msgstr "mit oder ohne grafisches Benutzerinterface. Ein Betrieb ohne grafisches Benutzerinterface startet automatisch eine einzelne Aufnahmesitzung. Diese kann entweder durch die Verwendung von"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "or"
+msgstr "oder"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ", or by hitting CTRL-C."
+msgstr "oder durch die Tastenkombination CTRL-C beendet werden.\t\t\tDamit beendet sich auch das Programm."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "supports automatic detection of parameters for output format, video- and audio codec. If any of those settings are saved as fixed values in the stored preferences, they can be overriden by specifying the parameter"
+msgstr "kann Parameter für Ausgabe-Dateiformat, Video- und Audio Codec automatisch erkennen. Wenn eine dieser Einstellungen als fest konfigurierter Wert in den Einstellungen abgespeichert ist, kann sie für sie wieder die automatische Erkennung gewählt werden, durch Spezifikation des Parameter"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "auto"
+msgstr "auto"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "to any of the arguments"
+msgstr "bei irgendeiner der Optionen"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ", or"
+msgstr " oder"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ". This argument is a shorthand for setting all three to automatic detection."
+msgstr ". Diese Option hier ist eine Kurzfassung, die für alle drei Einstellungen automatische Erkennung aktiviert."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Override preferences and automatic codec selection with the explicitly specified codec."
+msgstr "Setzt explizit einen Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "List valid codecs."
+msgstr "Zeigt eine Liste unterstützter Codecs."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Override preferences and automatic format selection with the explicitly specified file format."
+msgstr "Setzt explizit ein Dateiformat ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "List valid file formats."
+msgstr "Zeigt eine Liste unterstützter Ausgabe-Dateiformate."
+
+# type: Content of: <refentry><refsect1><title>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Audio Options"
+msgstr "Optionen für Ton-Aufnahme"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "The following options relate to audio capture which is available with multi-frame output formats only. There audio streams can either be captured from a compatible audio device (e.g."
+msgstr "Die folgenden Optionen beziehen sich auf die Ton-Aufnahme, die nur bei Film-Aufnahme möglich ist. Dabei können Klänge entweder von einem kompatiblen Audio-Gerät (z.B."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><filename>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "/dev/dsp"
+msgstr "/dev/dsp"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid ") or from STDIN (ref."
+msgstr ") oder von STDIN aufgenommen werden, s."
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "below)."
+msgstr "unten."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Enable or disable audio capture using default parameters or those saved to the preferences file. If supported this is enabled by default for multi-frame capture."
+msgstr "Schaltet Ton-Aufnahme an oder aus und verwendet ggf. Vorgabewerte oder gespeicherte Einstellungen. Wenn Ton-Aufnahme unterstützt wird, ist dies bei der Film-Aufnahme per Vorgabewert angeschaltet."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Override preferences and automatic codec selection with the explicitly specified audio codec."
+msgstr "Setzt explizit einen Ton Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "List valid audio codecs."
+msgstr "Zeigt eine Liste unterstützter Ton Codecs."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Capture audio from the specified device or from stdin. The latter allows for dubbing a captured video using a command line like the following. The default is"
+msgstr "Wählt als Ton-Eingang entweder das angegebene Gerät oder STDIN. Letzteres erlaubt es, die Aufnahme mit einer existierenden Ton-Aufnahme zu hinterlegen. Dazu verwendet man einen Aufruf wie den folgenden. Der Vorgabewert ist"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><command>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "cat some.mp3 | xvidcap --audio_in -"
+msgstr "cat irgendein.mp3 | xvidcap --audio_in -"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Set the desired bit rate. The default is"
+msgstr "Setzt die gewünschte Bit Rate. Der Vorgabewert ist"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "32000"
+msgstr "32000"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "bit. Note that when using STDIN input the input file will be resampled as needed."
+msgstr "Bit. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Set the desired sample rate. The default is"
+msgstr "Setzt die gewünschte Abtastrate. Der Vorgabewert ist"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "22050"
+msgstr "22050"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Hz. Note that when using STDIN input the input file will be resampled as needed."
+msgstr "Hz. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert."
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Set the desired number of channels. The default is"
+msgstr "Setzt die gewünschte Anzahl von Ton Kanälen. Der Vorgabewert ist"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "for mono. Any value above"
+msgstr "für mono. Jeglicher Wert über"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><literal>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "2"
+msgstr "2"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "is probably only useful with STDIN input and a 5-channel AC audio input file or very good and rare recording equipment."
+msgstr "ist wahrscheinlich nur bei STDIN als Ton-Quelle und einer 5-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme-Ausstattung sinnvoll."
+
+# type: Content of: <refentry><refsect1><title>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Authors"
+msgstr "Autoren"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "was written by Rasca Gmelch and Karl H. Beckers."
+msgstr "wurde entwickelt von Rasca Gmelch und Karl H. Beckers."
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "This manual page was written by Karl H. Beckers"
+msgstr "Diese manpage wurde von Karl H. Beckers"
+
+# type: Content of: <refentry><refsect1><para><email>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "karl.h.beckers@gmx.net"
+msgstr "karl.h.beckers@gmx.net"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "for the"
+msgstr "für das"
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "project."
+msgstr "Project geschrieben."
+
+# type: Content of: <refentry><refsect1><para>
+#: ../C/xvidcap.1.compact.xml:1
+#, no-wrap
+msgid "Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.1 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts and no Back-Cover Texts."
+msgstr "Die Genehmigung dieses Dokument zu kopieren, verteilen und/oder zu verändern wird erteilt im Rahmen der GNU Free Documentation License Version 1.1 oder jeglicher späterer Version, die durch die Free Software Foundation herausgegeben wurde; ohne unveränderliche Abschnitte, Voder- oder Rückseiten Texte."

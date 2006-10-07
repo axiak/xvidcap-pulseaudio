@@ -4,210 +4,99 @@ XVidCap \- Nimmt Bereiche der X11 Anzeige als Video auf
 .SH SYNOPSIS
 \fBxvidcap\fR [\-v] [ \-\-mf | \-\-sf ] [\-\-file\fB Dateinamensmuster\fR |\- ] [\-\-fps\fB Frames pro Sekunde\fR] [\-\-cap_geometry\fB Aufnahmebereich\fR] [\-\-rescale\fB prozentuale Gr\(:o\(sse\fR] [\-\-quality\fB prozentuale Qualit\(:at\fR] [\-\-source x11|shm ] [\-\-time\fB maximale Aufnahmedauer in Sekunden\fR] [\-\-frames\fB maximale Anzahl Frames\fR] [\-\-start_no\fB Anfang der Frame\-Nummerierung\fR] [\-\-continue yes|no ] [\-\-gui yes|no ] [\-\-auto] [\-\-codec\fB Video Codec\fR] [\-\-codec\-help] [\-\-format\fB Ausgabe\-Dateiformat\fR] [\-\-format\-help] [\-\-audio yes|no ] [\-\-aucodec\fB Ton Codec\fR] [\-\-aucodec\-help] [\-\-audio_in\fB Ton\-Aufnahmeger\(:at\fR |\- ] [\-\-audio_bits\fB Ton Bit Rate\fR] [\-\-audio_rate\fB Ton Abtastrate\fR] [\-\-audio_channels\fB Ton Kan\(:ale\fR]
 .SH BESCHREIBUNG
-xvidcap ist ein Werkzeug, welches Bewegungen in einem ausgew\(:ahlten
-Bereich einer X11 Anzeige speichert. Es kann auf zwei unterschiedliche Arten arbeiten: (1)
-\fIEinzelbild\-Aufnahme\fR (single\-frame capture) oder (2) \fIFilm\-Aufnahme\fR 
-(multi\-frame capture).
-Bei der Einzelbild\-Aufnahme macht xvidcap eine konfigurierbare
-Anzahl von Bildschirmfotos pro Sekunde und speichert sie als einzelne Bild\-Dateien. Bei der
-Film\-Aufnahme macht xvidcap ebenfalls eine Anzahl von Bildschirmfotos
-pro Sekunde, kodiert sie aber zur Laufzeit zu einem Film und speichert diesen in einer einzelnen
-Video\-Datei. Ton\-Aufnahme ist bei Einzelbild\-Aufnahme nicht m\(:oglich.
+xvidcap ist ein Werkzeug, welches Bewegungen in einem ausgew\(:ahlten Bereich einer X11 Anzeige speichert. Es kann auf zwei unterschiedliche Arten arbeiten: (1) \fIEinzelbild\-Aufnahme\fR (single\-frame capture) oder (2) \fIFilm\-Aufnahme\fR (multi\-frame capture). Bei der Einzelbild\-Aufnahme macht xvidcap eine konfigurierbare Anzahl von Bildschirmfotos pro Sekunde und speichert sie als einzelne Bild\-Dateien. Bei der Film\-Aufnahme macht xvidcap ebenfalls eine Anzahl von Bildschirmfotos pro Sekunde, kodiert sie aber zur Laufzeit zu einem Film und speichert diesen in einer einzelnen Video\-Datei. Ton\-Aufnahme ist bei Einzelbild\-Aufnahme nicht m\(:oglich. 
 .PP
-Die Einzelbild\-Aufnahme kann unter Umst\(:anden geeigneter sein, wenn die Bilder vor dem
-Kodieren bearbeitet werden sollen oder wenn Video Codecs ben\(:otigt werden, die 
-xvidcap nicht unterst\(:utzt. Die einzelnen Bilder k\(:onnen sp\(:ater
-mit Werzeugen wie ffmpeg, mendocer oder transcode zu einem Film kodiert werden.
+Die Einzelbild\-Aufnahme kann unter Umst\(:anden geeigneter sein, wenn die Bilder vor dem Kodieren bearbeitet werden sollen oder wenn Video Codecs ben\(:otigt werden, die xvidcap nicht unterst\(:utzt. Die einzelnen Bilder k\(:onnen sp\(:ater mit Werzeugen wie ffmpeg, mendocer oder transcode zu einem Film kodiert werden. 
 .PP
-F\(:ur weitere Hilfe, Verbesserungsvorschl\(:age oder Fehlerberichte wenden Sie sich bitte an 
-http://www.sourceforge.net/projects/xvidcap/
+F\(:ur weitere Hilfe, Verbesserungsvorschl\(:age oder Fehlerberichte wenden Sie sich bitte an http://www.sourceforge.net/projects/xvidcap/ 
 .SH OPTIONEN
-Dieses Program folgt der g\(:angigen GNU Befehlszeilen\-Syntax bei der
-lange Optionen mit zwei Bindestrichen (\fB\-\-\fR) beginnen.
-Folgende Optionen sind m\(:oglich:
+Dieses Program folgt der g\(:angigen GNU Befehlszeilen\-Syntax bei der lange Optionen mit zwei Bindestrichen (\fB\-\-\fR) beginnen. Folgende Optionen sind m\(:oglich: 
 .TP 
 \fB\-v\fR
-L\(:asst xvidcap ausf\(:uhrlichere Meldungen im Terminal ausgeben.
-Dies wird detailiertere Informationen bzgl. Einstellungen, Codecs, Aufnahme\-Leistung etc.
-auflisten. Meldungen wie "missing XX milli secs .." w\(:ahrend der Aufnahme
-bedeuten, dass mangels Rechenleistung Einzelbilder bei der Aufnahme verloren gehen. Dies
-f\(:uhrt zu einem Video, welches bei der Wiedergabe zu schnell abgespielt wird. Merke jedoch,
-dass die ausf\(:uhrlichen Meldungen xvidcap verlangsamen und 
-den Verlust von Einzelbildern sogar \fIverursachen\fR k\(:onnen. Versuchen
-Sie die ausf\(:uhrlichen Meldungen abzuschalten und den Bild\-Verlust Messer im Auge zu behalten.
+L\(:asst xvidcap ausf\(:uhrlichere Meldungen im Terminal ausgeben. Dies wird detailiertere Informationen bzgl. Einstellungen, Codecs, Aufnahme\-Leistung etc. auflisten. Meldungen wie "missing XX milli secs .." w\(:ahrend der Aufnahme bedeuten, dass mangels Rechenleistung Einzelbilder bei der Aufnahme verloren gehen. Dies f\(:uhrt zu einem Video, welches bei der Wiedergabe zu schnell abgespielt wird. Merke jedoch, dass die ausf\(:uhrlichen Meldungen xvidcap verlangsamen und den Verlust von Einzelbildern sogar \fIverursachen\fR k\(:onnen. Versuchen Sie die ausf\(:uhrlichen Meldungen abzuschalten und den Bild\-Verlust Messer im Auge zu behalten. 
 .TP 
 \fB\-\-mf\fR | \fB\-\-sf\fR
-xvidcap versucht zu erkennen welche Art von Aufnahme erw\(:unscht
-ist. Bei der Angabe von \fB\-\-file test.avi\fR wird es davon ausgehen, dass die 
-die Film\-Aufnahme ist. Mit diesem Schalter kann die gew\(:unschte Art der Aufnahme explizit 
-angegeben werden. Wenn, zum Beispiel, in den gespeicherten Einstellungen die Film\-Aufnahme
-als Standard eingestellt ist, wird \fBxvidcap \-\-sf\fR daf\(:ur sorgen, dass 
-xvidcap f\(:ur die Einzelbild\-Aufnahme gestartet wird. Film\-Aufnahme
-ist programm\-seitig als Standard eingestellt.
+xvidcap versucht zu erkennen welche Art von Aufnahme erw\(:unscht ist. Bei der Angabe von \fB\-\-file test.avi\fR xvidcap wird es davon ausgehen, dass die die Film\-Aufnahme ist. Mit diesem Schalter kann die gew\(:unschte Art der Aufnahme explizit angegeben werden. Wenn, zum Beispiel, in den gespeicherten Einstellungen die Film\-Aufnahme als Standard eingestellt ist, wird \fBxvidcap \-\-sf\fR daf\(:ur sorgen, dass xvidcap f\(:ur die Einzelbild\-Aufnahme gestartet wird. Film\-Aufnahme ist programm\-seitig als Standard eingestellt. 
 .TP 
-\fB\-\-file\fI Dateinamensmuster\fB\fR
-Dateiname oder Muster zur Verwendung beim Abspeichern der aufgenommenen Bilder.
-Ein Muster enth\(:alt Formatierungsangaben wie sie von printf() verwendet werden (s. 
-\fBman printf\fR), um es zu erm\(:oglichen, den Dateinamen hochzuz\(:ahlen, z. B.
-\fB\-\-file out\-%02d.xwd\fR. Bei der Einzelbild\-Aufnahme ist dies n\(:otig.
-xvidcap wird das erste Vorkommen einer printf() Formatierungs\-Information
-durch die Nummer des aktuellen Einzelbilds ersetzen. Im obigen Beispiel etwa werden
-Dateien \fBout\-00.xwd\fR, \fBout\-01.xwd\fR, 
-\fBout\-02.xwd\fR etc. geschrieben. Die Anfangsnummer der Nummerierung
-kan mit \fB\-\-start_no\fR angegeben werden, s. oben.
+\fB\-\-file \fIDateinamensmuster\fB\fR
+Dateiname oder Muster zur Verwendung beim Abspeichern der aufgenommenen Bilder. Ein Muster enth\(:alt Formatierungsangaben wie sie von printf() verwendet werden (s. \fBman printf\fR), um es zu erm\(:oglichen, den Dateinamen hochzuz\(:ahlen, z. B. \fB\-\-file out\-%02d.xwd\fR. Bei der Einzelbild\-Aufnahme ist dies n\(:otig. xvidcap wird das erste Vorkommen einer printf() Formatierungs\-Information durch die Nummer des aktuellen Einzelbilds ersetzen. Im obigen Beispiel etwa werden Dateien \fBout\-00.xwd\fR, \fBout\-01.xwd\fR, \fBout\-02.xwd\fRetc. geschrieben. Die Anfangsnummer der Nummerierung kann mit \fB\-\-start_no\fRangegeben werden, s. oben. 
 
-Film\-Aufnahmen ben\(:otigen kein hochz\(:ahlbaren Dateinamen. Wenn dennoch ein Muster im Dateinamen
-enthalten ist, wie etwa \fB\-\-file mymovie\-%d.mpeg\fR, wird xvidcap
-die Formatierungsangabe durch die Nummer der aktuellen Aufnahme\-Sitzung (die Nummerierung beginnt
-immer bei Null) ersetzen. Dies erm\(:oglicht es, diese Nummer manuell heraufzusetzen oder
-die automatische Aufnahme\-Fortsetzung zu verwenden (s. unten bei \fB\-\-continue\fR),
-um damit eine Serie von Filmen zu erzeugen.
+Film\-Aufnahmen ben\(:otigen kein hochz\(:ahlbaren Dateinamen. Wenn dennoch ein Muster im Dateinamen enthalten ist, wie etwa \fB\-\-file mymovie\-%d.mpeg\fR , wird xvidcap die Formatierungsangabe durch die Nummer der aktuellen Aufnahme\-Sitzung (die Nummerierung beginnt immer bei Null) ersetzen. Dies erm\(:oglicht es, diese Nummer manuell heraufzusetzen oder die automatische Aufnahme\-Fortsetzung zu verwenden (s. unten bei \fB\-\-continue\fR ), um damit eine Serie von Filmen zu erzeugen. 
 .TP 
 \fB\-\-fps\fI Frames pro Sekunde\fB\fR
-Gibt die Anzahl von Einzelbildern (Frames) an, die pro Sekunde aufgenommen werden
-sollen. Diese Option akzeptiert Fliesskomma\-Werte als Parameter, was es erm\(:oglicht,
-sehr kleine Raten anzugeben (z. B. \fB\-\-fps 0.5\fR), um etwa ein Bild nur
-alle zwei Sekunden aufzunehmen. Dies ist allerdings nur bei der Einzelbildaufnahme
-m\(:oglich, da die bei der Film\-Aufnahme verwendeten Video Codecs in der Regel nur
-bestimmte Bildraten als g\(:ultig akzeptieren. Fliesskomma\-Werte f\(:ur Codecs wie MPEG1,
-die nur ganz bestimmte Raten zulassen, sind in dieser Version deaktiviert. Es existiert
-eine Inkonsistenz bei der Behandlung von Fliesskomma Bildraten zwischen libavcodec
-und xvidcap. In diesen F\(:allen werden nur ganzzahlige
-Bildraten akzeptiert.
+Gibt die Anzahl von Einzelbildern (Frames) an, die pro Sekunde aufgenommen werden sollen. Diese Option akzeptiert Fliesskomma\-Werte als Parameter, was es erm\(:oglicht, sehr kleine Raten anzugeben (z. B. \fB\-\-fps 0.5\fR ), um etwa ein Bild nur alle zwei Sekunden aufzunehmen. Dies ist allerdings nur bei der Einzelbildaufnahme m\(:oglich, da die bei der Film\-Aufnahme verwendeten Video Codecs in der Regel nur bestimmte Bildraten als g\(:ultig akzeptieren. Fliesskomma\-Werte f\(:ur Codecs wie MPEG1, die nur ganz bestimmte Raten zulassen, sind in dieser Version deaktiviert. Es existiert eine Inkonsistenz bei der Behandlung von Fliesskomma Bildraten zwischen libavcodec und xvidcap . In diesen F\(:allen werden nur ganzzahlige Bildraten akzeptiert. 
 .TP 
 \fB\-\-cap_geometry\fI Aufnahmebereich\fB\fR
-Gibt den Aufnahmebereich an wie eine Fenstergeometrie etwa f\(:ur xterm, 
-also wie folgt:
-\fIBreite\fRx\fIH\(:ohe\fR+\fIHorizontale Position\fR+\fIVertikale Position\fR
+Gibt den Aufnahmebereich an wie eine Fenstergeometrie etwa f\(:ur xterm, also wie folgt: \fIBreite\fRx\fIH\(:ohe\fR+\fIHorizontale Position\fR+\fIVertikale Position\fR 
 
-Diese Option \(:uberschreibt die Standard\-Einstellung f\(:ur Breite und H\(:ohe des Aufnahmebereichs.
-Verwenden Sie statt dieser Option die Bereichsw\(:ahler\-Schaltfl\(:ache, um die Gr\(:osse an
-die eines bestehenden Fensters anzugleichen. Aufnahmebereiche kleiner 20 x 20 Bildpunkte
-scheinen mit den meisten bei der Film\-Aufnahme verwendeten Video Codecs nicht gut zu
-funktionieren.
+Diese Option \(:uberschreibt die Standard\-Einstellung f\(:ur Breite und H\(:ohe des Aufnahmebereichs. Verwenden Sie statt dieser Option die Bereichsw\(:ahler\-Schaltfl\(:ache, um die Gr\(:osse an die eines bestehenden Fensters anzugleichen. Aufnahmebereiche kleiner 20 x 20 Bildpunkte scheinen mit den meisten bei der Film\-Aufnahme verwendeten Video Codecs nicht gut zu funktionieren. 
 .TP 
-\fB\-\-rescale\fI prozentuale Gr\(:osse\fB\fR
-\(:Andert die gr\(:osse des ausgegebenen Films relativ zur Eingangsgr\(:osse des Aufnahmebereichs.
-Ein Wert von bspw. \fB25\fR erzeugt ein Video, dessen Bilder eine Gr\(:osse von
-25 Prozent der Originalgr\(:osse haben.
+\fB\-\-rescale\fI prozentuale Gr\(:o\(sse\fB\fR
+\(:Andert die Gr\(:osse des ausgegebenen Films relativ zur Eingangsgr\(:osse des Aufnahmebereichs. Ein Wert von bspw. \fB25\fRerzeugt ein Video, dessen Bilder eine Gr\(:osse von 25 Prozent der Originalgr\(:osse haben. 
 .TP 
 \fB\-\-quality\fI prozentuale Qualit\(:at\fB\fR
-Geben Sie einen Wert zwischen \fB0\fR und \fB100\fR an f\(:ur die Qualit\(:at
-der Kodierung. Der Vorgabewert liegt bei \fB75\fR. 
+Geben Sie einen Wert zwischen \fB0\fR und \fB100\fR an f\(:ur die Qualit\(:at der Kodierung. Der Vorgabewert liegt bei \fB75\fR. 
 .TP 
 \fB\-\-source\fR x11|shm
-Schaltet die Verwendung der X11 shared memory Erweiterung an oder aus.
-Wenn die Erweiterung unterst\(:utzt wird, verwendet xvidcap sie per
-Vorgabe. Daf\(:ur m\(:ussen X Server und Client jedoch auf dem gleichen Rechner laufen. Ist dies 
-nicht der Fall, m\(:ussen Sie die Verwendung ausschalten, etwa per \fB\-\-source x11\fR.
+Schaltet die Verwendung der X11 "shared memory" Erweiterung an oder aus. Wenn die Erweiterung unterst\(:utzt wird, verwendet xvidcap sie per Vorgabe. Daf\(:ur m\(:ussen X Server und Client jedoch auf dem gleichen Rechner laufen. Ist dies nicht der Fall, m\(:ussen Sie die Verwendung ausschalten, etwa per \fB\-\-source x11\fR. 
 .TP 
 \fB\-\-time\fI maximale Aufnahmedauer in Sekunden\fB\fR
-Gibt die maximale Dauer einer einzelnen Aufnahmesitzung an. Wenn der Wert auf \fB0\fR
-gesetzt wird, wird xvidcap die Aufnahme fortsetzen bis sie interaktiv
-beendet wird. Bei jedem anderen Wert wird die Aufnahme nach der angegebenen Anzahl Sekunden
-automatisch beendet. Dieser Parameter kolliediert ggf. mit \fB\-\-frames\fR (s. unten).
-Wenn beide spezifiziert sind, wird die Aufnahme bei der ersten eintretenden Begrenzung beendet.
-Das Programm akzeptiert Fliesskomma\-Werte wie \fB2.5\fR.
+Gibt die maximale Dauer einer einzelnen Aufnahmesitzung an. Wenn der Wert auf \fB0\fR daf\(:ur sorgen, dass xvidcap die Aufnahme fortsetzen bis sie interaktiv beendet wird. Bei jedem anderen Wert wird die Aufnahme nach der angegebenen Anzahl Sekunden automatisch beendet. Dieser Parameter kolliediert ggf. mit \fB\-\-frames\fR (s. unten). Wenn beide spezifiziert sind, wird xvidcap die Aufnahme bei der ersten eintretenden Begrenzung beendet. Das Programm akzeptiert Fliesskomma\-Werte wie \fB2.5\fR. 
 .TP 
 \fB\-\-frames\fI maximale Anzahl Frames\fB\fR
-Beendet die Aufnahme automatisch nach der angegebenen Anzahl Einzelbilder. Wenn der Wert auf \fB0\fR
-gesetzt wird, wird xvidcap die Aufnahme fortsetzen bis sie interaktiv
-beendet wird, s. \fB\-\-time\fR oben.
+Beendet die Aufnahme automatisch nach der angegebenen Anzahl Einzelbilder. Wenn der Wert auf \fB0\fR die Aufnahme fortsetzen bis sie interaktiv beendet wird, s. \fB\-\-time\fR oben. 
 .TP 
 \fB\-\-start_no\fI Anfang der Frame\-Nummerierung\fB\fR
-Geben Sie hier die Zahl an, die als erstes bei der Einzelbild\-Aufnahme f\(:ur die Nummerierung von
-Einzelbildern und Dateien verwendet werden soll. Der Vorgabewert ist \fB0\fR. Dieser
-Parameter wird nur von der Einzelbild\-Aufnahme verwendet. Die Z\(:ahlung der Video Dateien bei der
-Film\-Aufnahme unter Verwendung von \fB\-\-continue\fR beginnt immer bei \fB0\fR.
+Geben Sie hier die Zahl an, die als erstes bei der Einzelbild\-Aufnahme f\(:ur die Nummerierung von Einzelbildern und Dateien verwendet werden soll. Der Vorgabewert ist \fB0\fR. Dieser Parameter wird nur von der Einzelbild\-Aufnahme verwendet. Die Z\(:ahlung der Video Dateien bei der Film\-Aufnahme unter Verwendung von \fB\-\-continue\fR beginnt immer bei 
 .TP 
 \fB\-\-continue\fR yes|no
-Wenn bei der Film\-Aufnahme eine maximale Aufnahmedauer oder eine maximale Anzahl 
-von Einzelbildern angegeben ist und der Dateiname hochz\(:ahlbar ist (s. \fB\-\-file\fR oben),
-kann xvidcap die Aufnahme nach der automatischen Beendigung ebenso 
-automatisch mit einer neuen Zieldatei fortsetzen. Dies \(:andert das Verhalten von \fB\-\-time\fR 
-und \fB\-\-frames\fR da die Aufnahme beim Erreichen der angegebenen Begrenzungen 
-nicht l\(:anger komplett stoppt, sondern ein neues Video beginnt. Diese Funktionalit\(:at ist besonders dann
-n\(:utzlich, wenn man die Aufnahme automatisch in vorgegebene Abschnitte (etwa zu je f\(:unf Minuten) 
-st\(:uckeln m\(:ochte. Wenn keine Option \fB\-\-continue\fR angegeben ist, wird die
-automatische Fortsetzung per Vorgabewert abgeschaltet. Bei der Einzelbild\-Aufnahme ist diese
-Funktionalit\(:at ebenfalls abgeschaltet.
+Wenn bei der Film\-Aufnahme eine maximale Aufnahmedauer oder eine maximale Anzahl von Einzelbildern angegeben ist und der Dateiname hochz\(:ahlbar ist (s. \fB\-\-file\fR oben), kann xvidcap die Aufnahme nach der automatischen Beendigung ebenso automatisch mit einer neuen Zieldatei fortsetzen. Dies \(:andert das Verhalten von \fB\-\-time\fR und \fB\-\-frames\fR da die Aufnahme beim Erreichen der angegebenen Begrenzungen nicht l\(:anger komplett stoppt, sondern ein neues Video beginnt. Diese Funktionalit\(:at ist besonders dann n\(:utzlich, wenn man die Aufnahme automatisch in vorgegebene Abschnitte (etwa zu je f\(:unf Minuten) st\(:uckeln m\(:ochte. Wenn keine Option \fB\-\-continue\fR angegeben ist, verwendet xvidcap f\(:ur die automatische Fortsetzung den Vorgabewert \fBno\fR. Bei der Einzelbild\-Aufnahme ist diese Funktionalit\(:at ebenfalls abgeschaltet, weil hier der hochz\(:ahlbare Dateiname f\(:ur die Nummerierung der Einzelbilder verwendet wird. 
 .TP 
 \fB\-\-gui\fR yes|no
-Starte xvidcap mit oder ohne grafisches Benutzerinterface.
-Ein Betrieb ohne grafisches Benutzerinterface startet automatisch eine einzelne Aufnahmesitzung.
-Diese kann entweder durch die Verwendung von \fB\-\-time\fR oder
-\fB\-\-frames\fR oder durch die Tastenkombination CTRL\-C beendet werden.
-Damit beendet sich auch das Programm.
+Starte xvidcap mit oder ohne grafisches Benutzerinterface. Ein Betrieb ohne grafisches Benutzerinterface startet automatisch eine einzelne Aufnahmesitzung. Diese kann entweder durch die Verwendung von \fB\-\-time\fR oder \fB\-\-frames\fRoder durch die Tastenkombination CTRL\-C beendet werden. \\t Damit beendet sich auch das Programm. 
 .TP 
 \fB\-\-auto\fR
-xvidcap kann Parameter f\(:ur Ausgabe\-Dateiformat, Video\- und
-Audio Codec automatisch erkennen. Wenn eine dieser Einstellungen als fest konfigurierter
-Wert in den Einstellungen abgespeichert ist, kann sie f\(:ur sie wieder die automatische
-Erkennung gew\(:ahlt werden, indem der Parameter \fBauto\fR der jeweiligen
-Option \fB\-\-format\fR, \fB\-\-codec\fR oder 
-\fB\-\-aucodec\fR mitgegeben wird. Diese Option hier ist eine Kurzfassung, die
-f\(:ur alle drei Einstellungen automatische Erkennung aktiviert. 
+xvidcap kann Parameter f\(:ur Ausgabe\-Dateiformat, Video\- und Audio Codec automatisch erkennen. Wenn eine dieser Einstellungen als fest konfigurierter Wert in den Einstellungen abgespeichert ist, kann sie f\(:ur sie wieder die automatische Erkennung gew\(:ahlt werden, durch Spezifikation des Parameter \fBauto\fR bei irgendeiner der Optionen \fB\-\-format\fR, \fB\-\-codec\fR oder \fB\-\-aucodec\fR. Diese Option hier ist eine Kurzfassung, die f\(:ur alle drei Einstellungen automatische Erkennung aktiviert. 
 .TP 
 \fB\-\-codec\fI Video Codec\fB\fR
-Setzt explizit einen Codec ggf. anstelle des automatisch erkannten oder in den
-Einstellungen gespeicherten.
+Setzt explizit einen Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten. 
 .TP 
 \fB\-\-codec\-help\fR
-Zeigt eine Liste unterst\(:utzter Codecs.
+Zeigt eine Liste unterst\(:utzter Codecs. 
 .TP 
 \fB\-\-format\fI Ausgabe\-Dateiformat\fB\fR
-Setzt explizit ein Dateiformat ggf. anstelle des automatisch erkannten oder in den
-Einstellungen gespeicherten.
+Setzt explizit ein Dateiformat ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten. 
 .TP 
 \fB\-\-format\-help\fR
-Zeigt eine Liste unterst\(:utzter Ausgabe\-Dateiformate.
+Zeigt eine Liste unterst\(:utzter Ausgabe\-Dateiformate. 
 .SH "OPTIONEN F\(:uR TON\-AUFNAHME"
-Die folgenden Optionen beziehen sich auf die Ton\-Aufnahme, die nur bei
-Film\-Aufnahme m\(:oglich ist. Dabei k\(:onnen Kl\(:ange entweder von einem kompatiblen
-Audio\-Ger\(:at (z.B. \fB/dev/dsp\fR) oder von STDIN aufgenommen werden,
-s. \fB\-\-audio_in\fR unten.
+Die folgenden Optionen beziehen sich auf die Ton\-Aufnahme, die nur bei Film\-Aufnahme m\(:oglich ist. Dabei k\(:onnen Kl\(:ange entweder von einem kompatiblen Audio\-Ger\(:at (z.B. \fB/dev/dsp\fR) oder von STDIN aufgenommen werden, s. \fB\-\-audio_in\fR unten. 
 .TP 
 \fB\-\-audio\fR yes|no
-Schaltet Ton\-Aufnahme an oder aus und verwendet ggf. Vorgabewerte oder
-gespeicherte Einstellungen. Wenn Ton\-Aufnahme unterst\(:utzt wird, ist dies
-bei der Film\-Aufnahme per Vorgabewert angeschaltet.
+Schaltet Ton\-Aufnahme an oder aus und verwendet ggf. Vorgabewerte oder gespeicherte Einstellungen. Wenn Ton\-Aufnahme unterst\(:utzt wird, ist dies bei der Film\-Aufnahme per Vorgabewert angeschaltet. 
 .TP 
 \fB\-\-aucodec\fI Ton Codec\fB\fR
-Setzt explizit einen Ton Codec ggf. anstelle des automatisch erkannten oder in den
-Einstellungen gespeicherten.
+Setzt explizit einen Ton Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten. 
 .TP 
 \fB\-\-aucodec\-help\fR
-Zeigt eine Liste unterst\(:utzter Ton Codecs.
+Zeigt eine Liste unterst\(:utzter Ton Codecs. 
 .TP 
 \fB\-\-audio_in\fI Ton\-Aufnahmeger\(:at\fB|\-\fR
-W\(:ahlt als Ton\-Eingang entweder das angegebene Ger\(:at oder STDIN. Letzteres
-erlaubt es, die Aufnahme mit einer existierenden Ton\-Aufnahme zu hinterlegen.
-Dazu verwendet man einen Aufruf wie den folgenden. Der Vorgabewert ist 
-\fB/dev/dsp\fR.
+W\(:ahlt als Ton\-Eingang entweder das angegebene Ger\(:at oder STDIN. Letzteres erlaubt es, die Aufnahme mit einer existierenden Ton\-Aufnahme zu hinterlegen. Dazu verwendet man einen Aufruf wie den folgenden. Der Vorgabewert ist \fB/dev/dsp\fR. 
 
-cat irgendein.mp3 | xvidcap \-\-audio_in \-
+cat irgendein.mp3 | xvidcap \-\-audio_in \- 
 .TP 
 \fB\-\-audio_bits\fI Ton Bit Rate\fB\fR
-Setzt die gew\(:unschte Bit Rate. Der Vorgabewert ist \fB32000\fR Bit.
-Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert.
+Setzt die gew\(:unschte Bit Rate. Der Vorgabewert ist \fB32000\fR Bit. Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert. 
 .TP 
-\fB\-\-audio_rate\fI Ton\-Abtastrate\fB\fR
-Setzt die gew\(:unschte Abtastrate. Der Vorgabewert ist \fB22050\fR Hz.
-Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert.
+\fB\-\-audio_rate\fI Ton Abtastrate\fB\fR
+Setzt die gew\(:unschte Abtastrate. Der Vorgabewert ist \fB22050\fR Hz. Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert. 
 .TP 
 \fB\-\-audio_channels\fI Ton Kan\(:ale\fB\fR
-Setzt die gew\(:unschte Anzahl von Ton Kan\(:alen. Der Vorgabewert ist \fB1\fR f\(:ur mono.
-Jeglicher Wert \(:uber \fB2\fR ist wahrscheinlich nur bei STDIN als Ton\-Quelle und 
-einer 5\-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme\-Ausstattung sinnvoll.
-.SH AUTHOREN
-xvidcap wurde entwickelt von Rasca Gmelch und Karl H. Beckers.
+Setzt die gew\(:unschte Anzahl von Ton Kan\(:alen. Der Vorgabewert ist \fB1\fR f\(:ur mono. Jeglicher Wert \(:uber \fB2\fR ist wahrscheinlich nur bei STDIN als Ton\-Quelle und einer 5\-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme\-Ausstattung sinnvoll. 
+.SH AUTOREN
+xvidcap wurde entwickelt von Rasca Gmelch und Karl H. Beckers. 
 .PP
-Diese manpage wurde von Karl H. Beckers karl.h.beckers@gmx.net 
-f\(:ur das xvidcap Project geschrieben.
+Diese manpage wurde von Karl H. Beckers karl.h.beckers@gmx.net f\(:ur das xvidcap Project geschrieben. 
 .PP
-Deutsche \(:Ubersetzung von Karl H. Beckers karl.h.beckers@gmx.net erstellt.
-.PP
-Die Genehmigung dieses Dokument zu kopieren, verteilen und/oder
-zu ver\(:andern wird erteilt im Rahmen der GNU Free Documentation License Version 1.1 oder
-jeglicher sp\(:aterer Version, die durch die Free Software Foundation herausgegeben
-wurde; ohne unver\(:anderliche Abschnitte, Voder\- oder R\(:uckseiten Texte.
+Die Genehmigung dieses Dokument zu kopieren, verteilen und/oder zu ver\(:andern wird erteilt im Rahmen der GNU Free Documentation License Version 1.1 oder jeglicher sp\(:aterer Version, die durch die Free Software Foundation herausgegeben wurde; ohne unver\(:anderliche Abschnitte, Voder\- oder R\(:uckseiten Texte. 
