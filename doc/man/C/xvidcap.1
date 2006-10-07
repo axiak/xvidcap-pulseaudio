@@ -20,7 +20,7 @@ or transcode.
 For help, feature requests, or bug\-reports please turn to 
 http://www.sourceforge.net/projects/xvidcap/
 .SH OPTIONS
-These programs follow the usual GNU command line syntax, 
+This program follows the usual GNU command line syntax, 
 with long options starting with two dashes (\fB\-\-\fR). 
 A summary of options is included below.
 .TP 
@@ -57,7 +57,7 @@ Multi\-frame capture does not need a file pattern. If you specify one
 nonetheless like \fB\-\-file mymovie\-%d.mpeg\fR, xvidcap
 will replace the format string with the number of the current recording session 
 (always starting the count from zero). This will enable you to manually in\-/decrement that
-number, or use the autocontinue feature (ref. \fB\-\-continue\fR above) effectively
+number, or use the autocontinue feature (ref. \fB\-\-continue\fR below) effectively
 creating a series of video files.
 .TP 
 \fB\-\-fps\fI frames per second\fB\fR
@@ -97,8 +97,8 @@ client do not run on the same machine, you need to disable it by passing \fB\-\-
 Specifies the maximum time to capture, if \fB0\fR xvidcap will capture until 
 stopped interactively. For any other value any recording session will
 stop automatically after the specified number of seconds. This parameter 
-conflicts with \fB\-\-frames\fR (see below). If both are given xvidcap stop capturing
-if either applies. The program accepts floating point values, e.g. \fB2.5\fR.
+conflicts with \fB\-\-frames\fR (see below). If both are given xvidcap will stop capturing
+when either applies. The program accepts floating point values, e.g. \fB2.5\fR.
 .TP 
 \fB\-\-frames\fI maximum frames\fB\fR
 Stops capturing after the specified number of frames are captured. If \fB0\fR

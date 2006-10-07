@@ -76,7 +76,7 @@
     <refsect1 id='options'><title>Options</title>
 
         <para>
-            These programs follow the usual GNU command line syntax, 
+            This program follows the usual GNU command line syntax, 
             with long options starting with two dashes (<literal>--</literal>).  
             A summary of options is included below.
         </para> 
@@ -100,7 +100,7 @@
                 <listitem>
                     <para>
                         <application>xvidcap</application> tries to be smart about what capture mode you want. If you 
-                        specify <literal>--file test.avi</literal> xvidcap will assume you want multi-frame capture.
+                        specify <literal>--file test.avi</literal> <application>xvidcap</application> will assume you want multi-frame capture.
                         You can explicitly specify capture mode on the command line with this
                         switch. If, for example, you have your settings properly configured and
                         saved with multi-frame capture as the default mode, calling <literal>xvidcap --sf</literal>
@@ -128,7 +128,7 @@
                         nonetheless like <literal>--file mymovie-%d.mpeg</literal>, <application>xvidcap</application>
                         will replace the format string with the number of the current recording session 
                         (always starting the count from zero). This will enable you to manually in-/decrement that
-                        number, or use the autocontinue feature (ref. <literal>--continue</literal> above) effectively
+                        number, or use the autocontinue feature (ref. <literal>--continue</literal> below) effectively
                         creating a series of video files.
                     </para> 
                 </listitem>
@@ -199,8 +199,8 @@
                         Specifies the maximum time to capture, if <literal>0</literal> <application>xvidcap</application> will capture until 
                         stopped interactively. For any other value any recording session will
                         stop automatically after the specified number of seconds. This parameter 
-                        conflicts with <literal>--frames</literal> (see below). If both are given xvidcap stop capturing
-                        if either applies. The program accepts floating point values, e.g. <literal>2.5</literal>.
+                        conflicts with <literal>--frames</literal> (see below). If both are given <application>xvidcap</application> will stop capturing
+                        when either applies. The program accepts floating point values, e.g. <literal>2.5</literal>.
                     </para> 
                 </listitem>
             </varlistentry>
@@ -244,7 +244,7 @@
                 <term><option>--gui</option> yes|no</term>
                 <listitem>
                     <para>
-                        Start xvidcap with or without control GUI overriding what's in the
+                        Start <application>xvidcap</application> with or without control GUI overriding what's in the
                         preferences file. Running without GUI will automatically start a single
                         capture session. It can be stopped by either specifying one of <literal>--time</literal> or
                         <literal>--frames</literal>, or by hitting CTRL-C.

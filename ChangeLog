@@ -1,4 +1,9 @@
 
+2006-10-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* doc/man: C/xvidcap.1.xml, C/xvidcap.1, de/xvidcap.1.xml, 
+		de/xvidcap.1: German translation of manpage and minor
+		corrections of the English version
+		
 2006-10-04  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/man: man.make, it/xvidcap.1.xml, it/xvidcap.1, de/xvidcap.1.xml,
 		C/xvidcap.1.xml: changed encoding 
