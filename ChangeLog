@@ -1,4 +1,9 @@
 
+2006-10-08  Karl H. Beckers  <karl.h.beckers@gmx.net>
+ 	* configure.in, doc/man: C/xvidcap.1, man.make, de/xvidcap.1.xml:
+		integration of po4a to make translation of documentation
+		more maintainable
+
 2006-10-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/man: C/xvidcap.1.xml, C/xvidcap.1, de/xvidcap.1.xml, 
 		de/xvidcap.1: German translation of manpage and minor

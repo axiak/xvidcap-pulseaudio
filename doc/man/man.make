@@ -23,7 +23,29 @@ install:
 			continue ; \
 		fi ; \
 	else \
-		$(DOCBOOK2X_MAN) "$$i.xml" ; \
+		if test -r $$i-$(xv_LANG).po ; then \
+			if test x$(PO4A_TRANSLATE) = xno ; then \
+				echo "Cannot find po4a-translate to create current, translated manpage. Trying to use previous translation of $$i for locale $(xv_LANG)" ; \
+			else \
+				cat ../C/$$i.xml |  \
+				perl -e '$$/="" ; while (<>) { $$_ =~ s/\n//g ; $$_ =~ s/\t/ /g ; print $$_}' | \
+				sed -r 's/[ ]+/ /g' > ../C/$$i.compact.xml ; \
+				echo "translating manpage for lang $(xv_LANG)" ; \
+				po4a-translate -f xml -m ../C/$$i.compact.xml -p $$i-$(xv_LANG).po -l $$i.xml ; \
+			fi ; \
+		fi ; \
+		if test -r $$i.xml ; then \
+			echo "converting docbook to manpage for lang $(xv_LANG)" ; \
+			$(DOCBOOK2X_MAN) "$$i.xml" ; \
+		else \
+			echo "Cannot find $$i.xml as source for manpage of locale $(xv_LANG)" ; \
+			if test -r $$i ; then \
+				echo "Installing pre-generated manpage" ; \
+			else \
+				echo "Skipping manpage" ; \
+				continue ; \
+			fi ; \
+		fi ; \
 	fi ; \
 	xv_MANVOLNUM=`echo $$i | sed -e 's,^[^\.]*\.,,'` ; \
 	if test x$(xv_LANG) = xC; then \

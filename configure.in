@@ -40,6 +40,11 @@ AC_PATH_PROG(DOCBOOK2X_MAN,docbook2x-man,no)
 if test x$DOCBOOK2X_MAN = xno; then
   AC_MSG_NOTICE(Couldn't find docbook2x-man to generate current man pages. Will install pre-generated ones if present.)
 fi
+
+AC_PATH_PROG(PO4A_TRANSLATE,po4a-translate,no)
+if test x$PO4A_TRANSLATE = xno; then
+  AC_MSG_NOTICE(Couldn't find po4a-translate to translate current man pages. Will install pre-generated ones if present.)
+fi
 #MANPAGES###############################################
 #########################################################
 

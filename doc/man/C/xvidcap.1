@@ -54,7 +54,7 @@ etc. The frame number to start with can be specified with \fB\-\-start_no\fR,
 see above.
 
 Multi\-frame capture does not need a file pattern. If you specify one
-nonetheless like \fB\-\-file mymovie\-%d.mpeg\fR, xvidcap
+nonetheless like \fB\-\-file mymovie\-%d.mpeg\fR for example, xvidcap
 will replace the format string with the number of the current recording session 
 (always starting the count from zero). This will enable you to manually in\-/decrement that
 number, or use the autocontinue feature (ref. \fB\-\-continue\fR below) effectively
@@ -94,7 +94,7 @@ memory support is available, xvidcap will use it by default. If your X server an
 client do not run on the same machine, you need to disable it by passing \fB\-\-source x11\fR.
 .TP 
 \fB\-\-time\fI maximum duration in seconds\fB\fR
-Specifies the maximum time to capture, if \fB0\fR xvidcap will capture until 
+Specifies the maximum time to capture, a value of \fB0\fR will cause xvidcap to capture until 
 stopped interactively. For any other value any recording session will
 stop automatically after the specified number of seconds. This parameter 
 conflicts with \fB\-\-frames\fR (see below). If both are given xvidcap will stop capturing
