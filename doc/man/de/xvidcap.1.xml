@@ -1,1 +1,237 @@
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"><refentry revision="1.1.4"> <refmeta> <refentrytitle>xvidcap</refentrytitle> <manvolnum>1</manvolnum> <refmiscinfo>September 2006</refmiscinfo> </refmeta> <refnamediv id='name'> <refname>XVidCap</refname> <refpurpose>Nimmt Bereiche der X11 Anzeige als Video auf</refpurpose> </refnamediv>  <refsynopsisdiv id='synopsis'> <cmdsynopsis> <command>xvidcap</command> <arg choice='opt'>-v</arg> <arg choice='opt'><arg choice='plain'>--mf</arg>|<arg choice='plain'>--sf</arg></arg> <arg choice='opt'>--file<replaceable> Dateinamensmuster</replaceable><arg choice="plain">|-</arg></arg> <arg choice='opt'>--fps<replaceable> Frames pro Sekunde</replaceable></arg> <arg choice='opt'>--cap_geometry<replaceable> Aufnahmebereich</replaceable></arg> <arg choice='opt'>--rescale<replaceable> prozentuale Größe</replaceable></arg> <arg choice='opt'>--quality<replaceable> prozentuale Qualität</replaceable></arg> <arg choice='opt'>--source<arg choice="plain"> x11|shm</arg></arg> <arg choice='opt'>--time<replaceable> maximale Aufnahmedauer in Sekunden</replaceable></arg> <arg choice='opt'>--frames<replaceable> maximale Anzahl Frames</replaceable></arg> <arg choice='opt'>--start_no<replaceable> Anfang der Frame-Nummerierung</replaceable></arg> <arg choice='opt'>--continue<arg choice="plain"> yes|no</arg></arg> <arg choice='opt'>--gui<arg choice="plain"> yes|no</arg></arg> <arg choice='opt'>--auto</arg> <arg choice='opt'>--codec<replaceable> Video Codec</replaceable></arg> <arg choice='opt'>--codec-help</arg> <arg choice='opt'>--format<replaceable> Ausgabe-Dateiformat</replaceable></arg> <arg choice='opt'>--format-help</arg> <arg choice='opt'>--audio<arg choice="plain"> yes|no</arg></arg> <arg choice='opt'>--aucodec<replaceable> Ton Codec</replaceable></arg> <arg choice='opt'>--aucodec-help</arg> <arg choice='opt'>--audio_in<replaceable> Ton-Aufnahmegerät</replaceable><arg choice="plain">|-</arg></arg> <arg choice='opt'>--audio_bits<replaceable> Ton Bit Rate</replaceable></arg> <arg choice='opt'>--audio_rate<replaceable> Ton Abtastrate</replaceable></arg> <arg choice='opt'>--audio_channels<replaceable> Ton Kanäle</replaceable></arg> </cmdsynopsis> </refsynopsisdiv> <refsect1 id='intro'><title>Beschreibung</title> <para> <application>xvidcap</application> ist ein Werkzeug, welches Bewegungen in einem ausgewählten  Bereich einer X11 Anzeige speichert. Es kann auf zwei unterschiedliche Arten arbeiten: (1) <emphasis>Einzelbild-Aufnahme</emphasis> (single-frame capture) oder (2) <emphasis>Film-Aufnahme</emphasis> (multi-frame capture). Bei der Einzelbild-Aufnahme macht <application>xvidcap</application> eine konfigurierbare Anzahl von Bildschirmfotos pro Sekunde und speichert sie als einzelne Bild-Dateien. Bei der Film-Aufnahme macht <application>xvidcap</application> ebenfalls eine Anzahl von Bildschirmfotos pro Sekunde, kodiert sie aber zur Laufzeit zu einem Film und speichert diesen in einer einzelnen Video-Datei. Ton-Aufnahme ist bei Einzelbild-Aufnahme nicht möglich. </para> <para> Die Einzelbild-Aufnahme kann unter Umständen geeigneter sein, wenn die Bilder vor dem Kodieren bearbeitet werden sollen oder wenn Video Codecs benötigt werden, die <application>xvidcap</application> nicht unterstützt. Die einzelnen Bilder können später mit Werzeugen wie ffmpeg, mendocer oder transcode zu einem Film kodiert werden. </para> <para> Für weitere Hilfe, Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink> </para> </refsect1> <refsect1 id='options'><title>Optionen</title> <para> Dieses Program folgt der gängigen GNU Befehlszeilen-Syntax bei der lange Optionen mit zwei Bindestrichen (<literal>--</literal>) beginnen. Folgende Optionen sind möglich: </para> <variablelist remap='IP'> <varlistentry> <term><option>-v</option></term> <listitem> <para> Lässt <application>xvidcap</application> ausführlichere Meldungen im Terminal ausgeben. Dies wird detailiertere Informationen bzgl. Einstellungen, Codecs, Aufnahme-Leistung etc. auflisten. Meldungen wie <quote>"missing XX milli secs .."</quote> während der Aufnahme bedeuten, dass mangels Rechenleistung Einzelbilder bei der Aufnahme verloren gehen. Dies führt zu einem Video, welches bei der Wiedergabe zu schnell abgespielt wird. Merke jedoch, dass die ausführlichen Meldungen <application>xvidcap</application> verlangsamen und den Verlust von Einzelbildern sogar <emphasis>verursachen</emphasis> können. Versuchen Sie die ausführlichen Meldungen abzuschalten und den Bild-Verlust Messer im Auge zu behalten. </para> </listitem> </varlistentry> <varlistentry> <term><option>--mf</option> | <option>--sf</option></term> <listitem> <para> <application>xvidcap</application> versucht zu erkennen welche Art von Aufnahme erwünscht ist. Bei der Angabe von <literal>--file test.avi</literal> <application>xvidcap</application> wird es davon ausgehen, dass die die Film-Aufnahme ist. Mit diesem Schalter kann die gewünschte Art der Aufnahme explizit angegeben werden. Wenn, zum Beispiel, in den gespeicherten Einstellungen die Film-Aufnahme als Standard eingestellt ist, wird <literal>xvidcap --sf</literal> dafür sorgen, dass <application>xvidcap</application> für die Einzelbild-Aufnahme gestartet wird. Film-Aufnahme ist programm-seitig als Standard eingestellt. </para> </listitem> </varlistentry> <varlistentry> <term><option>--file <replaceable>Dateinamensmuster</replaceable></option></term> <listitem> <para> Dateiname oder Muster zur Verwendung beim Abspeichern der aufgenommenen Bilder. Ein Muster enthält Formatierungsangaben wie sie von printf() verwendet werden (s. <literal>man printf</literal>), um es zu ermöglichen, den Dateinamen hochzuzählen, z. B. <literal>--file out-%02d.xwd</literal>. Bei der Einzelbild-Aufnahme ist dies nötig. <application>xvidcap</application> wird das erste Vorkommen einer printf() Formatierungs-Information durch die Nummer des aktuellen Einzelbilds ersetzen. Im obigen Beispiel etwa werden Dateien <filename>out-00.xwd</filename>, <filename>out-01.xwd</filename>, <filename>out-02.xwd</filename>etc. geschrieben. Die Anfangsnummer der Nummerierung kann mit <literal>--start_no</literal>angegeben werden, s. oben. </para> <para> Film-Aufnahmen benötigen kein hochzählbaren Dateinamen. Wenn dennoch ein Muster im Dateinamen enthalten ist, wie etwa <literal>--file mymovie-%d.mpeg</literal> , wird <application>xvidcap</application> die Formatierungsangabe durch die Nummer der aktuellen Aufnahme-Sitzung (die Nummerierung beginnt immer bei Null) ersetzen. Dies ermöglicht es, diese Nummer manuell heraufzusetzen oder die automatische Aufnahme-Fortsetzung zu verwenden (s. unten bei <literal>--continue</literal> ), um damit eine Serie von Filmen zu erzeugen. </para> </listitem> </varlistentry> <varlistentry> <term><option>--fps<replaceable> Frames pro Sekunde</replaceable></option></term> <listitem> <para> Gibt die Anzahl von Einzelbildern (Frames) an, die pro Sekunde aufgenommen werden sollen. Diese Option akzeptiert Fliesskomma-Werte als Parameter, was es ermöglicht, sehr kleine Raten anzugeben (z. B. <literal>--fps 0.5</literal> ), um etwa ein Bild nur alle zwei Sekunden aufzunehmen. Dies ist allerdings nur bei der Einzelbildaufnahme möglich, da die bei der Film-Aufnahme verwendeten Video Codecs in der Regel nur bestimmte Bildraten als gültig akzeptieren. Fliesskomma-Werte für Codecs wie MPEG1, die nur ganz bestimmte Raten zulassen, sind in dieser Version deaktiviert. Es existiert eine Inkonsistenz bei der Behandlung von Fliesskomma Bildraten zwischen libavcodec und <application>xvidcap</application> . In diesen Fällen werden nur ganzzahlige Bildraten akzeptiert. </para> </listitem> </varlistentry> <varlistentry> <term><option>--cap_geometry<replaceable> Aufnahmebereich</replaceable></option></term> <listitem> <para> Gibt den Aufnahmebereich an wie eine Fenstergeometrie etwa für <application>xterm</application>, also wie folgt: <replaceable>Breite</replaceable>x<replaceable>Höhe</replaceable>+<replaceable>Horizontale Position</replaceable>+<replaceable>Vertikale Position</replaceable> </para> <para> Diese Option überschreibt die Standard-Einstellung für Breite und Höhe des Aufnahmebereichs. Verwenden Sie statt dieser Option die Bereichswähler-Schaltfläche, um die Grösse an die eines bestehenden Fensters anzugleichen. Aufnahmebereiche kleiner 20 x 20 Bildpunkte scheinen mit den meisten bei der Film-Aufnahme verwendeten Video Codecs nicht gut zu funktionieren. </para> </listitem> </varlistentry> <varlistentry> <term><option>--rescale<replaceable> prozentuale Größe</replaceable></option></term> <listitem> <para> Ändert die Grösse des ausgegebenen Films relativ zur Eingangsgrösse des Aufnahmebereichs. Ein Wert von bspw. <literal>25</literal>erzeugt ein Video, dessen Bilder eine Grösse von 25 Prozent der Originalgrösse haben. </para> </listitem> </varlistentry> <varlistentry> <term><option>--quality<replaceable> prozentuale Qualität</replaceable></option></term> <listitem> <para> Geben Sie einen Wert zwischen <literal>0</literal> und <literal>100</literal> an für die Qualität der Kodierung. Der Vorgabewert liegt bei <literal>75</literal>. </para> </listitem> </varlistentry> <varlistentry> <term><option>--source</option> x11|shm</term> <listitem> <para> Schaltet die Verwendung der X11 "shared memory" Erweiterung an oder aus. Wenn die Erweiterung unterstützt wird, verwendet <application>xvidcap</application> sie per Vorgabe. Dafür müssen X Server und Client jedoch auf dem gleichen Rechner laufen. Ist dies nicht der Fall, müssen Sie die Verwendung ausschalten, etwa per <literal>--source x11</literal>. </para> </listitem> </varlistentry> <varlistentry> <term><option>--time<replaceable> maximale Aufnahmedauer in Sekunden</replaceable></option></term> <listitem> <para> Gibt die maximale Dauer einer einzelnen Aufnahmesitzung an. Wenn der Wert auf <literal>0</literal> dafür sorgen, dass <application>xvidcap</application> die Aufnahme fortsetzen bis sie interaktiv beendet wird. Bei jedem anderen Wert wird die Aufnahme nach der angegebenen Anzahl Sekunden automatisch beendet. Dieser Parameter kolliediert ggf. mit <literal>--frames</literal> (s. unten). Wenn beide spezifiziert sind, wird  <application>xvidcap</application> die Aufnahme bei der ersten eintretenden Begrenzung beendet. Das Programm akzeptiert Fliesskomma-Werte wie <literal>2.5</literal>. </para> </listitem> </varlistentry> <varlistentry> <term><option>--frames<replaceable> maximale Anzahl Frames</replaceable></option></term> <listitem> <para> Beendet die Aufnahme automatisch nach der angegebenen Anzahl Einzelbilder. Wenn der Wert auf <literal>0</literal> die Aufnahme fortsetzen bis sie interaktiv beendet wird, s. <literal>--time</literal> oben. </para> </listitem> </varlistentry> <varlistentry> <term><option>--start_no<replaceable> Anfang der Frame-Nummerierung</replaceable></option></term> <listitem> <para> Geben Sie hier die Zahl an, die als erstes bei der Einzelbild-Aufnahme für die Nummerierung von Einzelbildern und Dateien verwendet werden soll. Der Vorgabewert ist <literal>0</literal>. Dieser Parameter wird nur von der Einzelbild-Aufnahme verwendet. Die Zählung der Video Dateien bei der Film-Aufnahme unter Verwendung von <literal>--continue</literal> beginnt immer bei </para> </listitem> </varlistentry> <varlistentry> <term><option>--continue</option> yes|no</term> <listitem> <para> Wenn bei der Film-Aufnahme eine maximale Aufnahmedauer oder eine maximale Anzahl von Einzelbildern angegeben ist und der Dateiname hochzählbar ist (s. <literal>--file</literal> oben), kann <application>xvidcap</application> die Aufnahme nach der automatischen Beendigung ebenso automatisch mit einer neuen Zieldatei fortsetzen. Dies ändert das Verhalten von <literal>--time</literal> und <literal>--frames</literal> da die Aufnahme beim Erreichen der angegebenen Begrenzungen nicht länger komplett stoppt, sondern ein neues Video beginnt. Diese Funktionalität ist besonders dann nützlich, wenn man die Aufnahme automatisch in vorgegebene Abschnitte (etwa zu je fünf Minuten) stückeln möchte. Wenn keine Option <literal>--continue</literal> angegeben ist, verwendet  <application>xvidcap</application> für die automatische Fortsetzung den Vorgabewert <literal>no</literal>. Bei der Einzelbild-Aufnahme ist diese Funktionalität ebenfalls abgeschaltet, weil hier der hochzählbare Dateiname für die Nummerierung der Einzelbilder verwendet wird. </para> </listitem> </varlistentry> <varlistentry> <term><option>--gui</option> yes|no</term> <listitem> <para> Starte <application>xvidcap</application> mit oder ohne grafisches Benutzerinterface. Ein Betrieb ohne grafisches Benutzerinterface startet automatisch eine einzelne Aufnahmesitzung. Diese kann entweder durch die Verwendung von <literal>--time</literal> oder <literal>--frames</literal>oder durch die Tastenkombination CTRL-C beendet werden.	\t	Damit beendet sich auch das Programm. </para> </listitem> </varlistentry> <varlistentry> <term><option>--auto</option></term> <listitem> <para> <application>xvidcap</application> kann Parameter für Ausgabe-Dateiformat, Video- und Audio Codec automatisch erkennen. Wenn eine dieser Einstellungen als fest konfigurierter Wert in den Einstellungen abgespeichert ist, kann sie für sie wieder die automatische Erkennung gewählt werden, durch Spezifikation des Parameter <literal>auto</literal> bei irgendeiner der Optionen <literal>--format</literal>, <literal>--codec</literal> oder <literal>--aucodec</literal>. Diese Option hier ist eine Kurzfassung, die für alle drei Einstellungen automatische Erkennung aktiviert. </para> </listitem> </varlistentry> <varlistentry> <term><option>--codec<replaceable> Video Codec</replaceable></option></term> <listitem> <para> Setzt explizit einen Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten. </para> </listitem> </varlistentry> <varlistentry> <term><option>--codec-help</option></term> <listitem> <para> Zeigt eine Liste unterstützter Codecs. </para> </listitem> </varlistentry> <varlistentry> <term><option>--format<replaceable> Ausgabe-Dateiformat</replaceable></option></term> <listitem> <para> Setzt explizit ein Dateiformat ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten. </para> </listitem> </varlistentry> <varlistentry> <term><option>--format-help</option></term> <listitem> <para> Zeigt eine Liste unterstützter Ausgabe-Dateiformate. </para> </listitem> </varlistentry> </variablelist> </refsect1> <refsect1 id='audio_options'><title>Optionen für Ton-Aufnahme</title> <para> Die folgenden Optionen beziehen sich auf die Ton-Aufnahme, die nur bei Film-Aufnahme möglich ist. Dabei können Klänge entweder von einem kompatiblen Audio-Gerät (z.B. <filename>/dev/dsp</filename>) oder von STDIN aufgenommen werden, s. <literal>--audio_in</literal> unten. </para> <variablelist remap="IP"> <varlistentry> <term><option>--audio</option> yes|no</term> <listitem> <para> Schaltet Ton-Aufnahme an oder aus und verwendet ggf. Vorgabewerte oder gespeicherte Einstellungen. Wenn Ton-Aufnahme unterstützt wird, ist dies bei der Film-Aufnahme per Vorgabewert angeschaltet. </para> </listitem> </varlistentry> <varlistentry> <term><option>--aucodec<replaceable> Ton Codec</replaceable></option></term> <listitem> <para> Setzt explizit einen Ton Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten. </para> </listitem> </varlistentry> <varlistentry> <term><option>--aucodec-help</option></term> <listitem> <para> Zeigt eine Liste unterstützter Ton Codecs. </para> </listitem> </varlistentry> <varlistentry> <term><option>--audio_in<replaceable> Ton-Aufnahmegerät</replaceable>|-</option></term> <listitem> <para> Wählt als Ton-Eingang entweder das angegebene Gerät oder STDIN. Letzteres erlaubt es, die Aufnahme mit einer existierenden Ton-Aufnahme zu hinterlegen. Dazu verwendet man einen Aufruf wie den folgenden. Der Vorgabewert ist <filename>/dev/dsp</filename>. </para> <para> <command>cat irgendein.mp3 | xvidcap --audio_in -</command> </para> </listitem> </varlistentry> <varlistentry> <term><option>--audio_bits<replaceable> Ton Bit Rate</replaceable></option></term> <listitem> <para> Setzt die gewünschte Bit Rate. Der Vorgabewert ist <literal>32000</literal> Bit. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert. </para> </listitem> </varlistentry> <varlistentry> <term><option>--audio_rate<replaceable> Ton Abtastrate</replaceable></option></term> <listitem> <para> Setzt die gewünschte Abtastrate. Der Vorgabewert ist <literal>22050</literal> Hz. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert. </para> </listitem> </varlistentry> <varlistentry> <term><option>--audio_channels<replaceable> Ton Kanäle</replaceable></option></term> <listitem> <para> Setzt die gewünschte Anzahl von Ton Kanälen. Der Vorgabewert ist <literal>1</literal> für mono. Jeglicher Wert über <literal>2</literal> ist wahrscheinlich nur bei STDIN als Ton-Quelle und einer 5-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme-Ausstattung sinnvoll. </para> </listitem> </varlistentry> </variablelist> </refsect1> <refsect1 id='author'><title>Autoren</title> <para> <application>xvidcap</application> wurde entwickelt von Rasca Gmelch und Karl H. Beckers. </para> <para> Diese manpage wurde von Karl H. Beckers <email>karl.h.beckers@gmx.net</email> für das <application>xvidcap</application> Project geschrieben. </para>  <para> Die Genehmigung dieses Dokument zu kopieren, verteilen und/oder zu verändern wird erteilt im Rahmen der GNU Free Documentation License Version 1.1 oder jeglicher späterer Version, die durch die Free Software Foundation herausgegeben wurde; ohne unveränderliche Abschnitte, Voder- oder Rückseiten Texte. </para> </refsect1></refentry>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry revision="1.1.4">
+    <refmeta>
+        <refentrytitle>xvidcap</refentrytitle>
+        <manvolnum>1</manvolnum>
+        <refmiscinfo>September 2006</refmiscinfo>
+    </refmeta>
+    <refnamediv id="name">
+        <refname>XVidCap</refname>
+        <refpurpose>Nimmt Bereiche der X11 Anzeige als Video auf</refpurpose>
+    </refnamediv>
+    <!-- body begins here -->
+    <refsynopsisdiv id="synopsis">
+        <cmdsynopsis>
+            <command>xvidcap</command>    
+            <arg choice="opt">-v</arg>
+
+            <arg choice="opt"><arg choice="plain">--mf</arg>|<arg choice="plain">--sf</arg></arg>
+            <arg choice="opt">--file <replaceable>Dateinamensmuster</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice="opt">--fps <replaceable>Frames pro Sekunde</replaceable></arg>
+
+            <arg choice="opt">--cap_geometry <replaceable>Aufnahmebereich</replaceable></arg>
+            <arg choice="opt">--rescale <replaceable>prozentuale Größe</replaceable></arg>
+            <arg choice="opt">--quality <replaceable>prozentuale Qualität</replaceable></arg>
+            <arg choice="opt">--source <arg choice="plain">x11|shm</arg></arg>
+
+            <arg choice="opt">--time <replaceable>maximale Aufnahmedauer in Sekunden</replaceable></arg>
+            <arg choice="opt">--frames <replaceable>maximale Anzahl Frames</replaceable></arg>
+            <arg choice="opt">--start_no <replaceable>Anfang der Frame-Nummerierung</replaceable></arg>
+
+            <arg choice="opt">--continue <arg choice="plain">yes|no</arg></arg>
+            <arg choice="opt">--gui <arg choice="plain">yes|no</arg></arg>
+
+            <arg choice="opt">--auto</arg>
+
+            <arg choice="opt">--codec <replaceable>Video Codec</replaceable></arg>
+            <arg choice="opt">--codec-help</arg>
+            <arg choice="opt">--format <replaceable>Ausgabe-Dateiformat</replaceable></arg>
+            <arg choice="opt">--format-help</arg>
+
+            <arg choice="opt">--audio <arg choice="plain">yes|no</arg></arg>
+            <arg choice="opt">--aucodec <replaceable>Ton Codec</replaceable></arg>
+            <arg choice="opt">--aucodec-help</arg>
+            <arg choice="opt">--audio_in <replaceable>Ton-Aufnahmegerät</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice="opt">--audio_bits <replaceable>Ton Bit Rate</replaceable></arg>
+            <arg choice="opt">--audio_rate <replaceable>Ton Abtastrate</replaceable></arg>
+            <arg choice="opt">--audio_channels <replaceable>Ton Kanäle</replaceable></arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+
+    <refsect1 id="intro"><title>Beschreibung</title>
+        <para><application>xvidcap</application> ist ein Werkzeug, welches Bewegungen in einem ausgewählten Bereich einer X11 Anzeige speichert. Es kann auf zwei unterschiedliche Arten arbeiten: (1) <emphasis>Einzelbild-Aufnahme</emphasis> (single-frame capture) oder (2) <emphasis>Film-Aufnahme</emphasis> (multi-frame capture). Bei der Einzelbild-Aufnahme macht <application>xvidcap</application> eine konfigurierbare Anzahl von Bildschirmfotos pro Sekunde und speichert sie als einzelne Bild-Dateien. Bei der Film-Aufnahme macht <application>xvidcap</application> ebenfalls eine Anzahl von Bildschirmfotos pro Sekunde, kodiert sie aber zur Laufzeit zu einem Film und speichert diesen in einer einzelnen Video-Datei. Ton-Aufnahme ist bei Einzelbild-Aufnahme nicht möglich.</para>
+        <para>Die Einzelbild-Aufnahme kann unter Umständen geeigneter sein, wenn die Bilder vor dem Kodieren bearbeitet werden sollen oder wenn Video Codecs benötigt werden, die <application>xvidcap</application> nicht unterstützt. Die einzelnen Bilder können später mit Werzeugen wie ffmpeg, mendocer oder transcode zu einem Film kodiert werden.</para>
+        <para>Für weitere Hilfe, Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink></para>
+    </refsect1>
+
+    <refsect1 id="options"><title>Optionen</title>
+
+        <para>Dieses Program folgt der gängigen GNU Befehlszeilen-Syntax bei der lange Optionen mit zwei Bindestrichen (<literal>--</literal>) beginnen. Folgende Optionen sind möglich:</para> 
+        <variablelist remap="IP">
+            <varlistentry>
+                <term><option>-v</option></term>
+                <listitem>
+                    <para>Lässt <application>xvidcap</application> ausführlichere Meldungen im Terminal ausgeben. Dies wird detailiertere Informationen bzgl. Einstellungen, Codecs, Aufnahme-Leistung etc. auflisten. Meldungen wie <quote>"missing XX milli secs .."</quote> während der Aufnahme bedeuten, dass mangels Rechenleistung Einzelbilder bei der Aufnahme verloren gehen. Dies führt zu einem Video, welches bei der Wiedergabe zu schnell abgespielt wird. Merke jedoch, dass die ausführlichen Meldungen <application>xvidcap</application> verlangsamen und den Verlust von Einzelbildern sogar <emphasis>verursachen</emphasis> können. Versuchen Sie die ausführlichen Meldungen abzuschalten und den Bild-Verlust Messer im Auge zu behalten.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--mf</option> | <option>--sf</option></term>
+                <listitem>
+                    <para><application>xvidcap</application> versucht zu erkennen welche Art von Aufnahme erwünscht ist. Bei der Angabe von <literal>--file test.avi</literal><application>xvidcap</application> wird es davon ausgehen, dass die die Film-Aufnahme ist. Mit diesem Schalter kann die gewünschte Art der Aufnahme explizit angegeben werden. Wenn, zum Beispiel, in den gespeicherten Einstellungen die Film-Aufnahme als Standard eingestellt ist, wird <literal>xvidcap --sf</literal> dafür sorgen, dass <application>xvidcap</application> für die Einzelbild-Aufnahme gestartet wird. Film-Aufnahme ist programm-seitig als Standard eingestellt.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--file <replaceable>Dateinamensmuster</replaceable></option></term>
+                <listitem>
+                    <para>Dateiname oder Muster zur Verwendung beim Abspeichern der aufgenommenen Bilder. Ein Muster enthält Formatierungsangaben wie sie von printf() verwendet werden (s. <literal>man printf</literal>), um es zu ermöglichen, den Dateinamen hochzuzählen, z. B. <literal>--file out-%02d.xwd</literal>. Bei der Einzelbild-Aufnahme ist dies nötig. <application>xvidcap</application> wird das erste Vorkommen einer printf() Formatierungs-Information durch die Nummer des aktuellen Einzelbilds ersetzen. Im obigen Beispiel etwa werden Dateien <filename>out-00.xwd</filename>, <filename>out-01.xwd</filename>, <filename>out-02.xwd</filename>etc. geschrieben. Die Anfangsnummer der Nummerierung kann mit <literal>--start_no</literal>angegeben werden, s. oben.</para>
+                    <para>Film-Aufnahmen benötigen kein hochzählbaren Dateinamen. Wenn dennoch ein Muster im Dateinamen enthalten ist, wie etwa <literal>--file mymovie-%d.mpeg</literal> , wird <application>xvidcap</application> die Formatierungsangabe durch die Nummer der aktuellen Aufnahme-Sitzung (die Nummerierung beginnt immer bei Null) ersetzen. Dies ermöglicht es, diese Nummer manuell heraufzusetzen oder die automatische Aufnahme-Fortsetzung zu verwenden (s. unten bei <literal>--continue</literal> ), um damit eine Serie von Filmen zu erzeugen.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--fps <replaceable>Frames pro Sekunde</replaceable></option></term>
+                <listitem>
+                    <para>Gibt die Anzahl von Einzelbildern (Frames) an, die pro Sekunde aufgenommen werden sollen. Diese Option akzeptiert Fliesskomma-Werte als Parameter, was es ermöglicht, sehr kleine Raten anzugeben (z. B. <literal>--fps 0.5</literal> ), um etwa ein Bild nur alle zwei Sekunden aufzunehmen. Dies ist allerdings nur bei der Einzelbildaufnahme möglich, da die bei der Film-Aufnahme verwendeten Video Codecs in der Regel nur bestimmte Bildraten als gültig akzeptieren. Fliesskomma-Werte für Codecs wie MPEG1, die nur ganz bestimmte Raten zulassen, sind in dieser Version deaktiviert. Es existiert eine Inkonsistenz bei der Behandlung von Fliesskomma Bildraten zwischen libavcodec und <application>xvidcap</application> . In diesen Fällen werden nur ganzzahlige Bildraten akzeptiert.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--cap_geometry <replaceable>Aufnahmebereich</replaceable></option></term>
+                <listitem>
+                    <para>Gibt den Aufnahmebereich an wie eine Fenstergeometrie etwa für <application>xterm</application>, also wie folgt: <replaceable>Breite</replaceable>x<replaceable>Höhe</replaceable>+<replaceable>Horizontale Position</replaceable>+<replaceable>Vertikale Position</replaceable></para>
+                    <para>Diese Option überschreibt die Standard-Einstellung für Breite und Höhe des Aufnahmebereichs. Verwenden Sie statt dieser Option die Bereichswähler-Schaltfläche, um die Grösse an die eines bestehenden Fensters anzugleichen. Aufnahmebereiche kleiner 20 x 20 Bildpunkte scheinen mit den meisten bei der Film-Aufnahme verwendeten Video Codecs nicht gut zu funktionieren.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--rescale <replaceable>prozentuale Größe</replaceable></option></term>
+                <listitem>
+                    <para>Ändert die Grösse des ausgegebenen Films relativ zur Eingangsgrösse des Aufnahmebereichs. Ein Wert von bspw. <literal>25</literal>erzeugt ein Video, dessen Bilder eine Grösse von 25 Prozent der Originalgrösse haben.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--quality <replaceable>prozentuale Qualität</replaceable></option></term>
+                <listitem>
+                    <para>Geben Sie einen Wert zwischen <literal>0</literal> und <literal>100</literal> an für die Qualität der Kodierung. Der Vorgabewert liegt bei <literal>75</literal>.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--source </option>x11|shm</term>
+                <listitem>
+                    <para>Schaltet die Verwendung der X11 "shared memory" Erweiterung an oder aus. Wenn die Erweiterung unterstützt wird, verwendet <application>xvidcap</application> sie per Vorgabe. Dafür müssen X Server und Client jedoch auf dem gleichen Rechner laufen. Ist dies nicht der Fall, müssen Sie die Verwendung ausschalten, etwa per <literal>--source x11</literal>.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--time <replaceable>maximale Aufnahmedauer in Sekunden</replaceable></option></term>
+                <listitem>
+                    <para>Gibt die maximale Dauer einer einzelnen Aufnahmesitzung an. Wenn der Wert auf <literal>0</literal> dafür sorgen, dass <application>xvidcap</application> die Aufnahme fortsetzen bis sie interaktiv beendet wird. Bei jedem anderen Wert wird die Aufnahme nach der angegebenen Anzahl Sekunden automatisch beendet. Dieser Parameter kolliediert ggf. mit <literal>--frames</literal> (s. unten). Wenn beide spezifiziert sind, wird <application>xvidcap</application> die Aufnahme bei der ersten eintretenden Begrenzung beendet. Das Programm akzeptiert Fliesskomma-Werte wie <literal>2.5</literal>.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--frames <replaceable>maximale Anzahl Frames</replaceable></option></term>
+                <listitem>
+                    <para>Beendet die Aufnahme automatisch nach der angegebenen Anzahl Einzelbilder. Wenn der Wert auf <literal>0</literal> die Aufnahme fortsetzen bis sie interaktiv beendet wird, s. <literal>--time</literal> oben.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--start_no <replaceable>Anfang der Frame-Nummerierung</replaceable></option></term>
+                <listitem>
+                    <para>Geben Sie hier die Zahl an, die als erstes bei der Einzelbild-Aufnahme für die Nummerierung von Einzelbildern und Dateien verwendet werden soll. Der Vorgabewert ist <literal>0</literal>. Dieser Parameter wird nur von der Einzelbild-Aufnahme verwendet. Die Zählung der Video Dateien bei der Film-Aufnahme unter Verwendung von <literal>--continue</literal> beginnt immer bei</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--continue </option>yes|no</term>
+                <listitem>
+                    <para>Wenn bei der Film-Aufnahme eine maximale Aufnahmedauer oder eine maximale Anzahl von Einzelbildern angegeben ist und der Dateiname hochzählbar ist (s. <literal>--file</literal> oben), kann <application>xvidcap</application> die Aufnahme nach der automatischen Beendigung ebenso automatisch mit einer neuen Zieldatei fortsetzen. Dies ändert das Verhalten von <literal>--time</literal> und <literal>--frames</literal> da die Aufnahme beim Erreichen der angegebenen Begrenzungen nicht länger komplett stoppt, sondern ein neues Video beginnt. Diese Funktionalität ist besonders dann nützlich, wenn man die Aufnahme automatisch in vorgegebene Abschnitte (etwa zu je fünf Minuten) stückeln möchte. Wenn keine Option <literal>--continue</literal> angegeben ist, verwendet <application>xvidcap</application> für die automatische Fortsetzung den Vorgabewert <literal>no</literal>. Bei der Einzelbild-Aufnahme ist diese Funktionalität ebenfalls abgeschaltet, weil hier der hochzählbare Dateiname für die Nummerierung der Einzelbilder verwendet wird.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--gui </option>yes|no</term>
+                <listitem>
+                    <para>Starte <application>xvidcap</application> mit oder ohne grafisches Benutzerinterface. Ein Betrieb ohne grafisches Benutzerinterface startet automatisch eine einzelne Aufnahmesitzung. Diese kann entweder durch die Verwendung von <literal>--time</literal> oder <literal>--frames</literal>oder durch die Tastenkombination CTRL-C beendet werden. \t Damit beendet sich auch das Programm.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--auto</option></term>
+                <listitem>
+                    <para><application>xvidcap</application> kann Parameter für Ausgabe-Dateiformat, Video- und Audio Codec automatisch erkennen. Wenn eine dieser Einstellungen als fest konfigurierter Wert in den Einstellungen abgespeichert ist, kann sie für sie wieder die automatische Erkennung gewählt werden, durch Spezifikation des Parameter <literal>auto</literal> bei irgendeiner der Optionen <literal>--format</literal>, <literal>--codec</literal> oder <literal>--aucodec</literal>. Diese Option hier ist eine Kurzfassung, die für alle drei Einstellungen automatische Erkennung aktiviert.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--codec <replaceable>Video Codec</replaceable></option></term>
+                <listitem>
+                    <para>Setzt explizit einen Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--codec-help</option></term>
+                <listitem>
+                    <para>Zeigt eine Liste unterstützter Codecs.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--format <replaceable>Ausgabe-Dateiformat</replaceable></option></term>
+                <listitem>
+                    <para>Setzt explizit ein Dateiformat ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--format-help</option></term>
+                <listitem>
+                    <para>Zeigt eine Liste unterstützter Ausgabe-Dateiformate.</para> 
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+        
+    <refsect1 id="audio_options"><title>Optionen für Ton-Aufnahme</title>
+
+        <para>Die folgenden Optionen beziehen sich auf die Ton-Aufnahme, die nur bei Film-Aufnahme möglich ist. Dabei können Klänge entweder von einem kompatiblen Audio-Gerät (z.B. <filename>/dev/dsp</filename>) oder von STDIN aufgenommen werden, s. <literal>--audio_in</literal> unten.</para> 
+        
+        <variablelist remap="IP">    
+            <varlistentry>
+                <term><option>--audio </option>yes|no</term>
+                <listitem>
+                    <para>Schaltet Ton-Aufnahme an oder aus und verwendet ggf. Vorgabewerte oder gespeicherte Einstellungen. Wenn Ton-Aufnahme unterstützt wird, ist dies bei der Film-Aufnahme per Vorgabewert angeschaltet.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--aucodec <replaceable>Ton Codec</replaceable></option></term>
+                <listitem>
+                    <para>Setzt explizit einen Ton Codec ggf. anstelle des automatisch erkannten oder in den Einstellungen gespeicherten.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--aucodec-help</option></term>
+                <listitem>
+                    <para>Zeigt eine Liste unterstützter Ton Codecs.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_in <replaceable>Ton-Aufnahmegerät</replaceable>|-</option></term>
+                <listitem>
+                    <para>Wählt als Ton-Eingang entweder das angegebene Gerät oder STDIN. Letzteres erlaubt es, die Aufnahme mit einer existierenden Ton-Aufnahme zu hinterlegen. Dazu verwendet man einen Aufruf wie den folgenden. Der Vorgabewert ist <filename>/dev/dsp</filename>.</para> 
+                    <para>
+                        <command>cat irgendein.mp3 | xvidcap --audio_in -</command>
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_bits <replaceable>Ton Bit Rate</replaceable></option></term>
+                <listitem>
+                    <para>Setzt die gewünschte Bit Rate. Der Vorgabewert ist <literal>32000</literal> Bit. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_rate <replaceable>Ton Abtastrate</replaceable></option></term>
+                <listitem>
+                    <para>Setzt die gewünschte Abtastrate. Der Vorgabewert ist <literal>22050</literal> Hz. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert.</para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_channels <replaceable>Ton Kanäle</replaceable></option></term>
+                <listitem>
+                    <para>Setzt die gewünschte Anzahl von Ton Kanälen. Der Vorgabewert ist <literal>1</literal> für mono. Jeglicher Wert über <literal>2</literal> ist wahrscheinlich nur bei STDIN als Ton-Quelle und einer 5-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme-Ausstattung sinnvoll.</para> 
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+
+    <refsect1 id="author"><title>Autoren</title>
+        <para><application>xvidcap</application> wurde entwickelt von Rasca Gmelch und Karl H. Beckers.</para>
+        <para>Diese manpage wurde von Karl H. Beckers <email>karl.h.beckers@gmx.net</email> für das <application>xvidcap</application> Project geschrieben.</para>
+        <para>
+            This translation was done by TRANSLATOR-CREDITS HERE!!!
+        </para>
+        <para>Die Genehmigung dieses Dokument zu kopieren, verteilen und/oder zu verändern wird erteilt im Rahmen der GNU Free Documentation License Version 1.1 oder jeglicher späterer Version, die durch die Free Software Foundation herausgegeben wurde; ohne unveränderliche Abschnitte, Voder- oder Rückseiten Texte.</para> 
+    </refsect1>
+</refentry>

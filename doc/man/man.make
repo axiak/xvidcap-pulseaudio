@@ -24,14 +24,11 @@ install:
 		fi ; \
 	else \
 		if test -r $$i-$(xv_LANG).po ; then \
-			if test x$(PO4A_TRANSLATE) = xno ; then \
-				echo "Cannot find po4a-translate to create current, translated manpage. Trying to use previous translation of $$i for locale $(xv_LANG)" ; \
+			if test x$(XML2PO) = xno ; then \
+				echo "Cannot find xml2po to create current, translated manpage. Trying to use previous translation of $$i for locale $(xv_LANG)" ; \
 			else \
-				cat ../C/$$i.xml |  \
-				perl -e '$$/="" ; while (<>) { $$_ =~ s/\n//g ; $$_ =~ s/\t/ /g ; print $$_}' | \
-				sed -r 's/[ ]+/ /g' > ../C/$$i.compact.xml ; \
 				echo "translating manpage for lang $(xv_LANG)" ; \
-				po4a-translate -f xml -m ../C/$$i.compact.xml -p $$i-$(xv_LANG).po -l $$i.xml ; \
+				xml2po -p $$i-$(xv_LANG).po -o $$i.xml ../C/$$i.xml ; \
 			fi ; \
 		fi ; \
 		if test -r $$i.xml ; then \

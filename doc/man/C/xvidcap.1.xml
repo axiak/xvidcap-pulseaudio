@@ -18,35 +18,35 @@
             <arg choice='opt'>-v</arg>
 
             <arg choice='opt'><arg choice='plain'>--mf</arg>|<arg choice='plain'>--sf</arg></arg>
-            <arg choice='opt'>--file<replaceable> file name pattern</replaceable><arg choice="plain">|-</arg></arg>
-            <arg choice='opt'>--fps<replaceable> frames per second</replaceable></arg>
+            <arg choice='opt'>--file <replaceable>file name pattern</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice='opt'>--fps <replaceable>frames per second</replaceable></arg>
 
-            <arg choice='opt'>--cap_geometry<replaceable> geometry</replaceable></arg>
-            <arg choice='opt'>--rescale<replaceable> size percentage</replaceable></arg>
-            <arg choice='opt'>--quality<replaceable> quality percentage</replaceable></arg>
-            <arg choice='opt'>--source<arg choice="plain"> x11|shm<!-- |v4l --></arg></arg>
+            <arg choice='opt'>--cap_geometry <replaceable>geometry</replaceable></arg>
+            <arg choice='opt'>--rescale <replaceable>size percentage</replaceable></arg>
+            <arg choice='opt'>--quality <replaceable>quality percentage</replaceable></arg>
+            <arg choice='opt'>--source <arg choice="plain">x11|shm<!-- |v4l --></arg></arg>
 
-            <arg choice='opt'>--time<replaceable> maximum duration in seconds</replaceable></arg>
-            <arg choice='opt'>--frames<replaceable> maximum frames</replaceable></arg>
-            <arg choice='opt'>--start_no<replaceable> initial frame number</replaceable></arg>
+            <arg choice='opt'>--time <replaceable>maximum duration in seconds</replaceable></arg>
+            <arg choice='opt'>--frames <replaceable>maximum frames</replaceable></arg>
+            <arg choice='opt'>--start_no <replaceable>initial frame number</replaceable></arg>
 
-            <arg choice='opt'>--continue<arg choice="plain"> yes|no</arg></arg>
-            <arg choice='opt'>--gui<arg choice="plain"> yes|no</arg></arg>
+            <arg choice='opt'>--continue <arg choice="plain">yes|no</arg></arg>
+            <arg choice='opt'>--gui <arg choice="plain">yes|no</arg></arg>
 
             <arg choice='opt'>--auto</arg>
 
-            <arg choice='opt'>--codec<replaceable> video codec</replaceable></arg>
+            <arg choice='opt'>--codec <replaceable>video codec</replaceable></arg>
             <arg choice='opt'>--codec-help</arg>
-            <arg choice='opt'>--format<replaceable> output file format</replaceable></arg>
+            <arg choice='opt'>--format <replaceable>output file format</replaceable></arg>
             <arg choice='opt'>--format-help</arg>
 
-            <arg choice='opt'>--audio<arg choice="plain"> yes|no</arg></arg>
-            <arg choice='opt'>--aucodec<replaceable> audio codec</replaceable></arg>
+            <arg choice='opt'>--audio <arg choice="plain">yes|no</arg></arg>
+            <arg choice='opt'>--aucodec <replaceable>audio codec</replaceable></arg>
             <arg choice='opt'>--aucodec-help</arg>
-            <arg choice='opt'>--audio_in<replaceable> audio capture device</replaceable><arg choice="plain">|-</arg></arg>
-            <arg choice='opt'>--audio_bits<replaceable> audio bit rate</replaceable></arg>
-            <arg choice='opt'>--audio_rate<replaceable> audio sample rate</replaceable></arg>
-            <arg choice='opt'>--audio_channels<replaceable> audio channels</replaceable></arg>
+            <arg choice='opt'>--audio_in <replaceable>audio capture device</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice='opt'>--audio_bits <replaceable>audio bit rate</replaceable></arg>
+            <arg choice='opt'>--audio_rate <replaceable>audio sample rate</replaceable></arg>
+            <arg choice='opt'>--audio_channels <replaceable>audio channels</replaceable></arg>
         </cmdsynopsis>
     </refsynopsisdiv>
 
@@ -134,7 +134,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--fps<replaceable> frames per second</replaceable></option></term>
+                <term><option>--fps <replaceable>frames per second</replaceable></option></term>
                 <listitem>
                     <para>
                         Specifies the number of frames to be captured per second. This parameter 
@@ -149,7 +149,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--cap_geometry<replaceable> geometry</replaceable></option></term>
+                <term><option>--cap_geometry <replaceable>geometry</replaceable></option></term>
                 <listitem>
                     <para>
                         Specify the geometry as for e. g. <application>xterm</application>, i. e. like this:
@@ -164,7 +164,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--rescale<replaceable> size percentage</replaceable></option></term>
+                <term><option>--rescale <replaceable>size percentage</replaceable></option></term>
                 <listitem>
                     <para>
                         Rescale the output to a percentage of the original input. A value of <literal>25</literal>, e. g.
@@ -173,7 +173,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--quality<replaceable> quality percentage</replaceable></option></term>
+                <term><option>--quality <replaceable>quality percentage</replaceable></option></term>
                 <listitem>
                     <para>
                         Specify a value between <literal>0</literal> and <literal>100</literal> to define the quality encoding. The 
@@ -182,7 +182,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--source</option> x11|shm<!-- |v4l --></term>
+                <term><option>--source </option>x11|shm<!-- |v4l --></term>
                 <listitem>
                     <para>
                         Enable or disable the usage of the X11 shared memory extension. For shared 
@@ -193,7 +193,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--time<replaceable> maximum duration in seconds</replaceable></option></term>
+                <term><option>--time <replaceable>maximum duration in seconds</replaceable></option></term>
                 <listitem>
                     <para>
                         Specifies the maximum time to capture, a value of <literal>0</literal> will cause <application>xvidcap</application> to capture until 
@@ -205,7 +205,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--frames<replaceable> maximum frames</replaceable></option></term>
+                <term><option>--frames <replaceable>maximum frames</replaceable></option></term>
                 <listitem>
                     <para>
                         Stops capturing after the specified number of frames are captured. If <literal>0</literal>
@@ -214,7 +214,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--start_no<replaceable> initial frame number</replaceable></option></term>
+                <term><option>--start_no <replaceable>initial frame number</replaceable></option></term>
                 <listitem>
                     <para>
                         Defines the start number which should be used for numbering files. The default 
@@ -224,7 +224,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--continue</option> yes|no</term>
+                <term><option>--continue </option>yes|no</term>
                 <listitem>
                     <para>
                         When multi-frame capture is selected, maximum recording time or frames are
@@ -241,7 +241,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--gui</option> yes|no</term>
+                <term><option>--gui </option>yes|no</term>
                 <listitem>
                     <para>
                         Start <application>xvidcap</application> with or without control GUI overriding what's in the
@@ -265,7 +265,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--codec<replaceable> video codec</replaceable></option></term>
+                <term><option>--codec <replaceable>video codec</replaceable></option></term>
                 <listitem>
                     <para>
                         Override preferences and automatic codec selection with the explicitly
@@ -282,7 +282,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--format<replaceable> output file format</replaceable></option></term>
+                <term><option>--format <replaceable>output file format</replaceable></option></term>
                 <listitem>
                     <para>
                         Override preferences and automatic format selection with the explicitly
@@ -312,7 +312,7 @@
         
         <variablelist remap="IP">    
             <varlistentry>
-                <term><option>--audio</option> yes|no</term>
+                <term><option>--audio </option>yes|no</term>
                 <listitem>
                     <para>
                         Enable or disable audio capture using default parameters or those saved to the
@@ -321,7 +321,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--aucodec<replaceable> audio codec</replaceable></option></term>
+                <term><option>--aucodec <replaceable>audio codec</replaceable></option></term>
                 <listitem>
                     <para>
                         Override preferences and automatic codec selection with the explicitly
@@ -338,7 +338,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_in<replaceable> audio capture device</replaceable>|-</option></term>
+                <term><option>--audio_in <replaceable>audio capture device</replaceable>|-</option></term>
                 <listitem>
                     <para>
                         Capture audio from the specified device or from stdin. The latter allows
@@ -351,7 +351,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_bits<replaceable> audio bit rate</replaceable></option></term>
+                <term><option>--audio_bits <replaceable>audio bit rate</replaceable></option></term>
                 <listitem>
                     <para>
                         Set the desired bit rate. The default is <literal>32000</literal> bit. Note that when using
@@ -360,7 +360,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_rate<replaceable> audio sample rate</replaceable></option></term>
+                <term><option>--audio_rate <replaceable>audio sample rate</replaceable></option></term>
                 <listitem>
                     <para>
                         Set the desired sample rate. The default is <literal>22050</literal> Hz. Note that when using
@@ -369,7 +369,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_channels<replaceable> audio channels</replaceable></option></term>
+                <term><option>--audio_channels <replaceable>audio channels</replaceable></option></term>
                 <listitem>
                     <para>
                         Set the desired number of channels. The default is <literal>1</literal> for mono. Any value
@@ -389,11 +389,9 @@
             This manual page was written by Karl H. Beckers <email>karl.h.beckers@gmx.net</email> for 
             the <application>xvidcap</application> project.
         </para>
-        <!--
         <para>
             This translation was done by TRANSLATOR-CREDITS HERE!!!
         </para>
-        -->
         <para>
             Permission is granted to copy, distribute and/or modify this document under 
             the terms of the GNU Free Documentation 

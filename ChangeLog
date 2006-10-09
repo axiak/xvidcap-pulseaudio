@@ -1,4 +1,12 @@
 
+2006-10-09  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* doc/man: man.make, C/Makefile.am, de/Makefile.am, it/Makefile.am:
+		make target encoding of manpage configurable per lang
+	* doc/man: man.make, C/xvidcap.1.xml.pot, de/xvidcap.1-de.po:
+		use xml2po rather than po4a
+	* doc/xvidcap: C/xvidcap.xml.pot, de/xvidcap-de.po: initial 
+		preparation for user-guide translation
+
 2006-10-08  Karl H. Beckers  <karl.h.beckers@gmx.net>
  	* configure.in, doc/man: C/xvidcap.1, man.make, de/xvidcap.1.xml:
 		integration of po4a to make translation of documentation

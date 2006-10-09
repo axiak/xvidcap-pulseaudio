@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <!--
     Document   : xvidcap-manual.xml
     Created on : 17. September 2006, 12:01
@@ -7,22 +6,19 @@
     Description:
         Purpose of the document follows.
 -->
-
-<!DOCTYPE article  PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" 
-	"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY appversion "1.1.4">
-  <!ENTITY manrevision "0.1">
-  <!ENTITY date "September 2006">
-  <!ENTITY app "xvidcap">
-  <!ENTITY mf-cap "multi-frame capture">
-  <!ENTITY sf-cap "single-frame capture">
-  ]
->
-<article id="index" lang="en">
+<!DOCTYPE article PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY appversion "1.1.4">
+<!ENTITY manrevision "0.1">
+<!ENTITY date "September 2006">
+<!ENTITY app "xvidcap">
+<!ENTITY mf-cap "multi-frame capture">
+<!ENTITY sf-cap "single-frame capture">
+]>
+<article id="index" lang="=de">
     <!-- please do not change the id; for translations, change lang to -->
     <!-- appropriate code -->
     <articleinfo>
-        <title>&app; Manual V&manrevision;</title>
+        <title>xvidcap Manual V0.1</title>
         <copyright>
             <year>2006</year>
             <holder>Karl H. Beckers</holder> 
@@ -85,7 +81,7 @@
             <!-- Remember to remove the &manrevision; entity from the revision entries other
             than the current revision. -->
             <revision>
-                <revnumber>&app; V&manrevision;</revnumber>
+                <revnumber>xvidcap V0.1</revnumber>
                 <date>2006</date>
                 <revdescription>
                     <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email>
@@ -95,18 +91,18 @@
             </revision>
 
         </revhistory>
-        <releaseinfo> This manual describes version &appversion; of &app;.
+        <releaseinfo> This manual describes version 1.1.4 of xvidcap.
         </releaseinfo>
         <legalnotice>
             <title>Feedback</title>
             <para>
-                To report a bug or make a suggestion regarding the <application>&app;</application> application or this 
-                manual, follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">&app;'s site at SF.net</ulink>.
+                To report a bug or make a suggestion regarding the <application>xvidcap</application> application or this 
+                manual, follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap's site at SF.net</ulink>.
             </para>
             <!-- Translators may also add here feedback address for translations -->
         </legalnotice>
         <abstract role="description">
-            <para>User manual for the &app; screencam application.</para>
+            <para>User manual for the xvidcap screencam application.</para>
         </abstract>
     </articleinfo>
     <indexterm><primary>xvidcap</primary></indexterm>
@@ -118,24 +114,24 @@
     <sect1 id="xvidcap-intro">
         <title>Introduction</title>
         <para>
-            <application>&app;</application> is a tool that captures movement on a selected area of an X11 screen to files. 
+            <application>xvidcap</application> is a tool that captures movement on a selected area of an X11 screen to files. 
             It does this by taking a configurable number of screenshots per second and saving them either as individual
             screenshots or as a video. This kind of application, today, is commonly labelled screencam or screencast utility. 
             If fact, one of the oldest of those utilities was <application>Lotus Screencam</application> which served as the 
-            inspiration for &app;.
+            inspiration for xvidcap.
         </para>
 
         <para>
-            <application>&app;</application> can be used in two distinct modes of operation:
+            <application>xvidcap</application> can be used in two distinct modes of operation:
             <orderedlist>
                 <listitem>
                     <para>
-                        <guilabel>&sf-cap;</guilabel> -- capture individual screenshots to one file each.
+                        <guilabel>single-frame capture</guilabel> -- capture individual screenshots to one file each.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        <guilabel>&mf-cap;</guilabel> -- capture and encode to video on the fly.
+                        <guilabel>multi-frame capture</guilabel> -- capture and encode to video on the fly.
                     </para>
                 </listitem>
             </orderedlist>
@@ -152,21 +148,21 @@
         <caution>
             <title>Audio Capture</title>
             <para>
-                &app; can capture audio, but only in &mf-cap; operation.
+                xvidcap can capture audio, but only in multi-frame capture operation.
             </para>
         </caution>
 
         <para>
             Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before 
-            encoding, or if you need other video codecs &app; does not support. Individual images can later be encoded 
+            encoding, or if you need other video codecs xvidcap does not support. Individual images can later be encoded 
             with tools like <ulink type="help" url="man:ffmpeg">ffmpeg</ulink>, 
             <ulink type="help" url="man:mencoder">mencoder</ulink>, or 
             <ulink type="help" url="man:transcode">transcode</ulink>.
         </para>
 
         <para>
-            To report a bug or make a suggestion regarding the <application>&app;</application> application or this manual, 
-            follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">&app;'s site at SF.net</ulink>.
+            To report a bug or make a suggestion regarding the <application>xvidcap</application> application or this manual, 
+            follow the directions on <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap's site at SF.net</ulink>.
         </para>
     </sect1>
     
@@ -174,8 +170,8 @@
         <title>Getting Started</title>
     
         <sect2 id="xvidcap-get-started-to-start">
-            <title>To Start &app;</title>
-            <para>You can start <application>&app;</application> in the following ways:</para>
+            <title>To Start xvidcap</title>
+            <para>You can start <application>xvidcap</application> in the following ways:</para>
             <variablelist>
                 <varlistentry>
                     <term><guimenu>Applications</guimenu> menu</term>
@@ -200,30 +196,30 @@
 
         <sect2 id="xvidcap-get-started-u-start">
 
-            <title>When You Start &app;</title>
-            <para>When you start <application>&app;</application>, the following windows are displayed:</para>
+            <title>When You Start xvidcap</title>
+            <para>When you start <application>xvidcap</application>, the following windows are displayed:</para>
 
             <figure id="xvidcap-window">
-                <title>&app; Control</title>
+                <title>xvidcap Control</title>
                 <screenshot>
                     <mediaobject>
                         <imageobject>
                             <imagedata fileref="figures/xvidcap-main-ctrl.png" format="PNG"/>
                         </imageobject>
-                        <textobject> <phrase>Shows &app; control.</phrase>
+                        <textobject> <phrase>Shows xvidcap control.</phrase>
                         </textobject>
                     </mediaobject>
                 </screenshot>
             </figure>
 
             <para>
-                The window with a proper title and buttons is &app;'s main control, while the red rectangle is
+                The window with a proper title and buttons is xvidcap's main control, while the red rectangle is
                 the selection frame enclosing the area to capture.
             </para>
 
             <table frame="all" id="xvidcap-get-started-u-start-TBL">
                 <title>
-                    &app;'s main control elements: 
+                    xvidcap's main control elements: 
                 </title>
                 <tgroup cols="2" align="char" charoff="50" char=".">
                     <tbody>
@@ -242,16 +238,16 @@
                             <entry>
                                 <para>
                                     The <guilabel>Filename Display and Menu</guilabel> displays the current output filename and, 
-                                    if in &mf-cap; mode, the index number of the most recently captured frame in square brackets.
-                                    In &sf-cap; mode the index number of the current frame will typically be part of the filename.
+                                    if in multi-frame capture mode, the index number of the most recently captured frame in square brackets.
+                                    In single-frame capture mode the index number of the current frame will typically be part of the filename.
                                 </para>
                                 <para>
-                                    When in &sf-cap; mode a left click resets the frame count to the start. A right-click while
+                                    When in single-frame capture mode a left click resets the frame count to the start. A right-click while
                                     not capturing will pop up the <ulink type="help" url="ghelp:xvidcap?xvidcap-menu">main menu</ulink>.
                                 </para>
                                 <tip>
                                     <title>Default Capture Mode</title>
-                                    <para>By default, &app; starts in &mf-cap; mode.</para>
+                                    <para>By default, xvidcap starts in multi-frame capture mode.</para>
                                 </tip>
 
                             </entry>
@@ -273,7 +269,7 @@
                                     The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well your capture session can capture at 
                                     your desired frame rate. If your system is under heavy load, it may not be able to capture
                                     as many frames per second as you wish. This will result in a video that plays back too quickly.
-                                    &app; displays a green status if you can or can almost capture at the desired frame rate. If
+                                    xvidcap displays a green status if you can or can almost capture at the desired frame rate. If
                                     you have some frame drop the status turns to yellow, or red if there is excessive frame drop.
                                     To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate,
                                     quit as many other applications putting stress on your system as possible, or run on a more 
@@ -351,7 +347,7 @@
                             </entry>
                             <entry>
                                 <para>
-                                    The <guilabel>Single Snapshot Button</guilabel> is only active in a paused &sf-cap; mode capturing session.
+                                    The <guilabel>Single Snapshot Button</guilabel> is only active in a paused single-frame capture mode capturing session.
                                     Then it allows you to take individual snapshots on a click of this button.
                                 </para>
                             </entry>
@@ -373,7 +369,7 @@
                                     The <guilabel>Rewind Button</guilabel> has different uses depending on the current capture mode.
                                 </para>
                                 <para>
-                                    In &sf-cap; mode <quote>rewinding</quote> relates to the index number of the current frame to
+                                    In single-frame capture mode <quote>rewinding</quote> relates to the index number of the current frame to
                                     capture. Imagine you have a stopped capture session that has captured ten PNG images. The filename 
                                     display may show <quote>test-0010.png</quote>. You then realize, the last two snapshots weren't
                                     what you needed. You can then click the rewind button twice. This changes the filename display to 
@@ -381,7 +377,7 @@
                                     and <quote>test-0009.png</quote> will be overwritten.
                                 </para>
                                 <para>
-                                    In &mf-cap; mode the rewind button works quite similar. It does not, however, manipulate the
+                                    In multi-frame capture mode the rewind button works quite similar. It does not, however, manipulate the
                                     index number of the current frame, but rather of the current movie as it relates to the 
                                     <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">autocontinue</ulink>
                                     feature.
@@ -500,9 +496,9 @@
                             <entry>
                                 <para>
                                     The <guilabel>Edit Button</guilabel> calls an external program to edit the most recently
-                                    captured frame in &sf-cap; mode or the current video in &mf-cap; mode. &app; does not
-                                    provide those applications. By default, &app; calls <application>gimp</application> in
-                                    &sf-cap; mode and nothing at all in &mf-cap; mode. Both settings can be changed through
+                                    captured frame in single-frame capture mode or the current video in multi-frame capture mode. xvidcap does not
+                                    provide those applications. By default, xvidcap calls <application>gimp</application> in
+                                    single-frame capture mode and nothing at all in multi-frame capture mode. Both settings can be changed through
                                     the <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">preferences dialog</ulink>.
                                 </para>
                             </entry>
@@ -574,9 +570,9 @@
                                 <tip>
                                     <title>Volatile Settings</title>
                                     <para>
-                                        Note that <application>&app;</application> does not save changed preferences automatically. You can
-                                        modify settings, exit <application>&app;</application>, and return to your previous settings by just
-                                        restarting <application>&app;</application>. If you want to make changes to your settings persistent,
+                                        Note that <application>xvidcap</application> does not save changed preferences automatically. You can
+                                        modify settings, exit <application>xvidcap</application>, and return to your previous settings by just
+                                        restarting <application>xvidcap</application>. If you want to make changes to your settings persistent,
                                         select this. It will write your settings to a file <filename>.xvidcaprc</filename>
                                         in your home directory.
                                     </para>
@@ -602,7 +598,7 @@
                                 <tip>
                                     <title>Parallel Settings for Capture Modes</title>
                                     <para>
-                                        Keep in mind that you can have distinct settings for &mf-cap; and &sf-cap; 
+                                        Keep in mind that you can have distinct settings for multi-frame capture and single-frame capture 
                                         modes configured and stored in parallel. Choosing this menuitem or the next
                                         toggles between the two modes and their respective settings.
                                     </para>
@@ -644,7 +640,7 @@
                                     toggle autocontinue feature on/off
                                 </para>
                                 <para>
-                                    This is selectable only in &mf-cap; mode
+                                    This is selectable only in multi-frame capture mode
                                     and only if the filename is mutable. Refer to 
                                     <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">the autocontinue prefernces
                                     setting</ulink> for more information.
@@ -668,10 +664,10 @@
                                     execute encoding command set in preferences
                                 </para>
                                 <para>
-                                    In &mf-cap; mode this is not at all
+                                    In multi-frame capture mode this is not at all
                                     needed and not set by default. It can, however, be set to allow executing a custom
-                                    transcoding command if output is needed in a format other than <application>&app;</application> can generate.
-                                    The script used in &sf-cap; mode by default is provided by <application>&app;</application> but may need to be
+                                    transcoding command if output is needed in a format other than <application>xvidcap</application> can generate.
+                                    The script used in single-frame capture mode by default is provided by <application>xvidcap</application> but may need to be
                                     copied to your executable path to make it available. Refer to 
                                     <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">the commands
                                     preferences tab</ulink> for more information on setting encoding commands.
@@ -695,7 +691,7 @@
                                     execute playback command set in preferences
                                 </para>
                                 <para>
-                                    In &mf-cap; mode this is <application>mplayer</application>
+                                    In multi-frame capture mode this is <application>mplayer</application>
                                     and <application>animate</application> (part of ImageMagick) by default. Refer to 
                                     <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">the commands
                                     preferences tab</ulink> for more information on setting encoding commands.
@@ -734,7 +730,7 @@
                             </entry>
                             <entry>
                                 <para>
-                                    pop up <application>&app;'s</application> about dialog
+                                    pop up <application>xvidcap's</application> about dialog
                                 </para>
                             </entry>
                         </row>
@@ -752,7 +748,7 @@
                             </entry>
                             <entry>
                                 <para>
-                                    exit <application>&app;</application>
+                                    exit <application>xvidcap</application>
                                 </para>
                             </entry>
                         </row>
@@ -777,7 +773,7 @@
 
             <para>
                 The first tab of the preferences dialog contains miscellaneous settings around
-                general behaviour of <application>&app;</application>.
+                general behaviour of <application>xvidcap</application>.
             </para>
 
             <figure id="xvidcap-prefs-general-screenshot">
@@ -807,8 +803,8 @@
                             </entry>
                             <entry>
                                 <para>
-                                    This setting governs which capture mode is used by <application>&app;</application> by default, i. e. if
-                                    no other settings give <application>&app;</application> a clue.
+                                    This setting governs which capture mode is used by <application>xvidcap</application> by default, i. e. if
+                                    no other settings give <application>xvidcap</application> a clue.
                                 </para>
                             </entry>
                         </row>
@@ -822,14 +818,14 @@
                                 <para>
                                     Check this to capture mouse pointer position. Once checked, you can select
                                     whether you want to capture a black or a white mouse pointer. This is 
-                                    required because <application>&app;</application> does not have a way of capturing the real, current
-                                    mouse pointer, only its position. Therefore <application>&app;</application> generates a dummy mouse
+                                    required because <application>xvidcap</application> does not have a way of capturing the real, current
+                                    mouse pointer, only its position. Therefore <application>xvidcap</application> generates a dummy mouse
                                     pointer in the captured movie.
                                 </para>
                                 <caution>
                                     <title>Custom Mouse Pointer Shapes</title>
                                     <para>
-                                        For above mentioned reasons, <application>&app;</application> cannot capture the shape of you
+                                        For above mentioned reasons, <application>xvidcap</application> cannot capture the shape of you
                                         mouse pointer. If, therefore, the application you're capturing 
                                         changes the shape of your mouse pointer to a specific shape you
                                         will loose that in the captured movie. If the logic of the captured
@@ -869,7 +865,7 @@
                                     <title>Shared Memory X11 Access</title>
                                     <para>
                                         Use of shared memory is enabled by default if the machine where
-                                        <application>&app;</application> was built supported shared memory access in X11, which is
+                                        <application>xvidcap</application> was built supported shared memory access in X11, which is
                                         typically the case, nowadays. You will need to turn this off, however, if
                                         X11 server and client are not running on the same machine, e. g. 
                                         if you are on a X terminal thin client.
@@ -885,8 +881,8 @@
                             </entry>
                             <entry>
                                 <para>
-                                    If recording in &mf-cap; mode and using a maximum number of frames to 
-                                    capture or a maximum capture duration, <application>&app;</application> can automatically continue
+                                    If recording in multi-frame capture mode and using a maximum number of frames to 
+                                    capture or a maximum capture duration, <application>xvidcap</application> can automatically continue
                                     capturing to a new video once the specified maximum number of frames or
                                     capture duration have been reached. This can effectively create a series
                                     of movies split to chunks of the specified maximum length. To use this
@@ -938,7 +934,7 @@
             <title>Single-Frame Capture Preferences</title>
 
             <para>
-                This tab contains the settings for &sf-cap; mode. Because &sf-cap; mode does
+                This tab contains the settings for single-frame capture mode. Because single-frame capture mode does
                 not support audio capture, only video settings are configurable here.
             </para>
 
@@ -957,7 +953,7 @@
 
             <table frame="all" id="xvidcap-prefs-sf-TBL">
                 <title>
-                    the &sf-cap; mode settings are: 
+                    the single-frame capture mode settings are: 
                 </title>
                 <tgroup cols="2" align="char" charoff="50" char=".">
                     <tbody>
@@ -996,13 +992,13 @@
                             </entry>
                             <entry>
                                 <para>
-                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application>
                                     automatically select an appropriate output format based on the
                                     filename specified. For example, if you specify <quote>test-%4d.png</quote>
                                     the output format will be <quote>Portable Network Graphics File (png)</quote>.
                                     If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
                                     menu allows for manually selecting a format, possibly overriding 
-                                    <application>&app;'s</application> decision.
+                                    <application>xvidcap's</application> decision.
                                 </para>
                             </entry>
                         </row>
@@ -1096,7 +1092,7 @@
             <title>Multi-Frame Capture Preferences</title>
 
             <para>
-                This tab contains the settings for &mf-cap; mode.
+                This tab contains the settings for multi-frame capture mode.
             </para>
 
             <figure id="xvidcap-prefs-mf-screenshot">
@@ -1114,7 +1110,7 @@
 
             <table frame="all" id="xvidcap-prefs-mf-TBL">
                 <title>
-                    the &mf-cap; mode video settings are: 
+                    the multi-frame capture mode video settings are: 
                 </title>
                 <tgroup cols="2" align="char" charoff="50" char=".">
                     <tbody>
@@ -1127,7 +1123,7 @@
                             <entry>
                                 <para>
                                     Enter a file name or file name pattern here to use for saving the individual
-                                    frames captured. For &mf-cap; the string supplied here only needs to be
+                                    frames captured. For multi-frame capture the string supplied here only needs to be
                                     a <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">mutable filename</ulink> 
                                     if the <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">autocontinue feature</ulink>
                                     is to be used. Otherwise a simple filename is sufficient here, which may also be
@@ -1143,13 +1139,13 @@
                             </entry>
                             <entry>
                                 <para>
-                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application>
                                     automatically select an appropriate output format based on the
                                     filename specified. For example, if you specify <quote>test.avi</quote>
                                     the output format will be <quote>Microsoft Audio Video Interleaved File (avi)</quote>.
                                     If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
                                     menu allows for manually selecting a format, possibly overriding 
-                                    <application>&app;'s</application> decision.
+                                    <application>xvidcap's</application> decision.
                                 </para>
                             </entry>
                         </row>
@@ -1161,13 +1157,13 @@
                             </entry>
                             <entry>
                                 <para>
-                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application>
                                     automatically select an appropriate video codec for the output format selected.
                                     For example, if <quote>Microsoft Audio Video Interleaved File (avi)</quote> is
                                     selected the video codec will be <quote>Microsoft DIVX 2</quote>.
                                     If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
                                     menu allows for manually selecting a codec, possibly overriding 
-                                    <application>&app;'s</application> decision.
+                                    <application>xvidcap's</application> decision.
                                 </para>
                             </entry>
                         </row>
@@ -1227,7 +1223,7 @@
 
             <table frame="all" id="xvidcap-prefs-mf-TBL-audio">
                 <title>
-                    the &mf-cap; mode audio settings are: 
+                    the multi-frame capture mode audio settings are: 
                 </title>
                 <tgroup cols="2" align="char" charoff="50" char=".">
                     <tbody>
@@ -1264,13 +1260,13 @@
                             </entry>
                             <entry>
                                 <para>
-                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>&app;</application>
+                                    A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application>
                                     automatically select an appropriate audio codec for the video output format selected.
                                     For example, if <quote>Microsoft Audio Video Interleaved File (avi)</quote> is
                                     selected the audio codec will be <quote>MPEG2</quote>.
                                     If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown
                                     menu allows for manually selecting a codec, possibly overriding 
-                                    <application>&app;'s</application> decision.
+                                    <application>xvidcap's</application> decision.
                                 </para>
                             </entry>
                         </row>
@@ -1289,17 +1285,17 @@
                                     <title>Piped Audio Input</title>
                                     <para>
                                         Instead of capturing audio from a real-time audio source, you can
-                                        also pipe a pre-recorded audio file to <application>&app;</application>. This way you can
+                                        also pipe a pre-recorded audio file to <application>xvidcap</application>. This way you can
                                         effectively dub your recording with a given audio track. To do
                                         this you need to:
                                     </para>
                                     <para>
-                                        <application>cat</application> my.mp3 | <application>&app;</application>
+                                        <application>cat</application> my.mp3 | <application>xvidcap</application>
                                         <parameter>--mf</parameter> <parameter>--audio yes</parameter>
                                         <parameter>--audio_in -</parameter> <parameter>--file test.avi</parameter>
                                     </para>
                                     <para>
-                                        When you start the recording session in <application>&app;</application> it will sample audio
+                                        When you start the recording session in <application>xvidcap</application> it will sample audio
                                         from the piped file.
                                     </para>
                                 </tip>
@@ -1372,20 +1368,6 @@
                 </title>
                 <tgroup cols="2" align="char" charoff="50" char=".">
                     <tbody>
-                        <row id="xvidcap-prefs-cmd-TBL-help">
-                            <entry>
-                                <para>
-                                    Help Command
-                                </para>
-                            </entry>
-                            <entry>
-                                <para>
-                                    The command here is executed when the main menu's <guimenuitem>help</guimenuitem> item is selected.
-                                    Since <application>&app;</application> now uses yelp for viewing the manual, this setting is going
-                                    to go away. All other help buttons are context sensitive.
-                                </para>
-                            </entry>
-                        </row>
                         <row id="xvidcap-prefs-cmd-TBL-sf-playback">
                             <entry>
                                 <para>
@@ -1396,7 +1378,7 @@
                                 <para>
                                     The command specified here is executed when the item <guimenuitem>Animate / Play</guimenuitem>
                                     is selected from the main menu or the play button is pressed on the capture
-                                    results dialog while in &sf-cap; mode. 
+                                    results dialog while in single-frame capture mode. 
                                 </para>
                                 <tip>
                                     <title>Specifying Commands</title>
@@ -1404,12 +1386,12 @@
                                         Any command can be configured here. It could theoretically be
                                         completely unrelated to video capture. You will always want to
                                         make sure that the called application is in your path and that
-                                        you end your command line with the <application>&amp;</application> to avoid that <application>&app;</application>
+                                        you end your command line with the <application>&amp;</application> to avoid that <application>xvidcap</application>
                                         waits for the called application to finish before continuing
                                         itself.
                                     </para>
                                     <para>
-                                        <application>&app;</application> makes the following environment variables available to
+                                        <application>xvidcap</application> makes the following environment variables available to
                                         the called application:
                                     </para>
                                     <table frame="non" id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL">
@@ -1503,7 +1485,7 @@
                                         </tgroup>
                                     </table>
                                     <para>
-                                        The file name, however, needs special treatment for &sf-cap;. Here the 
+                                        The file name, however, needs special treatment for single-frame capture. Here the 
                                         pattern used for <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">mutable file names</ulink>
                                         is sent literally as specified for the Single Frame Encoding Command further down only.
                                         For the Single Frame Playback Command the pattern is converted to wildcards, i. e.
@@ -1526,7 +1508,7 @@
                             <entry>
                                 <para>
                                     The command here is executed when the main menu's <guimenuitem>Make Video</guimenuitem> 
-                                    item is selected while in &sf-cap; mode.
+                                    item is selected while in single-frame capture mode.
                                 </para>
                             </entry>
                         </row>
@@ -1539,7 +1521,7 @@
                             <entry>
                                 <para>
                                     The command here is executed when the main control's <guibutton>Edit Button</guibutton>
-                                    is clicked while in &sf-cap; mode.
+                                    is clicked while in single-frame capture mode.
                                 </para>
                             </entry>
                         </row>
@@ -1553,7 +1535,7 @@
                                 <para>
                                     The command specified here is executed when the item <guimenuitem>Animate / Play</guimenuitem>
                                     is selected from the main menu or the play button is pressed on the capture
-                                    results dialog while in &mf-cap; mode. 
+                                    results dialog while in multi-frame capture mode. 
                                 </para>
                             </entry>
                         </row>
@@ -1566,7 +1548,7 @@
                             <entry>
                                 <para>
                                     The command here is executed when the main menu's <guimenuitem>Make Video</guimenuitem> 
-                                    item is selected while in &mf-cap; mode.
+                                    item is selected while in multi-frame capture mode.
                                 </para>
                             </entry>
                         </row>
@@ -1579,7 +1561,7 @@
                             <entry>
                                 <para>
                                     The command here is executed when the main control's <guibutton>Edit Button</guibutton>
-                                    is clicked while in &mf-cap; mode.
+                                    is clicked while in multi-frame capture mode.
                                 </para>
                             </entry>
                         </row>
@@ -1601,24 +1583,24 @@
         </para>
         <para>
             The dialog itself can take one of two forms depending on whether or not
-            you configured <application>&app;</application> to ask you for a target file name after the capture.
+            you configured <application>xvidcap</application> to ask you for a target file name after the capture.
         </para>
         <tip>
             <title>Ask User For File Name</title>
             <para>
-                For the time being, the only way to configure <application>&app;</application> to ask the user
+                For the time being, the only way to configure <application>xvidcap</application> to ask the user
                 to specify a file name after the capture rather than providing one
                 up-front it by providing an empty file name either through the
                 command line using <parameter>--file ""</parameter> or in the preferences
                 dialog. This requires manually specifying an output file format.
-                In this configuration <application>&app;</application> will store the video in a temporary file
+                In this configuration <application>xvidcap</application> will store the video in a temporary file
                 in your home directory which can lateron be renamed / moved to the
                 desired destination. This is not compatible with autocontinue.
             </para>
         </tip>
 
         <para>
-            If <application>&app;</application> is configured to ask the user for a file name, the results dialog
+            If <application>xvidcap</application> is configured to ask the user for a file name, the results dialog
             will look like this:
         </para>
         <figure id="xvidcap-results-ask-screenshot">
@@ -1662,7 +1644,121 @@
 
     </sect1>
     
-    
+    <sect1 id="xvidcap-warning">
+        <title>The Preferences Warning Dialog</title>
+        <para>
+            Whenever <application>xvidcap</application> determines that the settings you have chosen will
+            not work well, it will display those issues in a standardized format. Unless you run
+            <application>xvidcap</application> with the <parameter>--gui no</parameter> parameter,
+            it will pop up the following dialog:
+        </para>
+
+            <figure id="xvidcap-warn-window">
+                <title>Preferences Warning Dialog</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/xvidcap-warning.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Preferences Warning Dialog</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+        <tip>
+            <title>GUI-less operation</title>
+            <para>
+                When running from the command line with the <parameter>--gui no</parameter> parameter,
+                those warnings will be displayed in plain text on the terminal. You will not be seeing the
+                <quote>Details</quote> section unless you also specified <parameter>-v</parameter>.
+            </para>
+        </tip>
+
+            <table frame="all" id="xvidcap-warn-situations-TBL">
+                <title>
+                    There are a few situations in which such messages can be displayed:
+                </title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-warn-situations-TBL-start">
+                            <entry>
+                                <para>On start</para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    When <application>xvidcap</application> is started, it checks the 
+                                    consistency of the settings for the current capture mode and will
+                                    report on issues it finds there. You will not be able to cancel out
+                                    of this dialog, but have to revisit your preferences.
+                                </para>
+                                <para>
+                                    <application>xvidcap</application> <emphasis>only</emphasis>
+                                    checks on the current capture mode and will not care
+                                    about inconsistencies with the respective other mode. Therefore,
+                                    there is the second situation.
+                                </para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-warn-situations-TBL-change-mode">
+                            <entry>
+                                <para>On change of capture mode</para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    If you change the current capture mode through the 
+                                    <ulink type="help" url="ghelp:xvidcap?menu xvidcap-menu-TBL-mf">menu</ulink> 
+                                    <application>xvidcap</application> will check the consistency of the settings 
+                                    for the new capture mode and will report on issues it finds there. If you 
+                                    cancel the warning dialog, you will return to your previous capture mode
+                                    selection.
+                                </para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-warn-situations-TBL-preferences">
+                            <entry>
+                                <para>When submitting changed preferences</para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    When you leave the preferences dialog <application>xvidcap</application> 
+                                    will check the settings for both capture modes. Cancelling the warning
+                                    dialog will take you back to the preferences dialog.
+                                </para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <para>
+                In the Preferences Warning Dialog you will find one or more messages consisting of three
+                rows each. The first row contains a message type or severity, a unique numeric ID and a 
+                short name for the error. The second row gives a more detailed description, and the third
+                row tells about the action <application>xvidcap</application> is going to take if you
+                chose to click <guibutton>OK</guibutton>.
+            </para>
+
+            <para>
+                Such an action might be to automatically correct the issue by chosing a plausible default,
+                to ignore the issue if it is not severe or to quit <application>xvidcap</application> if no
+                solution can automatically be determined.
+            </para>
+
+            <para>
+                The severity of an issue can be <quote>INFO</quote> for purely informational messages
+                where no change is made to any settings, <quote>WARNING</quote> where a minor change
+                to current settings is suggested, <quote>ERROR</quote> where a major change to current
+                settings is required, or <quote>FATAL ERROR</quote>. A fatal error is always an error
+                where the suggested action is to quit <application>xvidcap</application>. You will not
+                see issues of severity <quote>INFO</quote> unless you run <application>xvidcap</application>
+                in verbose mode.
+            </para>
+    </sect1>
+
+
+
+
     <!--    
     <sect1 id="c1-s1">
     <title>section 1</title>
