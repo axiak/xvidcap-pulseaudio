@@ -35,8 +35,10 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
-#include <bonobo.h>
-#include <gnome.h>
+/*
+include <bonobo.h>
+include <gnome.h>
+*/
 #include <glade/glade.h>
 
 #include "job.h"
@@ -45,6 +47,7 @@
 #include "gnome_warning.h"
 #include "control.h"
 #include "gnome_ui.h"
+#include "xvidcap-intl.h"
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 #define DEBUGFILE "gnome_options.c"

@@ -1,4 +1,16 @@
 
+2006-10-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, src/gnome_ui.c, src/gnome_frame.c,
+		src/gnome_options.c, debian: control, files, changelog, rules:
+		Version bump and elimination of libgnome dependency. Also
+		added yelp as a suggested package for debian package
+	* doc/man: C/Makefile.am, de/Makefile.am: added po/pot to EXTRA_DIST
+	* doc/man/de/xvidcap.1-de.xml: removed (xvidcap.1.xml everywhere)
+	* doc/xvidcap: C/xvidcap.xml, de/xvidcap-de.po: continued
+		German translation of user guide and minor fixes to C original
+	* src/gnome_ui.c: added shortcut STRG-H for help because the stock
+		menu item shows that
+
 2006-10-09  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/man: man.make, C/Makefile.am, de/Makefile.am, it/Makefile.am:
 		make target encoding of manpage configurable per lang

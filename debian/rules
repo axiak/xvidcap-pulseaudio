@@ -82,7 +82,7 @@ binary-arch: build install
 	dh_fixperms
 	dh_installdeb
 	dh_shlibdeps
-	dh_gencontrol -- -v1.1.4rc1
+	dh_gencontrol -- -v1.1.4rc2
 	dh_md5sums
 	dh_builddeb
 

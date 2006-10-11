@@ -121,8 +121,8 @@
             <application>&app;</application> is a tool that captures movement on a selected area of an X11 screen to files. 
             It does this by taking a configurable number of screenshots per second and saving them either as individual
             screenshots or as a video. This kind of application, today, is commonly labelled screencam or screencast utility. 
-            If fact, one of the oldest of those utilities was <application>Lotus Screencam</application> which served as the 
-            inspiration for &app;.
+            In fact, one of the oldest of those utilities was <application>Lotus Screencam</application> which served as the 
+            inspiration for <application>&app;</application>.
         </para>
 
         <para>
@@ -152,13 +152,13 @@
         <caution>
             <title>Audio Capture</title>
             <para>
-                &app; can capture audio, but only in &mf-cap; operation.
+                <application>&app;</application> can capture audio, but only in &mf-cap; operation.
             </para>
         </caution>
 
         <para>
             Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before 
-            encoding, or if you need other video codecs &app; does not support. Individual images can later be encoded 
+            encoding, or if you need other video codecs <application>&app;</application> does not support. Individual images can later be encoded 
             with tools like <ulink type="help" url="man:ffmpeg">ffmpeg</ulink>, 
             <ulink type="help" url="man:mencoder">mencoder</ulink>, or 
             <ulink type="help" url="man:transcode">transcode</ulink>.
@@ -200,8 +200,8 @@
 
         <sect2 id="xvidcap-get-started-u-start">
 
-            <title>When You Start &app;</title>
-            <para>When you start <application>&app;</application>, the following windows are displayed:</para>
+            <title>When You Start <application>&app;</application></title>
+            <para>When you start <application>&app;</application>, the following window is displayed:</para>
 
             <figure id="xvidcap-window">
                 <title>&app; Control</title>
@@ -210,7 +210,7 @@
                         <imageobject>
                             <imagedata fileref="figures/xvidcap-main-ctrl.png" format="PNG"/>
                         </imageobject>
-                        <textobject> <phrase>Shows &app; control.</phrase>
+                        <textobject> <phrase>Shows <application>&app;</application> control.</phrase>
                         </textobject>
                     </mediaobject>
                 </screenshot>
@@ -251,7 +251,7 @@
                                 </para>
                                 <tip>
                                     <title>Default Capture Mode</title>
-                                    <para>By default, &app; starts in &mf-cap; mode.</para>
+                                    <para>By default, <application>&app;</application> starts in &mf-cap; mode.</para>
                                 </tip>
 
                             </entry>
@@ -273,7 +273,7 @@
                                     The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well your capture session can capture at 
                                     your desired frame rate. If your system is under heavy load, it may not be able to capture
                                     as many frames per second as you wish. This will result in a video that plays back too quickly.
-                                    &app; displays a green status if you can or can almost capture at the desired frame rate. If
+                                    <application>&app;</application> displays a green status if you can or can almost capture at the desired frame rate. If
                                     you have some frame drop the status turns to yellow, or red if there is excessive frame drop.
                                     To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate,
                                     quit as many other applications putting stress on your system as possible, or run on a more 
@@ -500,8 +500,8 @@
                             <entry>
                                 <para>
                                     The <guilabel>Edit Button</guilabel> calls an external program to edit the most recently
-                                    captured frame in &sf-cap; mode or the current video in &mf-cap; mode. &app; does not
-                                    provide those applications. By default, &app; calls <application>gimp</application> in
+                                    captured frame in &sf-cap; mode or the current video in &mf-cap; mode. <application>&app;</application> does not
+                                    provide those applications. By default, <application>&app;</application> calls <application>gimp</application> in
                                     &sf-cap; mode and nothing at all in &mf-cap; mode. Both settings can be changed through
                                     the <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">preferences dialog</ulink>.
                                 </para>

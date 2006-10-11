@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-29 14:49+0200\n"
+"POT-Creation-Date: 2006-10-10 17:14+0200\n"
 "PO-Revision-Date: 2006-09-11 21:06+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
@@ -690,143 +690,143 @@ msgstr "DESC:"
 msgid "ACTION:"
 msgstr "AZIONE:"
 
-#: src/codecs.c:48 src/codecs.c:219 src/codecs.c:256
+#: src/codecs.c:52 src/codecs.c:223 src/codecs.c:260
 msgid "NONE"
 msgstr "NESSUNA"
 
-#: src/codecs.c:60
+#: src/codecs.c:64
 msgid "Portable Graymap"
 msgstr "Portable Graymap"
 
-#: src/codecs.c:71
+#: src/codecs.c:75
 msgid "Portable Pixmap"
 msgstr "Portable Pixmap"
 
-#: src/codecs.c:82
+#: src/codecs.c:86
 msgid "Portable Network Graphics"
 msgstr "Portable Network Graphics"
 
-#: src/codecs.c:93 src/codecs.c:317
+#: src/codecs.c:97 src/codecs.c:321
 msgid "Joint Picture Expert Group"
 msgstr "Joint Picture Expert Group"
 
-#: src/codecs.c:104
+#: src/codecs.c:108
 msgid "MPEG 1"
 msgstr "MPEG 1"
 
-#: src/codecs.c:117
+#: src/codecs.c:121
 msgid "MJPEG"
 msgstr "MJPEG"
 
-#: src/codecs.c:129
+#: src/codecs.c:133
 msgid "MPEG 4 (DIVX)"
 msgstr "MPEG 4 (DIVX)"
 
-#: src/codecs.c:140
+#: src/codecs.c:144
 msgid "Microsoft DIVX 2"
 msgstr "Microsoft DIVX 2"
 
-#: src/codecs.c:152
+#: src/codecs.c:156
 msgid "Microsoft DIVX 3"
 msgstr "Microsoft DIVX 3"
 
-#: src/codecs.c:164
+#: src/codecs.c:168
 msgid "Flash Video"
 msgstr "Flash Video"
 
-#: src/codecs.c:176
+#: src/codecs.c:180
 msgid "DV Video"
 msgstr "DV Video"
 
-#: src/codecs.c:190
+#: src/codecs.c:194
 msgid "MPEG2 Video"
 msgstr "MPEG2 Video"
 
-#: src/codecs.c:203
+#: src/codecs.c:207
 msgid "Soerensen VQ 1"
 msgstr "Soerensen VQ 1"
 
-#: src/codecs.c:228
+#: src/codecs.c:232
 msgid "MPEG2"
 msgstr "MPEG2"
 
-#: src/codecs.c:236
+#: src/codecs.c:240
 msgid "MPEG2 Layer 3"
 msgstr "MPEG2 Layer 3"
 
-#: src/codecs.c:244
+#: src/codecs.c:248
 msgid "PCM"
 msgstr "PCM"
 
-#: src/codecs.c:268
+#: src/codecs.c:272
 msgid "X11 Window Dump"
 msgstr "X11 Window Dump"
 
-#: src/codecs.c:281
+#: src/codecs.c:285
 msgid "Portable Graymap File"
 msgstr "Portable Graymap File"
 
-#: src/codecs.c:293
+#: src/codecs.c:297
 msgid "Portable Anymap File"
 msgstr "Portable Anymap File"
 
-#: src/codecs.c:305
+#: src/codecs.c:309
 msgid "Portable Network Graphics File"
 msgstr "Portable Network Graphics File"
 
-#: src/codecs.c:329
+#: src/codecs.c:333
 msgid "Microsoft Audio Video Interleaved File"
 msgstr "Microsoft Audio Video Interleaved File"
 
-#: src/codecs.c:350
+#: src/codecs.c:354
 msgid "General AVI file (DIVX default)"
 msgstr "General AVI file (DIVX default)"
 
-#: src/codecs.c:371
+#: src/codecs.c:375
 msgid "Microsoft Advanced Streaming Format"
 msgstr "Microsoft Advanced Streaming Format"
 
-#: src/codecs.c:392
+#: src/codecs.c:396
 msgid "Macromedia Flash Video Stream"
 msgstr "Macromedia Flash Video Stream"
 
-#: src/codecs.c:414
+#: src/codecs.c:418
 msgid "Macromedia Shockwave Flash File"
 msgstr "Macromedia Shockwave Flash File"
 
-#: src/codecs.c:436
+#: src/codecs.c:440
 msgid "DV Video Format"
 msgstr "Formato DV Video"
 
-#: src/codecs.c:453
+#: src/codecs.c:457
 msgid "MPEG1 System Format"
 msgstr "Formato MPEG1 System"
 
-#: src/codecs.c:470
+#: src/codecs.c:474
 msgid "MPEG2 PS Format"
 msgstr "Formato MPEG2 PS"
 
-#: src/codecs.c:487
+#: src/codecs.c:491
 msgid "Quicktime Format"
 msgstr "Formato Quicktime"
 
-#: src/gnome_ui.c:1799 src/gnome_ui.c:1800 src/gnome-xvidcap.glade:225
+#: src/gnome_ui.c:1810 src/gnome_ui.c:1811 src/gnome-xvidcap.glade:225
 msgid "Detach selection frame"
 msgstr "Sgancia l'area di selezione"
 
-#: src/gnome_ui.c:1823 src/gnome_ui.c:1824
+#: src/gnome_ui.c:1834 src/gnome_ui.c:1835
 msgid "Attach selection frame"
 msgstr "Aggancia l'area di selezione"
 
-#: src/gnome_ui.c:2314 src/gnome_ui.c:2315
+#: src/gnome_ui.c:2325 src/gnome_ui.c:2326
 msgid "Move cursor back one frame"
 msgstr "Sposta il cursore indietro di un fotogramma"
 
-#: src/gnome_ui.c:2324 src/gnome_ui.c:2325
+#: src/gnome_ui.c:2335 src/gnome_ui.c:2336
 msgid "Move cursor to next frame"
 msgstr "Sposta il cursore al fotogramma successivo"
 
-#: src/gnome_ui.c:2331 src/gnome_ui.c:2332
+#: src/gnome_ui.c:2342 src/gnome_ui.c:2343
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -834,23 +834,23 @@ msgstr ""
 "Tasto sinistro: Ripristina contatore dei fotogrammi e nome file\n"
 "Tasto destro: Menu a comparsa"
 
-#: src/gnome_ui.c:2337 src/gnome_ui.c:2338
+#: src/gnome_ui.c:2348 src/gnome_ui.c:2349
 msgid "Edit current individual frame"
 msgstr "Modifica il singolo fotogramma attuale"
 
-#: src/gnome_ui.c:2343 src/gnome_ui.c:2344
+#: src/gnome_ui.c:2354 src/gnome_ui.c:2355
 msgid "Capture single frame"
 msgstr "Acquisisci fotogramma singolo"
 
-#: src/gnome_ui.c:2367 src/gnome_ui.c:2368
+#: src/gnome_ui.c:2378 src/gnome_ui.c:2379
 msgid "Move cursor to previous movie"
 msgstr "Sposta il cursore al precedente filmato"
 
-#: src/gnome_ui.c:2370 src/gnome_ui.c:2371
+#: src/gnome_ui.c:2381 src/gnome_ui.c:2382
 msgid "Move cursor to next movie"
 msgstr "Sposta il cursore al prossimo filmato"
 
-#: src/gnome_ui.c:2374 src/gnome_ui.c:2375
+#: src/gnome_ui.c:2385 src/gnome_ui.c:2386
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -858,11 +858,11 @@ msgstr ""
 "Tasto sinistro: Ripristina contatore del filmato a zero\n"
 "Tasto destro: Menu a comparsa"
 
-#: src/gnome_ui.c:2380 src/gnome_ui.c:2381
+#: src/gnome_ui.c:2391 src/gnome_ui.c:2392
 msgid "Edit current movie"
 msgstr "Modifica il filmato attuale"
 
-#: src/gnome_options.c:2713
+#: src/gnome_options.c:2775
 msgid "C_apture"
 msgstr "_Acquisisci"
 

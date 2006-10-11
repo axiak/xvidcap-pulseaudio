@@ -25,6 +25,8 @@
 #endif
 
 #include <sys/time.h>           // for timeval struct and related
+#include <stdlib.h>
+#include <unistd.h>
 
 #ifdef SOLARIS
 #include <X11/X.h>
@@ -37,8 +39,11 @@
 #endif // HAVE_SHMAT
 
 #include <gdk/gdkx.h>
-#include <bonobo.h>
-#include <gnome.h>
+#include <glib.h>
+/*
+include <bonobo.h>
+include <gnome.h>
+*/
 #include <glade/glade.h>
 #include <pthread.h>
 #include <signal.h>
@@ -54,6 +59,7 @@
 #include "gnome_options.h"
 #include "gnome_ui.h"
 #include "gnome_frame.h"
+#include "xvidcap-intl.h"
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 #define DEBUGFILE "gnome_ui.c"
@@ -2195,7 +2201,7 @@ on_xvc_ctrl_main_window_key_press_event(GtkWidget * widget,
         g_assert(mitem);
         gtk_menu_item_activate(GTK_MENU_ITEM(mitem));
         return TRUE;
-    } else if (kevent->keyval == 65470) {
+    } else if (kevent->keyval == 65470 || (kevent->state == 4 && kevent->keyval == 104)) {
         xml = glade_get_widget_tree(xvc_ctrl_m1);
         g_assert(xml);
         mitem = glade_xml_get_widget(xml, "xvc_ctrl_m1_mitem_help");

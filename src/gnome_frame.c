@@ -29,8 +29,10 @@
 
 #include <X11/Intrinsic.h>
 #include <gtk/gtk.h>
-#include <bonobo.h>
-#include <gnome.h>
+/*
+include <bonobo.h>
+include <gnome.h>
+*/
 #include <glade/glade.h>
 
 #include "app_data.h"
