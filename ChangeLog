@@ -1,4 +1,8 @@
 
+2006-10-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, Makefile.am: added debian/* stuff and TODO.tasks to 
+		EXTRA_DIST
+
 2006-10-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, src/gnome_ui.c, src/gnome_frame.c,
 		src/gnome_options.c, debian: control, files, changelog, rules:

@@ -4,7 +4,8 @@
 doc_SUBDIRS = doc
 SUBDIRS = $(doc_SUBDIRS) \
     src \
-    po 
+    po \
+    debian
 
 pkgdata_DATA = xvidcap.desktop \
 	xvidcap.png \
@@ -26,7 +27,9 @@ EXTRA_DIST = $(xvidcapdoc_DATA) \
     intltool-update.in \
     xvidcap.png \
     xvidcap.desktop \
-    ppm2mpeg.sh
+    ppm2mpeg.sh \
+    TODO.tasks
+
 
 # Copy all the spec files. Of cource, only one is actually used.
 dist-hook:
