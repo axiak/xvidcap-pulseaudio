@@ -1,4 +1,11 @@
 
+2006-10-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* debian/Makefile.am: added debian stuff to EXTRA_DIST
+	* doc/man: man.make, C/Makefile.am, de/Makefile.am, it/Makefile.am:
+		added xv_ENCODING to Makefiles (again?!?)
+	* doc/man/it: xvidcap.1-it.po, xvidcap.1.xml, xvidcap.1: added
+		reworked Italian translation of manpage
+
 2006-10-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, Makefile.am: added debian/* stuff and TODO.tasks to 
 		EXTRA_DIST

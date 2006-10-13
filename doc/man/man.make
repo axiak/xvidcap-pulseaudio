@@ -11,6 +11,8 @@
 # this is a list of manpages available for the language
 # xv_LANG = C
 # this is the language code
+# xv_ENCODING = iso8859-1
+# the desired encoding for the manpage
 
 install: 
 	for i in $(xv_MANPAGES) ; do \
@@ -33,7 +35,7 @@ install:
 		fi ; \
 		if test -r $$i.xml ; then \
 			echo "converting docbook to manpage for lang $(xv_LANG)" ; \
-			$(DOCBOOK2X_MAN) "$$i.xml" ; \
+			$(DOCBOOK2X_MAN) --encoding=$(xv_ENCODING) "$$i.xml" ; \
 		else \
 			echo "Cannot find $$i.xml as source for manpage of locale $(xv_LANG)" ; \
 			if test -r $$i ; then \
