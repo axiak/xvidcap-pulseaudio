@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-10-09 17:43+0200\n"
+"POT-Creation-Date: 2006-10-18 11:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -258,7 +258,7 @@ msgid "Introduction"
 msgstr ""
 
 #: xvidcap.xml:120(para) 
-msgid "<application>xvidcap</application> is a tool that captures movement on a selected area of an X11 screen to files. It does this by taking a configurable number of screenshots per second and saving them either as individual screenshots or as a video. This kind of application, today, is commonly labelled screencam or screencast utility. If fact, one of the oldest of those utilities was <application>Lotus Screencam</application> which served as the inspiration for xvidcap."
+msgid "<application>xvidcap</application> is a tool that captures movement on a selected area of an X11 screen to files. It does this by taking a configurable number of screenshots per second and saving them either as individual screenshots or as a video. This kind of application, today, is commonly labelled screencam or screencast utility. In fact, one of the oldest of those utilities was <application>Lotus Screencam</application> which served as the inspiration for <application>xvidcap</application>."
 msgstr ""
 
 #: xvidcap.xml:132(para) 
@@ -286,11 +286,11 @@ msgid "Audio Capture"
 msgstr ""
 
 #: xvidcap.xml:154(para) 
-msgid "xvidcap can capture audio, but only in multi-frame capture operation."
+msgid "<application>xvidcap</application> can capture audio, but only in multi-frame capture operation."
 msgstr ""
 
 #: xvidcap.xml:159(para) 
-msgid "Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before encoding, or if you need other video codecs xvidcap does not support. Individual images can later be encoded with tools like <ulink type=\"help\" url=\"man:ffmpeg\">ffmpeg</ulink>, <ulink type=\"help\" url=\"man:mencoder\">mencoder</ulink>, or <ulink type=\"help\" url=\"man:transcode\">transcode</ulink>."
+msgid "Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before encoding, or if you need other video codecs <application>xvidcap</application> does not support. Individual images can later be encoded with tools like <ulink type=\"help\" url=\"man:ffmpeg\">ffmpeg</ulink>, <ulink type=\"help\" url=\"man:mencoder\">mencoder</ulink>, or <ulink type=\"help\" url=\"man:transcode\">transcode</ulink>."
 msgstr ""
 
 #: xvidcap.xml:174(title) 
@@ -322,11 +322,11 @@ msgid "Execute the following command: <command>xvidcap</command>. For more infor
 msgstr ""
 
 #: xvidcap.xml:203(title) 
-msgid "When You Start xvidcap"
+msgid "When You Start <application>xvidcap</application>"
 msgstr ""
 
 #: xvidcap.xml:204(para) 
-msgid "When you start <application>xvidcap</application>, the following windows are displayed:"
+msgid "When you start <application>xvidcap</application>, the following window is displayed:"
 msgstr ""
 
 #: xvidcap.xml:207(title) 
@@ -334,7 +334,7 @@ msgid "xvidcap Control"
 msgstr ""
 
 #: xvidcap.xml:213(phrase) 
-msgid "Shows xvidcap control."
+msgid "Shows <application>xvidcap</application> control."
 msgstr ""
 
 #: xvidcap.xml:219(para) 
@@ -362,7 +362,7 @@ msgid "Default Capture Mode"
 msgstr ""
 
 #: xvidcap.xml:254(para) 
-msgid "By default, xvidcap starts in multi-frame capture mode."
+msgid "By default, <application>xvidcap</application> starts in multi-frame capture mode."
 msgstr ""
 
 #: xvidcap.xml:266(phrase) 
@@ -370,7 +370,7 @@ msgid "Frame Drop Meter"
 msgstr ""
 
 #: xvidcap.xml:272(para) 
-msgid "The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well your capture session can capture at your desired frame rate. If your system is under heavy load, it may not be able to capture as many frames per second as you wish. This will result in a video that plays back too quickly. xvidcap displays a green status if you can or can almost capture at the desired frame rate. If you have some frame drop the status turns to yellow, or red if there is excessive frame drop. To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate, quit as many other applications putting stress on your system as possible, or run on a more powerful machine. It may also help to <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-rescale\">downscale</ulink> the captured data."
+msgid "The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well your capture session can capture at your desired frame rate. If your system is under heavy load, it may not be able to capture as many frames per second as you wish. This will result in a video that plays back too quickly. <application>xvidcap</application> displays a green status if you can or can almost capture at the desired frame rate. If you have some frame drop the status turns to yellow, or red if there is excessive frame drop. To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate, quit as many other applications putting stress on your system as possible, or run on a more powerful machine. It may also help to <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-rescale\">downscale</ulink> the captured data."
 msgstr ""
 
 #: xvidcap.xml:292(phrase) 
@@ -478,7 +478,7 @@ msgid "Edit Button"
 msgstr ""
 
 #: xvidcap.xml:501(para) 
-msgid "The <guilabel>Edit Button</guilabel> calls an external program to edit the most recently captured frame in single-frame capture mode or the current video in multi-frame capture mode. xvidcap does not provide those applications. By default, xvidcap calls <application>gimp</application> in single-frame capture mode and nothing at all in multi-frame capture mode. Both settings can be changed through the <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-cmd\">preferences dialog</ulink>."
+msgid "The <guilabel>Edit Button</guilabel> calls an external program to edit the most recently captured frame in single-frame capture mode or the current video in multi-frame capture mode. <application>xvidcap</application> does not provide those applications. By default, <application>xvidcap</application> calls <application>gimp</application> in single-frame capture mode and nothing at all in multi-frame capture mode. Both settings can be changed through the <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-cmd\">preferences dialog</ulink>."
 msgstr ""
 
 #: xvidcap.xml:518(title) xvidcap.xml:522(title) xvidcap.xml:528(phrase) 
@@ -1006,7 +1006,7 @@ msgid "The command specified here is executed when the item <guimenuitem>Animate
 msgstr ""
 
 #: xvidcap.xml:1548(para) 
-msgid "Multi Frame Encoding command"
+msgid "Multi Frame Transcoding command"
 msgstr ""
 
 #: xvidcap.xml:1553(para) 
@@ -1114,7 +1114,7 @@ msgid "When you leave the preferences dialog <application>xvidcap</application> 
 msgstr ""
 
 #: xvidcap.xml:1738(para) 
-msgid "In the Preferences Warning Dialog you will find one or more messages consisting of three rows each. The first row contains a message type or severity, a unique numeric ID and a short name for the error. The second row gives a more detailed description, and the third row tells about the action <application>xvidcap</application> is going to take if you chose to click <guibutton>OK</guibutton>."
+msgid "In the Preferences Warning Dialog you will find one or more messages consisting of three rows each. The first one contains a message type or severity, a unique numeric ID and a short name for the error. The second row gives a more detailed description, and the third one tells about the action <application>xvidcap</application> is going to take if you chose to click <guibutton>OK</guibutton>."
 msgstr ""
 
 #: xvidcap.xml:1746(para) 

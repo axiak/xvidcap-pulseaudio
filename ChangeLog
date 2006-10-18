@@ -1,4 +1,15 @@
 
+2006-10-18  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* po: en.po, es.po, de.po, it.po: updated
+	* doc/xvidcap/C: xvidcap.xml, xvidcap.xml.pot: fixed a few errors
+		in the English original
+	* doc/xvidcap/de: xvidcap-de.po, xvidcap.xml-de.po, xvidcap.xml:
+		completed the user manual translation for German and
+		renamed the po file
+	* doc/xmldocs.make: included automatic translation for user manual
+	* src/gnome-xvidcap.glade: fixed capture result dialog where "play"
+		button was not a stock button
+
 2006-10-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* debian/Makefile.am: added debian stuff to EXTRA_DIST
 	* doc/man: man.make, C/Makefile.am, de/Makefile.am, it/Makefile.am:

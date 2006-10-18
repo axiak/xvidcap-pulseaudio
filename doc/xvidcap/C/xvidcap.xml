@@ -1546,7 +1546,7 @@
                         <row id="xvidcap-prefs-cmd-TBL-mf-encode">
                             <entry>
                                 <para>
-                                    Multi Frame Encoding command
+                                    Multi Frame Transcoding command
                                 </para>
                             </entry>
                             <entry>
@@ -1737,9 +1737,9 @@
 
             <para>
                 In the Preferences Warning Dialog you will find one or more messages consisting of three
-                rows each. The first row contains a message type or severity, a unique numeric ID and a 
+                rows each. The first one contains a message type or severity, a unique numeric ID and a 
                 short name for the error. The second row gives a more detailed description, and the third
-                row tells about the action <application>&app;</application> is going to take if you
+                one tells about the action <application>&app;</application> is going to take if you
                 chose to click <guibutton>OK</guibutton>.
             </para>
 
