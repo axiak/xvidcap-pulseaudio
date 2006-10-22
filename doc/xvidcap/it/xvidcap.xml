@@ -1,0 +1,1333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Document   : xvidcap-manual.xml
+    Created on : 17. September 2006, 12:01
+    Author     : kb87850
+    Description:
+        Purpose of the document follows.
+-->
+<!DOCTYPE article PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY appversion "1.1.4">
+<!ENTITY manrevision "0.1">
+<!ENTITY date "September 2006">
+<!ENTITY app "xvidcap">
+<!ENTITY mf-cap "multi-frame capture">
+<!ENTITY sf-cap "single-frame capture">
+]>
+<article id="index" lang="xvidcap.xml-it">
+    <!-- please do not change the id; for translations, change lang to -->
+    <!-- appropriate code -->
+    <articleinfo>
+        <title>Manuale di xvidcap V0.1</title>
+        <copyright>
+            <year>2006</year>
+            <holder>Karl H. Beckers</holder> 
+        </copyright>
+
+        <!-- translators: uncomment this:
+
+        <copyright>
+        <year>2003</year>
+        <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+        </copyright>
+
+        -->
+        <publisher>
+            <publishername>Karl H. Beckers</publishername>
+        </publisher>
+
+        <!-- FIXME later
+        <xi:include href="legal.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        --> 
+
+        <authorgroup>
+            <author role="maintainer">
+                <firstname>Karl</firstname>
+                <othername>H.</othername>
+                <surname>Beckers</surname>
+                <email>karl.h.beckers@gmx.net</email>
+            </author>
+            <!--
+            <othercredit role="reviewer">
+            <firstname>Baris</firstname>
+            <surname>Cicek provided information from earlier revisions of the gedit application.</surname>
+            <contrib>Acknowledgements</contrib>
+            </othercredit>
+            <othercredit role="reviewer">
+            <firstname>Ajit</firstname>
+            <surname>George provided information about plugins.</surname>
+            <contrib>Acknowledgements</contrib>
+            </othercredit>
+            -->
+
+
+            <!-- This is appropriate place for other contributors: translators,
+            maintainers,  etc. Commented out by default.
+            <othercredit role="translator">
+            <firstname>Latin</firstname>
+            <surname>Translator 1</surname>
+            <affiliation>
+            <orgname>Latin Translation Team</orgname>
+            <address> <email>translator@gnome.org</email> </address>
+            </affiliation>
+            <contrib>Latin translation</contrib>
+            </othercredit>
+            -->
+        </authorgroup>
+
+        <!-- According to GNU FDL, revision history is mandatory if you are -->
+        <!-- modifying/reusing someone else's document.  If not, you can omit it. -->
+        <revhistory>
+            <!-- Remember to remove the &manrevision; entity from the revision entries other
+            than the current revision. -->
+            <revision>
+                <revnumber>xvidcap V0.1</revnumber>
+                <date>2006</date>
+                <revdescription>
+                    <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email></para>
+                    <para role="publisher">Karl H. Beckers</para>
+                </revdescription>
+            </revision>
+
+        </revhistory>
+        <releaseinfo>Questo manuale descrive la versione 1.1.4 di xvidcap.</releaseinfo>
+        <legalnotice>
+            <title>Segnalazioni</title>
+            <para>Per segnalare bug o proporre suggerimenti riguardanti l'applicazione <application>xvidcap</application> o questa guida, seguire le istruzioni reperibili sul sito di <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap, presso SF.net</ulink>.</para>
+            <!-- Translators may also add here feedback address for translations -->
+        </legalnotice>
+        <abstract role="description">
+            <para>Manuale utente per l'applicazione di acquisizione dello schermo.</para>
+        </abstract>
+    </articleinfo>
+    <indexterm><primary>xvidcap</primary></indexterm>
+    <indexterm><primary>screencam</primary></indexterm>
+    <indexterm><primary>screencast</primary></indexterm>
+
+    <!-- ============= Document Body ============================= -->
+    <!-- ============= Introduction ============================== -->
+    <sect1 id="xvidcap-intro">
+        <title>Introduzione</title>
+        <para>
+            <application>xvidcap</application> is a tool that captures movement on a selected area of an X11 screen to files. 
+            It does this by taking a configurable number of screenshots per second and saving them either as individual
+            screenshots or as a video. This kind of application, today, is commonly labelled screencam or screencast utility. 
+            In fact, one of the oldest of those utilities was <application>Lotus Screencam</application> which served as the 
+            inspiration for <application>xvidcap</application>.
+        </para>
+
+        <para><application>xvidcap</application> può essere usato in due diverse modalità operative: <orderedlist>
+                <listitem>
+                    <para><guilabel>acquisizione a fotogramma singolo</guilabel> -- acquisisce schermate singole in file distinti.</para>
+                </listitem>
+                <listitem>
+                    <para><guilabel>acquisizione a fotogrammi multipli</guilabel> -- acquisisce e codifica in video al volo.</para>
+                </listitem>
+            </orderedlist></para>    
+
+        <tip>
+            <title>Promemoria</title>
+            <para>Il nome attribuito alle modalità operative deriva dal numero di fotogrammi che vengono memorizzati nel file di uscita: uno o più.</para>
+        </tip>
+
+        <caution>
+            <title>Acquisizione audio</title>
+            <para>
+                <application>xvidcap</application> can capture audio, but only in multi-frame capture operation.
+            </para>
+        </caution>
+
+        <para>
+            Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before 
+            encoding, or if you need other video codecs <application>xvidcap</application> does not support. Individual images can later be encoded 
+            with tools like <ulink type="help" url="man:ffmpeg">ffmpeg</ulink>, 
+            <ulink type="help" url="man:mencoder">mencoder</ulink>, or 
+            <ulink type="help" url="man:transcode">transcode</ulink>.
+        </para>
+
+        <para>Per segnalare bug o proporre suggerimenti riguardanti l'applicazione <application>xvidcap</application> o questa guida, seguire le istruzioni reperibili sul sito di <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap, presso SF.net</ulink>.</para>
+    </sect1>
+    
+    <sect1 id="xvidcap-get-started">
+        <title>Primi passi</title>
+    
+        <sect2 id="xvidcap-get-started-to-start">
+            <title>Avviare xvidcap</title>
+            <para>Puoi avviare <application>xvidcap</application> nei seguenti modi:</para>
+            <variablelist>
+                <varlistentry>
+                    <term>Menu <guimenu>Applicazioni</guimenu></term>
+                    <listitem>
+                        <para>Scegliere <menuchoice><guisubmenu>Sonoro e Video</guisubmenu><guimenuitem>Acquisizione schermo con XVidCap</guimenuitem></menuchoice>.</para>
+                    </listitem>
+                </varlistentry>
+                <varlistentry>
+                    <term>Linea di comando</term>
+                    <listitem>
+                        <para>Eseguire il seguente comando: <command>xvidcap</command>. Per ulteriori informazioni circa l'utilizzo della linea di comando, vedere <ulink type="help" url="man:xvidcap">la pagina di manuale di xvidcap</ulink>.</para>
+                    </listitem>
+                </varlistentry>
+            </variablelist>
+        </sect2>
+
+        <sect2 id="xvidcap-get-started-u-start">
+
+            <title>When You Start <application>xvidcap</application></title>
+            <para>When you start <application>xvidcap</application>, the following window is displayed:</para>
+
+            <figure id="xvidcap-window">
+                <title>Controlli di xvidcap</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/xvidcap-main-ctrl.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Shows <application>xvidcap</application> control.</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+            <para>La finestra dotata di titolo e pulsanti è il controllo principale di xvidcap, mentre il rettangolo rosso è il fotogramma di selezione che racchiude l'area da catturare.</para>
+
+            <table frame="all" id="xvidcap-get-started-u-start-TBL">
+                <title>Controlli principali di xvidcap</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-get-started-u-start-TBL-filename">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/filename-button.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Visualizzatore nome file e menu</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>visualizzatore nome file e menu</guilabel> visualizza il nome file attuale e, se in modalità di acquisizione a fotogrammi multipli, il numero indice del fotogramma acquisito di recente tra parentesi quadre. In modalità di acquisizione a fotogramma singolo, il numero indice del fotogramma attuale sarà normalmente parte del nome file.</para>
+                                <para>In modalità di acquisizione a fotogramma singolo, un clic del tasto destro del mouse reimposta il contatore dei fotogrammi all'inizio. Un clic del tasto destro quando non si è in fase di acquisizione mostrerà il <ulink type="help" url="ghelp:xvidcap?xvidcap-menu">menu principale</ulink>.</para>
+                                <tip>
+                                    <title>Modalità di acquisizione predefinita</title>
+                                    <para>By default, <application>xvidcap</application> starts in multi-frame capture mode.</para>
+                                </tip>
+
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-frame-drop-meter">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/frame-drop-meter.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Contatore dei fotogrammi scartati</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>
+                                    The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well your capture session can capture at 
+                                    your desired frame rate. If your system is under heavy load, it may not be able to capture
+                                    as many frames per second as you wish. This will result in a video that plays back too quickly.
+                                    <application>xvidcap</application> displays a green status if you can or can almost capture at the desired frame rate. If
+                                    you have some frame drop the status turns to yellow, or red if there is excessive frame drop.
+                                    To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate,
+                                    quit as many other applications putting stress on your system as possible, or run on a more 
+                                    powerful machine. It may also help to <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">downscale</ulink>
+                                    the captured data.
+                                </para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-stop">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/stop-toggle.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Ferma</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>			
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>pulsante Ferma</guilabel> interrompe una sessione di registrazione in esecuzione.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-pause">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/pause-toggle.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Pausa</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>pulsante Pausa</guilabel> sospende una sessione di registrazione o continua una sessione sospesa. È possibile selezionare anche prima dell'inizio della registrazione per avviare in pausa.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-record">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/record-toggle.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Registra</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>			
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>pulsante Registra</guilabel> avvia una sessione di registrazione.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-step">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/step-button.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Istantanea singola</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>pulsante Istantanea singola</guilabel> è attivo solo in caso di sessioni in pausa per la modalità di acquisizione a fotogramma singolo. Permette di catturare schermate singole alla pressione del pulsante.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-back">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/back-button.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Riavvolgi</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>			
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>pulsante Riavvolgi</guilabel> ha diversi usi a seconda della modalità di acquisizione attuale.</para>
+                                <para>In modalità di acquisizione a fotogramma singolo il <quote>riavvolgimento</quote> si riferisce al numero indice del fotogramma attuale da acquisire. Immaginare di fermare una sessione di acquisizione che ha catturato dieci immagini PNG. Il visualizzatore nome file dovrebbe mostrare <quote>test-0010.png</quote>. Se si crede che le ultime due schermate non siano quelle desiderate, è possibile fare clic sul pulsante Riavvolgi due volte. Ciò cambierà il nome file visualizzato in <quote>test-0008.png</quote>. Se l'acquisizione continua, i fotogrammi otto e nove delle immagini <quote>test-0008.png</quote> e <quote>test-0009.png</quote> saranno sovrascritti.</para>
+                                <para>In modalità di acquisizione a fotogrammi multipli, il pulsante Riavvolgi funziona quasi alla stesso modo. In ogni caso, non influenza il numero indice del fotogramma attuale, ma quello del filmato attuale poiché si riferisce alla funzionalità di <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">continuazione automatica</ulink>.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-fwd">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/fwd-button.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Avanti</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>			
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>pulsante Avanti</guilabel> fa l'opposto del pulsante Riavvolgi incrementando il numero indice del fotogramma attuale o il numero indice del filmato a seconda della modalità di acquisizione.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-lock">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/lock-toggle.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Blocca area di acquisizione</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>			
+                            </entry>
+                            <entry>
+                                <para>Il <guilabel>pulsante Blocca area di acquisizione</guilabel> fa spostare l'area di acquisizione con il controllo principale, se selezionata. Se deselezionata, l'area di acquisizione rimarrà ferma mentre il controllo principale si sposta.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-selector">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/selector-button.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Selettore fotogramma</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>Fare clic sul <guilabel>pulsante Selettore fotogramma</guilabel> per cambiare l'area che si desidera catturare. Al clic, il puntatore si trasforma in un puntatore a croce. Fatto questo, è possibile:</para>
+                                <itemizedlist>
+                                    <listitem>
+                                        <para>fare clic su una singola finestra per catturarla.</para>
+                                        <caution>
+                                            <title>Spostare le finestre catturate</title>
+                                            <para>Notare che la selezione dell'area non è incollata alla finestra nel senso di seguire la finestra selezionata in origine, se ci si sposta. Si occupa di regolare la posizone e la dimensione dell'area di acquisizione selezionata in corrispondenza del contenuto della finestra selezionata. Se, successivamente, si sposta la finestra, l'area di acquisizione rimarrà nella stessa posizione, a meno che non si sia abilitato il blocco dell'area di acquisizione e si sposti manualmente il controllo principale nella giusta posizione.</para>
+                                        </caution>
+                                    </listitem>
+                                    <listitem>
+                                        <para>fare clic e trascinare per selezionare un'arbitraria posizione dello schermo.</para>
+                                    </listitem>
+                                    <listitem>
+                                        <para>fare clic sullo sfondo per selezionare l'acquisizione a schermo intero.</para>
+                                        <caution>
+                                            <title>Acquisizione a schermo intero</title>
+                                            <para>Con le dimensioni attuali degli schermi, l'acquisizione a schermo intero ha un'alta probabilità di sottoporre il sistema a un elevato carico. Guardare il contatore dei fotogrammi scartati e, se possibile, regolare la risoluzione del proprio schermo se è necessaria un'acquisizione a schermo intero. Si tenga presente che la tipica risoluzione dei DVD è di 720 x 486. L'acquisizione a schermo intero a risoluzione di 1400 x 1050 significa codificare in tempo reale una quantità di dati 4 volte maggiore di quella di un DVD -- niente a che vedere con qualcosa che si può realizzare con carta e penna.</para>
+                                        </caution>
+                                    </listitem>
+                                </itemizedlist>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-get-started-u-start-TBL-edit">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/edit-button.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Pulsante Modifica</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>
+                                    The <guilabel>Edit Button</guilabel> calls an external program to edit the most recently
+                                    captured frame in single-frame capture mode or the current video in multi-frame capture mode. <application>xvidcap</application> does not
+                                    provide those applications. By default, <application>xvidcap</application> calls <application>gimp</application> in
+                                    single-frame capture mode and nothing at all in multi-frame capture mode. Both settings can be changed through
+                                    the <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">preferences dialog</ulink>.
+                                </para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+    
+        </sect2>
+
+        <sect2 id="xvidcap-menu">
+
+            <title>Menu principale</title>
+            <para>Un clic del tasto destro sul visualizzatore del nome file mostra il seguente menu:</para>
+
+            <figure id="xvidcap-menu-screenshot">
+                <title>Menu principale</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/menu.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Menu principale</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+            <table frame="all" id="xvidcap-menu-TBL">
+                <title>le voci del menu principale:</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-menu-TBL-prefs">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-prefs.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Preferenze</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para> apre la finestra delle preferenze</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-save-prefs">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-save-prefs.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Salva preferenze</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>salva le impostazioni attuali</para>
+                                <tip>
+                                    <title>Impostazioni temporanee</title>
+                                    <para>Notare che <application>xvidcap</application> non salva automaticamente le preferenze cambiate. È possibile modificare le impostazioni, uscire da <application>xvidcap</application>, e tornare alle impostazioni precedenti con il solo riavvio di <application>xvidcap</application>. Se si vuole rendere le modifiche permanenti, selezionare questa opzione. Scriverà le impostazioni in un file <filename>.xvidcaprc</filename> nella propria home.</para>
+                                </tip>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-mf">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-mf.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Fotogrammi multipli</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>seleziona la modalità di acquisizione a fotogrammi multipli</para>
+                                <tip>
+                                    <title>Impostazioni parallele per le modalità di acquisizione</title>
+                                    <para>Occorre ricordare che è possibile avere impostazioni distinte per le modalità di acquisizione a fotogrammi multipli e a fotogramma singolo configurate e memorizzate contemporaneamente. La scelta di questa voce di menu o della successiva commuta tra le due modalità e le rispettive impostazioni.</para>
+                                </tip>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-sf">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-sf.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Fotogramma singolo</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>seleziona la modalità di acquisizione a fotogramma singolo</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-autocontinue">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-cont.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Continuazione automatica</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>Attiva o disattiva la funzionalita di continuazione automatica</para>
+                                <para>Selezionabile solo in modalità di acquisizione a fotogrammi multipli e solo se il nome file è variabile. Fare riferimento a <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">impostazioni di continuazione automatica</ulink> per ulteriori informazioni.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-make-video">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-make-video.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Crea video</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>esegue il comando di codifica impostato nelle preferenze</para>
+                                <para>In modalità di acquisizione a fotogrammi multipli non è necessaria e non impostata come predefinita. Può, comunque, essere impostata per consentire l'esecuzione di un comando di transcodifica personalizzato se si desidera un formato d'uscita diverso da quelli che <application>xvidcap</application> può generare. Lo script usato come predefinito in modalità di acquisizione a fotogramma singolo è fornito da <application>xvidcap</application> ma potrebbe essere necessario copiarlo nel proprio path per renderlo disponibile. Fare riferimento a <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">la scheda di preferenze dei comandi</ulink> per ulteriori informazioni su come impostare i comandi di codifica.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-animate">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-animate.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Anima/Riproduci</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>esegue il comando di riproduzione impostato nelle preferenze</para>
+                                <para>In modalità di acquisizione a fotogrammi multipli è <application>mplayer</application> e <application>animate</application> (parte di ImageMagick) in maniera predefinita. Fare riferimento a <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">la scheda di preferenze dei comandi</ulink> per ulteriori informazioni su come impostare i comandi di codifica.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-help">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-help.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Aiuto</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>mostra l'aiuto in linea</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-about">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-about.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Informazioni su</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>mostra la finestra di informazioni di <application>xvidcap</application></para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-menu-TBL-quit">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-quit.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Voce di menu Esci</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>esce da <application>xvidcap</application></para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+        </sect2>
+    </sect1>
+    
+    <sect1 id="xvidcap-prefs">
+        <title>Preferenze</title>
+    
+        <para>Puoi aprire la finestra Preferenze sia facendo clic con il tasto destro sul visualizzatore del nome file controllo principale e selezionando <quote>Preferenze</quote>, sia premendo CTRL-P. La finestra è divisa in quattro schede.</para>
+
+        <sect2 id="xvidcap-prefs-general">
+            <title>Preferenze generali</title>
+
+            <para>La prima scheda della finestra delle preferenze contiene varie impostazioni riguardanti il comportamento generale di <application>xvidcap</application>.</para>
+
+            <figure id="xvidcap-prefs-general-screenshot">
+                <title>Preferenze generali</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/prefs-general.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Preferenze generali</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+            <table frame="all" id="xvidcap-prefs-general-TBL">
+                <title>le impostazioni generali sono:</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-prefs-general-TBL-dflt-mode">
+                            <entry>
+                                <para>Modalità di acquisizione predefinita</para>
+                            </entry>
+                            <entry>
+                                <para>Questa opzione stabilisce la modalità di acquisizione predefinita di <application>xvidcap</application>, ad es. se nessun altra impostazione fornisce a <application>xvidcap</application> un indizio.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-cap-mouse">
+                            <entry>
+                                <para>Catturare il puntatore del mouse</para>
+                            </entry>
+                            <entry>
+                                <para>Spuntare questa opzione per catturare la posizione del puntatore del mouse. Una volta spuntata, è possibile selezionare se catturare un puntatore bianco o nero. Ciò è richiesto perché <application>xvidcap</application> non ha modo di catturare il puntatore del mouse reale, ma solo la sua posizione. Perciò, <application>xvidcap</application> genera un falso puntatore nel filmato acquisito.</para>
+                                <caution>
+                                    <title>Forme personalizzate del puntatore del mouse</title>
+                                    <para>Per le ragioni menzionate in precedenza, <application>xvidcap</application> non può catturare la forma del puntatore del mouse. Per questo motivo, se l'applicazione oggetto di acquisizione usa una forma specifica del puntatore del mouse, la si perderà in fase di acquisizione del filmato. Se il contenuto acquisito è strettamente legato alla forma del puntatore, è bene assicurarsi di trovare altre strade per mostrare tale forma o elaborare l'argomento nel parlato.</para>
+                                </caution>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-save-cap-geometry">
+                            <entry>
+                                <para>Salva geometria di acquisizione</para>
+                            </entry>
+                            <entry>
+                                <para>Spuntare questa opzione per memorizzare la dimensione e la posizione dell'area di acquisizione attualmente selezionata insieme ad altre preferenze selezionando <quote>Salva preferenze</quote> dal menu principale.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-use-shm">
+                            <entry>
+                                <para>Usa memoria condivisa</para>
+                            </entry>
+                            <entry>
+                                <para>Spuntare questa opzione se si vuole che l'acquisizione dei fotogrammi utilizzi l'estensioni della memoria condivisa di X11.</para>
+                                <caution>
+                                    <title>Accesso con memoria condivisa a X11</title>
+                                    <para>L'uso della memoria condivisa è abilitato in maniera predefinita se la macchina sulla quale <application>xvidcap</application> è stato compilato supporta l'accesso con memoria condivisa a X11, che rappresenta oggigiorno la situazione tipica. È necessario disabilitare questa funzione, comunque, se server X11 e client non sono in esecuzione sulla stessa macchina, ad es. se si usa un terminale X su thin client.</para>
+                                </caution>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-autocontinue">
+                            <entry>
+                                <para>Continuazione automatica</para>
+                            </entry>
+                            <entry>
+                                <para>Se si registra in modalità di acquisizione a fotogrammi multipli e si usa un numero massimo di fotogrammi da acquisire o una durata massima di acquisizione, <application>xvidcap</application> può automaticamente continuare ad acquisire in un nuovo video una volta che il numero massimo di fotogrammi o la durata massima sia stata raggiunta. In questo modo si possono creare una serie di filmati in spezzoni della lunghezza massima desiderata. Per usare questa funzione è necessario un <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">nome file di destinazione mutevole</ulink>.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-always-show-results">
+                            <entry>
+                                <para>Mostra sempre la finestra dei risultati</para>
+                            </entry>
+                            <entry>
+                                <para>Spuntare questa opzione per mostrare sempre una finestra con un riepilogo dei risultati di acquisizione all'interruzione di una sessione di registrazione. La finestra sarà mostrata sempre se richiesto (ad es. per specificare il nome file di destinazione). In tal caso, la finestra potrebbe essere mostrato anche se non strettamente necessario. Per scelta predefinita, la finestra dei risultati è sempre visualizzata. Se si rimuove la spunta da <quote>Mostra questa finestra la prossima volta</quote> nella finestra precedente, è possibile riattivarla qui.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-rescale">
+                            <entry>
+                                <para>Percentuale di ridimensionamento dell'uscita</para>
+                            </entry>
+                            <entry>
+                                <para>Usare questa opzione per ridurre le dimensioni del video di uscita rispetto alle dimensioni originali della porzione di schermo acquisita. La percentuale specificata qui è la dimensione dell'uscita relativa all'ingresso. Per esempio, specificando <quote>25</quote>, l'altezza e la larghezza dell'uscita saranno la metà dell'originale. Le dimensioni dell'immagine di uscita saranno il 25 percento dell'area acquisita.</para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </sect2>
+
+        <sect2 id="xvidcap-prefs-sf">
+            <title>Preferenze di acquisizione a fotogramma singolo</title>
+
+            <para>Questa scheda contiene le impostazioni per la modalità di acquisizione a fotogramma singolo. Poiché tale modalità non supporta l'acquisizione audio, è possibile configurare solo le impostazioni video.</para>
+
+            <figure id="xvidcap-prefs-sf-screenshot">
+                <title>Preferenze di acquisizione a fotogramma singolo</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/prefs-sf.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Preferenze di acquisizione a fotogramma singolo</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+            <table frame="all" id="xvidcap-prefs-sf-TBL">
+                <title>le impostazione per la modalità di acquisizione a fotogramma singolo sono:</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-prefs-sf-TBL-file-name">
+                            <entry>
+                                <para>Nome file</para>
+                            </entry>
+                            <entry>
+                                <para>Inserire qui un modello di nome file da usare per il salvataggio dei singoli fotogrammi acquisiti. Il nome file deve contenere un modello che sarà sostituito dal numero del fotogramma per ogni singolo file. I modelli usati sono quelli riconosciuti da <ulink type="help" url="man:fprintf">fprintf</ulink>. Un nome file che contiene questo tipo di modelli sarà definito, d'ora in poi, nome file <quote>mutevole</quote></para>
+                                <tip>
+                                    <title>Selezione del nome file</title>
+                                    <para>Invece di digitare un nome file, è possibile fare clic sul pulsante di selezione file (<guibutton>...</guibutton>). Assicurarsi di immettere un modello numerico nel nome file. In caso di dubbi, usare <quote>%5d</quote> in una qualunque posizione del nome file.</para>
+                                </tip>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-sf-TBL-format">
+                            <entry>
+                                <para>Formato file</para>
+                            </entry>
+                            <entry>
+                                <para>Se si spunta la casella <guilabel>auto</guilabel>, <application>xvidcap</application> selezionerà automaticamente un formato di uscita appropriato basato sul nome file specificato. Per esempio, se si specifica <quote>test-%4d.png</quote> il formato di uscita sarà <quote>Portable Network Graphics File (png)</quote>. Se la casella <guilabel>auto</guilabel> è deselezionata, il menu a tendina permette di selezionare manualmente un formato, ignorando la decisione di <application>xvidcap</application>.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-sf-TBL-fps">
+                            <entry>
+                                <para>Fotogrammi al secondo</para>
+                            </entry>
+                            <entry>
+                                <para>Il numero di fotogrammi da acquisire per secondo.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-sf-TBL-max-time">
+                            <entry>
+                                <para>Tempo massimo</para>
+                            </entry>
+                            <entry>
+                                <para>Tempo massimo di registrazione in secondi</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-sf-TBL-max-frames">
+                            <entry>
+                                <para>Numero massimo di fotogrammi</para>
+                            </entry>
+                            <entry>
+                                <para>Numero massimo fotogrammi da acquisire</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-sf-TBL-frame-start">
+                            <entry>
+                                <para>Numero del fotogramma iniziale</para>
+                            </entry>
+                            <entry>
+                                <para>Inizia il conteggio dei fotogrammi con questo numero</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-sf-TBL-frame-increment">
+                            <entry>
+                                <para>Incremento per il numero del fotogramma</para>
+                            </entry>
+                            <entry>
+                                <para>Durante l'acquisizione incrementa il conteggio dei fotogrammi del numero specificato per ciascuno dei fotogrammi acquisiti.</para>
+                                <caution>
+                                    <title>Impostazioni deprecate</title>
+                                    <para>A causa dell'uso limitato di <quote>Numero del fotogramma iniziale</quote> e <quote>Incremento per il numero del fotogramma</quote>, queste impostazioni potrebbe sparire nelle prossime versioni.</para>
+                                </caution>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-sf-TBL-quality">
+                            <entry>
+                                <para>Qualità</para>
+                            </entry>
+                            <entry>
+                                <para>Qualità desiderata dell'uscita</para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </sect2>
+
+        <sect2 id="xvidcap-prefs-mf">
+            <title>Preferenze di acquisizione a fotogrammi multipli</title>
+
+            <para>Questa scheda contiene le impostazioni per la modalità di acquisizione a fotogrammi multipli.</para>
+
+            <figure id="xvidcap-prefs-mf-screenshot">
+                <title>Preferenze di acquisizione a fotogrammi multipli</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/prefs-mf.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Preferenze di acquisizione a fotogrammi multipli</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+            <table frame="all" id="xvidcap-prefs-mf-TBL">
+                <title>le impostazioni video per la modalità di acquisizione a fotogrammi multipli sono:</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-prefs-mf-TBL-file-name">
+                            <entry>
+                                <para>Nome file</para>
+                            </entry>
+                            <entry>
+                                <para>Inserire qui un nome file o modello di nome file da usare per il salvataggio dei singoli fotogrammi acquisiti. Per l'acquisizione a fotogrammi multipli, la stringa fornita deve essere un <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">nome file mutevole</ulink> se la <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">funzionalità di continuazione automatica</ulink> deve essere usata. Altrimenti è sufficiente un nome file semplice, che può essere anche selezionato attraverso il pulsante di selezione file (<guibutton>...</guibutton>).</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-format">
+                            <entry>
+                                <para>Formato file</para>
+                            </entry>
+                            <entry>
+                                <para>Se si spunta la casella <guilabel>auto</guilabel>, <application>xvidcap</application> selezionerà automaticamente un formato di uscita appropriato basato sul nome file specificato. Per esempio, se si specifica <quote>test.avi</quote> il formato di uscita sarà <quote>Microsoft Audio Video Interleaved File (avi)</quote>. Se la casella <guilabel>auto</guilabel> è deselezionata, il menu a tendina permette di selezionare un formato manualmente, ignorando la decisione di <application>xvidcap</application></para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-vid-codec">
+                            <entry>
+                                <para>Codificatore video</para>
+                            </entry>
+                            <entry>
+                                <para>Se si spunta la casella <guilabel>auto</guilabel>, <application>xvidcap</application> selezionerà automaticamente un codificatore video appropriato per il formato di uscita selezionato. Per esempio, se si seleziona <quote>Microsoft Audio Video Interleaved File (avi)</quote>, il codificatore video sarà <quote>Microsoft DIVX 2</quote>. Se la casella <guilabel>auto</guilabel> è deselezionata, il menu a tendina permette di selezionare manualmente un codificatore, ignorando la decisione di <application>xvidcap</application>.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-fps">
+                            <entry>
+                                <para>Fotogrammi al secondo</para>
+                            </entry>
+                            <entry>
+                                <para>Il numero di fotogrammi da acquisire per secondo. Questo controllo può essere una scala o un menu a tendina, se il codificatore selezionato supporta solo alcune velocità.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-max-time">
+                            <entry>
+                                <para>Tempo massimo</para>
+                            </entry>
+                            <entry>
+                                <para>Tempo massimo di registrazione in secondi</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-max-frames">
+                            <entry>
+                                <para>Numero massimo di fotogrammi</para>
+                            </entry>
+                            <entry>
+                                <para>Numero massimo fotogrammi da acquisire</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-quality">
+                            <entry>
+                                <para>Qualità</para>
+                            </entry>
+                            <entry>
+                                <para>Qualità desiderata dell'uscita</para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <table frame="all" id="xvidcap-prefs-mf-TBL-audio">
+                <title>le impostazioni audio per la modalità di acquisizione a fotogrammi multipli sono:</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-prefs-mf-TBL-audio-enable">
+                            <entry>
+                                <para>Abilita audio</para>
+                            </entry>
+                            <entry>
+                                <para>Spuntare questa opzione per acquisire l'audio insieme ai fotogrammi video.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-audio-device">
+                            <entry>
+                                <para>Dispositivo d'ingresso</para>
+                            </entry>
+                            <entry>
+                                <para>Inserire il nome del dispositivo di ingresso usato per acquisire l'audio o selezionarlo con il pulsante di selezione file (<guibutton>...</guibutton>).</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-audio-codec">
+                            <entry>
+                                <para>Codificatore audio</para>
+                            </entry>
+                            <entry>
+                                <para>Se si spunta la casella <guilabel>auto</guilabel>, <application>xvidcap</application> selezionerà automaticamente il codificatore audio appropriato per il formato video di uscita selezionato. Per esempio, se <quote>Microsoft Audio Video Interleaved File (avi)</quote> è selezionato il codificatore audio sarà <quote>MPEG2</quote>. Se la casella <guilabel>auto</guilabel> è deselezionata, il menu a tendina permette di selezionare manualmente un codificatore, ignorando la decisione di <application>xvidcap</application>.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-audio-smpl-rate">
+                            <entry>
+                                <para>Campionamento</para>
+                            </entry>
+                            <entry>
+                                <para>Campionamento audio. Se si usa un ingresso audio in pipe, il flusso audio viene ricampionato alla velocità specificata se richiesto.</para>
+                                <tip>
+                                    <title>Ingresso audio in pipe</title>
+                                    <para>Invece che acquisire l'audio da una fonte audio in tempo reale, si può anche redirigere con una pipe un file audio registrato in precedenza a <application>xvidcap</application>. In questo modo si può effettivamente doppiare la propria registrazione con una data traccia audio. Per fare ciò bisogna:</para>
+                                    <para><application>cat</application> mio.mp3 | <application>xvidcap</application><parameter>--mf</parameter><parameter>--audio yes</parameter><parameter>--audio_in -</parameter><parameter>--file test.avi</parameter></para>
+                                    <para>Quando si avvia una sessione di registrazione, <application>xvidcap</application> campionerà l'audio dal file rediretto con una pipe.</para>
+                                </tip>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-audio-bit-rate">
+                            <entry>
+                                <para>Bitrate</para>
+                            </entry>
+                            <entry>
+                                <para>Bitrate audio. Se non stai usando un ingresso audio rediretto con una pipe, il flusso audio è ricampionato alla velocità specificata se richiesto.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-mf-TBL-audio-channels">
+                            <entry>
+                                <para>Canali</para>
+                            </entry>
+                            <entry>
+                                <para>Numero di canali audio. Se si sta usando un ingresso audio rediretto con una pipe, il flusso audio è ricampionato al numero di canali se richiesto.</para>
+                                <caution>
+                                    <title>Qualità dell'acquisizione audio</title>
+                                    <para>Notare che le impostazioni predefinite sono ottimizzate per la dimensione piuttosto che per la qualità. Per una migliore qualità si potrebbe voler raddoppiare il campionamento, il bitrate e, potenzialmente, anche il numero di canali.</para>
+                                </caution>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+        </sect2>
+
+        <sect2 id="xvidcap-prefs-cmd">
+            <title>Preferenze comandi</title>
+
+            <para>Questa scheda contiene diverse impostazioni riguardanti i comandi da eseguire per determinate azioni.</para>
+
+            <figure id="xvidcap-prefs-cmd-screenshot">
+                <title>Preferenze comandi</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/prefs-commands.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Preferenze comandi</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+            <table frame="all" id="xvidcap-prefs-cmd-TBL">
+                <title>i comandi che si possono impostare sono:</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-prefs-cmd-TBL-sf-playback">
+                            <entry>
+                                <para>Comando di riproduzione per fotogramma singolo</para>
+                            </entry>
+                            <entry>
+                                <para>Questo comando è eseguito se si seleziona la voce del menu principale <guimenuitem>Anima / Riproduci</guimenuitem> o in caso di pressione del pulsante di riproduzione della finestra dei risultati di acquisizione in modalità di acquisizione a fotogramma singolo.</para>
+                                <tip>
+                                    <title>Specificare comandi</title>
+                                    <para>Ogni comando può essere configurato qui. In teoria, potrebbe anche non essere collegato all'acquisizione video. Sarà sempre necessario assicurarsi che l'applicazione invocata sia nel proprio path e che il comando termini con il simbolo <application>&amp;</application> per evitare che <application>xvidcap</application> attenda la chiusura dell'applicazione invocata prima di continuare.</para>
+                                    <para><application>xvidcap</application> rende disponibile la seguente variabile d'ambiente per l'applicazione chiamata:</para>
+                                    <table frame="non" id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL">
+                                        <tgroup cols="2" align="char" charoff="50" char=".">
+                                            <tbody>
+                                                <row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-fframe">
+                                                    <entry>
+                                                        <para>XVFFRAME</para>
+                                                    </entry>
+                                                    <entry>
+                                                        <para>numero del primo fotogramma acquisito</para>
+                                                    </entry>
+                                                </row>
+                                                <row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-lframe">
+                                                    <entry>
+                                                        <para>XVLFRAME</para>
+                                                    </entry>
+                                                    <entry>
+                                                        <para>numero dell'ultimo fotogramma acquisito</para>
+                                                    </entry>
+                                                </row>
+                                                <row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-width">
+                                                    <entry>
+                                                        <para>XVWIDTH</para>
+                                                    </entry>
+                                                    <entry>
+                                                        <para>larghezza dell'area acquisita</para>
+                                                    </entry>
+                                                </row>
+                                                <row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-height">
+                                                    <entry>
+                                                        <para>XVHEIGHT</para>
+                                                    </entry>
+                                                    <entry>
+                                                        <para>altezza dell'area acquisita</para>
+                                                    </entry>
+                                                </row>
+                                                <row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-fps">
+                                                    <entry>
+                                                        <para>XVFPS</para>
+                                                    </entry>
+                                                    <entry>
+                                                        <para>velocità fotogrammi desiderata (!)</para>
+                                                    </entry>
+                                                </row>
+                                                <row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-time">
+                                                    <entry>
+                                                        <para>XVTIME</para>
+                                                    </entry>
+                                                    <entry>
+                                                        <para>tempo per fotogramma desiderato (!)</para>
+                                                    </entry>
+                                                </row>
+                                                <row id="xvidcap-prefs-cmd-TBL-cmd-vars-TBL-filename">
+                                                    <entry>
+                                                        <para>XVFILE</para>
+                                                    </entry>
+                                                    <entry>
+                                                        <para>nome file</para>
+                                                    </entry>
+                                                </row>
+                                            </tbody>
+                                        </tgroup>
+                                    </table>
+                                    <para>Il nome file, comunque, necessita di un trattamento speciale per l'acquisizione a fotogramma singolo. Il modello usato per i <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">nomi file mutevoli</ulink> è inviato letteralmente come specificato per il comando di codifica per fotogramma singolo solamente alla fine. Per il comando di riproduzione per fotogramma singolo, il modello viene convertito in caratteri speciali, ad es. <quote>test-%4d.png</quote> diventa <quote>test-????.png</quote>. Per il comando di modifica per fotogramma singolo, il modello viene sostituito dal numero del fotogramma attuale, ad es. <quote>test-%4d.png</quote> diventa <quote>test-0001.png</quote>. Per tutti i comandi per fotogrammi multipli</para>
+                                </tip>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-cmd-TBL-sf-encode">
+                            <entry>
+                                <para>Comando di codifica per fotogramma singolo</para>
+                            </entry>
+                            <entry>
+                                <para>Questo comando è eseguito se si seleziona la voce di menu <guibutton>Crea video</guibutton> in modalità di acquisizione a fotogramma singolo.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-cmd-TBL-sf-edit">
+                            <entry>
+                                <para>Comando di modifica per fotogramma singolo</para>
+                            </entry>
+                            <entry>
+                                <para>Questo comando è eseguito al clic del <guibutton>pulsante Modifica</guibutton> dei controlli principali in modalità di acquisizione a fotogramma singolo.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-cmd-TBL-mf-playback">
+                            <entry>
+                                <para>Comando di riproduzione per fotogrammi multipli</para>
+                            </entry>
+                            <entry>
+                                <para>Questo comando è eseguito quando si seleziona la voce di menu <guibutton>Anima / Riproduci</guibutton> del menu principale o se si preme il tasto di riproduzione della finestra dei risultati di acquisizione in modalità di acquisizione a fotogrammi multipli.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-cmd-TBL-mf-encode">
+                            <entry>
+                                <para>
+                                    Multi Frame Transcoding command
+                                </para>
+                            </entry>
+                            <entry>
+                                <para>Questo comando è eseguito se si seleziona la voce di menu <guibutton>Crea video</guibutton> in modalità di acquisizione a fotogrammi multipli.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-cmd-TBL-mf-edit">
+                            <entry>
+                                <para>Comando di modifica per fotogrammi multipli</para>
+                            </entry>
+                            <entry>
+                                <para>Questo comando è eseguito al clic del <guibutton>pulsante Modifica</guibutton> dei controlli principali in modalità di acquisizione a fotogrammi multipli.</para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+        </sect2>
+    </sect1>
+    
+    <sect1 id="xvidcap-results">
+        <title>Finestra dei risultati di acquisizione</title>
+    
+        <para>Alla prima interruzione di una sessione di registrazione, comparirà una finestra che visualizza i risultati della sessione di acquisizione. Per evitare che tale finestra compaia ancora, è sufficiente deselezionare la casella <guibutton>Mostra la prossima volta</guibutton> o premere <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-always-show-results">questo pulsante</ulink> nella finestra delle preferenze.</para>
+        <para>Questa stessa finestra può usare uno o due moduli a seconda che <application>xvidcap</application> sia configurato o meno per richiedere un nome file di destinazione dopo l'acquisizione.</para>
+        <tip>
+            <title>Richiesta del nome file all'utente</title>
+            <para>D'ora in poi, il solo modo per configurare <application>xvidcap</application> per richiedere all'utente di specificare un nome file dopo l'acquisizione piuttosto che fornirne uno ****** specificando un nome file vuoto sia attraverso la linea di comando usando <parameter>--file ""</parameter> o nella finestra delle preferenze. Per fare ciò, bisogna specificare manualmente il formato file di uscita. In questa configurazione, <application>xvidcap</application> memorizzerà il video in un file temporaneo nella propria cartella home che può essere successivamente rinominato/spostato nella destinazione desiderata. Non è compatibile con la continuazione automatica.</para>
+        </tip>
+
+        <para>Se <application>xvidcap</application> è configurato per richiedete il nome file all'utente, la finestra dei risultati apparirà in questo modo:</para>
+        <figure id="xvidcap-results-ask-screenshot">
+            <title>Finestra dei risultati di acquisizione con richiesta del nome file all'utente</title>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/results-dialog-ask.png" format="PNG"/>
+                    </imageobject>
+                    <textobject> <phrase>Finestra dei risultati di acquisizione con richiesta del nome file all'utente</phrase>
+                    </textobject>
+                </mediaobject>
+            </screenshot>
+        </figure>
+
+        <para>Oltre al riepilogo delle impostazioni utilizzate e alle informazioni circa la velocità dei fotogrammi desiderata e raggiunta, si può selezionare il nome e la posizione del file nel quale di vuole salvare il video facendo clic su <guibutton>Salva come</guibutton>. Una volta che un file è stato selezionato, l'etichetta accanto al pulsante visualizzerà il nome file assoluto. Si può scegliere se vedere un'anteprima del video con <guibutton>Riproduci</guibutton> o abbandonare con <guibutton>Elimina</guibutton>. Notare che quest'ultima non elimina immediatamente il file temporaneo.</para>
+
+        <para>Normalmente, la finestra dei risultati apparirà in questo modo:</para>
+        <figure id="xvidcap-results-screenshot">
+            <title>Finestra di acquisizione dei risultati normale</title>
+            <screenshot>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata fileref="figures/results-dialog.png" format="PNG"/>
+                    </imageobject>
+                    <textobject> <phrase>Finestra di acquisizione dei risultati normale</phrase>
+                    </textobject>
+                </mediaobject>
+            </screenshot>
+        </figure>
+
+    </sect1>
+    
+    <sect1 id="xvidcap-warning">
+        <title>La finestra di avviso delle preferenze</title>
+        <para>Ogni volta che <application>xvidcap</application> determina che le impostazioni scelte non funzioneranno, visualizzerà questi problemi in un formato standardizzato. A meno che non si esegua <application>xvidcap</application> con il parametro <parameter>--gui no</parameter>, verrà mostrata la seguente finestra:</para>
+
+            <figure id="xvidcap-warn-window">
+                <title>Finestra di avviso delle preferenze</title>
+                <screenshot>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata fileref="figures/xvidcap-warning.png" format="PNG"/>
+                        </imageobject>
+                        <textobject> <phrase>Finestra di avviso delle preferenze</phrase>
+                        </textobject>
+                    </mediaobject>
+                </screenshot>
+            </figure>
+
+        <tip>
+            <title>Operare senza interfaccia grafica</title>
+            <para>In caso di esecuzione dalla linea di comando con il parametro <parameter>--gui no</parameter>, queste impostazioni saranno visualizzate in testo semplice sul terminale. Non si vedrà la sezione <quote>Dettagli</quote> a meno che non si specifichi <parameter>-v</parameter>.</para>
+        </tip>
+
+            <table frame="all" id="xvidcap-warn-situations-TBL">
+                <title>Ci sono pochi casi in cui certi messaggi possono essere visualizzati:</title>
+                <tgroup cols="2" align="char" charoff="50" char=".">
+                    <tbody>
+                        <row id="xvidcap-warn-situations-TBL-start">
+                            <entry>
+                                <para>All'avvio</para>
+                            </entry>
+                            <entry>
+                                <para>Quando <application>xvidcap</application> è avviato, verifica la consistenza delle impostazioni per la modalità di acquisizione attuale e segnala eventuali problemi. Non sarà possibile chiudere questa finestra, ma si dovrà riaprire la finestra delle preferenze.</para>
+                                <para><application>xvidcap</application> controlla <emphasis>solo</emphasis> la modalità di acquisizione attuale e non tiene conto delle inconsistenze con le altre modalità. Questa è il secondo caso.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-warn-situations-TBL-change-mode">
+                            <entry>
+                                <para>Al cambiamento della modalità di acquisizione</para>
+                            </entry>
+                            <entry>
+                                <para>Se si cambia la modalità di acqusizione attuale dal <ulink type="help" url="ghelp:xvidcap?menu xvidcap-menu-TBL-mf">menu</ulink>, <application>xvidcap</application> verificherà la consistenza delle impostazione per la nuova modalità di acquisizione e segnalerà eventuali problemi riscontrati. Annullando la finestra di avviso, si tornerà alla precedente selezione della modalità di acquisizione.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-warn-situations-TBL-preferences">
+                            <entry>
+                                <para>Quando si applicano modifiche delle preferenze</para>
+                            </entry>
+                            <entry>
+                                <para>Quando chiudi la finestra delle preferenze, <application>xvidcap</application> controllerà le impostazioni per entrambe le modalità di acquisizione. L'annullamento della finestra di avviso riporterà alla finestra delle preferenze.</para>
+                            </entry>
+                        </row>
+                    </tbody>
+                </tgroup>
+            </table>
+
+            <para>
+                In the Preferences Warning Dialog you will find one or more messages consisting of three
+                rows each. The first one contains a message type or severity, a unique numeric ID and a 
+                short name for the error. The second row gives a more detailed description, and the third
+                one tells about the action <application>xvidcap</application> is going to take if you
+                chose to click <guibutton>OK</guibutton>.
+            </para>
+
+            <para>Un'azione potrebbe essere la correzione automatica del problema scegliendo un valore predefinito plausibile, per ignorare il problema se non è grave o per uscire da <application>xvidcap</application> se la soluzione non è determinabile automaticamente.</para>
+
+            <para>La gravità di un problema può essere <quote>INFO</quote> per messaggi puramente informativi senza modifiche alle impostazioni, <quote>AVVISO</quote> dove vengono suggeriti piccoli cambiamenti alle impostazioni attuali, <quote>ERRORE</quote> dove viene richiesto una sostanziale modifica delle impostazioni attuali, o <quote>ERRORE GRAVE</quote>. In caso di errore grave, l'unica azione suggerita è di uscire da <application>xvidcap</application>. Non si vedranno problemi di gravità <quote>INFO</quote> a meno che non si esegua <application>xvidcap</application> in modalità prolissa.</para>
+    </sect1>
+
+
+
+
+    <!--    
+    <sect1 id="c1-s1">
+    <title>section 1</title>
+    <para>may or may not exist</para>
+
+    <example>
+    <title>sample command line session</title>
+    <screen id="sc1">
+    <prompt>$</prompt> <userinput>ncftp ftp://ftp.cygnus.com/pub/home/rosalia/</userinput>
+    <prompt>ncftp></prompt> <userinput>cd docware/RPMS/i386/</userinput>
+    <prompt>ncftp></prompt> <userinput>mget *.rpm</userinput>
+    <prompt>ncftp></prompt> <userinput>quit</userinput>
+    </screen>	    
+    </example>
+	    
+    <tip>
+    <title>sample tip with parameters</title>		
+    <para>
+    sample parameter details 
+    To validate DocBook without displaying the document, add the
+    argument <parameter class="option">-noout</parameter> to the
+    <application>xmllint</application> command.
+    </para>	    
+    </tip>
+	    
+    <example id="ex1">
+    <title>A simple C program</title>
+    <programlisting role="C">
+    #include &lt;stdio.h&gt;
+    main()
+    {
+    printf("Hello, world!\n");
+    }
+    </programlisting>
+    </example>	    
+	       
+    <figure id="app-FIG-shot1">
+    <title>Screenshot</title>
+    <screenshot>
+    <mediaobject>
+    <imageobject>
+    <imagedata fileref="figures/example_screenshot.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+    <phrase>Shows the application screenshot with several buttons.</phrase>
+    </textobject>
+    <caption>
+    <para>Screenshot of a program</para>
+    </caption>
+    </mediaobject>
+    </screenshot>
+    </figure>	    
+	    
+	    
+    </sect1>
+    <sect1 id="a1-s1">
+    <title>doinker</title>
+    <para>this is an <emphasis>example</emphasis></para>
+	    
+    <table frame="all">
+    <title>Convergence of dynamical equations and constraints for
+    various choices of constrained edges</title>
+    <tgroup cols="5" align="char" charoff="50" char=".">
+    <thead>
+    <row>
+    <entry>Constrained edges</entry>
+    <entry>Model</entry>
+    <entry># of iter.</entry>
+    <entry>E <subscript>i</subscript><superscript>2</superscript></entry>
+    <entry>C <subscript>i</subscript><superscript>2</superscript></entry>
+    </row>
+    </thead>
+    <tbody>
+    <row>
+    <entry>AD, AF, AG, AA'</entry>
+    <entry>Flat space</entry>
+    <entry>5</entry>
+    <entry>1.15<superscript>-24</superscript></entry>
+    <entry>1.77<superscript>-19</superscript></entry>
+    </row>
+    <row>
+    <entry>AD, AF, AG, AA'</entry>
+    <entry>Kasner universe</entry>
+    <entry>6</entry>
+    <entry>1.43<superscript>-19</superscript></entry>
+    <entry>1.77<superscript>-8</superscript></entry>
+    </row>
+    <row>
+    <entry>AB, AC, AE, AA'</entry>
+    <entry>Flat space</entry>
+    <entry>4</entry>
+    <entry>1.15<superscript>-24</superscript></entry>
+    <entry>4.09<superscript>-24</superscript></entry>
+    </row>
+    <row>
+    <entry>AB, AC, AE, AA'</entry>
+    <entry>Kasner universe</entry>
+    <entry>7</entry>
+    <entry>1.33<superscript>-19</superscript></entry>
+    <entry>8.07<superscript>-7</superscript></entry>
+    </row>
+    </tbody>
+    </tgroup>
+    </table>
+	    
+    </sect1>
+    -->    
+</article>

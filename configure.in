@@ -429,6 +429,7 @@ doc/Makefile
 doc/xvidcap/Makefile
 doc/xvidcap/C/Makefile
 doc/xvidcap/de/Makefile
+doc/xvidcap/it/Makefile
 doc/man/Makefile
 doc/man/C/Makefile
 doc/man/de/Makefile

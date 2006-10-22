@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-16 16:55+0200\n"
+"POT-Creation-Date: 2006-10-20 22:40+0200\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: German\n"
@@ -1791,7 +1791,8 @@ msgid ""
 "reading unsupported auto_continue value from options file\n"
 "resetting to autocontinue enabled.\n"
 msgstr ""
-"Unbekannte Option für automatische Aufnahmefortsetzung aus Einstellungs-Datei gelesen\n"
+"Unbekannte Option für automatische Aufnahmefortsetzung aus Einstellungs-"
+"Datei gelesen\n"
 "Schalte automatische Aufnahmefortsetzung ein.\n"
 
 #: ../src/options.c:450
@@ -1965,8 +1966,7 @@ msgstr "%s %s: Ungültige Farbtiefe %i ... breche ab\n"
 #: ../src/xtoffmpeg.c:1139
 #, c-format
 msgid "%s %s: Couldn't determin output format ... aborting\n"
-msgstr ""
-"%s %s: Konnte kein Ausgabeformat bestimmen ... breche ab\n"
+msgstr "%s %s: Konnte kein Ausgabeformat bestimmen ... breche ab\n"
 
 #: ../src/xtoffmpeg.c:1155
 #, c-format
@@ -2139,8 +2139,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:13
 msgid "<b>Height:</b>"
-msgstr ""
-"<b>Höhe:</b>"
+msgstr "<b>Höhe:</b>"
 
 #: ../src/gnome-xvidcap.glade.h:14
 msgid "<b>Miscellaneous Settings</b>"
@@ -2177,8 +2176,7 @@ msgstr "<b>Video Einstellungen</b>"
 
 #: ../src/gnome-xvidcap.glade.h:22
 msgid "<b>Width:</b>"
-msgstr ""
-"<b>Breite:</b>"
+msgstr "<b>Breite:</b>"
 
 #: ../src/gnome-xvidcap.glade.h:23
 msgid ""

@@ -1,5 +1,6 @@
 SUBDIRS = C \
-	de
+	de \
+	it
 
 install-doc-recursive:
 
