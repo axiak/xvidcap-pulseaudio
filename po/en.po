@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-20 22:40+0200\n"
+"POT-Creation-Date: 2006-10-22 18:41+0200\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: English\n"
@@ -1000,7 +1000,7 @@ msgstr ""
 #: ../src/main.c:94
 #, c-format
 msgid "[--quality #] recording quality (1-100)\n"
-msgstr ""
+msgstr "[--quality #] recording quality (1-100)\n"
 
 #: ../src/main.c:95
 #, c-format
@@ -1720,13 +1720,13 @@ msgstr ""
 "resetting to display frame counter\n"
 
 #: ../src/options.c:440
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "reading unsupported auto_continue value from options file\n"
 "resetting to autocontinue enabled.\n"
 msgstr ""
-"reading unsupported show_time value from options file\n"
-"resetting to display frame counter\n"
+"reading unsupported auto_continue value from options file\n"
+"resetting to autocontinue enabled.\n"
 
 #: ../src/options.c:450
 #, c-format
@@ -1890,9 +1890,9 @@ msgid "%s %s: image depth %i not supported ... aborting\n"
 msgstr "%s %s: image depth %i not supported ... aborting\n"
 
 #: ../src/xtoffmpeg.c:1139
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s: Couldn't determin output format ... aborting\n"
-msgstr "%s %s: Could not allocate buffer for output frame! ... aborting\n"
+msgstr "%s %s: Couldn't determin output format ... aborting\n"
 
 #: ../src/xtoffmpeg.c:1155
 #, c-format
@@ -2048,11 +2048,8 @@ msgstr ""
 "Frame Rate:</b>"
 
 #: ../src/gnome-xvidcap.glade.h:13
-#, fuzzy
 msgid "<b>Height:</b>"
-msgstr ""
-"<b>Video \n"
-"Length:</b>"
+msgstr "<b>Height:</b>"
 
 #: ../src/gnome-xvidcap.glade.h:14
 msgid "<b>Miscellaneous Settings</b>"
@@ -2088,11 +2085,8 @@ msgid "<b>Video Settings</b>"
 msgstr "<b>Video Settings</b>"
 
 #: ../src/gnome-xvidcap.glade.h:22
-#, fuzzy
 msgid "<b>Width:</b>"
-msgstr ""
-"<b>Video \n"
-"Length:</b>"
+msgstr "<b>Width:</b>"
 
 #: ../src/gnome-xvidcap.glade.h:23
 msgid ""
