@@ -1,4 +1,13 @@
 
+2006-10-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xv_error_item.c: made two missing strings translateable
+	* po/en.po, po/de.po: updated accordingly
+
+2006-10-23  Vincenzo Reale <smart2128@baslug.org>
+	* doc/xvidcap/it/figures/*: added translated screenshots
+	* doc/xvidcap/it/xvidcap.xml-it.po: updated
+	* po/it.po: updated
+
 2006-10-22  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* po/en.po: updated English "translation"
 

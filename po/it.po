@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-22 18:41+0200\n"
-"PO-Revision-Date: 2006-09-11 21:06+0200\n"
+"POT-Creation-Date: 2006-10-23 18:53+0200\n"
+"PO-Revision-Date: 2006-10-23 00:16+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -2005,6 +2005,14 @@ msgstr "INFO (%i):"
 msgid "???? (%i):"
 msgstr "???? (%i):"
 
+#: ../src/xv_error_item.c:183
+msgid "Details:"
+msgstr ""
+
+#: ../src/xv_error_item.c:210
+msgid "Action:"
+msgstr ""
+
 #: ../src/gnome-xvidcap.glade.h:1
 msgid "(select)"
 msgstr "(seleziona)"
@@ -2115,7 +2123,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:28
 msgid "Auto_continue"
-msgstr "_Cotinuazione automatica"
+msgstr "_Continuazione automatica"
 
 #: ../src/gnome-xvidcap.glade.h:29
 msgid "Autocontinue (y/n)"
@@ -2554,26 +2562,3 @@ msgstr "prova"
 #: ../src/gnome-xvidcap.glade.h:131
 msgid "website"
 msgstr "sito web"
-
-#~ msgid " help command = %s\n"
-#~ msgstr " comando della guida = %s\n"
-
-#~ msgid ""
-#~ "# command to display help\n"
-#~ "help_cmd: %s\n"
-#~ msgstr ""
-#~ "# comando per visualizzare la guida\n"
-#~ "help_cmd: %s\n"
-
-#~ msgid "<b>Global Commands</b>"
-#~ msgstr "<b>Comandi globali</b>"
-
-#~ msgid "Click to test the help command."
-#~ msgstr "Fai clic per provare il comando della guida."
-
-#~ msgid "Enter the command used to display the help screen."
-#~ msgstr ""
-#~ "Inserisci il comando usato per visualizzare la schermata della guida."
-
-#~ msgid "Help Command:"
-#~ msgstr "Comando della guida:"

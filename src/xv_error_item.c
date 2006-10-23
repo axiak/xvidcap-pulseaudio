@@ -180,7 +180,7 @@ static void xv_error_item_init(XvErrorItem * ei)
     gtk_misc_set_alignment(GTK_MISC(ei->title_text), 0, 0);
     gtk_misc_set_padding(GTK_MISC(ei->title_text), 2, 1);
 
-    ei->desc_tag = gtk_label_new("Details:");
+    ei->desc_tag = gtk_label_new(_("Details:"));
     gtk_widget_show(ei->desc_tag);
     gtk_table_attach(GTK_TABLE(table), ei->desc_tag, 0, 1, 1, 2,
                      (GtkAttachOptions) (GTK_FILL),
@@ -207,7 +207,7 @@ static void xv_error_item_init(XvErrorItem * ei)
                              "description, this is a test description with multiple lines",
                              -1);
 
-    ei->action_tag = gtk_label_new("Action:");
+    ei->action_tag = gtk_label_new(_("Action:"));
     gtk_widget_show(ei->action_tag);
     gtk_table_attach(GTK_TABLE(table), ei->action_tag, 0, 1, 2, 3,
                      (GtkAttachOptions) (GTK_FILL),

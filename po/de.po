@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-22 18:41+0200\n"
+"POT-Creation-Date: 2006-10-23 18:53+0200\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: German\n"
@@ -2088,6 +2088,14 @@ msgstr "INFO (%i):"
 #, c-format
 msgid "???? (%i):"
 msgstr "???? (%i):"
+
+#: ../src/xv_error_item.c:183
+msgid "Details:"
+msgstr "Details:"
+
+#: ../src/xv_error_item.c:210
+msgid "Action:"
+msgstr "Aktion:"
 
 #: ../src/gnome-xvidcap.glade.h:1
 msgid "(select)"
