@@ -1,4 +1,7 @@
 
+2006-10-24  Vincenzo Reale <smart2128@baslug.org>
+	* po/it.po, doc/xvidcap/it/xvidcap.xml-it.po: updated xlation
+
 2006-10-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xv_error_item.c: made two missing strings translateable
 	* po/en.po, po/de.po: updated accordingly

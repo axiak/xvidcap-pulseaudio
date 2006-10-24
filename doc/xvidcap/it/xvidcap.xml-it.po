@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap.xml-it\n"
-"POT-Creation-Date: 2006-10-23 18:54+0200\n"
-"PO-Revision-Date: 2006-10-23 11:45+0200\n"
+"POT-Creation-Date: 2006-10-24 09:37+0200\n"
+"PO-Revision-Date: 2006-10-23 20:05+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -315,7 +315,6 @@ msgid "Introduction"
 msgstr "Introduzione"
 
 #: ../C/xvidcap.xml:120(para)
-#, fuzzy
 msgid ""
 "<application>xvidcap</application> is a tool that captures movement on a "
 "selected area of an X11 screen to files. It does this by taking a "
@@ -332,7 +331,7 @@ msgstr ""
 "tipo di applicazione, al giorno d'oggi, è comunemente definito programma "
 "screencam o screencast. Uno dei più primi programmi del genere era "
 "<application>Lotus Screencam</application>, che è stato d'ispirazione per "
-"xvidcap."
+"<application>xvidcap</application>."
 
 #: ../C/xvidcap.xml:132(para)
 msgid ""
@@ -375,16 +374,14 @@ msgid "Audio Capture"
 msgstr "Acquisizione audio"
 
 #: ../C/xvidcap.xml:154(para)
-#, fuzzy
 msgid ""
 "<application>xvidcap</application> can capture audio, but only in multi-"
 "frame capture operation."
 msgstr ""
-"xvidcap può acquisire l'audio, ma solo in modalità di acquisizione a "
-"fotogrammi multipli."
+"<application>xvidcap</application> può acquisire l'audio, ma solo in "
+"modalità di acquisizione a fotogrammi multipli."
 
 #: ../C/xvidcap.xml:159(para)
-#, fuzzy
 msgid ""
 "Recording in single-frame capture mode may be more convenient if you wish to "
 "preprocess the images before encoding, or if you need other video codecs "
@@ -394,12 +391,13 @@ msgid ""
 "ulink>, or <ulink type=\"help\" url=\"man:transcode\">transcode</ulink>."
 msgstr ""
 "La registrazione in modalità di acquisizione a fotogramma singolo potrebbe "
-"essere maggiormente conveniente se si desidera preprocessare le immagini "
-"prima della codifica, o se si vuole usarei codificatori video che xvidcap "
-"non supporta. Le singole immagini possono essere codificate successivamente "
-"con strumenti quali <ulink type=\"help\" url=\"man:ffmpeg\">ffmpeg</ulink>, "
-"<ulink type=\"help\" url=\"man:mencoder\">mencoder</ulink>, o <ulink type="
-"\"help\" url=\"man:transcode\">transcode</ulink>."
+"essere maggiormente conveniente se si desidera pre-processare le immagini "
+"prima della codifica, o se si vuole usare codificatori video che "
+"<application>xvidcap</application> non supporta. Le singole immagini possono "
+"essere codificate successivamente con strumenti quali <ulink type=\"help\" "
+"url=\"man:ffmpeg\">ffmpeg</ulink>, <ulink type=\"help\" url=\"man:mencoder"
+"\">mencoder</ulink>, o <ulink type=\"help\" url=\"man:transcode\">transcode</"
+"ulink>."
 
 #: ../C/xvidcap.xml:174(title)
 msgid "Getting Started"
@@ -441,27 +439,24 @@ msgstr ""
 "\"help\" url=\"man:xvidcap\">la pagina di manuale di xvidcap</ulink>."
 
 #: ../C/xvidcap.xml:203(title)
-#, fuzzy
 msgid "When You Start <application>xvidcap</application>"
-msgstr "esce da <application>xvidcap</application>"
+msgstr "All'avvio di <application>xvidcap</application>"
 
 #: ../C/xvidcap.xml:204(para)
-#, fuzzy
 msgid ""
 "When you start <application>xvidcap</application>, the following window is "
 "displayed:"
 msgstr ""
-"All'avvio di <application>xvidcap</application>, vengono visualizzate le "
-"seguenti finestre:"
+"All'avvio di <application>xvidcap</application>, viene visualizzata la "
+"seguente finestra:"
 
 #: ../C/xvidcap.xml:207(title)
 msgid "xvidcap Control"
 msgstr "Controlli di xvidcap"
 
 #: ../C/xvidcap.xml:213(phrase)
-#, fuzzy
 msgid "Shows <application>xvidcap</application> control."
-msgstr "esce da <application>xvidcap</application>"
+msgstr "Mostra i controllo di <application>xvidcap</application>."
 
 #: ../C/xvidcap.xml:219(para)
 msgid ""
@@ -510,20 +505,18 @@ msgid "Default Capture Mode"
 msgstr "Modalità di acquisizione predefinita"
 
 #: ../C/xvidcap.xml:254(para)
-#, fuzzy
 msgid ""
 "By default, <application>xvidcap</application> starts in multi-frame capture "
 "mode."
 msgstr ""
-"In maniera predefinita, xvidcap si avvia in modalità di acquisizione a "
-"fotogrammi multipli."
+"In maniera predefinita, <application>xvidcap</application> si avvia in "
+"modalità di acquisizione a fotogrammi multipli."
 
 #: ../C/xvidcap.xml:266(phrase)
 msgid "Frame Drop Meter"
 msgstr "Contatore dei fotogrammi scartati"
 
 #: ../C/xvidcap.xml:272(para)
-#, fuzzy
 msgid ""
 "The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well "
 "your capture session can capture at your desired frame rate. If your system "
@@ -543,15 +536,16 @@ msgstr ""
 "desiderata. Se il proprio sistema viene sottoposto ad un carico eccessivo, "
 "potrebbe non essere in grado di acquisire il numero di fotogrammi "
 "desiderato. Ciò si manifesterà con un'anomala velocità di riproduzione dei "
-"video. xvidcap visualizza uno stato verde se è possibile acquisire o quasi "
-"alla velocità desiderata. Se ci sono fotogrammi scartati lo stato diventa "
-"giallo, o rosso se il numero di fotogrammi scartati è eccessivo. Per ridurre "
-"il numero di fotogrammi scartati, è possibile acquisire una parte di schermo "
-"più piccola, seleziona una velocità minore, chiudere quante più applicazioni "
-"che caricano eccessivamente il sistema sia possibile, o eseguire il "
-"programma sun una macchina più potente. Potrebbe, inoltre, essere di aiuto "
-"il <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-rescale"
-"\">ridimensionamento</ulink> dei dati acquisiti."
+"video. <application>xvidcap</application> visualizza uno stato verde se è "
+"possibile acquisire o quasi alla velocità desiderata. Se ci sono fotogrammi "
+"scartati lo stato diventa giallo, o rosso se il numero di fotogrammi "
+"scartati è eccessivo. Per ridurre il numero di fotogrammi scartati, è "
+"possibile acquisire una parte di schermo più piccola, seleziona una velocità "
+"minore, chiudere quante più applicazioni che caricano eccessivamente il "
+"sistema sia possibile, o eseguire il programma sun una macchina più potente. "
+"Potrebbe, inoltre, essere di aiuto il <ulink type=\"help\" url=\"ghelp:"
+"xvidcap?xvidcap-prefs-TBL-rescale\">ridimensionamento</ulink> dei dati "
+"acquisiti."
 
 #: ../C/xvidcap.xml:292(phrase)
 msgid "Stop Button"
@@ -756,7 +750,6 @@ msgid "Edit Button"
 msgstr "Pulsante Modifica"
 
 #: ../C/xvidcap.xml:501(para)
-#, fuzzy
 msgid ""
 "The <guilabel>Edit Button</guilabel> calls an external program to edit the "
 "most recently captured frame in single-frame capture mode or the current "
@@ -770,12 +763,13 @@ msgstr ""
 "Il <guilabel>pulsante Modifica</guilabel> chiama un programma esterno per "
 "modificare i fotogrammi acquisiti di recente in modalità di acquisizione a "
 "fotogramma singolo o il video attuale in modalità di acquisizione a "
-"fotogrammi multipli. xvidcap non fornisce queste applicazioni. In maniera "
-"predefinita, xvidcap chiama <application>gimp</application> in modalità di "
-"acquisizione a fotogramma singolo e nessun programma in modalità di "
-"acquisizione a fotogrammi multipli. Le due impostazioni possono essere "
-"cambiate attraverso la <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-"
-"prefs-cmd\">finestra di dialogo</ulink>."
+"fotogrammi multipli. <application>xvidcap</application> non fornisce queste "
+"applicazioni. In maniera predefinita, <application>xvidcap</application> "
+"chiama <application>gimp</application> in modalità di acquisizione a "
+"fotogramma singolo e nessun programma in modalità di acquisizione a "
+"fotogrammi multipli. Le due impostazioni possono essere cambiate attraverso "
+"la <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-cmd\">finestra "
+"delle preferenze</ulink>."
 
 #: ../C/xvidcap.xml:518(title) ../C/xvidcap.xml:522(title)
 #: ../C/xvidcap.xml:528(phrase)
@@ -1704,9 +1698,8 @@ msgstr ""
 "modalità di acquisizione a fotogrammi multipli."
 
 #: ../C/xvidcap.xml:1548(para)
-#, fuzzy
 msgid "Multi Frame Transcoding command"
-msgstr "Comando di codifica per fotogrammi multipli"
+msgstr "Comando di transcodifica per fotogrammi multipli"
 
 #: ../C/xvidcap.xml:1553(para)
 msgid ""
@@ -1930,7 +1923,6 @@ msgstr ""
 "finestra delle preferenze."
 
 #: ../C/xvidcap.xml:1738(para)
-#, fuzzy
 msgid ""
 "In the Preferences Warning Dialog you will find one or more messages "
 "consisting of three rows each. The first one contains a message type or "
