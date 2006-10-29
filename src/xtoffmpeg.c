@@ -23,7 +23,7 @@
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
-#endif // HAVE_CONFIG_H
+#endif                          // HAVE_CONFIG_H
 
 #define DEBUGFILE "xtoffmpeg.c"
 
@@ -36,7 +36,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-#include <sys/time.h>           // for timeval struct and related functions
+#include <sys/time.h>           // for timeval struct and related
+                                // functions
 #include <math.h>
 
 #include <X11/Intrinsic.h>
@@ -52,6 +53,13 @@
 // ffmpeg stuff
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
+#include "swscale.h"
+#include "rgb2rgb.h"
+#include "framehook.h"
+#include "dsputil.h"
+#include "opt.h"
+#include "fifo.h"
+
 #define PIX_FMT_ARGB32 PIX_FMT_RGBA32   // this is just my personal
 // convenience
 
@@ -65,23 +73,25 @@ extern xvCodec tCodecs[NUMCODECS];
 extern xvFFormat tFFormats[NUMCODECS];
 extern xvAuCodec tAuCodecs[NUMAUCODECS];
 
-static AVCodec *codec;                  // params for the codecs video 
-static AVFrame *p_inpic;                // a AVFrame as wrapper around the
+static AVCodec *codec;          // params for the codecs video 
+static AVFrame *p_inpic;        // a AVFrame as wrapper around the
                                         // original image data 
-static AVFrame *p_outpic, *p_resample;  // and one for the image converted to
+static AVFrame *p_outpic, *p_resample;  // and one for the image converted 
+                                        // to
                                         // yuv420p 
-static uint8_t *outpic_buf, *resample_buf;  // data buffer for output frame
-static uint8_t *outbuf;                 // output buffer for encoded frame 
-static int outbuf_size;                 // the size of the outbuf may be
+static uint8_t *outpic_buf, *resample_buf;  // data buffer for output
+                                            // frame
+static uint8_t *outbuf;         // output buffer for encoded frame 
+static int outbuf_size;         // the size of the outbuf may be
                                         // other than image_size
 static AVFormatContext *output_file;    // output file via avformat 
 static AVOutputFormat *file_oformat;    // ... plus related data 
-static AVStream *out_st = NULL;         // ... 
-static ImgReSampleContext *img_resample_ctx; // for image resampling
+static AVStream *out_st = NULL; // ... 
+static struct SwsContext *img_resample_ctx; // for image resampling
 
 static int image_size, input_pixfmt;    // size of yuv image, pix_fmt of
                                         // original image 
-static int out_size;                    // size of the encoded frame to write to
+static int out_size;            // size of the encoded frame to write to
                                         // file 
 static double audio_pts, video_pts;
 
@@ -92,7 +102,7 @@ static uint8_t *scratchbuf8bit;
 void dump8bit(XImage * image, u_int32_t * ct);
 void dump32bit(XImage * input);
 void x2ffmpeg_dump_ximage_info(XImage * img, FILE * fp);
-#endif // DEBUG
+#endif                          // DEBUG
 
 
 #ifdef HAVE_FFMPEG_AUDIO
@@ -104,36 +114,40 @@ void x2ffmpeg_dump_ximage_info(XImage * img, FILE * fp);
 
 
 typedef struct AVOutputStream {
-    int file_index;          /* file index */
-    int index;               /* stream index in the output file */
-    int source_index;        /* AVInputStream index */
-    AVStream *st;            /* stream in the output file */
-    int encoding_needed;     /* true if encoding needed for this stream */
+    int file_index;             /* file index */
+    int index;                  /* stream index in the output file */
+    int source_index;           /* AVInputStream index */
+    AVStream *st;               /* stream in the output file */
+    int encoding_needed;        /* true if encoding needed for this stream 
+                                 */
     int frame_number;
-    /* input pts and corresponding output pts
-       for A/V sync */
-    //double sync_ipts;        /* dts from the AVPacket of the demuxer in second units */
+    /* input pts and corresponding output pts for A/V sync */
+    // double sync_ipts; /* dts from the AVPacket of the demuxer in second 
+    // units */
     struct AVInputStream *sync_ist; /* input stream to sync against */
-    int64_t sync_opts;       /* output frame counter, could be changed to some true timestamp */ //FIXME look at frame_number
+    int64_t sync_opts;          /* output frame counter, could be changed
+                                 * to some true timestamp */
     /* video only */
     int video_resample;
-    AVFrame pict_tmp;      /* temporary image for resampling */
-    ImgReSampleContext *img_resample_ctx; /* for image resampling */
+    AVFrame pict_tmp;           /* temporary image for resampling */
+    struct SwsContext *img_resample_ctx;    /* for image resampling */
+    int resample_height;
 
     int video_crop;
-    int topBand;             /* cropping area sizes */
+    int topBand;                /* cropping area sizes */
     int leftBand;
 
     int video_pad;
-    int padtop;              /* padding area sizes */
+    int padtop;                 /* padding area sizes */
     int padbottom;
     int padleft;
     int padright;
 
     /* audio only */
     int audio_resample;
-    ReSampleContext *resample; /* for audio resampling */
-    FifoBuffer fifo;     /* for compression: one audio fifo per codec */
+    ReSampleContext *resample;  /* for audio resampling */
+    AVFifoBuffer fifo;          /* for compression: one audio fifo per
+                                 * codec */
     FILE *logfile;
 } AVOutputStream;
 
@@ -143,16 +157,19 @@ typedef struct AVInputStream {
     int file_index;
     int index;
     AVStream *st;
-    int discard;             /* true if stream data should be discarded */
-    int decoding_needed;     /* true if the packets must be decoded in 'raw_fifo' */
-    int64_t sample_index;      /* current sample */
+    int discard;                /* true if stream data should be discarded 
+                                 */
+    int decoding_needed;        /* true if the packets must be decoded in
+                                 * 'raw_fifo' */
+    int64_t sample_index;       /* current sample */
 
-    int64_t       start;     /* time when read started */
-    unsigned long frame;     /* current frame */
-    int64_t       next_pts;  /* synthetic pts for cases where pkt.pts
-                                is not defined */
-    int64_t       pts;       /* current pts */
-    int is_start;            /* is 1 at the start and after a discontinuity */
+    int64_t start;              /* time when read started */
+    unsigned long frame;        /* current frame */
+    int64_t next_pts;           /* synthetic pts for cases where pkt.pts
+                                 * is not defined */
+    int64_t pts;                /* current pts */
+    int is_start;               /* is 1 at the start and after a
+                                 * discontinuity */
 } AVInputStream;
 
 
@@ -180,204 +197,202 @@ static int tret = 0;
 
 // functions ...
 
-static void
-add_audio_stream (Job* job) {
-    #define DEBUGFUNCTION "add_audio_stream()"
+static void add_audio_stream(Job * job)
+{
+#define DEBUGFUNCTION "add_audio_stream()"
     Boolean grab_audio = TRUE;
     AVFormatParameters params, *ap = &params;   // audio stream params
     int err, ret;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-        if (!strcmp(job->snd_device, "-")) {
-            job->snd_device = "pipe:";
-            grab_audio = FALSE;
-        } else {
-            grab_audio = TRUE;
-        }
+    if (!strcmp(job->snd_device, "-")) {
+        job->snd_device = "pipe:";
+        grab_audio = FALSE;
+    } else {
+        grab_audio = TRUE;
+    }
 
-        // prepare input stream
-        memset(ap, 0, sizeof(*ap));
-        ap->device = job->snd_device;
-        
-        // this is required to guarantee import of the audio input format context
-        // for some strange reason this only works here and not further down
-        // with av_register_all
-//        audio_init();
+    // prepare input stream
+    memset(ap, 0, sizeof(*ap));
+    ap->device = job->snd_device;
 
-        if (grab_audio) {
-            ap->sample_rate = job->snd_rate;
-            ap->channels = job->snd_channels;
+    // this is required to guarantee import of the audio input format
+    // context
+    // for some strange reason this only works here and not further down
+    // with av_register_all
+    // audio_init();
 
-            grab_iformat = av_find_input_format("audio_device");
+    if (grab_audio) {
+        ap->sample_rate = job->snd_rate;
+        ap->channels = job->snd_channels;
 
-#ifdef DEBUG
-            printf("%s %s: grab iformat %p\n", DEBUGFILE, DEBUGFUNCTION, grab_iformat);
-            if (grab_iformat)
-                printf("%s %s: grab iformat name %s\n", DEBUGFILE, DEBUGFUNCTION, grab_iformat->name);
-#endif // DEBUG
-            
-            if (av_open_input_file(&ic, "", grab_iformat, 0, ap) < 0) {
-                fprintf(stderr,
-                        _("%s %s:Could not find audio grab device %s\n"),
-                        DEBUGFILE, DEBUGFUNCTION, job->snd_device);
-                exit(1);
-            }
-        } else {
-            err = av_open_input_file(&ic, ap->device, NULL, 0, ap);
-            if (err < 0) {
-                fprintf(stderr, _("%s %s: error opening input file %s: %i\n"),
-                            DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
-                exit(1);
-            }
-        }
-        au_in_st = av_mallocz(sizeof(AVInputStream));
-        if (!au_in_st) {
-            fprintf(stderr,
-                    _("%s %s: Could not alloc input stream ... aborting\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
-        }
-        au_in_st->st = ic->streams[0];
-
-        // If not enough info to get the stream parameters, we decode
-        // the first frames to get it. (used in mpeg case for example) 
-        ret = av_find_stream_info(ic);
-        if (ret < 0) {
-            fprintf(stderr, _("%s %s: %s: could not find codec parameters\n"),
-                        DEBUGFILE, DEBUGFUNCTION, job->snd_device);
-            exit(1);
-        }
-        // init pts stuff
-        au_in_st->next_pts = 0;
-        au_in_st->is_start = 1;
+        grab_iformat = av_find_input_format("audio_device");
 
 #ifdef DEBUG
-            dump_format(ic, 0, job->snd_device, 0);
-#endif // DEBUG
+        printf("%s %s: grab iformat %p\n", DEBUGFILE, DEBUGFUNCTION,
+               grab_iformat);
+        if (grab_iformat)
+            printf("%s %s: grab iformat name %s\n", DEBUGFILE,
+                   DEBUGFUNCTION, grab_iformat->name);
+#endif                          // DEBUG
 
-        // OUTPUT
-        // setup output codec
-        au_c = avcodec_alloc_context();
-
-        // put sample parameters 
-        au_c->codec_id = tAuCodecs[job->au_targetCodec].ffmpeg_id;
-        au_c->codec_type = CODEC_TYPE_AUDIO;
-        au_c->bit_rate = job->snd_smplsize;
-        au_c->sample_rate = job->snd_rate;
-        au_c->channels = job->snd_channels;
-        // au_c->debug = 0x00000FFF;
-
-        // prepare output stream 
-        au_out_st = av_mallocz(sizeof(AVOutputStream));
-        if (!au_out_st) {
+        if (av_open_input_file(&ic, "", grab_iformat, 0, ap) < 0) {
             fprintf(stderr,
-                    _("%s %s: Could not alloc stream ... aborting\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
+                    _("%s %s:Could not find audio grab device %s\n"),
+                    DEBUGFILE, DEBUGFUNCTION, job->snd_device);
             exit(1);
         }
-        au_out_st->st = av_new_stream(output_file, 1);
-        if (!au_out_st->st) {
-            fprintf(stderr, _("%s %s: Could not alloc stream\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
+    } else {
+        err = av_open_input_file(&ic, ap->device, NULL, 0, ap);
+        if (err < 0) {
+            fprintf(stderr, _("%s %s: error opening input file %s: %i\n"),
+                    DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
             exit(1);
         }
-        au_out_st->st->codec = au_c;
+    }
+    au_in_st = av_mallocz(sizeof(AVInputStream));
+    if (!au_in_st) {
+        fprintf(stderr,
+                _("%s %s: Could not alloc input stream ... aborting\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        exit(1);
+    }
+    au_in_st->st = ic->streams[0];
 
-        if (fifo_init(&au_out_st->fifo, 2 * MAX_AUDIO_PACKET_SIZE)) {
-            fprintf(stderr,
-                    _("%s %s: Can't initialize fifo for audio recording\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
-        }
-        // This bit is important for inputs other than self-sampled.
-        // The sample rates and no of channels a user asks for
-        // are the ones he/she wants in the encoded mpeg. For self-
-        // sampled audio, these are also the values used for sampling.
-        // Hence there is no resampling necessary (case 1).
-        // When dubbing from a pipe or a different
-        // file, we might have different sample rates or no of
-        // channels
-        // in the input file.....
-        if (au_c->channels == au_in_st->st->codec->channels &&
-                    au_c->sample_rate == au_in_st->st->codec->sample_rate) {
-            au_out_st->audio_resample = 0;
-        } else {
-            if (au_c->channels != au_in_st->st->codec->channels &&
-                        au_in_st->st->codec->codec_id == CODEC_ID_AC3) {
-                // Special case for 5:1 AC3 input 
-                // and mono or stereo output 
-                // Request specific number of channels 
-                au_in_st->st->codec->channels = au_c->channels;
-                if (au_c->sample_rate ==
-                            au_in_st->st->codec->sample_rate)
-                    au_out_st->audio_resample = 0;
-                else {
-                    au_out_st->audio_resample = 1;
-                    au_out_st->resample =
-                        audio_resample_init(au_c->channels,
-                                                au_in_st->st->codec->
-                                                channels,
-                                                au_c->sample_rate,
-                                                au_in_st->st->codec->
-                                                sample_rate);
-                    if (!au_out_st->resample) {
-                        printf(_("%s %s: Can't resample. Aborting.\n"),
-                                DEBUGFILE, DEBUGFUNCTION);
-                        exit(1);
-                    }
-                }
-                // Request specific number of channels 
-                au_in_st->st->codec->channels = au_c->channels;
-            } else {
+    // If not enough info to get the stream parameters, we decode
+    // the first frames to get it. (used in mpeg case for example) 
+    ret = av_find_stream_info(ic);
+    if (ret < 0) {
+        fprintf(stderr, _("%s %s: %s: could not find codec parameters\n"),
+                DEBUGFILE, DEBUGFUNCTION, job->snd_device);
+        exit(1);
+    }
+    // init pts stuff
+    au_in_st->next_pts = 0;
+    au_in_st->is_start = 1;
+
+#ifdef DEBUG
+    dump_format(ic, 0, job->snd_device, 0);
+#endif                          // DEBUG
+
+    // OUTPUT
+    // setup output codec
+    au_c = avcodec_alloc_context();
+
+    // put sample parameters 
+    au_c->codec_id = tAuCodecs[job->au_targetCodec].ffmpeg_id;
+    au_c->codec_type = CODEC_TYPE_AUDIO;
+    au_c->bit_rate = job->snd_smplsize;
+    au_c->sample_rate = job->snd_rate;
+    au_c->channels = job->snd_channels;
+    // au_c->debug = 0x00000FFF;
+
+    // prepare output stream 
+    au_out_st = av_mallocz(sizeof(AVOutputStream));
+    if (!au_out_st) {
+        fprintf(stderr,
+                _("%s %s: Could not alloc stream ... aborting\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        exit(1);
+    }
+    au_out_st->st = av_new_stream(output_file, 1);
+    if (!au_out_st->st) {
+        fprintf(stderr, _("%s %s: Could not alloc stream\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        exit(1);
+    }
+    au_out_st->st->codec = au_c;
+
+    if (av_fifo_init(&au_out_st->fifo, 2 * MAX_AUDIO_PACKET_SIZE)) {
+        fprintf(stderr,
+                _("%s %s: Can't initialize fifo for audio recording\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        exit(1);
+    }
+    // This bit is important for inputs other than self-sampled.
+    // The sample rates and no of channels a user asks for
+    // are the ones he/she wants in the encoded mpeg. For self-
+    // sampled audio, these are also the values used for sampling.
+    // Hence there is no resampling necessary (case 1).
+    // When dubbing from a pipe or a different
+    // file, we might have different sample rates or no of
+    // channels
+    // in the input file.....
+    if (au_c->channels == au_in_st->st->codec->channels &&
+        au_c->sample_rate == au_in_st->st->codec->sample_rate) {
+        au_out_st->audio_resample = 0;
+    } else {
+        if (au_c->channels != au_in_st->st->codec->channels &&
+            au_in_st->st->codec->codec_id == CODEC_ID_AC3) {
+            // Special case for 5:1 AC3 input 
+            // and mono or stereo output 
+            // Request specific number of channels 
+            au_in_st->st->codec->channels = au_c->channels;
+            if (au_c->sample_rate == au_in_st->st->codec->sample_rate)
+                au_out_st->audio_resample = 0;
+            else {
                 au_out_st->audio_resample = 1;
                 au_out_st->resample =
                     audio_resample_init(au_c->channels,
-                                            au_in_st->st->codec->channels,
-                                            au_c->sample_rate,
-                                            au_in_st->st->codec->
-                                            sample_rate);
+                                        au_in_st->st->codec->
+                                        channels,
+                                        au_c->sample_rate,
+                                        au_in_st->st->codec->sample_rate);
                 if (!au_out_st->resample) {
-                    printf(_("%s %s: Can't resample. Aborting.\n"), DEBUGFILE,
-                            DEBUGFUNCTION);
+                    printf(_("%s %s: Can't resample. Aborting.\n"),
+                           DEBUGFILE, DEBUGFUNCTION);
                     exit(1);
                 }
             }
+            // Request specific number of channels 
+            au_in_st->st->codec->channels = au_c->channels;
+        } else {
+            au_out_st->audio_resample = 1;
+            au_out_st->resample =
+                audio_resample_init(au_c->channels,
+                                    au_in_st->st->codec->channels,
+                                    au_c->sample_rate,
+                                    au_in_st->st->codec->sample_rate);
+            if (!au_out_st->resample) {
+                printf(_("%s %s: Can't resample. Aborting.\n"), DEBUGFILE,
+                       DEBUGFUNCTION);
+                exit(1);
+            }
         }
-        au_in_st->decoding_needed = 1;
-        au_out_st->encoding_needed = 1;
+    }
+    au_in_st->decoding_needed = 1;
+    au_out_st->encoding_needed = 1;
 
-        // open encoder
-        au_codec =
-                avcodec_find_encoder(au_out_st->st->codec->codec_id);
-        if (avcodec_open(au_out_st->st->codec, au_codec) < 0) {
-            fprintf(stderr,
-                    _("%s %s: Error while opening codec for output stream\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
-        }
-        // open decoder
-        au_codec =
-                avcodec_find_decoder(ic->streams[0]->codec->codec_id);
-        if (!au_codec) {
-            fprintf(stderr,
-                    _("%s %s: Unsupported codec (id=%d) for input stream\n"),
-                    DEBUGFILE, DEBUGFUNCTION, ic->streams[0]->codec->codec_id);
-            exit(1);
-        }
-        if (avcodec_open(ic->streams[0]->codec, au_codec) < 0) {
-            fprintf(stderr,
-                    _("%s %s: Error while opening codec for input stream\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
-        }
-
+    // open encoder
+    au_codec = avcodec_find_encoder(au_out_st->st->codec->codec_id);
+    if (avcodec_open(au_out_st->st->codec, au_codec) < 0) {
+        fprintf(stderr,
+                _("%s %s: Error while opening codec for output stream\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        exit(1);
+    }
+    // open decoder
+    au_codec = avcodec_find_decoder(ic->streams[0]->codec->codec_id);
+    if (!au_codec) {
+        fprintf(stderr,
+                _("%s %s: Unsupported codec (id=%d) for input stream\n"),
+                DEBUGFILE, DEBUGFUNCTION, ic->streams[0]->codec->codec_id);
+        exit(1);
+    }
+    if (avcodec_open(ic->streams[0]->codec, au_codec) < 0) {
+        fprintf(stderr,
+                _("%s %s: Error while opening codec for input stream\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        exit(1);
+    }
 #ifdef DEBUG
-    printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE, DEBUGFUNCTION, output_file->nb_streams);
-#endif // DEBUG
-    #undef DEBUGFUNCTION
+    printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE,
+           DEBUGFUNCTION, output_file->nb_streams);
+#endif                          // DEBUG
+#undef DEBUGFUNCTION
 }
 
 
@@ -385,7 +400,7 @@ static void
 do_audio_out(AVFormatContext * s, AVOutputStream * ost,
              AVInputStream * ist, unsigned char *buf, int size)
 {
-    #define DEBUGFUNCTION "do_audio_out()"
+#define DEBUGFUNCTION "do_audio_out()"
     uint8_t *buftmp;
     const int audio_out_size = 4 * MAX_AUDIO_PACKET_SIZE;
     int size_out, frame_bytes;
@@ -416,12 +431,10 @@ do_audio_out(AVFormatContext * s, AVOutputStream * ost,
     // now encode as many frames as possible 
     if (enc->frame_size > 1) {
         // output resampled raw samples 
-        fifo_write(&ost->fifo, buftmp, size_out, &ost->fifo.wptr);
+        av_fifo_write(&ost->fifo, buftmp, size_out);
         frame_bytes = enc->frame_size * 2 * enc->channels;
 
-        while (fifo_read
-               (&ost->fifo, audio_buf, frame_bytes, &ost->fifo.rptr) == 0)
-        {
+        while (av_fifo_read(&ost->fifo, audio_buf, frame_bytes) == 0) {
             AVPacket pkt;
 
             // initialize audio output packet
@@ -430,9 +443,11 @@ do_audio_out(AVFormatContext * s, AVOutputStream * ost,
             pkt.size =
                 avcodec_encode_audio(enc, audio_out, audio_out_size,
                                      (short *) audio_buf);
-            
+
             if (enc->coded_frame) {
-                pkt.pts= av_rescale_q(enc->coded_frame->pts, enc->time_base, ost->st->time_base);
+                pkt.pts =
+                    av_rescale_q(enc->coded_frame->pts, enc->time_base,
+                                 ost->st->time_base);
             }
             pkt.flags |= PKT_FLAG_KEY;
             pkt.stream_index = ost->st->index;
@@ -441,32 +456,34 @@ do_audio_out(AVFormatContext * s, AVOutputStream * ost,
 
             if (pthread_mutex_trylock(&mp) == 0) {
                 // write the compressed frame in the media file 
-                if( av_interleaved_write_frame(s, &pkt) != 0) {
-                    fprintf(stderr, _("%s %s: Error while writing audio frame\n"),
+                if (av_interleaved_write_frame(s, &pkt) != 0) {
+                    fprintf(stderr,
+                            _("%s %s: Error while writing audio frame\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                     exit(1);
                 }
 
                 if (pthread_mutex_unlock(&mp) > 0) {
                     fprintf(stderr,
-                            _("%s %s: Couldn't unlock mutex lock for writing audio frame\n"),
+                            _
+                            ("%s %s: Couldn't unlock mutex lock for writing audio frame\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                 }
             }
         }
     }
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 void cleanup_thread_when_stopped()
 {
-    #define DEBUGFUNCTION "cleanup_thread_when_stopped()"
+#define DEBUGFUNCTION "cleanup_thread_when_stopped()"
     int retval = 0;
 
 #ifdef DEBUG
-	printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
 
     if (audio_out) {
         av_free(audio_out);
@@ -478,25 +495,25 @@ void cleanup_thread_when_stopped()
     }
     grab_iformat = NULL;
     if (au_in_st) {
-	av_free(au_in_st);
-	au_in_st = NULL;
+        av_free(au_in_st);
+        au_in_st = NULL;
     }
 
     av_close_input_file(ic);
 
 #ifdef DEBUG
-	printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
 
     pthread_exit(&retval);
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 void capture_audio_thread(Job * job)
 {
-    #define DEBUGFUNCTION "capture_audio_thread()"
+#define DEBUGFUNCTION "capture_audio_thread()"
     unsigned long start, stop, start_s, stop_s;
     struct timeval thr_curr_time;
     long sleep;
@@ -513,27 +530,26 @@ void capture_audio_thread(Job * job)
         start_s = thr_curr_time.tv_sec;
         start = thr_curr_time.tv_usec;
 
-        // FIXME: this needs to get more sophisticated for pausing
-        // efficiently ...
         if ((job->state & VC_PAUSE) && !(job->state & VC_STEP)) {
             pthread_mutex_lock(&recording_mutex);
-            pthread_cond_wait(&recording_condition_unpaused, &recording_mutex);
+            pthread_cond_wait(&recording_condition_unpaused,
+                              &recording_mutex);
             pthread_mutex_unlock(&recording_mutex);
         } else if (job->state == VC_REC) {
 
-
-            audio_pts =
-                (double) /*au_out_st->st->pts.val * av_q2d(au_out_st->st->time_base); */
+            audio_pts = (double)    /* au_out_st->st->pts.val *
+                                     * av_q2d(au_out_st->st->time_base); */
                 au_out_st->st->pts.val *
                 au_out_st->st->time_base.num /
                 au_out_st->st->time_base.den;
             video_pts =
                 (double) out_st->pts.val * out_st->time_base.num /
                 out_st->time_base.den;
-                
+
             // sometimes we need to pause writing audio packets for a/v
             // sync (when audio_pts >= video_pts)
             // now, if we're reading from a file/pipe, we stop sampling or 
+            // 
             // else the audio track in the
             // video would become choppy (packets missing where they were
             // read but not written)
@@ -544,7 +560,8 @@ void capture_audio_thread(Job * job)
             if (audio_pts < video_pts) {
                 // read a packet from it and output it in the fifo 
                 if (av_read_packet(ic, &pkt) < 0) {
-                    fprintf(stderr, _("%s %s: error reading audio packet\n"),
+                    fprintf(stderr,
+                            _("%s %s: error reading audio packet\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                 }
                 len = pkt.size;
@@ -565,7 +582,8 @@ void capture_audio_thread(Job * job)
                                                  len);
                         if (retval < 0) {
                             fprintf(stderr,
-                                    _("%s %s: couldn't decode captured audio packet\n"),
+                                    _
+                                    ("%s %s: couldn't decode captured audio packet\n"),
                                     DEBUGFILE, DEBUGFUNCTION);
                             break;
                         }
@@ -574,20 +592,24 @@ void capture_audio_thread(Job * job)
                         if (data_size <= 0) {
                             // no audio frame 
 #ifdef DEBUG
-                            fprintf (stderr, _("%s %s: no audio frame\n"), DEBUGFILE,
-                                    DEBUGFUNCTION);
-#endif // DEBUG
+                            fprintf(stderr, _("%s %s: no audio frame\n"),
+                                    DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
                             ptr += retval;
                             len -= retval;
                             continue;
                         }
                         data_buf = (uint8_t *) samples;
-                        au_in_st->next_pts += ((int64_t)AV_TIME_BASE/2 * data_size) /
-                                (au_in_st->st->codec->sample_rate * au_in_st->st->codec->channels);
+                        au_in_st->next_pts +=
+                            ((int64_t) AV_TIME_BASE / 2 * data_size) /
+                            (au_in_st->st->codec->sample_rate *
+                             au_in_st->st->codec->channels);
                     } else {
                         // FIXME: dunno about the following
-                        au_in_st->next_pts += ((int64_t)AV_TIME_BASE/2 * data_size) /
-                                (au_in_st->st->codec->sample_rate * au_in_st->st->codec->channels);
+                        au_in_st->next_pts +=
+                            ((int64_t) AV_TIME_BASE / 2 * data_size) /
+                            (au_in_st->st->codec->sample_rate *
+                             au_in_st->st->codec->channels);
                     }
                     ptr += retval;
                     len -= retval;
@@ -599,14 +621,14 @@ void capture_audio_thread(Job * job)
                 av_free_packet(&pkt);
             }                   // end outside if pts ...
             else {
-                if ( strcmp(job->snd_device, "pipe:") < 0 )
+                if (strcmp(job->snd_device, "pipe:") < 0)
                     if (av_read_packet(ic, &pkt) < 0) {
                         fprintf(stderr, _("error reading audio packet\n"));
                     }
 #ifdef DEBUG
-                    printf(_("%s %s: dropping audio frame %f %f\n"),
-                            DEBUGFILE, DEBUGFUNCTION, audio_pts, video_pts);
-#endif // DEBUG
+                printf(_("%s %s: dropping audio frame %f %f\n"),
+                       DEBUGFILE, DEBUGFUNCTION, audio_pts, video_pts);
+#endif                          // DEBUG
             }
         }                       // end if VC_REC
         // get end time
@@ -632,7 +654,7 @@ void capture_audio_thread(Job * job)
     }                           // end while(TRUE) loop
     retval = 1;
     pthread_exit(&retval);
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 #endif                          // HAVE_FFMPEG_AUDIO
@@ -642,14 +664,15 @@ static void
 do_video_out(AVFormatContext * s, AVStream * ost,
              unsigned char *buf, int size)
 {
-    #define DEBUGFUNCTION "do_video_out()"
+#define DEBUGFUNCTION "do_video_out()"
     AVCodecContext *enc;
     AVPacket pkt;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with format context %p output stream %p buffer %p size %i\n", 
-                DEBUGFILE, DEBUGFUNCTION, s, ost, buf, size);
-#endif // DEBUG
+    printf
+        ("%s %s: Entering with format context %p output stream %p buffer %p size %i\n",
+         DEBUGFILE, DEBUGFUNCTION, s, ost, buf, size);
+#endif                          // DEBUG
 
     enc = ost->codec;
 
@@ -657,7 +680,9 @@ do_video_out(AVFormatContext * s, AVStream * ost,
     av_init_packet(&pkt);
 
     if (enc->coded_frame) {
-        pkt.pts= av_rescale_q(enc->coded_frame->pts, enc->time_base, ost->time_base);
+        pkt.pts =
+            av_rescale_q(enc->coded_frame->pts, enc->time_base,
+                         ost->time_base);
         if (enc->coded_frame->key_frame)
             pkt.flags |= PKT_FLAG_KEY;
     }
@@ -666,35 +691,35 @@ do_video_out(AVFormatContext * s, AVStream * ost,
     pkt.data = buf;
     pkt.size = size;
 
-    if( av_interleaved_write_frame(s, &pkt) != 0) {
+    if (av_interleaved_write_frame(s, &pkt) != 0) {
         fprintf(stderr, _("%s %s: Error while writing video frame\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
+                DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
-
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 
-//
+// 
 // convert bgra32 to rgba32
-// needed on Solaris/SPARC because the ffmpeg version used doesn't know PIX_FMT_ABGR32
-//
+// needed on Solaris/SPARC because the ffmpeg version used doesn't know
+// PIX_FMT_ABGR32
+// 
 void myABGR32toARGB32(XImage * image)
 {
-    #define DEBUGFUNCTION "myABGR32toARGB32()"
+#define DEBUGFUNCTION "myABGR32toARGB32()"
 
     char *pdata, *counter;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with image %p\n", 
-                DEBUGFILE, DEBUGFUNCTION, image);
-#endif // DEBUG
+    printf("%s %s: Entering with image %p\n",
+           DEBUGFILE, DEBUGFUNCTION, image);
+#endif                          // DEBUG
 
     pdata = image->data;
 
@@ -717,9 +742,9 @@ void myABGR32toARGB32(XImage * image)
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -732,15 +757,15 @@ void myABGR32toARGB32(XImage * image)
  */
 u_int32_t *FFMPEGcolorTable(XColor * colors, int ncolors)
 {
-    #define DEBUGFUNCTION "FFMPEGcolorTable()"
+#define DEBUGFUNCTION "FFMPEGcolorTable()"
 
     u_int32_t *color_table, *pixel;
     int i;                      // , n;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with colors %p and %i colors\n", 
-                DEBUGFILE, DEBUGFUNCTION, colors, ncolors);
-#endif // DEBUG
+    printf("%s %s: Entering with colors %p and %i colors\n",
+           DEBUGFILE, DEBUGFUNCTION, colors, ncolors);
+#endif                          // DEBUG
 
     color_table = malloc(256 * 4);
     if (!color_table)
@@ -771,37 +796,38 @@ u_int32_t *FFMPEGcolorTable(XColor * colors, int ncolors)
         pixel++;
     }
 #ifdef DEBUG
-    printf("%s %s: color_table pointer: %p\n", 
-                DEBUGFILE, DEBUGFUNCTION, color_table);
-    printf("%s %s: color_table third entry: 0x%.8X\n", 
-                DEBUGFILE, DEBUGFUNCTION, *(color_table + 2));
+    printf("%s %s: color_table pointer: %p\n",
+           DEBUGFILE, DEBUGFUNCTION, color_table);
+    printf("%s %s: color_table third entry: 0x%.8X\n",
+           DEBUGFILE, DEBUGFUNCTION, *(color_table + 2));
     // first and second black & white
-#endif // DEBUG 
+#endif                          // DEBUG
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     return (color_table);
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 
 void prepareOutputFile(char *jFileName, AVFormatContext * oc, int number)
 {
-    #define DEBUGFUNCTION "prepareOutputFile()"
+#define DEBUGFUNCTION "prepareOutputFile()"
 
 #ifdef DEBUG
-    printf("%s %s: Entering with filename %s format context %p and number %i\n", 
-                DEBUGFILE, DEBUGFUNCTION, jFileName, oc, number);
-#endif // DEBUG
+    printf
+        ("%s %s: Entering with filename %s format context %p and number %i\n",
+         DEBUGFILE, DEBUGFUNCTION, jFileName, oc, number);
+#endif                          // DEBUG
 
     // prepare output file for format context 
 
     if ((strcasecmp(jFileName, "-") == 0)
-                || (strcasecmp(jFileName, "pipe:") == 0)) {
+        || (strcasecmp(jFileName, "pipe:") == 0)) {
         jFileName = "pipe:";
         snprintf(oc->filename, sizeof(oc->filename), "pipe:");
         // register_protocol (&pipe_protocol);
@@ -822,12 +848,13 @@ void prepareOutputFile(char *jFileName, AVFormatContext * oc, int number)
         }
         // register_protocol (&file_protocol);
     }
-    
-#ifdef DEBUG
-    printf("%s %s: Leaving with filename %s\n", DEBUGFILE, DEBUGFUNCTION, oc->filename);
-#endif // DEBUG
 
-    #undef DEBUGFUNCTION
+#ifdef DEBUG
+    printf("%s %s: Leaving with filename %s\n", DEBUGFILE, DEBUGFUNCTION,
+           oc->filename);
+#endif                          // DEBUG
+
+#undef DEBUGFUNCTION
 }
 
 
@@ -835,22 +862,23 @@ void prepareOutputFile(char *jFileName, AVFormatContext * oc, int number)
 /* 
  * add a video output stream 
  */
-AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfmt,
-                           int codec_id, Job *job)
+AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
+                           int input_pixfmt, int codec_id, Job * job)
 {
-    #define DEBUGFUNCTION "add_video_stream()"
+#define DEBUGFUNCTION "add_video_stream()"
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
     int fps = job->fps / 100, quality = job->quality;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     st = av_new_stream(oc, 0);
     if (!st) {
         fprintf(stderr,
-                _("%s %s: Could not alloc output stream\n"), DEBUGFILE, DEBUGFUNCTION);
+                _("%s %s: Could not alloc output stream\n"), DEBUGFILE,
+                DEBUGFUNCTION);
         exit(1);
     }
 
@@ -860,11 +888,10 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     // find the video encoder 
     codec = avcodec_find_encoder(st->codec->codec_id);
     if (!codec) {
-        fprintf(stderr, _("%s %s: video codec not found\n"), 
-                    DEBUGFILE, DEBUGFUNCTION);
+        fprintf(stderr, _("%s %s: video codec not found\n"),
+                DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
-
     // put sample parameters 
     st->codec->bit_rate = 400000;
     // resolution must be a multiple of two ... this is taken care of
@@ -872,15 +899,17 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     if (job->rescale != 100) {
         int n;
         double r;
-        r = sqrt( 100 / job->rescale );
-        
+        r = sqrt(100 / job->rescale);
+
         n = image->width / r;
-        if ( n % 2 > 0 ) n--;
-        st->codec->width = n; 
-        
+        if (n % 2 > 0)
+            n--;
+        st->codec->width = n;
+
         n = image->height / r;
-        if ( n % 2 > 0 ) n--;
-        st->codec->height = n; 
+        if (n % 2 > 0)
+            n--;
+        st->codec->height = n;
     } else {
         st->codec->width = image->width;
         st->codec->height = image->height;
@@ -894,45 +923,36 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
     // emit one intra frame every fifty frames at most
     st->codec->gop_size = 50;
 
-    // FIXME: use avcodec_find_best_pix_fmt
-    if ( &(codec->pix_fmts) != NULL ) {
-        for ( i = 0; codec->pix_fmts[i] != -1; i++ ) {
+    // find suitable pix_fmt for codec
+    if (&(codec->pix_fmts) != NULL) {
+        for (i = 0; codec->pix_fmts[i] != -1; i++) {
             pix_fmt_mask |= (1 << codec->pix_fmts[i]);
         }
-    }
-    
-    st->codec->pix_fmt = avcodec_find_best_pix_fmt(pix_fmt_mask, input_pixfmt,
-            (input_pixfmt == PIX_FMT_ARGB32 ? 1 : 0), NULL);
-    if ( st->codec->pix_fmt < 0 ) st->codec->pix_fmt = PIX_FMT_YUV420P;
-    
+        st->codec->pix_fmt =
+            avcodec_find_best_pix_fmt(pix_fmt_mask, input_pixfmt,
+                                      (input_pixfmt ==
+                                       PIX_FMT_ARGB32 ? 1 : 0), NULL);
+        if (st->codec->pix_fmt < 0)
+            st->codec->pix_fmt = PIX_FMT_YUV420P;
+    } else
+        st->codec->pix_fmt = PIX_FMT_YUV420P;
+
 #ifdef DEBUG
-    printf("%s %s: pix_fmt_mask %i, has alpha %i, input_pixfmt %i, output pixfmt %i\n", 
-            DEBUGFILE, DEBUGFUNCTION, pix_fmt_mask, (input_pixfmt == PIX_FMT_ARGB32 ? 1 : 0),
-            input_pixfmt, st->codec->pix_fmt);
-#endif // DEBUG
+    printf
+        ("%s %s: pix_fmt_mask %i, has alpha %i, input_pixfmt %i, output pixfmt %i\n",
+         DEBUGFILE, DEBUGFUNCTION, pix_fmt_mask,
+         (input_pixfmt == PIX_FMT_ARGB32 ? 1 : 0), input_pixfmt,
+         st->codec->pix_fmt);
+#endif                          // DEBUG
 
     // flags
-    //
-// FIXME: should be smth. like this:    
-/*if(   (video_global_header&1)
-       || (video_global_header==0 && (oc->oformat->flags & AVFMT_GLOBALHEADER))){
-        video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
-        avctx_opts->flags|= CODEC_FLAG_GLOBAL_HEADER;
-    }
-    if(video_global_header&2){
-        video_enc->flags2 |= CODEC_FLAG2_LOCAL_HEADER;
-        avctx_opts->flags2|= CODEC_FLAG2_LOCAL_HEADER;
-    }
-*/
-    
-    st->codec->flags |= ( CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST );
+    st->codec->flags |= (CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST);
     st->codec->flags &= ~CODEC_FLAG_OBMC;
     // some formats want stream headers to be seperate
-    if (oc->oformat->name && ( !strcmp(oc->oformat->name, "mp4")
-        || !strcmp(oc->oformat->name, "mov")
-        || !strcmp(oc->oformat->name, "3gp")))
+    if (oc->oformat->flags & AVFMT_GLOBALHEADER)
         st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
+    // bit rate calculation
     st->codec->bit_rate =
         (st->codec->width * st->codec->height *
          (((((st->codec->height + st->codec->width) / 100) - 5) >> 1) +
@@ -942,119 +962,120 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image, int input_pixfm
 
 #ifdef DEBUG
     printf("%s %s: bitrate = %i\n", DEBUGFILE, DEBUGFUNCTION,
-                st->codec->bit_rate);
+           st->codec->bit_rate);
 #endif
 
     st->codec->mb_decision = 2;
-/*    st->codec->me_method = ME_ZERO;
-    st->codec->qmin = 1;
-    st->codec->qmax = 1; */
+    /* st->codec->me_method = ME_ZERO; st->codec->qmin = 1;
+     * st->codec->qmax = 1; */
     // st->codec->debug = 0x00000FFF;
-/*     out_st->time_base.num = out_st->codec->time_base.num;
-     out_st->time_base.den = out_st->codec->time_base.den;
-     out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / out_st->time_base.den; */
+    /* out_st->time_base.num = out_st->codec->time_base.num;
+     * out_st->time_base.den = out_st->codec->time_base.den;
+     * out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / 
+     * out_st->time_base.den; */
 
 #ifdef DEBUG
-    printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE, DEBUGFUNCTION, oc->nb_streams);
-#endif // DEBUG
+    printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE,
+           DEBUGFUNCTION, oc->nb_streams);
+#endif                          // DEBUG
 
     return st;
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 
 
 
-int guess_input_pix_fmt (XImage *image, ColorInfo *c_info) {
-    #define DEBUGFUNCTION "guess_input_pix_fmt()"
+int guess_input_pix_fmt(XImage * image, ColorInfo * c_info)
+{
+#define DEBUGFUNCTION "guess_input_pix_fmt()"
     int input_pixfmt;
 
-        switch (image->bits_per_pixel) {
-        case 8:
+    switch (image->bits_per_pixel) {
+    case 8:
 #ifdef DEBUG
-                printf("%s %s: 8 bit pallete\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG 
-            input_pixfmt = PIX_FMT_PAL8;
-            break;
-        case 16:
-            if (image->red_mask == 0xF800 && image->green_mask == 0x07E0
-                && image->blue_mask == 0x1F) {
+        printf("%s %s: 8 bit pallete\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+        input_pixfmt = PIX_FMT_PAL8;
+        break;
+    case 16:
+        if (image->red_mask == 0xF800 && image->green_mask == 0x07E0
+            && image->blue_mask == 0x1F) {
 #ifdef DEBUG
-                    printf("%s %s: 16 bit RGB565\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG 
-                input_pixfmt = PIX_FMT_RGB565;
-            } else if (image->red_mask == 0x7C00
-                       && image->green_mask == 0x03E0
-                       && image->blue_mask == 0x1F) {
+            printf("%s %s: 16 bit RGB565\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+            input_pixfmt = PIX_FMT_RGB565;
+        } else if (image->red_mask == 0x7C00
+                   && image->green_mask == 0x03E0
+                   && image->blue_mask == 0x1F) {
 #ifdef DEBUG
-                    printf("%s %s: 16 bit RGB555\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG 
-                input_pixfmt = PIX_FMT_RGB555;
+            printf("%s %s: 16 bit RGB555\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+            input_pixfmt = PIX_FMT_RGB555;
 
-            } else {
-                fprintf(stderr,
-                        _("%s %s: rgb ordering at image depth %i not supported ... aborting\n"),
-                        DEBUGFILE, DEBUGFUNCTION, image->bits_per_pixel);
-                fprintf(stderr,
-                        "%s %s: color masks: r 0x%.6lX g 0x%.6lX b 0x%.6lX\n",
-                        DEBUGFILE, DEBUGFUNCTION, image->red_mask, image->green_mask,
-                        image->blue_mask);
-                exit(1);
-            }
-            break;
-        case 24:
-            if (image->red_mask == 0xFF0000 && image->green_mask == 0xFF00
-                && image->blue_mask == 0xFF) {
-                input_pixfmt = PIX_FMT_BGR24;
-            } else if (image->red_mask == 0xFF
-                       && image->green_mask == 0xFF00
-                       && image->blue_mask == 0xFF0000) {
-                input_pixfmt = PIX_FMT_RGB24;
-            } else {
-                fprintf(stderr,
-                        _("%s %s: rgb ordering at image depth %i not supported ... aborting\n"),
-                        DEBUGFILE, DEBUGFUNCTION,
-                        image->bits_per_pixel);
-                fprintf(stderr,
-                        "%s %s: color masks: r 0x%.6lX g 0x%.6lX b 0x%.6lX\n",
-                        DEBUGFILE, DEBUGFUNCTION,
-                        image->red_mask, image->green_mask,
-                        image->blue_mask);
-                exit(1);
-            }
-            break;
-        case 32:
-            if (c_info->alpha_mask == 0xFF000000
-                && image->green_mask == 0xFF00) {
-                // byte order is relevant here, not endianness
-                // endianness is handled by avcodec, but atm no such thing
-                // as having ABGR, instead of ARGB in a word. Since we
-                // need this for Solaris/SPARC, but need to do the
-                // conversion
-                // for every frame we do it outside of this loop, cf.
-                // below
-                // this matches both ARGB32 and ABGR32
-                input_pixfmt = PIX_FMT_ARGB32;
-            } else {
-                fprintf(stderr,
-                        _("%s %s: image depth %i not supported ... aborting\n"),
-                        DEBUGFILE, DEBUGFUNCTION,
-                        image->bits_per_pixel);
-                exit(1);
-            }
-            break;
-        default:
+        } else {
             fprintf(stderr,
-                    _("%s %s: image depth %i not supported ... aborting\n"),
-                    DEBUGFILE, DEBUGFUNCTION,
-                    image->bits_per_pixel);
+                    _
+                    ("%s %s: rgb ordering at image depth %i not supported ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION, image->bits_per_pixel);
+            fprintf(stderr,
+                    "%s %s: color masks: r 0x%.6lX g 0x%.6lX b 0x%.6lX\n",
+                    DEBUGFILE, DEBUGFUNCTION, image->red_mask,
+                    image->green_mask, image->blue_mask);
             exit(1);
         }
+        break;
+    case 24:
+        if (image->red_mask == 0xFF0000 && image->green_mask == 0xFF00
+            && image->blue_mask == 0xFF) {
+            input_pixfmt = PIX_FMT_BGR24;
+        } else if (image->red_mask == 0xFF
+                   && image->green_mask == 0xFF00
+                   && image->blue_mask == 0xFF0000) {
+            input_pixfmt = PIX_FMT_RGB24;
+        } else {
+            fprintf(stderr,
+                    _
+                    ("%s %s: rgb ordering at image depth %i not supported ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION, image->bits_per_pixel);
+            fprintf(stderr,
+                    "%s %s: color masks: r 0x%.6lX g 0x%.6lX b 0x%.6lX\n",
+                    DEBUGFILE, DEBUGFUNCTION, image->red_mask,
+                    image->green_mask, image->blue_mask);
+            exit(1);
+        }
+        break;
+    case 32:
+        if (c_info->alpha_mask == 0xFF000000
+            && image->green_mask == 0xFF00) {
+            // byte order is relevant here, not endianness
+            // endianness is handled by avcodec, but atm no such thing
+            // as having ABGR, instead of ARGB in a word. Since we
+            // need this for Solaris/SPARC, but need to do the
+            // conversion
+            // for every frame we do it outside of this loop, cf.
+            // below
+            // this matches both ARGB32 and ABGR32
+            input_pixfmt = PIX_FMT_ARGB32;
+        } else {
+            fprintf(stderr,
+                    _
+                    ("%s %s: image depth %i not supported ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION, image->bits_per_pixel);
+            exit(1);
+        }
+        break;
+    default:
+        fprintf(stderr,
+                _("%s %s: image depth %i not supported ... aborting\n"),
+                DEBUGFILE, DEBUGFUNCTION, image->bits_per_pixel);
+        exit(1);
+    }
 
     return input_pixfmt;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -1066,28 +1087,29 @@ int guess_input_pix_fmt (XImage *image, ColorInfo *c_info) {
  */
 void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 {
-    #define DEBUGFUNCTION "XImageToFFMPEG()"
+#define DEBUGFUNCTION "XImageToFFMPEG()"
 
     int ret;
 
 #ifdef DEBUG
-        printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
 
     // encoder needs to be prepared only once .. 
-    if (job->state & VC_START ) {   // it's the first call
+    if (job->state & VC_START) {    // it's the first call
 
 #ifdef DEBUG
-            printf("%s %s: doing x2ffmpeg init for targetCodec %i\n", 
-                        DEBUGFILE, DEBUGFUNCTION, job->targetCodec);
-#endif // DEBUG 
+        printf("%s %s: doing x2ffmpeg init for targetCodec %i\n",
+               DEBUGFILE, DEBUGFUNCTION, job->targetCodec);
+#endif                          // DEBUG
 
         // determine input picture format 
-        //
+        // 
         // FIXME: test for exotic formats
         // endianness is treated by avcodec
 
         // color info only needs to be retrieved once for true color X ... 
+        // 
         // dunno about pseudo color 
         xvc_get_color_info(image, &c_info);
 
@@ -1097,89 +1119,99 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 
             printf("%s %s: got color info\n", DEBUGFILE, DEBUGFUNCTION);
             errout = fdopen(2, "w");
-//            x2ffmpeg_dump_ximage_info(image, errout);
+            // x2ffmpeg_dump_ximage_info(image, errout);
             printf("%s %s: alpha_mask: 0x%.8X\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.alpha_mask);
+                   DEBUGFILE, DEBUGFUNCTION, c_info.alpha_mask);
             printf("%s %s: alpha_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.alpha_shift);
+                   DEBUGFILE, DEBUGFUNCTION, c_info.alpha_shift);
             printf("%s %s: red_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.red_shift);
+                   DEBUGFILE, DEBUGFUNCTION, c_info.red_shift);
             printf("%s %s: green_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.green_shift);
+                   DEBUGFILE, DEBUGFUNCTION, c_info.green_shift);
             printf("%s %s: blue_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.blue_shift);
+                   DEBUGFILE, DEBUGFUNCTION, c_info.blue_shift);
         }
-#endif // DEBUG 
+#endif                          // DEBUG
 
 #ifdef DEBUG
-            printf("%s %s: image->byte_order: %i, msb=%i, lsb=%i\n",
-                    DEBUGFILE, DEBUGFUNCTION, image->byte_order, MSBFirst, LSBFirst);
-#endif // DEBUG
+        printf("%s %s: image->byte_order: %i, msb=%i, lsb=%i\n",
+               DEBUGFILE, DEBUGFUNCTION, image->byte_order, MSBFirst,
+               LSBFirst);
+#endif                          // DEBUG
 
         // determin input picture format
         input_pixfmt = guess_input_pix_fmt(image, &c_info);
-        
+
         // register all libav* related stuff
         av_register_all();
 
-/*        // next call the right init() function for the file format (e.g.
-        // avienc_init()) 
-        if ( tFFormats[job->target].init ) (*tFFormats[job->target].init) ();   */
+        /* // next call the right init() function for the file format
+         * (e.g. // avienc_init()) if ( tFFormats[job->target].init )
+         * (*tFFormats[job->target].init) (); */
         // guess AVOutputFormat
-        if ( job->target >= CAP_MF )
+        if (job->target >= CAP_MF)
             file_oformat =
-                    guess_format(tFFormats[job->target].ffmpeg_name, NULL, NULL);
+                guess_format(tFFormats[job->target].ffmpeg_name, NULL,
+                             NULL);
         else {
             char tmp_fn[30];
-            snprintf(tmp_fn, 29, "test-%%d.%s", xvc_next_element(tFFormats[job->target].extensions));
+            snprintf(tmp_fn, 29, "test-%%d.%s",
+                     xvc_next_element(tFFormats[job->target].extensions));
             file_oformat = guess_format(NULL, tmp_fn, NULL);
         }
-	if (!file_oformat) {
+        if (!file_oformat) {
             fprintf(stderr,
-                    _("%s %s: Couldn't determin output format ... aborting\n"),
+                    _
+                    ("%s %s: Couldn't determin output format ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
-      
 #ifdef DEBUG
-        printf("%s %s: found AVOutputFormat %s it expects a number in the filename (0=no/1=yes) %i\n", 
-                DEBUGFILE, DEBUGFUNCTION, file_oformat->name, (file_oformat->flags & AVFMT_NEEDNUMBER));
-        printf("%s %s: found based on: target %i - targetCodec %i - ffmpeg codec id %i\n", 
-                DEBUGFILE, DEBUGFUNCTION, job->target, job->targetCodec, tCodecs[job->targetCodec].ffmpeg_id);
-#endif // DEBUG
+        printf
+            ("%s %s: found AVOutputFormat %s it expects a number in the filename (0=no/1=yes) %i\n",
+             DEBUGFILE, DEBUGFUNCTION, file_oformat->name,
+             (file_oformat->flags & AVFMT_NEEDNUMBER));
+        printf
+            ("%s %s: found based on: target %i - targetCodec %i - ffmpeg codec id %i\n",
+             DEBUGFILE, DEBUGFUNCTION, job->target, job->targetCodec,
+             tCodecs[job->targetCodec].ffmpeg_id);
+#endif                          // DEBUG
 
         // prepare AVFormatContext
         output_file = av_alloc_format_context();
         if (!output_file) {
             fprintf(stderr,
-                    _("%s %s: Error allocating memory for format context ... aborting\n"),
+                    _
+                    ("%s %s: Error allocating memory for format context ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
         output_file->oformat = file_oformat;
-	if (output_file->oformat->priv_data_size > 0) {
-        	output_file->priv_data = av_mallocz (output_file->oformat->priv_data_size); 
-        	// FIXME: do I need to free this?
-        	if (!output_file->priv_data) { 
-            		fprintf (stderr, 
-                    		_("%s %s: Error allocating private data for format context ... aborting\n"),
-                    		DEBUGFILE, DEBUGFUNCTION); 
-            	exit (1); 
-        	} 
-	}
-//	output_file->packet_size= mux_packet_size;
-//    	output_file->mux_rate= mux_rate;
-        output_file->preload= (int)(0.5 * AV_TIME_BASE);
-	output_file->max_delay= (int)(0.7 * AV_TIME_BASE);
-//	output_file->loop_output = loop_output;
+        if (output_file->oformat->priv_data_size > 0) {
+            output_file->priv_data =
+                av_mallocz(output_file->oformat->priv_data_size);
+            // FIXME: do I need to free this?
+            if (!output_file->priv_data) {
+                fprintf(stderr,
+                        _
+                        ("%s %s: Error allocating private data for format context ... aborting\n"),
+                        DEBUGFILE, DEBUGFUNCTION);
+                exit(1);
+            }
+        }
+        // output_file->packet_size= mux_packet_size;
+        // output_file->mux_rate= mux_rate;
+        output_file->preload = (int) (0.5 * AV_TIME_BASE);
+        output_file->max_delay = (int) (0.7 * AV_TIME_BASE);
+        // output_file->loop_output = loop_output;
 
-        
+
         // add the video stream and initialize the codecs 
-        //
+        // 
         // prepare stream 
         out_st =
-            add_video_stream(output_file, image, input_pixfmt, tCodecs[job->targetCodec].ffmpeg_id,
-                             job);
+            add_video_stream(output_file, image, input_pixfmt,
+                             tCodecs[job->targetCodec].ffmpeg_id, job);
 
         // FIXME: set params
         // memset (p_fParams, 0, sizeof(*p_fParams));
@@ -1196,24 +1228,22 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             exit(1);
         }
 
-
         // open the codec 
-//        c = out_st->codec;
+        // c = out_st->codec;
 
         if (avcodec_open(out_st->codec, codec) < 0) {
             fprintf(stderr, _("%s %s: could not open video codec\n"),
-                        DEBUGFILE, DEBUGFUNCTION);
+                    DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
-
 #ifdef HAVE_FFMPEG_AUDIO
-        if ( ( job->flags & FLG_REC_SOUND ) && ( job->au_targetCodec > 0 ) ) {
+        if ((job->flags & FLG_REC_SOUND) && (job->au_targetCodec > 0)) {
 
             add_audio_stream(job);
 
 #ifdef DEBUG
             dump_format(output_file, 0, output_file->filename, 1);
-#endif // DEBUG
+#endif                          // DEBUG
 
             // initialize a mutex lock to its default value 
             ret = pthread_mutex_init(&mp, NULL);
@@ -1236,162 +1266,169 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         p_inpic = avcodec_alloc_frame();
 
         if (input_pixfmt == PIX_FMT_PAL8) {
-            scratchbuf8bit = malloc(avpicture_get_size(input_pixfmt, image->width, image->height));
+            scratchbuf8bit =
+                malloc(avpicture_get_size
+                       (input_pixfmt, image->width, image->height));
 
-            avpicture_fill((AVPicture *)p_inpic, scratchbuf8bit, input_pixfmt, image->width,
-                           image->height);
+            avpicture_fill((AVPicture *) p_inpic, scratchbuf8bit,
+                           input_pixfmt, image->width, image->height);
             p_inpic->data[1] = job->color_table;
 #ifdef DEBUG
-                printf("%s %s: first 4 colors a r g b each: 0x%.8X 0x%.8X 0x%.8X 0x%.8X\n",
-                        DEBUGFILE, DEBUGFUNCTION,
-                        *(u_int32_t *) (job->color_table),
-                        *((u_int32_t *) (job->color_table) + 1),
-                        *((u_int32_t *) (job->color_table) + 2),
-                        *((u_int32_t *) (job->color_table) + 3));
-#endif // DEBUG 
+            printf
+                ("%s %s: first 4 colors a r g b each: 0x%.8X 0x%.8X 0x%.8X 0x%.8X\n",
+                 DEBUGFILE, DEBUGFUNCTION,
+                 *(u_int32_t *) (job->color_table),
+                 *((u_int32_t *) (job->color_table) + 1),
+                 *((u_int32_t *) (job->color_table) + 2),
+                 *((u_int32_t *) (job->color_table) + 3));
+#endif                          // DEBUG
         } else {
-            avpicture_fill((AVPicture *)p_inpic, (uint8_t *) image->data, input_pixfmt, image->width,
-                           image->height);
+            avpicture_fill((AVPicture *) p_inpic, (uint8_t *) image->data,
+                           input_pixfmt, image->width, image->height);
         }
 
-        //output picture
+        // output picture
         p_outpic = avcodec_alloc_frame();
 
         image_size =
-            avpicture_get_size(out_st->codec->pix_fmt, out_st->codec->width, out_st->codec->height);
+            avpicture_get_size(out_st->codec->pix_fmt,
+                               out_st->codec->width,
+                               out_st->codec->height);
         outpic_buf = av_malloc(image_size);
         if (!outpic_buf) {
             fprintf(stderr,
-                    _("%s %s: Could not allocate buffer for output frame! ... aborting\n"),
+                    _
+                    ("%s %s: Could not allocate buffer for output frame! ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
-        avpicture_fill((AVPicture *)p_outpic, outpic_buf, out_st->codec->pix_fmt, out_st->codec->width,
-                           out_st->codec->height);
+        avpicture_fill((AVPicture *) p_outpic, outpic_buf,
+                       out_st->codec->pix_fmt, out_st->codec->width,
+                       out_st->codec->height);
 
         /* 
          * prepare output buffer for encoded frames 
          */
-        if ((image_size + 200) < FF_MIN_BUFFER_SIZE) outbuf_size = FF_MIN_BUFFER_SIZE;
-        else outbuf_size = image_size + 200;
+        if ((image_size + 200) < FF_MIN_BUFFER_SIZE)
+            outbuf_size = FF_MIN_BUFFER_SIZE;
+        else
+            outbuf_size = image_size + 200;
         outbuf = malloc(outbuf_size);
         if (!outbuf) {
             fprintf(stderr,
-                    _("%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"),
+                    _
+                    ("%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"),
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
-
         // img resampling
-        // FIXME: real conditions here
-        if (TRUE && ! img_resample_ctx) {
+        if (!img_resample_ctx) {
             p_resample = avcodec_alloc_frame();
 
-            resample_buf = av_malloc(
-                            avpicture_get_size(
-                                    out_st->codec->pix_fmt, 
-                                    image->width, 
-                                    image->height));
+            resample_buf =
+                av_malloc(avpicture_get_size
+                          (out_st->codec->pix_fmt, image->width,
+                           image->height));
             if (!resample_buf) {
                 fprintf(stderr,
-                        _("%s %s: Could not allocate buffer for resizing frame! ... aborting\n"),
+                        _
+                        ("%s %s: Could not allocate buffer for resizing frame! ... aborting\n"),
                         DEBUGFILE, DEBUGFUNCTION);
                 exit(1);
             }
-            avpicture_fill((AVPicture *)p_resample, resample_buf, out_st->codec->pix_fmt, image->width,
+            avpicture_fill((AVPicture *) p_resample, resample_buf,
+                           out_st->codec->pix_fmt, image->width,
                            image->height);
-            
 
-            img_resample_ctx = img_resample_init(out_st->codec->width, 
-                                                out_st->codec->height, 
-                                                image->width,
-                                                image->height);
+            img_resample_ctx = sws_getContext(image->width,
+                                              image->height,
+                                              input_pixfmt,
+                                              out_st->codec->width,
+                                              out_st->codec->height,
+                                              out_st->codec->pix_fmt,
+                                              1, NULL, NULL, NULL);
+            // sws_rgb2rgb_init(SWS_CPU_CAPS_MMX*0);
+
         }
-
-
-
-/*
-        frame = avcodec_alloc_frame();
-        frame->type = FF_BUFFER_TYPE_SHARED;
-
-        frame->data[0] = pic_out;
-        frame->data[1] = frame->data[0] + (out_st->codec->width * out_st->codec->height);
-        frame->data[2] = frame->data[1] + (out_st->codec->width * out_st->codec->height) / 4;
-        frame->data[3] = NULL;
-        frame->linesize[0] = out_st->codec->width;
-        frame->linesize[1] = out_st->codec->width / 2;
-        frame->linesize[2] = out_st->codec->width / 2;
-        frame->linesize[3] = 0;
-*/
-
         // file preparation needs to be done once for multi-frame capture
         // and multiple times for single-frame capture
-        if (job->target >= CAP_MF ) {
+        if (job->target >= CAP_MF) {
             // prepare output filenames and register protocols
-            // after this output_file->filename should have the right filename
+            // after this output_file->filename should have the right
+            // filename
             prepareOutputFile(job->file, output_file, job->movie_no);
 
             // open the file 
-            if (url_fopen(&output_file->pb, output_file->filename, URL_WRONLY) < 0) {
+            if (url_fopen
+                (&output_file->pb, output_file->filename,
+                 URL_WRONLY) < 0) {
                 fprintf(stderr,
-                        _("%s %s: Could not open '%s' ... aborting\n"), DEBUGFILE, DEBUGFUNCTION,
-                        output_file->filename);
+                        _("%s %s: Could not open '%s' ... aborting\n"),
+                        DEBUGFILE, DEBUGFUNCTION, output_file->filename);
                 exit(1);
             }
 
             if (av_write_header(output_file) < 0) {
                 dump_format(output_file, 0, output_file->filename, 1);
                 fprintf(stderr,
-                        _("%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n"),
+                        _
+                        ("%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n"),
                         DEBUGFILE, DEBUGFUNCTION);
                 exit(1);
             }
 
 
         }
-        
 #ifdef DEBUG
-            printf("%s %s: leaving xffmpeg init\n", DEBUGFILE, DEBUGFUNCTION);
-            
-            printf("%s %s: codec %p\n", DEBUGFILE, DEBUGFUNCTION, codec);
-            printf("%s %s: p_inpic %p\n", DEBUGFILE, DEBUGFUNCTION, p_inpic);
-            printf("%s %s: p_outpic %p\n", DEBUGFILE, DEBUGFUNCTION, p_outpic);
-            printf("%s %s: outpic_buf %p\n", DEBUGFILE, DEBUGFUNCTION, outpic_buf);
-            printf("%s %s: outbuf %p\n", DEBUGFILE, DEBUGFUNCTION, outbuf);
-            
-            printf("%s %s: output_file %p\n", DEBUGFILE, DEBUGFUNCTION, output_file);
-            printf("%s %s: file_oformat %p\n", DEBUGFILE, DEBUGFUNCTION, file_oformat);
-            printf("%s %s: out_st %p\n", DEBUGFILE, DEBUGFUNCTION, out_st);
+        printf("%s %s: leaving xffmpeg init\n", DEBUGFILE, DEBUGFUNCTION);
 
-            printf("%s %s: image size %i - input pixfmt %i - out_size %i\n", DEBUGFILE, DEBUGFUNCTION, image_size, input_pixfmt, out_size);
-            printf("%s %s: audio_pts %d - video_pts %d\n", DEBUGFILE, DEBUGFUNCTION, audio_pts, video_pts);
+        printf("%s %s: codec %p\n", DEBUGFILE, DEBUGFUNCTION, codec);
+        printf("%s %s: p_inpic %p\n", DEBUGFILE, DEBUGFUNCTION, p_inpic);
+        printf("%s %s: p_outpic %p\n", DEBUGFILE, DEBUGFUNCTION, p_outpic);
+        printf("%s %s: outpic_buf %p\n", DEBUGFILE, DEBUGFUNCTION,
+               outpic_buf);
+        printf("%s %s: outbuf %p\n", DEBUGFILE, DEBUGFUNCTION, outbuf);
 
-            printf("%s %s: c_info %p - scratchbuf8bit %p\n", DEBUGFILE, DEBUGFUNCTION, c_info, scratchbuf8bit);
-#endif // DEBUG 
+        printf("%s %s: output_file %p\n", DEBUGFILE, DEBUGFUNCTION,
+               output_file);
+        printf("%s %s: file_oformat %p\n", DEBUGFILE, DEBUGFUNCTION,
+               file_oformat);
+        printf("%s %s: out_st %p\n", DEBUGFILE, DEBUGFUNCTION, out_st);
+
+        printf("%s %s: image size %i - input pixfmt %i - out_size %i\n",
+               DEBUGFILE, DEBUGFUNCTION, image_size, input_pixfmt,
+               out_size);
+        printf("%s %s: audio_pts %d - video_pts %d\n", DEBUGFILE,
+               DEBUGFUNCTION, audio_pts, video_pts);
+
+        printf("%s %s: c_info %p - scratchbuf8bit %p\n", DEBUGFILE,
+               DEBUGFUNCTION, c_info, scratchbuf8bit);
+#endif                          // DEBUG
     }
 
 
-        if (job->target < CAP_MF ) {
-            // prepare output filenames and register protocols
-            // after this output_file->filename should have the right filename
-            prepareOutputFile(job->file, output_file, job->pic_no);
+    if (job->target < CAP_MF) {
+        // prepare output filenames and register protocols
+        // after this output_file->filename should have the right filename
+        prepareOutputFile(job->file, output_file, job->pic_no);
 
-            // open the file 
-            if (url_fopen(&output_file->pb, output_file->filename, URL_WRONLY) < 0) {
-                fprintf(stderr,
-                        _("%s %s: Could not open '%s' ... aborting\n"), DEBUGFILE, DEBUGFUNCTION,
-                        output_file->filename);
-                exit(1);
-            }
-
-            if (av_write_header(output_file) < 0) {
-                dump_format(output_file, 0, output_file->filename, 1);
-                fprintf(stderr,
-                        _("%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n"),
-                        DEBUGFILE, DEBUGFUNCTION);
-                exit(1);
-            }
+        // open the file 
+        if (url_fopen(&output_file->pb, output_file->filename, URL_WRONLY)
+            < 0) {
+            fprintf(stderr, _("%s %s: Could not open '%s' ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION, output_file->filename);
+            exit(1);
         }
+
+        if (av_write_header(output_file) < 0) {
+            dump_format(output_file, 0, output_file->filename, 1);
+            fprintf(stderr,
+                    _
+                    ("%s %s: Could not write header for output file (incorrect codec paramters ?) ... aborting\n"),
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit(1);
+        }
+    }
 
 
     /* 
@@ -1402,10 +1439,10 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         dump32bit(image);
     if (input_pixfmt == PIX_FMT_PAL8)
         dump8bit(image, (u_int32_t *) job->color_table);
-#endif // DEBUG 
+#endif                          // DEBUG
 
-// FIXME: test if this is still necessary
-   if (input_pixfmt == PIX_FMT_ARGB32 && c_info.alpha_mask == 0xFF000000
+    // FIXME: test if this is still necessary
+    if (input_pixfmt == PIX_FMT_ARGB32 && c_info.alpha_mask == 0xFF000000
         && image->red_mask == 0xFF && image->green_mask == 0xFF00
         && image->blue_mask == 0xFF0000) {
         myABGR32toARGB32(image);
@@ -1419,13 +1456,14 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             int y;              // , x;
             uint8_t *in, *out;
 
-            in = (uint8_t*) image->data;
+            in = (uint8_t *) image->data;
             out = scratchbuf8bit;
 
             for (y = 0; y < out_st->codec->height; y++) {
                 if (!memcpy(out, in, out_st->codec->width)) {
                     fprintf(stderr,
-                            _("%s %s: error preprocessing 8bit pseudo color input ... aborting\n"),
+                            _
+                            ("%s %s: error preprocessing 8bit pseudo color input ... aborting\n"),
                             DEBUGFILE, DEBUGFUNCTION);
                     exit(1);
                 }
@@ -1438,64 +1476,36 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
                        (out_st->codec->width * out_st->codec->height));
         }
     }
-
-
-    {
-        AVFrame *target_pic;
-        
-        if (job->rescale != 100) target_pic = p_resample;
-        else target_pic = p_outpic;
-
-        if ( img_convert((AVPicture *) target_pic, out_st->codec->pix_fmt,
-                    (AVPicture *)p_inpic, input_pixfmt, 
-                    image->width, image->height) < 0) {
-            fprintf(stderr,
-                    _("%s %s: pixel format conversion not handled ... aborting\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
-        }
-
-#ifdef DEBUG
-        {
-            FILE *lfp;
-
-            lfp = fopen("/tmp/pic.yuv", "w");
-            fwrite(outpic_buf, image_size, 1, lfp);
-            fclose(lfp);
-        }
-#endif                          /* DEBUG */
-    
-    }
-
-    // img resampling
-    // FIXME: real conditions here
-    if (job->rescale != 100) {
-        img_resample(img_resample_ctx, (AVPicture*) p_outpic, (AVPicture*) p_resample);
-    }
-
+    // img resampling and conversion
+    sws_scale(img_resample_ctx, p_inpic->data, p_inpic->linesize,
+              0, image->height, p_outpic->data, p_outpic->linesize);
 
     /* 
      * encode the image 
      */
 #ifdef DEBUG
-    printf("%s %s: calling encode_video with codec %p, outbuf %p, outbuf size %i, output frame %p\n",
-                DEBUGFILE, DEBUGFUNCTION,
-                out_st->codec, outbuf, outbuf, p_outpic);
-#endif // DEBUG
+    printf
+        ("%s %s: calling encode_video with codec %p, outbuf %p, outbuf size %i, output frame %p\n",
+         DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf, outbuf,
+         p_outpic);
+#endif                          // DEBUG
 
-    out_size = avcodec_encode_video(out_st->codec, outbuf, outbuf_size, p_outpic);
+    out_size =
+        avcodec_encode_video(out_st->codec, outbuf, outbuf_size, p_outpic);
     if (out_size < 0) {
         fprintf(stderr,
-                _("%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"), 
-                DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf, outbuf_size, p_outpic);
+                _
+                ("%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"),
+                DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf,
+                outbuf_size, p_outpic);
         exit(1);
     }
-
 #ifdef HAVE_FFMPEG_AUDIO
     if (job->flags & FLG_REC_SOUND) {
         if (pthread_mutex_lock(&mp) > 0) {
             fprintf(stderr,
-                    _("mutex lock for writing video frame failed ... aborting\n"));
+                    _
+                    ("mutex lock for writing video frame failed ... aborting\n"));
             exit(1);
         }
     }
@@ -1504,25 +1514,26 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
     /* 
      * write frame to file 
      */
-if (out_size > 0 ) {
-//    if ( job->target >= CAP_MF ) 
+    if (out_size > 0) {
+        // if ( job->target >= CAP_MF ) 
         do_video_out(output_file, out_st, outbuf, out_size);
-//    else 
-//        fwrite(outbuf, image_size, 1, fp);
-}
+        // else 
+        // fwrite(outbuf, image_size, 1, fp);
+    }
 
-    if (job->target < CAP_MF) 
+    if (job->target < CAP_MF)
         url_fclose(&output_file->pb);
-        
+
 #ifdef HAVE_FFMPEG_AUDIO
     /* 
      * release the mutex 
      */
     if (job->flags & FLG_REC_SOUND) {
-//    printf("releasing the mutex lock\n");
+        // printf("releasing the mutex lock\n");
         if (pthread_mutex_unlock(&mp) > 0) {
             fprintf(stderr,
-                    _("couldn't release the mutex for writing video frame ... aborting\n"));
+                    _
+                    ("couldn't release the mutex for writing video frame ... aborting\n"));
         }
     }
 #endif                          // HAVE_FFMPEG_AUDIO
@@ -1538,8 +1549,8 @@ void FFMPEGClean(Job * job)
 #define DEBUGFUNCTION "FFMPEGClean()"
 
 #ifdef DEBUG
-        printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG 
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
 
 #ifdef HAVE_FFMPEG_AUDIO
     // 
@@ -1562,38 +1573,41 @@ void FFMPEGClean(Job * job)
     }
 
     if (output_file) {
-	int i;
+        int i;
         /* 
          * close file if multi-frame capture ... otherwise closed already
          */
-        if (job->target >= CAP_MF) 
+        if (job->target >= CAP_MF)
             url_fclose(&output_file->pb);
-	/*
-	 * free streams
-	 */
-	for (i = 0; i < output_file->nb_streams; i++) {
-		if (output_file->streams[i]->codec) {
-			avcodec_close(output_file->streams[i]->codec);
-	    		av_free(output_file->streams[i]->codec);
-			output_file->streams[i]->codec = NULL;
-		}
-		av_free(output_file->streams[i]);
-		if (out_st) out_st = NULL;
+        /* 
+         * free streams
+         */
+        for (i = 0; i < output_file->nb_streams; i++) {
+            if (output_file->streams[i]->codec) {
+                avcodec_close(output_file->streams[i]->codec);
+                av_free(output_file->streams[i]->codec);
+                output_file->streams[i]->codec = NULL;
+            }
+            av_free(output_file->streams[i]);
+            if (out_st)
+                out_st = NULL;
 #ifdef HAVE_FFMPEG_AUDIO
-		if (au_out_st) au_out_st = NULL;
-#endif // HAVE_FFMPEG_AUDIO
-	}
+            if (au_out_st)
+                au_out_st = NULL;
+#endif                          // HAVE_FFMPEG_AUDIO
+        }
         /* 
          * free format context 
          */
         av_free(output_file->priv_data);
-	output_file->priv_data = NULL;
+        output_file->priv_data = NULL;
         av_free(output_file);
         output_file = NULL;
     }
 
     if (img_resample_ctx) {
-        img_resample_close(img_resample_ctx);
+        sws_freeContext(img_resample_ctx);
+        // img_resample_close(img_resample_ctx);
         img_resample_ctx = NULL;
     }
 
@@ -1601,12 +1615,9 @@ void FFMPEGClean(Job * job)
         av_free(outpic_buf);
         outpic_buf = NULL;
     }
-    av_free(outbuf); /* avcodec seems to do that job */
+    av_free(outbuf);            /* avcodec seems to do that job */
     outbuf = NULL;
-/*    if (frame) {
-        free(frame);
-        frame = NULL;
-    } */
+    /* if (frame) { free(frame); frame = NULL; } */
     av_free(p_inpic);
     p_inpic = NULL;
     av_free(outpic_buf);
@@ -1622,12 +1633,12 @@ void FFMPEGClean(Job * job)
     codec = NULL;
 #ifdef HAVE_FFMPEG_AUDIO
     au_codec = NULL;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
-//    av_free_static();
+    // av_free_static();
 #ifdef DEBUG
-        printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG 
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
 
 #undef DEBUGFUNCTION
 }
@@ -1635,16 +1646,16 @@ void FFMPEGClean(Job * job)
 
 #ifdef DEBUG
 // 
-//dump info about XImage - for debugging purposes
-//
+// dump info about XImage - for debugging purposes
+// 
 void x2ffmpeg_dump_ximage_info(XImage * img, FILE * fp)
 {
-    #define DEBUGFUNCTION "x2ffmpeg_dump_ximage_info()"
+#define DEBUGFUNCTION "x2ffmpeg_dump_ximage_info()"
 
 #ifdef DEBUG
-    printf("%s %s: Entering with image %p and file pointer %p\n", 
-                DEBUGFILE, DEBUGFUNCTION, img, fp);
-#endif // DEBUG
+    printf("%s %s: Entering with image %p and file pointer %p\n",
+           DEBUGFILE, DEBUGFUNCTION, img, fp);
+#endif                          // DEBUG
 
     fprintf(fp, " width %d\n", img->width);
     fprintf(fp, " height %d\n", img->height);
@@ -1669,19 +1680,19 @@ void x2ffmpeg_dump_ximage_info(XImage * img, FILE * fp)
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
-//
+// 
 // dump 32bit image to pnm
-//this is just used for debugging purposes
-//
+// this is just used for debugging purposes
+// 
 void dump32bit(XImage * input)
 {
-    #define DEBUGFUNCTION "dump32bit()"
+#define DEBUGFUNCTION "dump32bit()"
 
     int row, col;
     static char head[256];
@@ -1699,9 +1710,9 @@ void dump32bit(XImage * input)
         bs = c_info.blue_shift, *p32 = (unsigned int *) input->data;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with image %p\n", 
-                DEBUGFILE, DEBUGFUNCTION, input);
-#endif // DEBUG
+    printf("%s %s: Entering with image %p\n",
+           DEBUGFILE, DEBUGFUNCTION, input);
+#endif                          // DEBUG
 
     sprintf(head, "P6\n%d %d\n%d\n", input->width, input->height, 255);
     size = ((input->bytes_per_line * input->height) / 4) * 3;
@@ -1713,12 +1724,12 @@ void dump32bit(XImage * input)
             *output++ = ((*p32 & rm) >> rs);
             *output++ = ((*p32 & gm) >> gs);
             *output++ = ((*p32 & bm) >> bs);
-            p32++; // ignore alpha values
+            p32++;              // ignore alpha values
         }
         // 
         // eat paded bytes, for better speed we use shifting,
         // (bytes_per_line - bits_per_pixel / 8 * width ) / 4 
-        //
+        // 
         p32 += (input->bytes_per_line - (input->bits_per_pixel >> 3)
                 * input->width) >> 2;
     }
@@ -1727,26 +1738,26 @@ void dump32bit(XImage * input)
     fwrite(head, strlen(head), 1, fp2);
     // 
     // x2ffmpeg_dump_ximage_info (input, fp2); 
-    //
+    // 
     fwrite(ptr2, size, 1, fp2);
     fclose(fp2);
     free(ptr2);
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 // 
 // dump 8 bit image to ppm
 // this is just used for debugging purposes
-//
+// 
 void dump8bit(XImage * image, u_int32_t * ct)
 {
-    #define DEBUGFUNCTION "dump8bit()"
+#define DEBUGFUNCTION "dump8bit()"
 
     static char head[256];
     static unsigned int image_size;
@@ -1757,12 +1768,12 @@ void dump8bit(XImage * image, u_int32_t * ct)
     static FILE *fp2 = NULL;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with image %p\n", 
-                DEBUGFILE, DEBUGFUNCTION, image);
-#endif // DEBUG
+    printf("%s %s: Entering with image %p\n",
+           DEBUGFILE, DEBUGFUNCTION, image);
+#endif                          // DEBUG
 
     sprintf(head, "P6\n%d %d\n%d\n", image->width, image->height, 255);
-    image_size = image->width * 3 * image->height; // RGB
+    image_size = image->width * 3 * image->height;  // RGB
     pnm_image = (unsigned char *) malloc(image_size);
 
     fp2 = fopen("/tmp/pic.rgb.pnm", "w");
@@ -1780,20 +1791,20 @@ void dump8bit(XImage * image, u_int32_t * ct)
     }
     fwrite(pnm_image, image_size, 1, fp2);
 
-    //
+    // 
     // x2ffmpeg_dump_ximage_info (input, fp2); 
-    //
+    // 
     fclose(fp2);
     free(pnm_image);
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
-#endif // DEBUG 
+#endif                          // DEBUG
 
 
 
