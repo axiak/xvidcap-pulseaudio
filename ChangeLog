@@ -1,4 +1,13 @@
 
+2006-10-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* ffmpeg-svn6791/*: updated ffmpeg due to previously bad quality 
+		of mjpeg
+	* src/xtoffmpeg.c: made xtoffmpeg match new ffmpeg version and
+		use libswscale
+	* doc/xvidcap/*/figures: translated screenshots for German 
+		version and used "Simple" GTK theme everywhere as a
+		standard for translators.
+
 2006-10-24  Vincenzo Reale <smart2128@baslug.org>
 	* po/it.po, doc/xvidcap/it/xvidcap.xml-it.po: updated xlation
 
