@@ -46,4 +46,4 @@ long TCbCaptureV4L(XtPointer, XtIntervalId *);
 #define TCbCaptureV4L TCbCaptureX11
 #endif
 
-#endif // __CAPTURE_H__
+#endif                          // __CAPTURE_H__

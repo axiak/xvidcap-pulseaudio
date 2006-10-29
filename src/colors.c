@@ -189,8 +189,8 @@ xvc_get_color_info(XImage * image, ColorInfo * ci /* return struct */ )
            (uint) (image->red_mask), ci->red_bit_depth, ci->red_shift,
            ci->red_max_val);
     printf("green mask %08x bit_depth %lu shift %lu max_val %lu\n",
-           (uint) (image->green_mask), ci->green_bit_depth, ci->green_shift,
-           ci->green_max_val);
+           (uint) (image->green_mask), ci->green_bit_depth,
+           ci->green_shift, ci->green_max_val);
     printf("blue mask %08x bit_depth %lu shift %lu max_val %lu\n",
            (uint) (image->blue_mask), ci->blue_bit_depth, ci->blue_shift,
            ci->blue_max_val);

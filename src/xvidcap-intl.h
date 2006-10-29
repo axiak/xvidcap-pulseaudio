@@ -3,7 +3,7 @@
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif /* HAVE_CONFIG_H */
+#endif                          /* HAVE_CONFIG_H */
 
 #ifdef ENABLE_NLS
 #include <libintl.h>
@@ -13,15 +13,15 @@
 #else
 #define N_(String) (String)
 #endif
-#else /* NLS is disabled */
+#else                           /* NLS is disabled */
 #define _(String) (String)
 #define N_(String) (String)
 #define textdomain(String) (String)
 #define gettext(String) (String)
 #define dgettext(Domain,String) (String)
 #define dcgettext(Domain,String,Type) (String)
-#define bindtextdomain(Domain,Directory) (Domain) 
-#define bind_textdomain_codeset(Domain,Codeset) (Codeset) 
-#endif /* ENABLE_NLS */
+#define bindtextdomain(Domain,Directory) (Domain)
+#define bind_textdomain_codeset(Domain,Codeset) (Codeset)
+#endif                          /* ENABLE_NLS */
 
-#endif /* __XVIDCAP_INTL_H__ */
+#endif                          /* __XVIDCAP_INTL_H__ */

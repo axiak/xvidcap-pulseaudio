@@ -29,10 +29,8 @@
 
 #include <X11/Intrinsic.h>
 #include <gtk/gtk.h>
-/*
-include <bonobo.h>
-include <gnome.h>
-*/
+/* 
+ * include <bonobo.h> include <gnome.h> */
 #include <glade/glade.h>
 
 #include "app_data.h"
@@ -58,64 +56,68 @@ static GtkWidget *gtk_frame_top,
     *gtk_frame_center;
 
 
-void do_reposition_control(GtkWidget *toplevel) {
-    #define DEBUGFUNCTION "do_reposition_control()"
+void do_reposition_control(GtkWidget * toplevel)
+{
+#define DEBUGFUNCTION "do_reposition_control()"
     int max_width = 0, max_height = 0;
-    int pwidth = 0, pheight = 0, x = 0, y = 0, topHeight = 0, width = 0, leftWidth = 0, height = 0;
+    int pwidth = 0, pheight = 0, x = 0, y = 0, topHeight = 0, width =
+        0, leftWidth = 0, height = 0;
     GdkScreen *myscreen;
 
-        myscreen = GTK_WINDOW(toplevel)->screen;
-        g_assert(myscreen);
+    myscreen = GTK_WINDOW(toplevel)->screen;
+    g_assert(myscreen);
 
-        max_width = gdk_screen_get_width(GDK_SCREEN(myscreen));
-        max_height = gdk_screen_get_height(GDK_SCREEN(myscreen));
+    max_width = gdk_screen_get_width(GDK_SCREEN(myscreen));
+    max_height = gdk_screen_get_height(GDK_SCREEN(myscreen));
 
-        gdk_window_get_size(GDK_WINDOW(toplevel->window),
-                            &pwidth, &pheight);
-        pwidth += FRAME_OFFSET;
-        pheight += FRAME_OFFSET;
+    gdk_window_get_size(GDK_WINDOW(toplevel->window), &pwidth, &pheight);
+    pwidth += FRAME_OFFSET;
+    pheight += FRAME_OFFSET;
 
-        gdk_window_get_size(GDK_WINDOW(gtk_frame_left->window), &leftWidth, &height);
-        gdk_window_get_size(GDK_WINDOW(gtk_frame_top->window), &width, &topHeight);
-        gtk_window_get_position(GTK_WINDOW(gtk_frame_top),(gint*) &x,(gint*) &y);
+    gdk_window_get_size(GDK_WINDOW(gtk_frame_left->window), &leftWidth,
+                        &height);
+    gdk_window_get_size(GDK_WINDOW(gtk_frame_top->window), &width,
+                        &topHeight);
+    gtk_window_get_position(GTK_WINDOW(gtk_frame_top), (gint *) & x,
+                            (gint *) & y);
 
 #ifdef DEBUG
-    printf("%s %s: x %i y%i pheight %i pwidht %i height %i width%i\n", DEBUGFILE, DEBUGFUNCTION,
-            x, y, pheight, pwidth, height, width );
-#endif // DEBUG
+    printf("%s %s: x %i y%i pheight %i pwidht %i height %i width%i\n",
+           DEBUGFILE, DEBUGFUNCTION, x, y, pheight, pwidth, height, width);
+#endif                          // DEBUG
 
-        if ((y - pheight) >= 0) {
+    if ((y - pheight) >= 0) {
+        gtk_window_move(GTK_WINDOW(toplevel), x, (y - pheight));
+    } else {
+        GladeXML *xml = NULL;
+        GtkWidget *w = NULL;
+
+        xml = glade_get_widget_tree(GTK_WIDGET(toplevel));
+        g_assert(xml);
+
+        w = glade_xml_get_widget(xml, "xvc_ctrl_lock_toggle");
+        g_assert(w);
+
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w),
+                                          FALSE);
+
+        if ((y + pheight + height) < max_height) {
             gtk_window_move(GTK_WINDOW(toplevel), x,
-                            (y - pheight));
+                            (y + height + FRAME_OFFSET));
         } else {
-            GladeXML *xml = NULL;
-            GtkWidget *w = NULL;
-
-            xml = glade_get_widget_tree(GTK_WIDGET(toplevel));
-            g_assert(xml);
-
-            w = glade_xml_get_widget(xml, "xvc_ctrl_lock_toggle");
-            g_assert(w);
-    
-            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
-        
-            if ((y + pheight + height) < max_height) {
-                gtk_window_move(GTK_WINDOW(toplevel), x,
-                                (y + height + FRAME_OFFSET));
+            if (x > pwidth) {
+                gtk_window_move(GTK_WINDOW(toplevel),
+                                (x - pwidth - FRAME_OFFSET), y);
             } else {
-                if (x > pwidth) {
+                if ((x + width + pwidth) < max_width) {
                     gtk_window_move(GTK_WINDOW(toplevel),
-                                    (x - pwidth - FRAME_OFFSET), y);
-                } else {
-                    if ((x + width + pwidth) < max_width) {
-                        gtk_window_move(GTK_WINDOW(toplevel),
-                                        (x + width + FRAME_OFFSET), y);
-                    }
-                    // otherwise leave the UI where it is ...
+                                    (x + width + FRAME_OFFSET), y);
                 }
+                // otherwise leave the UI where it is ...
             }
         }
-    #undef DEBUGFUNCTION
+    }
+#undef DEBUGFUNCTION
 }
 
 
@@ -123,10 +125,10 @@ void do_reposition_control(GtkWidget *toplevel) {
  * Change Frame due to user input
  *
  */
-void xvc_change_gtk_frame(int x, int y, int width, int height, 
-                     Boolean reposition_control)
+void xvc_change_gtk_frame(int x, int y, int width, int height,
+                          Boolean reposition_control)
 {
-    #define DEBUGFUNCTION "xvc_change_gtk_frame()"
+#define DEBUGFUNCTION "xvc_change_gtk_frame()"
     int max_width, max_height;
     extern GtkWidget *xvc_ctrl_main_window;
     GdkScreen *myscreen;
@@ -148,8 +150,8 @@ void xvc_change_gtk_frame(int x, int y, int width, int height,
     }
 
 #ifdef DEBUG
-    printf("%s %s: screen = %dx%d selection=%dx%d\n", DEBUGFILE, DEBUGFUNCTION,
-           max_width, max_height, width, height);
+    printf("%s %s: screen = %dx%d selection=%dx%d\n", DEBUGFILE,
+           DEBUGFUNCTION, max_width, max_height, width, height);
 #endif
 
     if (x < 0)
@@ -189,7 +191,7 @@ void xvc_change_gtk_frame(int x, int y, int width, int height,
         // if we have a v4l blind, move it, too
         if (gtk_frame_center != NULL)
             gtk_window_move(GTK_WINDOW(gtk_frame_center), x, y);
-#endif // HasVideo4Linux
+#endif                          // HasVideo4Linux
     }
     // store coordinates in rectangle for further reference
     xvc_frame_rectangle.x = x;
@@ -206,10 +208,10 @@ void xvc_change_gtk_frame(int x, int y, int width, int height,
     // triggered through a move of the control ... thus causing an
     // infinite loop), 
     // move the control window, too
-    if (((app->flags & FLG_NOGUI) == 0) && reposition_control) 
+    if (((app->flags & FLG_NOGUI) == 0) && reposition_control)
         do_reposition_control(xvc_ctrl_main_window);
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -218,7 +220,7 @@ void xvc_change_gtk_frame(int x, int y, int width, int height,
 static gint
 on_gtk_frame_configure_event(GtkWidget * w, GdkEventConfigure * e)
 {
-    #define DEBUGFUNCTION "on_gtk_frame_configure_event()"
+#define DEBUGFUNCTION "on_gtk_frame_configure_event()"
     gint x, y, pwidth, pheight;
 
     if (xvc_is_frame_locked()) {
@@ -232,7 +234,7 @@ on_gtk_frame_configure_event(GtkWidget * w, GdkEventConfigure * e)
     }
 
     return FALSE;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -240,14 +242,15 @@ void
 xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
                      int px, int py)
 {
-    #define DEBUGFUNCTION "xvc_create_gtk_frame()"
+#define DEBUGFUNCTION "xvc_create_gtk_frame()"
     gint x = 0, y = 0, width = 0, height = 0;
     GdkColor g_col;
     GdkColormap *colormap;
     int flags = app->flags;
 
 #ifdef DEBUG
-    printf("%s %s: x %d y %d width %d height %d\n", DEBUGFILE, DEBUGFUNCTION, px, py, pwidth, pheight);
+    printf("%s %s: x %d y %d width %d height %d\n", DEBUGFILE,
+           DEBUGFUNCTION, px, py, pwidth, pheight);
 #endif
 
 
@@ -272,8 +275,6 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
         x = (px < 0 ? 0 : px);
         y = (py < 0 ? 0 : py);
     }
-
-    // FIXME: make sure width and height are on screen
 
     // store rectangle properties for further reference
     g_assert(&xvc_frame_rectangle);
@@ -518,7 +519,7 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
             // XtNlabel, "Source: Video4Linux", NULL);
             // XtPopup(blind, XtGrabNone); 
         }
-#endif // HasVideo4Linux
+#endif                          // HasVideo4Linux
         // connect event-handler to configure event of gtk control window
         // to redraw the
         // selection frame if the control is moved and the frame is locked
@@ -528,17 +529,17 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
     }
     xvc_frame_lock = 1;
 
-    if (!(flags & FLG_NOGUI) && ( px >= 0 || py >= 0 ) )
+    if (!(flags & FLG_NOGUI) && (px >= 0 || py >= 0))
         do_reposition_control(toplevel);
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 void xvc_destroy_gtk_frame()
 {
-    #define DEBUGFUNCTION "xvc_destroy_gtk_frame()"
-    
+#define DEBUGFUNCTION "xvc_destroy_gtk_frame()"
+
     gtk_widget_destroy(gtk_frame_bottom);
     gtk_widget_destroy(gtk_frame_right);
     gtk_widget_destroy(gtk_frame_left);
@@ -546,6 +547,5 @@ void xvc_destroy_gtk_frame()
     if (gtk_frame_center) {
         gtk_widget_destroy(gtk_frame_center);
     }
-
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }

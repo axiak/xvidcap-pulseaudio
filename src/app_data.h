@@ -36,7 +36,7 @@
 
 #ifdef HAVE_SHMAT
 #define FLG_USE_SHM 4
-#endif // HAVE_SHMAT
+#endif                          // HAVE_SHMAT
 
 #define FLG_USE_DGA 8
 #define FLG_USE_V4L 16
@@ -45,7 +45,7 @@
 #define FLG_SOURCE (FLG_USE_DGA | FLG_USE_SHM | FLG_USE_V4L)
 #else
 #define FLG_SOURCE (FLG_USE_DGA | FLG_USE_V4L)
-#endif // HAVE_SHMAT
+#endif                          // HAVE_SHMAT
 
 #define FLG_REC_SOUND 32
 // FIXME: do we need the following?
@@ -85,7 +85,7 @@ typedef struct {
     int sndrate;                // sound sample rate
     int sndsize;                // bits to sample for audio capture
     int sndchannels;            // number of channels to record
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     // audio to 
     char *play_cmd;             // command to use for animate function
     char *video_cmd;            // command to use for make video function
@@ -105,7 +105,7 @@ typedef struct {
     char *source;               // video capture source
 #ifdef HAVE_FFMPEG_AUDIO
     char *snddev;               // audio capture source
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     // information
     char *device;               // v4l device to capture from
     int default_mode;           // 0 = single_frame, 1 =
@@ -150,7 +150,8 @@ typedef struct _xvError {
     // ending in a '.' (or smth.)
     void (*action) (void *);    // default action 
     char *action_msg;           // describes what the default action does
-    // formulate like you're completing the sentence: to resolve this I will ...
+    // formulate like you're completing the sentence: to resolve this I
+    // will ...
 } xvError;
 
 typedef struct _xvErrorListItem {

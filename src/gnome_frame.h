@@ -29,7 +29,7 @@
 #include "gtk/gtk.h"
 
 
-void xvc_change_gtk_frame(int x, int y, int width, int height, 
+void xvc_change_gtk_frame(int x, int y, int width, int height,
                           Boolean reposition_control);
 void xvc_create_gtk_frame(GtkWidget * w, int width, int height, int x,
                           int y);

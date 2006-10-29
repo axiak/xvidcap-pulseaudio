@@ -20,7 +20,7 @@
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
-#endif // HAVE_CONFIG_H
+#endif                          // HAVE_CONFIG_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -180,7 +180,8 @@ void XImageToXWD(FILE * fp, XImage * image, Job * job)
         head.window_bdrwidth = (CARD32) win_attr.border_width;
 
         if (*(char *) &little_endian)
-            swap_n_4byte((unsigned char *) &head, sizeof(head) / sizeof(long));
+            swap_n_4byte((unsigned char *) &head,
+                         sizeof(head) / sizeof(long));
     }
     if (fwrite((char *) &head, sizeof(head), 1, fp) < 1)
         perror(file);

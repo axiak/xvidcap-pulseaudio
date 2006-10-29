@@ -32,15 +32,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h> // PATH_MAX
+#include <limits.h>             // PATH_MAX
 #include <ctype.h>
 
-/* FIXME: still necessary ... and here?
-#ifdef SOLARIS 
-#include <X11/X.h> 
-#include <X11/Xlib.h> 
-#endif //SOLARIS
-*/ 
+/* FIXME: still necessary ... and here? #ifdef SOLARIS #include <X11/X.h> 
+ * #include <X11/Xlib.h> #endif //SOLARIS */
 
 #include "app_data.h"
 #include "codecs.h"
@@ -75,7 +71,7 @@ void xvc_cap_type_options_init(CapTypeOptions * cto)
     cto->sndrate = -1;          // sound sample rate
     cto->sndsize = -1;          // bits to sample for audio capture
     cto->sndchannels = -1;      // number of channels to record audio to
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     cto->play_cmd = NULL;       // command to use for animate function
     cto->video_cmd = NULL;      // command to use for make video function
     cto->edit_cmd = NULL;       // command to use for edit function
@@ -94,12 +90,13 @@ void xvc_app_data_init(AppData * lapp)
     lapp->cap_pos_x = 0;        // x position of the capture frame
     lapp->cap_pos_y = 0;        // y position of the capture frame
     lapp->rescale = 0;
-    lapp->mouseWanted = 0;      // capture mouse pointer: 0 none , 1 white,
-                                // 2 black
+    lapp->mouseWanted = 0;      // capture mouse pointer: 0 none , 1
+                                // white,
+    // 2 black
     lapp->source = NULL;        // video capture source
 #ifdef HAVE_FFMPEG_AUDIO
     lapp->snddev = NULL;        // audio capture source
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     // information
     lapp->device = NULL;        // v4l device to capture from
     lapp->default_mode = 0;     // 0 = single_frame, 1 = multi_frame
@@ -108,7 +105,7 @@ void xvc_app_data_init(AppData * lapp)
     xvc_cap_type_options_init(&(lapp->single_frame));
 #ifdef USE_FFMPEG
     xvc_cap_type_options_init(&(lapp->multi_frame));
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 }
 
 
@@ -127,17 +124,17 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->source = "x11";
 #endif
     lapp->mouseWanted = 1;
-#ifdef HAVE_FFMPEG_AUDIO    
+#ifdef HAVE_FFMPEG_AUDIO
     lapp->snddev = "/dev/dsp";
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     lapp->cap_width = 192;
     lapp->cap_height = 144;
     lapp->rescale = 100;
 #ifdef USE_FFMPEG
     lapp->default_mode = 1;
-#else 
+#else
     lapp->default_mode = 0;
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     // initialzie options specific to either single- or multi-frame
     // capture
@@ -152,7 +149,7 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->single_frame.au_targetCodec = lapp->multi_frame.au_targetCodec =
         CODEC_NONE;
     lapp->single_frame.audioWanted = 0;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     lapp->single_frame.start_no = lapp->multi_frame.start_no = 0;
     lapp->single_frame.file = "test-%04d.xwd";
     lapp->single_frame.fps = lapp->multi_frame.fps = 1000;
@@ -171,15 +168,16 @@ void xvc_app_data_set_defaults(AppData * lapp)
     lapp->multi_frame.sndrate = 22050;
     lapp->multi_frame.sndsize = 32000;
     lapp->multi_frame.sndchannels = 1;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     lapp->multi_frame.file = "test-%04d.mpeg";
 
     lapp->multi_frame.edit_cmd =
         _("xterm -e 'echo \"none specified\" ; sleep 20'");
     lapp->multi_frame.video_cmd =
-        _("xterm -e 'echo \"not needed for multi-frame capture\" ; sleep 20'");
+        _
+        ("xterm -e 'echo \"not needed for multi-frame capture\" ; sleep 20'");
     lapp->multi_frame.play_cmd = "mplayer \"${XVFILE}\" &";
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
 }
 
@@ -209,7 +207,7 @@ xvc_cap_type_options_copy(CapTypeOptions * topts, CapTypeOptions * sopts)
     // capture
     topts->sndchannels = sopts->sndchannels;    // number of channels to
     // record audio to 
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     topts->play_cmd = strdup(sopts->play_cmd);  // command to use for
     // animate function
     topts->video_cmd = strdup(sopts->video_cmd);    // command to use
@@ -217,6 +215,7 @@ xvc_cap_type_options_copy(CapTypeOptions * topts, CapTypeOptions * sopts)
     // function
     topts->edit_cmd = strdup(sopts->edit_cmd);  // command to use for edit 
                                                 // 
+    // 
     // function
 
 }
@@ -241,7 +240,7 @@ void xvc_app_data_copy(AppData * tapp, AppData * sapp)
     tapp->source = strdup(sapp->source);    // video capture source
 #ifdef HAVE_FFMPEG_AUDIO
     tapp->snddev = strdup(sapp->snddev);    // audio capture source
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     tapp->device = strdup(sapp->device);    // v4l device to capture
     // from
     tapp->default_mode = sapp->default_mode;    // 0 = single_frame, 1 =
@@ -251,7 +250,7 @@ void xvc_app_data_copy(AppData * tapp, AppData * sapp)
                               &(sapp->single_frame));
 #ifdef USE_FFMPEG
     xvc_cap_type_options_copy(&(tapp->multi_frame), &(sapp->multi_frame));
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
 }
 
@@ -270,8 +269,8 @@ void xvc_app_data_copy(AppData * tapp, AppData * sapp)
  */
 xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "xvc_app_data_validate()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_app_data_validate()"
     CapTypeOptions *target = NULL;
 #ifdef USE_FFMPEG
     CapTypeOptions *non_target = NULL;
@@ -280,7 +279,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     int t_codec, t_format;
 #ifdef HAVE_FFMPEG_AUDIO
     int t_au_codec;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
     // capture size related
     Display *dpy;
@@ -288,7 +287,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     // we need current_mode determined by now
@@ -303,15 +302,16 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         target = &(lapp->multi_frame);
         non_target = &(lapp->single_frame);
     }
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (lapp->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, lapp->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, lapp->current_mode);
+
     lapp->current_mode = 0;
     target = &(lapp->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
 
     // flags related
@@ -352,14 +352,14 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     // end: mouseWanted
 
     // start: source
-//    lapp->flags &= ~FLG_SOURCE;
+    // lapp->flags &= ~FLG_SOURCE;
     if (strcasecmp(app->source, "x11") == 0) {
         // empty
     }
-#ifdef HAVE_SHMAT   
+#ifdef HAVE_SHMAT
     else if (strcasecmp(app->source, "shm") == 0)
         lapp->flags |= FLG_USE_SHM;
-#endif // HAVE_SHMAT
+#endif                          // HAVE_SHMAT
     else if (strcasecmp(app->source, "dga") == 0)
         lapp->flags |= FLG_USE_DGA;
     else if (strstr(app->source, "v4l") != NULL)
@@ -453,7 +453,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     // current_mode must be selected by now
 
     // start: rescale
-    if (lapp->rescale < 1 || lapp->rescale > 100 ) {
+    if (lapp->rescale < 1 || lapp->rescale > 100) {
         errors = xvc_errors_append(37, errors, lapp);
         if (!errors) {
             *rc = -1;
@@ -529,10 +529,10 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     if (!t_codec)
         t_codec = tFFormats[t_format].def_vid_codec;
 #ifdef HAVE_FFMPEG_AUDIO
-    t_au_codec = target->au_targetCodec;        
+    t_au_codec = target->au_targetCodec;
     if (!t_au_codec)
         t_au_codec = tFFormats[t_format].def_au_codec;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
     // is target valid and does it match the current_mode?
     // the next includes t_format == 0 ... which is at this stage an
@@ -558,8 +558,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         }
         *rc = 1;
         return errors;
-    }
-    else if (lapp->current_mode == 1 && t_format < CAP_MF) {
+    } else if (lapp->current_mode == 1 && t_format < CAP_MF) {
         errors = xvc_errors_append(19, errors, lapp);
         if (!errors) {
             *rc = -1;
@@ -591,11 +590,11 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         // a failure of xvc_is_element (...) is only relevant if
         // allowed_vid_codecs
         // is not NULL
-    } 
-#ifdef USE_FFMPEG    
+    }
+#ifdef USE_FFMPEG
     else if (tFFormats[t_format].allowed_vid_codecs &&
-               (!xvc_is_element(tFFormats[t_format].allowed_vid_codecs,
-                                tCodecs[t_codec].name))) {
+             (!xvc_is_element(tFFormats[t_format].allowed_vid_codecs,
+                              tCodecs[t_codec].name))) {
 #ifdef DEBUG
         printf("app_data: format %i %s - codec %i %s\n", t_format,
                tFFormats[t_format].name, t_codec, tCodecs[t_codec].name);
@@ -612,7 +611,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     }
 #ifdef HAVE_FFMPEG_AUDIO
     // only check audio settings if audio capture is enabled
-    if ( target->audioWanted == 1 ) {
+    if (target->audioWanted == 1) {
         if (t_format < CAP_FFM && target->au_targetCodec != CODEC_NONE) {
             errors = xvc_errors_append(24, errors, lapp);
             if (!errors) {
@@ -620,7 +619,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
                 return NULL;
             }
         } else
-        if (target->target == CODEC_NONE
+            if (target->target == CODEC_NONE
                 && target->au_targetCodec != CODEC_NONE) {
             // if target is auto-detected we also want to auto-detect
             // au_targetCodec
@@ -629,13 +628,13 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
                 *rc = -1;
                 return NULL;
             }
-        } 
+        }
         // a failure of xvc_is_element (...) is only relevant if
         // allowed_au_codecs
         // is not NULL
         else if (tFFormats[t_format].allowed_au_codecs &&
-                (!xvc_is_element(tFFormats[t_format].allowed_au_codecs,
-                                tAuCodecs[t_au_codec].name))) {
+                 (!xvc_is_element(tFFormats[t_format].allowed_au_codecs,
+                                  tAuCodecs[t_au_codec].name))) {
             errors = xvc_errors_append(26, errors, lapp);
             if (!errors) {
                 *rc = -1;
@@ -644,20 +643,19 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
             // FIXME: do I need to return here?
             // *rc = 1;
             // return errors;
-        } 
-        else if (tFFormats[t_format].allowed_au_codecs == NULL
-                && target->audioWanted) {
+        } else if (tFFormats[t_format].allowed_au_codecs == NULL
+                   && target->audioWanted) {
             errors =
-                xvc_errors_append((lapp->current_mode == 0) ? 42 : 43, errors,
-                                lapp);
+                xvc_errors_append((lapp->current_mode == 0) ? 42 : 43,
+                                  errors, lapp);
             if (!errors) {
                 *rc = -1;
                 return NULL;
             }
         }
     }
-#endif // HAVE_FFMPEG_AUDIO
-#endif // USE_FFMPEG
+#endif                          // HAVE_FFMPEG_AUDIO
+#endif                          // USE_FFMPEG
     // end: target
 
     // targetCodec ... check for suitable format is above with target
@@ -765,7 +763,8 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
      */
 
 
-    // if we don't have FFMPEG, we can only have one capture type, i.e. the target
+    // if we don't have FFMPEG, we can only have one capture type, i.e.
+    // the target
 #ifdef USE_FFMPEG
     if (mode == 0) {
         /* 
@@ -841,7 +840,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         t_au_codec = non_target->au_targetCodec;
         if (!t_au_codec)
             t_au_codec = tFFormats[t_format].def_au_codec;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
         // is target valid and does it match the current_mode?
         // the next includes t_format == 0 ... which is at this stage an
@@ -857,8 +856,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
             }
             *rc = 1;
             return errors;
-        }
-        else if (lapp->current_mode == 1 && t_format >= CAP_FFM) {
+        } else if (lapp->current_mode == 1 && t_format >= CAP_FFM) {
             errors = xvc_errors_append(18, errors, lapp);
             if (!errors) {
                 *rc = -1;
@@ -917,18 +915,18 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
         }
 #ifdef HAVE_FFMPEG_AUDIO
         // only check audio settings if audio capture is enabled
-        if ( non_target->audioWanted == 1 ) {
+        if (non_target->audioWanted == 1) {
             // does au_targetCodec match target
-            if (t_format < CAP_FFM && non_target->au_targetCodec != CODEC_NONE) {
+            if (t_format < CAP_FFM
+                && non_target->au_targetCodec != CODEC_NONE) {
                 errors = xvc_errors_append(24, errors, lapp);
                 if (!errors) {
                     *rc = -1;
                     return NULL;
                 }
             } else
-
-            if (non_target->target == CODEC_NONE
-                    && non_target->au_targetCodec != CODEC_NONE) {
+             if (non_target->target == CODEC_NONE
+                     && non_target->au_targetCodec != CODEC_NONE) {
                 // if target is auto-detected we also want to auto-detect
                 // au_targetCodec
                 errors = xvc_errors_append(25, errors, lapp);
@@ -940,8 +938,9 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
                 // allowed_au_codecs
                 // is not NULL
             } else if (tFFormats[t_format].allowed_au_codecs &&
-                    (!xvc_is_element(tFFormats[t_format].allowed_au_codecs,
-                                    tAuCodecs[t_au_codec].name))) {
+                       (!xvc_is_element
+                        (tFFormats[t_format].allowed_au_codecs,
+                         tAuCodecs[t_au_codec].name))) {
                 errors = xvc_errors_append(26, errors, lapp);
                 if (!errors) {
                     *rc = -1;
@@ -951,17 +950,17 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
                 // *rc = 1;
                 // return errors;
             } else if (tFFormats[t_format].allowed_au_codecs == NULL
-                    && non_target->audioWanted) {
+                       && non_target->audioWanted) {
                 errors =
                     xvc_errors_append((lapp->current_mode == 1) ? 42 : 43,
-                                    errors, lapp);
+                                      errors, lapp);
                 if (!errors) {
                     *rc = -1;
                     return NULL;
                 }
             }
         }
-#endif // HAVE_FFMPEG_AUDIO        
+#endif                          // HAVE_FFMPEG_AUDIO
         // end: target
 
         // targetCodec ... check for suitable format is above with target
@@ -1071,7 +1070,7 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
          */
 
     }
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
 
     if (errors)
@@ -1079,8 +1078,9 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
     else
         *rc = 0;
 #ifdef DEBUG
-    printf("%s %s: Leaving %s errors\n", DEBUGFILE, DEBUGFUNCTION, ((errors)?"with":"without"));
-#endif // DEBUG
+    printf("%s %s: Leaving %s errors\n", DEBUGFILE, DEBUGFUNCTION,
+           ((errors) ? "with" : "without"));
+#endif                          // DEBUG
 
     return errors;
 #undef DEBUGFUNCTION
@@ -1093,12 +1093,12 @@ xvErrorListItem *xvc_app_data_validate(AppData * lapp, int mode, int *rc)
  */
 int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
 {
-    #define DEBUGFUNCTION "xvc_merge_cap_type_and_app_data()"
+#define DEBUGFUNCTION "xvc_merge_cap_type_and_app_data()"
     CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     // we need current_mode determined by now
@@ -1108,15 +1108,16 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
         target = &(lapp->single_frame);
     else
         target = &(lapp->multi_frame);
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (lapp->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, lapp->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, lapp->current_mode);
+
     lapp->current_mode = 0;
     target = &(lapp->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     // set the capture options of the right mode to the specified values
     if (cto->file != NULL)
@@ -1139,7 +1140,7 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
         target->quality = cto->quality;
     if (cto->bpp > -1)
         target->bpp = cto->bpp;
-#ifdef HAVE_FFMPEG_AUDIO        
+#ifdef HAVE_FFMPEG_AUDIO
     if (cto->au_targetCodec > -1)
         target->au_targetCodec = cto->au_targetCodec;
     if (cto->audioWanted > -1)
@@ -1150,7 +1151,7 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
         target->sndsize = cto->sndsize;
     if (cto->sndchannels > -1)
         target->sndchannels = cto->sndchannels;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     if (cto->play_cmd != NULL)
         target->play_cmd = cto->play_cmd;
     if (cto->video_cmd != NULL)
@@ -1160,11 +1161,11 @@ int xvc_merge_cap_type_and_app_data(CapTypeOptions * cto, AppData * lapp)
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     return 1;
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -1369,29 +1370,30 @@ const xvError eleven = {
 // empty filenames to signify ask-user
 void xverror_12_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_12_action()"
+#define DEBUGFUNCTION "xverror_12_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
     CapTypeOptions *target = NULL;
     char *fn = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
+
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     if (target->target > 0 && target->target < NUMCAPS) {
         char tmp_fn[512];
@@ -1410,12 +1412,12 @@ void xverror_12_action(void *err)
     } else {
 #ifdef USE_FFMPEG
         if (cerr->app->current_mode == 0)
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
             fn = "test-%04d.xwd";
 #ifdef USE_FFMPEG
         else
             fn = "test-%04d.mpeg";
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
         target->target = 0;
     }
 
@@ -1423,9 +1425,9 @@ void xverror_12_action(void *err)
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError twelve = {
@@ -1479,35 +1481,37 @@ const xvError fifteen = {
 };
 
 
-void xverror_16_action(void *err) {
-    #define DEBUGFUNCTION "xverror_16_action()"
+void xverror_16_action(void *err)
+{
+#define DEBUGFUNCTION "xverror_16_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0) {
         cerr->app->single_frame.target = CAP_XWD;
     } else {
-        cerr->app->multi_frame.target = CAP_DIVX;        
+        cerr->app->multi_frame.target = CAP_DIVX;
     }
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
+
     cerr->app->current_mode = 0;
     cerr->app->single_frame.target = CAP_XWD;
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError sixteen = {
@@ -1606,7 +1610,7 @@ const xvError twentythree = {
     xverror_23_action,
     N_("Reset multi-frame target codec to default for file format")
 };
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
 const xvError twentyfour = {
     24,
@@ -1643,7 +1647,7 @@ const xvError twentysix = {
     xverror_26_action,
     N_("Reset multi-frame target audio codec to default for file format")
 };
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
 const xvError twentyseven = {
     27,
@@ -1672,36 +1676,37 @@ const xvError twentyeight = {
 
 void xverror_29_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_29_action()"
+#define DEBUGFUNCTION "xverror_29_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
     CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
+
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     target->time = 0;
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError twentynine = {
@@ -1724,36 +1729,37 @@ const xvError thirty = {
 
 void xverror_31_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_31_action()"
+#define DEBUGFUNCTION "xverror_31_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
     CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
+
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     target->frames = 0;
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError thirtyone = {
@@ -1776,36 +1782,37 @@ const xvError thirtytwo = {
 
 void xverror_33_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_33_action()"
+#define DEBUGFUNCTION "xverror_33_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
     CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
+
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     target->start_no = 0;
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError thirtythree = {
@@ -1828,36 +1835,37 @@ const xvError thirtyfour = {
 
 void xverror_35_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_35_action()"
+#define DEBUGFUNCTION "xverror_35_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
     CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
+
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     target->step = 1;
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError thirtyfive = {
@@ -1880,19 +1888,19 @@ const xvError thirtysix = {
 
 void xverror_37_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_37_action()"
+#define DEBUGFUNCTION "xverror_37_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     cerr->app->rescale = 100;
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-    #undef DEBUGFUNCTION
+#endif                          // DEBUG
+#undef DEBUGFUNCTION
 }
 
 const xvError thirtyseven = {
@@ -1906,36 +1914,37 @@ const xvError thirtyseven = {
 
 void xverror_40_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_40_action()"
+#define DEBUGFUNCTION "xverror_40_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
     CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
 #ifdef USE_FFMPEG
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
     else
         target = &(cerr->app->multi_frame);
-#else // USE_FFMPEG
+#else                           // USE_FFMPEG
     // we only have single frame capture
     if (cerr->app->current_mode != 0)
-        printf(_("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"), 
-                DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
-    
+        printf(_
+               ("%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... correcting, but smth's wrong\n"),
+               DEBUGFILE, DEBUGFUNCTION, cerr->app->current_mode);
+
     cerr->app->current_mode = 0;
     target = &(cerr->app->single_frame);
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
     target->quality = 1;
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError fourty = {
@@ -1959,13 +1968,13 @@ const xvError fourtyone = {
 #ifdef HAVE_FFMPEG_AUDIO
 void xverror_42_action(void *err)
 {
-    #define DEBUGFUNCTION "xverror_42_action()"
+#define DEBUGFUNCTION "xverror_42_action()"
     xvErrorListItem *cerr = (xvErrorListItem *) err;
     CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     if (cerr->app->current_mode == 0)
         target = &(cerr->app->single_frame);
@@ -1976,9 +1985,9 @@ void xverror_42_action(void *err)
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 const xvError fourtytwo = {
@@ -1998,7 +2007,7 @@ const xvError fourtythree = {
     xverror_42_action,
     N_("Disable audio capture for multi-frame capture")
 };
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
 
 
@@ -2037,12 +2046,12 @@ void xvc_errors_init()
     xvErrors[i++] = twentytwo;
 #ifdef USE_FFMPEG
     xvErrors[i++] = twentythree;
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
     xvErrors[i++] = twentyfour;
     xvErrors[i++] = twentyfive;
     xvErrors[i++] = twentysix;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
     xvErrors[i++] = twentyseven;
     xvErrors[i++] = twentyeight;
     xvErrors[i++] = twentynine;
@@ -2054,14 +2063,14 @@ void xvc_errors_init()
     xvErrors[i++] = thirtyfive;
     xvErrors[i++] = thirtysix;
     xvErrors[i++] = thirtyseven;
-//    xvErrors[i++] = thirtyeight;
-//    xvErrors[i++] = thirtynine;
+    // xvErrors[i++] = thirtyeight;
+    // xvErrors[i++] = thirtynine;
     xvErrors[i++] = fourty;
     xvErrors[i++] = fourtyone;
 #ifdef HAVE_FFMPEG_AUDIO
     xvErrors[i++] = fourtytwo;
     xvErrors[i++] = fourtythree;
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
     // the next one is used to terminate the list in the array
     // don't depend on NUMERRORS
@@ -2336,17 +2345,17 @@ void xvc_errors_write_action_msg(int code)
  */
 void
 xvc_command_execute(char *command, int flag, int number, char *file,
-                    int fframe, int lframe, int width, int height,
-                    int fps)
+                    int fframe, int lframe, int width, int height, int fps)
 {
-    #define DEBUGFUNCTION "xvc_command_execute()"
+#define DEBUGFUNCTION "xvc_command_execute()"
     int buflength = (PATH_MAX * 5) + 1;
     char buf[buflength];
     char *myfile = NULL;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with flag '%i'\n", DEBUGFILE, DEBUGFUNCTION, flag);
-#endif // DEBUG
+    printf("%s %s: Entering with flag '%i'\n", DEBUGFILE, DEBUGFUNCTION,
+           flag);
+#endif                          // DEBUG
 
     switch (flag) {
     case 0:
@@ -2396,16 +2405,15 @@ xvc_command_execute(char *command, int flag, int number, char *file,
         break;
 
     }
-    
-    snprintf(buf, buflength, 
+
+    snprintf(buf, buflength,
              "XVFFRAME=\"%i\" XVLFRAME=\"%i\" XVWIDTH=\"%i\" XVHEIGHT=\"%i\" XVFPS=\"%f\" XVTIME=\"%f\" XVFILE=\"%s\" ; %s",
-             fframe, lframe, width, height, ((float) fps / 100), 
-             (float) 1000 / ((float) fps / 100),
-             myfile, command);
+             fframe, lframe, width, height, ((float) fps / 100),
+             (float) 1000 / ((float) fps / 100), myfile, command);
 
 #ifdef DEBUG
     printf("%s %s: calling: '%s'\n", DEBUGFILE, DEBUGFUNCTION, buf);
-#endif // DEBUG
+#endif                          // DEBUG
     system(buf);
 
     // sf-animate: flag 1
@@ -2415,11 +2423,11 @@ xvc_command_execute(char *command, int flag, int number, char *file,
     // ${XVHEIGHT} ${XVFPS} ${XVTIME} &
     // sf-edit: flag 2
     // gimp "${XVFILE}" &
-    
+
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG    
-    #undef DEBUGFUNCTION
+#endif                          // DEBUG
+#undef DEBUGFUNCTION
 }
 
 

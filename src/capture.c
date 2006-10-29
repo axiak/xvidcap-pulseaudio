@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) 1997-98 Rasca, Berlin
  * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
  *
@@ -82,7 +82,7 @@
  */
 static void getCurrentPointer(int *x, int *y, Job * mjob)
 {
-    #define DEBUGFUNCTION "getCurrentPointer()"
+#define DEBUGFUNCTION "getCurrentPointer()"
     Window mrootwindow, childwindow;
     int dummy;
     Display *dpy;
@@ -97,7 +97,7 @@ static void getCurrentPointer(int *x, int *y, Job * mjob)
     mrootwindow = DefaultRootWindow(dpy);
 
     if (XQueryPointer(dpy, mrootwindow, &mrootwindow, &childwindow,
-                      x, y, &dummy, &dummy,(unsigned int*) &dummy)) {
+                      x, y, &dummy, &dummy, (unsigned int *) &dummy)) {
         // if the XQueryPointer was successfull, we have everything we
         // need in the variables passed as result pointers
     } else {
@@ -112,7 +112,7 @@ static void getCurrentPointer(int *x, int *y, Job * mjob)
     if (mjob->flags & FLG_NOGUI) {
         XCloseDisplay(dpy);
     }
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -121,7 +121,7 @@ static void getCurrentPointer(int *x, int *y, Job * mjob)
  */
 static void paintMousePointer(int *x, int *y, XImage * image)
 {
-    #define DEBUGFUNCTION "paintMousePointer()"
+#define DEBUGFUNCTION "paintMousePointer()"
     uint16_t mousePointerBlack[] =
         { 0, 49152, 40960, 36864, 34816, 33792, 33280, 33024, 32896, 32832,
         33728, 37376, 43264, 51456, 1152, 1152, 576, 576, 448, 0
@@ -142,7 +142,7 @@ static void paintMousePointer(int *x, int *y, XImage * image)
         && (*y - mjob->area->y) >= 0
         && *y < (mjob->area->height + mjob->area->y)) {
         int line;
-        uint8_t *im_data = (uint8_t*) image->data;
+        uint8_t *im_data = (uint8_t *) image->data;
 
         // move the cursor to the right starting position
         // first: shift to right line
@@ -285,7 +285,7 @@ static void paintMousePointer(int *x, int *y, XImage * image)
             exit(1);
         }
     }
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -297,14 +297,14 @@ static void paintMousePointer(int *x, int *y, XImage * image)
 static Boolean
 XGetZPixmap(Display * dpy, Drawable d, XImage * image, int x, int y)
 {
-    #define DEBUGFUNCTION "XGetZPixmap()"
+#define DEBUGFUNCTION "XGetZPixmap()"
     register xGetImageReq *req = NULL;
     xGetImageReply rep;
     long nbytes;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     if (!image)
         return (False);
@@ -330,7 +330,7 @@ XGetZPixmap(Display * dpy, Drawable d, XImage * image, int x, int y)
     nbytes = (long) rep.length << 2;
 #ifdef DEBUG
     printf("%s %s: read %i bytes\n", DEBUGFILE, DEBUGFUNCTION, nbytes);
-#endif // DEBUG
+#endif                          // DEBUG
 
     _XReadPad(dpy, image->data, nbytes);
 
@@ -339,19 +339,19 @@ XGetZPixmap(Display * dpy, Drawable d, XImage * image, int x, int y)
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     return (True);
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 FILE *getOutputFile(Job * job)
 {
-    #define DEBUGFUNCTION "getOutputFile()"
+#define DEBUGFUNCTION "getOutputFile()"
     char file[PATH_MAX + 1];
     FILE *fp = NULL;
-    
+
     if ((job->flags & FLG_MULTI_IMAGE) != 0) {
         sprintf(file, job->file, job->movie_no);
     } else {
@@ -363,47 +363,47 @@ FILE *getOutputFile(Job * job)
         perror(file);
         job->state = VC_STOP;
     }
-    
+
     return fp;                  // possibly NULL
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 Display *getCaptureDisplay(Job * job)
 {
-    #define DEBUGFUNCTION "getCaptureDisplay()"
+#define DEBUGFUNCTION "getCaptureDisplay()"
     Screen *scr;
     Display *dpy;
-    
+
     if (!(job->flags & FLG_NOGUI)) {
         scr = job->win_attr.screen;
         dpy = DisplayOfScreen(scr);
     } else {
         dpy = XOpenDisplay(NULL);
     }
-    
+
     return dpy;                 // possibly NULL
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 XImage *captureFrameCreatingImage(Display * dpy, Job * job)
 {
-    #define DEBUGFUNCTION "captureFrameCreatingImage()"
+#define DEBUGFUNCTION "captureFrameCreatingImage()"
     int x, y;                   // trace mouse pointer
     XImage *image = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-    
+#endif                          // DEBUG
+
     // don't find the current pointer position if we don't need it
     if (job->mouseWanted > 0) {
         getCurrentPointer(&x, &y, job);
     }
 #ifdef DEBUG
     printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
     // get the image here
     image = XGetImage(dpy, RootWindow(dpy, DefaultScreen(dpy)),
                       job->area->x, job->area->y,
@@ -423,21 +423,21 @@ XImage *captureFrameCreatingImage(Display * dpy, Job * job)
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     return image;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 int captureFrameToImage(Display * dpy, Job * job, XImage * image)
 {
-    #define DEBUGFUNCTION "captureFrameToImage()"
+#define DEBUGFUNCTION "captureFrameToImage()"
     int x, y, ret = 0;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     // don't find the current pointer position if we don't need it
     if (job->mouseWanted > 0) {
@@ -445,7 +445,7 @@ int captureFrameToImage(Display * dpy, Job * job, XImage * image)
     }
 #ifdef DEBUG
     printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
     // get the image here
     if (XGetZPixmap(dpy,
                     RootWindow(dpy, DefaultScreen(dpy)),
@@ -456,24 +456,23 @@ int captureFrameToImage(Display * dpy, Job * job, XImage * image)
         }
         ret = 1;
     }
-
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-    
+#endif                          // DEBUG
+
     return ret;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 int captureFrameToImageSHM(Display * dpy, Job * job, XImage * image)
 {
-    #define DEBUGFUNCTION "captureFrameToImageSHM()"
+#define DEBUGFUNCTION "captureFrameToImageSHM()"
     int x, y, ret = 0;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     // don't find the current pointer position if we don't need it
     if (job->mouseWanted > 0) {
@@ -481,30 +480,30 @@ int captureFrameToImageSHM(Display * dpy, Job * job, XImage * image)
     }
 #ifdef DEBUG
     printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
     // get the image here
     if (XShmGetImage(dpy,
-                    RootWindow(dpy, DefaultScreen(dpy)),
-                    image, job->area->x, job->area->y, AllPlanes)) {
+                     RootWindow(dpy, DefaultScreen(dpy)),
+                     image, job->area->x, job->area->y, AllPlanes)) {
         // paint the mouse pointer into the captured image if necessary
         if (job->mouseWanted > 0) {
             paintMousePointer(&x, &y, image);
         }
         ret = 1;
     }
-
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-    
+#endif                          // DEBUG
+
     return ret;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
-XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job, XShmSegmentInfo *shminfo)
+XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job,
+                                     XShmSegmentInfo * shminfo)
 {
-    #define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
+#define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
     int x, y;                   // trace mouse pointer
     XImage *image = NULL;
 
@@ -513,19 +512,18 @@ XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job, XShmSegmentInfo *
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-    
+#endif                          // DEBUG
+
     // don't find the current pointer position if we don't need it
     if (job->mouseWanted > 0) {
         getCurrentPointer(&x, &y, job);
     }
-    
 #ifdef DEBUG
     printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
     // get the image here
     image = XShmCreateImage(dpy, visual, depth, ZPixmap, NULL,
-            shminfo, job->area->width, job->area->height);
+                            shminfo, job->area->width, job->area->height);
     if (!image) {
         printf("%s %s: Can't get image: %dx%d+%d+%d\n",
                DEBUGFILE, DEBUGFUNCTION, job->area->width,
@@ -533,11 +531,11 @@ XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job, XShmSegmentInfo *
         job_set_state(VC_STOP);
     } else {
         shminfo->shmid = shmget(IPC_PRIVATE,
-                    image->bytes_per_line * image->height,
-                    IPC_CREAT | 0777);
+                                image->bytes_per_line * image->height,
+                                IPC_CREAT | 0777);
         if (shminfo->shmid == -1) {
             printf("%s %s: Fatal: Can't get shared memory!\n",
-                    DEBUGFILE, DEBUGFUNCTION);
+                   DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
         shminfo->shmaddr = image->data = shmat(shminfo->shmid, 0, 0);
@@ -545,7 +543,7 @@ XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job, XShmSegmentInfo *
 
         if (XShmAttach(dpy, shminfo) == 0) {
             printf("%s %s: Fatal: Failed to attach shared memory!\n",
-                    DEBUGFILE, DEBUGFUNCTION);
+                   DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
 
@@ -554,25 +552,25 @@ XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job, XShmSegmentInfo *
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     return image;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
 long checkCaptureDuration(Job * job, long time, long time1)
 {
-    #define DEBUGFUNCTION "checkCaptureDuration()"
+#define DEBUGFUNCTION "checkCaptureDuration()"
     struct timeval curr_time;   // for measuring the duration of a frame
-                                // capture
-    
+    // capture
+
     // update monitor widget, here time is the time the capture took
     // time == 0 resets led_meter
     if (time1 < 1)
         time1 = 1;
     if (!(job->flags & FLG_NOGUI))
-        xvc_idle_add( xvc_frame_monitor, (void *) time1, FALSE);
+        xvc_idle_add(xvc_frame_monitor, (void *) time1, FALSE);
     // calculate the remaining time we have till capture of next frame
     time1 = job->time_per_frame - time1;
 
@@ -593,11 +591,10 @@ long checkCaptureDuration(Job * job, long time, long time1)
                  time, job->time_per_frame, job->pic_no);
     }
     // we need a little time to update the GUI (frame_drop_meter)
-/*    if (time < 2)
-        time = 2; */
+    /* if (time < 2) time = 2; */
 
     return time;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -605,27 +602,27 @@ long checkCaptureDuration(Job * job, long time, long time1)
 // this is used with source = x11 ... capture from X11 display w/o SHM
 long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
 {
-    #define DEBUGFUNCTION "TCbCaptureX11()"
+#define DEBUGFUNCTION "TCbCaptureX11()"
     Job *job = (Job *) xtp;
     static XImage *image = NULL;
     static FILE *fp = NULL;     // file handle to write the frame to
     long time, time1;           // for measuring the duration of a frame
-                                // capture
+    // capture
     struct timeval curr_time;   // for measuring the duration of a frame
-                                // capture
+    // capture
     static Display *dpy;
 
 #ifdef DEBUG
     printf("%s %s: pic_no=%d - state=%i\n", DEBUGFILE, DEBUGFUNCTION,
            job->pic_no, job->state);
-#endif // DEBUG
+#endif                          // DEBUG
 
     // wait for next iteration if pausing
-    if (job->state & VC_REC) { // if recording ...
+    if (job->state & VC_REC) {  // if recording ...
 
 #ifdef DEBUG
         printf("%s %s: we're recording\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
         // the next bit is true if we have configured max_frames and we're
         // reaching the limit with this captured frame
@@ -635,14 +632,15 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
 #ifdef DEBUG
             printf("%s %s: this is the final frame\n", DEBUGFILE,
                    DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
             if (job->flags & FLG_RUN_VERBOSE)
                 printf("%s %s: Stopped! pic_no=%d max_frames=%d\n",
                        DEBUGFILE, DEBUGFUNCTION, job->pic_no,
                        job->max_frames);
             if (!(job->flags & FLG_NOGUI))
-                xvc_idle_add( xvc_change_filename_display, (void *) job->pic_no, FALSE );
+                xvc_idle_add(xvc_change_filename_display,
+                             (void *) job->pic_no, FALSE);
 
             // we need to stop the capture to go through the necessary
             // cleanup routines for writing a correct file. If we have
@@ -656,6 +654,7 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
             goto CLEAN_X11;
         }
         // this might be a single step. If so, remove the state flag so we 
+        // 
         // don't keep single stepping
         job_remove_state(VC_STEP);
 
@@ -672,7 +671,7 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
 #ifdef DEBUG
             printf("%s %s: opening file for captured frame(s)\n",
                    DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
             fp = getOutputFile(job);
             if (!fp)
@@ -684,7 +683,7 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
 #ifdef DEBUG
             printf("%s %s: create data structure for image\n", DEBUGFILE,
                    DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
             // the first time this procedure is started
             // we must create a new image ..
@@ -698,13 +697,14 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
                 (*job->save) (fp, image, job);
                 job_remove_state(VC_START);
             }
-        } else { // we're recording and not in the first frame ....
-             // so we just read new data into the present image structure 
+        } else {                // we're recording and not in the first
+                                // frame ....
+            // so we just read new data into the present image structure 
 
 #ifdef DEBUG
             printf("%s %s: reading an image in a data sturctur present\n",
                    DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
             if (captureFrameToImage(dpy, job, image) > 0)
                 // call the necessary XtoXYZ function to process the image
@@ -720,232 +720,10 @@ long TCbCaptureX11(XtPointer xtp, XtIntervalId * id)
 #ifdef DEBUG
             printf("%s %s: done saving image, closing file descriptor\n",
                    DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
             fclose(fp);
         }
-
-         // substract the time we needed for creating and saving the frame
-         // to the file 
-        gettimeofday(&curr_time, NULL);
-        time1 =
-            (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
-
-        time = checkCaptureDuration(job, time, time1);
-        // time the next capture
-
-#ifdef DEBUG
-        printf
-            ("%s %s: submitting capture of next frame in %ld milliseconds\n",
-             DEBUGFILE, DEBUGFUNCTION, time);
-#endif // DEBUG
-
-        job->pic_no += job->step;
-        // if we're not short on time, update frame count
-        if (!(job->flags & FLG_NOGUI))
-            xvc_idle_add( xvc_change_filename_display, (void * )job->pic_no, FALSE );
-
-        // the following means VC_STATE != VC_REC
-        // this can only happen in capture.c if we were capturing and are
-        // just stopping
-    } else {
-        int orig_state;
-
-         // clean up 
-      CLEAN_X11:
-
-#ifdef DEBUG
-        printf("%s %s: cleaning up\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-
-        time = 0;
-        orig_state = job->state;    // store state here, esp. VC_CONTINUE
-
-        if (image) {
-            XDestroyImage(image);
-            image = NULL;
-        }
-
-        job_set_state(VC_STOP);
-
-        // set the sensitive stuff for the control panel if we don't
-        // autocontinue 
-        if ((orig_state & VC_CONTINUE) == 0)
-            xvc_idle_add( xvc_capture_stop, job, FALSE );
-
-        // clean up the save routines in xtoXXX.c 
-        if (job->clean)
-            (*job->clean) (job);
-        // if we're recording to a movie, we must close the file now
-        if (job->flags & FLG_MULTI_IMAGE)
-            if (fp)
-                fclose(fp);
-        fp = NULL;
-
-        if ((orig_state & VC_CONTINUE) == 0) {
-            // after this we're ready to start recording again 
-            job_merge_state(VC_READY);
-        } else {
-
-#ifdef DEBUG
-            printf
-                ("%s %s: autocontinue selected, preparing autocontinue\n",
-                 DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-
-            // prepare autocontinue
-            job->movie_no += 1;
-            job->pic_no = job->start_no;
-            job_merge_and_remove_state((VC_START|VC_REC), VC_STOP);
-            // start new capture session
-//            xvc_capture_start(job);
-            // and leave this one without further ado ...
-            return time;
-        }
-
-        if (job->flags & FLG_NOGUI) {
-            XCloseDisplay(dpy);
-        }
-    }
-
-    return time;
-
-    #undef DEBUGFUNCTION
-}
-
-
-#ifdef HAVE_SHMAT
-/* 
- * timer callback for capturing with shared memory
- */
-long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
-{
-    #define DEBUGFUNCTION "TCbCaptureSHM()"
-
-    Job *job = (Job *) xtp;
-    static XImage *image = NULL;
-    static FILE *fp = NULL;     // file handle to write the frame to
-    long time, time1;           // for measuring the duration of a frame
-                                // capture
-    struct timeval curr_time;   // for measuring the duration of a frame
-                                // capture
-    static Display *dpy;
-    static XShmSegmentInfo shminfo;
-
-#ifdef DEBUG
-    printf("%s %s: pic_no=%d flags=%d state=%i ", DEBUGFILE, DEBUGFUNCTION,
-            job->pic_no, job->flags, job->state);
-    printf("VC_REC %i - VC_STOP %i\n", (job->state & VC_REC),
-           (job->state & VC_STOP));
-    xvc_job_dump();
-#endif // DEBUG
-
-    // wait for next iteration if pausing
-    if (job->state & VC_REC) { // if recording ...
-
-#ifdef DEBUG
-        printf("%s %s: we're recording\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-
-        // the next bit is true if we have configured max_frames and we're
-        // reaching the limit with this captured frame
-        if (job->max_frames && ((job->pic_no - job->start_no) >
-                                job->max_frames - 1)) {
-
-#ifdef DEBUG
-            printf("%s %s: this is the final frame\n", DEBUGFILE,
-                   DEBUGFUNCTION);
-#endif // DEBUG
-
-            if (job->flags & FLG_RUN_VERBOSE)
-                printf("%s %s: Stopped! pic_no=%d max_frames=%d\n",
-                       DEBUGFILE, DEBUGFUNCTION, job->pic_no,
-                       job->max_frames);
-            if (!(job->flags & FLG_NOGUI))
-                xvc_idle_add( xvc_change_filename_display, (void *) job->pic_no, FALSE );
-
-            // we need to stop the capture to go through the necessary
-            // cleanup routines for writing a correct file. If we have
-            // autocontinue on we're setting a flag to let the cleanup
-            // code know we need
-            // to restart again afterwards
-            if (job->flags & FLG_AUTO_CONTINUE) {
-                job_merge_state(VC_CONTINUE);
-            }
-
-            goto CLEAN_SHM;
-        }
-
-        // this might be a single step. If so, remove the state flag so we 
-        // don't keep single stepping
-        job_remove_state(VC_STEP);
-        
-        // take the time before starting the capture
-        gettimeofday(&curr_time, NULL);
-        time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
-
-        // open the output file we need to do this for every frame for
-        // individual frame 
-        // capture and only once for capture to movie
-        if ((!(job->flags & FLG_MULTI_IMAGE)) ||
-            ((job->flags & FLG_MULTI_IMAGE) && (job->state & VC_START))) {
-
-#ifdef DEBUG
-            printf("%s %s: opening file for captured frame(s)\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-
-            fp = getOutputFile(job);
-            if (!fp)
-                return FALSE;
-        }
-        // if this is the first frame for the current job ...
-        if (job->state & VC_START) {
-
-#ifdef DEBUG
-            printf("%s %s: create data structure for image\n", DEBUGFILE,
-                   DEBUGFUNCTION);
-#endif // DEBUG
-
-            // the first time this procedure is started
-            // we must create a new image ..
-            dpy = getCaptureDisplay(job);
-            if (!dpy)
-                return FALSE;
-
-            image = captureFrameCreatingImageSHM(dpy, job, &shminfo);
-            if (image) {
-                // call the necessary XtoXYZ function to process the image
-                (*job->save) (fp, image, job);
-                job_remove_state(VC_START);
-            }
-        } else { // we're recording and not in the first frame ....
-             // so we just read new data into the present image structure 
-
-#ifdef DEBUG
-            printf("%s %s: reading an image in a data sturctur present\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-
-            if (captureFrameToImage(dpy, job, image) > 0)
-                // call the necessary XtoXYZ function to process the image
-                (*job->save) (fp, image, job);
-            else
-                printf("%s %s: XGetZPixmap returned 'False'!\n", DEBUGFILE,
-                       DEBUGFUNCTION);
-        }
-        // this again is for recording, no matter if first frame or any
-        // other close the image file if single frame capture mode
-        if (!(job->flags & FLG_MULTI_IMAGE)) {
-
-#ifdef DEBUG
-            printf("%s %s: done saving image, closing file descriptor\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-
-            fclose(fp);
-        }
-
         // substract the time we needed for creating and saving the frame
         // to the file 
         gettimeofday(&curr_time, NULL);
@@ -959,12 +737,13 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
         printf
             ("%s %s: submitting capture of next frame in %ld milliseconds\n",
              DEBUGFILE, DEBUGFUNCTION, time);
-#endif // DEBUG
-//        xvc_add_timeout(time, job->capture);
+#endif                          // DEBUG
 
         job->pic_no += job->step;
+        // if we're not short on time, update frame count
         if (!(job->flags & FLG_NOGUI))
-            xvc_idle_add( xvc_change_filename_display, (void * )job->pic_no, FALSE );
+            xvc_idle_add(xvc_change_filename_display, (void *) job->pic_no,
+                         FALSE);
 
         // the following means VC_STATE != VC_REC
         // this can only happen in capture.c if we were capturing and are
@@ -972,31 +751,27 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
     } else {
         int orig_state;
 
-         // clean up 
-      CLEAN_SHM:
+        // clean up 
+      CLEAN_X11:
 
 #ifdef DEBUG
         printf("%s %s: cleaning up\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
         time = 0;
         orig_state = job->state;    // store state here, esp. VC_CONTINUE
 
         if (image) {
-            XShmDetach(dpy, &shminfo);
-            image->data = NULL;
             XDestroyImage(image);
             image = NULL;
-            shmdt(shminfo.shmaddr);
-            shmctl(shminfo.shmid, IPC_RMID, 0);
-        } 
+        }
 
         job_set_state(VC_STOP);
 
         // set the sensitive stuff for the control panel if we don't
         // autocontinue 
         if ((orig_state & VC_CONTINUE) == 0)
-            xvc_idle_add( xvc_capture_stop, job, FALSE );
+            xvc_idle_add(xvc_capture_stop, job, FALSE);
 
         // clean up the save routines in xtoXXX.c 
         if (job->clean)
@@ -1016,14 +791,14 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
             printf
                 ("%s %s: autocontinue selected, preparing autocontinue\n",
                  DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
             // prepare autocontinue
             job->movie_no += 1;
             job->pic_no = job->start_no;
-            job_merge_and_remove_state((VC_START|VC_REC), VC_STOP);
+            job_merge_and_remove_state((VC_START | VC_REC), VC_STOP);
             // start new capture session
-//            xvc_capture_start(job);
+            // xvc_capture_start(job);
             // and leave this one without further ado ...
             return time;
         }
@@ -1035,7 +810,234 @@ long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
 
     return time;
 
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
+}
+
+
+#ifdef HAVE_SHMAT
+/* 
+ * timer callback for capturing with shared memory
+ */
+long TCbCaptureSHM(XtPointer xtp, XtIntervalId * id)
+{
+#define DEBUGFUNCTION "TCbCaptureSHM()"
+
+    Job *job = (Job *) xtp;
+    static XImage *image = NULL;
+    static FILE *fp = NULL;     // file handle to write the frame to
+    long time, time1;           // for measuring the duration of a frame
+    // capture
+    struct timeval curr_time;   // for measuring the duration of a frame
+    // capture
+    static Display *dpy;
+    static XShmSegmentInfo shminfo;
+
+#ifdef DEBUG
+    printf("%s %s: pic_no=%d flags=%d state=%i ", DEBUGFILE, DEBUGFUNCTION,
+           job->pic_no, job->flags, job->state);
+    printf("VC_REC %i - VC_STOP %i\n", (job->state & VC_REC),
+           (job->state & VC_STOP));
+    xvc_job_dump();
+#endif                          // DEBUG
+
+    // wait for next iteration if pausing
+    if (job->state & VC_REC) {  // if recording ...
+
+#ifdef DEBUG
+        printf("%s %s: we're recording\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+
+        // the next bit is true if we have configured max_frames and we're
+        // reaching the limit with this captured frame
+        if (job->max_frames && ((job->pic_no - job->start_no) >
+                                job->max_frames - 1)) {
+
+#ifdef DEBUG
+            printf("%s %s: this is the final frame\n", DEBUGFILE,
+                   DEBUGFUNCTION);
+#endif                          // DEBUG
+
+            if (job->flags & FLG_RUN_VERBOSE)
+                printf("%s %s: Stopped! pic_no=%d max_frames=%d\n",
+                       DEBUGFILE, DEBUGFUNCTION, job->pic_no,
+                       job->max_frames);
+            if (!(job->flags & FLG_NOGUI))
+                xvc_idle_add(xvc_change_filename_display,
+                             (void *) job->pic_no, FALSE);
+
+            // we need to stop the capture to go through the necessary
+            // cleanup routines for writing a correct file. If we have
+            // autocontinue on we're setting a flag to let the cleanup
+            // code know we need
+            // to restart again afterwards
+            if (job->flags & FLG_AUTO_CONTINUE) {
+                job_merge_state(VC_CONTINUE);
+            }
+
+            goto CLEAN_SHM;
+        }
+        // this might be a single step. If so, remove the state flag so we 
+        // 
+        // don't keep single stepping
+        job_remove_state(VC_STEP);
+
+        // take the time before starting the capture
+        gettimeofday(&curr_time, NULL);
+        time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
+
+        // open the output file we need to do this for every frame for
+        // individual frame 
+        // capture and only once for capture to movie
+        if ((!(job->flags & FLG_MULTI_IMAGE)) ||
+            ((job->flags & FLG_MULTI_IMAGE) && (job->state & VC_START))) {
+
+#ifdef DEBUG
+            printf("%s %s: opening file for captured frame(s)\n",
+                   DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+
+            fp = getOutputFile(job);
+            if (!fp)
+                return FALSE;
+        }
+        // if this is the first frame for the current job ...
+        if (job->state & VC_START) {
+
+#ifdef DEBUG
+            printf("%s %s: create data structure for image\n", DEBUGFILE,
+                   DEBUGFUNCTION);
+#endif                          // DEBUG
+
+            // the first time this procedure is started
+            // we must create a new image ..
+            dpy = getCaptureDisplay(job);
+            if (!dpy)
+                return FALSE;
+
+            image = captureFrameCreatingImageSHM(dpy, job, &shminfo);
+            if (image) {
+                // call the necessary XtoXYZ function to process the image
+                (*job->save) (fp, image, job);
+                job_remove_state(VC_START);
+            }
+        } else {                // we're recording and not in the first
+                                // frame ....
+            // so we just read new data into the present image structure 
+
+#ifdef DEBUG
+            printf("%s %s: reading an image in a data sturctur present\n",
+                   DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+
+            if (captureFrameToImage(dpy, job, image) > 0)
+                // call the necessary XtoXYZ function to process the image
+                (*job->save) (fp, image, job);
+            else
+                printf("%s %s: XGetZPixmap returned 'False'!\n", DEBUGFILE,
+                       DEBUGFUNCTION);
+        }
+        // this again is for recording, no matter if first frame or any
+        // other close the image file if single frame capture mode
+        if (!(job->flags & FLG_MULTI_IMAGE)) {
+
+#ifdef DEBUG
+            printf("%s %s: done saving image, closing file descriptor\n",
+                   DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+
+            fclose(fp);
+        }
+        // substract the time we needed for creating and saving the frame
+        // to the file 
+        gettimeofday(&curr_time, NULL);
+        time1 =
+            (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
+
+        time = checkCaptureDuration(job, time, time1);
+        // time the next capture
+
+#ifdef DEBUG
+        printf
+            ("%s %s: submitting capture of next frame in %ld milliseconds\n",
+             DEBUGFILE, DEBUGFUNCTION, time);
+#endif                          // DEBUG
+        // xvc_add_timeout(time, job->capture);
+
+        job->pic_no += job->step;
+        if (!(job->flags & FLG_NOGUI))
+            xvc_idle_add(xvc_change_filename_display, (void *) job->pic_no,
+                         FALSE);
+
+        // the following means VC_STATE != VC_REC
+        // this can only happen in capture.c if we were capturing and are
+        // just stopping
+    } else {
+        int orig_state;
+
+        // clean up 
+      CLEAN_SHM:
+
+#ifdef DEBUG
+        printf("%s %s: cleaning up\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+
+        time = 0;
+        orig_state = job->state;    // store state here, esp. VC_CONTINUE
+
+        if (image) {
+            XShmDetach(dpy, &shminfo);
+            image->data = NULL;
+            XDestroyImage(image);
+            image = NULL;
+            shmdt(shminfo.shmaddr);
+            shmctl(shminfo.shmid, IPC_RMID, 0);
+        }
+
+        job_set_state(VC_STOP);
+
+        // set the sensitive stuff for the control panel if we don't
+        // autocontinue 
+        if ((orig_state & VC_CONTINUE) == 0)
+            xvc_idle_add(xvc_capture_stop, job, FALSE);
+
+        // clean up the save routines in xtoXXX.c 
+        if (job->clean)
+            (*job->clean) (job);
+        // if we're recording to a movie, we must close the file now
+        if (job->flags & FLG_MULTI_IMAGE)
+            if (fp)
+                fclose(fp);
+        fp = NULL;
+
+        if ((orig_state & VC_CONTINUE) == 0) {
+            // after this we're ready to start recording again 
+            job_merge_state(VC_READY);
+        } else {
+
+#ifdef DEBUG
+            printf
+                ("%s %s: autocontinue selected, preparing autocontinue\n",
+                 DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+
+            // prepare autocontinue
+            job->movie_no += 1;
+            job->pic_no = job->start_no;
+            job_merge_and_remove_state((VC_START | VC_REC), VC_STOP);
+            // start new capture session
+            // xvc_capture_start(job);
+            // and leave this one without further ado ...
+            return time;
+        }
+
+        if (job->flags & FLG_NOGUI) {
+            XCloseDisplay(dpy);
+        }
+    }
+
+    return time;
+
+#undef DEBUGFUNCTION
 }
 
 #endif                          /* HAVE_SHMAT */

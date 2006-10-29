@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <errno.h> 
+#include <errno.h>
 #include <pthread.h>
 #include <limits.h>             // PATH_MAX
 #include <X11/Intrinsic.h>
@@ -47,7 +47,7 @@
 #include "xvidcap-intl.h"
 #ifdef USE_FFMPEG
 # include "xtoffmpeg.h"
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 
 
 #define DEBUGFILE "job.c"
@@ -78,15 +78,15 @@ int job_quality(void);
  */
 Job *xvc_job_new()
 {
-    #define DEBUGFUNCTION "xvc_job_new()"
-    
+#define DEBUGFUNCTION "xvc_job_new()"
+
     job = (Job *) malloc(sizeof(Job));
     if (!job) {
         perror("%s %s: malloc failed?!?");
         exit(1);
     }
     return (job);
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
@@ -94,16 +94,17 @@ void
 xvc_job_set_from_app_data(AppData * app, Display * disp,
                           XWindowAttributes wa)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "xvc_job_set_from_app_data()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_job_set_from_app_data()"
     CapTypeOptions *cto;
     char file[PATH_MAX + 1];
 
     // make sure we do have a job
     if (job == NULL) {
         fprintf
-            (stderr, "%s %s: job is still NULL ... this should never happen!",
-                    DEBUGFILE, DEBUGFUNCTION);
+            (stderr,
+             "%s %s: job is still NULL ... this should never happen!",
+             DEBUGFILE, DEBUGFUNCTION);
         exit(1);
     }
     // switch sf or mf
@@ -141,8 +142,9 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
 #endif                          // HAVE_FFMPEG_AUDIO
         job->flags &= ~FLG_REC_SOUND;
 #ifdef HAVE_FFMPEG_AUDIO
-    job_set_sound_dev(app->snddev, cto->sndrate, cto->sndsize, cto->sndchannels);
-#endif // HAVE_FFMPEG_AUDIO
+    job_set_sound_dev(app->snddev, cto->sndrate, cto->sndsize,
+                      cto->sndchannels);
+#endif                          // HAVE_FFMPEG_AUDIO
     job->mouseWanted = app->mouseWanted;
     job->video_dev = app->device;
 
@@ -150,8 +152,9 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
     job->clean = (void (*)(Job *)) NULL;
 
 #ifdef DEBUG
-    printf("%s %s: target is set to %i \n", DEBUGFILE, DEBUGFUNCTION, job->target);
-#endif // DEBUG
+    printf("%s %s: target is set to %i \n", DEBUGFILE, DEBUGFUNCTION,
+           job->target);
+#endif                          // DEBUG
 
     job->target = cto->target;
     if (job->target <= 0) {
@@ -165,17 +168,20 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
             // sanity checking function
             // should have checked before if we have a valid specification 
             // 
+            // 
             // for a target either
             // through target itself or the filename extension
             if (job->target <= 0) {
                 fprintf(stderr,
-                        "%s %s: Unrecoverable error while initializing job from app_data.\n", DEBUGFILE, DEBUGFUNCTION);
+                        "%s %s: Unrecoverable error while initializing job from app_data.\n",
+                        DEBUGFILE, DEBUGFUNCTION);
                 fprintf(stderr,
                         "targetCodec is still 0. This should never happen.\n");
-            fprintf(stderr, "Please contact the xvidcap project team.\n");
+                fprintf(stderr,
+                        "Please contact the xvidcap project team.\n");
 #ifdef DEBUG
                 xvc_job_dump();
-#endif // DEBUG
+#endif                          // DEBUG
                 exit(1);
             }
         }
@@ -187,17 +193,17 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
             job->targetCodec = tFFormats[job->target].def_vid_codec;
         if (job->targetCodec < 0) {
             fprintf(stderr,
-                    "%s %s: Unrecoverable error while initializing job from app_data.\n", DEBUGFILE, DEBUGFUNCTION);
+                    "%s %s: Unrecoverable error while initializing job from app_data.\n",
+                    DEBUGFILE, DEBUGFUNCTION);
             fprintf(stderr,
                     "targetCodec is still < 0. This should never happen.\n");
             fprintf(stderr, "Please contact the xvidcap project team.\n");
 #ifdef DEBUG
-                xvc_job_dump();
-#endif // DEBUG
+            xvc_job_dump();
+#endif                          // DEBUG
             exit(1);
         }
     }
-
 #ifdef HAVE_FFMPEG_AUDIO
     job->au_targetCodec = cto->au_targetCodec;
     if (job->au_targetCodec <= 0) {
@@ -206,22 +212,24 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
         // if 0 the format has no default audio codec. This should only be 
         // 
         // 
+        // 
         // the case if the format does not support audio or recording
         // without
         // audio is encouraged
         if (job->au_targetCodec < 0) {
             fprintf(stderr,
-                    "%s %s: Unrecoverable error while initializing job from app_data.\n", DEBUGFILE, DEBUGFUNCTION);
+                    "%s %s: Unrecoverable error while initializing job from app_data.\n",
+                    DEBUGFILE, DEBUGFUNCTION);
             fprintf(stderr,
                     "au_targetCodec is still < 0. This should never happen.\n");
             fprintf(stderr, "Please contact the xvidcap project team.\n");
 #ifdef DEBUG
-                xvc_job_dump();
-#endif // DEBUG
+            xvc_job_dump();
+#endif                          // DEBUG
             exit(1);
         }
     }
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
     job->color_table = NULL;
     job->colors = NULL;
@@ -254,9 +262,10 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
         job->color_table = (*job->get_colors) (job->colors, job->ncolors);
 
 #ifdef DEBUG
-    printf("%s %s: Leaving function with this job:\n", DEBUGFILE, DEBUGFUNCTION);
+    printf("%s %s: Leaving function with this job:\n", DEBUGFILE,
+           DEBUGFUNCTION);
     xvc_job_dump();
-#endif // DEBUG
+#endif                          // DEBUG
 }
 
 
@@ -266,9 +275,9 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
  */
 Job *xvc_job_ptr(void)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "xvc_job_ptr()"
-    
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_job_ptr()"
+
     return (job);
 }
 
@@ -278,12 +287,13 @@ Job *xvc_job_ptr(void)
  */
 void xvc_job_set_save_function(Visual * vis, int type)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "xvc_job_set_save_function()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_job_set_save_function()"
 
 #ifdef DEBUG2
-    printf("%s %s: entering with type: %i\n", DEBUGFILE, DEBUGFUNCTION, type);
-#endif // DEBUG2
+    printf("%s %s: entering with type: %i\n", DEBUGFILE, DEBUGFUNCTION,
+           type);
+#endif                          // DEBUG2
 
 #ifdef USE_FFMPEG
     if (type >= CAP_MF) {
@@ -302,7 +312,7 @@ void xvc_job_set_save_function(Visual * vis, int type)
         job->flags &= ~FLG_MULTI_IMAGE;
         job->get_colors = FFMPEGcolorTable;
         job->save = XImageToFFMPEG;
-    } else 
+    } else
 #endif                          // USE_FFMPEG
     {
         job->save = XImageToXWD;
@@ -318,13 +328,14 @@ void xvc_job_set_save_function(Visual * vis, int type)
  */
 void job_set_fps(int fps)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "job_set_fps()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "job_set_fps()"
 
 #ifdef DEBUG2
-    printf("%s %s: entering with fps: %i\n", DEBUGFILE, DEBUGFUNCTION, fps);
-#endif // DEBUG2
-    
+    printf("%s %s: entering with fps: %i\n", DEBUGFILE, DEBUGFUNCTION,
+           fps);
+#endif                          // DEBUG2
+
     job->time_per_frame = (int) (1000 / (fps / (float) 100));
     job->fps = fps;
 }
@@ -335,10 +346,10 @@ void job_set_fps(int fps)
  * set and check some parameters for the sound device
  */
 
-int 
-job_set_sound_dev(char *snd, int rate, int size, int channels){
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "job_set_sound_dev()"
+int job_set_sound_dev(char *snd, int rate, int size, int channels)
+{
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "job_set_sound_dev()"
     extern int errno;
     struct stat statbuf;
     int stat_ret;
@@ -354,27 +365,29 @@ job_set_sound_dev(char *snd, int rate, int size, int channels){
 
             if (stat_ret != 0) {
                 switch (errno) {
-                    case EACCES:
-                        fprintf(stderr,
-                                _("Insufficient permission to access sound input from %s\n"),
-                                snd);
-                        fprintf(stderr, _("Sound disabled!\n"));
-                        job->flags &= ~FLG_REC_SOUND;
-                        break;
-                    default:
-                        fprintf(stderr,
-                                _("Error accessing sound input from %s\n"), snd);
-                        fprintf(stderr, _("Sound disabled!\n"));
-                        job->flags &= ~FLG_REC_SOUND;
-                        break;
+                case EACCES:
+                    fprintf(stderr,
+                            _
+                            ("Insufficient permission to access sound input from %s\n"),
+                            snd);
+                    fprintf(stderr, _("Sound disabled!\n"));
+                    job->flags &= ~FLG_REC_SOUND;
+                    break;
+                default:
+                    fprintf(stderr,
+                            _("Error accessing sound input from %s\n"),
+                            snd);
+                    fprintf(stderr, _("Sound disabled!\n"));
+                    job->flags &= ~FLG_REC_SOUND;
+                    break;
                 }
             }
         }
-    } 
+    }
 
     return 0;
 }
-#endif // HAVE_FFMPEG_AUDIO
+#endif                          // HAVE_FFMPEG_AUDIO
 
 
 
@@ -382,9 +395,9 @@ job_set_sound_dev(char *snd, int rate, int size, int channels){
  */
 void job_set_file(char *file)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "job_set_file()"
-    
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "job_set_file()"
+
     if (!file)
         return;
 
@@ -393,8 +406,9 @@ void job_set_file(char *file)
     sprintf(job->open_flags, "wb");
 
 #ifdef DEBUG2
-    printf("%s %s: leaving function with file = %s\n", DEBUGFILE, DEBUGFUNCTION, job->file);
-#endif // DEBUG2
+    printf("%s %s: leaving function with file = %s\n", DEBUGFILE,
+           DEBUGFUNCTION, job->file);
+#endif                          // DEBUG2
 }
 
 
@@ -403,8 +417,8 @@ void job_set_file(char *file)
  */
 void job_set_capture(void)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "job_set_capture()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "job_set_capture()"
     int input = job->flags & FLG_SOURCE;
 
     switch (input) {
@@ -412,7 +426,7 @@ void job_set_capture(void)
     case FLG_USE_SHM:
         job->capture = TCbCaptureSHM;
         break;
-#endif // HAVE_SHMAT
+#endif                          // HAVE_SHMAT
     case FLG_USE_DGA:
         job->capture = TCbCaptureDGA;
         break;
@@ -433,9 +447,9 @@ void job_set_capture(void)
  */
 void job_set_quality(int quality)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "job_set_quality()"
-    
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "job_set_quality()"
+
     if (quality < 1)
         quality = 1;
     else if (quality > 100)
@@ -449,9 +463,9 @@ void job_set_quality(int quality)
  */
 void xvc_job_dump()
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "xvc_job_dump()"
-    
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_job_dump()"
+
     printf("fps = %.2f\n", (float) (job->fps / 100.00));
     printf("file = %s\n", job->file);
     printf("flags = %i\n", job->flags);
@@ -505,69 +519,72 @@ void xvc_job_dump()
  */
 void xvc_job_validate()
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "xvc_job_validate()"
-    
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_job_validate()"
+
     // unset autocontinue unless we capture to movie and file is mutable 
     if (job->flags & FLG_AUTO_CONTINUE &&
-            ((!xvc_is_filename_mutable(job->file)) || 
-            (job->flags & FLG_MULTI_IMAGE) == 0)) { 
-        job->flags &= ~FLG_AUTO_CONTINUE; 
-        printf ("Output not a video file or no counter in filename\nDisabling autocontinue!\n"); 
-    } 
-    
-#ifdef USE_FFMPEG 
+        ((!xvc_is_filename_mutable(job->file)) ||
+         (job->flags & FLG_MULTI_IMAGE) == 0)) {
+        job->flags &= ~FLG_AUTO_CONTINUE;
+        printf
+            ("Output not a video file or no counter in filename\nDisabling autocontinue!\n");
+    }
+#ifdef USE_FFMPEG
     // make sure we have even width and height for ffmpeg 
-    if (job->target >= CAP_MF) { 
+    if (job->target >= CAP_MF) {
         Boolean changed = FALSE;
         int orig_width = job->area->width, orig_height = job->area->height;
-    
-        if ((job->area->width % 2) > 0) { 
-            job->area->width--; 
-            changed = TRUE; 
-        } 
-        if ((job->area->height % 2) > 0) { 
-            job->area->height--; 
-            changed = TRUE; 
-        } 
-        if (job->win_attr.width < 26) { 
-            job->win_attr.width = 26; 
-            changed = TRUE; 
-        } 
-        if (job->win_attr.height < 26) { 
-            job->win_attr.height = 26;
-            changed = TRUE; 
+
+        if ((job->area->width % 2) > 0) {
+            job->area->width--;
+            changed = TRUE;
         }
-    
-        if (changed) { 
-            xvc_frame_change(job->area->x, job->area->y, job->area->width, job->area->height, FALSE); 
-            if (job->flags & FLG_RUN_VERBOSE) { 
-                fprintf(stdout, _("%s %s: Original dimensions: %i * %i\n"),
-                        DEBUGFILE, DEBUGFUNCTION, orig_width, orig_height); 
-                fprintf(stdout, 
-                        _("%s %s(): Modified dimensions: %i * %i\n"), 
-                        DEBUGFILE, DEBUGFUNCTION, job->area->width, job->area->height); 
-            } 
+        if ((job->area->height % 2) > 0) {
+            job->area->height--;
+            changed = TRUE;
+        }
+        if (job->win_attr.width < 26) {
+            job->win_attr.width = 26;
+            changed = TRUE;
+        }
+        if (job->win_attr.height < 26) {
+            job->win_attr.height = 26;
+            changed = TRUE;
         }
 
-    } 
-#endif // USE_FFMPEG
+        if (changed) {
+            xvc_frame_change(job->area->x, job->area->y, job->area->width,
+                             job->area->height, FALSE);
+            if (job->flags & FLG_RUN_VERBOSE) {
+                fprintf(stdout, _("%s %s: Original dimensions: %i * %i\n"),
+                        DEBUGFILE, DEBUGFUNCTION, orig_width, orig_height);
+                fprintf(stdout,
+                        _("%s %s(): Modified dimensions: %i * %i\n"),
+                        DEBUGFILE, DEBUGFUNCTION, job->area->width,
+                        job->area->height);
+            }
+        }
+
+    }
+#endif                          // USE_FFMPEG
 
 }
 
 
-void job_state_change_signals_thread( int orig_state, int new_state ) {
-    if ( 
-        ( (orig_state & VC_PAUSE) > 0 && (new_state & VC_PAUSE) == 0 ) ||
-        ( (orig_state & VC_STOP) == 0 && (new_state & VC_STOP) > 0 ) ||
-        ( (orig_state & VC_STEP) == 0 && (new_state & VC_STEP) > 0 )
+void job_state_change_signals_thread(int orig_state, int new_state)
+{
+    if (((orig_state & VC_PAUSE) > 0 && (new_state & VC_PAUSE) == 0) ||
+        ((orig_state & VC_STOP) == 0 && (new_state & VC_STOP) > 0) ||
+        ((orig_state & VC_STEP) == 0 && (new_state & VC_STEP) > 0)
         ) {
         // signal potentially paused thread
         pthread_cond_broadcast(&recording_condition_unpaused);
     }
 }
 
-void job_set_state(int state) {
+void job_set_state(int state)
+{
     int orig_state = job->state;
 
     pthread_mutex_lock(&recording_mutex);
@@ -576,7 +593,8 @@ void job_set_state(int state) {
     pthread_mutex_unlock(&recording_mutex);
 }
 
-void job_merge_state(int state) {
+void job_merge_state(int state)
+{
     int orig_state = job->state;
 
     pthread_mutex_lock(&recording_mutex);
@@ -585,7 +603,8 @@ void job_merge_state(int state) {
     pthread_mutex_unlock(&recording_mutex);
 }
 
-void job_remove_state(int state) {
+void job_remove_state(int state)
+{
     int orig_state = job->state;
 
     pthread_mutex_lock(&recording_mutex);
@@ -594,7 +613,8 @@ void job_remove_state(int state) {
     pthread_mutex_unlock(&recording_mutex);
 }
 
-void job_merge_and_remove_state(int merge_state, int remove_state) {
+void job_merge_and_remove_state(int merge_state, int remove_state)
+{
     int orig_state = job->state;
 
     pthread_mutex_lock(&recording_mutex);
@@ -604,7 +624,8 @@ void job_merge_and_remove_state(int merge_state, int remove_state) {
     pthread_mutex_unlock(&recording_mutex);
 }
 
-void job_keep_state(int state) {
+void job_keep_state(int state)
+{
     int orig_state = job->state;
 
     pthread_mutex_lock(&recording_mutex);
@@ -613,7 +634,8 @@ void job_keep_state(int state) {
     pthread_mutex_unlock(&recording_mutex);
 }
 
-void job_keep_and_merge_state(int keep_state, int merge_state) {
+void job_keep_and_merge_state(int keep_state, int merge_state)
+{
     int orig_state = job->state;
 
     pthread_mutex_lock(&recording_mutex);
@@ -622,4 +644,3 @@ void job_keep_and_merge_state(int keep_state, int merge_state) {
     job_state_change_signals_thread(orig_state, job->state);
     pthread_mutex_unlock(&recording_mutex);
 }
-

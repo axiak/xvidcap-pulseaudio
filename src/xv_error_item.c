@@ -18,7 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
- 
+
 #include <stdio.h>
 #include <gtk/gtkeventbox.h>
 #include <gtk/gtkframe.h>
@@ -131,25 +131,25 @@ static void xv_error_item_init(XvErrorItem * ei)
         char buf[256];
         PangoLayout *layout = NULL;
         int width, height;
-        
+
         switch (i) {
-            case 0:
-                snprintf(buf, 255, _("FATAL\nERROR (%i):"), 100);
-                break;
-            case 1:
-                snprintf(buf, 255, _("ERROR (%i):"), 100);
-                break;
-            case 2:
-                snprintf(buf, 255, _("WARNING (%i):"), 100);
-                break;
-            case 3:
-                snprintf(buf, 255, _("INFO (%i):"), 100);
-                break;
-            case 4:
-                snprintf(buf, 255, _("???? (%i):"), 100);
-                break;
+        case 0:
+            snprintf(buf, 255, _("FATAL\nERROR (%i):"), 100);
+            break;
+        case 1:
+            snprintf(buf, 255, _("ERROR (%i):"), 100);
+            break;
+        case 2:
+            snprintf(buf, 255, _("WARNING (%i):"), 100);
+            break;
+        case 3:
+            snprintf(buf, 255, _("INFO (%i):"), 100);
+            break;
+        case 4:
+            snprintf(buf, 255, _("???? (%i):"), 100);
+            break;
         }
-        
+
         title_text_spacer = gtk_label_new(buf);
 
         layout = gtk_widget_create_pango_layout(title_text_spacer, buf);
@@ -157,8 +157,9 @@ static void xv_error_item_init(XvErrorItem * ei)
         pango_layout_get_pixel_size(layout, &width, &height);
         g_object_unref(layout);
         gtk_widget_destroy(title_text_spacer);
-        
-        if ( width > max_width ) max_width = width;
+
+        if (width > max_width)
+            max_width = width;
     }
 
     ei->title_tag = gtk_label_new("ERROR (n):");
@@ -175,7 +176,7 @@ static void xv_error_item_init(XvErrorItem * ei)
     gtk_table_attach(GTK_TABLE(table), ei->title_text, 1, 2, 0, 1,
                      (GtkAttachOptions) (GTK_FILL),
                      (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
-//    gtk_widget_set_size_request(ei->title_text, 200, -1);
+    // gtk_widget_set_size_request(ei->title_text, 200, -1);
     gtk_label_set_line_wrap(GTK_LABEL(ei->title_text), TRUE);
     gtk_misc_set_alignment(GTK_MISC(ei->title_text), 0, 0);
     gtk_misc_set_padding(GTK_MISC(ei->title_text), 2, 1);
@@ -190,7 +191,7 @@ static void xv_error_item_init(XvErrorItem * ei)
 
     ei->desc_text = gtk_text_view_new();
     gtk_widget_modify_base(ei->desc_text, GTK_STATE_NORMAL, &g_col);
-    gtk_widget_set_size_request(ei->desc_text, 200, -1);    
+    gtk_widget_set_size_request(ei->desc_text, 200, -1);
     gtk_widget_show(ei->desc_text);
     gtk_table_attach(GTK_TABLE(table), ei->desc_text, 1, 2, 1, 2,
                      (GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
@@ -221,7 +222,7 @@ static void xv_error_item_init(XvErrorItem * ei)
                      (GtkAttachOptions) (GTK_FILL),
                      (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
     gtk_label_set_line_wrap(GTK_LABEL(ei->action_text), TRUE);
-//    gtk_widget_set_size_request(ei->action_text, 200, -1);
+    // gtk_widget_set_size_request(ei->action_text, 200, -1);
     gtk_misc_set_alignment(GTK_MISC(ei->action_text), 0, 0);
     gtk_misc_set_padding(GTK_MISC(ei->action_text), 2, 1);
 

@@ -112,7 +112,7 @@ typedef struct _xvFFormat {
     char *allowed_vid_codecs;
     int def_au_codec;
     char *allowed_au_codecs;
-//    int (*init) (void);
+    // int (*init) (void);
 } xvFFormat;
 
 

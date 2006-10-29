@@ -24,4 +24,4 @@
 void XImageToXWD(FILE * fp, XImage * image, Job * job);
 void *XWDcolorTable(XColor * colors, int ncolors);
 
-#endif // __X_TO_XWD_H__
+#endif                          // __X_TO_XWD_H__

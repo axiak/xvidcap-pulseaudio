@@ -1,4 +1,4 @@
-/*
+/* 
  * gnome_warning.c
  *
  * this file contains the warnings dialog for the options dialog of
@@ -59,9 +59,10 @@ static guint scheduled_warning_resize_id = 0;
 static xvErrorListItem *warning_elist = NULL;
 
 
-/*const char *XVC_WARN_LABEL_TEXT =
-    "Your input bears a number of inconsistencies! \nPlease review the list below and click \"OK\" to accept the suggested actions or \"Cancel\" to return to the Preferences dialog.";
-*/
+/* const char *XVC_WARN_LABEL_TEXT = "Your input bears a number of
+ * inconsistencies! \nPlease review the list below and click \"OK\" to
+ * accept the suggested actions or \"Cancel\" to return to the Preferences 
+ * dialog."; */
 
 GtkWidget *xvc_warn_main_window;
 extern AppData *app;
@@ -116,8 +117,10 @@ gboolean
 on_xvc_warn_main_window_delete_event(GtkWidget * widget, GdkEvent * event,
                                      gpointer user_data)
 {
-    if (called_from_where == 2) return TRUE;
-    else return FALSE;
+    if (called_from_where == 2)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 
@@ -144,15 +147,15 @@ void
 on_xvc_warn_main_window_response(GtkDialog * dialog, gint response_id,
                                  gpointer user_data)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "on_xvc_warn_main_window_response()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "on_xvc_warn_main_window_response()"
     GladeXML *xml = NULL;
     GtkWidget *mitem = NULL;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with response_id %i, called from %i\n", DEBUGFILE, DEBUGFUNCTION, 
-            response_id, called_from_where);
-#endif // DEBUG
+    printf("%s %s: Entering with response_id %i, called from %i\n",
+           DEBUGFILE, DEBUGFUNCTION, response_id, called_from_where);
+#endif                          // DEBUG
 
     switch (response_id) {
     case GTK_RESPONSE_OK:
@@ -222,10 +225,10 @@ on_xvc_warn_main_window_response(GtkDialog * dialog, gint response_id,
     default:
         break;
     }
-    
+
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 }
 
 
@@ -235,8 +238,8 @@ on_xvc_warn_main_window_response(GtkDialog * dialog, gint response_id,
  */
 void auto_resize_warning_dialog()
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "auto_resize_warning_dialog()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "auto_resize_warning_dialog()"
     GtkRequisition vp_size;
     int set_size = 0, orig_vp_size = 0;
     gint win_width = 0;
@@ -245,10 +248,10 @@ void auto_resize_warning_dialog()
     GList *elist = NULL;
     int ind = 0, height = 0;
     GladeXML *xml = NULL;
-    
+
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     g_assert(xvc_warn_main_window);
     xml = glade_get_widget_tree(GTK_WIDGET(xvc_warn_main_window));
@@ -287,14 +290,14 @@ void auto_resize_warning_dialog()
         // printf("gtk2_warning: the window height is: %i \n",
         // win_height);
         gtk_window_resize(GTK_WINDOW(xvc_warn_main_window), win_width,
-                          win_height - (orig_vp_size - vp_size.height) + 1);
+                          win_height - (orig_vp_size - vp_size.height) +
+                          1);
 
         g_source_remove(scheduled_warning_resize_id);
     }
-    
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 }
 
 
@@ -302,15 +305,15 @@ void auto_resize_warning_dialog()
 GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
                                           int from_where)
 {
-    #undef DEBUGFUNCTION
-    #define DEBUGFUNCTION "xvc_create_warning_with_errors()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_create_warning_with_errors()"
     GtkWidget *vbox = NULL, *w = NULL;
     GladeXML *xml = NULL;
     int count_fatal_messages = 0;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     // save list for cleanup
     warning_elist = elist;
@@ -352,42 +355,44 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
         }
     } else {
         fprintf(stderr,
-                "%s %s: displaying a warning with a NULL error list\n", DEBUGFILE, DEBUGFUNCTION);
+                "%s %s: displaying a warning with a NULL error list\n",
+                DEBUGFILE, DEBUGFUNCTION);
     }
 
     // FIXME: depending on where we're called from make different buttons
     // visible/sensitive
 
-    switch( called_from_where ) {
-        case 0:
-            w = NULL;
-            w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
-            g_assert(w);
-            gtk_widget_hide(w);
-            
-            w = NULL;
-            w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
-            g_assert(w);
-            gtk_widget_show(w);
-            break;
-        case 1:
-        case 2:
-            w = NULL;
-            w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
-            g_assert(w);
-            gtk_widget_show(w);
-            
-            w = NULL;
-            w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
-            g_assert(w);
-            gtk_widget_hide(w);
-            break;
-        default:
-            break;
+    switch (called_from_where) {
+    case 0:
+        w = NULL;
+        w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
+        g_assert(w);
+        gtk_widget_hide(w);
+
+        w = NULL;
+        w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
+        g_assert(w);
+        gtk_widget_show(w);
+        break;
+    case 1:
+    case 2:
+        w = NULL;
+        w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
+        g_assert(w);
+        gtk_widget_show(w);
+
+        w = NULL;
+        w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
+        g_assert(w);
+        gtk_widget_hide(w);
+        break;
+    default:
+        break;
     }
 #ifdef DEBUG
-    printf("%s %s: called from where %i\n", DEBUGFILE, DEBUGFUNCTION, called_from_where);
-#endif // DEBUG
+    printf("%s %s: called from where %i\n", DEBUGFILE, DEBUGFUNCTION,
+           called_from_where);
+#endif                          // DEBUG
 
     // auto-resize the dialog ... this is one ugly hack but the only way
     // to do it
@@ -397,8 +402,7 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
+#endif                          // DEBUG
 
     return xvc_warn_main_window;
 }
-

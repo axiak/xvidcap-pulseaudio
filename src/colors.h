@@ -47,4 +47,4 @@ void xvc_get_color_info(XImage * image, ColorInfo * return_struct);
 int xvc_get_colors(Display * dpy, XWindowAttributes * winfo,
                    XColor ** colors);
 
-#endif // __COLORS_H__
+#endif                          // __COLORS_H__

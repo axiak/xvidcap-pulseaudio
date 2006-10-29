@@ -112,8 +112,8 @@ const xvCodec mpeg1 = {
     24,
     NULL,
     "24|25|30|50|60"
-    // FIXME: adapt to ffmpeg's new fractional fps handling
-    //    "23.976|24|25|29.97|30|50|59.94|60"
+        // FIXME: adapt to ffmpeg's new fractional fps handling
+        // "23.976|24|25|29.97|30|50|59.94|60"
 };
 
 const xvCodec mjpeg = {
@@ -184,9 +184,8 @@ const xvCodec dv = {
     25,
     NULL,
     "25"
-    // FIXME: adapt to ffmpeg's new fractional fps handling
-    //    "25|29.97"
-    
+        // FIXME: adapt to ffmpeg's new fractional fps handling
+        // "25|29.97"
 };
 
 const xvCodec mpeg2 = {
@@ -198,8 +197,8 @@ const xvCodec mpeg2 = {
     24,
     NULL,
     "24|25|30|50|60"
-    // FIXME: adapt to ffmpeg's new fractional fps handling
-    //    "23.976|24|25|29.97|30|50|59.94|60"
+        // FIXME: adapt to ffmpeg's new fractional fps handling
+        // "23.976|24|25|29.97|30|50|59.94|60"
 };
 
 const xvCodec svq1 = {
@@ -263,8 +262,7 @@ const xvFFormat none_format = {
     CODEC_NONE,
     NULL,
     AU_CODEC_NONE,
-    NULL /*,
-    NULL */
+    NULL                        /* , NULL */
 };
 
 const xvFFormat xwd = {
@@ -275,8 +273,7 @@ const xvFFormat xwd = {
     CODEC_NONE,
     NULL,
     AU_CODEC_NONE,
-    NULL /*,
-    NULL */
+    NULL                        /* , NULL */
 };
 
 #ifdef USE_FFMPEG
@@ -288,8 +285,7 @@ const xvFFormat pgm_format = {
     CODEC_PGM,
     "PGM",
     AU_CODEC_NONE,
-    NULL /*,
-    NULL */
+    NULL                        /* , NULL */
 };
 
 const xvFFormat ppm_format = {
@@ -300,8 +296,7 @@ const xvFFormat ppm_format = {
     CODEC_PPM,
     "PPM",
     AU_CODEC_NONE,
-    NULL /*,
-    NULL */
+    NULL                        /* , NULL */
 };
 
 const xvFFormat png_format = {
@@ -312,8 +307,7 @@ const xvFFormat png_format = {
     CODEC_PNG,
     "PNG",
     AU_CODEC_NONE,
-    NULL /*,
-    NULL */
+    NULL                        /* , NULL */
 };
 
 const xvFFormat jpeg_format = {
@@ -324,8 +318,7 @@ const xvFFormat jpeg_format = {
     CODEC_JPEG,
     "JPEG",
     AU_CODEC_NONE,
-    NULL /*,
-    jpeg_init */
+    NULL                        /* , jpeg_init */
 };
 
 const xvFFormat avi = {
@@ -338,15 +331,15 @@ const xvFFormat avi = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16" //,
+    "MP2|MP3|PCM16"             // ,
 #else
-    "MP2|PCM16" //,
+    "MP2|PCM16"                 // ,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    avienc_init
+        // avienc_init
 };
 
 const xvFFormat divx = {
@@ -359,15 +352,15 @@ const xvFFormat divx = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16" //,
+    "MP2|MP3|PCM16"             // ,
 #else
-    "MP2|PCM16" //,
+    "MP2|PCM16"                 // ,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    avienc_init
+        // avienc_init
 };
 
 const xvFFormat asf = {
@@ -380,15 +373,15 @@ const xvFFormat asf = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_NONE,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3" //,
+    "MP2|MP3"                   // ,
 #else
-    "MP2" //,
+    "MP2"                       // ,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    asf_init
+        // asf_init
 };
 
 const xvFFormat ff_flv1 = {
@@ -405,12 +398,12 @@ const xvFFormat ff_flv1 = {
 #else
     AU_CODEC_NONE,
     NULL
-#endif // HAVE_LIBMP3LAME
+#endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
     NULL
-#endif // HAVE_FFMPEG_AUDIO
-    /*, flvenc_init */
+#endif                          // HAVE_FFMPEG_AUDIO
+        /* , flvenc_init */
 };
 
 const xvFFormat swf = {
@@ -423,16 +416,16 @@ const xvFFormat swf = {
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
-    "MP2|MP3" //,
+    "MP2|MP3"                   // ,
 #else
     AU_CODEC_MP2,
-    "MP2" //,
+    "MP2"                       // ,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    swf_init
+        // swf_init
 };
 
 const xvFFormat dv_format = {
@@ -444,12 +437,12 @@ const xvFFormat dv_format = {
     "DV",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "PCM16" //,
+    "PCM16"                     // ,
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    ff_dv_init
+        // ff_dv_init
 };
 
 const xvFFormat mpeg = {
@@ -461,12 +454,12 @@ const xvFFormat mpeg = {
     "MPEG1",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "MP2" //,
+    "MP2"                       // ,
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    mpegps_init
+        // mpegps_init
 };
 
 const xvFFormat svcd = {
@@ -478,12 +471,12 @@ const xvFFormat svcd = {
     "MPEG2",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "MP2" //,
+    "MP2"                       // ,
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    mpegps_init
+        // mpegps_init
 };
 
 const xvFFormat mov = {
@@ -496,16 +489,16 @@ const xvFFormat mov = {
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
-    "MP2|MP3|PCM16" //,
+    "MP2|MP3|PCM16"             // ,
 #else
     AU_CODEC_PCM16,
-    "MP2|PCM16" //,
+    "MP2|PCM16"                 // ,
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL //,
+    NULL                        // ,
 #endif                          // HAVE_FFMPEG_AUDIO
-//    mpegps_init
+        // mpegps_init
 };
 #endif                          // USE_FFMPEG
 
@@ -570,7 +563,7 @@ void xvc_codecs_init()
 #endif                          // HAVE_LIBMP3LAME
     tAuCodecs[i++] = pcm16;
 #endif                          // HAVE_FFMPEG_AUDIO
-#endif // USE_FFMPEG
+#endif                          // USE_FFMPEG
 }
 
 /* 
@@ -672,7 +665,7 @@ int xvc_codec_get_target_from_filename(char *file)
  */
 int xvc_codec_is_valid_fps(int fps, int codec)
 {
-    #define DEBUGFUNCTION "xvc_codec_is_valid_fps()"
+#define DEBUGFUNCTION "xvc_codec_is_valid_fps()"
     char *element = NULL;
 
     if (tCodecs[codec].allowed_fps) {
@@ -682,8 +675,7 @@ int xvc_codec_is_valid_fps(int fps, int codec)
             if (f < 0)
                 fprintf(stderr,
                         "%s %s: Non-fatal error in the definition of valid fps for codec %s\n",
-                        DEBUGFILE, DEBUGFUNCTION,
-                        tCodecs[codec].name);
+                        DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
             else if (f == fps)
                 return 1;
             element = xvc_next_element(NULL);
@@ -705,8 +697,7 @@ int xvc_codec_is_valid_fps(int fps, int codec)
             if (start < 0 || end < 0) {
                 fprintf(stderr,
                         "%s %s: Non-fatal error in the definition of valid fps ranges for codec %s\n",
-                        DEBUGFILE, DEBUGFUNCTION,
-                        tCodecs[codec].name);
+                        DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
             } else if (start <= fps && fps <= end)
                 return 1;
             element = xvc_next_element(NULL);
@@ -714,7 +705,7 @@ int xvc_codec_is_valid_fps(int fps, int codec)
     }
     // FIXME: what kind of error do I want to report with the return code?
     return 0;
-    #undef DEBUGFUNCTION
+#undef DEBUGFUNCTION
 }
 
 
