@@ -1,0 +1,201 @@
+.TH xvidcap 1  "Septiembre 2006" 
+.SH NAME
+XVidCap \- Graba porciones de una ventana X11 a video
+.SH SYNOPSIS
+\fBxvidcap\fR [\-v] [ \-\-mf | \-\-sf ] [\-\-file\fB nombre de fichero\fR |\- ] [\-\-fps\fB frames por segundo\fR] [\-\-cap_geometry\fB geometr\('ia\fR] [\-\-rescale\fB tama\(~no en porcentaje\fR] [\-\-quality\fB calidad en porcentaje\fR] [\-\-source x11|shm ] [\-\-time\fB duraci\('on m\('axima en segundos\fR] [\-\-frames\fB n\('umero m\('aximo de frames\fR] [\-\-start_no\fB n\('umero del frame de inicio\fR] [\-\-continue yes|no ] [\-\-gui yes|no ] [\-\-auto] [\-\-codec\fB codec de video\fR] [\-\-codec\-help] [\-\-format\fB formato de fichero de salida\fR] [\-\-format\-help] [\-\-audio yes|no ] [\-\-aucodec\fB codec de audio\fR] [\-\-aucodec\-help] [\-\-audio_in\fB dispositivo de captura de audio\fR |\- ] [\-\-audio_bits\fB bit rate de audio\fR] [\-\-audio_rate\fB sample rate de audio\fR] [\-\-audio_channels\fB canales de audio\fR]
+.SH INTRODUCCI\('oN
+xvidcap es una herramienta que captura a fichero el movimiento en un \('area seleccionada 
+de la pantalla. Puede operar en dos modos distintos: (1) captura \fIsingle\-frame\fR
+o (2) captura \fImulti\-frame\fR. En modo de captura single\-frame 
+xvidcap saca un n\('umero configurable de capturas por segundo y 
+los guarda como ficheros individuales. En modo de captura multi\-frame xvidcap 
+tambi\('en saca un n\('umero de capturas por segundo, pero las codifica en un solo fichero de video en tiempo real. 
+La captura de audio solo est\('a disponible con formatos multi\-frame.
+.PP
+Es conveniente grabar en modo de captura single\-frame si se pretende preprocesar las 
+im\('agenes antes de codificarlas a video, o si necesita otros codecs de video que xvidcap 
+no soporta. Las im\('agenes individuales pueden posteriormente ser codificadas utilizando herramientas como ffmpeg, mencoder
+o transcode.
+.PP
+Para ayuda, nuevas caracter\('isticas, o reportar bugs por favor dir\('ijase a 
+http://www.sourceforge.net/projects/xvidcap/
+.SH OPCIONES
+Estos programas siguen la sintaxis de la linea de comandos GNU, 
+con opciones de nombre largo comenzando por dos guiones (\fB\-\-\fR). 
+Un sumario de las opciones puede verse a continuaci\('on.
+.TP 
+\fB\-v\fR
+Ejecuta xvidcap en modo verbose. Esto proporciona m\('as informaci\('on sobre
+ajustes de usuario, codecs de entrada y salida, rendimiento, ... Mensajes 
+como "missing XX milli secs .." durante la captura significa que est\('a perdiendo 
+frames debido a la falta de recursos (frames perdidos). Esto resulta en un video 
+que se reproducir\('a acelerado. Tenga en cuenta que el modo verbose ralentiza 
+xvidcap y podr\('ia ser el \fIcausante\fR de perdidas de frames. Pruebe a ejeutarlo sin 
+modo verbose y observe el contador de frames perdidos.
+.TP 
+\fB\-\-mf\fR | \fB\-\-sf\fR
+xvidcap intenta adivinar el modo de captura que desea. Si usted 
+especifica \fB\-\-file test.avi\fR xvidcap asumir\('a que usted desea una captura multi\-frame.
+Puede especificar explicitamente el modo de captura deseado en la linea de comandos con este 
+modificador. Si, por ejemplo, usted tiene sus ajustes correctamente configurados y 
+guardados con captura multi\-frame como modo por defecto, ejecutar \fBxvidcap \-\-sf\fR
+iniciar\('a xvidcap en modo de captura single\-frame con todos los ajustes guardados. Por 
+defecto es captura multi\-frame.
+.TP 
+\fB\-\-file \fInombre/patr\('on de fichero\fB\fR
+El nombre/patr\('on de fichero a utilizar para guardar los frames capturados. Un patr\('on de nombre 
+de fichero contiene un formato tipo printf() (ref. \fBman printf\fR) 
+para hacer el nombre de fichero incrementable, e.g. \fB\-\-file out\-%02d.xwd\fR. 
+Esto es necesario para capturas single\-frame. xvidcap reemplazar\('a 
+la primera cadena del formato printf() con el n\('umero del frame capturado. 
+As\('i pues, en el ejemplo dado, escribir\('a los ficheros \fBout\-00.xwd\fR, 
+\fBout\-01.xwd\fR, \fBout\-02.xwd\fR,
+etc. El n\('umero de frame desde el que iniciar la capturapuede ser especificado con \fB\-\-start_no\fR,
+ver arriba.
+
+La captura Multi\-frame no necesita un patr\('on de fichero. Si especifica uno, 
+no obstante como \fB\-\-file mymovie\-%d.mpeg\fR, xvidcap
+reemplazar\('a la cadena de formato con el n\('umero de la sesi\('on grabaci\('on actual 
+(siempre empezando a contar desde cero). Esto le habilitar\('a para incrementar/disminuir manualmente ese 
+n\('umero, o usar la caracter\('istica autocontinuar (ref. \fB\-\-continue\fR arriba) creando 
+una serie de ficheros de video.
+.TP 
+\fB\-\-fps\fI frames por segundo\fB\fR
+Especifica el n\('umero de frames a capturar por segundo. Este par\('ametro 
+acepta n\('umeros de coma flotante, lo que permite capturas a frame rates muy bajos como
+e.g. \fB\-\-fps 0.5\fR para grabar un frame cada 2 segundos. Esto solo es posible 
+en modo single\-frame. Los codecs usados para modo multi\-frame normalmente solo 
+aceptan ciertos frame rates como v\('alidos. Tenga en cuenta que frame rates fracionados para 
+codecs como MPEG1 que solo acepta fracciones muy espec\('ificas est\('an deshabilitados 
+en esta versi\('on debido a una inconsistencia con tiempos fraccionados entre 
+xvidcap y libavcodec. Solo frame rates de n\('umero entero ser\('an aceptados.
+.TP 
+\fB\-\-cap_geometry\fI geometr\('ia\fB\fR
+Especifica la geometr\('ia como por ejemplo xterm, i. e. de esta manera:
+\fIwidth\fRx\fIheight\fR+\fIx\-position\fR+\fIy\-position\fR
+
+Esto invalida la anchura y altura por defecto del marco de captura. Use el bot\('on 
+picker del GUI en vez de esta opci\('on de linea de comandos para ajustar el tama\(~no del marco de captura 
+a una ventana. Tama\(~nos de captura inferiores a 20 x 20 no parecen funcionar bi\('en con 
+la mayor\('ia de codecs de captura multi\-frame.
+.TP 
+\fB\-\-rescale\fI tama\(~no en porcentaje\fB\fR
+Reescala la salida a un porcentaje del original de entrada. Un valor de \fB25\fR, e. g.
+har\('a que el tama\(~no de salida sea un 25 por ciento del \('area original de entrada.
+.TP 
+\fB\-\-quality\fI calidad en porcentaje\fB\fR
+Especifica un valor entre \fB0\fR y \fB100\fR para definir la calidad do codificaci\('on. El 
+valor por defecto es \fB75\fR. 
+.TP 
+\fB\-\-source\fR x11|shm
+Habilita o deshabilita el uso de la extensi\('on de memoria compartida de X11. Para soportar 
+memoria ompartida, ambos, cliente y servidor han de ejecutarse en el mismo host. Si el uso de 
+memoria compartida est\('a disponible, xvidcap la usar\('a por defecto. Si su servidor X y 
+cliente no se ejecutan en la misma m\('aquina, necesita deshabilitarlo con el par\('ametro \fB\-\-source x11\fR.
+.TP 
+\fB\-\-time\fI duraci\('on m\('axima en segundos\fB\fR
+Especifica el tiempo m\('aximo de captura, si \fB0\fR xvidcap capturar\('a hasta 
+que sea parado interactivamente. Para cualquier otro valor, cualquier sesi\('on de grabaci\('on parar\('a 
+automaticamente despu\('es del n\('umero de segundos especificado. Este parametro entra en 
+conflicto con \fB\-\-frames\fR (vea mas abajo). Si se especifican ambos xvidcap parar\('a cuando 
+ocurra la primera de las dos. El programa acepta n\('umeros de coma flotante, e.g. \fB2.5\fR.
+.TP 
+\fB\-\-frames\fI n\('umero m\('aximo de frames\fB\fR
+Para la captura despu\('es de capturar el n\('umero de frames especificado. Si \fB0\fR
+xvidcap capturar\('a hasta ser parado interactivamente, ref. \fB\-\-time\fR arriba.
+.TP 
+\fB\-\-start_no\fI N\('umero de frame inicial\fB\fR
+Define el n\('umero inicial con el que empezar a numerar los ficheros. El valor 
+por defecto es \fB0\fR. Este par\('ametro solo se utiliza para capturas single\-frame. 
+La numeraci\('on de ficheros de video para \fB\-\-continue\fR siempre empieza de cero.
+.TP 
+\fB\-\-continue\fR yes|no
+Cuando se selecciona captura multi\-frame, tiempo m\('aximo de captura o frames son 
+especificados, y el nombre de fichero de salida es incrementable (vea \fB\-\-file\fR abajo),
+xvidcap puede continuar automaticamente capturando a un fichero nuevo cuando uno 
+excede el tiempo m\('aximo o el n\('umero de frames. Esto cambiar\('a el 
+comportamiento de \fB\-\-time\fR y \fB\-\-frames\fR porque la grabaci\('on no parar\('a
+en los l\('imites especificados, si no, empezar\('a un nuevo fichero de video. Esta caracter\('istica es 
+de utilidad si desea dividir su grabaci\('on en fragmentos de 
+e. g. cinco minutos. Si no hay opci\('on \fB\-\-continue\fR, xvidcap usar\('a por defecto \fBno\fR.
+Dado que la captura single\-frame necesita un nombre de fichero con un patr\('on incremental para contar los 
+frames individuales, esta caracter\('istica est\('a deshabilitada para las capturas single\-frame. 
+.TP 
+\fB\-\-gui\fR yes|no
+Inicia xvidcap con o sin GUI de control overriding what's in the
+preferences file. Ejecutandolo sin GUI iniciar\('a automaticamente una sesi\('on 
+de captura. Puede pararse especificando o bien \fB\-\-time\fR o
+\fB\-\-frames\fR, o pulsando CTRL\-C.
+.TP 
+\fB\-\-auto\fR
+xvidcap soporta la detecci\('on autom\('atica de par\('ametros para 
+formatos de salida, codecs de video y audio. Si alguno de esos ajustes han sido guardados como valores 
+fijos en las preferencias, pueden ser invalidados especificando el par\('ametro 
+\fBauto\fR a cualquiera de los argumentos \fB\-\-format\fR, \fB\-\-codec\fR,
+o \fB\-\-aucodec\fR. Este argumento es una manera r\('apida de ajustar los tres a 
+detecci\('on autom\('atica.
+.TP 
+\fB\-\-codec\fI codec de video\fB\fR
+Invalida las preferencias y la selecci\('on autom\('atica de codecs y utiliza el codec 
+explicitamente especificado.
+.TP 
+\fB\-\-codec\-help\fR
+Lista los codecs v\('alidos.
+.TP 
+\fB\-\-format\fI Formato del fichero de salida\fB\fR
+Invalida las preferencias y la selecci\('on autom\('atica de formato con el formato de fichero 
+explicitamente especificado.
+.TP 
+\fB\-\-format\-help\fR
+Lista los formatos de fichero v\('alidos.
+.SH "OPCIONES DE AUDIO"
+Las siguientes opciones hacen referencia a la captura de audio, la cual solo est\('a disponible con 
+formatos de salida multi\-frame. El audio puede ser capturado tanto desde cualquier 
+dispositivo de audio compatible (e.g. \fB/dev/dsp\fR) o desde 
+STDIN (ref. \fB\-\-audio_in\fR abajo).
+.TP 
+\fB\-\-audio\fR yes|no
+Habilita o deshabilita la captura de audio utilizando los par\('ametros por defecto o aquellos guardados en 
+el fichero de preferencias. Si est\('a soportado, se hbilitar\('a por defecto en las capturas multi\-frame.
+.TP 
+\fB\-\-aucodec\fI codec de audio\fB\fR
+Inhabilita las preferencias y la selecci\('on autom\('atica de codec con el codec de audio 
+explicitamente especificado.
+.TP 
+\fB\-\-aucodec\-help\fR
+Lista los codecs de audio v\('alidos.
+.TP 
+\fB\-\-audio_in\fI dispositivo de captura de audio\fB|\-\fR
+Camptura audio desde el dispositivo especificado o desde stdin. El \('ultimo permite 
+el doblaje de un video capturado utilizando la linea de comandos de la siguiente manera. Por 
+defecto es \fB/dev/dsp\fR.
+
+cat some.mp3 | xvidcap \-\-audio_in \-
+.TP 
+\fB\-\-audio_bits\fI bit rate del audio\fB\fR
+Ajusta el bit rate deseado. Por defecto es \fB32000\fR bit. Tenga en cuenta que si utiliza 
+STDIN el fichero de entrada ser\('a resampleado seg\('un se necesite.
+.TP 
+\fB\-\-audio_rate\fI sample rate del audio\fB\fR
+Ajusta el sample rate deseado. Por defecto es \fB22050\fR Hz. Tenga en cuenta que si utiliza 
+STDIN el fichero de entrada ser\('a resampleado seg\('un se necesite.
+.TP 
+\fB\-\-audio_channels\fI canales de audio\fB\fR
+Ajusta el n\('umero de canales deseados. Por defecto es \fB1\fR para mono. Cualquier valor 
+superior a \fB2\fR probablemente solo sea util al tomar la entrada de STDIN y un fichero de entrada 5\-channel AC audio
+5\-canales AC o equipos de grabaci\('on de alta gama.
+.SH AUTORES
+xvidcap fu\('e escrito por Rasca Gmelch and Karl H. Beckers.
+.PP
+Esta p\('agina del manual fu\('e escrita por Karl H. Beckers karl.h.beckers@gmx.net para 
+el proyecto xvidcap.
+.PP
+Esta traducci\('on fu\('e hecha por Imanol Garc\('ia Calvo
+
+\-\->
+
+Garantizado el permiso de copia, distribuci\('on y/o modificaci\('on de este documento bajo 
+Los t\('erminos de la licencia de documentaci\('on libre, 
+version 1.1 o cualquier versi\('on posterior publicada por la 
+Free Software Foundation; con la imposibilidad de variar secciones y/o a\(~nadir textos en la portada 
+o contraportada.

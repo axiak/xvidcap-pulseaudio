@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                   "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry revision="1.1.4">
+    <refmeta>
+        <refentrytitle>xvidcap</refentrytitle>
+        <manvolnum>1</manvolnum>
+        <refmiscinfo>Septiembre 2006</refmiscinfo>
+    </refmeta>
+    <refnamediv id='name'>
+        <refname>XVidCap</refname>
+        <refpurpose>Graba porciones de una ventana X11 a video</refpurpose>
+    </refnamediv>
+    <!-- body begins here -->
+    <refsynopsisdiv id='synopsis'>
+        <cmdsynopsis>
+            <command>xvidcap</command>    
+            <arg choice='opt'>-v</arg>
+
+            <arg choice='opt'><arg choice='plain'>--mf</arg>|<arg choice='plain'>--sf</arg></arg>
+            <arg choice='opt'>--file<replaceable> nombre de fichero</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice='opt'>--fps<replaceable> frames por segundo</replaceable></arg>
+
+            <arg choice='opt'>--cap_geometry<replaceable> geometría</replaceable></arg>
+            <arg choice='opt'>--rescale<replaceable> tamaño en porcentaje</replaceable></arg>
+            <arg choice='opt'>--quality<replaceable> calidad en porcentaje</replaceable></arg>
+            <arg choice='opt'>--source<arg choice="plain"> x11|shm<!-- |v4l --></arg></arg>
+
+            <arg choice='opt'>--time<replaceable> duración máxima en segundos</replaceable></arg>
+            <arg choice='opt'>--frames<replaceable> número máximo de frames</replaceable></arg>
+            <arg choice='opt'>--start_no<replaceable> número del frame de inicio</replaceable></arg>
+
+            <arg choice='opt'>--continue<arg choice="plain"> yes|no</arg></arg>
+            <arg choice='opt'>--gui<arg choice="plain"> yes|no</arg></arg>
+
+            <arg choice='opt'>--auto</arg>
+
+            <arg choice='opt'>--codec<replaceable> codec de video</replaceable></arg>
+            <arg choice='opt'>--codec-help</arg>
+            <arg choice='opt'>--format<replaceable> formato de fichero de salida</replaceable></arg>
+            <arg choice='opt'>--format-help</arg>
+
+            <arg choice='opt'>--audio<arg choice="plain"> yes|no</arg></arg>
+            <arg choice='opt'>--aucodec<replaceable> codec de audio</replaceable></arg>
+            <arg choice='opt'>--aucodec-help</arg>
+            <arg choice='opt'>--audio_in<replaceable> dispositivo de captura de audio</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice='opt'>--audio_bits<replaceable> bit rate de audio</replaceable></arg>
+            <arg choice='opt'>--audio_rate<replaceable> sample rate de audio</replaceable></arg>
+            <arg choice='opt'>--audio_channels<replaceable> canales de audio</replaceable></arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+
+    <refsect1 id='intro'><title>Introducción</title>
+        <para>
+            <application>xvidcap</application> es una herramienta que captura a fichero el movimiento en un área seleccionada 
+            de la pantalla. Puede operar en dos modos distintos: (1) captura <emphasis>single-frame</emphasis>
+             o (2) captura <emphasis>multi-frame</emphasis>. En modo de captura single-frame 
+            <application>xvidcap</application> saca un número configurable de capturas por segundo y 
+            los guarda como ficheros individuales. En modo de captura multi-frame <application>xvidcap</application> 
+            también saca un número de capturas por segundo, pero las codifica en un solo fichero de video en tiempo real. 
+            La captura de audio solo está disponible con formatos multi-frame.
+        </para>
+        <para>
+            Es conveniente grabar en modo de captura single-frame si se pretende preprocesar las 
+            imágenes antes de codificarlas a video, o si necesita otros codecs de video que <application>xvidcap</application> 
+            no soporta. Las imágenes individuales pueden posteriormente ser codificadas utilizando herramientas como ffmpeg, mencoder
+            o transcode.
+        </para>
+        <para>
+            Para ayuda, nuevas características, o reportar bugs por favor diríjase a 
+            <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink>
+        </para>
+    </refsect1>
+
+    <refsect1 id='options'><title>Opciones</title>
+
+        <para>
+            Estos programas siguen la sintaxis de la linea de comandos GNU, 
+            con opciones de nombre largo comenzando por dos guiones (<literal>--</literal>).  
+            Un sumario de las opciones puede verse a continuación.
+        </para> 
+        <variablelist remap='IP'>
+            <varlistentry>
+                <term><option>-v</option></term>
+                <listitem>
+                    <para>
+                        Ejecuta <application>xvidcap</application> en modo verbose. Esto proporciona más información sobre
+                        ajustes de usuario, codecs de entrada y salida, rendimiento, ... Mensajes 
+                        como <quote>"missing XX milli secs .."</quote> durante la captura significa que está perdiendo 
+                        frames debido a la falta de recursos (frames perdidos). Esto resulta en un video 
+                        que se reproducirá acelerado. Tenga en cuenta que el modo verbose ralentiza 
+                        <application>xvidcap</application> y podría ser el <emphasis>causante</emphasis> de perdidas de frames. Pruebe a ejeutarlo sin 
+                        modo verbose y observe el contador de frames perdidos.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--mf</option> | <option>--sf</option></term>
+                <listitem>
+                    <para>
+                        <application>xvidcap</application> intenta adivinar el modo de captura que desea. Si usted 
+                        especifica <literal>--file test.avi</literal> xvidcap asumirá que usted desea una captura multi-frame.
+                        Puede especificar explicitamente el modo de captura deseado en la linea de comandos con este 
+                        modificador. Si, por ejemplo, usted tiene sus ajustes correctamente configurados y 
+                        guardados con captura multi-frame como modo por defecto, ejecutar <literal>xvidcap --sf</literal>
+                        iniciará <application>xvidcap</application> en modo de captura single-frame con todos los ajustes guardados. Por 
+                        defecto es captura multi-frame.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--file <replaceable>nombre/patrón de fichero</replaceable></option></term>
+                <listitem>
+                    <para>
+                        El nombre/patrón de fichero a utilizar para guardar los frames capturados. Un patrón de nombre 
+                        de fichero contiene un formato tipo printf() (ref. <literal>man printf</literal>) 
+                        para hacer el nombre de fichero incrementable, e.g. <literal>--file out-%02d.xwd</literal>. 
+                        Esto es necesario para capturas single-frame. <application>xvidcap</application> reemplazará 
+                        la primera cadena del formato printf() con el número del frame capturado. 
+                        Así pues, en el ejemplo dado, escribirá los ficheros <filename>out-00.xwd</filename>, 
+                        <filename>out-01.xwd</filename>, <filename>out-02.xwd</filename>,
+                        etc. El número de frame desde el que iniciar la capturapuede ser especificado con <literal>--start_no</literal>,
+                        ver arriba.
+                    </para>
+                    <para>
+                        La captura Multi-frame no necesita un patrón de fichero. Si especifica uno, 
+                        no obstante como <literal>--file mymovie-%d.mpeg</literal>, <application>xvidcap</application>
+                        reemplazará la cadena de formato con el número de la sesión grabación actual 
+                        (siempre empezando a contar desde cero). Esto le habilitará para incrementar/disminuir  manualmente ese 
+                        número, o usar la característica autocontinuar (ref. <literal>--continue</literal> arriba) creando 
+                        una serie de ficheros de video.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--fps<replaceable> frames por segundo</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Especifica el número de frames a capturar por segundo. Este parámetro 
+                        acepta números de coma flotante, lo que permite capturas a frame rates muy bajos como
+                        e.g. <literal>--fps 0.5</literal> para grabar un frame cada 2 segundos. Esto solo es posible 
+                        en modo single-frame. Los codecs usados para modo multi-frame normalmente solo 
+                        aceptan ciertos frame rates como válidos. Tenga en cuenta que frame rates fracionados para 
+                        codecs como MPEG1 que solo acepta fracciones muy específicas están deshabilitados 
+                        en esta versión debido a una inconsistencia con tiempos fraccionados entre 
+                        <application>xvidcap</application> y libavcodec. Solo frame rates de número entero serán aceptados.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--cap_geometry<replaceable> geometría</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Especifica la geometría como por ejemplo <application>xterm</application>, i. e. de esta manera:
+                        <replaceable>width</replaceable>x<replaceable>height</replaceable>+<replaceable>x-position</replaceable>+<replaceable>y-position</replaceable>
+                    </para>
+                    <para>
+                        Esto invalida la anchura y altura por defecto del marco de captura. Use el botón 
+                        picker del GUI en vez de esta opción de linea de comandos para ajustar el tamaño del marco de captura 
+                        a una ventana. Tamaños de captura inferiores a 20 x 20 no parecen funcionar bién con 
+                        la mayoría de codecs de captura multi-frame.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--rescale<replaceable> tamaño en porcentaje</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Reescala la salida a un porcentaje del original de entrada. Un valor de <literal>25</literal>, e. g.
+                        hará que el tamaño de salida sea un 25 por ciento del área original de entrada.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--quality<replaceable> calidad en porcentaje</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Especifica un valor entre <literal>0</literal> y <literal>100</literal> para definir la calidad do codificación. El 
+                        valor por defecto es <literal>75</literal>. 
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--source</option> x11|shm<!-- |v4l --></term>
+                <listitem>
+                    <para>
+                        Habilita o deshabilita el uso de la extensión de memoria compartida de X11. Para soportar 
+                        memoria ompartida, ambos, cliente y servidor han de ejecutarse en el mismo host. Si el uso de 
+                        memoria compartida está disponible, <application>xvidcap</application> la usará por defecto. Si su servidor X y 
+                        cliente no se ejecutan en la misma máquina, necesita deshabilitarlo con el parámetro <literal>--source x11</literal>.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--time<replaceable> duración máxima en segundos</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Especifica el tiempo máximo de captura, si <literal>0</literal> <application>xvidcap</application> capturará hasta 
+                        que sea parado interactivamente. Para cualquier otro valor, cualquier sesión de grabación parará 
+                        automaticamente después del número de segundos especificado. Este parametro entra en 
+                        conflicto con <literal>--frames</literal> (vea mas abajo). Si se especifican ambos xvidcap parará cuando 
+                        ocurra la primera de las dos. El programa acepta números de coma flotante, e.g. <literal>2.5</literal>.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--frames<replaceable> número máximo de frames</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Para la captura después de capturar el número de frames especificado. Si <literal>0</literal>
+                        xvidcap capturará hasta ser parado interactivamente, ref. <literal>--time</literal> arriba.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--start_no<replaceable> Número de frame inicial</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Define el número inicial con el que empezar a numerar los ficheros. El valor 
+                        por defecto es <literal>0</literal>. Este parámetro solo se utiliza para capturas single-frame. 
+                        La numeración de ficheros de video para <literal>--continue</literal> siempre empieza de cero.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--continue</option> yes|no</term>
+                <listitem>
+                    <para>
+                        Cuando se selecciona captura multi-frame, tiempo máximo de captura o frames son 
+                        especificados, y el nombre de fichero de salida es incrementable (vea <literal>--file</literal> abajo),
+                        <application>xvidcap</application> puede continuar automaticamente capturando a un fichero nuevo cuando uno 
+                        excede el tiempo máximo o el número de frames. Esto cambiará el 
+                        comportamiento de <literal>--time</literal> y <literal>--frames</literal> porque la grabación no parará
+                        en los límites especificados, si no, empezará un nuevo fichero de video. Esta característica es 
+                        de utilidad si desea dividir su grabación en fragmentos de 
+                        e. g. cinco minutos. Si no hay opción <literal>--continue</literal>, <application>xvidcap</application> usará por defecto <literal>no</literal>.
+                        Dado que la captura single-frame necesita un nombre de fichero con un patrón incremental para contar los 
+                        frames individuales, esta característica está deshabilitada para las capturas single-frame. 
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--gui</option> yes|no</term>
+                <listitem>
+                    <para>
+                        Inicia xvidcap con o sin GUI de control overriding what's in the
+                        preferences file. Ejecutandolo sin GUI iniciará automaticamente una sesión 
+                        de captura. Puede pararse especificando o bien <literal>--time</literal> o
+                        <literal>--frames</literal>, o pulsando CTRL-C.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--auto</option></term>
+                <listitem>
+                    <para>
+                        <application>xvidcap</application> soporta la detección automática de parámetros para 
+                        formatos de salida, codecs de video y audio. Si alguno de esos ajustes han sido guardados como valores 
+                        fijos en las preferencias, pueden ser invalidados especificando el parámetro 
+                        <literal>auto</literal> a cualquiera de los argumentos <literal>--format</literal>, <literal>--codec</literal>,
+                        o <literal>--aucodec</literal>. Este argumento es una manera rápida de ajustar los tres a 
+                        detección automática.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--codec<replaceable> codec de video</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Invalida las preferencias y la selección automática de codecs y utiliza el codec 
+                        explicitamente especificado.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--codec-help</option></term>
+                <listitem>
+                    <para>
+                        Lista los codecs válidos.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--format<replaceable> Formato del fichero de salida</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Invalida las preferencias y la selección automática de formato con el formato de fichero 
+                        explicitamente especificado.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--format-help</option></term>
+                <listitem>
+                    <para>
+                        Lista los formatos de fichero válidos.
+                    </para> 
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+        
+    <refsect1 id='audio_options'><title>Opciones de Audio</title>
+
+        <para>
+            Las siguientes opciones hacen referencia a la captura de audio, la cual solo está disponible con 
+            formatos de salida multi-frame. El audio puede ser capturado tanto desde cualquier 
+            dispositivo de audio compatible (e.g. <filename>/dev/dsp</filename>) o desde 
+            STDIN (ref. <literal>--audio_in</literal> abajo).
+        </para> 
+        
+        <variablelist remap="IP">    
+            <varlistentry>
+                <term><option>--audio</option> yes|no</term>
+                <listitem>
+                    <para>
+                        Habilita o deshabilita la captura de audio utilizando los parámetros por defecto o aquellos guardados en 
+                        el fichero de preferencias. Si está soportado, se hbilitará por defecto en las capturas multi-frame.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--aucodec<replaceable> codec de audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Inhabilita las preferencias y la selección automática de codec con el codec de audio 
+                        explicitamente especificado.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--aucodec-help</option></term>
+                <listitem>
+                    <para>
+                        Lista los codecs de audio válidos.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_in<replaceable> dispositivo de captura de audio</replaceable>|-</option></term>
+                <listitem>
+                    <para>
+                        Camptura audio desde el dispositivo especificado o desde stdin. El último permite 
+                        el doblaje de un video capturado utilizando la linea de comandos de la siguiente manera. Por 
+                        defecto es <filename>/dev/dsp</filename>.
+                    </para> 
+                    <para>
+                        <command>cat some.mp3 | xvidcap --audio_in -</command>
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_bits<replaceable> bit rate del audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Ajusta el bit rate deseado. Por defecto es <literal>32000</literal> bit. Tenga en cuenta que si utiliza 
+                        STDIN el fichero de entrada será resampleado según se necesite.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_rate<replaceable> sample rate del audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Ajusta el sample rate deseado. Por defecto es <literal>22050</literal> Hz. Tenga en cuenta que si utiliza 
+                        STDIN el fichero de entrada será resampleado según se necesite.
+                    </para> 
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term><option>--audio_channels<replaceable> canales de audio</replaceable></option></term>
+                <listitem>
+                    <para>
+                        Ajusta el número de canales deseados. Por defecto es <literal>1</literal> para mono. Cualquier valor 
+                        superior a <literal>2</literal> probablemente solo sea util al tomar la entrada de STDIN y un fichero de entrada  5-channel AC audio
+                        5-canales AC o equipos de grabación de alta gama.
+                    </para> 
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+
+    <refsect1 id='author'><title>Autores</title>
+        <para>
+            <application>xvidcap</application> fué escrito por Rasca Gmelch and Karl H. Beckers.
+        </para>
+        <para>
+            Esta página del manual fué escrita por Karl H. Beckers <email>karl.h.beckers@gmx.net</email> para 
+            el proyecto <application>xvidcap</application>.
+        </para>
+        <para>
+            Esta traducción fué hecha por Imanol García Calvo
+        </para>
+        -->
+        <para>
+            Garantizado el permiso de copia, distribución y/o modificación de este documento bajo 
+            Los términos de la licencia de documentación libre, 
+            version 1.1 o cualquier versión posterior publicada por la 
+            Free Software Foundation; con la imposibilidad de variar secciones y/o añadir textos en la portada 
+            o contraportada.
+        </para> 
+    </refsect1>
+</refentry>
+

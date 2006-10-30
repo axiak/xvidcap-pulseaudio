@@ -262,7 +262,7 @@ const xvFFormat none_format = {
     CODEC_NONE,
     NULL,
     AU_CODEC_NONE,
-    NULL                        /* , NULL */
+    NULL
 };
 
 const xvFFormat xwd = {
@@ -273,7 +273,7 @@ const xvFFormat xwd = {
     CODEC_NONE,
     NULL,
     AU_CODEC_NONE,
-    NULL                        /* , NULL */
+    NULL
 };
 
 #ifdef USE_FFMPEG
@@ -285,7 +285,7 @@ const xvFFormat pgm_format = {
     CODEC_PGM,
     "PGM",
     AU_CODEC_NONE,
-    NULL                        /* , NULL */
+    NULL
 };
 
 const xvFFormat ppm_format = {
@@ -296,7 +296,7 @@ const xvFFormat ppm_format = {
     CODEC_PPM,
     "PPM",
     AU_CODEC_NONE,
-    NULL                        /* , NULL */
+    NULL
 };
 
 const xvFFormat png_format = {
@@ -307,7 +307,7 @@ const xvFFormat png_format = {
     CODEC_PNG,
     "PNG",
     AU_CODEC_NONE,
-    NULL                        /* , NULL */
+    NULL
 };
 
 const xvFFormat jpeg_format = {
@@ -318,7 +318,7 @@ const xvFFormat jpeg_format = {
     CODEC_JPEG,
     "JPEG",
     AU_CODEC_NONE,
-    NULL                        /* , jpeg_init */
+    NULL
 };
 
 const xvFFormat avi = {
@@ -331,15 +331,14 @@ const xvFFormat avi = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16"             // ,
+    "MP2|MP3|PCM16"
 #else
-    "MP2|PCM16"                 // ,
+    "MP2|PCM16"
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL                        // ,
+    NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        // avienc_init
 };
 
 const xvFFormat divx = {
@@ -352,15 +351,14 @@ const xvFFormat divx = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16"             // ,
+    "MP2|MP3|PCM16"
 #else
-    "MP2|PCM16"                 // ,
+    "MP2|PCM16"
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL                        // ,
+    NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        // avienc_init
 };
 
 const xvFFormat asf = {
@@ -373,15 +371,14 @@ const xvFFormat asf = {
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_NONE,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3"                   // ,
+    "MP2|MP3"
 #else
-    "MP2"                       // ,
+    "MP2"
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL                        // ,
+    NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        // asf_init
 };
 
 const xvFFormat ff_flv1 = {
@@ -403,7 +400,6 @@ const xvFFormat ff_flv1 = {
     AU_CODEC_NONE,
     NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        /* , flvenc_init */
 };
 
 const xvFFormat swf = {
@@ -413,19 +409,20 @@ const xvFFormat swf = {
     "swf",
     CODEC_FLV,
     "FLASH_VIDEO|MJPEG",
+/* 
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
-    "MP2|MP3"                   // ,
+    "MP2|MP3"
 #else
     AU_CODEC_MP2,
-    "MP2"                       // ,
+    "MP2"
 #endif                          // HAVE_LIBMP3LAME
 #else
+*/
     AU_CODEC_NONE,
-    NULL                        // ,
-#endif                          // HAVE_FFMPEG_AUDIO
-        // swf_init
+    NULL
+// #endif                          // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat dv_format = {
@@ -437,12 +434,11 @@ const xvFFormat dv_format = {
     "DV",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "PCM16"                     // ,
+    "PCM16"
 #else
     AU_CODEC_NONE,
-    NULL                        // ,
+    NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        // ff_dv_init
 };
 
 const xvFFormat mpeg = {
@@ -454,12 +450,11 @@ const xvFFormat mpeg = {
     "MPEG1",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "MP2"                       // ,
+    "MP2"
 #else
     AU_CODEC_NONE,
-    NULL                        // ,
+    NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        // mpegps_init
 };
 
 const xvFFormat svcd = {
@@ -471,12 +466,11 @@ const xvFFormat svcd = {
     "MPEG2",
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
-    "MP2"                       // ,
+    "MP2"
 #else
     AU_CODEC_NONE,
-    NULL                        // ,
+    NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        // mpegps_init
 };
 
 const xvFFormat mov = {
@@ -489,16 +483,15 @@ const xvFFormat mov = {
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
-    "MP2|MP3|PCM16"             // ,
+    "MP2|MP3|PCM16"
 #else
     AU_CODEC_PCM16,
-    "MP2|PCM16"                 // ,
+    "MP2|PCM16"
 #endif                          // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
-    NULL                        // ,
+    NULL
 #endif                          // HAVE_FFMPEG_AUDIO
-        // mpegps_init
 };
 #endif                          // USE_FFMPEG
 

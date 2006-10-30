@@ -1,0 +1,34 @@
+
+BASICS:
+
+This version no longer has an Xt UI!
+
+In return it has a load of other goodies, like:
+- fewer bugs :)
+- documentation (need yelp to read it)
+- availability in English, German, Italian, Spanish
+- recent versions
+- on-the-fly frame size reduction
+
+
+COMPILATION:
+
+Now, the usual triple does what most users want, so it's just:
+
+./configure
+make
+make install
+
+
+KNOWN ISSUES:
+
+- if you get this: 
+xvidcap: pthread_mutex_lock.c:108: __pthread_mutex_lock: Assertion `mutex->__data.__owner == 0' failed. Aborted 
+read : http://sourceforge.net/tracker/index.php?func=detail&aid=1551015&group_id=81535&atid=563254 
+
+- if you use compiz/beryl and use the capture area selector to single click and select a window to capture, don't click on the window title but the contents. Other window managers can handle it.
+
+- some codecs have certain requirements that they don't offer xvidcap a way of asking about it in advance. They may make xvidcap crash if configured to run with incompatible settings. Most notably it is DV which you cannot use with anything but a frame size of 720 x 576. So if you experience strange crashes, try running from command line and see if you get a message from libavcodec. Eventually, submit a bug. This is on the todo-list for xvidcap.next.
+
+
+

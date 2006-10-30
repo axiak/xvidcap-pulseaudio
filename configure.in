@@ -3,7 +3,7 @@ dnl Process this file with autoconf to produce a configure script.
 #GENERAL STUFF##############################################
 #########################################################
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(xvidcap, 1.1.4rc2)
+AM_INIT_AUTOMAKE(xvidcap, 1.1.4)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
@@ -438,10 +438,12 @@ doc/xvidcap/Makefile
 doc/xvidcap/C/Makefile
 doc/xvidcap/de/Makefile
 doc/xvidcap/it/Makefile
+doc/xvidcap/es/Makefile
 doc/man/Makefile
 doc/man/C/Makefile
 doc/man/de/Makefile
 doc/man/it/Makefile
+doc/man/es/Makefile
 po/Makefile.in
 debian/Makefile
 src/Makefile

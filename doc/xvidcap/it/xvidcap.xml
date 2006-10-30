@@ -108,13 +108,7 @@
     <!-- ============= Introduction ============================== -->
     <sect1 id="xvidcap-intro">
         <title>Introduzione</title>
-        <para>
-            <application>xvidcap</application> is a tool that captures movement on a selected area of an X11 screen to files. 
-            It does this by taking a configurable number of screenshots per second and saving them either as individual
-            screenshots or as a video. This kind of application, today, is commonly labelled screencam or screencast utility. 
-            In fact, one of the oldest of those utilities was <application>Lotus Screencam</application> which served as the 
-            inspiration for <application>xvidcap</application>.
-        </para>
+        <para><application>xvidcap</application> è uno strumento che acquisisce su file il movimento presente in un'area selezionata di uno schermo X11. Ciò avviene tramite l'acquisizione di un numero configurabile di schermate per secondo ed il loro salvataggio, sia come schermate individualiche come video. Questo tipo di applicazione, al giorno d'oggi, è comunemente definito programma screencam o screencast. Uno dei più primi programmi del genere era <application>Lotus Screencam</application>, che è stato d'ispirazione per <application>xvidcap</application>.</para>
 
         <para><application>xvidcap</application> può essere usato in due diverse modalità operative: <orderedlist>
                 <listitem>
@@ -132,18 +126,10 @@
 
         <caution>
             <title>Acquisizione audio</title>
-            <para>
-                <application>xvidcap</application> can capture audio, but only in multi-frame capture operation.
-            </para>
+            <para><application>xvidcap</application> può acquisire l'audio, ma solo in modalità di acquisizione a fotogrammi multipli.</para>
         </caution>
 
-        <para>
-            Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before 
-            encoding, or if you need other video codecs <application>xvidcap</application> does not support. Individual images can later be encoded 
-            with tools like <ulink type="help" url="man:ffmpeg">ffmpeg</ulink>, 
-            <ulink type="help" url="man:mencoder">mencoder</ulink>, or 
-            <ulink type="help" url="man:transcode">transcode</ulink>.
-        </para>
+        <para>La registrazione in modalità di acquisizione a fotogramma singolo potrebbe essere maggiormente conveniente se si desidera pre-processare le immagini prima della codifica, o se si vuole usare codificatori video che <application>xvidcap</application> non supporta. Le singole immagini possono essere codificate successivamente con strumenti quali <ulink type="help" url="man:ffmpeg">ffmpeg</ulink>, <ulink type="help" url="man:mencoder">mencoder</ulink>, o <ulink type="help" url="man:transcode">transcode</ulink>.</para>
 
         <para>Per segnalare bug o proporre suggerimenti riguardanti l'applicazione <application>xvidcap</application> o questa guida, seguire le istruzioni reperibili sul sito di <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap, presso SF.net</ulink>.</para>
     </sect1>
@@ -172,8 +158,8 @@
 
         <sect2 id="xvidcap-get-started-u-start">
 
-            <title>When You Start <application>xvidcap</application></title>
-            <para>When you start <application>xvidcap</application>, the following window is displayed:</para>
+            <title>All'avvio di <application>xvidcap</application></title>
+            <para>All'avvio di <application>xvidcap</application>, viene visualizzata la seguente finestra:</para>
 
             <figure id="xvidcap-window">
                 <title>Controlli di xvidcap</title>
@@ -182,7 +168,7 @@
                         <imageobject>
                             <imagedata fileref="figures/xvidcap-main-ctrl.png" format="PNG"/>
                         </imageobject>
-                        <textobject> <phrase>Shows <application>xvidcap</application> control.</phrase>
+                        <textobject> <phrase>Mostra i controllo di <application>xvidcap</application>.</phrase>
                         </textobject>
                     </mediaobject>
                 </screenshot>
@@ -211,7 +197,7 @@
                                 <para>In modalità di acquisizione a fotogramma singolo, un clic del tasto destro del mouse reimposta il contatore dei fotogrammi all'inizio. Un clic del tasto destro quando non si è in fase di acquisizione mostrerà il <ulink type="help" url="ghelp:xvidcap?xvidcap-menu">menu principale</ulink>.</para>
                                 <tip>
                                     <title>Modalità di acquisizione predefinita</title>
-                                    <para>By default, <application>xvidcap</application> starts in multi-frame capture mode.</para>
+                                    <para>In maniera predefinita, <application>xvidcap</application> si avvia in modalità di acquisizione a fotogrammi multipli.</para>
                                 </tip>
 
                             </entry>
@@ -229,17 +215,7 @@
                                 </screenshot>
                             </entry>
                             <entry>
-                                <para>
-                                    The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well your capture session can capture at 
-                                    your desired frame rate. If your system is under heavy load, it may not be able to capture
-                                    as many frames per second as you wish. This will result in a video that plays back too quickly.
-                                    <application>xvidcap</application> displays a green status if you can or can almost capture at the desired frame rate. If
-                                    you have some frame drop the status turns to yellow, or red if there is excessive frame drop.
-                                    To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate,
-                                    quit as many other applications putting stress on your system as possible, or run on a more 
-                                    powerful machine. It may also help to <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">downscale</ulink>
-                                    the captured data.
-                                </para>
+                                <para>Il <guilabel>contatore dei fotogrammi scartati</guilabel> fornisce un'indicazione della bontà della sessione di acquisizione alla velocità desiderata. Se il proprio sistema viene sottoposto ad un carico eccessivo, potrebbe non essere in grado di acquisire il numero di fotogrammi desiderato. Ciò si manifesterà con un'anomala velocità di riproduzione dei video. <application>xvidcap</application> visualizza uno stato verde se è possibile acquisire o quasi alla velocità desiderata. Se ci sono fotogrammi scartati lo stato diventa giallo, o rosso se il numero di fotogrammi scartati è eccessivo. Per ridurre il numero di fotogrammi scartati, è possibile acquisire una parte di schermo più piccola, seleziona una velocità minore, chiudere quante più applicazioni che caricano eccessivamente il sistema sia possibile, o eseguire il programma sun una macchina più potente. Potrebbe, inoltre, essere di aiuto il <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">ridimensionamento</ulink> dei dati acquisiti.</para>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-stop">
@@ -404,13 +380,7 @@
                                 </screenshot>
                             </entry>
                             <entry>
-                                <para>
-                                    The <guilabel>Edit Button</guilabel> calls an external program to edit the most recently
-                                    captured frame in single-frame capture mode or the current video in multi-frame capture mode. <application>xvidcap</application> does not
-                                    provide those applications. By default, <application>xvidcap</application> calls <application>gimp</application> in
-                                    single-frame capture mode and nothing at all in multi-frame capture mode. Both settings can be changed through
-                                    the <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">preferences dialog</ulink>.
-                                </para>
+                                <para>Il <guilabel>pulsante Modifica</guilabel> chiama un programma esterno per modificare i fotogrammi acquisiti di recente in modalità di acquisizione a fotogramma singolo o il video attuale in modalità di acquisizione a fotogrammi multipli. <application>xvidcap</application> non fornisce queste applicazioni. In maniera predefinita, <application>xvidcap</application> chiama <application>gimp</application> in modalità di acquisizione a fotogramma singolo e nessun programma in modalità di acquisizione a fotogrammi multipli. Le due impostazioni possono essere cambiate attraverso la <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">finestra delle preferenze</ulink>.</para>
                             </entry>
                         </row>
                     </tbody>
@@ -1088,9 +1058,7 @@
                         </row>
                         <row id="xvidcap-prefs-cmd-TBL-mf-encode">
                             <entry>
-                                <para>
-                                    Multi Frame Transcoding command
-                                </para>
+                                <para>Comando di transcodifica per fotogrammi multipli</para>
                             </entry>
                             <entry>
                                 <para>Questo comando è eseguito se si seleziona la voce di menu <guibutton>Crea video</guibutton> in modalità di acquisizione a fotogrammi multipli.</para>
@@ -1117,7 +1085,7 @@
         <para>Questa stessa finestra può usare uno o due moduli a seconda che <application>xvidcap</application> sia configurato o meno per richiedere un nome file di destinazione dopo l'acquisizione.</para>
         <tip>
             <title>Richiesta del nome file all'utente</title>
-            <para>D'ora in poi, il solo modo per configurare <application>xvidcap</application> per richiedere all'utente di specificare un nome file dopo l'acquisizione piuttosto che fornirne uno ****** specificando un nome file vuoto sia attraverso la linea di comando usando <parameter>--file ""</parameter> o nella finestra delle preferenze. Per fare ciò, bisogna specificare manualmente il formato file di uscita. In questa configurazione, <application>xvidcap</application> memorizzerà il video in un file temporaneo nella propria cartella home che può essere successivamente rinominato/spostato nella destinazione desiderata. Non è compatibile con la continuazione automatica.</para>
+            <para>D'ora in poi, il solo modo per configurare <application>xvidcap</application> per richiedere all'utente di specificare un nome file dopo l'acquisizione piuttosto che fornirne uno direttamente, specificando un nome file vuoto sia attraverso la linea di comando usando <parameter>--file ""</parameter> o nella finestra delle preferenze. Per fare ciò, bisogna specificare manualmente il formato file di uscita. In questa configurazione, <application>xvidcap</application> memorizzerà il video in un file temporaneo nella propria cartella home che può essere successivamente rinominato/spostato nella destinazione desiderata. Non è compatibile con la continuazione automatica.</para>
         </tip>
 
         <para>Se <application>xvidcap</application> è configurato per richiedete il nome file all'utente, la finestra dei risultati apparirà in questo modo:</para>
@@ -1207,13 +1175,7 @@
                 </tgroup>
             </table>
 
-            <para>
-                In the Preferences Warning Dialog you will find one or more messages consisting of three
-                rows each. The first one contains a message type or severity, a unique numeric ID and a 
-                short name for the error. The second row gives a more detailed description, and the third
-                one tells about the action <application>xvidcap</application> is going to take if you
-                chose to click <guibutton>OK</guibutton>.
-            </para>
+            <para>Nella finestra di avviso delle preferenze si troveranno uno o più messaggi composti da tre righe ciascuno. La prima riga contiene un tipo di messaggio o gravità, un ID numerico univoco e un breve nome dell'errore. La seconda riga fornisce una descrizione più dettagliata, e la terza riga descrive l'azione che <application>xvidcap</application> intraprenderà se si fa clic su <guibutton>OK</guibutton>.</para>
 
             <para>Un'azione potrebbe essere la correzione automatica del problema scegliendo un valore predefinito plausibile, per ignorare il problema se non è grave o per uscire da <application>xvidcap</application> se la soluzione non è determinabile automaticamente.</para>
 
