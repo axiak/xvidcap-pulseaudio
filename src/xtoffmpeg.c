@@ -76,11 +76,9 @@ extern xvAuCodec tAuCodecs[NUMAUCODECS];
 static AVCodec *codec;          // params for the codecs video 
 static AVFrame *p_inpic;        // a AVFrame as wrapper around the
                                         // original image data 
-static AVFrame *p_outpic, *p_resample;  // and one for the image converted 
-                                        // to
+static AVFrame *p_outpic;       // and one for the image converted to
                                         // yuv420p 
-static uint8_t *outpic_buf, *resample_buf;  // data buffer for output
-                                            // frame
+static uint8_t *outpic_buf;     // data buffer for output frame
 static uint8_t *outbuf;         // output buffer for encoded frame 
 static int outbuf_size;         // the size of the outbuf may be
                                         // other than image_size
@@ -123,6 +121,8 @@ typedef struct AVOutputStream {
     int frame_number;
     /* input pts and corresponding output pts for A/V sync */
     // double sync_ipts; /* dts from the AVPacket of the demuxer in second 
+    // 
+    // 
     // units */
     struct AVInputStream *sync_ist; /* input stream to sync against */
     int64_t sync_opts;          /* output frame counter, could be changed
@@ -537,7 +537,7 @@ void capture_audio_thread(Job * job)
             pthread_mutex_unlock(&recording_mutex);
         } else if (job->state == VC_REC) {
 
-            audio_pts = (double)    /* au_out_st->st->pts.val *
+            audio_pts = (double)    /* au_out_st->st->pts.val * * *
                                      * av_q2d(au_out_st->st->time_base); */
                 au_out_st->st->pts.val *
                 au_out_st->st->time_base.num /
@@ -549,6 +549,8 @@ void capture_audio_thread(Job * job)
             // sometimes we need to pause writing audio packets for a/v
             // sync (when audio_pts >= video_pts)
             // now, if we're reading from a file/pipe, we stop sampling or 
+            // 
+            // 
             // 
             // else the audio track in the
             // video would become choppy (packets missing where they were
@@ -743,6 +745,38 @@ void myABGR32toARGB32(XImage * image)
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
+
+#undef DEBUGFUNCTION
+}
+
+
+// 
+// convert pal8 to rgba32
+// libswscale does not support pal8 input
+// 
+void myPAL8toRGB24(XImage * image, AVFrame * p_inpic, Job * job)
+{
+#define DEBUGFUNCTION "myABGR32toRGB24()"
+
+    u_int32_t *color_table = job->color_table;
+    int y = 0, x = 0;
+    uint8_t *out_cursor = NULL;
+    uint8_t *out = (uint8_t *) p_inpic->data[0];
+
+    /* 
+     * 8bit pseudo-color images may have lines padded by excess bytes
+     * these need to be removed before conversion FIXME: other formats 
+     * might also have this problem 
+     */
+    for (y = 0; y < image->height; y++) {
+        out_cursor = (uint8_t *) image->data + (y * image->bytes_per_line);
+        for (x = 0; x < image->width; x++) {
+            *out++ = ((color_table[*out_cursor] & 0x00FF0000) >> 16);
+            *out++ = ((color_table[*out_cursor] & 0x0000FF00) >> 8);
+            *out++ = (color_table[*out_cursor] & 0x000000FF);
+            out_cursor++;
+        }
+    }
 
 #undef DEBUGFUNCTION
 }
@@ -972,7 +1006,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
     /* out_st->time_base.num = out_st->codec->time_base.num;
      * out_st->time_base.den = out_st->codec->time_base.den;
      * out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / 
-     * out_st->time_base.den; */
+     * * * out_st->time_base.den; */
 
 #ifdef DEBUG
     printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE,
@@ -1006,14 +1040,14 @@ int guess_input_pix_fmt(XImage * image, ColorInfo * c_info)
 #ifdef DEBUG
             printf("%s %s: 16 bit RGB565\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
-            input_pixfmt = PIX_FMT_RGB565;
+            input_pixfmt = PIX_FMT_BGR565;
         } else if (image->red_mask == 0x7C00
                    && image->green_mask == 0x03E0
                    && image->blue_mask == 0x1F) {
 #ifdef DEBUG
             printf("%s %s: 16 bit RGB555\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
-            input_pixfmt = PIX_FMT_RGB555;
+            input_pixfmt = PIX_FMT_BGR555;
 
         } else {
             fprintf(stderr,
@@ -1109,6 +1143,8 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         // endianness is treated by avcodec
 
         // color info only needs to be retrieved once for true color X ... 
+        // 
+        // 
         // 
         // dunno about pseudo color 
         xvc_get_color_info(image, &c_info);
@@ -1210,7 +1246,9 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         // 
         // prepare stream 
         out_st =
-            add_video_stream(output_file, image, input_pixfmt,
+            add_video_stream(output_file, image,
+                             (input_pixfmt ==
+                              PIX_FMT_PAL8 ? PIX_FMT_RGB24 : input_pixfmt),
                              tCodecs[job->targetCodec].ffmpeg_id, job);
 
         // FIXME: set params
@@ -1227,7 +1265,6 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
                     DEBUGFILE, DEBUGFUNCTION);
             exit(1);
         }
-
         // open the codec 
         // c = out_st->codec;
 
@@ -1268,20 +1305,18 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         if (input_pixfmt == PIX_FMT_PAL8) {
             scratchbuf8bit =
                 malloc(avpicture_get_size
-                       (input_pixfmt, image->width, image->height));
+                       (PIX_FMT_RGB24, image->width, image->height));
+            if (!scratchbuf8bit) {
+                fprintf(stderr,
+                        "%s %s: Could not allocate buffer for 8bit palette conversion\n",
+                        DEBUGFILE, DEBUGFUNCTION);
+                exit(1);
+            }
 
             avpicture_fill((AVPicture *) p_inpic, scratchbuf8bit,
                            input_pixfmt, image->width, image->height);
-            p_inpic->data[1] = job->color_table;
-#ifdef DEBUG
-            printf
-                ("%s %s: first 4 colors a r g b each: 0x%.8X 0x%.8X 0x%.8X 0x%.8X\n",
-                 DEBUGFILE, DEBUGFUNCTION,
-                 *(u_int32_t *) (job->color_table),
-                 *((u_int32_t *) (job->color_table) + 1),
-                 *((u_int32_t *) (job->color_table) + 2),
-                 *((u_int32_t *) (job->color_table) + 3));
-#endif                          // DEBUG
+            p_inpic->data[0] = scratchbuf8bit;
+            p_inpic->linesize[0] = image->width * 3;
         } else {
             avpicture_fill((AVPicture *) p_inpic, (uint8_t *) image->data,
                            input_pixfmt, image->width, image->height);
@@ -1323,32 +1358,16 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         }
         // img resampling
         if (!img_resample_ctx) {
-            p_resample = avcodec_alloc_frame();
-
-            resample_buf =
-                av_malloc(avpicture_get_size
-                          (out_st->codec->pix_fmt, image->width,
-                           image->height));
-            if (!resample_buf) {
-                fprintf(stderr,
-                        _
-                        ("%s %s: Could not allocate buffer for resizing frame! ... aborting\n"),
-                        DEBUGFILE, DEBUGFUNCTION);
-                exit(1);
-            }
-            avpicture_fill((AVPicture *) p_resample, resample_buf,
-                           out_st->codec->pix_fmt, image->width,
-                           image->height);
-
             img_resample_ctx = sws_getContext(image->width,
                                               image->height,
-                                              input_pixfmt,
+                                              (input_pixfmt ==
+                                               PIX_FMT_PAL8 ? PIX_FMT_RGB24
+                                               : input_pixfmt),
                                               out_st->codec->width,
                                               out_st->codec->height,
-                                              out_st->codec->pix_fmt,
-                                              1, NULL, NULL, NULL);
+                                              out_st->codec->pix_fmt, 1,
+                                              NULL, NULL, NULL);
             // sws_rgb2rgb_init(SWS_CPU_CAPS_MMX*0);
-
         }
         // file preparation needs to be done once for multi-frame capture
         // and multiple times for single-frame capture
@@ -1398,11 +1417,11 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         printf("%s %s: image size %i - input pixfmt %i - out_size %i\n",
                DEBUGFILE, DEBUGFUNCTION, image_size, input_pixfmt,
                out_size);
-        printf("%s %s: audio_pts %d - video_pts %d\n", DEBUGFILE,
+        printf("%s %s: audio_pts %.f - video_pts %.f\n", DEBUGFILE,
                DEBUGFUNCTION, audio_pts, video_pts);
 
         printf("%s %s: c_info %p - scratchbuf8bit %p\n", DEBUGFILE,
-               DEBUGFUNCTION, c_info, scratchbuf8bit);
+               DEBUGFUNCTION, &c_info, scratchbuf8bit);
 #endif                          // DEBUG
     }
 
@@ -1447,38 +1466,20 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         && image->blue_mask == 0xFF0000) {
         myABGR32toARGB32(image);
     } else if (input_pixfmt == PIX_FMT_PAL8) {
-        /* 
-         * 8bit pseudo-color images may have lines padded by excess bytes
-         * these need to be removed before conversion FIXME: other formats 
-         * might also have this problem 
-         */
-        if (image->bytes_per_line > out_st->codec->width) {
-            int y;              // , x;
-            uint8_t *in, *out;
-
-            in = (uint8_t *) image->data;
-            out = scratchbuf8bit;
-
-            for (y = 0; y < out_st->codec->height; y++) {
-                if (!memcpy(out, in, out_st->codec->width)) {
-                    fprintf(stderr,
-                            _
-                            ("%s %s: error preprocessing 8bit pseudo color input ... aborting\n"),
-                            DEBUGFILE, DEBUGFUNCTION);
-                    exit(1);
-                }
-                in += image->bytes_per_line;
-                out += out_st->codec->width;
-            }
-        } else {
-            scratchbuf8bit =
-                memcpy(scratchbuf8bit, image->data,
-                       (out_st->codec->width * out_st->codec->height));
-        }
+        myPAL8toRGB24(image, p_inpic, job);
     }
     // img resampling and conversion
-    sws_scale(img_resample_ctx, p_inpic->data, p_inpic->linesize,
-              0, image->height, p_outpic->data, p_outpic->linesize);
+    if (sws_scale(img_resample_ctx, p_inpic->data, p_inpic->linesize,
+                  0, image->height, p_outpic->data,
+                  p_outpic->linesize) < 0) {
+        fprintf(stderr,
+                _
+                ("%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"),
+                DEBUGFILE, DEBUGFUNCTION, img_resample_ctx, image->width,
+                image->height, out_st->codec->width, out_st->codec->height,
+                input_pixfmt, out_st->codec->pix_fmt);
+        exit(1);
+    }
 
     /* 
      * encode the image 
@@ -1486,7 +1487,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 #ifdef DEBUG
     printf
         ("%s %s: calling encode_video with codec %p, outbuf %p, outbuf size %i, output frame %p\n",
-         DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf, outbuf,
+         DEBUGFILE, DEBUGFUNCTION, out_st->codec, outbuf, outbuf_size,
          p_outpic);
 #endif                          // DEBUG
 
@@ -1674,9 +1675,9 @@ void x2ffmpeg_dump_ximage_info(XImage * img, FILE * fp)
     fprintf(fp, " depth %d\n", img->depth);
     fprintf(fp, " bytes_per_line %d\n", img->bytes_per_line);
     fprintf(fp, " bits_per_pixel %d\n", img->bits_per_pixel);
-    fprintf(fp, " red_mask 0x%.8X\n", img->red_mask);
-    fprintf(fp, " green_mask 0x%.8X\n", img->green_mask);
-    fprintf(fp, " blue_mask 0x%.8X\n", img->blue_mask);
+    fprintf(fp, " red_mask 0x%.8lX\n", img->red_mask);
+    fprintf(fp, " green_mask 0x%.8lX\n", img->green_mask);
+    fprintf(fp, " blue_mask 0x%.8lX\n", img->blue_mask);
 
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1781,7 +1782,8 @@ void dump8bit(XImage * image, u_int32_t * ct)
 
     line_ptr = pnm_image;
     for (row = 0; row < image->height; row++) {
-        col_ptr = image->data + (row * image->bytes_per_line);
+        col_ptr =
+            (unsigned char *) image->data + (row * image->bytes_per_line);
         for (col = 0; col < image->width; col++) {
             *line_ptr++ = ((ct[*col_ptr] & 0x00FF0000) >> 16);
             *line_ptr++ = ((ct[*col_ptr] & 0x0000FF00) >> 8);
