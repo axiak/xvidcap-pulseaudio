@@ -3,7 +3,6 @@ EXTRA_DIST = bts \
 	compat \
 	control \
 	copyright \
-	files \
 	postinst \
 	postrm \
 	rules \

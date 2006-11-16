@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-30 09:36+0100\n"
+"POT-Creation-Date: 2006-11-10 21:21+0100\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: English\n"
@@ -838,35 +838,35 @@ msgstr "Portable Network Graphics File"
 msgid "Microsoft Audio Video Interleaved File"
 msgstr "Microsoft Audio Video Interleaved File"
 
-#: src/codecs.c:347
+#: src/codecs.c:346
 msgid "General AVI file (DIVX default)"
 msgstr "General AVI file (DIVX default)"
 
-#: src/codecs.c:368
+#: src/codecs.c:366
 msgid "Microsoft Advanced Streaming Format"
 msgstr "Microsoft Advanced Streaming Format"
 
-#: src/codecs.c:389
+#: src/codecs.c:386
 msgid "Macromedia Flash Video Stream"
 msgstr "Macromedia Flash Video Stream"
 
-#: src/codecs.c:411
+#: src/codecs.c:407
 msgid "Macromedia Shockwave Flash File"
 msgstr "Macromedia Shockwave Flash File"
 
-#: src/codecs.c:433
+#: src/codecs.c:430
 msgid "DV Video Format"
 msgstr "DV Video Format"
 
-#: src/codecs.c:450
+#: src/codecs.c:446
 msgid "MPEG1 System Format"
 msgstr "MPEG1 System Format"
 
-#: src/codecs.c:467
+#: src/codecs.c:462
 msgid "MPEG2 PS Format"
 msgstr "MPEG2 PS Format"
 
-#: src/codecs.c:484
+#: src/codecs.c:478
 msgid "Quicktime Format"
 msgstr "Quicktime Format"
 
@@ -1838,104 +1838,99 @@ msgstr "%s %s: Error while writing audio frame\n"
 msgid "%s %s: Couldn't unlock mutex lock for writing audio frame\n"
 msgstr "%s %s: Couldn't unlock mutex lock for writing audio frame\n"
 
-#: src/xtoffmpeg.c:564
+#: src/xtoffmpeg.c:566
 #, c-format
 msgid "%s %s: error reading audio packet\n"
 msgstr "%s %s: error reading audio packet\n"
 
-#: src/xtoffmpeg.c:586
+#: src/xtoffmpeg.c:588
 #, c-format
 msgid "%s %s: couldn't decode captured audio packet\n"
 msgstr "%s %s: couldn't decode captured audio packet\n"
 
-#: src/xtoffmpeg.c:595
+#: src/xtoffmpeg.c:597
 #, c-format
 msgid "%s %s: no audio frame\n"
 msgstr "%s %s: no audio frame\n"
 
-#: src/xtoffmpeg.c:626
+#: src/xtoffmpeg.c:628
 #, c-format
 msgid "error reading audio packet\n"
 msgstr "error reading audio packet\n"
 
-#: src/xtoffmpeg.c:629
+#: src/xtoffmpeg.c:631
 #, c-format
 msgid "%s %s: dropping audio frame %f %f\n"
 msgstr "%s %s: dropping audio frame %f %f\n"
 
-#: src/xtoffmpeg.c:695
+#: src/xtoffmpeg.c:697
 #, c-format
 msgid "%s %s: Error while writing video frame\n"
 msgstr "%s %s: Error while writing video frame\n"
 
-#: src/xtoffmpeg.c:880
+#: src/xtoffmpeg.c:914
 #, c-format
 msgid "%s %s: Could not alloc output stream\n"
 msgstr "%s %s: Could not alloc output stream\n"
 
-#: src/xtoffmpeg.c:891
+#: src/xtoffmpeg.c:925
 #, c-format
 msgid "%s %s: video codec not found\n"
 msgstr "%s %s: video codec not found\n"
 
-#: src/xtoffmpeg.c:1021 src/xtoffmpeg.c:1041
+#: src/xtoffmpeg.c:1055 src/xtoffmpeg.c:1075
 #, c-format
 msgid "%s %s: rgb ordering at image depth %i not supported ... aborting\n"
 msgstr "%s %s: rgb ordering at image depth %i not supported ... aborting\n"
 
-#: src/xtoffmpeg.c:1065 src/xtoffmpeg.c:1072
+#: src/xtoffmpeg.c:1099 src/xtoffmpeg.c:1106
 #, c-format
 msgid "%s %s: image depth %i not supported ... aborting\n"
 msgstr "%s %s: image depth %i not supported ... aborting\n"
 
-#: src/xtoffmpeg.c:1165
+#: src/xtoffmpeg.c:1201
 #, c-format
 msgid "%s %s: Couldn't determin output format ... aborting\n"
 msgstr "%s %s: Couldn't determin output format ... aborting\n"
 
-#: src/xtoffmpeg.c:1185
+#: src/xtoffmpeg.c:1221
 #, c-format
 msgid "%s %s: Error allocating memory for format context ... aborting\n"
 msgstr "%s %s: Error allocating memory for format context ... aborting\n"
 
-#: src/xtoffmpeg.c:1197
+#: src/xtoffmpeg.c:1233
 #, c-format
 msgid "%s %s: Error allocating private data for format context ... aborting\n"
 msgstr "%s %s: Error allocating private data for format context ... aborting\n"
 
-#: src/xtoffmpeg.c:1226
+#: src/xtoffmpeg.c:1264
 #, c-format
 msgid "%s %s: Invalid encoding parameters ... aborting\n"
 msgstr "%s %s: Invalid encoding parameters ... aborting\n"
 
-#: src/xtoffmpeg.c:1235
+#: src/xtoffmpeg.c:1272
 #, c-format
 msgid "%s %s: could not open video codec\n"
 msgstr "%s %s: could not open video codec\n"
 
-#: src/xtoffmpeg.c:1301
+#: src/xtoffmpeg.c:1336
 #, c-format
 msgid "%s %s: Could not allocate buffer for output frame! ... aborting\n"
 msgstr "%s %s: Could not allocate buffer for output frame! ... aborting\n"
 
-#: src/xtoffmpeg.c:1320
+#: src/xtoffmpeg.c:1355
 #, c-format
 msgid ""
 "%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"
 msgstr ""
 "%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"
 
-#: src/xtoffmpeg.c:1335
-#, c-format
-msgid "%s %s: Could not allocate buffer for resizing frame! ... aborting\n"
-msgstr "%s %s: Could not allocate buffer for resizing frame! ... aborting\n"
-
-#: src/xtoffmpeg.c:1366 src/xtoffmpeg.c:1418
+#: src/xtoffmpeg.c:1385 src/xtoffmpeg.c:1437
 #, c-format
 msgid "%s %s: Could not open '%s' ... aborting\n"
 msgstr "%s %s: Could not open '%s' ... aborting\n"
 
-#: src/xtoffmpeg.c:1375 src/xtoffmpeg.c:1427
+#: src/xtoffmpeg.c:1394 src/xtoffmpeg.c:1446
 #, c-format
 msgid ""
 "%s %s: Could not write header for output file (incorrect codec "
@@ -1944,22 +1939,24 @@ msgstr ""
 "%s %s: Could not write header for output file (incorrect codec "
 "paramters ?) ... aborting\n"
 
-#: src/xtoffmpeg.c:1466
+#: src/xtoffmpeg.c:1477
 #, c-format
-msgid "%s %s: error preprocessing 8bit pseudo color input ... aborting\n"
-msgstr "%s %s: error preprocessing 8bit pseudo color input ... aborting\n"
+msgid ""
+"%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
+"i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
+msgstr ""
 
-#: src/xtoffmpeg.c:1498
+#: src/xtoffmpeg.c:1499
 #, c-format
 msgid "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"
 msgstr "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"
 
-#: src/xtoffmpeg.c:1508
+#: src/xtoffmpeg.c:1509
 #, c-format
 msgid "mutex lock for writing video frame failed ... aborting\n"
 msgstr "mutex lock for writing video frame failed ... aborting\n"
 
-#: src/xtoffmpeg.c:1536
+#: src/xtoffmpeg.c:1537
 #, c-format
 msgid "couldn't release the mutex for writing video frame ... aborting\n"
 msgstr "couldn't release the mutex for writing video frame ... aborting\n"
@@ -2440,10 +2437,6 @@ msgstr "XVidCap"
 msgid "Rasca, Karl H. Beckers"
 msgstr "Rasca, Karl H. Beckers"
 
-#: src/gnome-xvidcap.glade:3347
-msgid "1.1.4"
-msgstr ""
-
 #: src/gnome-xvidcap.glade:3350
 msgid "website"
 msgstr "website"
@@ -2556,6 +2549,12 @@ msgstr "<b>Width:</b>"
 #: src/gnome-xvidcap.glade:4187
 msgid "<b>Height:</b>"
 msgstr "<b>Height:</b>"
+
+#~ msgid "%s %s: Could not allocate buffer for resizing frame! ... aborting\n"
+#~ msgstr "%s %s: Could not allocate buffer for resizing frame! ... aborting\n"
+
+#~ msgid "%s %s: error preprocessing 8bit pseudo color input ... aborting\n"
+#~ msgstr "%s %s: error preprocessing 8bit pseudo color input ... aborting\n"
 
 #~ msgid "%s %s: pixel format conversion not handled ... aborting\n"
 #~ msgstr "%s %s: pixel format conversion not handled ... aborting\n"

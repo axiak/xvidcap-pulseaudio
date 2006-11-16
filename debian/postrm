@@ -6,3 +6,6 @@ set -e
 if [ "$1" = "configure" ]; then
     scrollkeeper-update -q
 fi
+
+#DEBHELPER#
+

@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Karl H. Beckers <karl.h.beckers@gmx.net>
 Standards-Version: 3.6.1
 Build-Depends: debhelper (>> 3.3.4), libgtk2.0-dev,
- libmp3lame-dev
+ libmp3lame-dev | liblame-dev
 
 Package: xvidcap
 Architecture: any

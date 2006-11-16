@@ -16,9 +16,7 @@ xvidcapdoc_DATA = \
 	README\
 	COPYING\
 	AUTHORS\
-	ChangeLog\
-	INSTALL\
-	NEWS
+	ChangeLog
 
 EXTRA_DIST = $(xvidcapdoc_DATA) \
     autogen.sh \
@@ -28,7 +26,8 @@ EXTRA_DIST = $(xvidcapdoc_DATA) \
     xvidcap.png \
     xvidcap.desktop \
     ppm2mpeg.sh \
-    TODO.tasks
+    TODO.tasks \
+    INSTALL
 
 
 # Copy all the spec files. Of cource, only one is actually used.
@@ -50,6 +49,9 @@ install-exec-hook:
 	cp $(top_srcdir)/xvidcap.png $(datadir)/pixmaps/ ; \
 	mkdir $(datadir)/applications ; \
 	cp $(top_srcdir)/xvidcap.desktop $(datadir)/applications/
+
+install-data-hook:
+	chmod 755 $(datadir)/xvidcap/ppm2mpeg.sh
 
 uninstall-hook:
 	rm $(datadir)/pixmaps/xvidcap.png ; \
