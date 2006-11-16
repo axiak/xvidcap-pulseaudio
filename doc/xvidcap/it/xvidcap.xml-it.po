@@ -275,8 +275,8 @@ msgid "Karl H. Beckers <email>karl.h.beckers@gmx.net</email>"
 msgstr "Karl H. Beckers <email>karl.h.beckers@gmx.net</email>"
 
 #: ../C/xvidcap.xml:98(releaseinfo)
-msgid "This manual describes version 1.1.4 of xvidcap."
-msgstr "Questo manuale descrive la versione 1.1.4 di xvidcap."
+msgid "This manual describes version 1.1.4p1 of xvidcap."
+msgstr "Questo manuale descrive la versione 1.1.4p1 di xvidcap."
 
 #: ../C/xvidcap.xml:101(title)
 msgid "Feedback"
