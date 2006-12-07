@@ -25,23 +25,31 @@
 # include <config.h>
 #endif
 
-long TCbCaptureX11(XtPointer, XtIntervalId *);
+enum captureFunctions {
+    X11,
+#ifdef HAVE_SHMAT
+    SHM,
+#endif                          // HAVE_SHMAT
+    NUMFUNCTIONS
+};
+
+long TCbCaptureX11(XtPointer);
 
 #ifdef HAVE_SHMAT
-long TCbCaptureSHM(XtPointer, XtIntervalId *);
+long TCbCaptureSHM(XtPointer);
 #else
 #define TCbCaptureSHM TCbCaptureX11
 #endif
 
 // the rest is not really used atm
 #ifdef HasDGA
-long TCbCaptureDGA(XtPointer, XtIntervalId *);
+long TCbCaptureDGA(XtPointer);
 #else
 #define TCbCaptureDGA TCbCaptureX11
 #endif
 
 #ifdef HasVideo4Linux
-long TCbCaptureV4L(XtPointer, XtIntervalId *);
+long TCbCaptureV4L(XtPointer);
 #else
 #define TCbCaptureV4L TCbCaptureX11
 #endif

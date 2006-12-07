@@ -123,6 +123,8 @@ typedef struct AVOutputStream {
     // double sync_ipts; /* dts from the AVPacket of the demuxer in second 
     // 
     // 
+    // 
+    // 
     // units */
     struct AVInputStream *sync_ist; /* input stream to sync against */
     int64_t sync_opts;          /* output frame counter, could be changed
@@ -179,12 +181,12 @@ extern pthread_mutex_t recording_mutex;
 extern pthread_cond_t recording_condition_unpaused;
 
 // FIXME: check if this all needs to be global
-static AVCodec *au_codec;
-static AVCodecContext *au_c;
-static AVFormatContext *ic;
-static AVInputFormat *grab_iformat;
-static AVOutputStream *au_out_st;
-static AVInputStream *au_in_st;
+static AVCodec *au_codec = NULL;
+static AVCodecContext *au_c = NULL;
+static AVFormatContext *ic = NULL;
+static AVInputFormat *grab_iformat = NULL;
+static AVOutputStream *au_out_st = NULL;
+static AVInputStream *au_in_st = NULL;
 
 static uint8_t *audio_buf = NULL;
 static uint8_t *audio_out = NULL;
@@ -197,7 +199,7 @@ static int tret = 0;
 
 // functions ...
 
-static void add_audio_stream(Job * job)
+static int add_audio_stream(Job * job)
 {
 #define DEBUGFUNCTION "add_audio_stream()"
     Boolean grab_audio = TRUE;
@@ -243,22 +245,22 @@ static void add_audio_stream(Job * job)
             fprintf(stderr,
                     _("%s %s:Could not find audio grab device %s\n"),
                     DEBUGFILE, DEBUGFUNCTION, job->snd_device);
-            exit(1);
+            return 1;
         }
     } else {
         err = av_open_input_file(&ic, ap->device, NULL, 0, ap);
         if (err < 0) {
             fprintf(stderr, _("%s %s: error opening input file %s: %i\n"),
                     DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
-            exit(1);
+            return 1;
         }
     }
     au_in_st = av_mallocz(sizeof(AVInputStream));
-    if (!au_in_st) {
+    if (!au_in_st || !ic) {
         fprintf(stderr,
                 _("%s %s: Could not alloc input stream ... aborting\n"),
                 DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+        return 1;
     }
     au_in_st->st = ic->streams[0];
 
@@ -266,9 +268,13 @@ static void add_audio_stream(Job * job)
     // the first frames to get it. (used in mpeg case for example) 
     ret = av_find_stream_info(ic);
     if (ret < 0) {
-        fprintf(stderr, _("%s %s: %s: could not find codec parameters\n"),
-                DEBUGFILE, DEBUGFUNCTION, job->snd_device);
-        exit(1);
+        fprintf(stderr, _("%s %s: could not find codec parameters\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
     }
     // init pts stuff
     au_in_st->next_pts = 0;
@@ -281,7 +287,17 @@ static void add_audio_stream(Job * job)
     // OUTPUT
     // setup output codec
     au_c = avcodec_alloc_context();
-
+    if (!au_c) {
+        fprintf(stderr,
+                _
+                ("%s %s: could not allocate audio output codec context\n"),
+                DEBUGFILE, DEBUGFUNCTION);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
+    }
     // put sample parameters 
     au_c->codec_id = tAuCodecs[job->au_targetCodec].ffmpeg_id;
     au_c->codec_type = CODEC_TYPE_AUDIO;
@@ -296,13 +312,21 @@ static void add_audio_stream(Job * job)
         fprintf(stderr,
                 _("%s %s: Could not alloc stream ... aborting\n"),
                 DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
     }
     au_out_st->st = av_new_stream(output_file, 1);
     if (!au_out_st->st) {
         fprintf(stderr, _("%s %s: Could not alloc stream\n"),
                 DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
     }
     au_out_st->st->codec = au_c;
 
@@ -310,7 +334,11 @@ static void add_audio_stream(Job * job)
         fprintf(stderr,
                 _("%s %s: Can't initialize fifo for audio recording\n"),
                 DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
     }
     // This bit is important for inputs other than self-sampled.
     // The sample rates and no of channels a user asks for
@@ -344,7 +372,11 @@ static void add_audio_stream(Job * job)
                 if (!au_out_st->resample) {
                     printf(_("%s %s: Can't resample. Aborting.\n"),
                            DEBUGFILE, DEBUGFUNCTION);
-                    exit(1);
+                    if (au_in_st) {
+                        av_free(au_in_st);
+                        au_in_st = NULL;
+                    }
+                    return 1;
                 }
             }
             // Request specific number of channels 
@@ -359,7 +391,11 @@ static void add_audio_stream(Job * job)
             if (!au_out_st->resample) {
                 printf(_("%s %s: Can't resample. Aborting.\n"), DEBUGFILE,
                        DEBUGFUNCTION);
-                exit(1);
+                if (au_in_st) {
+                    av_free(au_in_st);
+                    au_in_st = NULL;
+                }
+                return 1;
             }
         }
     }
@@ -372,7 +408,11 @@ static void add_audio_stream(Job * job)
         fprintf(stderr,
                 _("%s %s: Error while opening codec for output stream\n"),
                 DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
     }
     // open decoder
     au_codec = avcodec_find_decoder(ic->streams[0]->codec->codec_id);
@@ -380,18 +420,27 @@ static void add_audio_stream(Job * job)
         fprintf(stderr,
                 _("%s %s: Unsupported codec (id=%d) for input stream\n"),
                 DEBUGFILE, DEBUGFUNCTION, ic->streams[0]->codec->codec_id);
-        exit(1);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
     }
     if (avcodec_open(ic->streams[0]->codec, au_codec) < 0) {
         fprintf(stderr,
                 _("%s %s: Error while opening codec for input stream\n"),
                 DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+        if (au_in_st) {
+            av_free(au_in_st);
+            au_in_st = NULL;
+        }
+        return 1;
     }
 #ifdef DEBUG
     printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE,
            DEBUGFUNCTION, output_file->nb_streams);
 #endif                          // DEBUG
+    return 0;
 #undef DEBUGFUNCTION
 }
 
@@ -460,7 +509,8 @@ do_audio_out(AVFormatContext * s, AVOutputStream * ost,
                     fprintf(stderr,
                             _("%s %s: Error while writing audio frame\n"),
                             DEBUGFILE, DEBUGFUNCTION);
-                    exit(1);
+                    // exit (1);
+                    return;
                 }
 
                 if (pthread_mutex_unlock(&mp) > 0) {
@@ -537,7 +587,7 @@ void capture_audio_thread(Job * job)
             pthread_mutex_unlock(&recording_mutex);
         } else if (job->state == VC_REC) {
 
-            audio_pts = (double)    /* au_out_st->st->pts.val * * *
+            audio_pts = (double)    /* au_out_st->st->pts.val * * * * *
                                      * av_q2d(au_out_st->st->time_base); */
                 au_out_st->st->pts.val *
                 au_out_st->st->time_base.num /
@@ -549,6 +599,8 @@ void capture_audio_thread(Job * job)
             // sometimes we need to pause writing audio packets for a/v
             // sync (when audio_pts >= video_pts)
             // now, if we're reading from a file/pipe, we stop sampling or 
+            // 
+            // 
             // 
             // 
             // 
@@ -696,7 +748,8 @@ do_video_out(AVFormatContext * s, AVStream * ost,
     if (av_interleaved_write_frame(s, &pkt) != 0) {
         fprintf(stderr, _("%s %s: Error while writing video frame\n"),
                 DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+        // exit (1);
+        return;
     }
 #ifdef DEBUG
     printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -927,7 +980,6 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
         exit(1);
     }
     // put sample parameters 
-    st->codec->bit_rate = 400000;
     // resolution must be a multiple of two ... this is taken care of
     // elsewhere but needs to be ensured for rescaled dimensions, too
     if (job->rescale != 100) {
@@ -987,10 +1039,13 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
         st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
     // bit rate calculation
+    /* 
+     * st->codec->bit_rate = (st->codec->width * st->codec->height *
+     * (((((st->codec->height + st->codec->width) / 100) - 5) >> 1) + 10)
+     * * quality) / 100; */
     st->codec->bit_rate =
-        (st->codec->width * st->codec->height *
-         (((((st->codec->height + st->codec->width) / 100) - 5) >> 1) +
-          10) * quality) / 100;
+        (st->codec->width * st->codec->height * image->bits_per_pixel /
+         8) * 1 / av_q2d(st->codec->time_base) * 8;
     if (st->codec->bit_rate < 300000)
         st->codec->bit_rate = 300000;
 
@@ -1006,7 +1061,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
     /* out_st->time_base.num = out_st->codec->time_base.num;
      * out_st->time_base.den = out_st->codec->time_base.den;
      * out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / 
-     * * * out_st->time_base.den; */
+     * * * * * out_st->time_base.den; */
 
 #ifdef DEBUG
     printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE,
@@ -1144,8 +1199,6 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 
         // color info only needs to be retrieved once for true color X ... 
         // 
-        // 
-        // 
         // dunno about pseudo color 
         xvc_get_color_info(image, &c_info);
 
@@ -1275,9 +1328,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
         }
 #ifdef HAVE_FFMPEG_AUDIO
         if ((job->flags & FLG_REC_SOUND) && (job->au_targetCodec > 0)) {
-
-            add_audio_stream(job);
-
+            int au_ret = add_audio_stream(job);
 #ifdef DEBUG
             dump_format(output_file, 0, output_file->filename, 1);
 #endif                          // DEBUG
@@ -1285,14 +1336,16 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
             // initialize a mutex lock to its default value 
             ret = pthread_mutex_init(&mp, NULL);
 
-            // create and start capture thread 
-            // initialized with default attributes 
-            tret = pthread_attr_init(&tattr);
+            if (au_ret == 0) {
+                // create and start capture thread 
+                // initialized with default attributes 
+                tret = pthread_attr_init(&tattr);
 
-            // create the thread 
-            tret =
-                pthread_create(&tid, &tattr, (void *) capture_audio_thread,
-                               job);
+                // create the thread 
+                tret =
+                    pthread_create(&tid, &tattr,
+                                   (void *) capture_audio_thread, job);
+            }
         }
 #endif                          // HAVE_FFMPEG_AUDIO
 
@@ -1590,13 +1643,13 @@ void FFMPEGClean(Job * job)
                 output_file->streams[i]->codec = NULL;
             }
             av_free(output_file->streams[i]);
-            if (out_st)
-                out_st = NULL;
-#ifdef HAVE_FFMPEG_AUDIO
-            if (au_out_st)
-                au_out_st = NULL;
-#endif                          // HAVE_FFMPEG_AUDIO
         }
+        if (out_st)
+            out_st = NULL;
+#ifdef HAVE_FFMPEG_AUDIO
+        if (au_out_st)
+            au_out_st = NULL;
+#endif                          // HAVE_FFMPEG_AUDIO
         /* 
          * free format context 
          */

@@ -66,7 +66,7 @@ typedef struct _Job {
     void *(*get_colors) (XColor *, int);
     void (*save) (FILE *, XImage *, struct _Job *);
     void (*clean) (struct _Job *);
-    long (*capture) (void *, unsigned long *);
+    long (*capture) (void *);
 
     /* 
      * target format, e.g. CAP_XWD 

@@ -169,6 +169,7 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
             // should have checked before if we have a valid specification 
             // 
             // 
+            // 
             // for a target either
             // through target itself or the filename extension
             if (job->target <= 0) {
@@ -210,6 +211,7 @@ xvc_job_set_from_app_data(AppData * app, Display * disp,
         if (job->au_targetCodec == 0)
             job->au_targetCodec = tFFormats[job->target].def_au_codec;
         // if 0 the format has no default audio codec. This should only be 
+        // 
         // 
         // 
         // 

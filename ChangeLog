@@ -2,6 +2,15 @@
 2006-12-07  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* po/en.op: fixed mouseover for "Edit" button in multi-frame 
 		mode
+	* src: xtoffmpeg.c, gnome_ui.c, capture.c, capture.h, job.c,
+		job.h: fed back code optimization around painting the
+		mouse pointer Eduardo Gomez did for his patch to 
+		ffmpeg (x11 demuxer). While at it I joined the 
+		functions capturing individual frames from different
+		sources (x11, shm) to make them more maintainable and
+		easier to add (or reactivage dga, v4l)
+	* .anjuta: that stuff should not be in svn
+	* doc/xvidcap: de/xvidcap.xml, it/xvidcap.xml: version update
 
 2006-11-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: fix for 16 bit depth and 8 bit palette with

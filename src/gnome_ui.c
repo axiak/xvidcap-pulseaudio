@@ -971,7 +971,7 @@ void do_record_thread(Job * job)
             printf("%s %s: unpaused\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
         }
-        pause = job->capture(job, NULL);
+        pause = job->capture(job);
 
         if (pause > 0)
             usleep(pause * 1000);
@@ -2356,6 +2356,7 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
     // previous and next buttons have different meanings for on-the-fly
     // encoding
     // and individual frame capture ... this sets the tooltips accordingly 
+    // 
     // 
     // 
     // 
