@@ -920,7 +920,7 @@ msgstr ""
 
 #: src/gnome_ui.c:2441 src/gnome_ui.c:2442
 msgid "Edit current movie"
-msgstr "Aktuellen Film bearbeiten"
+msgstr "Edit current movie"
 
 #: src/gnome_options.c:3069
 msgid "C_apture"
