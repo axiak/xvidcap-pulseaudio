@@ -41,7 +41,7 @@ int xvc_ui_run(void);
 
 
 void xvc_idle_add(void *, void *, Boolean queue_events);
-Boolean xvc_change_filename_display(int pic_no);
+Boolean xvc_change_filename_display();
 void xvc_frame_change(int x, int y, int width, int height,
                       Boolean reposition_control);
 
@@ -55,7 +55,7 @@ Boolean xvc_write_options_file();
 void xvc_check_start_options();
 
 
-Boolean xvc_frame_monitor(int measured_time);
+Boolean xvc_frame_monitor();
 
 // this one is defined in main.c because it is not GUI dependant
 void xvc_signal_handler(int signal);

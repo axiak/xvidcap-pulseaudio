@@ -125,6 +125,7 @@ typedef struct AVOutputStream {
     // 
     // 
     // 
+    // 
     // units */
     struct AVInputStream *sync_ist; /* input stream to sync against */
     int64_t sync_opts;          /* output frame counter, could be changed
@@ -587,7 +588,7 @@ void capture_audio_thread(Job * job)
             pthread_mutex_unlock(&recording_mutex);
         } else if (job->state == VC_REC) {
 
-            audio_pts = (double)    /* au_out_st->st->pts.val * * * * *
+            audio_pts = (double)    /* au_out_st->st->pts.val * * * * * *
                                      * av_q2d(au_out_st->st->time_base); */
                 au_out_st->st->pts.val *
                 au_out_st->st->time_base.num /
@@ -599,6 +600,7 @@ void capture_audio_thread(Job * job)
             // sometimes we need to pause writing audio packets for a/v
             // sync (when audio_pts >= video_pts)
             // now, if we're reading from a file/pipe, we stop sampling or 
+            // 
             // 
             // 
             // 
@@ -956,6 +958,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
     int fps = job->fps / 100, quality = job->quality;
+    int percentage_offset = 0, absolute_offset = 0;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1032,22 +1035,32 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
 #endif                          // DEBUG
 
     // flags
-    st->codec->flags |= (CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST);
+    st->codec->flags |= (CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST |
+                         // this is for trying to achieve cbr (to make the 
+                         // quality setting have any effect)
+                         CODEC_FLAG_MV0 | CODEC_FLAG_CBP_RD);
     st->codec->flags &= ~CODEC_FLAG_OBMC;
     // some formats want stream headers to be seperate
     if (oc->oformat->flags & AVFMT_GLOBALHEADER)
         st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+    // attempt for cbr
+    st->codec->mb_decision = 2;
+    st->codec->lmax = 340 * FF_QP2LAMBDA;
+    st->codec->scenechange_threshold = 100000000;
+    st->codec->rc_buffer_aggressivity = 0.25;
 
     // bit rate calculation
-    /* 
-     * st->codec->bit_rate = (st->codec->width * st->codec->height *
-     * (((((st->codec->height + st->codec->width) / 100) - 5) >> 1) + 10)
-     * * quality) / 100; */
+    // st->codec->bit_rate = (st->codec->width * st->codec->height *
+    // (((((st->codec->height + st->codec->width) / 100) - 5) >> 1) + 10)
+    // * quality) / 100; 
     st->codec->bit_rate =
         (st->codec->width * st->codec->height * image->bits_per_pixel /
          8) * 1 / av_q2d(st->codec->time_base) * 8;
-    if (st->codec->bit_rate < 300000)
-        st->codec->bit_rate = 300000;
+    // apply quality adjustment
+    st->codec->bit_rate =
+        ((float) (quality) / 100.0) * st->codec->bit_rate;
+    // if (st->codec->bit_rate < 300000)
+    // st->codec->bit_rate = 300000;
 
 #ifdef DEBUG
     printf("%s %s: bitrate = %i\n", DEBUGFILE, DEBUGFUNCTION,
@@ -1061,7 +1074,7 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
     /* out_st->time_base.num = out_st->codec->time_base.num;
      * out_st->time_base.den = out_st->codec->time_base.den;
      * out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / 
-     * * * * * out_st->time_base.den; */
+     * * * * * * out_st->time_base.den; */
 
 #ifdef DEBUG
     printf("%s %s: Leaving with %i streams in oc\n", DEBUGFILE,
@@ -1199,6 +1212,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 
         // color info only needs to be retrieved once for true color X ... 
         // 
+        // 
         // dunno about pseudo color 
         xvc_get_color_info(image, &c_info);
 
@@ -1334,7 +1348,7 @@ void XImageToFFMPEG(FILE * fp, XImage * image, Job * job)
 #endif                          // DEBUG
 
             // initialize a mutex lock to its default value 
-            ret = pthread_mutex_init(&mp, NULL);
+            pthread_mutex_init(&mp, NULL);
 
             if (au_ret == 0) {
                 // create and start capture thread 

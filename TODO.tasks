@@ -147,12 +147,22 @@ kb87850@ubuntu:~/Quellen/xvidcap/trunk$
     <item>
       <attribute id="1159484368" priority="1" done="1" start_date="732583" completed_date="732583" notify="0" last_edited="1159530472"/>
       <summary>remove help command everywhere (and from the docs)</summary>
-      <comment></comment>
+      <comment/>
     </item>
     <item>
       <attribute id="1158952937" priority="1" done="1" start_date="732576" completed_date="732583" notify="0" last_edited="1159530476"/>
       <summary>put right yelp calls in help buttons everywhere</summary>
       <comment>for some reason the links jump to strange places (somewhat above or below the actual target)</comment>
+    </item>
+    <item>
+      <attribute id="1165704390" priority="1" done="0" start_date="732654" enddate="99999999" notify="0" endtime="-60" last_edited="1165704390"/>
+      <summary>--gui no leaks open displays</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1165857916" priority="1" done="0" start_date="732656" enddate="99999999" notify="0" endtime="-60" last_edited="1165857916"/>
+      <summary>step button</summary>
+      <comment>don't enable on back if not paused and all the other conditions are met</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

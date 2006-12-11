@@ -78,6 +78,8 @@
 Display *getCaptureDisplay(Job * job);
 void dropDisplay(Display * dpy, Job * job);
 
+extern int led_time;
+
 
 
 /* 
@@ -91,9 +93,6 @@ static void getCurrentPointer(int *x, int *y, Job * mjob)
     Display *dpy;
     // Screen *scr;
 
-    /* 
-     * if (!(mjob->flags & FLG_NOGUI)) { scr = mjob->win_attr.screen; dpy
-     * = DisplayOfScreen(scr); } else { dpy = XOpenDisplay(NULL); } */
     dpy = getCaptureDisplay(mjob);
     mrootwindow = DefaultRootWindow(dpy);
 
@@ -274,7 +273,7 @@ XGetZPixmap(Display * dpy, Drawable d, XImage * image, int x, int y)
 
     nbytes = (long) rep.length << 2;
 #ifdef DEBUG
-    printf("%s %s: read %i bytes\n", DEBUGFILE, DEBUGFUNCTION, nbytes);
+    printf("%s %s: read %li bytes\n", DEBUGFILE, DEBUGFUNCTION, nbytes);
 #endif                          // DEBUG
 
     _XReadPad(dpy, image->data, nbytes);
@@ -520,8 +519,10 @@ long checkCaptureDuration(Job * job, long time, long time1)
     // time == 0 resets led_meter
     if (time1 < 1)
         time1 = 1;
-    if (!(job->flags & FLG_NOGUI))
-        xvc_idle_add(xvc_frame_monitor, (void *) time1, FALSE);
+
+    // this sets the frame monitor widget
+    led_time = time1;
+
     // calculate the remaining time we have till capture of next frame
     time1 = job->time_per_frame - time1;
 
@@ -541,8 +542,6 @@ long checkCaptureDuration(Job * job, long time, long time1)
                 ("missing %ld milli secs (%d needed per frame), pic no %d\n",
                  time, job->time_per_frame, job->pic_no);
     }
-    // we need a little time to update the GUI (frame_drop_meter)
-    /* if (time < 2) time = 2; */
 
     return time;
 #undef DEBUGFUNCTION
@@ -591,9 +590,6 @@ long commonCapture(XtPointer xtp, int capfunc)
                 printf("%s %s: Stopped! pic_no=%d max_frames=%d\n",
                        DEBUGFILE, DEBUGFUNCTION, job->pic_no,
                        job->max_frames);
-            if (!(job->flags & FLG_NOGUI))
-                xvc_idle_add(xvc_change_filename_display,
-                             (void *) job->pic_no, FALSE);
 
             // we need to stop the capture to go through the necessary
             // cleanup routines for writing a correct file. If we have
@@ -606,11 +602,6 @@ long commonCapture(XtPointer xtp, int capfunc)
 
             goto CLEAN_CAPTURE;
         }
-        // this might be a single step. If so, remove the state flag so we 
-        // 
-        // don't keep single stepping
-        job_remove_state(VC_STEP);
-
         // take the time before starting the capture
         gettimeofday(&curr_time, NULL);
         time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
@@ -689,6 +680,7 @@ long commonCapture(XtPointer xtp, int capfunc)
                     ("%s %s: attempt to acquire pixmap returned 'False'!\n",
                      DEBUGFILE, DEBUGFUNCTION);
         }
+
         // this again is for recording, no matter if first frame or any
         // other close the image file if single frame capture mode
         if (!(job->flags & FLG_MULTI_IMAGE)) {
@@ -716,11 +708,18 @@ long commonCapture(XtPointer xtp, int capfunc)
 #endif                          // DEBUG
 
         job->pic_no += job->step;
-        // if we're not short on time, update frame count
-        if (!(job->flags & FLG_NOGUI))
-            xvc_idle_add(xvc_change_filename_display, (void *) job->pic_no,
-                         FALSE);
 
+        // this might be a single step. If so, remove the state flag so we 
+        // 
+        // don't keep single stepping
+        if (job->state & VC_STEP) {
+            job_remove_state(VC_STEP);
+            // the time is the pause between this and the next snapshot
+            // for step mode this makes no sense and could be 0. Setting
+            // it to 50 is just to give the led meter the chance to flash
+            // before being set blank again
+            time = 50;
+        }
         // the following means VC_STATE != VC_REC
         // this can only happen in capture.c if we were capturing and are
         // just stopping
@@ -747,7 +746,7 @@ long commonCapture(XtPointer xtp, int capfunc)
         // set the sensitive stuff for the control panel if we don't
         // autocontinue 
         if ((orig_state & VC_CONTINUE) == 0)
-            xvc_idle_add(xvc_capture_stop, job, FALSE);
+            xvc_idle_add(xvc_capture_stop, job, TRUE);
 
         // clean up the save routines in xtoXXX.c 
         if (job->clean)
@@ -773,14 +772,16 @@ long commonCapture(XtPointer xtp, int capfunc)
             job->movie_no += 1;
             job->pic_no = job->start_no;
             job_merge_and_remove_state((VC_START | VC_REC), VC_STOP);
-            // start new capture session
-            // xvc_capture_start(job);
-            // and leave this one without further ado ...
+
             return time;
         }
 
         dropDisplay(dpy, job);
     }
+
+#ifdef DEBUG
+    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
 
     return time;
 

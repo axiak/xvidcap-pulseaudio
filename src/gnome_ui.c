@@ -80,7 +80,9 @@ extern xvCodec tCodecs[NUMCODECS];
 extern xvFFormat tFFormats[NUMCAPS];
 extern xvAuCodec tAuCodecs[NUMAUCODECS];
 
-
+int led_time = 0;
+static int last_led_time = 0;
+static int last_pic_no = 0;
 static guint stop_timer_id = 0;
 static long start_time = 0, pause_time = 0, time_captured = 0;
 static char *target_file_name = NULL;
@@ -90,7 +92,6 @@ static int OK_attempts = 0;
 
 // those are for recording video in thread
 pthread_mutex_t recording_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t update_filename_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t recording_condition_unpaused;
 static pthread_t recording_thread;
 static pthread_attr_t recording_thread_attr;
@@ -133,6 +134,7 @@ Boolean xvc_init_pre(int argc, char **argv)
 #define DEBUGFUNCTION "xvc_init_pre()"
 
     g_thread_init(NULL);
+    gdk_threads_init();
 
     // gnome program initialization
     // make gnome init ignore command line options (we want to handle them
@@ -415,18 +417,34 @@ int xvc_ui_run()
 
 void xvc_idle_add(void *func, void *data, Boolean queue_events)
 {
-    if (queue_events || !gtk_events_pending())
+    if (queue_events || !gdk_events_pending()) {
         g_idle_add(func, data);
+    }
 }
 
 
-Boolean xvc_change_filename_display(int pic_no)
+Boolean xvc_change_filename_display()
 {
 #define DEBUGFUNCTION "xvc_change_filename_display()"
+#ifdef DEBUG
+    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif                          // DEBUG
+    Job *job = xvc_job_ptr();
+    int ret = recording_thread_running;
 
-    GtkChangeLabel(pic_no);
-    return FALSE;
+    if (!ret) {
+        last_pic_no = 0;
+        GtkChangeLabel(job->pic_no);
+    } else if (job->pic_no != last_pic_no) {
+        last_pic_no = job->pic_no;
+        GtkChangeLabel(last_pic_no);
+    }
+#ifdef DEBUG
+    printf("%s %s: Leaving! ...continuing? %i\n", DEBUGFILE, DEBUGFUNCTION,
+           ret);
+#endif                          // DEBUG
 
+    return ret;
 #undef DEBUGFUNCTION
 }
 
@@ -481,8 +499,12 @@ Boolean xvc_capture_stop()
     printf("%s %s: done stopping non-gui stuff\n", DEBUGFILE,
            DEBUGFUNCTION);
 #endif                          // DEBUG
-    if (!(job->flags & FLG_NOGUI))
+    if (!(job->flags & FLG_NOGUI)) {
+        gdk_threads_enter();
         rc = stop_recording_gui_stuff(job);
+        gdk_flush();
+        gdk_threads_leave();
+    }
 
     return FALSE;
 #undef DEBUGFUNCTION
@@ -514,7 +536,7 @@ xvc_frame_change(int x, int y, int width, int height,
 }
 
 
-Boolean xvc_frame_monitor(int measured_time)
+Boolean xvc_frame_monitor()
 {
 #define DEBUGFUNCTION "xvc_frame_monitor()"
 
@@ -522,25 +544,34 @@ Boolean xvc_frame_monitor(int measured_time)
     int percent = 0, diff = 0;
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
+    int ret = recording_thread_running;
 
 #ifdef DEBUG
     printf("%s %s: Entering with time = %i\n", DEBUGFILE, DEBUGFUNCTION,
-           measured_time);
+           led_time);
 #endif                          // DEBUG
+
+    // fastpath
+    if (led_time != 0 && last_led_time == led_time)
+        return TRUE;
 
     xml = glade_get_widget_tree(xvc_ctrl_main_window);
     g_return_val_if_fail(xml != NULL, FALSE);
     w = glade_xml_get_widget(xml, "xvc_ctrl_led_meter");
     g_return_val_if_fail(w != NULL, FALSE);
 
-    if (measured_time == 0) {
+    if (!ret) {
+        led_time = last_led_time = 0;
+    }
+
+    if (led_time == 0) {
         percent = 0;
-    } else if (measured_time <= job->time_per_frame)
+    } else if (led_time <= job->time_per_frame)
         percent = 30;
-    else if (measured_time >= (job->time_per_frame * 2))
+    else if (led_time >= (job->time_per_frame * 2))
         percent = 100;
     else {
-        diff = measured_time - job->time_per_frame;
+        diff = led_time - job->time_per_frame;
         percent = diff * 70 / job->time_per_frame;
         percent += 30;
     }
@@ -551,11 +582,11 @@ Boolean xvc_frame_monitor(int measured_time)
         LED_METER(w)->old_max_da = 0;
 
 #ifdef DEBUG
-    printf("%s %s: Leaving with percent = %i\n", DEBUGFILE, DEBUGFUNCTION,
-           percent);
+    printf("%s %s: Leaving with percent = %i ... continuing? %i\n",
+           DEBUGFILE, DEBUGFUNCTION, percent, ret);
 #endif                          // DEBUG
 
-    return FALSE;
+    return ret;
 #undef DEBUGFUNCTION
 }
 
@@ -957,12 +988,20 @@ void do_record_thread(Job * job)
 #endif                          // DEBUG
     recording_thread_running = TRUE;
 
+    if (!(job->flags & FLG_NOGUI)) {
+        xvc_idle_add(xvc_change_filename_display, (void *) NULL, TRUE);
+        xvc_idle_add(xvc_frame_monitor, (void *) NULL, TRUE);
+    }
+
     while ((job->state & VC_READY) == 0) {
 #ifdef DEBUG
         printf("%s %s: going for next frame with state %i\n", DEBUGFILE,
                DEBUGFUNCTION, job->state);
 #endif
         if ((job->state & VC_PAUSE) && !(job->state & VC_STEP)) {
+            // make the led monitor stop for pausing
+            led_time = 0;
+
             pthread_mutex_lock(&recording_mutex);
             pthread_cond_wait(&recording_condition_unpaused,
                               &recording_mutex);
@@ -1009,7 +1048,7 @@ gboolean stop_recording_nongui_stuff(Job * job)
     job_set_state(state);
 
     if (recording_thread_running) {
-        pthread_join(recording_thread, NULL /* (void **) &status */ );
+        pthread_join(recording_thread, NULL);
 #ifdef DEBUG
         printf("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
@@ -1136,11 +1175,6 @@ static gboolean stop_recording_gui_stuff(Job * job)
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
 
-    // playing it safe
-    xvc_change_filename_display(job->pic_no);
-    // reset frame_drop_meter
-    xvc_frame_monitor(0);
-
     xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
     g_assert(xml);
 
@@ -1149,7 +1183,6 @@ static gboolean stop_recording_gui_stuff(Job * job)
     g_assert(w);
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w), FALSE);
 
-    // gtk_widget_set_sensitive(GTK_WIDGET(MI_file), TRUE);
     w = glade_xml_get_widget(xml, "xvc_ctrl_select_toggle");
     g_assert(w);
     gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
@@ -1169,23 +1202,37 @@ static gboolean stop_recording_gui_stuff(Job * job)
     g_assert(w);
     gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
 
-    if (!
-        ((jobp->flags & FLG_MULTI_IMAGE) != 0
-         && xvc_is_filename_mutable(jobp->file) != TRUE)) {
-        w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
-        g_assert(w);
-        gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
-        w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
-        g_assert(w);
-        gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
-        w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
-        g_assert(w);
-        if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
-            if (jobp->pic_no >= jobp->step)
+    w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
+    g_assert(w);
+    gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
+
+    if (jobp->flags & FLG_MULTI_IMAGE) {
+
+        if (xvc_is_filename_mutable(jobp->file) == TRUE) {
+            if (jobp->movie_no > 0) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
+                g_assert(w);
                 gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
-        } else {
-            if (jobp->movie_no > 0)
+            }
+
+            w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
+            g_assert(w);
+            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+        }
+    } else {
+        if (xvc_is_filename_mutable(jobp->file) == TRUE) {
+            if (jobp->pic_no >= jobp->step) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
+                g_assert(w);
                 gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+            }
+
+            if (jobp->max_frames == 0
+                || jobp->pic_no < (jobp->max_frames - jobp->step)) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
+                g_assert(w);
+                gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+            }
         }
     }
 
@@ -1404,6 +1451,7 @@ static gboolean stop_recording_gui_stuff(Job * job)
         } while (result == GTK_RESPONSE_HELP
                  || result == GTK_RESPONSE_ACCEPT);
 
+
         gtk_widget_destroy(xvc_result_dialog);
         xvc_result_dialog = NULL;
 
@@ -1506,9 +1554,12 @@ gboolean start_recording_gui_stuff(Job * job)
         if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
 
-            w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
-            g_assert(w);
-            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+            if (jobp->max_frames == 0
+                || jobp->pic_no <= (jobp->max_frames - jobp->step)) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
+                g_assert(w);
+                gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+            }
             if (jobp->pic_no >= jobp->step) {
                 w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
                 g_assert(w);
@@ -1534,11 +1585,6 @@ gboolean start_recording_gui_stuff(Job * job)
         w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
         g_assert(w);
         gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
-    }
-
-    if (job->flags & FLG_MULTI_IMAGE) {
-        job->pic_no = job->start_no;
-        GtkChangeLabel(job->pic_no);
     }
 
     return FALSE;
@@ -1577,7 +1623,6 @@ gboolean start_recording_nongui_stuff(Job * job)
         }
         // initialize recording thread
         pthread_mutex_init(&recording_mutex, NULL);
-        pthread_mutex_init(&update_filename_mutex, NULL);
         pthread_cond_init(&recording_condition_unpaused, NULL);
 
         pthread_attr_init(&recording_thread_attr);
@@ -1647,17 +1692,18 @@ on_xvc_ctrl_pause_toggle_toggled(GtkToggleToolButton * button,
         g_assert(w);
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w),
                                           FALSE);
-        // make the led monitor stop
-        xvc_frame_monitor(0);
-        // gtk_widget_set_sensitive(GTK_WIDGET(stop), TRUE);
-        if ((jobp->flags & FLG_MULTI_IMAGE) == 0 && jobp->state & VC_REC) {
-            w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
-            g_assert(w);
-            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
 
-            w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
-            g_assert(w);
-            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+        if ((jobp->flags & FLG_MULTI_IMAGE) == 0 && jobp->state & VC_REC) {
+            if (jobp->max_frames == 0
+                || jobp->pic_no <= (jobp->max_frames - jobp->step)) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
+                g_assert(w);
+                gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+
+                w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
+                g_assert(w);
+                gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+            }
 
             if (jobp->pic_no >= jobp->step) {
                 w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
@@ -1719,6 +1765,7 @@ on_xvc_ctrl_step_button_clicked(GtkButton * button, gpointer user_data)
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
     Job *jobp = xvc_job_ptr();
+    int pic_no = jobp->pic_no;
 
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
         if (!(jobp->state & (VC_PAUSE | VC_REC)))
@@ -1726,19 +1773,27 @@ on_xvc_ctrl_step_button_clicked(GtkButton * button, gpointer user_data)
 
         job_merge_state(VC_STEP);
 
-        // FIXME: what is the following condition meant to achieve?
-        // if (jobp->pic_no == jobp->step ) {
-        if (jobp->pic_no > (jobp->max_frames - jobp->step)) {
-            xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
-            g_assert(xml);
+        xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
+        g_assert(xml);
 
-            w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
+        if (pic_no == 0) {
+            w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
+            g_assert(w);
+            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+        }
+
+        if (jobp->max_frames > 0
+            && pic_no >= (jobp->max_frames - jobp->step)) {
+            if (pic_no > (jobp->max_frames - jobp->step)) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
+                g_assert(w);
+                gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
+            }
+
+            w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
             g_assert(w);
             gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
         }
-        // FIXME: find a clever way of making the led only flash for step
-        // prolly needs a completely different handling of the led
-        // updater, though
     }
 #undef DEBUGFUNCTION
 }
@@ -1747,13 +1802,22 @@ on_xvc_ctrl_step_button_clicked(GtkButton * button, gpointer user_data)
 void
 on_xvc_ctrl_filename_button_clicked(GtkButton * button, gpointer user_data)
 {
-#define DEBUGFUNCTION "on_xvc_ctrl_step_button_clicked()"
+#define DEBUGFUNCTION "on_xvc_ctrl_filename_button_clicked()"
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL;
     Job *jobp = xvc_job_ptr();
 
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
         if (jobp->pic_no != jobp->start_no
             && ((jobp->state & VC_STOP) > 0
                 || (jobp->state & VC_PAUSE) > 0)) {
+            xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
+            g_assert(xml);
+
+            w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
+            g_assert(w);
+            gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
+
             jobp->pic_no = jobp->start_no;
             GtkChangeLabel(jobp->pic_no);
         }
@@ -1771,6 +1835,8 @@ void
 on_xvc_ctrl_back_button_clicked(GtkButton * button, gpointer user_data)
 {
 #define DEBUGFUNCTION "on_xvc_ctrl_back_button_clicked()"
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL;
     Job *jobp = xvc_job_ptr();
 
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
@@ -1784,6 +1850,23 @@ on_xvc_ctrl_back_button_clicked(GtkButton * button, gpointer user_data)
         }
         if (jobp->pic_no < jobp->step)
             gtk_widget_set_sensitive(GTK_WIDGET(button), FALSE);
+
+        if (jobp->max_frames == 0
+            || jobp->pic_no == (jobp->max_frames - jobp->step)) {
+            xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
+            g_assert(xml);
+
+            if (jobp->state & VC_PAUSE) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
+                g_assert(w);
+                if ((jobp->flags & FLG_MULTI_IMAGE) == 0)
+                    gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+            }
+
+            w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
+            g_assert(w);
+            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+        }
     } else {
         if (jobp->movie_no > 0) {
             jobp->movie_no -= 1;
@@ -1810,15 +1893,29 @@ on_xvc_ctrl_forward_button_clicked(GtkButton * button, gpointer user_data)
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
         jobp->pic_no += jobp->step;
         GtkChangeLabel(jobp->pic_no);
-        if (jobp->pic_no == jobp->step) {
-            xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
-            g_assert(xml);
 
+        xml = glade_get_widget_tree(GTK_WIDGET(xvc_ctrl_main_window));
+        g_assert(xml);
+
+        if (jobp->pic_no == jobp->step) {
             w = glade_xml_get_widget(xml, "xvc_ctrl_back_button");
             g_assert(w);
 
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
         }
+        if (jobp->max_frames > 0
+            && jobp->pic_no > (jobp->max_frames - jobp->step)) {
+            if (jobp->pic_no >= (jobp->max_frames - jobp->step)) {
+                w = glade_xml_get_widget(xml, "xvc_ctrl_step_button");
+                g_assert(w);
+                gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
+            }
+
+            w = glade_xml_get_widget(xml, "xvc_ctrl_forward_button");
+            g_assert(w);
+            gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
+        }
+
     } else {
         jobp->movie_no += 1;
         GtkChangeLabel(jobp->pic_no);
@@ -2356,8 +2453,6 @@ void xvc_reset_ctrl_main_window_according_to_current_prefs()
     // previous and next buttons have different meanings for on-the-fly
     // encoding
     // and individual frame capture ... this sets the tooltips accordingly 
-    // 
-    // 
     // 
     // 
     if ((jobp->flags & FLG_MULTI_IMAGE) == 0) {
