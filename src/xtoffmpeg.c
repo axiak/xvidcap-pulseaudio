@@ -600,12 +600,6 @@ void capture_audio_thread(Job * job)
             // sometimes we need to pause writing audio packets for a/v
             // sync (when audio_pts >= video_pts)
             // now, if we're reading from a file/pipe, we stop sampling or 
-            // 
-            // 
-            // 
-            // 
-            // 
-            // 
             // else the audio track in the
             // video would become choppy (packets missing where they were
             // read but not written)
@@ -1050,17 +1044,11 @@ AVStream *add_video_stream(AVFormatContext * oc, XImage * image,
     st->codec->rc_buffer_aggressivity = 0.25;
 
     // bit rate calculation
-    // st->codec->bit_rate = (st->codec->width * st->codec->height *
-    // (((((st->codec->height + st->codec->width) / 100) - 5) >> 1) + 10)
-    // * quality) / 100; 
-    st->codec->bit_rate =
-        (st->codec->width * st->codec->height * image->bits_per_pixel /
-         8) * 1 / av_q2d(st->codec->time_base) * 8;
-    // apply quality adjustment
-    st->codec->bit_rate =
-        ((float) (quality) / 100.0) * st->codec->bit_rate;
-    // if (st->codec->bit_rate < 300000)
-    // st->codec->bit_rate = 300000;
+    st->codec->bit_rate = (st->codec->width * st->codec->height *
+    (((((st->codec->height + st->codec->width) / 100) - 5) >> 1) + 10)
+    * quality) / 100; 
+    if (st->codec->bit_rate < 300000)
+        st->codec->bit_rate = 300000;
 
 #ifdef DEBUG
     printf("%s %s: bitrate = %i\n", DEBUGFILE, DEBUGFUNCTION,

@@ -1,4 +1,7 @@
 
+2006-12-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c: revert to old bit rate calculation
+
 2006-12-11  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src:  control.h, xtoffmpeg.c, gnome_ui.c, capture.c: suggested
 		fix for bug # 1551015. Also fixed behaviour of 
