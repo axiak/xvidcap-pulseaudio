@@ -60,9 +60,11 @@ void do_reposition_control(GtkWidget * toplevel)
 {
 #define DEBUGFUNCTION "do_reposition_control()"
     int max_width = 0, max_height = 0;
-    int pwidth = 0, pheight = 0, x = 0, y = 0, topHeight = 0, width =
-        0, leftWidth = 0, height = 0;
+    int pwidth = 0, pheight = 0;
+    int x = xvc_frame_rectangle.x, y = xvc_frame_rectangle.y;
+    int width = xvc_frame_rectangle.width, height = xvc_frame_rectangle.height;
     GdkScreen *myscreen;
+    GdkRectangle rect;
 
     myscreen = GTK_WINDOW(toplevel)->screen;
     g_assert(myscreen);
@@ -70,24 +72,17 @@ void do_reposition_control(GtkWidget * toplevel)
     max_width = gdk_screen_get_width(GDK_SCREEN(myscreen));
     max_height = gdk_screen_get_height(GDK_SCREEN(myscreen));
 
-    gdk_window_get_size(GDK_WINDOW(toplevel->window), &pwidth, &pheight);
-    pwidth += FRAME_OFFSET;
-    pheight += FRAME_OFFSET;
-
-    gdk_window_get_size(GDK_WINDOW(gtk_frame_left->window), &leftWidth,
-                        &height);
-    gdk_window_get_size(GDK_WINDOW(gtk_frame_top->window), &width,
-                        &topHeight);
-    gtk_window_get_position(GTK_WINDOW(gtk_frame_top), (gint *) & x,
-                            (gint *) & y);
+    gdk_window_get_frame_extents(GDK_WINDOW(toplevel->window), &rect);
+    pwidth = rect.width + FRAME_OFFSET;
+    pheight = rect.height + FRAME_OFFSET;
 
 #ifdef DEBUG
-    printf("%s %s: x %i y%i pheight %i pwidht %i height %i width%i\n",
-           DEBUGFILE, DEBUGFUNCTION, x, y, pheight, pwidth, height, width);
+    printf("%s %s: x %i y %i pwidth %i pheight %i width %i height %i\n",
+           DEBUGFILE, DEBUGFUNCTION, x, y, 
+		pwidth, pheight, width, height);
 #endif                          // DEBUG
-
-    if ((y - pheight) >= 0) {
-        gtk_window_move(GTK_WINDOW(toplevel), x, (y - pheight));
+    if ((y - pheight - FRAME_WIDTH) >= 0) {
+        gtk_window_move(GTK_WINDOW(toplevel), x, (y - pheight - FRAME_WIDTH));
     } else {
         GladeXML *xml = NULL;
         GtkWidget *w = NULL;
@@ -101,17 +96,17 @@ void do_reposition_control(GtkWidget * toplevel)
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(w),
                                           FALSE);
 
-        if ((y + pheight + height) < max_height) {
+        if ((y + pheight + height + FRAME_WIDTH + FRAME_OFFSET) < max_height) {
             gtk_window_move(GTK_WINDOW(toplevel), x,
-                            (y + height + FRAME_OFFSET));
+                            (y + height + FRAME_OFFSET + FRAME_WIDTH));
         } else {
-            if (x > pwidth) {
+            if (x > pwidth + FRAME_WIDTH + FRAME_OFFSET) {
                 gtk_window_move(GTK_WINDOW(toplevel),
-                                (x - pwidth - FRAME_OFFSET), y);
+                                (x - pwidth - FRAME_OFFSET - FRAME_WIDTH), y);
             } else {
-                if ((x + width + pwidth) < max_width) {
+                if ((x + width + pwidth + FRAME_OFFSET + FRAME_WIDTH) < max_width) {
                     gtk_window_move(GTK_WINDOW(toplevel),
-                                    (x + width + FRAME_OFFSET), y);
+                                    (x + width + FRAME_OFFSET + FRAME_WIDTH), y);
                 }
                 // otherwise leave the UI where it is ...
             }
@@ -246,6 +241,7 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
     gint x = 0, y = 0, width = 0, height = 0;
     GdkColor g_col;
     GdkColormap *colormap;
+    GdkRectangle rect;
     int flags = app->flags;
 
 #ifdef DEBUG
@@ -260,11 +256,11 @@ xvc_create_gtk_frame(GtkWidget * toplevel, int pwidth, int pheight,
         if (px < 0 && py < 0) {
             // compute position for frame
             gdk_window_get_origin(GDK_WINDOW(toplevel->window), &x, &y);
-            gtk_window_get_size(GTK_WINDOW(toplevel), &width, &height);
+	    gdk_window_get_frame_extents(GDK_WINDOW(toplevel->window), &rect);
 
             if (x < 0)
                 x = 0;
-            y += height + FRAME_OFFSET;
+            y += rect.height + FRAME_OFFSET;
             if (y < 0)
                 y = 0;
         } else {

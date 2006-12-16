@@ -2116,20 +2116,6 @@ on_xvc_ctrl_select_toggle_toggled(GtkToggleToolButton *
         jobp->win_attr.x = x;
         jobp->win_attr.y = y;
 
-        // we must move the panel a little bit, so get the height of
-        // the panel to adjust the y value 
-        gdk_window_get_size(GDK_WINDOW(xvc_ctrl_main_window->window),
-                            &pwidth, &pheight);
-        pheight = pheight + FRAME_OFFSET;
-        if (xvc_is_frame_locked()) {
-            gtk_window_move(GTK_WINDOW(xvc_ctrl_main_window), x,
-                            y - pheight);
-        }
-
-        if (jobp->flags & FLG_RUN_VERBOSE) {
-            printf("Original Selection geometry: %dx%d+%d+%d\n",
-                   jobp->win_attr.width, jobp->win_attr.height, x, y);
-        }
 #ifdef USE_FFMPEG
         // 
         // make sure we have even width and height for ffmpeg
@@ -2166,7 +2152,7 @@ on_xvc_ctrl_select_toggle_toggled(GtkToggleToolButton *
 #endif                          // USE_FFMPEG
 
         xvc_change_gtk_frame(x, y, jobp->win_attr.width,
-                             jobp->win_attr.height, FALSE);
+                             jobp->win_attr.height, xvc_is_frame_locked());
 
         jobp->ncolors =
             xvc_get_colors(display, &jobp->win_attr, &jobp->colors);

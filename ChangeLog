@@ -1,4 +1,11 @@
 
+2006-12-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_ui.c, gnome_frame.c: fixed some errors in the
+		repositioning of the control during capture frame
+		selection. The control could previously have been
+		moved out of the top of the visible screen, apparently
+		causing trouble with KDE.
+
 2006-12-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: revert to old bit rate calculation
 
