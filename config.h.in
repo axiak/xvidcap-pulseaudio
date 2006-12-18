@@ -69,6 +69,9 @@
 /* Define to 1 if you have the `swscale' library (-lswscale). */
 #undef HAVE_LIBSWSCALE
 
+/* Define to 1 if you have the `Xfixes' library (-lXfixes). */
+#undef HAVE_LIBXFIXES
+
 /* Define to 1 if you have the `Xmu' library (-lXmu). */
 #undef HAVE_LIBXMU
 

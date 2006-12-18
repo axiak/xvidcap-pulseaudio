@@ -217,12 +217,17 @@ fi
 # first check for Xmu without tweaking, then in X11 paths
 AC_CHECK_LIB(Xmu,XmuClientWindow,,[unset ac_cv_lib_Xmu_XmuClientWindow; echo "Couldn't find libXmu in LD_LIBRARY_PATH, checking X11 paths"; AC_CHECK_LIB(Xmu,XmuClientWindow,LDFLAGS="${LDFLAGS} -L${ac_x_libraries} -Xlinker -R${ac_x_libraries}"; LIBS="${LIBS} -lXmu",echo "libXmu required for drawing the frame around the area to capture" && exit 1,[-L${ac_x_libraries}])])
 
+# first check for Xfixes without tweaking, then in X11 paths
+AC_CHECK_LIB(Xfixes,XFixesGetCursorImage,,[unset ac_cv_lib_Xfixes_XFixesGetCursorImage; echo "Couldn't find libXfixes in LD_LIBRARY_PATH, checking X11 paths"; AC_CHECK_LIB(Xfixes,XFixesGetCursorImage,LDFLAGS="${LDFLAGS} -L${ac_x_libraries} -Xlinker -R${ac_x_libraries}"; LIBS="${LIBS} -lXfixes",[echo "libXfixes not available, cannot capture real mouse pointer"],[-L${ac_x_libraries}])])
+
 ## libice test is present, but we need to bail out if not there
 
 if test "x${ac_cv_lib_ICE_IceConnectionNumber+set}" = "x"; then
   echo "Your X11 environment is missing libice."
   exit 1
 fi
+
+
 #########################################################
 
 #########################################################

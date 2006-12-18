@@ -39,17 +39,14 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-#include <X11/Intrinsic.h>
-#include <X11/StringDefs.h>
-#include <X11/XWDFile.h>
-#include <X11/Xproto.h>
-#include <X11/Xlibint.h>
-#include <X11/cursorfont.h>
-
-#ifdef SOLARIS
 #include <X11/X.h>
 #include <X11/Xlib.h>
-#endif                          // SOLARIS
+#include <X11/Xlibint.h>
+#include <X11/Xproto.h>
+#include <X11/Xutil.h>
+#ifdef HAVE_LIBXFIXES
+#include <X11/extensions/Xfixes.h>
+#endif // HAVE_LIBXFIXES
 
 #ifdef HAVE_SHMAT
 #include <sys/ipc.h>
@@ -72,13 +69,22 @@
 #include "job.h"
 #include "control.h"
 
-
 #define DEBUGFILE "capture.c"
 
 Display *getCaptureDisplay(Job * job);
 void dropDisplay(Display * dpy, Job * job);
 
 extern int led_time;
+
+int use_xfixes = 0;
+#ifdef HAVE_LIBXFIXES
+#include "colors.h"
+// the following are used for alpha masking of real mouse pointer
+unsigned char top[65536];
+unsigned char bottom[65536];
+
+static ColorInfo c_info;
+#endif // HAVE_LIBXFIXES
 
 
 
@@ -152,12 +158,16 @@ apply_masks(uint8_t * dst, uint32_t and, uint32_t or, int bits_per_pixel)
  * @param y Mouse pointer coordinate
  */
 static
-void paintMousePointer(int x, int y, XImage * image)
+void paintMousePointer(XImage * image)
 {
 #define DEBUGFUNCTION "paintMousePointer()"
 #ifndef min
 #define min(a,b) (a<b? a:b)
 #endif                          // min
+#ifndef max
+#define max(a,b) (a>b? a:b)
+#endif                          // max
+
     /* 16x20x1bpp bitmap for the black channel of the mouse pointer */
     static const uint16_t const mousePointerBlack[] = {
         0x0000, 0x0003, 0x0005, 0x0009, 0x0011,
@@ -174,42 +184,79 @@ void paintMousePointer(int x, int y, XImage * image)
         0x00C0, 0x0180, 0x0180, 0x0000, 0x0000
     };
 
-    Job *mjob;
+    Job *mjob = xvc_job_ptr();
+    int x, y, cursor_width = 16, cursor_height = 20;
+#ifdef HAVE_LIBXFIXES
+    Display *dpy = getCaptureDisplay(mjob);
+    XFixesCursorImage *x_cursor;
+#endif // HAVE_LIBXFIXES
 
-    mjob = xvc_job_ptr();
     // only paint a mouse pointer into the dummy frame if the position of
     // the mouse is within the rectangle defined by the capture frame
 
-    if ((x - mjob->area->x) >= 0 && x < (mjob->area->width + mjob->area->x)
-        && (y - mjob->area->y) >= 0
-        && y < (mjob->area->height + mjob->area->y)) {
+    getCurrentPointer(&x, &y, mjob); 
+
+#ifdef HAVE_LIBXFIXES
+	if ( use_xfixes ) {
+		x_cursor = XFixesGetCursorImage(dpy);
+		cursor_width = x_cursor->width;
+		cursor_height = x_cursor->height;
+		y -= x_cursor->yhot;
+		x -= x_cursor->xhot;
+	}
+#endif // HAVE_LIBXFIXES
+
+    if (
+	(x - mjob->area->x + cursor_width) >= 0 && 
+	x < (mjob->area->width + mjob->area->x) &&
+        (y - mjob->area->y + cursor_height) >= 0 &&
+        y < (mjob->area->height + mjob->area->y)
+	) {
         uint8_t *im_data = (uint8_t *) image->data;
         int bytes_per_pixel;
         int line;
-        uint32_t masks;
+        uint32_t masks = 0;
+	int yoff = mjob->area->y - y;
 
         /* Select correct masks and pixel size */
+	if (!use_xfixes) {
         if (image->bits_per_pixel == 8) {
             masks = 1;
         } else {
             masks =
                 (image->red_mask | image->green_mask | image->blue_mask);
         }
+	}
         bytes_per_pixel = image->bits_per_pixel >> 3;
 
+        if (!use_xfixes) {
         // first: shift to right line
-        im_data += (image->bytes_per_line * (y - mjob->area->y));
+        im_data += (image->bytes_per_line * max(0, (y - mjob->area->y)));
+
         // then: shift to right pixel
-        im_data += (image->bits_per_pixel / 8 * (x - mjob->area->x));
+        im_data += (bytes_per_pixel * max(0, (x - mjob->area->x)));
+	}
 
         /* Draw the cursor - proper loop */
-        for (line = 0; line < min(20, (mjob->area->y + image->height) - y);
-             line++) {
+        for (line = max(0, yoff); 
+			line < min(
+				cursor_height, 
+				(mjob->area->y + image->height) - y
+			);
+             		line++) {
             uint8_t *cursor = im_data;
             int column;
             uint16_t bm_b;
             uint16_t bm_w;
+	    int xoff = mjob->area->x - x;
+	    unsigned long *pix_pointer = NULL;
 
+#ifdef HAVE_LIBXFIXES
+	    if (use_xfixes) 
+		pix_pointer = (line * x_cursor->width) + x_cursor->pixels;
+#endif // HAVE_LIBXFIXES
+
+	    if (!use_xfixes) {
             if (mjob->mouseWanted == 1) {
                 bm_b = mousePointerBlack[line];
                 bm_w = mousePointerWhite[line];
@@ -218,18 +265,92 @@ void paintMousePointer(int x, int y, XImage * image)
                 bm_w = mousePointerBlack[line];
             }
 
-            for (column = 0;
-                 column < min(16, (mjob->area->x + image->width) - x);
+	    if (xoff > 0) {
+		bm_b >>= xoff;
+		bm_w >>= xoff;
+	    }
+	    }
+
+            for (column = max(0, xoff);
+                 column < min(
+			cursor_width, 
+			(mjob->area->x + image->width) - x
+		 );
                  column++) {
+#ifdef HAVE_LIBXFIXES
+		if ( use_xfixes ) {
+			int count;
+			int rel_x = (x - mjob->area->x + column);
+			int rel_y = (y - mjob->area->y + line);
+			int mask = (*pix_pointer & 0xFF000000) >> 24;
+			int shift, src_shift, src_mask;
+
+			unsigned long bot_pixel = XGetPixel(image, rel_x, rel_y);
+			unsigned long applied = 0;
+
+//			printf("rel x: %i - rel y: %i\n", rel_x, rel_y);
+//			printf("mask: 0x%.4X - mouse pixel: 0x%.8lX\n", mask, *pix_pointer);
+			//printf("old pixel: 0x%.8lX - %li\n", bot_pixel, bot_pixel);
+
+			for (count = 2; count >= 0; count--) {
+				unsigned char t, b;
+				shift = count * 8;
+
+				switch (count) {
+					case 2:
+						src_shift = c_info.red_shift;
+						src_mask = image->red_mask;
+						break;
+					case 1: 
+						src_shift = c_info.green_shift;
+						src_mask = image->green_mask;
+						break;
+					default:
+						src_shift = c_info.blue_shift;
+						src_mask = image->blue_mask;
+				}
+
+				t = (*pix_pointer >> shift) & 0xFF;
+				unsigned char topp = top[(mask << 8) + t];
+
+				b = ((bot_pixel & src_mask) >> src_shift) & 0xFF;
+				unsigned char botp = bottom[(mask << 8) + b];
+
+				applied |= (topp + botp) << shift;
+
+			}
+//			printf("new pixel: 0x%.8lX\n", applied);
+
+			XPutPixel(image, rel_x, rel_y, 
+				applied);
+/*
+			XPutPixel(image, (x - mjob->area->x + column), 
+				(y - mjob->area->y + line), 
+				APPLY_ALPHA_MASK(((*pix_pointer & 0xFF000000) >> 24), 
+				*pix_pointer, 
+				XGetPixel(image, (x - mjob->area->x + column), (y - mjob->area->y + line))));
+*/
+			pix_pointer++;
+		} else {
+#endif // HAVE_LIBXFIXES
+
                 apply_masks(cursor, ~(masks * (bm_b & 1)),
                             masks * (bm_w & 1), image->bits_per_pixel);
                 cursor += bytes_per_pixel;
                 bm_b >>= 1;
                 bm_w >>= 1;
+
+#ifdef HAVE_LIBXFIXES
+		}
+#endif // HAVE_LIBXFIXES
             }
+		
             im_data += image->bytes_per_line;
         }
     }
+#ifdef HAVE_LIBXFIXES
+    dropDisplay(dpy, mjob);
+#endif // HAVE_LIBXFIXES
 #undef DEBUGFUNCTION
 }
 
@@ -340,20 +461,12 @@ void dropDisplay(Display * dpy, Job * job)
 XImage *captureFrameCreatingImage(Display * dpy, Job * job)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImage()"
-    int x, y;                   // trace mouse pointer
     XImage *image = NULL;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
 
-    // don't find the current pointer position if we don't need it
-    if (job->mouseWanted > 0) {
-        getCurrentPointer(&x, &y, job);
-    }
-#ifdef DEBUG
-    printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
     // get the image here
     image = XGetImage(dpy, RootWindow(dpy, DefaultScreen(dpy)),
                       job->area->x, job->area->y,
@@ -363,11 +476,11 @@ XImage *captureFrameCreatingImage(Display * dpy, Job * job)
         printf("%s %s: Can't get image: %dx%d+%d+%d\n",
                DEBUGFILE, DEBUGFUNCTION, job->area->width,
                job->area->height, job->area->x, job->area->y);
-        job->state = VC_STOP;
+        job_set_state(VC_STOP);
     } else {
         // paint the mouse pointer into the captured image if necessary
         if (job->mouseWanted > 0) {
-            paintMousePointer(x, y, image);
+            paintMousePointer(image);
         }
     }
 
@@ -383,26 +496,19 @@ XImage *captureFrameCreatingImage(Display * dpy, Job * job)
 int captureFrameToImage(Display * dpy, Job * job, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImage()"
-    int x, y, ret = 0;
+    int ret = 0;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
 
-    // don't find the current pointer position if we don't need it
-    if (job->mouseWanted > 0) {
-        getCurrentPointer(&x, &y, job);
-    }
-#ifdef DEBUG
-    printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
     // get the image here
     if (XGetZPixmap(dpy,
                     RootWindow(dpy, DefaultScreen(dpy)),
                     image, job->area->x, job->area->y)) {
         // paint the mouse pointer into the captured image if necessary
         if (job->mouseWanted > 0) {
-            paintMousePointer(x, y, image);
+            paintMousePointer(image);
         }
         ret = 1;
     }
@@ -418,26 +524,19 @@ int captureFrameToImage(Display * dpy, Job * job, XImage * image)
 int captureFrameToImageSHM(Display * dpy, Job * job, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImageSHM()"
-    int x, y, ret = 0;
+    int ret = 0;
 
 #ifdef DEBUG
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
 
-    // don't find the current pointer position if we don't need it
-    if (job->mouseWanted > 0) {
-        getCurrentPointer(&x, &y, job);
-    }
-#ifdef DEBUG
-    printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
     // get the image here
     if (XShmGetImage(dpy,
                      RootWindow(dpy, DefaultScreen(dpy)),
                      image, job->area->x, job->area->y, AllPlanes)) {
         // paint the mouse pointer into the captured image if necessary
         if (job->mouseWanted > 0) {
-            paintMousePointer(x, y, image);
+            paintMousePointer(image);
         }
         ret = 1;
     }
@@ -454,7 +553,6 @@ XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job,
                                      XShmSegmentInfo * shminfo)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
-    int x, y;                   // trace mouse pointer
     XImage *image = NULL;
 
     Visual *visual = job->win_attr.visual;
@@ -464,13 +562,6 @@ XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job,
     printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif                          // DEBUG
 
-    // don't find the current pointer position if we don't need it
-    if (job->mouseWanted > 0) {
-        getCurrentPointer(&x, &y, job);
-    }
-#ifdef DEBUG
-    printf("%s %s: going to fetch image next\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
     // get the image here
     image = XShmCreateImage(dpy, visual, depth, ZPixmap, NULL,
                             shminfo, job->area->width, job->area->height);
@@ -635,6 +726,27 @@ long commonCapture(XtPointer xtp, int capfunc)
             if (!dpy)
                 return FALSE;
 
+#ifdef HAVE_LIBXFIXES
+	    {
+	    int a, b;
+	    unsigned int mask, color;
+
+    	    use_xfixes = XFixesQueryExtension(dpy, &a, &b);
+#ifdef DEBUG
+	    printf("%s %s: Xfixes present, setting up alpha masking arrays\n",
+			DEBUGFILE, DEBUGFUNCTION);
+#endif // DEBUG
+	    if ( use_xfixes ) {
+		for (mask = 0; mask <= 255; mask++) {
+			for (color = 0; color <= 255; color++) {
+    				top[(mask << 8) + color]  = (color * (mask+1)) >> 8;
+    				bottom[(mask << 8) + color] = (color * (256-mask)) >> 8;
+			}
+		}
+	    }
+	    }
+#endif // HAVE_LIBXFIXES
+
             switch (capfunc) {
 #ifdef HAVE_SHMAT
             case SHM:
@@ -652,6 +764,11 @@ long commonCapture(XtPointer xtp, int capfunc)
             } else
                 printf("%s %s: could not acquire pixmap!\n", DEBUGFILE,
                        DEBUGFUNCTION);
+
+#ifdef HAVE_LIBXFIXES
+	    if ( use_xfixes )
+		xvc_get_color_info(image, &c_info);
+#endif // HAVE_LIBXFIXES
 
         } else {                // we're recording and not in the first
             // frame ....

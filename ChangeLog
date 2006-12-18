@@ -1,4 +1,10 @@
 
+2006-12-18  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, src/capture.c: implemented initial support for
+		capturing real mouse pointers (yippieh)
+	* Makefile.am: DESTDIR fixes supplied by Julian Sikorski
+		<belegdol@gmail.com>
+	
 2006-12-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, gnome_frame.c: fixed some errors in the
 		repositioning of the control during capture frame

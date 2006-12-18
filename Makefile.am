@@ -45,23 +45,23 @@ dist-hook:
     ( test -f $(distdir)/ffmpeg/config.log && rm $(distdir)/ffmpeg/config.log ) || echo "no ffmpeg config.log"
 
 install-exec-hook:
-	mkdir $(datadir)/pixmaps ; \
-	cp $(top_srcdir)/xvidcap.png $(datadir)/pixmaps/ ; \
-	mkdir $(datadir)/applications ; \
-	cp $(top_srcdir)/xvidcap.desktop $(datadir)/applications/
+	mkdir $(DESTDIR)$(datadir)/pixmaps ; \
+	cp $(top_srcdir)/xvidcap.png $(DESTDIR)$(datadir)/pixmaps/ ; \
+	mkdir $(DESTDIR)$(datadir)/applications ; \
+	cp $(top_srcdir)/xvidcap.desktop $(DESTDIR)$(datadir)/applications/
 
 install-data-hook:
-	chmod 755 $(datadir)/xvidcap/ppm2mpeg.sh
+	chmod 755 $(DESTDIR)$(datadir)/xvidcap/ppm2mpeg.sh
 
 uninstall-hook:
-	rm $(datadir)/pixmaps/xvidcap.png ; \
-	rm $(datadir)/applications/xvidcap.desktop ; \
-    rm -r $(datadir)/doc/xvidcap ; \
-    rm -r $(datadir)/xvidcap
-
+	rm $(DESTDIR)$(datadir)/pixmaps/xvidcap.png ; \
+	rm $(DESTDIR)$(datadir)/applications/xvidcap.desktop ; \
+	rm -r $(DESTDIR)$(datadir)/doc/xvidcap ; \
+	rm -r $(DESTDIR)$(datadir)/xvidcap
 
 install-doc: 
 	cd doc && $(MAKE) $(AM_MAKEFLAGS) install-doc
 
 uninstall-doc: 
 	cd doc && $(MAKE) $(AM_MAKEFLAGS) uninstall-doc
+
