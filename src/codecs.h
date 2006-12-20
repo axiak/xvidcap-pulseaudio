@@ -12,7 +12,8 @@
 /* 
  * codecs used by xvidcap 
  */
-enum tCodecIDs {
+enum tCodecIDs
+{
     CODEC_NONE,
 #ifdef USE_FFMPEG
     CODEC_PGM,
@@ -28,14 +29,16 @@ enum tCodecIDs {
     CODEC_DV,
     CODEC_MPEG2,
     CODEC_SVQ1,
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
     NUMCODECS
 };
+
 #ifdef USE_FFMPEG
 #define CODEC_MF CODEC_MPEG1
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
 
-typedef struct _xvCodec {
+typedef struct _xvCodec
+{
     char *name;
     char *longname;
     int id;
@@ -49,19 +52,21 @@ typedef struct _xvCodec {
 /* 
  * audio codecs
  */
-enum tAuCodecIDs {
+enum tAuCodecIDs
+{
     AU_CODEC_NONE,
 #ifdef HAVE_FFMPEG_AUDIO
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
     AU_CODEC_PCM16,
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
     NUMAUCODECS
 };
 
-typedef struct _xvAuCodec {
+typedef struct _xvAuCodec
+{
     char *name;
     char *longname;
     int id;
@@ -75,7 +80,8 @@ typedef struct _xvAuCodec {
  * capture output formats
  *
  */
-enum tcap_formats {
+enum tcap_formats
+{
     CAP_NONE,
     CAP_XWD,
 #ifdef USE_FFMPEG
@@ -92,18 +98,17 @@ enum tcap_formats {
     CAP_MPG,
     CAP_SVCD,
     CAP_MOV,
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
     NUMCAPS
 };
 
 #ifdef USE_FFMPEG
 #define CAP_FFM CAP_PGM
 #define CAP_MF CAP_AVI
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
 
-
-
-typedef struct _xvFFormat {
+typedef struct _xvFFormat
+{
     char *name;
     char *longname;
     char *ffmpeg_name;
@@ -115,15 +120,12 @@ typedef struct _xvFFormat {
     // int (*init) (void);
 } xvFFormat;
 
+void xvc_codecs_init ();
+int xvc_trans_codec (int);
+int xvc_is_element (char *xvList, char *xvElement);
+char *xvc_next_element (char *list);
+int xvc_codec_get_target_from_filename (char *file);
+int xvc_codec_is_valid_fps (int fps, int codec);
+int xvc_num_elements (char *list);
 
-
-void xvc_codecs_init();
-int xvc_trans_codec(int);
-int xvc_is_element(char *xvList, char *xvElement);
-char *xvc_next_element(char *list);
-int xvc_codec_get_target_from_filename(char *file);
-int xvc_codec_is_valid_fps(int fps, int codec);
-int xvc_num_elements(char *list);
-
-
-#endif                          // __CODECS_H__
+#endif     // __CODECS_H__

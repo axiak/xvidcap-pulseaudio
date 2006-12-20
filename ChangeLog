@@ -1,4 +1,9 @@
 
+2006-12-20  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/*.[ch]: indentation (more to follow), cleanup for
+		display handling (no more leaking of displays)
+		and real mouse pointer capture
+
 2006-12-18  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, src/capture.c: implemented initial support for
 		capturing real mouse pointers (yippieh)

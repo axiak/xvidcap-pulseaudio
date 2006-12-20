@@ -21,13 +21,11 @@
 #ifndef __GNOME_OPTIONS_H__
 #define __GNOME_OPTIONS_H__
 
-
 #include <gtk/gtk.h>
 #include "app_data.h"
 
-void xvc_create_pref_dialog(AppData * lapp);
-void xvc_pref_do_OK();
-void xvc_pref_reset_OK_attempts();
+void xvc_create_pref_dialog (AppData * lapp);
+void xvc_pref_do_OK ();
+void xvc_pref_reset_OK_attempts ();
 
-
-#endif                          // __GNOME_OPTIONS_H__
+#endif     // __GNOME_OPTIONS_H__

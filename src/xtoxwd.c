@@ -20,7 +20,7 @@
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
-#endif                          // HAVE_CONFIG_H
+#endif     // HAVE_CONFIG_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,16 +35,17 @@
  */
 #define ZImageSize(i) (i->bytes_per_line * i->height)
 
-
 // a couple of byte swap functions originally from util.c
 
 /* 
  * swap the byte order of a 16 bit word;
  */
-void swap_2byte(unsigned short *i)
+void
+swap_2byte (unsigned short *i)
 {
     unsigned char t;
     unsigned char *p = (unsigned char *) i;
+
     t = p[0];
     p[0] = p[1];
     p[1] = t;
@@ -53,7 +54,8 @@ void swap_2byte(unsigned short *i)
 /* 
  * swap the byte order of a long integer (32 byte)
  */
-void swap_4byte(unsigned long *i)
+void
+swap_4byte (unsigned long *i)
 {
     unsigned char t;
     unsigned char *p = (unsigned char *) i;
@@ -69,10 +71,12 @@ void swap_4byte(unsigned long *i)
 /* 
  * swap the byte order of a 32 bit word;
  */
-void swap_n_4byte(unsigned char *p, unsigned long n)
+void
+swap_n_4byte (unsigned char *p, unsigned long n)
 {
     register unsigned char t;
     register unsigned long i;
+
     for (i = 0; i < n; i++) {
         t = p[0];
         p[0] = p[3];
@@ -87,7 +91,8 @@ void swap_n_4byte(unsigned char *p, unsigned long n)
 /* 
  * swap n bytes in a char array
  */
-void swap_n_bytes(unsigned char *p, unsigned long n)
+void
+swap_n_bytes (unsigned char *p, unsigned long n)
 {
     unsigned char t;
     unsigned int i, h;
@@ -100,7 +105,6 @@ void swap_n_bytes(unsigned char *p, unsigned long n)
     }
 }
 
-
 /* 
  * global, we need this to check if we must swap some bytes
  */
@@ -109,11 +113,13 @@ static unsigned long little_endian = 1;
 /* 
  * prepare the color table for the xwd file
  */
-void *XWDcolorTable(XColor * colors, int ncolors)
+void *
+XWDcolorTable (XColor * colors, int ncolors)
 {
     XWDColor *color_table;
     int i;
-    color_table = (XWDColor *) malloc(sizeof(XWDColor) * ncolors);
+
+    color_table = (XWDColor *) malloc (sizeof (XWDColor) * ncolors);
     if (!color_table)
         return (NULL);
     for (i = 0; i < ncolors; i++) {
@@ -125,10 +131,10 @@ void *XWDcolorTable(XColor * colors, int ncolors)
     }
     if (*(char *) &little_endian) {
         for (i = 0; i < ncolors; i++) {
-            swap_4byte(&color_table[i].pixel);
-            swap_2byte(&color_table[i].red);
-            swap_2byte(&color_table[i].green);
-            swap_2byte(&color_table[i].blue);
+            swap_4byte (&color_table[i].pixel);
+            swap_2byte (&color_table[i].red);
+            swap_2byte (&color_table[i].green);
+            swap_2byte (&color_table[i].blue);
         }
     }
     return (color_table);
@@ -137,7 +143,8 @@ void *XWDcolorTable(XColor * colors, int ncolors)
 /* 
  * write ximage as xwd file to 'fp'
  */
-void XImageToXWD(FILE * fp, XImage * image, Job * job)
+void
+XImageToXWD (FILE * fp, XImage * image, Job * job)
 {
     static XWDFileHeader head;
     static int file_name_len;
@@ -148,12 +155,12 @@ void XImageToXWD(FILE * fp, XImage * image, Job * job)
      */
     if (job->state & VC_START /* it's the first call */ ) {
         XWindowAttributes win_attr = job->win_attr;
+
 #ifdef DEBUG
-        printf("Preparing XWD header ... win_attr.x = %i\n",
-               job->win_attr.x);
+        printf ("Preparing XWD header ... win_attr.x = %i\n", job->win_attr.x);
 #endif
-        file_name_len = strlen(file) + 1;
-        head.header_size = (CARD32) (sizeof(head) + file_name_len);
+        file_name_len = strlen (file) + 1;
+        head.header_size = (CARD32) (sizeof (head) + file_name_len);
         head.file_version = (CARD32) XWD_FILE_VERSION;
         head.pixmap_format = (CARD32) ZPixmap;
         head.pixmap_depth = (CARD32) image->depth;
@@ -180,21 +187,21 @@ void XImageToXWD(FILE * fp, XImage * image, Job * job)
         head.window_bdrwidth = (CARD32) win_attr.border_width;
 
         if (*(char *) &little_endian)
-            swap_n_4byte((unsigned char *) &head,
-                         sizeof(head) / sizeof(long));
+            swap_n_4byte ((unsigned char *) &head,
+                          sizeof (head) / sizeof (long));
     }
-    if (fwrite((char *) &head, sizeof(head), 1, fp) < 1)
-        perror(file);
-    if (fwrite(file, file_name_len, 1, fp) < 1)
-        perror(file);
-    if (fwrite(job->color_table, sizeof(XWDColor), job->ncolors, fp) < 1)
-        perror(file);
-    if (fwrite(image->data, ZImageSize(image), 1, fp) < 1)
-        perror(file);
+    if (fwrite ((char *) &head, sizeof (head), 1, fp) < 1)
+        perror (file);
+    if (fwrite (file, file_name_len, 1, fp) < 1)
+        perror (file);
+    if (fwrite (job->color_table, sizeof (XWDColor), job->ncolors, fp) < 1)
+        perror (file);
+    if (fwrite (image->data, ZImageSize (image), 1, fp) < 1)
+        perror (file);
 
 #ifdef DEBUG
-    printf("XImageToXWD() header size = %d visual=%d\n",
-           sizeof(XWDFileHeader), job->win_attr.visual->class);
+    printf ("XImageToXWD() header size = %d visual=%d\n",
+            sizeof (XWDFileHeader), job->win_attr.visual->class);
 #endif
 }
 

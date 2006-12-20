@@ -21,7 +21,8 @@
 #ifndef __COLORS_H__
 #define __COLORS_H__
 
-typedef struct {
+typedef struct
+{
     unsigned long red_shift;
     unsigned long green_shift;
     unsigned long blue_shift;
@@ -43,8 +44,7 @@ typedef struct {
     u_int32_t alpha_mask;
 } ColorInfo;
 
-void xvc_get_color_info(XImage * image, ColorInfo * return_struct);
-int xvc_get_colors(Display * dpy, XWindowAttributes * winfo,
-                   XColor ** colors);
+void xvc_get_color_info (XImage * image, ColorInfo * return_struct);
+int xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors);
 
-#endif                          // __COLORS_H__
+#endif     // __COLORS_H__

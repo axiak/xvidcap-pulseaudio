@@ -23,7 +23,7 @@
 
 #include "app_data.h"
 
-GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
-                                          int from_where);
+GtkWidget *xvc_create_warning_with_errors (xvErrorListItem * elist,
+                                           int from_where);
 
-#endif                          // __GNOME_WARNING_H__
+#endif     // __GNOME_WARNING_H__

@@ -32,7 +32,7 @@
 
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
-#endif                          // HAVE_STDINT_H
+#endif     // HAVE_STDINT_H
 
 #include <stdio.h>
 #include <limits.h>
@@ -46,24 +46,24 @@
 #include <X11/Xutil.h>
 #ifdef HAVE_LIBXFIXES
 #include <X11/extensions/Xfixes.h>
-#endif // HAVE_LIBXFIXES
+#endif     // HAVE_LIBXFIXES
 
 #ifdef HAVE_SHMAT
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <X11/extensions/XShm.h>
-#endif                          // HAVE_SHMAT
+#endif     // HAVE_SHMAT
 
 #ifdef HasDGA
 #include <X11/extensions/xf86dga.h>
-#endif                          // HasDGA
+#endif     // HasDGA
 
 #ifdef HasVideo4Linux
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include "video.h"
-#endif                          // HasVideo4Linux
+#endif     // HasVideo4Linux
 
 #include "capture.h"
 #include "job.h"
@@ -71,12 +71,8 @@
 
 #define DEBUGFILE "capture.c"
 
-Display *getCaptureDisplay(Job * job);
-void dropDisplay(Display * dpy, Job * job);
-
 extern int led_time;
 
-int use_xfixes = 0;
 #ifdef HAVE_LIBXFIXES
 #include "colors.h"
 // the following are used for alpha masking of real mouse pointer
@@ -84,42 +80,33 @@ unsigned char top[65536];
 unsigned char bottom[65536];
 
 static ColorInfo c_info;
-#endif // HAVE_LIBXFIXES
-
-
+#endif     // HAVE_LIBXFIXES
 
 /* 
  * the following function finds out where the mouse pointer is
  */
-static void getCurrentPointer(int *x, int *y, Job * mjob)
+static void
+getCurrentPointer (int *x, int *y, Job * mjob)
 {
 #define DEBUGFUNCTION "getCurrentPointer()"
     Window mrootwindow, childwindow;
     int dummy;
-    Display *dpy;
-    // Screen *scr;
 
-    dpy = getCaptureDisplay(mjob);
-    mrootwindow = DefaultRootWindow(dpy);
+    mrootwindow = DefaultRootWindow (mjob->dpy);
 
-    if (XQueryPointer(dpy, mrootwindow, &mrootwindow, &childwindow,
-                      x, y, &dummy, &dummy, (unsigned int *) &dummy)) {
+    if (XQueryPointer (mjob->dpy, mrootwindow, &mrootwindow, &childwindow,
+                       x, y, &dummy, &dummy, (unsigned int *) &dummy)) {
         // if the XQueryPointer was successfull, we have everything we
         // need in the variables passed as result pointers
     } else {
-        fprintf(stderr,
-                "%s %s: couldn't find mouse pointer for disp: %p , rootwindow: %p\n",
-                DEBUGFILE, DEBUGFUNCTION, dpy, &mrootwindow);
+        fprintf (stderr,
+                 "%s %s: couldn't find mouse pointer for disp: %p , rootwindow: %p\n",
+                 DEBUGFILE, DEBUGFUNCTION, mjob->dpy, &mrootwindow);
         *x = -1;
         *y = -1;
     }
-
-    dropDisplay(dpy, mjob);
 #undef DEBUGFUNCTION
 }
-
-
-
 
 /**
  * Mouse painting helper function that applies an 'and' and 'or' mask pair to
@@ -133,7 +120,7 @@ static void getCurrentPointer(int *x, int *y, Job * mjob)
  * @param bits_per_pixel Bits per pixel used in the grabbed image
  */
 static void inline
-apply_masks(uint8_t * dst, uint32_t and, uint32_t or, int bits_per_pixel)
+apply_masks (uint8_t * dst, uint32_t and, uint32_t or, int bits_per_pixel)
 {
     switch (bits_per_pixel) {
     case 32:
@@ -157,16 +144,16 @@ apply_masks(uint8_t * dst, uint32_t and, uint32_t or, int bits_per_pixel)
  * @param x Mouse pointer coordinate
  * @param y Mouse pointer coordinate
  */
-static
-void paintMousePointer(XImage * image)
+static void
+paintMousePointer (XImage * image)
 {
 #define DEBUGFUNCTION "paintMousePointer()"
 #ifndef min
 #define min(a,b) (a<b? a:b)
-#endif                          // min
+#endif     // min
 #ifndef max
 #define max(a,b) (a>b? a:b)
-#endif                          // max
+#endif     // max
 
     /* 16x20x1bpp bitmap for the black channel of the mouse pointer */
     static const uint16_t const mousePointerBlack[] = {
@@ -184,183 +171,159 @@ void paintMousePointer(XImage * image)
         0x00C0, 0x0180, 0x0180, 0x0000, 0x0000
     };
 
-    Job *mjob = xvc_job_ptr();
+    Job *mjob = xvc_job_ptr ();
     int x, y, cursor_width = 16, cursor_height = 20;
+
 #ifdef HAVE_LIBXFIXES
-    Display *dpy = getCaptureDisplay(mjob);
+    unsigned char topp, botp;
+    unsigned long applied;
     XFixesCursorImage *x_cursor;
-#endif // HAVE_LIBXFIXES
+#endif     // HAVE_LIBXFIXES
 
     // only paint a mouse pointer into the dummy frame if the position of
     // the mouse is within the rectangle defined by the capture frame
 
-    getCurrentPointer(&x, &y, mjob); 
-
 #ifdef HAVE_LIBXFIXES
-	if ( use_xfixes ) {
-		x_cursor = XFixesGetCursorImage(dpy);
-		cursor_width = x_cursor->width;
-		cursor_height = x_cursor->height;
-		y -= x_cursor->yhot;
-		x -= x_cursor->xhot;
-	}
-#endif // HAVE_LIBXFIXES
+    if (mjob->flags & FLG_USE_XFIXES) {
+        x_cursor = XFixesGetCursorImage (mjob->dpy);
+        cursor_width = x_cursor->width;
+        cursor_height = x_cursor->height;
+        y = x_cursor->y - x_cursor->yhot;
+        x = x_cursor->x - x_cursor->xhot;
+    } else {
+        getCurrentPointer (&x, &y, mjob);
+    }
+#else
+    getCurrentPointer (&x, &y, mjob);
+#endif     // HAVE_LIBXFIXES
 
-    if (
-	(x - mjob->area->x + cursor_width) >= 0 && 
-	x < (mjob->area->width + mjob->area->x) &&
+    if ((x - mjob->area->x + cursor_width) >= 0 &&
+        x < (mjob->area->width + mjob->area->x) &&
         (y - mjob->area->y + cursor_height) >= 0 &&
         y < (mjob->area->height + mjob->area->y)
-	) {
+        ) {
         uint8_t *im_data = (uint8_t *) image->data;
-        int bytes_per_pixel;
+        int bytes_per_pixel = image->bits_per_pixel >> 3;
         int line;
         uint32_t masks = 0;
-	int yoff = mjob->area->y - y;
+        int yoff = mjob->area->y - y;
 
         /* Select correct masks and pixel size */
-	if (!use_xfixes) {
-        if (image->bits_per_pixel == 8) {
-            masks = 1;
-        } else {
-            masks =
-                (image->red_mask | image->green_mask | image->blue_mask);
+        if (!mjob->flags & FLG_USE_XFIXES) {
+            if (image->bits_per_pixel == 8) {
+                masks = 1;
+            } else {
+                masks =
+                    (image->red_mask | image->green_mask | image->blue_mask);
+            }
+
+            // first: shift to right line
+            im_data += (image->bytes_per_line * max (0, (y - mjob->area->y)));
+
+            // then: shift to right pixel
+            im_data += (bytes_per_pixel * max (0, (x - mjob->area->x)));
         }
-	}
-        bytes_per_pixel = image->bits_per_pixel >> 3;
-
-        if (!use_xfixes) {
-        // first: shift to right line
-        im_data += (image->bytes_per_line * max(0, (y - mjob->area->y)));
-
-        // then: shift to right pixel
-        im_data += (bytes_per_pixel * max(0, (x - mjob->area->x)));
-	}
 
         /* Draw the cursor - proper loop */
-        for (line = max(0, yoff); 
-			line < min(
-				cursor_height, 
-				(mjob->area->y + image->height) - y
-			);
-             		line++) {
+        for (line = max (0, yoff);
+             line < min (cursor_height,
+                         (mjob->area->y + image->height) - y); line++) {
             uint8_t *cursor = im_data;
             int column;
             uint16_t bm_b;
             uint16_t bm_w;
-	    int xoff = mjob->area->x - x;
-	    unsigned long *pix_pointer = NULL;
+            int xoff = mjob->area->x - x;
+            unsigned long *pix_pointer = NULL;
 
 #ifdef HAVE_LIBXFIXES
-	    if (use_xfixes) 
-		pix_pointer = (line * x_cursor->width) + x_cursor->pixels;
-#endif // HAVE_LIBXFIXES
+            if (mjob->flags & FLG_USE_XFIXES)
+                pix_pointer = (line * x_cursor->width) + x_cursor->pixels;
+#endif     // HAVE_LIBXFIXES
 
-	    if (!use_xfixes) {
-            if (mjob->mouseWanted == 1) {
-                bm_b = mousePointerBlack[line];
-                bm_w = mousePointerWhite[line];
-            } else {
-                bm_b = mousePointerWhite[line];
-                bm_w = mousePointerBlack[line];
+            if (!mjob->flags & FLG_USE_XFIXES) {
+                if (mjob->mouseWanted == 1) {
+                    bm_b = mousePointerBlack[line];
+                    bm_w = mousePointerWhite[line];
+                } else {
+                    bm_b = mousePointerWhite[line];
+                    bm_w = mousePointerBlack[line];
+                }
+
+                if (xoff > 0) {
+                    bm_b >>= xoff;
+                    bm_w >>= xoff;
+                }
             }
 
-	    if (xoff > 0) {
-		bm_b >>= xoff;
-		bm_w >>= xoff;
-	    }
-	    }
-
-            for (column = max(0, xoff);
-                 column < min(
-			cursor_width, 
-			(mjob->area->x + image->width) - x
-		 );
-                 column++) {
+            for (column = max (0, xoff);
+                 column < min (cursor_width,
+                               (mjob->area->x + image->width) - x); column++) {
 #ifdef HAVE_LIBXFIXES
-		if ( use_xfixes ) {
-			int count;
-			int rel_x = (x - mjob->area->x + column);
-			int rel_y = (y - mjob->area->y + line);
-			int mask = (*pix_pointer & 0xFF000000) >> 24;
-			int shift, src_shift, src_mask;
+                if (mjob->flags & FLG_USE_XFIXES) {
+                    int count;
+                    int rel_x = (x - mjob->area->x + column);
+                    int rel_y = (y - mjob->area->y + line);
+                    int mask = (*pix_pointer & 0xFF000000) >> 24;
+                    int shift, src_shift, src_mask;
 
-			unsigned long bot_pixel = XGetPixel(image, rel_x, rel_y);
-			unsigned long applied = 0;
+                    applied = 0;
 
-//			printf("rel x: %i - rel y: %i\n", rel_x, rel_y);
-//			printf("mask: 0x%.4X - mouse pixel: 0x%.8lX\n", mask, *pix_pointer);
-			//printf("old pixel: 0x%.8lX - %li\n", bot_pixel, bot_pixel);
+                    for (count = 2; count >= 0; count--) {
+                        shift = count * 8;
 
-			for (count = 2; count >= 0; count--) {
-				unsigned char t, b;
-				shift = count * 8;
+                        switch (count) {
+                        case 2:
+                            src_shift = c_info.red_shift;
+                            src_mask = image->red_mask;
+                            break;
+                        case 1:
+                            src_shift = c_info.green_shift;
+                            src_mask = image->green_mask;
+                            break;
+                        default:
+                            src_shift = c_info.blue_shift;
+                            src_mask = image->blue_mask;
+                        }
 
-				switch (count) {
-					case 2:
-						src_shift = c_info.red_shift;
-						src_mask = image->red_mask;
-						break;
-					case 1: 
-						src_shift = c_info.green_shift;
-						src_mask = image->green_mask;
-						break;
-					default:
-						src_shift = c_info.blue_shift;
-						src_mask = image->blue_mask;
-				}
+                        topp =
+                            top[(mask << 8) + ((*pix_pointer >> shift) & 0xFF)];
+                        botp =
+                            bottom[(mask << 8) +
+                                   (((XGetPixel (image, rel_x, rel_y) &
+                                      src_mask) >> src_shift) & 0xFF)];
 
-				t = (*pix_pointer >> shift) & 0xFF;
-				unsigned char topp = top[(mask << 8) + t];
+                        applied |= (topp + botp) << shift;
+                    }
 
-				b = ((bot_pixel & src_mask) >> src_shift) & 0xFF;
-				unsigned char botp = bottom[(mask << 8) + b];
+                    XPutPixel (image, rel_x, rel_y, applied);
 
-				applied |= (topp + botp) << shift;
+                    pix_pointer++;
+                } else {
+#endif     // HAVE_LIBXFIXES
 
-			}
-//			printf("new pixel: 0x%.8lX\n", applied);
-
-			XPutPixel(image, rel_x, rel_y, 
-				applied);
-/*
-			XPutPixel(image, (x - mjob->area->x + column), 
-				(y - mjob->area->y + line), 
-				APPLY_ALPHA_MASK(((*pix_pointer & 0xFF000000) >> 24), 
-				*pix_pointer, 
-				XGetPixel(image, (x - mjob->area->x + column), (y - mjob->area->y + line))));
-*/
-			pix_pointer++;
-		} else {
-#endif // HAVE_LIBXFIXES
-
-                apply_masks(cursor, ~(masks * (bm_b & 1)),
-                            masks * (bm_w & 1), image->bits_per_pixel);
-                cursor += bytes_per_pixel;
-                bm_b >>= 1;
-                bm_w >>= 1;
+                    apply_masks (cursor, ~(masks * (bm_b & 1)),
+                                 masks * (bm_w & 1), image->bits_per_pixel);
+                    cursor += bytes_per_pixel;
+                    bm_b >>= 1;
+                    bm_w >>= 1;
 
 #ifdef HAVE_LIBXFIXES
-		}
-#endif // HAVE_LIBXFIXES
+                }
+#endif     // HAVE_LIBXFIXES
             }
-		
+
             im_data += image->bytes_per_line;
         }
     }
-#ifdef HAVE_LIBXFIXES
-    dropDisplay(dpy, mjob);
-#endif // HAVE_LIBXFIXES
 #undef DEBUGFUNCTION
 }
-
 
 /* 
  * just read new data in the image structure, the image
  * structure inclusive the data area must be allocated before
  */
 static Boolean
-XGetZPixmap(Display * dpy, Drawable d, XImage * image, int x, int y)
+XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
 {
 #define DEBUGFUNCTION "XGetZPixmap()"
     register xGetImageReq *req = NULL;
@@ -368,13 +331,13 @@ XGetZPixmap(Display * dpy, Drawable d, XImage * image, int x, int y)
     long nbytes;
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     if (!image)
         return (False);
-    LockDisplay(dpy);
-    GetReq(GetImage, req);
+    LockDisplay (dpy);
+    GetReq (GetImage, req);
     /* 
      * first set up the standard stuff in the request
      */
@@ -386,171 +349,146 @@ XGetZPixmap(Display * dpy, Drawable d, XImage * image, int x, int y)
     req->planeMask = AllPlanes;
     req->format = ZPixmap;
 
-    if (_XReply(dpy, (xReply *) & rep, 0, xFalse) == 0 || rep.length == 0) {
-        UnlockDisplay(dpy);
-        SyncHandle();
+    if (_XReply (dpy, (xReply *) & rep, 0, xFalse) == 0 || rep.length == 0) {
+        UnlockDisplay (dpy);
+        SyncHandle ();
         return (False);
     }
 
     nbytes = (long) rep.length << 2;
 #ifdef DEBUG
-    printf("%s %s: read %li bytes\n", DEBUGFILE, DEBUGFUNCTION, nbytes);
-#endif                          // DEBUG
+    printf ("%s %s: read %li bytes\n", DEBUGFILE, DEBUGFUNCTION, nbytes);
+#endif     // DEBUG
 
-    _XReadPad(dpy, image->data, nbytes);
+    _XReadPad (dpy, image->data, nbytes);
 
-    UnlockDisplay(dpy);
-    SyncHandle();
+    UnlockDisplay (dpy);
+    SyncHandle ();
 
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     return (True);
 #undef DEBUGFUNCTION
 }
 
-
-FILE *getOutputFile(Job * job)
+FILE *
+getOutputFile (Job * job)
 {
 #define DEBUGFUNCTION "getOutputFile()"
     char file[PATH_MAX + 1];
     FILE *fp = NULL;
 
     if ((job->flags & FLG_MULTI_IMAGE) != 0) {
-        sprintf(file, job->file, job->movie_no);
+        sprintf (file, job->file, job->movie_no);
     } else {
-        sprintf(file, job->file, job->pic_no);
+        sprintf (file, job->file, job->pic_no);
     }
 
-    fp = fopen(file, job->open_flags);
+    fp = fopen (file, job->open_flags);
     if (!fp) {
-        perror(file);
+        perror (file);
         job->state = VC_STOP;
     }
 
-    return fp;                  // possibly NULL
+    return fp;                         // possibly NULL
 #undef DEBUGFUNCTION
 }
 
-
-Display *getCaptureDisplay(Job * job)
-{
-#define DEBUGFUNCTION "getCaptureDisplay()"
-    Screen *scr;
-    Display *dpy;
-
-    if (!(job->flags & FLG_NOGUI)) {
-        scr = job->win_attr.screen;
-        dpy = DisplayOfScreen(scr);
-    } else {
-        dpy = XOpenDisplay(NULL);
-    }
-
-    return dpy;                 // possibly NULL
-#undef DEBUGFUNCTION
-}
-
-void dropDisplay(Display * dpy, Job * job)
-{
-    if (job->flags & FLG_NOGUI) {
-        XCloseDisplay(dpy);
-    }
-}
-
-XImage *captureFrameCreatingImage(Display * dpy, Job * job)
+XImage *
+captureFrameCreatingImage (Display * dpy, Job * job)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImage()"
     XImage *image = NULL;
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     // get the image here
-    image = XGetImage(dpy, RootWindow(dpy, DefaultScreen(dpy)),
-                      job->area->x, job->area->y,
-                      job->area->width, job->area->height,
-                      AllPlanes, ZPixmap);
+    image = XGetImage (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+                       job->area->x, job->area->y,
+                       job->area->width, job->area->height, AllPlanes, ZPixmap);
     if (!image) {
-        printf("%s %s: Can't get image: %dx%d+%d+%d\n",
-               DEBUGFILE, DEBUGFUNCTION, job->area->width,
-               job->area->height, job->area->x, job->area->y);
-        job_set_state(VC_STOP);
+        printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
+                DEBUGFILE, DEBUGFUNCTION, job->area->width,
+                job->area->height, job->area->x, job->area->y);
+        job_set_state (VC_STOP);
     } else {
         // paint the mouse pointer into the captured image if necessary
         if (job->mouseWanted > 0) {
-            paintMousePointer(image);
+            paintMousePointer (image);
         }
     }
 
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     return image;
 #undef DEBUGFUNCTION
 }
 
-
-int captureFrameToImage(Display * dpy, Job * job, XImage * image)
+int
+captureFrameToImage (Display * dpy, Job * job, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImage()"
     int ret = 0;
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     // get the image here
-    if (XGetZPixmap(dpy,
-                    RootWindow(dpy, DefaultScreen(dpy)),
-                    image, job->area->x, job->area->y)) {
+    if (XGetZPixmap (dpy,
+                     RootWindow (dpy, DefaultScreen (dpy)),
+                     image, job->area->x, job->area->y)) {
         // paint the mouse pointer into the captured image if necessary
         if (job->mouseWanted > 0) {
-            paintMousePointer(image);
+            paintMousePointer (image);
         }
         ret = 1;
     }
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     return ret;
 #undef DEBUGFUNCTION
 }
 
-
-int captureFrameToImageSHM(Display * dpy, Job * job, XImage * image)
+int
+captureFrameToImageSHM (Display * dpy, Job * job, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImageSHM()"
     int ret = 0;
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     // get the image here
-    if (XShmGetImage(dpy,
-                     RootWindow(dpy, DefaultScreen(dpy)),
-                     image, job->area->x, job->area->y, AllPlanes)) {
+    if (XShmGetImage (dpy,
+                      RootWindow (dpy, DefaultScreen (dpy)),
+                      image, job->area->x, job->area->y, AllPlanes)) {
         // paint the mouse pointer into the captured image if necessary
         if (job->mouseWanted > 0) {
-            paintMousePointer(image);
+            paintMousePointer (image);
         }
         ret = 1;
     }
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     return ret;
 #undef DEBUGFUNCTION
 }
 
-
-XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job,
-                                     XShmSegmentInfo * shminfo)
+XImage *
+captureFrameCreatingImageSHM (Display * dpy, Job * job,
+                              XShmSegmentInfo * shminfo)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
     XImage *image = NULL;
@@ -559,51 +497,52 @@ XImage *captureFrameCreatingImageSHM(Display * dpy, Job * job,
     unsigned int depth = job->win_attr.depth;
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     // get the image here
-    image = XShmCreateImage(dpy, visual, depth, ZPixmap, NULL,
-                            shminfo, job->area->width, job->area->height);
+    image = XShmCreateImage (dpy, visual, depth, ZPixmap, NULL,
+                             shminfo, job->area->width, job->area->height);
     if (!image) {
-        printf("%s %s: Can't get image: %dx%d+%d+%d\n",
-               DEBUGFILE, DEBUGFUNCTION, job->area->width,
-               job->area->height, job->area->x, job->area->y);
-        job_set_state(VC_STOP);
+        printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
+                DEBUGFILE, DEBUGFUNCTION, job->area->width,
+                job->area->height, job->area->x, job->area->y);
+        job_set_state (VC_STOP);
     } else {
-        shminfo->shmid = shmget(IPC_PRIVATE,
-                                image->bytes_per_line * image->height,
-                                IPC_CREAT | 0777);
+        shminfo->shmid = shmget (IPC_PRIVATE,
+                                 image->bytes_per_line * image->height,
+                                 IPC_CREAT | 0777);
         if (shminfo->shmid == -1) {
-            printf("%s %s: Fatal: Can't get shared memory!\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
+            printf ("%s %s: Fatal: Can't get shared memory!\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit (1);
         }
-        shminfo->shmaddr = image->data = shmat(shminfo->shmid, 0, 0);
+        shminfo->shmaddr = image->data = shmat (shminfo->shmid, 0, 0);
         shminfo->readOnly = False;
 
-        if (XShmAttach(dpy, shminfo) == 0) {
-            printf("%s %s: Fatal: Failed to attach shared memory!\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
+        if (XShmAttach (dpy, shminfo) == 0) {
+            printf ("%s %s: Fatal: Failed to attach shared memory!\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+            exit (1);
         }
 
-        captureFrameToImageSHM(dpy, job, image);
+        captureFrameToImageSHM (dpy, job, image);
     }
 
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     return image;
 #undef DEBUGFUNCTION
 }
 
-
-long checkCaptureDuration(Job * job, long time, long time1)
+long
+checkCaptureDuration (Job * job, long time, long time1)
 {
 #define DEBUGFUNCTION "checkCaptureDuration()"
     struct timeval curr_time;   // for measuring the duration of a frame
+
     // capture
 
     // update monitor widget, here time is the time the capture took
@@ -621,7 +560,7 @@ long checkCaptureDuration(Job * job, long time, long time1)
         // get time again because updating frame drop meter took some time
         // we're only doing this if wait time for next frame hasn't been
         // negative already before
-        gettimeofday(&curr_time, NULL);
+        gettimeofday (&curr_time, NULL);
         time = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
         time = job->time_per_frame - time;
     } else {
@@ -638,34 +577,35 @@ long checkCaptureDuration(Job * job, long time, long time1)
 #undef DEBUGFUNCTION
 }
 
-
-long commonCapture(XtPointer xtp, int capfunc)
+long
+commonCapture (XtPointer xtp, int capfunc)
 {
 #define DEBUGFUNCTION "commonCapture()"
     Job *job = (Job *) xtp;
     static XImage *image = NULL;
-    static FILE *fp = NULL;     // file handle to write the frame to
-    long time, time1;           // for measuring the duration of a frame
+    static FILE *fp = NULL; // file handle to write the frame to
+    long time, time1;   // for measuring the duration of a frame
+
     // capture
     struct timeval curr_time;   // for measuring the duration of a frame
+
     // capture
-    static Display *dpy;
 #ifdef HAVE_SHMAT
     static XShmSegmentInfo shminfo;
-#endif                          // HAVE_SHMAT
+#endif     // HAVE_SHMAT
     int ret = 0;
 
 #ifdef DEBUG
-    printf("%s %s: pic_no=%d - state=%i\n", DEBUGFILE, DEBUGFUNCTION,
-           job->pic_no, job->state);
-#endif                          // DEBUG
+    printf ("%s %s: pic_no=%d - state=%i\n", DEBUGFILE, DEBUGFUNCTION,
+            job->pic_no, job->state);
+#endif     // DEBUG
 
     // wait for next iteration if pausing
-    if (job->state & VC_REC) {  // if recording ...
+    if (job->state & VC_REC) {         // if recording ...
 
 #ifdef DEBUG
-        printf("%s %s: we're recording\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+        printf ("%s %s: we're recording\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
         // the next bit is true if we have configured max_frames and we're
         // reaching the limit with this captured frame
@@ -673,14 +613,13 @@ long commonCapture(XtPointer xtp, int capfunc)
                                 job->max_frames - 1)) {
 
 #ifdef DEBUG
-            printf("%s %s: this is the final frame\n", DEBUGFILE,
-                   DEBUGFUNCTION);
-#endif                          // DEBUG
+            printf ("%s %s: this is the final frame\n", DEBUGFILE,
+                    DEBUGFUNCTION);
+#endif     // DEBUG
 
             if (job->flags & FLG_RUN_VERBOSE)
-                printf("%s %s: Stopped! pic_no=%d max_frames=%d\n",
-                       DEBUGFILE, DEBUGFUNCTION, job->pic_no,
-                       job->max_frames);
+                printf ("%s %s: Stopped! pic_no=%d max_frames=%d\n",
+                        DEBUGFILE, DEBUGFUNCTION, job->pic_no, job->max_frames);
 
             // we need to stop the capture to go through the necessary
             // cleanup routines for writing a correct file. If we have
@@ -688,13 +627,13 @@ long commonCapture(XtPointer xtp, int capfunc)
             // code know we need
             // to restart again afterwards
             if (job->flags & FLG_AUTO_CONTINUE) {
-                job_merge_state(VC_CONTINUE);
+                job_merge_state (VC_CONTINUE);
             }
 
             goto CLEAN_CAPTURE;
         }
         // take the time before starting the capture
-        gettimeofday(&curr_time, NULL);
+        gettimeofday (&curr_time, NULL);
         time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
 
         // open the output file we need to do this for every frame for
@@ -704,11 +643,11 @@ long commonCapture(XtPointer xtp, int capfunc)
             ((job->flags & FLG_MULTI_IMAGE) && (job->state & VC_START))) {
 
 #ifdef DEBUG
-            printf("%s %s: opening file for captured frame(s)\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+            printf ("%s %s: opening file for captured frame(s)\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
-            fp = getOutputFile(job);
+            fp = getOutputFile (job);
             if (!fp)
                 return FALSE;
         }
@@ -716,78 +655,65 @@ long commonCapture(XtPointer xtp, int capfunc)
         if (job->state & VC_START) {
 
 #ifdef DEBUG
-            printf("%s %s: create data structure for image\n", DEBUGFILE,
-                   DEBUGFUNCTION);
-#endif                          // DEBUG
-
-            // the first time this procedure is started
-            // we must create a new image ..
-            dpy = getCaptureDisplay(job);
-            if (!dpy)
-                return FALSE;
+            printf ("%s %s: create data structure for image\n", DEBUGFILE,
+                    DEBUGFUNCTION);
+#endif     // DEBUG
 
 #ifdef HAVE_LIBXFIXES
-	    {
-	    int a, b;
-	    unsigned int mask, color;
+            if (job->flags & FLG_USE_XFIXES) {
+                unsigned int mask, color;
 
-    	    use_xfixes = XFixesQueryExtension(dpy, &a, &b);
-#ifdef DEBUG
-	    printf("%s %s: Xfixes present, setting up alpha masking arrays\n",
-			DEBUGFILE, DEBUGFUNCTION);
-#endif // DEBUG
-	    if ( use_xfixes ) {
-		for (mask = 0; mask <= 255; mask++) {
-			for (color = 0; color <= 255; color++) {
-    				top[(mask << 8) + color]  = (color * (mask+1)) >> 8;
-    				bottom[(mask << 8) + color] = (color * (256-mask)) >> 8;
-			}
-		}
-	    }
-	    }
-#endif // HAVE_LIBXFIXES
+                for (mask = 0; mask <= 255; mask++) {
+                    for (color = 0; color <= 255; color++) {
+                        top[(mask << 8) + color] = (color * (mask + 1)) >> 8;
+                        bottom[(mask << 8) + color] =
+                            (color * (256 - mask)) >> 8;
+                    }
+                }
+            }
+#endif     // HAVE_LIBXFIXES
 
             switch (capfunc) {
 #ifdef HAVE_SHMAT
             case SHM:
-                image = captureFrameCreatingImageSHM(dpy, job, &shminfo);
+                image = captureFrameCreatingImageSHM (job->dpy, job, &shminfo);
                 break;
-#endif                          // HAVE_SHMAT
+#endif     // HAVE_SHMAT
             case X11:
             default:
-                image = captureFrameCreatingImage(dpy, job);
+                image = captureFrameCreatingImage (job->dpy, job);
             }
             if (image) {
                 // call the necessary XtoXYZ function to process the image
                 (*job->save) (fp, image, job);
-                job_remove_state(VC_START);
+                job_remove_state (VC_START);
             } else
-                printf("%s %s: could not acquire pixmap!\n", DEBUGFILE,
-                       DEBUGFUNCTION);
+                printf ("%s %s: could not acquire pixmap!\n", DEBUGFILE,
+                        DEBUGFUNCTION);
 
 #ifdef HAVE_LIBXFIXES
-	    if ( use_xfixes )
-		xvc_get_color_info(image, &c_info);
-#endif // HAVE_LIBXFIXES
+            if (job->flags & FLG_USE_XFIXES)
+                xvc_get_color_info (image, &c_info);
+#endif     // HAVE_LIBXFIXES
 
-        } else {                // we're recording and not in the first
+        } else {                       // we're recording and not in the first
             // frame ....
             // so we just read new data into the present image structure 
 
 #ifdef DEBUG
-            printf("%s %s: reading an image in a data sturctur present\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+            printf ("%s %s: reading an image in a data sturctur present\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
             switch (capfunc) {
 #ifdef HAVE_SHMAT
             case SHM:
-                ret = captureFrameToImage(dpy, job, image);
+                ret = captureFrameToImage (job->dpy, job, image);
                 break;
-#endif                          // HAVE_SHMAT
+#endif     // HAVE_SHMAT
             case X11:
             default:
-                ret = captureFrameToImage(dpy, job, image);
+                ret = captureFrameToImage (job->dpy, job, image);
             }
             if (ret > 0)
                 // call the necessary XtoXYZ function to process the image
@@ -803,26 +729,25 @@ long commonCapture(XtPointer xtp, int capfunc)
         if (!(job->flags & FLG_MULTI_IMAGE)) {
 
 #ifdef DEBUG
-            printf("%s %s: done saving image, closing file descriptor\n",
-                   DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+            printf ("%s %s: done saving image, closing file descriptor\n",
+                    DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
-            fclose(fp);
+            fclose (fp);
         }
         // substract the time we needed for creating and saving the frame
         // to the file 
-        gettimeofday(&curr_time, NULL);
-        time1 =
-            (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
+        gettimeofday (&curr_time, NULL);
+        time1 = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
 
-        time = checkCaptureDuration(job, time, time1);
+        time = checkCaptureDuration (job, time, time1);
         // time the next capture
 
 #ifdef DEBUG
         printf
             ("%s %s: submitting capture of next frame in %ld milliseconds\n",
              DEBUGFILE, DEBUGFUNCTION, time);
-#endif                          // DEBUG
+#endif     // DEBUG
 
         job->pic_no += job->step;
 
@@ -830,7 +755,7 @@ long commonCapture(XtPointer xtp, int capfunc)
         // 
         // don't keep single stepping
         if (job->state & VC_STEP) {
-            job_remove_state(VC_STEP);
+            job_remove_state (VC_STEP);
             // the time is the pause between this and the next snapshot
             // for step mode this makes no sense and could be 0. Setting
             // it to 50 is just to give the led meter the chance to flash
@@ -847,23 +772,23 @@ long commonCapture(XtPointer xtp, int capfunc)
       CLEAN_CAPTURE:
 
 #ifdef DEBUG
-        printf("%s %s: cleaning up\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+        printf ("%s %s: cleaning up\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
         time = 0;
-        orig_state = job->state;    // store state here, esp. VC_CONTINUE
+        orig_state = job->state;       // store state here, esp. VC_CONTINUE
 
         if (image) {
-            XDestroyImage(image);
+            XDestroyImage (image);
             image = NULL;
         }
 
-        job_set_state(VC_STOP);
+        job_set_state (VC_STOP);
 
         // set the sensitive stuff for the control panel if we don't
         // autocontinue 
         if ((orig_state & VC_CONTINUE) == 0)
-            xvc_idle_add(xvc_capture_stop, job, TRUE);
+            xvc_idle_add (xvc_capture_stop, job, TRUE);
 
         // clean up the save routines in xtoXXX.c 
         if (job->clean)
@@ -871,65 +796,62 @@ long commonCapture(XtPointer xtp, int capfunc)
         // if we're recording to a movie, we must close the file now
         if (job->flags & FLG_MULTI_IMAGE)
             if (fp)
-                fclose(fp);
+                fclose (fp);
         fp = NULL;
 
         if ((orig_state & VC_CONTINUE) == 0) {
             // after this we're ready to start recording again 
-            job_merge_state(VC_READY);
+            job_merge_state (VC_READY);
         } else {
 
 #ifdef DEBUG
             printf
                 ("%s %s: autocontinue selected, preparing autocontinue\n",
                  DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+#endif     // DEBUG
 
             // prepare autocontinue
             job->movie_no += 1;
             job->pic_no = job->start_no;
-            job_merge_and_remove_state((VC_START | VC_REC), VC_STOP);
+            job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
 
             return time;
         }
 
-        dropDisplay(dpy, job);
     }
 
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     return time;
 
 #undef DEBUGFUNCTION
 }
 
-
 // timer callback for capturing
 // this is used with source = x11 ... capture from X11 display w/o SHM
-long TCbCaptureX11(XtPointer xtp)
+long
+TCbCaptureX11 (XtPointer xtp)
 {
 #define DEBUGFUNCTION "TCbCaptureX11()"
-    return commonCapture(xtp, X11);
+    return commonCapture (xtp, X11);
 #undef DEBUGFUNCTION
 }
-
 
 #ifdef HAVE_SHMAT
 /* 
  * timer callback for capturing with shared memory
  */
-long TCbCaptureSHM(XtPointer xtp)
+long
+TCbCaptureSHM (XtPointer xtp)
 {
 #define DEBUGFUNCTION "TCbCaptureSHM()"
-    return commonCapture(xtp, SHM);
+    return commonCapture (xtp, SHM);
 #undef DEBUGFUNCTION
 }
 
-#endif                          /* HAVE_SHMAT */
-
-
+#endif     /* HAVE_SHMAT */
 
 // FIXME: update capture modes after this
 #ifdef HasVideo4Linux
@@ -943,7 +865,8 @@ long TCbCaptureSHM(XtPointer xtp)
  * from bttv.h 
  */
 
-Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
+Boolean
+TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
 {
     Job *job = (Job *) xtp;
     static char file[PATH_MAX + 1];
@@ -961,44 +884,43 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
 
     if (!(job->flags & FLG_NOGUI)) {
         scr = job->win_attr.screen;
-        dpy = DisplayOfScreen(scr);
+        dpy = DisplayOfScreen (scr);
     } else {
-        dpy = XOpenDisplay(NULL);
+        dpy = XOpenDisplay (NULL);
     }
 
 #ifdef DEBUG2
-    printf("TCbCaptureV4L() pic_no=%d\n", job->pic_no);
+    printf ("TCbCaptureV4L() pic_no=%d\n", job->pic_no);
 #endif
     if ((job->state & VC_PAUSE) && !(job->state & VC_STEP)) {
-        xvc_add_timeout(job->time_per_frame, job->capture, job);
+        xvc_add_timeout (job->time_per_frame, job->capture, job);
 
     } else if (job->state & VC_REC) {
         if (job->max_frames && ((job->pic_no - job->start_no) >
                                 job->max_frames - 1)) {
             if (job->flags & FLG_RUN_VERBOSE)
-                printf("Stopped! pic_no=%d max_frames=%d\n",
-                       job->pic_no, job->max_frames);
-            if ((!(job->flags & FLG_RUN_VERBOSE)) &
-                (!(job->flags & FLG_NOGUI)))
-                xvc_change_filename_display(job->pic_no);
+                printf ("Stopped! pic_no=%d max_frames=%d\n",
+                        job->pic_no, job->max_frames);
+            if ((!(job->flags & FLG_RUN_VERBOSE)) & (!(job->flags & FLG_NOGUI)))
+                xvc_change_filename_display (job->pic_no);
 
             if (job->flags & FLG_AUTO_CONTINUE)
                 job->state |= VC_CONTINUE;
             goto CLEAN_V4L;
         }
         job->state &= ~VC_STEP;
-        gettimeofday(&curr_time, NULL);
+        gettimeofday (&curr_time, NULL);
         time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
 
         if ((!(job->flags & FLG_MULTI_IMAGE)) ||
             ((job->flags & FLG_MULTI_IMAGE) && (job->state & VC_START))) {
             if (job->flags & FLG_MULTI_IMAGE)
-                sprintf(file, job->file, job->movie_no);
+                sprintf (file, job->file, job->movie_no);
             else
-                sprintf(file, job->file, job->pic_no);
+                sprintf (file, job->file, job->pic_no);
             fp = (*job->open) (file, job->open_flags);
             if (!fp) {
-                perror(file);
+                perror (file);
                 job->state = VC_STOP;
                 return;
             }
@@ -1008,24 +930,23 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
              * the first time this procedure is started
              * we must prepare some stuff ..
              */
-            if (!job->bpp)      /* use depth of the default window */
+            if (!job->bpp)             /* use depth of the default window */
                 job->bpp = job->win_attr.depth;
 
-            sync();             /* remove if your bttv driver runs stable
-                                 * .. */
-            video = video_open(job->video_dev, O_RDWR);
+            sync ();                   /* remove if your bttv driver runs stable
+                                        * .. */
+            video = video_open (job->video_dev, O_RDWR);
             if (!video) {
-                perror(job->video_dev);
+                perror (job->video_dev);
                 goto CLEAN_V4L;
             }
             vi_pict.depth = 0;
             /* 
              * read default values for hue, etc.. 
              */
-            ioctl(video->fd, VIDIOCGPICT, &vi_pict);
+            ioctl (video->fd, VIDIOCGPICT, &vi_pict);
 
-            printf("%d->%d %d\n", job->bpp, vi_pict.depth,
-                   vi_pict.palette);
+            printf ("%d->%d %d\n", job->bpp, vi_pict.depth, vi_pict.palette);
             switch (job->bpp) {
             case 24:
                 vi_mmap.format = vi_pict.palette = VIDEO_PALETTE_RGB24;
@@ -1037,24 +958,22 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
                 vi_mmap.format = vi_pict.palette = VIDEO_PALETTE_RGB555;
                 break;
             default:
-                printf("Fatal: unsupported bpp (%d)\n", job->bpp);
-                exit(3);
+                printf ("Fatal: unsupported bpp (%d)\n", job->bpp);
+                exit (3);
                 break;
             }
-            ioctl(video->fd, VIDIOCSPICT, &vi_pict);
-            printf("%d->%d %d\n", job->bpp, vi_pict.depth,
-                   vi_pict.palette);
-
+            ioctl (video->fd, VIDIOCSPICT, &vi_pict);
+            printf ("%d->%d %d\n", job->bpp, vi_pict.depth, vi_pict.palette);
 
             vi_memb.size = 0;
-            ioctl(video->fd, VIDIOCGMBUF, &vi_memb);
-            printf("%d %d %d\n", vi_memb.size, vi_memb.frames,
-                   vi_memb.offsets);
+            ioctl (video->fd, VIDIOCGMBUF, &vi_memb);
+            printf ("%d %d %d\n", vi_memb.size, vi_memb.frames,
+                    vi_memb.offsets);
 
-            image = (XImage *) XtMalloc(sizeof(XImage));
+            image = (XImage *) XtMalloc (sizeof (XImage));
             if (!image) {
-                printf("Can't get image: %dx%d+%d+%d\n", job->area->width,
-                       job->area->height, job->area->x, job->area->y);
+                printf ("Can't get image: %dx%d+%d+%d\n", job->area->width,
+                        job->area->height, job->area->x, job->area->y);
                 goto CLEAN_V4L;
             }
             switch (job->bpp) {
@@ -1074,8 +993,8 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
                 image->blue_mask = 0x00001F;
                 break;
             default:
-                printf("Fatal: unsupported bpp (%d)\n", job->bpp);
-                exit(3);
+                printf ("Fatal: unsupported bpp (%d)\n", job->bpp);
+                exit (3);
                 break;
             }
             image->width = job->area->width;
@@ -1085,9 +1004,9 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
             image->byte_order = MSBFirst;
             size = image->width * image->height * job->bpp;
             video->size = vi_memb.size;
-            video_mmap(video, 1);
+            video_mmap (video, 1);
             if (video->mmap == NULL) {
-                perror("mmap()");
+                perror ("mmap()");
                 goto CLEAN_V4L;
             }
 
@@ -1099,18 +1018,18 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
         /* 
          * just read new data in the image structure 
          */
-        if (ioctl(video->fd, VIDIOCMCAPTURE, &vi_mmap) < 0) {
-            perror("ioctl(capture)");
+        if (ioctl (video->fd, VIDIOCMCAPTURE, &vi_mmap) < 0) {
+            perror ("ioctl(capture)");
             /* 
              * if (vb.frame) vb.frame = 0; else vb.frame = 1; 
              */
             goto CLEAN_V4L;
         }
-        printf("syncing ..\n");
-        if (ioctl(video->fd, VIDIOCSYNC, vi_mmap.frame) < 0) {
-            perror("ioctl(sync)");
+        printf ("syncing ..\n");
+        if (ioctl (video->fd, VIDIOCSYNC, vi_mmap.frame) < 0) {
+            perror ("ioctl(sync)");
         }
-        printf("synced()\n");
+        printf ("synced()\n");
 
         (*job->save) (fp, image, job);
         job->state &= ~VC_START;
@@ -1122,15 +1041,14 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
          * substract the time we needed for creating and saving the frame
          * to the file 
          */
-        gettimeofday(&curr_time, NULL);
-        time1 =
-            (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
+        gettimeofday (&curr_time, NULL);
+        time1 = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
         // update monitor widget, here time is the time the capture took
         // time == 0 resets led_meter
         if (!time1)
             time1 = 1;
         if (!(job->flags & FLG_NOGUI))
-            xvc_frame_monitor(time1);
+            xvc_frame_monitor (time1);
         // printf("time: %i time_per_frame: %i\n", time1,
         // job->time_per_frame);
         // calculate the remaining time we have till capture of next frame
@@ -1139,10 +1057,8 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
         if (time1 > 0) {
             // get time again because updating frame drop meter took some
             // time
-            gettimeofday(&curr_time, NULL);
-            time =
-                (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) -
-                time;
+            gettimeofday (&curr_time, NULL);
+            time = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
             time = job->time_per_frame - time;
         } else {
             time = time1;
@@ -1156,11 +1072,11 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
         if (time < 2)
             time = 2;
 
-        xvc_add_timeout(time, job->capture, job);
+        xvc_add_timeout (time, job->capture, job);
 
         job->pic_no += job->step;
         if (time >= 2 && (!(job->flags & FLG_NOGUI)))
-            xvc_change_filename_display(job->pic_no);
+            xvc_change_filename_display (job->pic_no);
 
     } else {
         int orig_state;
@@ -1169,22 +1085,22 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
          * clean up 
          */
       CLEAN_V4L:
-        orig_state = job->state;    // store state here
+        orig_state = job->state;       // store state here
 
         if (!(job->flags & FLG_NOGUI)) {
             // maybe the last update didn't succeed
-            xvc_change_filename_display(job->pic_no);
-            xvc_frame_monitor(0);
+            xvc_change_filename_display (job->pic_no);
+            xvc_frame_monitor (0);
         }
 
         job->state = VC_STOP;
         if (image) {
-            XtFree((char *) image);
+            XtFree ((char *) image);
             image = NULL;
         }
         if (video) {
-            video_mmap(video, 0);
-            video_close(video);
+            video_mmap (video, 0);
+            video_close (video);
             video = NULL;
         }
 
@@ -1193,7 +1109,7 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
          * autocontinue 
          */
         if ((orig_state & VC_CONTINUE) == 0)
-            xvc_capture_stop(job);
+            xvc_capture_stop (job);
 
         /* 
          * clean up the save routines in xtoXXX.c 
@@ -1216,7 +1132,7 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
             job->state &= ~VC_STOP;
             job->state |= VC_START;
             job->state |= VC_REC;
-            xvc_capture_start(job);
+            xvc_capture_start (job);
             return;
         }
 
@@ -1227,13 +1143,13 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
      */
     job->state |= VC_READY;
 
-    if (job->flags & FLG_NOGUI && (!is_filename_mutable(job->file))) {
-        XCloseDisplay(dpy);
+    if (job->flags & FLG_NOGUI && (!is_filename_mutable (job->file))) {
+        XCloseDisplay (dpy);
     }
 
     return FALSE;
 }
-#endif                          /* HasVideo4Linux */
+#endif     /* HasVideo4Linux */
 
 #ifdef HasDGA
 /* 
@@ -1242,7 +1158,8 @@ Boolean TCbCaptureV4L(XtPointer xtp, XtIntervalId id *)
  *
  * IT HAS ALSO NOT BEEN REWRITTEN FOR GTK GUI SUPPORT
  */
-Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
+Boolean
+TCbCaptureDGA (XtPointer xtp, XtIntervalId id *)
 {
     Job *job = (Job *) xtp;
     static char file[PATH_MAX + 1];
@@ -1254,37 +1171,36 @@ Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
     struct timeval curr_time;
 
 #ifdef DEBUG2
-    printf("TCbCaptureDGA() pic_no=%d state=%d\n", job->pic_no,
-           job->state);
+    printf ("TCbCaptureDGA() pic_no=%d state=%d\n", job->pic_no, job->state);
 #endif
     if ((job->state & VC_PAUSE) && !(job->state & VC_STEP)) {
-        XtAppAddTimeOut(XtWidgetToApplicationContext(job->toplevel),
-                        job->time_per_frame,
-                        (XtTimerCallbackProc) job->capture, job);
+        XtAppAddTimeOut (XtWidgetToApplicationContext (job->toplevel),
+                         job->time_per_frame,
+                         (XtTimerCallbackProc) job->capture, job);
 
     } else if (job->state & VC_REC) {
         if (job->max_frames && ((job->pic_no - job->start_no) >
                                 job->max_frames - 1)) {
             if (job->flags & FLG_RUN_VERBOSE)
-                printf("Stopped! pic_no=%d max_frames=%d\n",
-                       job->pic_no, job->max_frames);
+                printf ("Stopped! pic_no=%d max_frames=%d\n",
+                        job->pic_no, job->max_frames);
             if (!(job->flags & FLG_RUN_VERBOSE))
-                ChangeLabel(job->pic_no);
+                ChangeLabel (job->pic_no);
             goto CLEAN_DGA;
         }
         job->state &= ~VC_STEP;
-        gettimeofday(&curr_time, NULL);
+        gettimeofday (&curr_time, NULL);
         time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
 
         if ((!(job->flags & FLG_MULTI_IMAGE)) ||
             ((job->flags & FLG_MULTI_IMAGE) && (job->state & VC_START))) {
             if (job->flags & FLG_MULTI_IMAGE)
-                sprintf(file, job->file, job->movie_no);
+                sprintf (file, job->file, job->movie_no);
             else
-                sprintf(file, job->file, job->pic_no);
+                sprintf (file, job->file, job->pic_no);
             fp = (*job->open) (file, job->open_flags);
             if (!fp) {
-                perror(file);
+                perror (file);
                 job->state = VC_STOP;
                 return;
             }
@@ -1294,11 +1210,11 @@ Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
              * the first time this procedure is started
              * we must create a new image structure ..
              */
-            dpy = XtDisplay(job->toplevel);
-            image = (XImage *) XtMalloc(sizeof(XImage));
+            dpy = XtDisplay (job->toplevel);
+            image = (XImage *) XtMalloc (sizeof (XImage));
             if (!image) {
-                printf("Can't get image: %dx%d+%d+%d\n", job->area->width,
-                       job->area->height, job->area->x, job->area->y);
+                printf ("Can't get image: %dx%d+%d+%d\n", job->area->width,
+                        job->area->height, job->area->x, job->area->y);
                 goto CLEAN_DGA;
             }
             image->width = job->area->width;
@@ -1310,23 +1226,24 @@ Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
             {
                 int width, bank, ram;
                 char *base;
-                XF86DGAGetVideo(dpy, XDefaultScreen(dpy), (char **) &base,
-                                &width, &bank, &ram);
+
+                XF86DGAGetVideo (dpy, XDefaultScreen (dpy), (char **) &base,
+                                 &width, &bank, &ram);
                 image->data = base;
             }
-            XF86DGADirectVideo(dpy, XDefaultScreen(dpy),
-                               XF86DGADirectGraphics);
+            XF86DGADirectVideo (dpy, XDefaultScreen (dpy),
+                                XF86DGADirectGraphics);
             (*job->save) (fp, image, job);
-            XF86DGADirectVideo(dpy, XDefaultScreen(dpy), 0);
+            XF86DGADirectVideo (dpy, XDefaultScreen (dpy), 0);
             job->state &= ~VC_START;
         } else {
             /* 
              * just read new data in the image structure 
              */
-            XF86DGADirectVideo(dpy, XDefaultScreen(dpy),
-                               XF86DGADirectGraphics);
+            XF86DGADirectVideo (dpy, XDefaultScreen (dpy),
+                                XF86DGADirectGraphics);
             (*job->save) (fp, image, job);
-            XF86DGADirectVideo(dpy, XDefaultScreen(dpy), 0);
+            XF86DGADirectVideo (dpy, XDefaultScreen (dpy), 0);
         }
         if (!(job->flags & FLG_MULTI_IMAGE))
             (*job->close) (fp);
@@ -1335,7 +1252,7 @@ Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
          * substract the time we needed for creating and saving the frame
          * to the file 
          */
-        gettimeofday(&curr_time, NULL);
+        gettimeofday (&curr_time, NULL);
         time = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
         time = job->time_per_frame - time;
         if (time < 0) {
@@ -1345,14 +1262,14 @@ Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
                      time, job->time_per_frame, job->pic_no);
             time = 0;
         }
-        XtAppAddTimeOut(XtWidgetToApplicationContext(job->toplevel),
-                        time, (XtTimerCallbackProc) job->capture, job);
+        XtAppAddTimeOut (XtWidgetToApplicationContext (job->toplevel),
+                         time, (XtTimerCallbackProc) job->capture, job);
         job->pic_no += job->step;
         /* 
          * update the label if we have time to do this 
          */
         if (time)
-            ChangeLabel(job->pic_no);
+            ChangeLabel (job->pic_no);
     } else {
         /* 
          * clean up 
@@ -1361,17 +1278,17 @@ Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
         /* 
          * may be the last update failed .. so do it here before stop 
          */
-        ChangeLabel(job->pic_no);
+        ChangeLabel (job->pic_no);
         job->state = VC_STOP;
         if (image) {
-            XtFree((char *) image);
+            XtFree ((char *) image);
             image = NULL;
         }
-        XF86DGADirectVideo(dpy, XDefaultScreen(dpy), 0);
+        XF86DGADirectVideo (dpy, XDefaultScreen (dpy), 0);
         /* 
          * set the sensitive stuff for the control panel 
          */
-        CbStop(NULL, NULL, NULL);
+        CbStop (NULL, NULL, NULL);
 
         /* 
          * clean up the save routines in xtoXXX.c 
@@ -1387,4 +1304,4 @@ Boolean TCbCaptureDGA(XtPointer xtp, XtIntervalId id *)
     }
     return TRUE;
 }
-#endif                          /* HasDGA */
+#endif     /* HasDGA */

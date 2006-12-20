@@ -22,43 +22,35 @@
 #ifndef __XVC_CONTROL_H__
 #define __XVC_CONTROL_H__
 
-
-
 #include <X11/Intrinsic.h>
 #include "xv_error_item.h"
-
-
 
 // the following defines the xvc interface for UIs
 // they need to be implemented by any GUI anybody wants to add in the
 // future. Look at gnome_ui.[c|h] for how to do that
 
-Boolean xvc_init_pre(int argc, char **argv);
-Boolean xvc_ui_create();
-Boolean xvc_frame_create();
-Boolean xvc_ui_init(xvErrorListItem * errors);
-int xvc_ui_run(void);
+Boolean xvc_init_pre (int argc, char **argv);
+Boolean xvc_ui_create ();
+Boolean xvc_frame_create ();
+Boolean xvc_ui_init (xvErrorListItem * errors);
+int xvc_ui_run (void);
 
+void xvc_idle_add (void *, void *, Boolean queue_events);
+Boolean xvc_change_filename_display ();
+void xvc_frame_change (int x, int y, int width, int height,
+                       Boolean reposition_control);
 
-void xvc_idle_add(void *, void *, Boolean queue_events);
-Boolean xvc_change_filename_display();
-void xvc_frame_change(int x, int y, int width, int height,
-                      Boolean reposition_control);
+Boolean xvc_capture_stop ();
+void xvc_capture_stop_signal (Boolean wait_for_termination);
+void xvc_capture_start ();
 
-Boolean xvc_capture_stop();
-void xvc_capture_stop_signal(Boolean wait_for_termination);
-void xvc_capture_start();
+Boolean xvc_read_options_file ();
+Boolean xvc_write_options_file ();
+void xvc_check_start_options ();
 
-
-Boolean xvc_read_options_file();
-Boolean xvc_write_options_file();
-void xvc_check_start_options();
-
-
-Boolean xvc_frame_monitor();
+Boolean xvc_frame_monitor ();
 
 // this one is defined in main.c because it is not GUI dependant
-void xvc_signal_handler(int signal);
+void xvc_signal_handler (int signal);
 
-
-#endif                          // __XVC_CONTROL_H__
+#endif     // __XVC_CONTROL_H__

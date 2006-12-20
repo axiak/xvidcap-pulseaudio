@@ -18,26 +18,25 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
 #include <X11/Intrinsic.h>
 #include "frame.h"
-
 
 /* 
  * return a pointer to the current area enclosed by the frame
  */
-XRectangle *xvc_get_capture_area(void)
+XRectangle *
+xvc_get_capture_area (void)
 {
     extern XRectangle xvc_frame_rectangle;
 
     return (&xvc_frame_rectangle);
 }
 
-
 /* 
  * this is a convenience function 
  */
-int xvc_is_frame_locked()
+int
+xvc_is_frame_locked ()
 {
     extern int xvc_frame_lock;
 

@@ -43,21 +43,18 @@
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 #define DEBUGFILE "gnome_warning.c"
 
-
-
-
 /* 
  * global variables
  */
 // static gint xvc_warn_label_width = 0;
 static int called_from_where = 0;   // tells from where the warning
+
 // originates
 // 0 = preferences dialog
 // 1 = capture type toggle
 // 2 = initial validation in main.c
 static guint scheduled_warning_resize_id = 0;
 static xvErrorListItem *warning_elist = NULL;
-
 
 /* const char *XVC_WARN_LABEL_TEXT = "Your input bears a number of
  * inconsistencies! \nPlease review the list below and click \"OK\" to
@@ -68,7 +65,6 @@ GtkWidget *xvc_warn_main_window;
 extern AppData *app;
 extern GtkWidget *xvc_ctrl_m1;
 extern GtkWidget *xvc_pref_main_window;
-
 
 /* 
  * callbacks
@@ -114,8 +110,8 @@ extern GtkWidget *xvc_pref_main_window;
  */
 
 gboolean
-on_xvc_warn_main_window_delete_event(GtkWidget * widget, GdkEvent * event,
-                                     gpointer user_data)
+on_xvc_warn_main_window_delete_event (GtkWidget * widget, GdkEvent * event,
+                                      gpointer user_data)
 {
     if (called_from_where == 2)
         return TRUE;
@@ -123,29 +119,27 @@ on_xvc_warn_main_window_delete_event(GtkWidget * widget, GdkEvent * event,
         return FALSE;
 }
 
-
-void on_xvc_warn_main_window_close(GtkDialog * dialog, gpointer user_data)
+void
+on_xvc_warn_main_window_close (GtkDialog * dialog, gpointer user_data)
 {
     // empty as yet ...
 }
 
-
 void
-on_xvc_warn_main_window_destroy(GtkButton * button, gpointer user_data)
+on_xvc_warn_main_window_destroy (GtkButton * button, gpointer user_data)
 {
     // empty as yet ...
 }
 
-
-static void doHelp()
+static void
+doHelp ()
 {
-    system("yelp ghelp:xvidcap?xvidcap-warning &");
+    system ("yelp ghelp:xvidcap?xvidcap-warning &");
 }
 
-
 void
-on_xvc_warn_main_window_response(GtkDialog * dialog, gint response_id,
-                                 gpointer user_data)
+on_xvc_warn_main_window_response (GtkDialog * dialog, gint response_id,
+                                  gpointer user_data)
 {
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "on_xvc_warn_main_window_response()"
@@ -153,90 +147,90 @@ on_xvc_warn_main_window_response(GtkDialog * dialog, gint response_id,
     GtkWidget *mitem = NULL;
 
 #ifdef DEBUG
-    printf("%s %s: Entering with response_id %i, called from %i\n",
-           DEBUGFILE, DEBUGFUNCTION, response_id, called_from_where);
-#endif                          // DEBUG
+    printf ("%s %s: Entering with response_id %i, called from %i\n",
+            DEBUGFILE, DEBUGFUNCTION, response_id, called_from_where);
+#endif     // DEBUG
 
     switch (response_id) {
     case GTK_RESPONSE_OK:
 
         if (warning_elist != NULL) {
             xvErrorListItem *err;
+
             err = warning_elist;
             for (; err != NULL; err = err->next) {
                 (*err->err->action) (err);
             }
         }
 
-        warning_elist = xvc_errors_delete_list(warning_elist);
+        warning_elist = xvc_errors_delete_list (warning_elist);
 
         switch (called_from_where) {
         case 0:
-            gtk_widget_destroy(xvc_warn_main_window);
-            xvc_pref_do_OK();
+            gtk_widget_destroy (xvc_warn_main_window);
+            xvc_pref_do_OK ();
             break;
 #ifdef USE_FFMPEG
         case 1:
-            gtk_widget_destroy(xvc_warn_main_window);
-            xvc_toggle_cap_type();
+            gtk_widget_destroy (xvc_warn_main_window);
+            xvc_toggle_cap_type ();
             break;
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
         case 2:
-            gtk_widget_destroy(xvc_warn_main_window);
-            xvc_check_start_options();
+            gtk_widget_destroy (xvc_warn_main_window);
+            xvc_check_start_options ();
         }
         break;
     case GTK_RESPONSE_CANCEL:
         switch (called_from_where) {
         case 0:
-            xvc_pref_reset_OK_attempts();
-            gtk_widget_destroy(xvc_warn_main_window);
+            xvc_pref_reset_OK_attempts ();
+            gtk_widget_destroy (xvc_warn_main_window);
             break;
 #ifdef USE_FFMPEG
         case 1:
-            xvc_undo_toggle_cap_type();
-            gtk_widget_destroy(xvc_warn_main_window);
+            xvc_undo_toggle_cap_type ();
+            gtk_widget_destroy (xvc_warn_main_window);
             break;
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
         }
         break;
     case GTK_RESPONSE_HELP:
-        doHelp();
+        doHelp ();
         break;
     case GTK_RESPONSE_REJECT:
-        xml = glade_get_widget_tree(xvc_ctrl_m1);
-        g_assert(xml);
-        mitem = glade_xml_get_widget(xml, "xvc_ctrl_m1_mitem_preferences");
-        g_assert(mitem);
-        gtk_menu_item_activate(GTK_MENU_ITEM(mitem));
+        xml = glade_get_widget_tree (xvc_ctrl_m1);
+        g_assert (xml);
+        mitem = glade_xml_get_widget (xml, "xvc_ctrl_m1_mitem_preferences");
+        g_assert (mitem);
+        gtk_menu_item_activate (GTK_MENU_ITEM (mitem));
 
         xml = NULL;
-        xml = glade_get_widget_tree(xvc_pref_main_window);
-        g_assert(xml);
-        mitem = glade_xml_get_widget(xml, "xvc_pref_cancel_button");
-        g_assert(mitem);
-        gtk_widget_set_sensitive(GTK_WIDGET(mitem), FALSE);
+        xml = glade_get_widget_tree (xvc_pref_main_window);
+        g_assert (xml);
+        mitem = glade_xml_get_widget (xml, "xvc_pref_cancel_button");
+        g_assert (mitem);
+        gtk_widget_set_sensitive (GTK_WIDGET (mitem), FALSE);
 
-        warning_elist = xvc_errors_delete_list(warning_elist);
-        xvc_pref_reset_OK_attempts();
+        warning_elist = xvc_errors_delete_list (warning_elist);
+        xvc_pref_reset_OK_attempts ();
 
-        gtk_widget_destroy(xvc_warn_main_window);
+        gtk_widget_destroy (xvc_warn_main_window);
         break;
     default:
         break;
     }
 
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 }
-
-
 
 /* 
  * this is one ugly hack
  */
-void auto_resize_warning_dialog()
+void
+auto_resize_warning_dialog ()
 {
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "auto_resize_warning_dialog()"
@@ -250,60 +244,56 @@ void auto_resize_warning_dialog()
     GladeXML *xml = NULL;
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
-    g_assert(xvc_warn_main_window);
-    xml = glade_get_widget_tree(GTK_WIDGET(xvc_warn_main_window));
-    vbox = glade_xml_get_widget(xml, "xvc_warn_errors_vbox");
-    g_assert(vbox);
+    g_assert (xvc_warn_main_window);
+    xml = glade_get_widget_tree (GTK_WIDGET (xvc_warn_main_window));
+    vbox = glade_xml_get_widget (xml, "xvc_warn_errors_vbox");
+    g_assert (vbox);
 
-
-    elist = gtk_container_get_children(GTK_CONTAINER(vbox));
-    eitem = g_list_nth_data(elist, 0);
+    elist = gtk_container_get_children (GTK_CONTAINER (vbox));
+    eitem = g_list_nth_data (elist, 0);
     // the hack keeps getting uglier ...
     if (eitem->allocation.height > 1) {
 
-        for (ind = 0; ind < g_list_length(elist); ind++) {
-            eitem = g_list_nth_data(elist, ind);
-            g_assert(eitem);
+        for (ind = 0; ind < g_list_length (elist); ind++) {
+            eitem = g_list_nth_data (elist, ind);
+            g_assert (eitem);
             // printf("eitem height: %i\n", eitem->allocation.height);
             height += (eitem->allocation.height + 1);
         }
 
         set_size = (height > 400 ? 400 : height);
 
-        viewport = glade_xml_get_widget(xml, "xvc_warn_errors_viewport");
-        g_assert(viewport);
+        viewport = glade_xml_get_widget (xml, "xvc_warn_errors_viewport");
+        g_assert (viewport);
 
-        gtk_widget_size_request(viewport, &vp_size);
+        gtk_widget_size_request (viewport, &vp_size);
         orig_vp_size = vp_size.height;
         // printf("gtk2_warning: setting vp height to: %i ... old height:
         // %i \n", set_size, orig_vp_size);
 
-        gtk_widget_set_size_request(viewport, -1, set_size);
-        gtk_widget_size_request(viewport, &vp_size);
+        gtk_widget_set_size_request (viewport, -1, set_size);
+        gtk_widget_size_request (viewport, &vp_size);
         // printf("gtk2_warning: new vp height: %i \n", vp_size.height);
 
-        gtk_window_get_size(GTK_WINDOW(xvc_warn_main_window), &win_width,
-                            &win_height);
+        gtk_window_get_size (GTK_WINDOW (xvc_warn_main_window), &win_width,
+                             &win_height);
         // printf("gtk2_warning: the window height is: %i \n",
         // win_height);
-        gtk_window_resize(GTK_WINDOW(xvc_warn_main_window), win_width,
-                          win_height - (orig_vp_size - vp_size.height) +
-                          1);
+        gtk_window_resize (GTK_WINDOW (xvc_warn_main_window), win_width,
+                           win_height - (orig_vp_size - vp_size.height) + 1);
 
-        g_source_remove(scheduled_warning_resize_id);
+        g_source_remove (scheduled_warning_resize_id);
     }
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 }
 
-
-
-GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
-                                          int from_where)
+GtkWidget *
+xvc_create_warning_with_errors (xvErrorListItem * elist, int from_where)
 {
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_create_warning_with_errors()"
@@ -312,8 +302,8 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
     int count_fatal_messages = 0;
 
 #ifdef DEBUG
-    printf("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     // save list for cleanup
     warning_elist = elist;
@@ -323,40 +313,39 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
     called_from_where = from_where;
 
     // load the interface
-    xml = glade_xml_new(GLADE_FILE, "xvc_warn_main_window", NULL);
+    xml = glade_xml_new (GLADE_FILE, "xvc_warn_main_window", NULL);
 
-    g_assert(xml);
+    g_assert (xml);
 
     // connect the signals in the interface 
-    glade_xml_signal_autoconnect(xml);
+    glade_xml_signal_autoconnect (xml);
     // store the toplevel widget for further reference
-    xvc_warn_main_window =
-        glade_xml_get_widget(xml, "xvc_warn_main_window");
-    g_assert(xvc_warn_main_window);
+    xvc_warn_main_window = glade_xml_get_widget (xml, "xvc_warn_main_window");
+    g_assert (xvc_warn_main_window);
 
     // set the error list
     if (elist != NULL) {
         xvErrorListItem *err = NULL;
 
-        vbox = glade_xml_get_widget(xml, "xvc_warn_errors_vbox");
-        g_assert(vbox);
+        vbox = glade_xml_get_widget (xml, "xvc_warn_errors_vbox");
+        g_assert (vbox);
 
         err = elist;
         for (; err != NULL; err = err->next) {
             GtkWidget *eitem;
-            if (err->err->type != XV_ERR_INFO
-                || (app->flags & FLG_RUN_VERBOSE)) {
+
+            if (err->err->type != XV_ERR_INFO || (app->flags & FLG_RUN_VERBOSE)) {
                 if (err->err->type == XV_ERR_FATAL)
                     count_fatal_messages++;
-                eitem = xv_error_item_new_with_error(err->err);
-                gtk_box_pack_start(GTK_BOX(vbox), eitem, FALSE, FALSE, 0);
-                gtk_widget_show(eitem);
+                eitem = xv_error_item_new_with_error (err->err);
+                gtk_box_pack_start (GTK_BOX (vbox), eitem, FALSE, FALSE, 0);
+                gtk_widget_show (eitem);
             }
         }
     } else {
-        fprintf(stderr,
-                "%s %s: displaying a warning with a NULL error list\n",
-                DEBUGFILE, DEBUGFUNCTION);
+        fprintf (stderr,
+                 "%s %s: displaying a warning with a NULL error list\n",
+                 DEBUGFILE, DEBUGFUNCTION);
     }
 
     // FIXME: depending on where we're called from make different buttons
@@ -365,44 +354,44 @@ GtkWidget *xvc_create_warning_with_errors(xvErrorListItem * elist,
     switch (called_from_where) {
     case 0:
         w = NULL;
-        w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
-        g_assert(w);
-        gtk_widget_hide(w);
+        w = glade_xml_get_widget (xml, "xvc_warn_pref_button");
+        g_assert (w);
+        gtk_widget_hide (w);
 
         w = NULL;
-        w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
-        g_assert(w);
-        gtk_widget_show(w);
+        w = glade_xml_get_widget (xml, "xvc_warn_cancel_button");
+        g_assert (w);
+        gtk_widget_show (w);
         break;
     case 1:
     case 2:
         w = NULL;
-        w = glade_xml_get_widget(xml, "xvc_warn_pref_button");
-        g_assert(w);
-        gtk_widget_show(w);
+        w = glade_xml_get_widget (xml, "xvc_warn_pref_button");
+        g_assert (w);
+        gtk_widget_show (w);
 
         w = NULL;
-        w = glade_xml_get_widget(xml, "xvc_warn_cancel_button");
-        g_assert(w);
-        gtk_widget_hide(w);
+        w = glade_xml_get_widget (xml, "xvc_warn_cancel_button");
+        g_assert (w);
+        gtk_widget_hide (w);
         break;
     default:
         break;
     }
 #ifdef DEBUG
-    printf("%s %s: called from where %i\n", DEBUGFILE, DEBUGFUNCTION,
-           called_from_where);
-#endif                          // DEBUG
+    printf ("%s %s: called from where %i\n", DEBUGFILE, DEBUGFUNCTION,
+            called_from_where);
+#endif     // DEBUG
 
     // auto-resize the dialog ... this is one ugly hack but the only way
     // to do it
-    scheduled_warning_resize_id = g_timeout_add((guint32) 5, (GtkFunction)
-                                                auto_resize_warning_dialog,
-                                                NULL);
+    scheduled_warning_resize_id = g_timeout_add ((guint32) 5, (GtkFunction)
+                                                 auto_resize_warning_dialog,
+                                                 NULL);
 
 #ifdef DEBUG
-    printf("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
 
     return xvc_warn_main_window;
 }

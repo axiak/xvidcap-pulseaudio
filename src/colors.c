@@ -35,7 +35,7 @@
  * ..
  */
 int
-xvc_get_colors(Display * dpy, XWindowAttributes * winfo, XColor ** colors)
+xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors)
 {
 # define lowbit(x) ((x) & (~(x) + 1))
     int ncolors, i;
@@ -44,21 +44,22 @@ xvc_get_colors(Display * dpy, XWindowAttributes * winfo, XColor ** colors)
     visual = winfo->visual;
     ncolors = visual->map_entries;
     if (*colors)
-        free(*colors);
-    *colors = (XColor *) malloc(sizeof(XColor) * ncolors);
+        free (*colors);
+    *colors = (XColor *) malloc (sizeof (XColor) * ncolors);
     if (!*colors) {
-        perror("GetColors()");
+        perror ("GetColors()");
         return (0);
     }
     if ((visual->class == DirectColor) || (visual->class == TrueColor)) {
         Pixel red, green, blue, red0, green0, blue0;
+
 #ifdef DEBUG
-        printf("GetColors() Direct- or TrueColor (%d)\n", ncolors);
+        printf ("GetColors() Direct- or TrueColor (%d)\n", ncolors);
 #endif
         red = green = blue = 0;
-        red0 = lowbit(visual->red_mask);
-        green0 = lowbit(visual->green_mask);
-        blue0 = lowbit(visual->blue_mask);
+        red0 = lowbit (visual->red_mask);
+        green0 = lowbit (visual->green_mask);
+        blue0 = lowbit (visual->blue_mask);
         for (i = 0; i < ncolors; i++) {
             (*colors)[i].pixel = red | green | blue;
             (*colors)[i].pad = 0;
@@ -78,12 +79,12 @@ xvc_get_colors(Display * dpy, XWindowAttributes * winfo, XColor ** colors)
             (*colors)[i].pad = 0;
         }
     }
-    XQueryColors(dpy, winfo->colormap, *colors, ncolors);
+    XQueryColors (dpy, winfo->colormap, *colors, ncolors);
 #ifdef DEBUG2
     for (i = 0; i < ncolors; i++) {
-        printf("color[%d] pixel:%ld red:%d green:%d blue:%d\n", i,
-               (*colors)[i].pixel,
-               (*colors)[i].red, (*colors)[i].green, (*colors)[i].blue);
+        printf ("color[%d] pixel:%ld red:%d green:%d blue:%d\n", i,
+                (*colors)[i].pixel,
+                (*colors)[i].red, (*colors)[i].green, (*colors)[i].blue);
     }
 #endif
     return (ncolors);
@@ -95,9 +96,10 @@ xvc_get_colors(Display * dpy, XWindowAttributes * winfo, XColor ** colors)
  * field
  */
 void
-xvc_get_color_info(XImage * image, ColorInfo * ci /* return struct */ )
+xvc_get_color_info (XImage * image, ColorInfo * ci /* return struct */ )
 {
     unsigned long red_mask, green_mask, blue_mask, alpha_mask;
+
     // the shifts are unsigned longs as well
 
     if (!ci)
@@ -156,10 +158,10 @@ xvc_get_color_info(XImage * image, ColorInfo * ci /* return struct */ )
      * over all max values 
      */
     // whatever they are good for
-    ci->max_val = max(ci->red_max_val, ci->green_max_val);
-    ci->max_val = max(ci->blue_max_val, ci->max_val);
-    ci->bit_depth = max(ci->red_bit_depth, ci->green_bit_depth);
-    ci->bit_depth = max(ci->blue_bit_depth, ci->bit_depth);
+    ci->max_val = max (ci->red_max_val, ci->green_max_val);
+    ci->max_val = max (ci->blue_max_val, ci->max_val);
+    ci->bit_depth = max (ci->red_bit_depth, ci->green_bit_depth);
+    ci->bit_depth = max (ci->blue_bit_depth, ci->bit_depth);
     if (image->bits_per_pixel > image->depth) {
         /* 
          * alpha? 
@@ -182,20 +184,20 @@ xvc_get_color_info(XImage * image, ColorInfo * ci /* return struct */ )
         ci->alpha_max_val = (1 << ci->alpha_bit_depth) - 1;
     }
 #ifdef DEBUG2
-    printf("rgb mask %08x bit_depth %lu max_val %lu\n",
-           (uint) (image->red_mask | image->green_mask | image->blue_mask),
-           ci->bit_depth, ci->max_val);
-    printf("red mask %08x bit_depth %lu shift %lu max_val %lu\n",
-           (uint) (image->red_mask), ci->red_bit_depth, ci->red_shift,
-           ci->red_max_val);
-    printf("green mask %08x bit_depth %lu shift %lu max_val %lu\n",
-           (uint) (image->green_mask), ci->green_bit_depth,
-           ci->green_shift, ci->green_max_val);
-    printf("blue mask %08x bit_depth %lu shift %lu max_val %lu\n",
-           (uint) (image->blue_mask), ci->blue_bit_depth, ci->blue_shift,
-           ci->blue_max_val);
-    printf("alpha mask %08x bit_depth %lu shift %lu max_val %lu\n",
-           ci->alpha_mask, ci->alpha_bit_depth, ci->alpha_shift,
-           ci->alpha_max_val);
+    printf ("rgb mask %08x bit_depth %lu max_val %lu\n",
+            (uint) (image->red_mask | image->green_mask | image->blue_mask),
+            ci->bit_depth, ci->max_val);
+    printf ("red mask %08x bit_depth %lu shift %lu max_val %lu\n",
+            (uint) (image->red_mask), ci->red_bit_depth, ci->red_shift,
+            ci->red_max_val);
+    printf ("green mask %08x bit_depth %lu shift %lu max_val %lu\n",
+            (uint) (image->green_mask), ci->green_bit_depth,
+            ci->green_shift, ci->green_max_val);
+    printf ("blue mask %08x bit_depth %lu shift %lu max_val %lu\n",
+            (uint) (image->blue_mask), ci->blue_bit_depth, ci->blue_shift,
+            ci->blue_max_val);
+    printf ("alpha mask %08x bit_depth %lu shift %lu max_val %lu\n",
+            ci->alpha_mask, ci->alpha_bit_depth, ci->alpha_shift,
+            ci->alpha_max_val);
 #endif
 }

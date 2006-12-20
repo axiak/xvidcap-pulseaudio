@@ -30,35 +30,35 @@
 # include <config.h>
 #endif
 
-
-typedef struct _Job {
-    int fps;                    /* frames per second */
-    char *file;                 /* filename */
-    int flags;                  /* different flags .. see app_data.h */
-    int state;                  /* state flags */
-    int start_no;               /* start number */
-    int pic_no;                 /* current pic number */
-    int movie_no;               /* current movie number */
-    int step;                   /* number to use for increasing pic number 
-                                 */
-    int time_per_frame;         /* time per frame in milli secs */
-    int max_frames;             /* max number of frames to record */
+typedef struct _Job
+{
+    int fps;    /* frames per second */
+    char *file; /* filename */
+    int flags;  /* different flags .. see app_data.h */
+    int state;  /* state flags */
+    int start_no;   /* start number */
+    int pic_no; /* current pic number */
+    int movie_no;   /* current movie number */
+    int step;   /* number to use for increasing pic number 
+                 */
+    int time_per_frame; /* time per frame in milli secs */
+    int max_frames; /* max number of frames to record */
     int max_time;
-    int quality;                /* needed for jpeg */
+    int quality;    /* needed for jpeg */
     char open_flags[8];
-    int bpp;                    /* for video4linux */
-    int vid_dev;                /* file descriptor for video device */
+    int bpp;    /* for video4linux */
+    int vid_dev;    /* file descriptor for video device */
 #ifdef HAVE_FFMPEG_AUDIO
-    int snd_dev;                /* file descriptor for sound device */
+    int snd_dev;    /* file descriptor for sound device */
     int snd_rate;
     int snd_smplsize;
     int snd_channels;
-#endif                          // HAVE_FFMPEG_AUDIO
-    int mouseWanted;            /* 0 none , 1 white , 2 black */
-    char *video_dev;            /* video device */
+#endif     // HAVE_FFMPEG_AUDIO
+    int mouseWanted;    /* 0 none , 1 white , 2 black */
+    char *video_dev;    /* video device */
 #ifdef HAVE_FFMPEG_AUDIO
-    char *snd_device;           /* sound device */
-#endif                          // HAVE_FFMPEG_AUDIO
+    char *snd_device;   /* sound device */
+#endif     // HAVE_FFMPEG_AUDIO
 
     /* 
      * some function pointers 
@@ -83,6 +83,7 @@ typedef struct _Job {
     void *color_table;
     XColor *colors;
     XWindowAttributes win_attr;
+    Display *dpy;
     XRectangle *area;
     int rescale;
 } Job;
@@ -98,21 +99,20 @@ typedef struct _Job {
 #define VC_READY 32
 #define VC_CONTINUE 64
 
+Job *xvc_job_new ();
+void xvc_job_free ();
+void xvc_job_set_from_app_data (AppData * app);
+Job *xvc_job_ptr (void);
+void xvc_job_dump ();
+void xvc_job_validate ();
+void xvc_job_set_save_function (Visual * vis, int type);
+void xvc_job_set_colors ();
 
-Job *xvc_job_new();
-void xvc_job_set_from_app_data(AppData * app, Display * disp,
-                               XWindowAttributes wa);
-Job *xvc_job_ptr(void);
-void xvc_job_dump();
-void xvc_job_validate();
-void xvc_job_set_save_function(Visual * vis, int type);
+void job_set_state (int state);
+void job_merge_state (int state);
+void job_remove_state (int state);
+void job_merge_and_remove_state (int merge_state, int remove_state);
+void job_keep_state (int state);
+void job_keep_and_merge_state (int merge_state, int remove_state);
 
-void job_set_state(int state);
-void job_merge_state(int state);
-void job_remove_state(int state);
-void job_merge_and_remove_state(int merge_state, int remove_state);
-void job_keep_state(int state);
-void job_keep_and_merge_state(int merge_state, int remove_state);
-
-
-#endif                          // __JOB_H__
+#endif     // __JOB_H__

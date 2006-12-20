@@ -46,7 +46,6 @@ xvCodec tCodecs[NUMCODECS];
 xvFFormat tFFormats[NUMCAPS];
 xvAuCodec tAuCodecs[NUMAUCODECS];
 
-
 const xvCodec none = {
     "NONE",
     N_("NONE"),
@@ -123,7 +122,7 @@ const xvCodec mjpeg = {
     CODEC_ID_MJPEG,
     300000,
     24,
-    "7.5-30",                   // this is actually MPEG4 ... no idea if
+    "7.5-30",                          // this is actually MPEG4 ... no idea if
     // this is the same here
     NULL
 };
@@ -146,7 +145,7 @@ const xvCodec ms_div2 = {
     CODEC_ID_MSMPEG4V2,
     300000,
     24,
-    "7.5-30",                   // this is actually MPEG4 ... no idea if
+    "7.5-30",                          // this is actually MPEG4 ... no idea if
     // this is the same here
     NULL
 };
@@ -158,7 +157,7 @@ const xvCodec ms_div3 = {
     CODEC_ID_MSMPEG4V3,
     300000,
     24,
-    "7.5-30",                   // this is actually MPEG4 ... no idea if
+    "7.5-30",                          // this is actually MPEG4 ... no idea if
     // this is the same here
     NULL
 };
@@ -170,7 +169,7 @@ const xvCodec flv1 = {
     CODEC_ID_FLV1,
     300000,
     24,
-    "7.5-30",                   // this is actually MPEG4 ... no idea if
+    "7.5-30",                          // this is actually MPEG4 ... no idea if
     // this is the same here
     NULL
 };
@@ -208,12 +207,11 @@ const xvCodec svq1 = {
     CODEC_ID_SVQ1,
     300000,
     24,
-    "7.5-30",                   // this is actually MPEG4 ... no idea if
+    "7.5-30",                          // this is actually MPEG4 ... no idea if
     // this is the same here
     NULL
 };
-#endif                          // USE_FFMPEG
-
+#endif     // USE_FFMPEG
 
 // audio codecs
 
@@ -240,7 +238,7 @@ const xvAuCodec mp3 = {
     AU_CODEC_MP3,
     CODEC_ID_MP3
 };
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
 
 const xvAuCodec pcm16 = {
     "PCM16",
@@ -248,9 +246,8 @@ const xvAuCodec pcm16 = {
     AU_CODEC_PCM16,
     CODEC_ID_PCM_S16LE
 };
-#endif                          // HAVE_FFMPEG_AUDIO
-#endif                          // USE_FFMPEG
-
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
 
 // file formats
 
@@ -334,11 +331,11 @@ const xvFFormat avi = {
     "MP2|MP3|PCM16"
 #else
     "MP2|PCM16"
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat divx = {
@@ -354,11 +351,11 @@ const xvFFormat divx = {
     "MP2|MP3|PCM16"
 #else
     "MP2|PCM16"
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat asf = {
@@ -374,11 +371,11 @@ const xvFFormat asf = {
     "MP2|MP3"
 #else
     "MP2"
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat ff_flv1 = {
@@ -395,11 +392,11 @@ const xvFFormat ff_flv1 = {
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat swf = {
@@ -438,7 +435,7 @@ const xvFFormat dv_format = {
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat mpeg = {
@@ -454,7 +451,7 @@ const xvFFormat mpeg = {
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat svcd = {
@@ -470,7 +467,7 @@ const xvFFormat svcd = {
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
 
 const xvFFormat mov = {
@@ -487,19 +484,19 @@ const xvFFormat mov = {
 #else
     AU_CODEC_PCM16,
     "MP2|PCM16"
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
 #else
     AU_CODEC_NONE,
     NULL
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
 };
-#endif                          // USE_FFMPEG
-
+#endif     // USE_FFMPEG
 
 /* 
  * must be called by main() to initialize data structures
  */
-void xvc_codecs_init()
+void
+xvc_codecs_init ()
 {
     int i = 0;
 
@@ -520,7 +517,7 @@ void xvc_codecs_init()
     tCodecs[i++] = dv;
     tCodecs[i++] = mpeg2;
     tCodecs[i++] = svq1;
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
 
     // dto.
     // the target item of the array will be found by CAP_XXX - CAP_FFM
@@ -542,7 +539,7 @@ void xvc_codecs_init()
     tFFormats[i++] = mpeg;
     tFFormats[i++] = svcd;
     tFFormats[i++] = mov;
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
 
     // audio codecs
     i = 0;
@@ -553,17 +550,18 @@ void xvc_codecs_init()
 #ifdef HAVE_LIBMP3LAME
 
     tAuCodecs[i++] = mp3;
-#endif                          // HAVE_LIBMP3LAME
+#endif     // HAVE_LIBMP3LAME
     tAuCodecs[i++] = pcm16;
-#endif                          // HAVE_FFMPEG_AUDIO
-#endif                          // USE_FFMPEG
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
 }
 
 /* 
  * find ffmpeg codec id from xvidcap's
  * 0 is a valid id ... therefore we return -1 on failure
  */
-int xvc_trans_codec(int xv_codec)
+int
+xvc_trans_codec (int xv_codec)
 {
     int i, ret = -1;
 
@@ -577,24 +575,25 @@ int xvc_trans_codec(int xv_codec)
 /* 
  * check if string is element in list (e.g. allowed_vid_codecs)
  */
-int xvc_is_element(char *xvList, char *xvElement)
+int
+xvc_is_element (char *xvList, char *xvElement)
 {
     char llist[512];
     char lelement[512];
     char *found = NULL;
     int ret, y;
 
-    sprintf(llist, "|%s|", xvList);
-    for (y = 0; y < strlen(llist); y++) {
-        llist[y] = toupper(llist[y]);
+    sprintf (llist, "|%s|", xvList);
+    for (y = 0; y < strlen (llist); y++) {
+        llist[y] = toupper (llist[y]);
     }
 
-    sprintf(lelement, "|%s|", xvElement);
-    for (y = 0; y < strlen(lelement); y++) {
-        lelement[y] = toupper(lelement[y]);
+    sprintf (lelement, "|%s|", xvElement);
+    for (y = 0; y < strlen (lelement); y++) {
+        lelement[y] = toupper (lelement[y]);
     }
 
-    found = strstr(llist, lelement);
+    found = strstr (llist, lelement);
     if (found != NULL)
         ret = 1;
     else
@@ -605,17 +604,18 @@ int xvc_is_element(char *xvList, char *xvElement)
 /* 
  * enumerate list (e.g. allowed_vid_codecs)
  */
-char *xvc_next_element(char *list)
+char *
+xvc_next_element (char *list)
 {
     static char *p_list;
     static char llist[512];
     char *ret;
 
     if (list != NULL) {
-        sprintf(llist, "|%s|", list);
-        ret = strtok_r(llist, "|", &p_list);
+        sprintf (llist, "|%s|", list);
+        ret = strtok_r (llist, "|", &p_list);
     } else {
-        ret = strtok_r(NULL, "|", &p_list);
+        ret = strtok_r (NULL, "|", &p_list);
     }
     return ret;
 }
@@ -624,12 +624,13 @@ char *xvc_next_element(char *list)
  * find target based on filename
  * returns CAP_* or 0 if none found
  */
-int xvc_codec_get_target_from_filename(char *file)
+int
+xvc_codec_get_target_from_filename (char *file)
 {
     char *ext = NULL, *element = NULL;
     int ret = 0, n;
 
-    ext = rindex(file, '.');
+    ext = rindex (file, '.');
     if (ext == NULL) {
         return ret;
     }
@@ -637,14 +638,14 @@ int xvc_codec_get_target_from_filename(char *file)
 
     for (n = CAP_NONE; n < NUMCAPS; n++) {
         if (tFFormats[n].extensions) {
-            element = xvc_next_element(tFFormats[n].extensions);
+            element = xvc_next_element (tFFormats[n].extensions);
             while (element != NULL) {
-                if (strcasecmp(ext, element) == 0) {
+                if (strcasecmp (ext, element) == 0) {
                     // then we have found the right extension in target n
                     ret = n;
                     return ret;
                 }
-                element = xvc_next_element(NULL);
+                element = xvc_next_element (NULL);
             }
         }
     }
@@ -656,44 +657,47 @@ int xvc_codec_get_target_from_filename(char *file)
  * check if fps rate is valid for given codec
  * returns 0 for false or 1 for true
  */
-int xvc_codec_is_valid_fps(int fps, int codec)
+int
+xvc_codec_is_valid_fps (int fps, int codec)
 {
 #define DEBUGFUNCTION "xvc_codec_is_valid_fps()"
     char *element = NULL;
 
     if (tCodecs[codec].allowed_fps) {
-        element = xvc_next_element(tCodecs[codec].allowed_fps);
+        element = xvc_next_element (tCodecs[codec].allowed_fps);
         while (element) {
-            int f = xvc_get_int_from_float_string(element);
+            int f = xvc_get_int_from_float_string (element);
+
             if (f < 0)
-                fprintf(stderr,
-                        "%s %s: Non-fatal error in the definition of valid fps for codec %s\n",
-                        DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
+                fprintf (stderr,
+                         "%s %s: Non-fatal error in the definition of valid fps for codec %s\n",
+                         DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
             else if (f == fps)
                 return 1;
-            element = xvc_next_element(NULL);
+            element = xvc_next_element (NULL);
         }
     }
 
     if (tCodecs[codec].allowed_fps_ranges) {
-        element = xvc_next_element(tCodecs[codec].allowed_fps_ranges);
+        element = xvc_next_element (tCodecs[codec].allowed_fps_ranges);
         while (element) {
             int start = 0, end = 0;
-            char *start_str = strdup(element);
-            char *ptr = index(start_str, '-');
+            char *start_str = strdup (element);
+            char *ptr = index (start_str, '-');
+
             *ptr = '\0';
             ptr++;
 
-            start = xvc_get_int_from_float_string(start_str);
-            end = xvc_get_int_from_float_string(ptr);
+            start = xvc_get_int_from_float_string (start_str);
+            end = xvc_get_int_from_float_string (ptr);
 
             if (start < 0 || end < 0) {
-                fprintf(stderr,
-                        "%s %s: Non-fatal error in the definition of valid fps ranges for codec %s\n",
-                        DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
+                fprintf (stderr,
+                         "%s %s: Non-fatal error in the definition of valid fps ranges for codec %s\n",
+                         DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
             } else if (start <= fps && fps <= end)
                 return 1;
-            element = xvc_next_element(NULL);
+            element = xvc_next_element (NULL);
         }
     }
     // FIXME: what kind of error do I want to report with the return code?
@@ -701,11 +705,11 @@ int xvc_codec_is_valid_fps(int fps, int codec)
 #undef DEBUGFUNCTION
 }
 
-
 /* 
  * count elements in a list (e.g. allowed_vid_codecs)
  */
-int xvc_num_elements(char *list)
+int
+xvc_num_elements (char *list)
 {
     static char *p_list;
     static char llist[512];
@@ -713,11 +717,11 @@ int xvc_num_elements(char *list)
     int elem_count = 0;
 
     if (list != NULL) {
-        sprintf(llist, "|%s|", list);
-        elem = strtok_r(llist, "|", &p_list);
+        sprintf (llist, "|%s|", list);
+        elem = strtok_r (llist, "|", &p_list);
         do {
             elem_count++;
-            elem = strtok_r(NULL, "|", &p_list);
+            elem = strtok_r (NULL, "|", &p_list);
         }
         while (elem != NULL);
     }

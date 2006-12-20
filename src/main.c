@@ -42,10 +42,12 @@
 #include <stdio.h>
 #include <libintl.h>
 #include <ctype.h>
+#include <pthread.h>
+#include <signal.h>
 
 #ifdef USE_FFMPEG
 #include <ffmpeg/avcodec.h>
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
 
 #include "control.h"
 #include "codecs.h"
@@ -64,17 +66,15 @@ extern xvCodec tCodecs[NUMCODECS];
 extern xvFFormat tFFormats[NUMCAPS];
 extern xvAuCodec tAuCodecs[NUMAUCODECS];
 
-
 /* 
  * STATIC VARIABLES
  */
 
-
-
 /* 
  * HELPER FUNCTIONS 
  */
-void usage(char *prog)
+void
+usage (char *prog)
 {
     int n, m;
     char *element;
@@ -83,93 +83,105 @@ void usage(char *prog)
         (_
          ("Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
          prog, VERSION);
-    printf(_("[--fps #.#] frames per second (float)\n"));
-    printf(_("[--verbose #] verbose level, '-v' is --verbose 1\n"));
-    printf(_("[--time #.#] time to record in seconds (float)\n"));
-    printf(_("[--frames #] frames to record, don't use it with --time\n"));
-    printf
-        (_
-         ("[--continue [yes|no]] autocontinue after maximum frames/time\n"));
-    printf(_
-           ("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"));
-    printf(_
-           ("[--rescale #] relative output size in percent compared to input (1-100)\n"));
-    printf(_("[--quality #] recording quality (1-100)\n"));
-    printf(_("[--start_no #] start number for the file names\n"));
+    printf (_("[--fps #.#] frames per second (float)\n"));
+    printf (_("[--verbose #] verbose level, '-v' is --verbose 1\n"));
+    printf (_("[--time #.#] time to record in seconds (float)\n"));
+    printf (_("[--frames #] frames to record, don't use it with --time\n"));
+    printf (_
+            ("[--continue [yes|no]] autocontinue after maximum frames/time\n"));
+    printf (_
+            ("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"));
+    printf (_
+            ("[--rescale #] relative output size in percent compared to input (1-100)\n"));
+    printf (_("[--quality #] recording quality (1-100)\n"));
+    printf (_("[--start_no #] start number for the file names\n"));
 #ifdef HAVE_SHMAT
-    printf(_("[--source <src>] select input source: x11, shm\n"));
-#endif                          // HAVE_SHMAT
-    printf(_("[--file <file>] file pattern, e.g. out%%03d.xwd\n"));
-    printf(_("[--gui [yes|no]] turn on/off gui\n"));
+    printf (_("[--source <src>] select input source: x11, shm\n"));
+#endif     // HAVE_SHMAT
+    printf (_("[--file <file>] file pattern, e.g. out%%03d.xwd\n"));
+    printf (_("[--gui [yes|no]] turn on/off gui\n"));
 #ifdef USE_FFMPEG
-    printf
-        (_
-         ("[--sf|--mf] request single-frame or multi-frame capture mode\n"));
-#endif                          // USE_FFMPEG
+    printf (_
+            ("[--sf|--mf] request single-frame or multi-frame capture mode\n"));
+#endif     // USE_FFMPEG
     printf
         (_
          ("[--auto] cause auto-detection of output format, video-, and audio codec\n"));
-    printf(_
-           ("[--codec <codec>] specify codec to use for multi-frame capture\n"));
-    printf(_
-           ("[--codec-help] list available codecs for multi-frame capture\n"));
-    printf(_
-           ("[--format <format>] specify file format to override the extension in the filename\n"));
-    printf(_("[--format-help] list available file formats\n"));
+    printf (_
+            ("[--codec <codec>] specify codec to use for multi-frame capture\n"));
+    printf (_
+            ("[--codec-help] list available codecs for multi-frame capture\n"));
+    printf (_
+            ("[--format <format>] specify file format to override the extension in the filename\n"));
+    printf (_("[--format-help] list available file formats\n"));
 #ifdef HAVE_FFMPEG_AUDIO
     printf
         (_
          ("[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"));
-    printf(_
-           ("[--aucodec-help] list available audio codecs for multi-frame capture\n"));
-    printf(_("[--audio [yes|no]] turn on/off audio capture\n"));
+    printf (_
+            ("[--aucodec-help] list available audio codecs for multi-frame capture\n"));
+    printf (_("[--audio [yes|no]] turn on/off audio capture\n"));
     printf
         (_
          ("[--audio_in <src>] specify audio input device or '-' for pipe input\n"));
-    printf(_("[--audio_rate #] sample rate for audio capture\n"));
-    printf(_("[--audio_bits #] bit rate for audio capture\n"));
-    printf(_("[--audio_channels #] number of audio channels\n"));
-#endif                          // HAVE_FFMPEG_AUDIO
+    printf (_("[--audio_rate #] sample rate for audio capture\n"));
+    printf (_("[--audio_bits #] bit rate for audio capture\n"));
+    printf (_("[--audio_channels #] number of audio channels\n"));
+#endif     // HAVE_FFMPEG_AUDIO
 
-    printf(_("Supported output formats:\n"));
+    printf (_("Supported output formats:\n"));
     for (n = CAP_NONE; n < NUMCAPS; n++) {
         if (tFFormats[n].extensions) {
-            printf(" %s", _(tFFormats[n].longname));
-            for (m = strlen(_(tFFormats[n].longname)); m < 40; m++)
-                printf(" ");
-            printf("(");
-            element = xvc_next_element(tFFormats[n].extensions);
+            printf (" %s", _(tFFormats[n].longname));
+            for (m = strlen (_(tFFormats[n].longname)); m < 40; m++)
+                printf (" ");
+            printf ("(");
+            element = xvc_next_element (tFFormats[n].extensions);
             while (element != NULL) {
-                printf(".%s", element);
-                element = xvc_next_element(NULL);
+                printf (".%s", element);
+                element = xvc_next_element (NULL);
                 if (element != NULL)
-                    printf(", ");
+                    printf (", ");
             }
-            printf(")\n");
+            printf (")\n");
         }
     }
-    exit(1);
+    exit (1);
 }
 
-
-void xvc_init(CapTypeOptions * ctos, int argc, char *argv[])
+void
+xvc_init (CapTypeOptions * ctos, int argc, char *argv[])
 {
-    xvc_codecs_init();
-    xvc_errors_init();
+    xvc_codecs_init ();
+    xvc_errors_init ();
 
     // 
     // some variable initialization
     // 
     app = &sapp;
-    xvc_app_data_init(app);
-    xvc_app_data_set_defaults(app);
-    xvc_cap_type_options_init(ctos);
+    xvc_app_data_init (app);
+    xvc_app_data_set_defaults (app);
+    xvc_cap_type_options_init (ctos);
 }
 
+void
+xvc_cleanup ()
+{
+    Job *job = xvc_job_ptr ();
+
+    if (job)
+        xvc_job_free ();
+
+    xvc_frame_drop_capture_display ();
+
+#ifdef USE_FFMPEG
+    av_free_static ();
+#endif
+}
 
 void
-parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
-                  char *_argv[])
+parse_cli_options (CapTypeOptions * tmp_capture_options, int argc,
+                   char *_argv[])
 {
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "parse_cli_options()"
@@ -205,53 +217,54 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
     };
     int opt_index = 0, c;
 
-    while ((c = getopt_long(argc, _argv, "v", options, &opt_index)) != -1) {
+    while ((c = getopt_long (argc, _argv, "v", options, &opt_index)) != -1) {
         switch (c) {
-        case 0:                // it's a long option
+        case 0:                       // it's a long option
             switch (opt_index) {
-            case 0:            // fps
+            case 0:                   // fps
                 tmp_capture_options->fps =
-                    xvc_get_int_from_float_string(optarg);
+                    xvc_get_int_from_float_string (optarg);
                 break;
-            case 1:            // file
-                tmp_capture_options->file = strdup(optarg);
+            case 1:                   // file
+                tmp_capture_options->file = strdup (optarg);
                 break;
             case 2:
-                app->verbose = atoi(optarg);
+                app->verbose = atoi (optarg);
                 break;
-            case 3:            // max_time
-                tmp_capture_options->time = atoi(optarg);
+            case 3:                   // max_time
+                tmp_capture_options->time = atoi (optarg);
                 break;
-            case 4:            // max_frames
-                tmp_capture_options->frames = atoi(optarg);
+            case 4:                   // max_frames
+                tmp_capture_options->frames = atoi (optarg);
                 break;
-            case 5:            // cap_geometry
-                sscanf(optarg, "%dx%d+%d+%d", &(app->cap_width),
-                       &(app->cap_height), &(app->cap_pos_x),
-                       &(app->cap_pos_y));
+            case 5:                   // cap_geometry
+                sscanf (optarg, "%dx%d+%d+%d", &(app->cap_width),
+                        &(app->cap_height), &(app->cap_pos_x),
+                        &(app->cap_pos_y));
                 break;
-            case 6:            // start_no
-                tmp_capture_options->start_no = atoi(optarg);
+            case 6:                   // start_no
+                tmp_capture_options->start_no = atoi (optarg);
                 break;
-            case 7:            // quality
-                tmp_capture_options->quality = atoi(optarg);
+            case 7:                   // quality
+                tmp_capture_options->quality = atoi (optarg);
                 break;
-            case 8:            // source
+            case 8:                   // source
 #ifdef HAVE_SHMAT
-                app->source = strdup(optarg);
+                app->source = strdup (optarg);
 #else
-                fprintf(stderr,
-                        _
-                        ("Only 'x11' is supported as a capture source with this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_SHMAT
+                fprintf (stderr,
+                         _
+                         ("Only 'x11' is supported as a capture source with this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_SHMAT
                 break;
-            case 9:            // step_no
-                tmp_capture_options->step = atoi(optarg);
+            case 9:                   // step_no
+                tmp_capture_options->step = atoi (optarg);
                 break;
-            case 10:           // gui
+            case 10:                  // gui
                 {
                     char *tmp;
+
                     if (!optarg) {
                         if (optind < argc) {
                             tmp =
@@ -261,19 +274,20 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                             tmp = "yes";
                         }
                     } else {
-                        tmp = strdup(optarg);
+                        tmp = strdup (optarg);
                     }
-                    if (strstr(tmp, "no") != NULL) {
+                    if (strstr (tmp, "no") != NULL) {
                         app->flags |= FLG_NOGUI;
                     } else {
                         app->flags &= ~FLG_NOGUI;
                     }
                 }
                 break;
-            case 11:           // audio
+            case 11:                  // audio
 #ifdef HAVE_FFMPEG_AUDIO
                 {
                     char *tmp;
+
                     if (!optarg) {
                         if (optind < argc) {
                             tmp =
@@ -283,63 +297,64 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                             tmp = "yes";
                         }
                     } else {
-                        tmp = strdup(optarg);
+                        tmp = strdup (optarg);
                     }
-                    if (strstr(tmp, "no") != NULL) {
+                    if (strstr (tmp, "no") != NULL) {
                         tmp_capture_options->audioWanted = 0;
                     } else {
                         tmp_capture_options->audioWanted = 1;
                     }
                 }
 #else
-                fprintf(stderr,
-                        _("Audio support not present in this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_FFMPEG_AUDIO
+                fprintf (stderr,
+                         _("Audio support not present in this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 12:           // audio_in
+            case 12:                  // audio_in
 #ifdef HAVE_FFMPEG_AUDIO
                 tmp_capture_options->audioWanted = 1;
-                app->snddev = strdup(optarg);
+                app->snddev = strdup (optarg);
 #else
-                fprintf(stderr,
-                        _("Audio support not present in this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_FFMPEG_AUDIO
+                fprintf (stderr,
+                         _("Audio support not present in this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 13:           // audio_rate
+            case 13:                  // audio_rate
 #ifdef HAVE_FFMPEG_AUDIO
                 tmp_capture_options->audioWanted = 1;
-                tmp_capture_options->sndrate = atoi(optarg);
+                tmp_capture_options->sndrate = atoi (optarg);
 #else
-                fprintf(stderr,
-                        _("Audio support not present in this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_FFMPEG_AUDIO
+                fprintf (stderr,
+                         _("Audio support not present in this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 14:           // audio_bits
+            case 14:                  // audio_bits
 #ifdef HAVE_FFMPEG_AUDIO
                 tmp_capture_options->audioWanted = 1;
-                tmp_capture_options->sndsize = atoi(optarg);
+                tmp_capture_options->sndsize = atoi (optarg);
 #else
-                fprintf(stderr,
-                        _("Audio support not present in this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_FFMPEG_AUDIO
+                fprintf (stderr,
+                         _("Audio support not present in this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 15:           // audio_channels
+            case 15:                  // audio_channels
 #ifdef HAVE_FFMPEG_AUDIO
                 tmp_capture_options->audioWanted = 1;
-                tmp_capture_options->sndchannels = atoi(optarg);
+                tmp_capture_options->sndchannels = atoi (optarg);
 #else
-                fprintf(stderr,
-                        _("Audio support not present in this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_FFMPEG_AUDIO
+                fprintf (stderr,
+                         _("Audio support not present in this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 16:           // continue
+            case 16:                  // continue
                 {
                     char *tmp;
+
                     if (!optarg) {
                         if (optind < argc) {
                             tmp =
@@ -349,9 +364,9 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                             tmp = "yes";
                         }
                     } else {
-                        tmp = strdup(optarg);
+                        tmp = strdup (optarg);
                     }
-                    if (strstr(tmp, "no") != NULL) {
+                    if (strstr (tmp, "no") != NULL) {
                         app->flags &= ~FLG_AUTO_CONTINUE;
                     } else {
                         app->flags |= FLG_AUTO_CONTINUE;
@@ -359,38 +374,38 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                 }
                 break;
 #ifdef USE_FFMPEG
-            case 17:           // single-frame
+            case 17:                  // single-frame
                 app->current_mode = 0;
                 break;
-            case 18:           // multi-frame
+            case 18:                  // multi-frame
                 app->current_mode = 1;
                 break;
-#endif                          // USE_FFMPEG
-            case 19:           // codec
+#endif     // USE_FFMPEG
+            case 19:                  // codec
                 {
                     int n, m = 0;
                     Boolean found = FALSE;
 
                     for (n = 1; n < NUMCODECS; n++) {
-                        if (strcasecmp(optarg, tCodecs[n].name) == 0) {
+                        if (strcasecmp (optarg, tCodecs[n].name) == 0) {
                             found = TRUE;
                             m = n;
                         }
                     }
-                    if (strcasecmp(optarg, "auto") == 0) {
+                    if (strcasecmp (optarg, "auto") == 0) {
                         found = TRUE;
-                        m = 0;  // set to CODEC_NONE which will get
+                        m = 0;         // set to CODEC_NONE which will get
                         // overridden later
                     }
 
                     if (found) {
                         tmp_capture_options->targetCodec = m;
                     } else {
-                        usage(_argv[0]);
+                        usage (_argv[0]);
                     }
                 }
                 break;
-            case 20:           // codec-help
+            case 20:                  // codec-help
                 {
                     int n, m;
                     char tmp_codec[512];
@@ -401,67 +416,64 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                          _argv[0], VERSION);
 
 #ifdef USE_FFMPEG
-                    printf(_
-                           ("Available codecs for single-frame capture: "));
+                    printf (_("Available codecs for single-frame capture: "));
 
                     for (n = 1; n < CAP_MF; n++) {
-                        for (m = 0; m < strlen(tCodecs[n].name); m++) {
-                            tmp_codec[m] = tolower(tCodecs[n].name[m]);
+                        for (m = 0; m < strlen (tCodecs[n].name); m++) {
+                            tmp_codec[m] = tolower (tCodecs[n].name[m]);
                         }
-                        tmp_codec[strlen(tCodecs[n].name)] = '\0';
-                        printf("%s", tmp_codec);
+                        tmp_codec[strlen (tCodecs[n].name)] = '\0';
+                        printf ("%s", tmp_codec);
                         if (n < (CAP_MF - 1))
-                            printf(", ");
+                            printf (", ");
                     }
-                    printf("\n");
+                    printf ("\n");
 
-                    printf(_
-                           ("Available codecs for multi-frame capture: "));
+                    printf (_("Available codecs for multi-frame capture: "));
 
                     for (n = CAP_MF; n < NUMCODECS; n++) {
-                        for (m = 0; m < strlen(tCodecs[n].name); m++) {
-                            tmp_codec[m] = tolower(tCodecs[n].name[m]);
+                        for (m = 0; m < strlen (tCodecs[n].name); m++) {
+                            tmp_codec[m] = tolower (tCodecs[n].name[m]);
                         }
-                        tmp_codec[strlen(tCodecs[n].name)] = '\0';
-                        printf("%s", tmp_codec);
+                        tmp_codec[strlen (tCodecs[n].name)] = '\0';
+                        printf ("%s", tmp_codec);
                         if (n < (NUMCODECS - 1))
-                            printf(", ");
+                            printf (", ");
                     }
-                    printf("\n");
+                    printf ("\n");
 #else
-                    printf(_
-                           ("Available codecs for single-frame capture: "));
+                    printf (_("Available codecs for single-frame capture: "));
 
                     for (n = 1; n < NUMCODECS; n++) {
-                        for (m = 0; m < strlen(tCodecs[n].name); m++) {
-                            tmp_codec[m] = tolower(tCodecs[n].name[m]);
+                        for (m = 0; m < strlen (tCodecs[n].name); m++) {
+                            tmp_codec[m] = tolower (tCodecs[n].name[m]);
                         }
-                        tmp_codec[strlen(tCodecs[n].name)] = '\0';
-                        printf("%s", tmp_codec);
+                        tmp_codec[strlen (tCodecs[n].name)] = '\0';
+                        printf ("%s", tmp_codec);
                         if (n < (NUMCODECS - 1))
-                            printf(", ");
+                            printf (", ");
                     }
-                    printf("\n");
-#endif                          // USE_FFMPEG
+                    printf ("\n");
+#endif     // USE_FFMPEG
 
                     printf
                         (_
                          ("Specify 'auto' to use the file format's default codec.\n"));
-                    exit(1);
+                    exit (1);
                 }
                 break;
-            case 21:           // format
+            case 21:                  // format
                 {
                     int n, m = -1;
                     Boolean found = FALSE;
 
                     for (n = CAP_NONE; n < NUMCAPS; n++) {
-                        if (strcasecmp(optarg, tFFormats[n].name) == 0) {
+                        if (strcasecmp (optarg, tFFormats[n].name) == 0) {
                             found = TRUE;
                             m = n;
                         }
                     }
-                    if (strcasecmp(optarg, "auto") == 0) {
+                    if (strcasecmp (optarg, "auto") == 0) {
                         found = TRUE;
                         m = 0;
                     }
@@ -470,24 +482,24 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                         if (m > -1) {
                             tmp_capture_options->target = m;
                         } else {
-                            fprintf(stderr,
-                                    _
-                                    ("Specified file format '%s' not supported with this binary."),
-                                    optarg);
-                            fprintf(stderr,
-                                    _
-                                    ("Resetting to file format auto-detection.\n"));
+                            fprintf (stderr,
+                                     _
+                                     ("Specified file format '%s' not supported with this binary."),
+                                     optarg);
+                            fprintf (stderr,
+                                     _
+                                     ("Resetting to file format auto-detection.\n"));
                             tmp_capture_options->target = 0;
                         }
                     } else {
-                        fprintf(stderr,
-                                _("Unknown file format '%s' specified.\n"),
-                                optarg);
-                        usage(_argv[0]);
+                        fprintf (stderr,
+                                 _("Unknown file format '%s' specified.\n"),
+                                 optarg);
+                        usage (_argv[0]);
                     }
                 }
                 break;
-            case 22:           // format-help
+            case 22:                  // format-help
                 {
                     int n, m;
                     char tmp_format[512];
@@ -496,58 +508,57 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                         (_
                          ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
                          _argv[0], VERSION);
-                    printf(_("Available file formats: "));
+                    printf (_("Available file formats: "));
 
                     for (n = CAP_NONE; n < NUMCAPS; n++) {
                         if (tFFormats[n].extensions) {
-                            for (m = 0; m < strlen(tFFormats[n].name); m++) {
-                                tmp_format[m] =
-                                    tolower(tFFormats[n].name[m]);
+                            for (m = 0; m < strlen (tFFormats[n].name); m++) {
+                                tmp_format[m] = tolower (tFFormats[n].name[m]);
                             }
-                            tmp_format[strlen(tFFormats[n].name)] = '\0';
-                            printf("%s", tmp_format);
+                            tmp_format[strlen (tFFormats[n].name)] = '\0';
+                            printf ("%s", tmp_format);
                             if (n < (NUMCAPS - 1))
-                                printf(", ");
+                                printf (", ");
                         }
                     }
-                    printf("\n");
+                    printf ("\n");
                     printf
                         (_
                          ("Specify 'auto' to force file format auto-detection.\n"));
-                    exit(1);
+                    exit (1);
                 }
                 break;
-            case 23:           // aucodec
+            case 23:                  // aucodec
 #ifdef HAVE_FFMPEG_AUDIO
                 {
                     int n, m = 0;
                     Boolean found = FALSE;
 
                     for (n = 1; n < NUMAUCODECS; n++) {
-                        if (strcasecmp(optarg, tAuCodecs[n].name) == 0) {
+                        if (strcasecmp (optarg, tAuCodecs[n].name) == 0) {
                             found = TRUE;
                             m = n;
                         }
                     }
-                    if (strcasecmp(optarg, "auto") == 0) {
+                    if (strcasecmp (optarg, "auto") == 0) {
                         found = TRUE;
-                        m = 0;  // set to CODEC_NONE which will get
+                        m = 0;         // set to CODEC_NONE which will get
                         // overridden later
                     }
 
                     if (found) {
                         tmp_capture_options->au_targetCodec = m;
                     } else {
-                        usage(_argv[0]);
+                        usage (_argv[0]);
                     }
                 }
 #else
-                fprintf(stderr,
-                        _("Audio support not present in this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_FFMPEG_AUDIO
+                fprintf (stderr,
+                         _("Audio support not present in this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 24:           // aucodec-help
+            case 24:                  // aucodec-help
 #ifdef HAVE_FFMPEG_AUDIO
                 {
                     int n, m;
@@ -557,42 +568,42 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
                         (_
                          ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
                          _argv[0], VERSION);
-                    printf(_
-                           ("Available audio codecs for multi-frame capture: "));
+                    printf (_
+                            ("Available audio codecs for multi-frame capture: "));
 
                     for (n = 1; n < NUMAUCODECS; n++) {
-                        for (m = 0; m < strlen(tAuCodecs[n].name); m++) {
-                            tmp_codec[m] = tolower(tAuCodecs[n].name[m]);
+                        for (m = 0; m < strlen (tAuCodecs[n].name); m++) {
+                            tmp_codec[m] = tolower (tAuCodecs[n].name[m]);
                         }
-                        tmp_codec[strlen(tAuCodecs[n].name)] = '\0';
-                        printf("%s", tmp_codec);
+                        tmp_codec[strlen (tAuCodecs[n].name)] = '\0';
+                        printf ("%s", tmp_codec);
                         if (n < (NUMAUCODECS - 1))
-                            printf(", ");
+                            printf (", ");
                     }
-                    printf("\n");
+                    printf ("\n");
                     printf
                         (_
                          ("Specify 'auto' to use the file format's default audio codec.\n"));
-                    exit(1);
+                    exit (1);
                 }
 #else
-                fprintf(stderr,
-                        _("Audio support not present in this binary.\n"));
-                usage(_argv[0]);
-#endif                          // HAVE_FFMPEG_AUDIO
+                fprintf (stderr,
+                         _("Audio support not present in this binary.\n"));
+                usage (_argv[0]);
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 25:           // auto
+            case 25:                  // auto
                 tmp_capture_options->target = 0;
                 tmp_capture_options->targetCodec = 0;
 #ifdef HAVE_FFMPEG_AUDIO
                 tmp_capture_options->au_targetCodec = 0;
-#endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_FFMPEG_AUDIO
                 break;
-            case 26:           // rescale
-                app->rescale = atoi(optarg);
+            case 26:                  // rescale
+                app->rescale = atoi (optarg);
                 break;
             default:
-                usage(_argv[0]);
+                usage (_argv[0]);
                 break;
             }
             break;
@@ -602,18 +613,18 @@ parse_cli_options(CapTypeOptions * tmp_capture_options, int argc,
             break;
 
         default:
-            usage(_argv[0]);
+            usage (_argv[0]);
             break;
         }
     }
     if (argc != optind)
-        usage(_argv[0]);
+        usage (_argv[0]);
 
 #undef DEBUGFUNCTION
 }
 
-
-CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
+CapTypeOptions *
+merge_cli_options (CapTypeOptions * tmp_capture_options)
 {
 #define DEBUGFUNCTION "merge_cli_options()"
     int current_mode_by_filename = -1, current_mode_by_target = -1;
@@ -640,12 +651,12 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
         current_mode_by_filename = -1;
     else {
         current_mode_by_filename =
-            xvc_codec_get_target_from_filename(tmp_capture_options->file);
+            xvc_codec_get_target_from_filename (tmp_capture_options->file);
 #ifdef USE_FFMPEG
         if (current_mode_by_filename >= CAP_MF)
             current_mode_by_filename = 1;
         else
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
         if (current_mode_by_filename > 0)
             current_mode_by_filename = 0;
         // if we can't determine capture type by filename treat as not
@@ -663,7 +674,7 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
         if (tmp_capture_options->target >= CAP_MF)
             current_mode_by_target = 1;
         else
-#endif                          // USE_FFMPEG
+#endif     // USE_FFMPEG
         if (tmp_capture_options->target > 0)
             current_mode_by_target = 0;
         // if we have an invalide target treat as not
@@ -700,12 +711,12 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
     // ((app->current_mode == 0) ? "single-frame" : "multi-frame"));
 
     // merge cli options with app
-    if (xvc_merge_cap_type_and_app_data(tmp_capture_options, app) < 1) {
-        fprintf(stderr,
-                _
-                ("%s %s: Unrecoverable error while merging options, please contact the xvidcap project.\n"),
-                DEBUGFILE, DEBUGFUNCTION);
-        exit(1);
+    if (xvc_merge_cap_type_and_app_data (tmp_capture_options, app) < 1) {
+        fprintf (stderr,
+                 _
+                 ("%s %s: Unrecoverable error while merging options, please contact the xvidcap project.\n"),
+                 DEBUGFILE, DEBUGFUNCTION);
+        exit (1);
     }
 
     return target;
@@ -713,54 +724,57 @@ CapTypeOptions *merge_cli_options(CapTypeOptions * tmp_capture_options)
 #undef DEBUGFUNCTION
 }
 
-
-static sighandler_t my_signal_add(int sig_nr, sighandler_t sighandler)
+static sighandler_t
+my_signal_add (int sig_nr, sighandler_t sighandler)
 {
     struct sigaction neu_sig, alt_sig;
 
     neu_sig.sa_handler = sighandler;
-    sigemptyset(&neu_sig.sa_mask);
+    sigemptyset (&neu_sig.sa_mask);
     neu_sig.sa_flags = SA_RESETHAND;
-    if (sigaction(sig_nr, &neu_sig, &alt_sig) < 0)
+    if (sigaction (sig_nr, &neu_sig, &alt_sig) < 0)
         return SIG_ERR;
     return alt_sig.sa_handler;
 }
 
-
-void xvc_signal_handler(int signal)
+void
+xvc_signal_handler (int signal)
 {
 #define DEBUGFUNCTION "xvc_signal_handler()"
     Job *job = NULL;
+
 #ifdef DEBUG
-    printf("%s %s: Entering with thread %i sigal %i\n",
-           DEBUGFILE, DEBUGFUNCTION, pthread_self(), signal);
-#endif                          // DEBUG
+    printf ("%s %s: Entering with thread %i sigal %i\n",
+            DEBUGFILE, DEBUGFUNCTION, (int) pthread_self (), (int) signal);
+#endif     // DEBUG
 
     switch (signal) {
     case SIGINT:
-        job = xvc_job_ptr();
+        job = xvc_job_ptr ();
         if (job)
-            xvc_capture_stop_signal(TRUE);
-        exit(0);
+            xvc_capture_stop_signal (TRUE);
+        xvc_cleanup ();
+        exit (0);
         break;
     case SIGALRM:
-        my_signal_add(SIGALRM, xvc_signal_handler);
+        my_signal_add (SIGALRM, xvc_signal_handler);
         break;
     default:
         break;
     }
 
 #ifdef DEBUG
-    printf("%s %s: Leaving with signal %i\n", DEBUGFILE, DEBUGFUNCTION,
-           signal);
-#endif                          // DEBUG
+    printf ("%s %s: Leaving with signal %i\n", DEBUGFILE, DEBUGFUNCTION,
+            signal);
+#endif     // DEBUG
 #undef DEBUGFUNCTION
 }
 
-
-void print_current_settings(CapTypeOptions * target)
+void
+print_current_settings (CapTypeOptions * target)
 {
     char *mp;
+
     switch (app->mouseWanted) {
     case 2:
         mp = _("black");
@@ -775,59 +789,57 @@ void print_current_settings(CapTypeOptions * target)
     // FIXME: make the options output take new app_data structure with
     // parallel capTypeOptions into account
 
-    printf(_("Current settings:\n"));
-    printf(_(" flags = %d\n"), app->flags);
+    printf (_("Current settings:\n"));
+    printf (_(" flags = %d\n"), app->flags);
 #ifdef USE_FFMPEG
-    printf(_(" capture mode = %s\n"),
-           ((app->current_mode ==
-             0) ? _("single-frame") : _("multi-frame")));
-#endif                          // USE_FFMPEG
-    printf(_(" position = %ix%i"), app->cap_width, app->cap_height);
+    printf (_(" capture mode = %s\n"),
+            ((app->current_mode == 0) ? _("single-frame") : _("multi-frame")));
+#endif     // USE_FFMPEG
+    printf (_(" position = %ix%i"), app->cap_width, app->cap_height);
     if (app->cap_pos_x >= 0)
-        printf("+%i+%i", app->cap_pos_x, app->cap_pos_y);
-    printf("\n");
-    printf(_(" rescale output to = %i\n"), app->rescale);
-    printf(_(" frames per second = %.2f\n"), ((float) target->fps / 100));
-    printf(_(" file pattern = %s\n"), target->file);
-    printf(_(" file format = %s\n"),
-           ((target->target ==
-             CAP_NONE) ? "AUTO" : _(tFFormats[target->target].longname)));
-    printf(_(" video encoding = %s\n"),
-           ((target->targetCodec ==
-             CODEC_NONE) ? "AUTO" : tCodecs[target->targetCodec].name));
+        printf ("+%i+%i", app->cap_pos_x, app->cap_pos_y);
+    printf ("\n");
+    printf (_(" rescale output to = %i\n"), app->rescale);
+    printf (_(" frames per second = %.2f\n"), ((float) target->fps / 100));
+    printf (_(" file pattern = %s\n"), target->file);
+    printf (_(" file format = %s\n"),
+            ((target->target ==
+              CAP_NONE) ? "AUTO" : _(tFFormats[target->target].longname)));
+    printf (_(" video encoding = %s\n"),
+            ((target->targetCodec ==
+              CODEC_NONE) ? "AUTO" : tCodecs[target->targetCodec].name));
 #ifdef HAVE_FFMPEG_AUDIO
-    printf(_(" audio codec = %s\n"),
-           ((target->au_targetCodec ==
-             CODEC_NONE) ? "AUTO" : tAuCodecs[target->au_targetCodec].
-            name));
-#endif                          // HAVE_FFMPEG_AUDIO
-    printf(_(" verbose level = %d\n"), app->verbose);
-    printf(_(" frame start no = %d\n"), target->start_no);
-    printf(_(" frames to store = %d\n"), target->frames);
-    printf(_(" time to capture = %i sec\n"), target->time);
-    printf(_(" autocontinue = %s\n"),
-           ((app->flags & FLG_AUTO_CONTINUE) ? "yes" : "no"));
-    printf(_(" input source = %s (%d)\n"), app->source,
-           app->flags & FLG_SOURCE);
-    printf(_(" capture pointer = %s\n"), mp);
+    printf (_(" audio codec = %s\n"),
+            ((target->au_targetCodec ==
+              CODEC_NONE) ? "AUTO" : tAuCodecs[target->au_targetCodec].name));
+#endif     // HAVE_FFMPEG_AUDIO
+    printf (_(" verbose level = %d\n"), app->verbose);
+    printf (_(" frame start no = %d\n"), target->start_no);
+    printf (_(" frames to store = %d\n"), target->frames);
+    printf (_(" time to capture = %i sec\n"), target->time);
+    printf (_(" autocontinue = %s\n"),
+            ((app->flags & FLG_AUTO_CONTINUE) ? "yes" : "no"));
+    printf (_(" input source = %s (%d)\n"), app->source,
+            app->flags & FLG_SOURCE);
+    printf (_(" capture pointer = %s\n"), mp);
 #ifdef HAVE_FFMPEG_AUDIO
-    printf(_(" capture audio = %s\n"),
-           ((target->audioWanted == 1) ? "yes" : "no"));
-    printf(_(" - input = %s\n"), app->snddev);
-    printf(_(" - sample rate = %i\n"), target->sndrate);
-    printf(_(" - bit rate = %i\n"), target->sndsize);
-    printf(_(" - channels = %i\n"), target->sndchannels);
-#endif                          // HAVE_FFMPEG_AUDIO
-    printf(_(" animate command = %s\n"), target->play_cmd);
-    printf(_(" make video command= %s\n"), target->video_cmd);
-    printf(_(" edit frame command= %s\n"), target->edit_cmd);
+    printf (_(" capture audio = %s\n"),
+            ((target->audioWanted == 1) ? "yes" : "no"));
+    printf (_(" - input = %s\n"), app->snddev);
+    printf (_(" - sample rate = %i\n"), target->sndrate);
+    printf (_(" - bit rate = %i\n"), target->sndsize);
+    printf (_(" - channels = %i\n"), target->sndchannels);
+#endif     // HAVE_FFMPEG_AUDIO
+    printf (_(" animate command = %s\n"), target->play_cmd);
+    printf (_(" make video command= %s\n"), target->video_cmd);
+    printf (_(" edit frame command= %s\n"), target->edit_cmd);
 }
-
 
 /* 
  * main
  */
-int main(int argc, char *argv[])
+int
+main (int argc, char *argv[])
 {
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "main()"
@@ -837,36 +849,37 @@ int main(int argc, char *argv[])
 
 #ifdef HasDGA
     int dga_evb, dga_errb;
-#endif                          // HasDGA
+#endif     // HasDGA
 
     // Xlib threading initialization
     // this is here with the gtk/glib stuff in gnome_ui.c|h because this
     // is
     // UI independant and would need to be here even with Qt
-    XInitThreads();
+    XInitThreads ();
 
 #ifdef ENABLE_NLS
     // i18n initialization
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
+    bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+    textdomain (GETTEXT_PACKAGE);
 #endif
 
     // this is a hook for a GUI to do some pre-init functions ...
     // possibly to set some fallback options read from a rc file or
     // Xdefaults
-    if (!xvc_init_pre(argc, argv)) {
-        fprintf(stderr,
-                _("%s %s: can't do GUI pre-initialization ... aborting\n"),
-                DEBUGFILE, DEBUGFUNCTION);
-        exit(2);
+    if (!xvc_init_pre (argc, argv)) {
+        fprintf (stderr,
+                 _("%s %s: can't do GUI pre-initialization ... aborting\n"),
+                 DEBUGFILE, DEBUGFUNCTION);
+        exit (2);
     }
     // xvc initialization
-    xvc_init(&s_tmp_capture_options, argc, argv);
+    xvc_init (&s_tmp_capture_options, argc, argv);
     // gtk_init may replace argv values with NULL ... that's bad for
     // getopt_long
     for (i = argc; i > 0; i--) {
         int j;
+
         // printf("arg %i = %s\n", i, argv[i]);
         if (argv[i - 1] == NULL) {
             if (i == argc)
@@ -880,62 +893,59 @@ int main(int argc, char *argv[])
             }
         }
     }
-    // printf("argc %i\n", argc);
 
     // read options file now 
-    xvc_read_options_file(app);
+    xvc_read_options_file (app);
 
     // parse cli options and merge with app data
-    parse_cli_options(&s_tmp_capture_options, argc, argv);
-    target = merge_cli_options(&s_tmp_capture_options);
+    parse_cli_options (&s_tmp_capture_options, argc, argv);
+    target = merge_cli_options (&s_tmp_capture_options);
 
     // get errors in options to pass to xvc_ui_create
     {
         int rc;
+
         rc = 0;
-        errors_after_cli = xvc_app_data_validate(app, 1, &rc);
+        errors_after_cli = xvc_app_data_validate (app, 1, &rc);
         if (rc == -1) {
-            fprintf(stderr,
-                    _
-                    ("%s %s: Unrecoverable error while validating options, please contact the xvidcap project.\n"),
-                    DEBUGFILE, DEBUGFUNCTION);
-            exit(1);
+            fprintf (stderr,
+                     _
+                     ("%s %s: Unrecoverable error while validating options, please contact the xvidcap project.\n"),
+                     DEBUGFILE, DEBUGFUNCTION);
+            exit (1);
         }
     }
 
     // these are the hooks for a GUI to create the GUI,
     // the selection frame, and do some initialization ...
-    if (!xvc_ui_create()) {
-        fprintf(stderr, _("%s %s: can't create GUI ... aborting\n"),
-                DEBUGFILE, DEBUGFUNCTION);
-        exit(2);
+    if (!xvc_ui_create ()) {
+        fprintf (stderr, _("%s %s: can't create GUI ... aborting\n"),
+                 DEBUGFILE, DEBUGFUNCTION);
+        exit (2);
     }
-    if (!xvc_frame_create()) {
-        fprintf(stderr,
-                _("%s %s: can't create selection Frame ... aborting\n"),
-                DEBUGFILE, DEBUGFUNCTION);
-        exit(2);
+    if (!xvc_frame_create ()) {
+        fprintf (stderr,
+                 _("%s %s: can't create selection Frame ... aborting\n"),
+                 DEBUGFILE, DEBUGFUNCTION);
+        exit (2);
     }
-    if (!xvc_ui_init(errors_after_cli)) {
-        fprintf(stderr, _("%s %s: can't initialize GUI ... aborting\n"),
-                DEBUGFILE, DEBUGFUNCTION);
-        exit(2);
+    if (!xvc_ui_init (errors_after_cli)) {
+        fprintf (stderr, _("%s %s: can't initialize GUI ... aborting\n"),
+                 DEBUGFILE, DEBUGFUNCTION);
+        exit (2);
     }
 
     if (app->verbose) {
-        print_current_settings(target);
+        print_current_settings (target);
     }
     // signal handling for --gui no operation (CTRL-C) and 
     // unsleeping the recoring thread on stop
-    my_signal_add(SIGALRM, xvc_signal_handler);
-    my_signal_add(SIGINT, xvc_signal_handler);
+    my_signal_add (SIGALRM, xvc_signal_handler);
+    my_signal_add (SIGINT, xvc_signal_handler);
 
     // this is a hook for the GUI's main loop
-    resultCode = xvc_ui_run();
+    resultCode = xvc_ui_run ();
 
-#ifdef USE_FFMPEG
-    av_free_static();
-#endif
-
+    xvc_cleanup ();
     return (resultCode);
 }

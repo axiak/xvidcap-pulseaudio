@@ -21,13 +21,13 @@
 #ifndef __LED_METER_H__
 #define __LED_METER_H__
 
-
 #include <gdk/gdk.h>
 #include <gtk/gtkvbox.h>
 
 #ifdef __cplusplus
-extern "C" {
-#endif                          /* __cplusplus */
+extern "C"
+{
+#endif     /* __cplusplus */
 
 #define LED_METER(obj) GTK_CHECK_CAST (obj, led_meter_get_type (), LedMeter)
 #define LED_METER_CLASS(klass) GTK_CHECK_CLASS_CAST (klass, led_meter_get_type (), LedMeterClass)
@@ -40,11 +40,11 @@ extern "C" {
 #define LM_MEDIUM 1
 #define LM_HIGH 2
 
-
     typedef struct _LedMeter LedMeter;
     typedef struct _LedMeterClass LedMeterClass;
 
-    struct _LedMeter {
+    struct _LedMeter
+    {
         GtkVBox vbox;
         GtkWidget *ebox;
         GtkWidget *da[LM_NUM_DAS];
@@ -52,18 +52,19 @@ extern "C" {
         gint max_da, old_max_da;
     };
 
-    struct _LedMeterClass {
+    struct _LedMeterClass
+    {
         GtkVBoxClass parent_class;
 
         void (*led_meter) (LedMeter * lm);
     };
 
-    GtkType led_meter_get_type(void);
-    GtkWidget *led_meter_new(void);
-    void led_meter_set_percent(LedMeter *, int);
-    void led_meter_set_tip(LedMeter * lm, char *tip);
+    GtkType led_meter_get_type (void);
+    GtkWidget *led_meter_new (void);
+    void led_meter_set_percent (LedMeter *, int);
+    void led_meter_set_tip (LedMeter * lm, char *tip);
 
 #ifdef __cplusplus
 }
-#endif                          /* __cplusplus */
-#endif                          /* __LED_METER_H__ */
+#endif     /* __cplusplus */
+#endif     /* __LED_METER_H__ */

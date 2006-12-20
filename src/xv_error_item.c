@@ -34,57 +34,59 @@
 #include "app_data.h"
 #include "xvidcap-intl.h"
 
-enum {
+enum
+{
     XV_ERROR_ITEM_SIGNAL,
     LAST_SIGNAL
 };
 
-static void xv_error_item_class_init(XvErrorItemClass * klass);
-static void xv_error_item_init(XvErrorItem * ei);
+static void xv_error_item_class_init (XvErrorItemClass * klass);
+static void xv_error_item_init (XvErrorItem * ei);
 
 static gint xv_error_item_signals[LAST_SIGNAL] = { 0 };
 
-
-GType xv_error_item_get_type()
+GType
+xv_error_item_get_type ()
 {
     static GType ei_type = 0;
 
     if (!ei_type) {
         static const GTypeInfo ei_info = {
-            sizeof(XvErrorItemClass),
+            sizeof (XvErrorItemClass),
             NULL,
             NULL,
             (GClassInitFunc) xv_error_item_class_init,
             NULL,
             NULL,
-            sizeof(XvErrorItem),
+            sizeof (XvErrorItem),
             0,
             (GInstanceInitFunc) xv_error_item_init,
         };
 
         ei_type =
-            g_type_register_static(GTK_TYPE_HBOX, "XvErrorItem", &ei_info,
-                                   0);
+            g_type_register_static (GTK_TYPE_HBOX, "XvErrorItem", &ei_info, 0);
     }
 
     return ei_type;
 }
 
-static void xv_error_item_class_init(XvErrorItemClass * class)
+static void
+xv_error_item_class_init (XvErrorItemClass * class)
 {
     GtkObjectClass *object_class;
 
     object_class = (GtkObjectClass *) class;
 
     xv_error_item_signals[XV_ERROR_ITEM_SIGNAL] =
-        g_signal_new("xv_error_item", G_TYPE_FROM_CLASS(object_class),
-                     G_SIGNAL_RUN_FIRST, 0, NULL, NULL,
-                     g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0, NULL);
+        g_signal_new ("xv_error_item", G_TYPE_FROM_CLASS (object_class),
+                      G_SIGNAL_RUN_FIRST, 0, NULL, NULL,
+                      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0, NULL);
 
     class->xv_error_item = NULL;
 }
 
-static void xv_error_item_init(XvErrorItem * ei)
+static void
+xv_error_item_init (XvErrorItem * ei)
 {
     GdkColor g_col;
     GtkWidget *frame;
@@ -96,35 +98,35 @@ static void xv_error_item_init(XvErrorItem * ei)
     // gtk_container_set_border_width (GTK_CONTAINER(ei), 1);
 
     // add eventbox to be able to set a background colour
-    ei->ebox = gtk_event_box_new();
-    gtk_container_add(GTK_CONTAINER(ei), ei->ebox);
+    ei->ebox = gtk_event_box_new ();
+    gtk_container_add (GTK_CONTAINER (ei), ei->ebox);
 
     g_col.red = 0xFFFF;
     g_col.green = 0xFFFF;
     g_col.blue = 0xFFFF;
-    gtk_widget_modify_bg(ei->ebox, GTK_STATE_NORMAL, &g_col);
+    gtk_widget_modify_bg (ei->ebox, GTK_STATE_NORMAL, &g_col);
 
-    frame = gtk_frame_new(NULL);
-    gtk_widget_show(frame);
-    gtk_container_add(GTK_CONTAINER(ei->ebox), frame);
-    gtk_frame_set_label_align(GTK_FRAME(frame), 0, 0);
-    gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
+    frame = gtk_frame_new (NULL);
+    gtk_widget_show (frame);
+    gtk_container_add (GTK_CONTAINER (ei->ebox), frame);
+    gtk_frame_set_label_align (GTK_FRAME (frame), 0, 0);
+    gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
 
-    hbox = gtk_hbox_new(FALSE, 0);
-    gtk_widget_show(hbox);
-    gtk_container_add(GTK_CONTAINER(frame), hbox);
+    hbox = gtk_hbox_new (FALSE, 0);
+    gtk_widget_show (hbox);
+    gtk_container_add (GTK_CONTAINER (frame), hbox);
 
     ei->image =
-        gtk_image_new_from_stock("gtk-dialog-warning",
-                                 GTK_ICON_SIZE_LARGE_TOOLBAR);
-    gtk_widget_show(ei->image);
-    gtk_box_pack_start(GTK_BOX(hbox), ei->image, FALSE, FALSE, 0);
-    gtk_misc_set_alignment(GTK_MISC(ei->image), 0, 0);
-    gtk_misc_set_padding(GTK_MISC(ei->image), 4, 4);
+        gtk_image_new_from_stock ("gtk-dialog-warning",
+                                  GTK_ICON_SIZE_LARGE_TOOLBAR);
+    gtk_widget_show (ei->image);
+    gtk_box_pack_start (GTK_BOX (hbox), ei->image, FALSE, FALSE, 0);
+    gtk_misc_set_alignment (GTK_MISC (ei->image), 0, 0);
+    gtk_misc_set_padding (GTK_MISC (ei->image), 4, 4);
 
-    table = gtk_table_new(3, 2, FALSE);
-    gtk_widget_show(table);
-    gtk_box_pack_start(GTK_BOX(hbox), table, TRUE, TRUE, 0);
+    table = gtk_table_new (3, 2, FALSE);
+    gtk_widget_show (table);
+    gtk_box_pack_start (GTK_BOX (hbox), table, TRUE, TRUE, 0);
 
     // calculate maximum width for left column, esp. for i18n
     for (i = 0; i < 5; i++) {
@@ -134,157 +136,160 @@ static void xv_error_item_init(XvErrorItem * ei)
 
         switch (i) {
         case 0:
-            snprintf(buf, 255, _("FATAL\nERROR (%i):"), 100);
+            snprintf (buf, 255, _("FATAL\nERROR (%i):"), 100);
             break;
         case 1:
-            snprintf(buf, 255, _("ERROR (%i):"), 100);
+            snprintf (buf, 255, _("ERROR (%i):"), 100);
             break;
         case 2:
-            snprintf(buf, 255, _("WARNING (%i):"), 100);
+            snprintf (buf, 255, _("WARNING (%i):"), 100);
             break;
         case 3:
-            snprintf(buf, 255, _("INFO (%i):"), 100);
+            snprintf (buf, 255, _("INFO (%i):"), 100);
             break;
         case 4:
-            snprintf(buf, 255, _("???? (%i):"), 100);
+            snprintf (buf, 255, _("???? (%i):"), 100);
             break;
         }
 
-        title_text_spacer = gtk_label_new(buf);
+        title_text_spacer = gtk_label_new (buf);
 
-        layout = gtk_widget_create_pango_layout(title_text_spacer, buf);
-        g_assert(layout);
-        pango_layout_get_pixel_size(layout, &width, &height);
-        g_object_unref(layout);
-        gtk_widget_destroy(title_text_spacer);
+        layout = gtk_widget_create_pango_layout (title_text_spacer, buf);
+        g_assert (layout);
+        pango_layout_get_pixel_size (layout, &width, &height);
+        g_object_unref (layout);
+        gtk_widget_destroy (title_text_spacer);
 
         if (width > max_width)
             max_width = width;
     }
 
-    ei->title_tag = gtk_label_new("ERROR (n):");
-    gtk_widget_show(ei->title_tag);
-    gtk_table_attach(GTK_TABLE(table), ei->title_tag, 0, 1, 0, 1,
-                     (GtkAttachOptions) (GTK_FILL),
-                     (GtkAttachOptions) (GTK_FILL), 0, 0);
-    gtk_widget_set_size_request(ei->title_tag, max_width, -1);
-    gtk_misc_set_alignment(GTK_MISC(ei->title_tag), 0, 0);
-    gtk_misc_set_padding(GTK_MISC(ei->title_tag), 2, 1);
+    ei->title_tag = gtk_label_new ("ERROR (n):");
+    gtk_widget_show (ei->title_tag);
+    gtk_table_attach (GTK_TABLE (table), ei->title_tag, 0, 1, 0, 1,
+                      (GtkAttachOptions) (GTK_FILL),
+                      (GtkAttachOptions) (GTK_FILL), 0, 0);
+    gtk_widget_set_size_request (ei->title_tag, max_width, -1);
+    gtk_misc_set_alignment (GTK_MISC (ei->title_tag), 0, 0);
+    gtk_misc_set_padding (GTK_MISC (ei->title_tag), 2, 1);
 
-    ei->title_text = gtk_label_new("this is an error");
-    gtk_widget_show(ei->title_text);
-    gtk_table_attach(GTK_TABLE(table), ei->title_text, 1, 2, 0, 1,
-                     (GtkAttachOptions) (GTK_FILL),
-                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+    ei->title_text = gtk_label_new ("this is an error");
+    gtk_widget_show (ei->title_text);
+    gtk_table_attach (GTK_TABLE (table), ei->title_text, 1, 2, 0, 1,
+                      (GtkAttachOptions) (GTK_FILL),
+                      (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
     // gtk_widget_set_size_request(ei->title_text, 200, -1);
-    gtk_label_set_line_wrap(GTK_LABEL(ei->title_text), TRUE);
-    gtk_misc_set_alignment(GTK_MISC(ei->title_text), 0, 0);
-    gtk_misc_set_padding(GTK_MISC(ei->title_text), 2, 1);
+    gtk_label_set_line_wrap (GTK_LABEL (ei->title_text), TRUE);
+    gtk_misc_set_alignment (GTK_MISC (ei->title_text), 0, 0);
+    gtk_misc_set_padding (GTK_MISC (ei->title_text), 2, 1);
 
-    ei->desc_tag = gtk_label_new(_("Details:"));
-    gtk_widget_show(ei->desc_tag);
-    gtk_table_attach(GTK_TABLE(table), ei->desc_tag, 0, 1, 1, 2,
-                     (GtkAttachOptions) (GTK_FILL),
-                     (GtkAttachOptions) (GTK_FILL), 0, 0);
-    gtk_misc_set_alignment(GTK_MISC(ei->desc_tag), 0, 0);
-    gtk_misc_set_padding(GTK_MISC(ei->desc_tag), 2, 1);
+    ei->desc_tag = gtk_label_new (_("Details:"));
+    gtk_widget_show (ei->desc_tag);
+    gtk_table_attach (GTK_TABLE (table), ei->desc_tag, 0, 1, 1, 2,
+                      (GtkAttachOptions) (GTK_FILL),
+                      (GtkAttachOptions) (GTK_FILL), 0, 0);
+    gtk_misc_set_alignment (GTK_MISC (ei->desc_tag), 0, 0);
+    gtk_misc_set_padding (GTK_MISC (ei->desc_tag), 2, 1);
 
-    ei->desc_text = gtk_text_view_new();
-    gtk_widget_modify_base(ei->desc_text, GTK_STATE_NORMAL, &g_col);
-    gtk_widget_set_size_request(ei->desc_text, 200, -1);
-    gtk_widget_show(ei->desc_text);
-    gtk_table_attach(GTK_TABLE(table), ei->desc_text, 1, 2, 1, 2,
-                     (GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
-                     (GtkAttachOptions) (GTK_FILL), 0, 0);
-    gtk_text_view_set_editable(GTK_TEXT_VIEW(ei->desc_text), FALSE);
-    gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(ei->desc_text), FALSE);
-    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(ei->desc_text),
-                                GTK_WRAP_WORD);
-    gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(ei->desc_text), FALSE);
-    gtk_text_view_set_left_margin(GTK_TEXT_VIEW(ei->desc_text), 2);
+    ei->desc_text = gtk_text_view_new ();
+    gtk_widget_modify_base (ei->desc_text, GTK_STATE_NORMAL, &g_col);
+    gtk_widget_set_size_request (ei->desc_text, 200, -1);
+    gtk_widget_show (ei->desc_text);
+    gtk_table_attach (GTK_TABLE (table), ei->desc_text, 1, 2, 1, 2,
+                      (GtkAttachOptions) (GTK_FILL | GTK_EXPAND),
+                      (GtkAttachOptions) (GTK_FILL), 0, 0);
+    gtk_text_view_set_editable (GTK_TEXT_VIEW (ei->desc_text), FALSE);
+    gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW (ei->desc_text), FALSE);
+    gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (ei->desc_text), GTK_WRAP_WORD);
+    gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (ei->desc_text), FALSE);
+    gtk_text_view_set_left_margin (GTK_TEXT_VIEW (ei->desc_text), 2);
 
-    gtk_text_buffer_set_text(gtk_text_view_get_buffer
-                             (GTK_TEXT_VIEW(ei->desc_text)),
-                             "description, this is a test description with multiple lines",
-                             -1);
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer
+                              (GTK_TEXT_VIEW (ei->desc_text)),
+                              "description, this is a test description with multiple lines",
+                              -1);
 
-    ei->action_tag = gtk_label_new(_("Action:"));
-    gtk_widget_show(ei->action_tag);
-    gtk_table_attach(GTK_TABLE(table), ei->action_tag, 0, 1, 2, 3,
-                     (GtkAttachOptions) (GTK_FILL),
-                     (GtkAttachOptions) (GTK_FILL), 0, 0);
-    gtk_misc_set_alignment(GTK_MISC(ei->action_tag), 0, 0);
-    gtk_misc_set_padding(GTK_MISC(ei->action_tag), 2, 1);
+    ei->action_tag = gtk_label_new (_("Action:"));
+    gtk_widget_show (ei->action_tag);
+    gtk_table_attach (GTK_TABLE (table), ei->action_tag, 0, 1, 2, 3,
+                      (GtkAttachOptions) (GTK_FILL),
+                      (GtkAttachOptions) (GTK_FILL), 0, 0);
+    gtk_misc_set_alignment (GTK_MISC (ei->action_tag), 0, 0);
+    gtk_misc_set_padding (GTK_MISC (ei->action_tag), 2, 1);
 
-    ei->action_text = gtk_label_new_with_mnemonic("what to do ...");
-    gtk_widget_show(ei->action_text);
-    gtk_table_attach(GTK_TABLE(table), ei->action_text, 1, 2, 2, 3,
-                     (GtkAttachOptions) (GTK_FILL),
-                     (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
-    gtk_label_set_line_wrap(GTK_LABEL(ei->action_text), TRUE);
+    ei->action_text = gtk_label_new_with_mnemonic ("what to do ...");
+    gtk_widget_show (ei->action_text);
+    gtk_table_attach (GTK_TABLE (table), ei->action_text, 1, 2, 2, 3,
+                      (GtkAttachOptions) (GTK_FILL),
+                      (GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_label_set_line_wrap (GTK_LABEL (ei->action_text), TRUE);
     // gtk_widget_set_size_request(ei->action_text, 200, -1);
-    gtk_misc_set_alignment(GTK_MISC(ei->action_text), 0, 0);
-    gtk_misc_set_padding(GTK_MISC(ei->action_text), 2, 1);
+    gtk_misc_set_alignment (GTK_MISC (ei->action_text), 0, 0);
+    gtk_misc_set_padding (GTK_MISC (ei->action_text), 2, 1);
 
-    gtk_widget_show(ei->ebox);
+    gtk_widget_show (ei->ebox);
 }
 
-GtkWidget *xv_error_item_new()
+GtkWidget *
+xv_error_item_new ()
 {
-    return GTK_WIDGET(g_object_new(xv_error_item_get_type(), NULL));
+    return GTK_WIDGET (g_object_new (xv_error_item_get_type (), NULL));
 }
 
-GtkWidget *xv_error_item_new_with_error(xvError * err)
+GtkWidget *
+xv_error_item_new_with_error (xvError * err)
 {
     GtkWidget *wid;
-    wid = GTK_WIDGET(g_object_new(xv_error_item_get_type(), NULL));
-    xv_error_item_set_error(XV_ERROR_ITEM(wid), err);
+
+    wid = GTK_WIDGET (g_object_new (xv_error_item_get_type (), NULL));
+    xv_error_item_set_error (XV_ERROR_ITEM (wid), err);
 
     return wid;
 }
 
-void xv_error_item_set_error(XvErrorItem * ei, xvError * err)
+void
+xv_error_item_set_error (XvErrorItem * ei, xvError * err)
 {
     if (err != NULL && ei != NULL) {
         char ttag[128];
 
         switch (err->type) {
         case XV_ERR_FATAL:
-            gtk_image_set_from_stock(GTK_IMAGE(ei->image),
-                                     "gtk-dialog-error",
-                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, _("FATAL\nERROR (%i):"), err->code);
+            gtk_image_set_from_stock (GTK_IMAGE (ei->image),
+                                      "gtk-dialog-error",
+                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
+            snprintf (ttag, 128, _("FATAL\nERROR (%i):"), err->code);
             break;
         case XV_ERR_ERROR:
-            gtk_image_set_from_stock(GTK_IMAGE(ei->image),
-                                     "gtk-dialog-warning",
-                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, _("ERROR (%i):"), err->code);
+            gtk_image_set_from_stock (GTK_IMAGE (ei->image),
+                                      "gtk-dialog-warning",
+                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
+            snprintf (ttag, 128, _("ERROR (%i):"), err->code);
             break;
         case XV_ERR_WARN:
-            gtk_image_set_from_stock(GTK_IMAGE(ei->image),
-                                     "gtk-dialog-info",
-                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, _("WARNING (%i):"), err->code);
+            gtk_image_set_from_stock (GTK_IMAGE (ei->image),
+                                      "gtk-dialog-info",
+                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
+            snprintf (ttag, 128, _("WARNING (%i):"), err->code);
             break;
         case XV_ERR_INFO:
-            gtk_image_set_from_stock(GTK_IMAGE(ei->image),
-                                     "gtk-dialog-info",
-                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, _("INFO (%i):"), err->code);
+            gtk_image_set_from_stock (GTK_IMAGE (ei->image),
+                                      "gtk-dialog-info",
+                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
+            snprintf (ttag, 128, _("INFO (%i):"), err->code);
             break;
         default:
-            gtk_image_set_from_stock(GTK_IMAGE(ei->image),
-                                     "gtk-dialog-info",
-                                     GTK_ICON_SIZE_LARGE_TOOLBAR);
-            snprintf(ttag, 128, "???? (%i):", err->code);
+            gtk_image_set_from_stock (GTK_IMAGE (ei->image),
+                                      "gtk-dialog-info",
+                                      GTK_ICON_SIZE_LARGE_TOOLBAR);
+            snprintf (ttag, 128, "???? (%i):", err->code);
         }
-        gtk_label_set_text(GTK_LABEL(ei->title_tag), strdup(ttag));
-        gtk_label_set_text(GTK_LABEL(ei->title_text), _(err->short_msg));
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer
-                                 (GTK_TEXT_VIEW(ei->desc_text)),
-                                 _(err->long_msg), -1);
-        gtk_label_set_text(GTK_LABEL(ei->action_text), _(err->action_msg));
+        gtk_label_set_text (GTK_LABEL (ei->title_tag), strdup (ttag));
+        gtk_label_set_text (GTK_LABEL (ei->title_text), _(err->short_msg));
+        gtk_text_buffer_set_text (gtk_text_view_get_buffer
+                                  (GTK_TEXT_VIEW (ei->desc_text)),
+                                  _(err->long_msg), -1);
+        gtk_label_set_text (GTK_LABEL (ei->action_text), _(err->action_msg));
     }
 
 }

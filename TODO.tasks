@@ -8,11 +8,6 @@
 sometimes cancel takes you back to the preferences dialog, sometimes it's "preferneces"</comment>
     </item>
     <item>
-      <attribute id="1156244179" priority="1" done="0" start_date="732545" enddate="99999999" notify="0" endtime="-60" last_edited="1156244179"/>
-      <summary>filename button does not reclaim space</summary>
-      <comment>if you first have a very long filename (like with ask-user-for-filename) and then a short one, the button stays wide</comment>
-    </item>
-    <item>
       <attribute id="1156092080" priority="1" done="0" start_date="732543" enddate="99999999" notify="0" endtime="-60" last_edited="1156261050"/>
       <summary>odditiy with audio capture</summary>
       <comment>kb87850@ubuntu:~/Quellen/xvidcap/trunk$ ~/xvidcap/bin/xvidcap --mf --file test.avi
@@ -31,14 +26,6 @@ jetzt tut's audio mit flash dennoch nicht
       <attribute id="1156332633" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156332633"/>
       <summary>revisit FIXMEs</summary>
       <comment/>
-    </item>
-    <item>
-      <attribute id="1156351012" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1156501224"/>
-      <summary>mutex assertion</summary>
-      <comment>xvidcap: pthread_mutex_lock.c:108: __pthread_mutex_lock: Assertion `mutex-&gt;__data.__owner == 0' failed.
-
-this seems to be happening more often with heavy load
-may need testing withouth SMP</comment>
     </item>
     <item>
       <attribute id="1156622581" priority="1" done="1" start_date="732549" completed_date="732550" notify="0" last_edited="1156677116"/>
@@ -96,11 +83,6 @@ xtoffmpeg.c XImageToFFMPEG(): Fehler beim Enkodieren der Video Daten: c 0x87160e
       <comment/>
     </item>
     <item>
-      <attribute id="1156332643" priority="1" done="0" start_date="732546" enddate="99999999" notify="0" endtime="-60" last_edited="1157957173"/>
-      <summary>revisit i18n</summary>
-      <comment>watch typos, Vincenzo sent -- remove blanks -- translator_credits</comment>
-    </item>
-    <item>
       <attribute id="1157960346" priority="1" done="0" start_date="732565" enddate="99999999" notify="0" endtime="-60" last_edited="1157981213"/>
       <summary>bad color error</summary>
       <comment>this happens if when changing the frame, you single-click on a window title ... but only with compiz/cgwd, not metacity. filed issue 0000090 at bugs.compiz.net
@@ -140,11 +122,6 @@ kb87850@ubuntu:~/Quellen/xvidcap/trunk$
       <comment/>
     </item>
     <item>
-      <attribute id="1159484354" priority="1" done="0" start_date="732583" enddate="99999999" notify="0" endtime="-60" last_edited="1159484354"/>
-      <summary>translate manpage and manual to German</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1159484368" priority="1" done="1" start_date="732583" completed_date="732583" notify="0" last_edited="1159530472"/>
       <summary>remove help command everywhere (and from the docs)</summary>
       <comment/>
@@ -155,14 +132,47 @@ kb87850@ubuntu:~/Quellen/xvidcap/trunk$
       <comment>for some reason the links jump to strange places (somewhat above or below the actual target)</comment>
     </item>
     <item>
-      <attribute id="1165704390" priority="1" done="0" start_date="732654" enddate="99999999" notify="0" endtime="-60" last_edited="1165704390"/>
+      <attribute id="1165857916" priority="1" done="0" start_date="732656" enddate="99999999" notify="0" endtime="-60" last_edited="1165857916"/>
+      <summary>step button</summary>
+      <comment>don't enable on back if not paused and all the other conditions are met</comment>
+    </item>
+    <item>
+      <attribute id="1156351012" priority="1" done="1" start_date="732546" completed_date="732664" notify="0" last_edited="1166527705"/>
+      <summary>mutex assertion</summary>
+      <comment>xvidcap: pthread_mutex_lock.c:108: __pthread_mutex_lock: Assertion `mutex-&gt;__data.__owner == 0' failed.
+
+this seems to be happening more often with heavy load
+may need testing withouth SMP</comment>
+    </item>
+    <item>
+      <attribute id="1165704390" priority="1" done="1" start_date="732654" completed_date="732664" notify="0" last_edited="1166527737"/>
       <summary>--gui no leaks open displays</summary>
       <comment/>
     </item>
     <item>
-      <attribute id="1165857916" priority="1" done="0" start_date="732656" enddate="99999999" notify="0" endtime="-60" last_edited="1165857916"/>
-      <summary>step button</summary>
-      <comment>don't enable on back if not paused and all the other conditions are met</comment>
+      <attribute id="1159484354" priority="1" done="1" start_date="732583" completed_date="732664" notify="0" last_edited="1166527837"/>
+      <summary>translate manpage and manual to German</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156332643" priority="1" done="1" start_date="732546" completed_date="732664" notify="0" last_edited="1166527848"/>
+      <summary>revisit i18n</summary>
+      <comment>watch typos, Vincenzo sent -- remove blanks -- translator_credits</comment>
+    </item>
+    <item>
+      <attribute id="1166528458" priority="1" done="0" start_date="732664" enddate="99999999" notify="0" endtime="-60" last_edited="1166528458"/>
+      <summary>step forward back buttons with sf and filename not mutable</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1166528487" priority="1" done="0" start_date="732664" enddate="99999999" notify="0" endtime="-60" last_edited="1166528524"/>
+      <summary>with max_frames captured frames one to high?</summary>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1156244179" priority="1" done="1" start_date="732545" completed_date="732664" notify="0" last_edited="1166528618"/>
+      <summary>filename button does not reclaim space</summary>
+      <comment>if you first have a very long filename (like with ask-user-for-filename) and then a short one, the button stays wide</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

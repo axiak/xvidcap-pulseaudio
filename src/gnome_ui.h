@@ -22,10 +22,8 @@
 #ifndef __XVC_GNOME_UI_H__
 #define __XVC_GNOME_UI_H__
 
+void xvc_toggle_cap_type ();
+void xvc_undo_toggle_cap_type ();
+void xvc_reset_ctrl_main_window_according_to_current_prefs ();
 
-void xvc_toggle_cap_type();
-void xvc_undo_toggle_cap_type();
-void xvc_reset_ctrl_main_window_according_to_current_prefs();
-
-
-#endif                          // __XVC_GNOME_UI_H__
+#endif     // __XVC_GNOME_UI_H__
