@@ -18,8 +18,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdio.h>
 #include <X11/Intrinsic.h>
 #include "frame.h"
+
+#define DEBUGFILE "frame.c"
 
 /* 
  * return a pointer to the current area enclosed by the frame
@@ -41,4 +44,25 @@ xvc_is_frame_locked ()
     extern int xvc_frame_lock;
 
     return (xvc_frame_lock);
+}
+
+void
+xvc_get_window_attributes (Window win, XWindowAttributes * wa)
+{
+#define DEBUGFUNCTION "xvc_get_window_attributes()"
+
+    Display *display = xvc_frame_get_capture_display ();
+
+    if (win == None) {
+        win = DefaultRootWindow (display);
+    }
+
+    if (!XGetWindowAttributes (display, win, wa)) {
+        char msg[256];
+
+        snprintf (msg, 256, "%s %s: Can't get window attributes!\n",
+                  DEBUGFILE, DEBUGFUNCTION);
+        perror (msg);
+    }
+#undef DEBUGFUNCTTION
 }

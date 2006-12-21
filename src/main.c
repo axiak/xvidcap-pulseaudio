@@ -52,6 +52,7 @@
 #include "control.h"
 #include "codecs.h"
 #include "job.h"
+#include "frame.h"
 #include "xvidcap-intl.h"
 
 #define DEBUGFILE "main.c"
@@ -62,6 +63,7 @@ typedef void (*sighandler_t) (int);
  * GLOBAL VARIABLES 
  */
 AppData sapp, *app;
+Window capture_window = None;
 extern xvCodec tCodecs[NUMCODECS];
 extern xvFFormat tFFormats[NUMCAPS];
 extern xvAuCodec tAuCodecs[NUMAUCODECS];
@@ -91,6 +93,8 @@ usage (char *prog)
             ("[--continue [yes|no]] autocontinue after maximum frames/time\n"));
     printf (_
             ("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"));
+    printf (_
+            ("[--window <hex-window-id>] a hexadecimal window id (ref. xwininfo)\n"));
     printf (_
             ("[--rescale #] relative output size in percent compared to input (1-100)\n"));
     printf (_("[--quality #] recording quality (1-100)\n"));
@@ -213,6 +217,7 @@ parse_cli_options (CapTypeOptions * tmp_capture_options, int argc,
         {"aucodec-help", no_argument, NULL, 0},
         {"auto", no_argument, NULL, 0},
         {"rescale", required_argument, NULL, 0},
+        {"window", required_argument, NULL, 0},
         {NULL, 0, NULL, 0},
     };
     int opt_index = 0, c;
@@ -602,6 +607,9 @@ parse_cli_options (CapTypeOptions * tmp_capture_options, int argc,
             case 26:                  // rescale
                 app->rescale = atoi (optarg);
                 break;
+            case 27:
+                sscanf (optarg, "%X", (int *) &capture_window);
+                break;
             default:
                 usage (_argv[0]);
                 break;
@@ -853,8 +861,7 @@ main (int argc, char *argv[])
 
     // Xlib threading initialization
     // this is here with the gtk/glib stuff in gnome_ui.c|h because this
-    // is
-    // UI independant and would need to be here even with Qt
+    // is UI independant and would need to be here even with Qt
     XInitThreads ();
 
 #ifdef ENABLE_NLS
@@ -923,7 +930,7 @@ main (int argc, char *argv[])
                  DEBUGFILE, DEBUGFUNCTION);
         exit (2);
     }
-    if (!xvc_frame_create ()) {
+    if (!xvc_frame_create (capture_window)) {
         fprintf (stderr,
                  _("%s %s: can't create selection Frame ... aborting\n"),
                  DEBUGFILE, DEBUGFUNCTION);

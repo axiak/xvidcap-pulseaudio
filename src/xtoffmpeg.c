@@ -995,6 +995,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     st->codec->time_base.num = 1;
     // emit one intra frame every fifty frames at most
     st->codec->gop_size = 50;
+    st->codec->mb_decision = 2;
 
     // find suitable pix_fmt for codec
     if (&(codec->pix_fmts) != NULL) {
@@ -1019,19 +1020,11 @@ add_video_stream (AVFormatContext * oc, XImage * image,
 #endif     // DEBUG
 
     // flags
-    st->codec->flags |= (CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST |
-                         // this is for trying to achieve cbr (to make the 
-                         // quality setting have any effect)
-                         CODEC_FLAG_MV0 | CODEC_FLAG_CBP_RD);
+    st->codec->flags |= (CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST);
     st->codec->flags &= ~CODEC_FLAG_OBMC;
     // some formats want stream headers to be seperate
     if (oc->oformat->flags & AVFMT_GLOBALHEADER)
         st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
-    // attempt for cbr
-    st->codec->mb_decision = 2;
-    st->codec->lmax = 340 * FF_QP2LAMBDA;
-    st->codec->scenechange_threshold = 100000000;
-    st->codec->rc_buffer_aggressivity = 0.25;
 
     // bit rate calculation
     st->codec->bit_rate = (st->codec->width * st->codec->height *
@@ -1042,22 +1035,8 @@ add_video_stream (AVFormatContext * oc, XImage * image,
         st->codec->bit_rate = 300000;
 
 #ifdef DEBUG
-    printf ("%s %s: bitrate = %i\n", DEBUGFILE, DEBUGFUNCTION,
-            st->codec->bit_rate);
-#endif
-
-    st->codec->mb_decision = 2;
-    /* st->codec->me_method = ME_ZERO; st->codec->qmin = 1;
-     * st->codec->qmax = 1; */
-    // st->codec->debug = 0x00000FFF;
-    /* out_st->time_base.num = out_st->codec->time_base.num;
-     * out_st->time_base.den = out_st->codec->time_base.den;
-     * out_st->pts.val = (double)out_st->pts.val * out_st->time_base.num / 
-     * * * * * * out_st->time_base.den; */
-
-#ifdef DEBUG
-    printf ("%s %s: Leaving with %i streams in oc\n", DEBUGFILE,
-            DEBUGFUNCTION, oc->nb_streams);
+    printf ("%s %s: Leaving with %i streams in oc and bitrate %i\n", DEBUGFILE,
+            DEBUGFUNCTION, oc->nb_streams, st->codec->bit_rate);
 #endif     // DEBUG
 
     return st;

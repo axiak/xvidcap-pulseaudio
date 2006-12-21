@@ -232,7 +232,7 @@ xvc_ui_create ()
 }
 
 Boolean
-xvc_frame_create ()
+xvc_frame_create (Window win)
 {
 #define DEBUGFUNCTION "xvc_frame_create()"
 
@@ -242,14 +242,32 @@ xvc_frame_create ()
         g_assert (xvc_ctrl_main_window);
     }
 
-    if (app->cap_width == 0)
-        app->cap_width = 10;
-    if (app->cap_height == 0)
-        app->cap_height = 10;
+    if (win == None) {
+        if (app->cap_width == 0)
+            app->cap_width = 10;
+        if (app->cap_height == 0)
+            app->cap_height = 10;
 
-    xvc_create_gtk_frame (xvc_ctrl_main_window, app->cap_width,
-                          app->cap_height, app->cap_pos_x, app->cap_pos_y);
+        xvc_create_gtk_frame (xvc_ctrl_main_window, app->cap_width,
+                              app->cap_height, app->cap_pos_x, app->cap_pos_y);
+    } else {
+        Job *job = xvc_job_ptr ();
+        Display *display = xvc_frame_get_capture_display ();
+        int x, y;
+        Window temp = None;
+        Window root = DefaultRootWindow (display);
 
+        xvc_job_set_window_attributes (win);
+        XTranslateCoordinates (display, win, root, 0, 0, &x, &y, &temp);
+
+        app->cap_pos_x = job->win_attr.x = x;
+        app->cap_pos_y = job->win_attr.y = y;
+        app->cap_width = job->win_attr.width;
+        app->cap_height = job->win_attr.height;
+
+        xvc_create_gtk_frame (xvc_ctrl_main_window, app->cap_width,
+                              app->cap_height, app->cap_pos_x, app->cap_pos_y);
+    }
     return TRUE;
 #undef DEBUGFUNCTION
 }
@@ -1910,10 +1928,9 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
     Job *jobp = xvc_job_ptr ();
 
     if (gtk_toggle_tool_button_get_active (togglebutton)) {
-        Display *display =
-            GDK_DRAWABLE_XDISPLAY (GTK_WIDGET (xvc_ctrl_main_window)->window);
+        Display *display = xvc_frame_get_capture_display ();
         Cursor cursor;
-        Window root, target = None, temp = None;
+        Window root = None, target = None, temp = None;
         XEvent event;
         int buttons = 0;
         int x_down, y_down, x_up, y_up, x, y, pheight = 0, pwidth = 0;
@@ -1923,7 +1940,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
 
         g_assert (display);
 
-        root = RootWindow (display, DefaultScreen (display));
+        root = DefaultRootWindow (display);
         cursor = XCreateFontCursor (display, XC_crosshair);
 
         gcv.background = XBlackPixel (display, XDefaultScreen (display));
@@ -2019,9 +2036,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                 height = y_up - y_down + 2;
                 y = y_down;
             }
-            if (target != root)
-                target = XmuClientWindow (display, target);
-            XGetWindowAttributes (display, target, &jobp->win_attr);
+            xvc_job_set_window_attributes (target);
             jobp->win_attr.width = width;
             jobp->win_attr.height = height;
         } else {
@@ -2029,7 +2044,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                 // get the real window 
                 target = XmuClientWindow (display, target);
             }
-            XGetWindowAttributes (display, target, &jobp->win_attr);
+            xvc_job_set_window_attributes (target);
             XTranslateCoordinates (display, target, root, 0, 0, &x, &y, &temp);
         }
 

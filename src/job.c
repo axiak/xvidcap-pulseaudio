@@ -129,7 +129,7 @@ xvc_job_new ()
 
     job->color_table = NULL;
     job->colors = NULL;
-//    XWindowAttributes win_attr;
+    job->win_attr.root = None;
     job->dpy = NULL;
     job->area = NULL;
     job->rescale = 0;
@@ -189,19 +189,11 @@ xvc_job_set_display ()
 }
 
 void
-xvc_job_set_window_attributes ()
+xvc_job_set_window_attributes (Window win)
 {
 #define DEBUGFUNCTION "xvc_job_set_window_attributes()"
-    Window root = DefaultRootWindow (job->dpy);
-
-    if (!XGetWindowAttributes (job->dpy, root, &(job->win_attr))) {
-        char msg[256];
-
-        snprintf (msg, 256, "%s %s: Can't get window attributes!\n",
-                  DEBUGFILE, DEBUGFUNCTION);
-        perror (msg);
-    }
-    XGetWindowAttributes (job->dpy, root, &(job->win_attr));
+    xvc_job_set_display ();
+    xvc_get_window_attributes (win, &(job->win_attr));
 #undef DEBUGFUNCTION
 }
 
@@ -214,12 +206,8 @@ xvc_job_set_from_app_data (AppData * app)
     char file[PATH_MAX + 1];
 
     // make sure we do have a job
-    if (job == NULL) {
-        fprintf
-            (stderr,
-             "%s %s: job is still NULL ... this should never happen!",
-             DEBUGFILE, DEBUGFUNCTION);
-        exit (1);
+    if (!job) {
+        xvc_job_new ();
     }
     // switch sf or mf
 #ifdef USE_FFMPEG
@@ -355,7 +343,10 @@ xvc_job_set_from_app_data (AppData * app)
     // set display and window attributes
     xvc_job_set_display ();
 
-    xvc_job_set_window_attributes ();
+    // once we have window attributes, we only change them when we select a
+    // new capture frame
+    if (job->win_attr.root == None)
+        xvc_job_set_window_attributes (None);
 
     job_set_capture ();
 
@@ -369,6 +360,7 @@ xvc_job_set_from_app_data (AppData * app)
             DEBUGFUNCTION);
     xvc_job_dump ();
 #endif     // DEBUG
+#undef DEBUGFUNCTION
 }
 
 /* 
@@ -378,10 +370,11 @@ xvc_job_set_from_app_data (AppData * app)
 Job *
 xvc_job_ptr (void)
 {
-#undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_job_ptr()"
-
+    if (!job)
+        xvc_job_new ();
     return (job);
+#undef DEBUGFUNCTION
 }
 
 /* 
@@ -390,7 +383,6 @@ xvc_job_ptr (void)
 void
 xvc_job_set_save_function (Visual * vis, int type)
 {
-#undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_job_set_save_function()"
 
 #ifdef DEBUG2

@@ -107,6 +107,7 @@ void xvc_job_dump ();
 void xvc_job_validate ();
 void xvc_job_set_save_function (Visual * vis, int type);
 void xvc_job_set_colors ();
+void xvc_job_set_window_attributes (Window win);
 
 void job_set_state (int state);
 void job_merge_state (int state);

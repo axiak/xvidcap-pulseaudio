@@ -26,8 +26,8 @@
 #endif
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
+#include <config.h>
+#endif     // HAVE_CONFIG_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -99,17 +99,17 @@ xvc_app_data_init (AppData * lapp)
     lapp->cap_pos_x = 0;               // x position of the capture frame
     lapp->cap_pos_y = 0;               // y position of the capture frame
     lapp->rescale = 0;
-    lapp->mouseWanted = 0;             // capture mouse pointer: 0 none , 1
-    // white, 2 black (1 & 2 only relevant
-    // if xfixes not present)
+    lapp->mouseWanted = 0;             /* capture mouse pointer: 0 none , 1
+                                        * white, 2 black (1 & 2 only relevant
+                                        * if xfixes not present) */
     lapp->source = NULL;               // video capture source
 #ifdef HAVE_FFMPEG_AUDIO
     lapp->snddev = NULL;               // audio capture source
 #endif     // HAVE_FFMPEG_AUDIO
     lapp->device = NULL;               // v4l device to capture from
     lapp->default_mode = 0;            // 0 = single_frame, 1 = multi_frame
-    lapp->current_mode = -1;           // dto. ... this is set after evaluation
-    // of cli options
+    lapp->current_mode = -1;           /* dto. ... this is set after evaluation
+                                        * of cli options */
     xvc_cap_type_options_init (&(lapp->single_frame));
 #ifdef USE_FFMPEG
     xvc_cap_type_options_init (&(lapp->multi_frame));
@@ -221,20 +221,20 @@ xvc_cap_type_options_copy (CapTypeOptions * topts, CapTypeOptions * sopts)
     topts->quality = sopts->quality;   // quality setting
     topts->bpp = sopts->bpp;           // bits per pixel
 
-    topts->play_cmd = strdup (sopts->play_cmd); // command to use for
-    // animate function
-    topts->video_cmd = strdup (sopts->video_cmd);   // command to use
-    // for make video function
-    topts->edit_cmd = strdup (sopts->edit_cmd); // command to use for edit 
-    // function
+    topts->play_cmd = strdup (sopts->play_cmd); /* command to use for
+                                                 * animate function */
+    topts->video_cmd = strdup (sopts->video_cmd);   /* command to use
+                                                     * for make video function */
+    topts->edit_cmd = strdup (sopts->edit_cmd); /* command to use for edit 
+                                                 * function */
 
 #ifdef HAVE_FFMPEG_AUDIO
     topts->au_targetCodec = sopts->au_targetCodec;  // for audio encoding
     topts->audioWanted = sopts->audioWanted;    // audio wanted
     topts->sndrate = sopts->sndrate;   // sound sample rate
     topts->sndsize = sopts->sndsize;   // bits to sample for audio capture
-    topts->sndchannels = sopts->sndchannels;    // number of channels to
-    // record audio to 
+    topts->sndchannels = sopts->sndchannels;    /* number of channels to
+                                                 * record audio to */
 #endif     // HAVE_FFMPEG_AUDIO
 }
 
@@ -251,15 +251,15 @@ xvc_app_data_copy (AppData * tapp, AppData * sapp)
     tapp->cap_pos_x = sapp->cap_pos_x; // x position of the capture frame
     tapp->cap_pos_y = sapp->cap_pos_y; // y position of the capture frame
     tapp->rescale = sapp->rescale;
-    tapp->mouseWanted = sapp->mouseWanted;  // capture mouse pointer: 0 none, 
-    // 1 white , 2 black
+    tapp->mouseWanted = sapp->mouseWanted;  /* capture mouse pointer: 0 none, 
+                                             * 1 white , 2 black */
     tapp->source = strdup (sapp->source);   // video capture source
 #ifdef HAVE_FFMPEG_AUDIO
     tapp->snddev = strdup (sapp->snddev);   // audio capture source
 #endif     // HAVE_FFMPEG_AUDIO
     tapp->device = strdup (sapp->device);   // v4l device to capture from
-    tapp->default_mode = sapp->default_mode;    // 0 = single_frame, 1 =
-    // multi_frame
+    tapp->default_mode = sapp->default_mode;    /* 0 = single_frame, 1 =
+                                                 * multi_frame */
     tapp->current_mode = sapp->current_mode;    // dto.
     xvc_cap_type_options_copy (&(tapp->single_frame), &(sapp->single_frame));
 
@@ -274,7 +274,7 @@ xvc_app_data_copy (AppData * tapp, AppData * sapp)
  * mode = 1 : ignore non-current mode data
  *
  * returns 0 on no error
- * 1 on errors
+ * 1 on error
  * -1 on internal errors (i.e. errors while checking for errors)
  *
  * passing the errors return pointer always clears it

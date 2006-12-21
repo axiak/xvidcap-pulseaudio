@@ -1,4 +1,12 @@
 
+2006-12-21  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c: code cleanup
+	* src: gnome_ui.c, app_data.c, job.c, job.h, main.c, frame.c:
+		eliminate some cases where X11 displays were still
+		opened outside xvc_frame_get_capture_display and
+		added a new --window switch to select a window to
+		capture by hexadecimal window id (ref. xwininfo)
+
 2006-12-20  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/*.[ch]: indentation (more to follow), cleanup for
 		display handling (no more leaking of displays)
