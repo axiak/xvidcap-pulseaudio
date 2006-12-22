@@ -24,6 +24,8 @@
 
 #define DEBUGFILE "frame.c"
 
+static XRectangle xvc_frame_rectangle;
+
 /* 
  * return a pointer to the current area enclosed by the frame
  */

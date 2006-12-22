@@ -88,8 +88,9 @@ do_reposition_control (GtkWidget * toplevel)
 #define DEBUGFUNCTION "do_reposition_control()"
     int max_width = 0, max_height = 0;
     int pwidth = 0, pheight = 0;
-    int x = xvc_frame_rectangle.x, y = xvc_frame_rectangle.y;
-    int width = xvc_frame_rectangle.width, height = xvc_frame_rectangle.height;
+    XRectangle *x_rect = xvc_get_capture_area();
+    int x = x_rect->x, y = x_rect->y;
+    int width = x_rect->width, height = x_rect->height;
     GdkScreen *myscreen;
     GdkRectangle rect;
 
@@ -153,9 +154,8 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
 #define DEBUGFUNCTION "xvc_change_gtk_frame()"
     int max_width, max_height;
     extern GtkWidget *xvc_ctrl_main_window;
-    GdkScreen *myscreen;
     Display *dpy;
-    Job *job = xvc_job_ptr ();
+    XRectangle *x_rect = xvc_get_capture_area();
 
     // we have to adjust it to viewable areas
     dpy = xvc_frame_get_capture_display ();
@@ -205,10 +205,10 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
 #endif     // HasVideo4Linux
     }
     // store coordinates in rectangle for further reference
-    xvc_frame_rectangle.x = x;
-    xvc_frame_rectangle.y = y;
-    xvc_frame_rectangle.width = width;
-    xvc_frame_rectangle.height = height;
+    x_rect->x = x;
+    x_rect->y = y;
+    x_rect->width = width;
+    x_rect->height = height;
 
     // if the frame is locked, we have a GUI, and we also want to
     // reposition
@@ -232,6 +232,7 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
 {
 #define DEBUGFUNCTION "on_gtk_frame_configure_event()"
     gint x, y, pwidth, pheight;
+    XRectangle *x_rect = xvc_get_capture_area();
 
     if (xvc_is_frame_locked ()) {
         x = ((GdkEventConfigure *) e)->x;
@@ -239,8 +240,8 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
         pwidth = ((GdkEventConfigure *) e)->width;
         pheight = ((GdkEventConfigure *) e)->height;
         y += pheight + FRAME_OFFSET;
-        xvc_change_gtk_frame (x, y, xvc_frame_rectangle.width,
-                              xvc_frame_rectangle.height, FALSE);
+        xvc_change_gtk_frame (x, y, x_rect->width,
+                              x_rect->height, FALSE);
     }
 
     return FALSE;
@@ -252,11 +253,12 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
                       int px, int py)
 {
 #define DEBUGFUNCTION "xvc_create_gtk_frame()"
-    gint x = 0, y = 0, width = 0, height = 0;
+    gint x = 0, y = 0;
     GdkColor g_col;
     GdkColormap *colormap;
     GdkRectangle rect;
     int flags = app->flags;
+    XRectangle *x_rect = xvc_get_capture_area();
 
 #ifdef DEBUG
     printf ("%s %s: x %d y %d width %d height %d\n", DEBUGFILE,
@@ -286,12 +288,12 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     }
 
     // store rectangle properties for further reference
-    g_assert (&xvc_frame_rectangle);
+    g_assert (x_rect);
 
-    xvc_frame_rectangle.width = pwidth;
-    xvc_frame_rectangle.height = pheight;
-    xvc_frame_rectangle.x = x;
-    xvc_frame_rectangle.y = y;
+    x_rect->width = pwidth;
+    x_rect->height = pheight;
+    x_rect->x = x;
+    x_rect->y = y;
 
     // create frame
     if (!(flags & FLG_NOGUI)) {

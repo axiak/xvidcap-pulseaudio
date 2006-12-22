@@ -32,30 +32,30 @@
 
 typedef struct _Job
 {
-    int fps;    /* frames per second */
+//    int fps;    /* frames per second */
     char *file; /* filename */
     int flags;  /* different flags .. see app_data.h */
     int state;  /* state flags */
-    int start_no;   /* start number */
+//    int start_no;   /* start number */
     int pic_no; /* current pic number */
     int movie_no;   /* current movie number */
-    int step;   /* number to use for increasing pic number 
-                 */
+//    int step;   /* number to use for increasing pic number 
+//                 */
     int time_per_frame; /* time per frame in milli secs */
-    int max_frames; /* max number of frames to record */
-    int max_time;
-    int quality;    /* needed for jpeg */
-    char open_flags[8];
-    int bpp;    /* for video4linux */
-    int vid_dev;    /* file descriptor for video device */
+//    int max_frames; /* max number of frames to record */
+//    int max_time;
+//    int quality;    /* needed for jpeg */
+//    char open_flags[8];
+//    int bpp;    /* for video4linux */
+//    int vid_dev;    /* file descriptor for video device */
 #ifdef HAVE_FFMPEG_AUDIO
-    int snd_dev;    /* file descriptor for sound device */
-    int snd_rate;
-    int snd_smplsize;
-    int snd_channels;
+//    int snd_dev;    /* file descriptor for sound device */
+//    int snd_rate;
+//    int snd_smplsize;
+//    int snd_channels;
 #endif     // HAVE_FFMPEG_AUDIO
-    int mouseWanted;    /* 0 none , 1 white , 2 black */
-    char *video_dev;    /* video device */
+//    int mouseWanted;    /* 0 none , 1 white , 2 black */
+//    char *video_dev;    /* video device */
 #ifdef HAVE_FFMPEG_AUDIO
     char *snd_device;   /* sound device */
 #endif     // HAVE_FFMPEG_AUDIO
@@ -64,9 +64,9 @@ typedef struct _Job
      * some function pointers 
      */
     void *(*get_colors) (XColor *, int);
-    void (*save) (FILE *, XImage *, struct _Job *);
-    void (*clean) (struct _Job *);
-    long (*capture) (void *);
+    void (*save) (FILE *, XImage *);
+    void (*clean) ();
+    long (*capture) ();
 
     /* 
      * target format, e.g. CAP_XWD 
@@ -74,7 +74,7 @@ typedef struct _Job
     int target;
     int targetCodec;
     int au_targetCodec;
-    unsigned long crc;
+//    unsigned long crc;
     int ncolors;
 
     /* 
@@ -82,10 +82,10 @@ typedef struct _Job
      */
     void *color_table;
     XColor *colors;
-    XWindowAttributes win_attr;
-    Display *dpy;
-    XRectangle *area;
-    int rescale;
+//    XWindowAttributes win_attr;
+//    Display *dpy;
+//    XRectangle *area;
+//    int rescale;
 } Job;
 
 /* 
@@ -104,10 +104,10 @@ void xvc_job_free ();
 void xvc_job_set_from_app_data (AppData * app);
 Job *xvc_job_ptr (void);
 void xvc_job_dump ();
-void xvc_job_validate ();
+//void xvc_job_validate ();
 void xvc_job_set_save_function (Visual * vis, int type);
 void xvc_job_set_colors ();
-void xvc_job_set_window_attributes (Window win);
+// void xvc_job_set_window_attributes (Window win);
 
 void job_set_state (int state);
 void job_merge_state (int state);

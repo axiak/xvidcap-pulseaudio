@@ -22,12 +22,12 @@
 #ifndef __XVC_FRAME_H__
 #define __XVC_FRAME_H__
 
-XRectangle xvc_frame_rectangle;
 int xvc_frame_lock;
 
 XRectangle *xvc_get_capture_area (void);
 int xvc_is_frame_locked (void);
 Display *xvc_frame_get_capture_display ();
 void xvc_frame_drop_capture_display ();
+void xvc_get_window_attributes (Window win, XWindowAttributes * wa);
 
 #endif     // __XVC_FRAME_H__

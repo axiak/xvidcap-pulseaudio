@@ -1,5 +1,5 @@
-/* 
- * app_data.h,
+/** 
+ * \file app_data.h,
  *
  * Copyright (C) 1997 Rasca Gmelch, Berlin
  * Copyright (C) 2003-2006 Karl H. Beckers, Frankfurt
@@ -25,161 +25,231 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+#include <X11/Intrinsic.h>
 
 /* 
  * some flags to toggle on/off options
- *
  */
-#define FLG_NONE 0
-#define FLG_RUN_VERBOSE 1
-#define FLG_MULTI_IMAGE 2
-
+#define FLG_NONE                0
+/** \brief run xvidcap with verbose output */
+#define FLG_RUN_VERBOSE         1
 #ifdef HAVE_SHMAT
-#define FLG_USE_SHM 4
+/** \brief use shared memory access to X11 */
+#define FLG_USE_SHM             2
 #endif     // HAVE_SHMAT
-
-#define FLG_USE_DGA 8
-#define FLG_USE_V4L 16
+/** \brief use dga for capturing 
+ * 
+ * @note this is not at all used atm.
+ */
+#define FLG_USE_DGA             4
+/** \brief use video for linux for capturing 
+ * 
+ * @note this is not at all used atm.
+ */
+#define FLG_USE_V4L             8
 
 #ifdef HAVE_SHMAT
+/** \brief shorthand for the sum of source flags */
 #define FLG_SOURCE (FLG_USE_DGA | FLG_USE_SHM | FLG_USE_V4L)
 #else
+/** \brief shorthand for the sum of source flags */
 #define FLG_SOURCE (FLG_USE_DGA | FLG_USE_V4L)
 #endif     // HAVE_SHMAT
+/** \brief should we record sound
+ * 
+ * @note this is used inside the job to be able to unset audio capture if
+ *      the user wants it in the AppData struct, but audio capture is not
+ *      possible
+ */
+#define FLG_REC_SOUND           16
+/** \brief run without GUI */
+#define FLG_NOGUI               32
+/** \brief enable auto-continue feature */
+#define FLG_AUTO_CONTINUE       64
+/** \brief save the capture geometry to the preferences file */
+#define FLG_SAVE_GEOMETRY       128
+/** \brief use video for linux for capturing 
+ * 
+ * @note this is not at all used atm.
+ */
+#define FLG_SHOW_TIME           256
+/** \brief always show the results dialog */
+#define FLG_ALWAYS_SHOW_RESULTS 512
+/** \brief use the xfixes extension, i. e. capture the real mouse pointer */
+#define FLG_USE_XFIXES          1024
 
-#define FLG_REC_SOUND 32
-// FIXME: do we need the following?
-#define FLG_SYNC 64
-
-#define FLG_NOGUI 128
-#define FLG_USE_DEFAULT_CODECS 256
-#define FLG_AUTO_CONTINUE 512
-#define FLG_SAVE_GEOMETRY 1024
-#define FLG_SHOW_TIME 2048             // for future use
-#define FLG_ALWAYS_SHOW_RESULTS 4096
-#define FLG_USE_XFIXES 8192
-
-/* 
- * moving AppData definition here to make it available to options.c, control.c etc.
- *
- * this structure is used to pass options passed to the application to the job
- * controller
- *
- * now, we want options specific to single-frame capture and those to multi-frame
- * capture (a.k.a on-the-fly encoding) separate
+/** \brief This structure contains the settings for one of the two capture
+ *      modes (single-frame vs. multi-frame).
  */
 typedef struct
 {
-    char *file; // file pattern
-    int target; // target file format
-    int targetCodec;    // for video encoding
-    int fps;    // frames per second
-    int time;   // time in seconds to record
-    int frames; // max frames to record
-    int start_no;   // frame number to start with
-    int step;   // frame increment
-    int quality;    // quality setting
-    int bpp;    // bits per pixel
+    /** \brief file name pattern */
+    char *file;
+    /** \brief target file format, 0 means autodetect */
+    int target; // 
+    /** \brief target codec, 0 means autodetect */
+    int targetCodec;
+    /** \brief frames per second */
+    int fps;
+    /** \brief maximum time in seconds to record */
+    int time;
+    /** \brief maximum frames to record */
+    int frames;
+    /** \brief frame number to start with */
+    int start_no;
+    /** \brief frame increment */
+    int step;
+    /** \brief quality setting */
+    int quality;
 #ifdef HAVE_FFMPEG_AUDIO
-    int au_targetCodec; // for audio encoding
-    int audioWanted;    // audio wanted
-    int sndrate;    // sound sample rate
-    int sndsize;    // bits to sample for audio capture
-    int sndchannels;    // number of channels to record
+    /** \brief target codec for audio encoding, 0 means autodetect */
+    int au_targetCodec;
+    /** \brief audio wanted */
+    int audioWanted;
+    /** \brief sound sample rate */
+    int sndrate;
+    /** \brief bits to sample for audio capture */
+    int sndsize;
+    /** \brief number of channels to record */
+    int sndchannels;
 #endif     // HAVE_FFMPEG_AUDIO
-    // audio to 
-    char *play_cmd; // command to use for animate function
-    char *video_cmd;    // command to use for make video function
-    char *edit_cmd; // command to use for edit function
+    /** \brief command to use for animate function */
+    char *play_cmd;
+    /** \brief command to use for make video function */
+    char *video_cmd;
+    /** \brief command to use for edit function */
+    char *edit_cmd;
 } CapTypeOptions;
 
+/** \brief This structure has all the user options passed to the application.
+ *      It contains two CapTypeOptions structs to keep the settings for the two
+ *      capture modes (single-frame vs. multi-frame) in parallel.
+ */
 typedef struct
 {
-    int verbose;    // verbose level
-    int flags;  // flags used ... see above
-    int cap_width;  // width
-    int cap_height; // height
-    int cap_pos_x;  // x position of the capture frame
-    int cap_pos_y;  // y position of the capture frame
+    /** \brief level of verbosity */
+    int verbose;
+    /** \brief general flags 
+     *
+     * @see FLG_NONE
+     */
+    int flags;
+    /** \brief rescale to percentage */
     int rescale;
-    int mouseWanted;    // capture mouse pointer: 0 none , 
-    // 1 white , 2 black
-    char *source;   // video capture source
+    /** \brief capture mouse pointer: 0 none, 1 white , 2 black. When Xfixes
+     *      is used to capture the real mouse pointer only 0 or != 0 is
+     *      relevant.
+     */
+    int mouseWanted;
+    /** \brief video capture source */
+    char *source;
 #ifdef HAVE_FFMPEG_AUDIO
-    char *snddev;   // audio capture source
+    /** \brief audio capture source */
+    char *snddev;
 #endif     // HAVE_FFMPEG_AUDIO
-    // information
-    char *device;   // v4l device to capture from
-    int default_mode;   // 0 = single_frame, 1 =
-    // multi_frame
-    int current_mode;   // dto.
+#ifdef HasVideo4Linux
+    /** \brief v4l device to capture from */
+    char *device;
+#endif     // HasVideo4Linux
+    /** \brief window attributes for area to capture. 
+     *
+     * This is mostly relevant for captures on 8-bit pseudo-color displays with
+     * potential for colormap flashing. In such cases selecting a single window for
+     * capture (through the select toggle and a single-click on a window or the
+     * --window parameter) will retrieve the correct colormap for that window.
+     * Also the geometry will be retrieved in that way.
+     */
+    XWindowAttributes win_attr;
+    /** \brief store the display here, so we don't open and close it everywhere
+     *      we need it */
+    Display *dpy;
+    /** \brief the area to capture */
+    XRectangle *area;
+
+    /** \brief the default capture mode (if detection fails). 0 = single-frame
+     *      1 = multi-frame */
+    int default_mode;
+    /** \brief the current capture mode, values as with default_mode */
+    int current_mode;
+    /** \brief options for single-frame capture mode */
     CapTypeOptions single_frame;
+    /** \brief options for multi-frame capture mode */
     CapTypeOptions multi_frame;
-    // int use_default_codecs; // override targetCodec values from
-    // preferences file
-    // with defaults for target file type
 } AppData;
 
-// error related
+/*
+ * error related constants
+ */
+/** \brief max number of errors to initialize error array */
+#define NUMERRORS               50
+/** \brief error severity fatal (default action calls exit) */
+#define XV_ERR_FATAL            1
+/** \brief error severity error (default action is a major change to input) */
+#define XV_ERR_ERROR            2
+/** \brief error severity warning (default action is a minor change to input)*/
+#define XV_ERR_WARN             3
+/** \brief error severity info (smth's strange but does NOT require a change) 
+ *
+ * In other words: an INFO MUST NOT NEED TO CHANGE ANYTHING! xvidcap will 
+ * continue when there are only INFO messages left.
+ */
+#define XV_ERR_INFO             4
 
-#define NUMERRORS 50                   // max number of errors to
-// initialize error array
-#define XV_ERR_FATAL 1                 // fatal error (default
-// action calls exit)
-#define XV_ERR_ERROR 2                 // error - default action
-// is a major change to
-// input
-#define XV_ERR_WARN 3                  // warning - default
-// action is a minor
-// change to input
-#define XV_ERR_INFO 4                  // info - smth's strange
-// but does NOT require a
-// change
-// in other words: an INFO 
-// MUST NOT NEED TO CHANGE 
-// ANYTHING
-// the app will continue
-// when there are only
-// INFO messages left
-
+/** \brief all information about a given error related to an inconsistency
+ *      regarding user preferences is contained here.
+ */
+struct _xvErrorListItem;
 typedef struct _xvError
 {
-    int code;   // error code
-    int type;   // one of the error types XV_ERR_*
-    char *short_msg;    // short description (title?)
-    char *long_msg; // long description in full sentences
-    // ending in a '.' (or smth.)
-    void (*action) (void *);    // default action 
-    char *action_msg;   // describes what the default action does
-    // formulate like you're completing the sentence: to resolve this I
-    // will ...
+    /** \brief error code */
+    int code;
+    /** \brief one of the error types 
+     *
+     * @see XV_ERR_FATAL
+     */
+    int type;
+    /** \brief short description (title?) */
+    char *short_msg;
+    /** \brief long description in full sentences */
+    char *long_msg;
+    /** \brief default action */
+    void (*action) (struct _xvErrorListItem *);
+    /** \brief describes what the default action does 
+     *
+     * formulate like you're completing the sentence: to resolve this I will ...
+     */
+    char *action_msg;
 } xvError;
 
+/** \brief wraps an xv_Error in an xvErrorListItem to create a double-linked
+ *      list of errors.
+ */
 typedef struct _xvErrorListItem
 {
-    xvError *err;   // pointer to actual error
-    AppData *app;   // pointer to app_data that threw error
-    struct _xvErrorListItem *previous;  // previous in dbl-linked-list
-    struct _xvErrorListItem *next;  // next in dbl-linked-list
+    /** \brief pointer to actual error */
+    xvError *err;
+    /** \brief pointer to app_data that threw error */
+    AppData *app;
+    /** \brief previous element in the double-linked list */
+    struct _xvErrorListItem *previous;  // 
+    /** \brief next element in the double-linked list */
+    struct _xvErrorListItem *next;
 } xvErrorListItem;
 
-#include <X11/Intrinsic.h>
-
-// Functions from app_data.c
-int xvc_merge_cap_type_and_app_data (CapTypeOptions * cto, AppData * lapp);
-
-xvErrorListItem *xvc_app_data_validate (AppData * lapp, int mode, int *rc);
+/*
+ * Functions from app_data.c
+ */
 void xvc_app_data_init (AppData * lapp);
 void xvc_app_data_set_defaults (AppData * lapp);
 void xvc_app_data_copy (AppData * tapp, AppData * sapp);
+void xvc_merge_cap_type_and_app_data (CapTypeOptions * cto, AppData * lapp);
+xvErrorListItem *xvc_app_data_validate (AppData * lapp, int mode, int *rc);
+void xvc_app_data_set_window_attributes (Window win);
 
 void xvc_cap_type_options_copy (CapTypeOptions * topts, CapTypeOptions * sopts);
 void xvc_cap_type_options_init (CapTypeOptions * cto);
 
 void xvc_errors_init ();
-xvErrorListItem *xvc_errors_append (int code, xvErrorListItem * err,
-                                    AppData * app);
-void xvc_errors_write_action_msg (int code);
 xvErrorListItem *xvc_errors_delete_list (xvErrorListItem * err);
 void xvc_errors_write_error_msg (int code, int print_action_or_not);
 

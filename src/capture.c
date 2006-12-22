@@ -1,4 +1,12 @@
-/* 
+/*
+ * \file capture.c
+ * 
+ * This file contains routines used for capturing individual frames.
+ * Theese routines are called from the record button callback in
+ * the GUI and call themselves again till they are stopped by a stop
+ * button event handler, a timeout, exceeding the maximum number of
+ * frames (see the various VC_... states)
+
  * Copyright (C) 1997-98 Rasca, Berlin
  * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
  * contains code written by Eduardo Gomez
@@ -16,29 +24,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- *
- * This file contains routines used for capturing individual frames.
- * Theese routines are called from the record button callback in
- * the GUI and call themselves again till they are stopped by a stop
- * button event handler, a timeout, exceeding the maximum number of
- * frames (see the various VC_... states)
- *
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
-
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif     // HAVE_STDINT_H
-
 #include <stdio.h>
 #include <limits.h>
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
@@ -47,13 +46,11 @@
 #ifdef HAVE_LIBXFIXES
 #include <X11/extensions/Xfixes.h>
 #endif     // HAVE_LIBXFIXES
-
 #ifdef HAVE_SHMAT
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <X11/extensions/XShm.h>
 #endif     // HAVE_SHMAT
-
 #ifdef HasDGA
 #include <X11/extensions/xf86dga.h>
 #endif     // HasDGA
@@ -67,41 +64,45 @@
 
 #include "capture.h"
 #include "job.h"
+#include "app_data.h"
 #include "control.h"
 
 #define DEBUGFILE "capture.c"
 
 extern int led_time;
+extern AppData *app;
 
 #ifdef HAVE_LIBXFIXES
 #include "colors.h"
-// the following are used for alpha masking of real mouse pointer
-unsigned char top[65536];
-unsigned char bottom[65536];
+/** \brief vectors used for alpha masking of real mouse pointer */
+static unsigned char top[65536];
 
+/** \brief vectors used for alpha masking of real mouse pointer */
+static unsigned char bottom[65536];
+
+/** \brief color information required for paintig of real mouse pointer */
 static ColorInfo c_info;
 #endif     // HAVE_LIBXFIXES
 
-/* 
- * the following function finds out where the mouse pointer is
+/** \brief function to find out where the mouse pointer is
+ *
+ * @param x return pointer to write x coordinate to pre-existing int
+ * @param y return pointer to write y coordinate to pre-existing int
  */
 static void
-getCurrentPointer (int *x, int *y, Job * mjob)
+getCurrentPointer (int *x, int *y)
 {
 #define DEBUGFUNCTION "getCurrentPointer()"
     Window mrootwindow, childwindow;
     int dummy;
 
-    mrootwindow = DefaultRootWindow (mjob->dpy);
+    mrootwindow = DefaultRootWindow (app->dpy);
 
-    if (XQueryPointer (mjob->dpy, mrootwindow, &mrootwindow, &childwindow,
-                       x, y, &dummy, &dummy, (unsigned int *) &dummy)) {
-        // if the XQueryPointer was successfull, we have everything we
-        // need in the variables passed as result pointers
-    } else {
+    if (!XQueryPointer (app->dpy, mrootwindow, &mrootwindow, &childwindow,
+                        x, y, &dummy, &dummy, (unsigned int *) &dummy)) {
         fprintf (stderr,
                  "%s %s: couldn't find mouse pointer for disp: %p , rootwindow: %p\n",
-                 DEBUGFILE, DEBUGFUNCTION, mjob->dpy, &mrootwindow);
+                 DEBUGFILE, DEBUGFUNCTION, app->dpy, &mrootwindow);
         *x = -1;
         *y = -1;
     }
@@ -171,7 +172,6 @@ paintMousePointer (XImage * image)
         0x00C0, 0x0180, 0x0180, 0x0000, 0x0000
     };
 
-    Job *mjob = xvc_job_ptr ();
     int x, y, cursor_width = 16, cursor_height = 20;
 
 #ifdef HAVE_LIBXFIXES
@@ -184,32 +184,32 @@ paintMousePointer (XImage * image)
     // the mouse is within the rectangle defined by the capture frame
 
 #ifdef HAVE_LIBXFIXES
-    if (mjob->flags & FLG_USE_XFIXES) {
-        x_cursor = XFixesGetCursorImage (mjob->dpy);
+    if (app->flags & FLG_USE_XFIXES) {
+        x_cursor = XFixesGetCursorImage (app->dpy);
         cursor_width = x_cursor->width;
         cursor_height = x_cursor->height;
         y = x_cursor->y - x_cursor->yhot;
         x = x_cursor->x - x_cursor->xhot;
     } else {
-        getCurrentPointer (&x, &y, mjob);
+        getCurrentPointer (&x, &y);
     }
 #else
-    getCurrentPointer (&x, &y, mjob);
+    getCurrentPointer (&x, &y);
 #endif     // HAVE_LIBXFIXES
 
-    if ((x - mjob->area->x + cursor_width) >= 0 &&
-        x < (mjob->area->width + mjob->area->x) &&
-        (y - mjob->area->y + cursor_height) >= 0 &&
-        y < (mjob->area->height + mjob->area->y)
+    if ((x - app->area->x + cursor_width) >= 0 &&
+        x < (app->area->width + app->area->x) &&
+        (y - app->area->y + cursor_height) >= 0 &&
+        y < (app->area->height + app->area->y)
         ) {
         uint8_t *im_data = (uint8_t *) image->data;
         int bytes_per_pixel = image->bits_per_pixel >> 3;
         int line;
         uint32_t masks = 0;
-        int yoff = mjob->area->y - y;
+        int yoff = app->area->y - y;
 
         /* Select correct masks and pixel size */
-        if (!mjob->flags & FLG_USE_XFIXES) {
+        if (!app->flags & FLG_USE_XFIXES) {
             if (image->bits_per_pixel == 8) {
                 masks = 1;
             } else {
@@ -218,30 +218,30 @@ paintMousePointer (XImage * image)
             }
 
             // first: shift to right line
-            im_data += (image->bytes_per_line * max (0, (y - mjob->area->y)));
+            im_data += (image->bytes_per_line * max (0, (y - app->area->y)));
 
             // then: shift to right pixel
-            im_data += (bytes_per_pixel * max (0, (x - mjob->area->x)));
+            im_data += (bytes_per_pixel * max (0, (x - app->area->x)));
         }
 
         /* Draw the cursor - proper loop */
         for (line = max (0, yoff);
              line < min (cursor_height,
-                         (mjob->area->y + image->height) - y); line++) {
+                         (app->area->y + image->height) - y); line++) {
             uint8_t *cursor = im_data;
             int column;
             uint16_t bm_b;
             uint16_t bm_w;
-            int xoff = mjob->area->x - x;
+            int xoff = app->area->x - x;
             unsigned long *pix_pointer = NULL;
 
 #ifdef HAVE_LIBXFIXES
-            if (mjob->flags & FLG_USE_XFIXES)
+            if (app->flags & FLG_USE_XFIXES)
                 pix_pointer = (line * x_cursor->width) + x_cursor->pixels;
 #endif     // HAVE_LIBXFIXES
 
-            if (!mjob->flags & FLG_USE_XFIXES) {
-                if (mjob->mouseWanted == 1) {
+            if (!app->flags & FLG_USE_XFIXES) {
+                if (app->mouseWanted == 1) {
                     bm_b = mousePointerBlack[line];
                     bm_w = mousePointerWhite[line];
                 } else {
@@ -257,12 +257,13 @@ paintMousePointer (XImage * image)
 
             for (column = max (0, xoff);
                  column < min (cursor_width,
-                               (mjob->area->x + image->width) - x); column++) {
+                               (app->area->x + app->area->width) - x);
+                 column++) {
 #ifdef HAVE_LIBXFIXES
-                if (mjob->flags & FLG_USE_XFIXES) {
+                if (app->flags & FLG_USE_XFIXES) {
                     int count;
-                    int rel_x = (x - mjob->area->x + column);
-                    int rel_y = (y - mjob->area->y + line);
+                    int rel_x = (x - app->area->x + column);
+                    int rel_y = (y - app->area->y + line);
                     int mask = (*pix_pointer & 0xFF000000) >> 24;
                     int shift, src_shift, src_mask;
 
@@ -318,9 +319,14 @@ paintMousePointer (XImage * image)
 #undef DEBUGFUNCTION
 }
 
-/* 
- * just read new data in the image structure, the image
- * structure inclusive the data area must be allocated before
+/** \brief reads new data in a pre-existing image structure.
+ *
+ * @param dpy a pointer to the display to read from
+ * @param d the drawable to use
+ * @param image a pointer to the image to return data to
+ * @param x origin x coordinate
+ * @param y origin y coordinate
+ * @return we were successfull TRUE or FALSE
  */
 static Boolean
 XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
@@ -373,31 +379,43 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
 #undef DEBUGFUNCTION
 }
 
-FILE *
-getOutputFile (Job * job)
+/** \brief compute the output filename depending on current capture mode and
+ *      frame or movie number. Then open that file for writing.
+ *
+ * @return a pointer to a file handle or NULL
+ */
+static FILE *
+getOutputFile ()
 {
 #define DEBUGFUNCTION "getOutputFile()"
     char file[PATH_MAX + 1];
     FILE *fp = NULL;
+    Job *job = xvc_job_ptr ();
 
-    if ((job->flags & FLG_MULTI_IMAGE) != 0) {
+    if (app->current_mode > 0) {
         sprintf (file, job->file, job->movie_no);
     } else {
         sprintf (file, job->file, job->pic_no);
     }
 
-    fp = fopen (file, job->open_flags);
+    fp = fopen (file, "wb");
     if (!fp) {
         perror (file);
         job->state = VC_STOP;
     }
 
-    return fp;                         // possibly NULL
+    return fp;
 #undef DEBUGFUNCTION
 }
 
-XImage *
-captureFrameCreatingImage (Display * dpy, Job * job)
+/** \brief this captures without an existing XImage and creates one along the
+ *      way. This is the plain X11 version.
+ *
+ * @param dpy a pointer to the display to read from
+ * @return a pointer to an XImage or NULL
+ */
+static XImage *
+captureFrameCreatingImage (Display * dpy)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImage()"
     XImage *image = NULL;
@@ -408,16 +426,16 @@ captureFrameCreatingImage (Display * dpy, Job * job)
 
     // get the image here
     image = XGetImage (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-                       job->area->x, job->area->y,
-                       job->area->width, job->area->height, AllPlanes, ZPixmap);
+                       app->area->x, app->area->y,
+                       app->area->width, app->area->height, AllPlanes, ZPixmap);
     if (!image) {
         printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
-                DEBUGFILE, DEBUGFUNCTION, job->area->width,
-                job->area->height, job->area->x, job->area->y);
+                DEBUGFILE, DEBUGFUNCTION, app->area->width,
+                app->area->height, app->area->x, app->area->y);
         job_set_state (VC_STOP);
     } else {
         // paint the mouse pointer into the captured image if necessary
-        if (job->mouseWanted > 0) {
+        if (app->mouseWanted > 0) {
             paintMousePointer (image);
         }
     }
@@ -430,8 +448,15 @@ captureFrameCreatingImage (Display * dpy, Job * job)
 #undef DEBUGFUNCTION
 }
 
-int
-captureFrameToImage (Display * dpy, Job * job, XImage * image)
+/** \brief this captures into an existing XImage. This is the plain X11 
+ *      version.
+ *
+ * @param dpy a pointer to the display to read from
+ * @param image a pointer to the image to write to
+ * @return 1 on success, 0 on failure
+ */
+static int
+captureFrameToImage (Display * dpy, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImage()"
     int ret = 0;
@@ -443,9 +468,9 @@ captureFrameToImage (Display * dpy, Job * job, XImage * image)
     // get the image here
     if (XGetZPixmap (dpy,
                      RootWindow (dpy, DefaultScreen (dpy)),
-                     image, job->area->x, job->area->y)) {
+                     image, app->area->x, app->area->y)) {
         // paint the mouse pointer into the captured image if necessary
-        if (job->mouseWanted > 0) {
+        if (app->mouseWanted > 0) {
             paintMousePointer (image);
         }
         ret = 1;
@@ -458,8 +483,15 @@ captureFrameToImage (Display * dpy, Job * job, XImage * image)
 #undef DEBUGFUNCTION
 }
 
-int
-captureFrameToImageSHM (Display * dpy, Job * job, XImage * image)
+#ifdef HAVE_SHMAT
+/** \brief this captures into an existing XImage. This is the SHM version.
+ *
+ * @param dpy a pointer to the display to read from
+ * @param image a pointer to the image to write to
+ * @return 1 on success, 0 on failure
+ */
+static int
+captureFrameToImageSHM (Display * dpy, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImageSHM()"
     int ret = 0;
@@ -471,9 +503,9 @@ captureFrameToImageSHM (Display * dpy, Job * job, XImage * image)
     // get the image here
     if (XShmGetImage (dpy,
                       RootWindow (dpy, DefaultScreen (dpy)),
-                      image, job->area->x, job->area->y, AllPlanes)) {
+                      image, app->area->x, app->area->y, AllPlanes)) {
         // paint the mouse pointer into the captured image if necessary
-        if (job->mouseWanted > 0) {
+        if (app->mouseWanted > 0) {
             paintMousePointer (image);
         }
         ret = 1;
@@ -486,15 +518,19 @@ captureFrameToImageSHM (Display * dpy, Job * job, XImage * image)
 #undef DEBUGFUNCTION
 }
 
-XImage *
-captureFrameCreatingImageSHM (Display * dpy, Job * job,
-                              XShmSegmentInfo * shminfo)
+/** \brief this captures without an existing XImage and creates one along the
+ *      way. This is the SHM version.
+ *
+ * @param dpy a pointer to the display to read from
+ * @return a pointer to an XImage or NULL
+ */
+static XImage *
+captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
     XImage *image = NULL;
-
-    Visual *visual = job->win_attr.visual;
-    unsigned int depth = job->win_attr.depth;
+    Visual *visual = app->win_attr.visual;
+    unsigned int depth = app->win_attr.depth;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -502,11 +538,11 @@ captureFrameCreatingImageSHM (Display * dpy, Job * job,
 
     // get the image here
     image = XShmCreateImage (dpy, visual, depth, ZPixmap, NULL,
-                             shminfo, job->area->width, job->area->height);
+                             shminfo, app->area->width, app->area->height);
     if (!image) {
         printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
-                DEBUGFILE, DEBUGFUNCTION, job->area->width,
-                job->area->height, job->area->x, job->area->y);
+                DEBUGFILE, DEBUGFUNCTION, app->area->width,
+                app->area->height, app->area->x, app->area->y);
         job_set_state (VC_STOP);
     } else {
         shminfo->shmid = shmget (IPC_PRIVATE,
@@ -526,7 +562,7 @@ captureFrameCreatingImageSHM (Display * dpy, Job * job,
             exit (1);
         }
 
-        captureFrameToImageSHM (dpy, job, image);
+        captureFrameToImageSHM (dpy, image);
     }
 
 #ifdef DEBUG
@@ -536,14 +572,22 @@ captureFrameCreatingImageSHM (Display * dpy, Job * job,
     return image;
 #undef DEBUGFUNCTION
 }
+#endif     // HAVE_SHMAT
 
-long
-checkCaptureDuration (Job * job, long time, long time1)
+/** \brief calculates in how many msecs the next capture is due based on fps
+ *      and the duration of the previous capture.
+ *
+ * @param time the time in msecs when the last capture started
+ * @param time1 the time in msecs when the last capture ended
+ * @return the number of msecs in which the next capture is due
+ */
+static long
+checkCaptureDuration (long time, long time1)
 {
 #define DEBUGFUNCTION "checkCaptureDuration()"
-    struct timeval curr_time;   // for measuring the duration of a frame
-
-    // capture
+    Job *job = xvc_job_ptr ();
+    struct timeval curr_time;   /* for measuring the duration of a frame
+                                 * capture */
 
     // update monitor widget, here time is the time the capture took
     // time == 0 resets led_meter
@@ -567,7 +611,7 @@ checkCaptureDuration (Job * job, long time, long time1)
         time = time1;
     }
     if (time < 0) {
-        if (job->flags & FLG_RUN_VERBOSE)
+        if (app->flags & FLG_RUN_VERBOSE)
             printf
                 ("missing %ld milli secs (%d needed per frame), pic no %d\n",
                  time, job->time_per_frame, job->pic_no);
@@ -577,28 +621,39 @@ checkCaptureDuration (Job * job, long time, long time1)
 #undef DEBUGFUNCTION
 }
 
-long
-commonCapture (XtPointer xtp, int capfunc)
+/** \brief this is the merged capture function that handles all sources.
+ *
+ * @param capfunc passes the source as specified in captureFunctions
+ * @return the number of msecs in which the next capture is due
+ * @see captureFunctions
+ */
+static long
+commonCapture (int capfunc)
 {
 #define DEBUGFUNCTION "commonCapture()"
-    Job *job = (Job *) xtp;
     static XImage *image = NULL;
     static FILE *fp = NULL; // file handle to write the frame to
-    long time, time1;   // for measuring the duration of a frame
-
-    // capture
-    struct timeval curr_time;   // for measuring the duration of a frame
-
-    // capture
+    long time, time1;   /* for measuring the duration of a frame capture */
+    struct timeval curr_time;   /* for measuring the duration of a frame 
+                                 * capture */
 #ifdef HAVE_SHMAT
     static XShmSegmentInfo shminfo;
 #endif     // HAVE_SHMAT
     int ret = 0;
+    CapTypeOptions *target;
+    Job *job = xvc_job_ptr ();
 
 #ifdef DEBUG
-    printf ("%s %s: pic_no=%d - state=%i\n", DEBUGFILE, DEBUGFUNCTION,
+    printf ("%s %s: Entering pic_no=%d - state=%i\n", DEBUGFILE, DEBUGFUNCTION,
             job->pic_no, job->state);
 #endif     // DEBUG
+
+#ifdef USE_FFMPEG
+    if (app->current_mode != 0)
+        target = &(app->multi_frame);
+    else
+#endif     // USE_FFMPEG
+        target = &(app->single_frame);
 
     // wait for next iteration if pausing
     if (job->state & VC_REC) {         // if recording ...
@@ -609,24 +664,24 @@ commonCapture (XtPointer xtp, int capfunc)
 
         // the next bit is true if we have configured max_frames and we're
         // reaching the limit with this captured frame
-        if (job->max_frames && ((job->pic_no - job->start_no) >
-                                job->max_frames - 1)) {
+        if (target->frames && ((job->pic_no - target->start_no) >
+                               target->frames - 1)) {
 
 #ifdef DEBUG
             printf ("%s %s: this is the final frame\n", DEBUGFILE,
                     DEBUGFUNCTION);
 #endif     // DEBUG
 
-            if (job->flags & FLG_RUN_VERBOSE)
+            if (app->flags & FLG_RUN_VERBOSE)
                 printf ("%s %s: Stopped! pic_no=%d max_frames=%d\n",
-                        DEBUGFILE, DEBUGFUNCTION, job->pic_no, job->max_frames);
+                        DEBUGFILE, DEBUGFUNCTION, job->pic_no, target->frames);
 
             // we need to stop the capture to go through the necessary
             // cleanup routines for writing a correct file. If we have
             // autocontinue on we're setting a flag to let the cleanup
             // code know we need
             // to restart again afterwards
-            if (job->flags & FLG_AUTO_CONTINUE) {
+            if (app->flags & FLG_AUTO_CONTINUE) {
                 job_merge_state (VC_CONTINUE);
             }
 
@@ -639,15 +694,15 @@ commonCapture (XtPointer xtp, int capfunc)
         // open the output file we need to do this for every frame for
         // individual frame 
         // capture and only once for capture to movie
-        if ((!(job->flags & FLG_MULTI_IMAGE)) ||
-            ((job->flags & FLG_MULTI_IMAGE) && (job->state & VC_START))) {
+        if ((app->current_mode == 0) ||
+            (app->current_mode > 0 && job->state & VC_START)) {
 
 #ifdef DEBUG
             printf ("%s %s: opening file for captured frame(s)\n",
                     DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-            fp = getOutputFile (job);
+            fp = getOutputFile ();
             if (!fp)
                 return FALSE;
         }
@@ -660,7 +715,7 @@ commonCapture (XtPointer xtp, int capfunc)
 #endif     // DEBUG
 
 #ifdef HAVE_LIBXFIXES
-            if (job->flags & FLG_USE_XFIXES) {
+            if (app->flags & FLG_USE_XFIXES) {
                 unsigned int mask, color;
 
                 for (mask = 0; mask <= 255; mask++) {
@@ -676,30 +731,29 @@ commonCapture (XtPointer xtp, int capfunc)
             switch (capfunc) {
 #ifdef HAVE_SHMAT
             case SHM:
-                image = captureFrameCreatingImageSHM (job->dpy, job, &shminfo);
+                image = captureFrameCreatingImageSHM (app->dpy, &shminfo);
                 break;
 #endif     // HAVE_SHMAT
             case X11:
             default:
-                image = captureFrameCreatingImage (job->dpy, job);
+                image = captureFrameCreatingImage (app->dpy);
             }
             if (image) {
                 // call the necessary XtoXYZ function to process the image
-                (*job->save) (fp, image, job);
+                (*job->save) (fp, image);
                 job_remove_state (VC_START);
             } else
                 printf ("%s %s: could not acquire pixmap!\n", DEBUGFILE,
                         DEBUGFUNCTION);
 
 #ifdef HAVE_LIBXFIXES
-            if (job->flags & FLG_USE_XFIXES)
+            if (app->flags & FLG_USE_XFIXES)
                 xvc_get_color_info (image, &c_info);
 #endif     // HAVE_LIBXFIXES
 
-        } else {                       // we're recording and not in the first
-            // frame ....
+        } else {
+            // we're recording and not in the first frame ....
             // so we just read new data into the present image structure 
-
 #ifdef DEBUG
             printf ("%s %s: reading an image in a data sturctur present\n",
                     DEBUGFILE, DEBUGFUNCTION);
@@ -708,16 +762,16 @@ commonCapture (XtPointer xtp, int capfunc)
             switch (capfunc) {
 #ifdef HAVE_SHMAT
             case SHM:
-                ret = captureFrameToImage (job->dpy, job, image);
+                ret = captureFrameToImage (app->dpy, image);
                 break;
 #endif     // HAVE_SHMAT
             case X11:
             default:
-                ret = captureFrameToImage (job->dpy, job, image);
+                ret = captureFrameToImage (app->dpy, image);
             }
             if (ret > 0)
                 // call the necessary XtoXYZ function to process the image
-                (*job->save) (fp, image, job);
+                (*job->save) (fp, image);
             else
                 printf
                     ("%s %s: attempt to acquire pixmap returned 'False'!\n",
@@ -726,7 +780,7 @@ commonCapture (XtPointer xtp, int capfunc)
 
         // this again is for recording, no matter if first frame or any
         // other close the image file if single frame capture mode
-        if (!(job->flags & FLG_MULTI_IMAGE)) {
+        if (app->current_mode == 0) {
 
 #ifdef DEBUG
             printf ("%s %s: done saving image, closing file descriptor\n",
@@ -740,7 +794,7 @@ commonCapture (XtPointer xtp, int capfunc)
         gettimeofday (&curr_time, NULL);
         time1 = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
 
-        time = checkCaptureDuration (job, time, time1);
+        time = checkCaptureDuration (time, time1);
         // time the next capture
 
 #ifdef DEBUG
@@ -749,10 +803,9 @@ commonCapture (XtPointer xtp, int capfunc)
              DEBUGFILE, DEBUGFUNCTION, time);
 #endif     // DEBUG
 
-        job->pic_no += job->step;
+        job->pic_no += target->step;
 
         // this might be a single step. If so, remove the state flag so we 
-        // 
         // don't keep single stepping
         if (job->state & VC_STEP) {
             job_remove_state (VC_STEP);
@@ -792,9 +845,9 @@ commonCapture (XtPointer xtp, int capfunc)
 
         // clean up the save routines in xtoXXX.c 
         if (job->clean)
-            (*job->clean) (job);
+            (*job->clean) ();
         // if we're recording to a movie, we must close the file now
-        if (job->flags & FLG_MULTI_IMAGE)
+        if (app->current_mode > 0)
             if (fp)
                 fclose (fp);
         fp = NULL;
@@ -812,12 +865,11 @@ commonCapture (XtPointer xtp, int capfunc)
 
             // prepare autocontinue
             job->movie_no += 1;
-            job->pic_no = job->start_no;
+            job->pic_no = target->start_no;
             job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
 
             return time;
         }
-
     }
 
 #ifdef DEBUG
@@ -829,31 +881,40 @@ commonCapture (XtPointer xtp, int capfunc)
 #undef DEBUGFUNCTION
 }
 
-// timer callback for capturing
-// this is used with source = x11 ... capture from X11 display w/o SHM
+/** \brief function used for capturing. This one is used with source = x11,
+ *      i. e. when capturing from X11 display w/o SHM
+ *
+ * @return the number of msecs in which the next capture is due
+ */
 long
-TCbCaptureX11 (XtPointer xtp)
+TCbCaptureX11 ()
 {
 #define DEBUGFUNCTION "TCbCaptureX11()"
-    return commonCapture (xtp, X11);
+    return commonCapture (X11);
 #undef DEBUGFUNCTION
 }
 
 #ifdef HAVE_SHMAT
-/* 
- * timer callback for capturing with shared memory
+/** \brief function used for capturing. This one is used with source = shm,
+ *      i. e. when capturing from X11 with SHM support
+ *
+ * @return the number of msecs in which the next capture is due
  */
 long
-TCbCaptureSHM (XtPointer xtp)
+TCbCaptureSHM ()
 {
 #define DEBUGFUNCTION "TCbCaptureSHM()"
-    return commonCapture (xtp, SHM);
+    return commonCapture (SHM);
 #undef DEBUGFUNCTION
 }
 
 #endif     /* HAVE_SHMAT */
 
-// FIXME: update capture modes after this
+/*
+ *
+ * @todo add dga and v4l again
+ *
+ */
 #ifdef HasVideo4Linux
 /* 
  * timer callback for capturing direct from bttv driver (only linux)

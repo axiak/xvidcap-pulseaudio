@@ -243,9 +243,9 @@ parse_cli_options (CapTypeOptions * tmp_capture_options, int argc,
                 tmp_capture_options->frames = atoi (optarg);
                 break;
             case 5:                   // cap_geometry
-                sscanf (optarg, "%dx%d+%d+%d", &(app->cap_width),
-                        &(app->cap_height), &(app->cap_pos_x),
-                        &(app->cap_pos_y));
+                sscanf (optarg, "%hux%hu+%hi+%hi", &(app->area->width),
+                        &(app->area->height), &(app->area->x),
+                        &(app->area->y));
                 break;
             case 6:                   // start_no
                 tmp_capture_options->start_no = atoi (optarg);
@@ -608,7 +608,7 @@ parse_cli_options (CapTypeOptions * tmp_capture_options, int argc,
                 app->rescale = atoi (optarg);
                 break;
             case 27:
-                sscanf (optarg, "%X", (int *) &capture_window);
+                sscanf (optarg, "%X", (unsigned int *) &capture_window);
                 break;
             default:
                 usage (_argv[0]);
@@ -719,13 +719,7 @@ merge_cli_options (CapTypeOptions * tmp_capture_options)
     // ((app->current_mode == 0) ? "single-frame" : "multi-frame"));
 
     // merge cli options with app
-    if (xvc_merge_cap_type_and_app_data (tmp_capture_options, app) < 1) {
-        fprintf (stderr,
-                 _
-                 ("%s %s: Unrecoverable error while merging options, please contact the xvidcap project.\n"),
-                 DEBUGFILE, DEBUGFUNCTION);
-        exit (1);
-    }
+    xvc_merge_cap_type_and_app_data (tmp_capture_options, app);
 
     return target;
 
@@ -803,9 +797,9 @@ print_current_settings (CapTypeOptions * target)
     printf (_(" capture mode = %s\n"),
             ((app->current_mode == 0) ? _("single-frame") : _("multi-frame")));
 #endif     // USE_FFMPEG
-    printf (_(" position = %ix%i"), app->cap_width, app->cap_height);
-    if (app->cap_pos_x >= 0)
-        printf ("+%i+%i", app->cap_pos_x, app->cap_pos_y);
+    printf (_(" position = %ix%i"), app->area->width, app->area->height);
+    if (app->area->x >= 0)
+        printf ("+%i+%i", app->area->x, app->area->y);
     printf ("\n");
     printf (_(" rescale output to = %i\n"), app->rescale);
     printf (_(" frames per second = %.2f\n"), ((float) target->fps / 100));

@@ -28,7 +28,12 @@
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include <X11/XWDFile.h>
+
 #include "job.h"
+#include "app_data.h"
+
+extern AppData *app;
+
 
 /* 
  * image size for ZPixmap 
@@ -144,17 +149,18 @@ XWDcolorTable (XColor * colors, int ncolors)
  * write ximage as xwd file to 'fp'
  */
 void
-XImageToXWD (FILE * fp, XImage * image, Job * job)
+XImageToXWD (FILE * fp, XImage * image)
 {
     static XWDFileHeader head;
     static int file_name_len;
+    Job *job = xvc_job_ptr();
     char *file = job->file;
 
     /* 
      * header must be prepared only once .. 
      */
     if (job->state & VC_START /* it's the first call */ ) {
-        XWindowAttributes win_attr = job->win_attr;
+        XWindowAttributes win_attr = app->win_attr;
 
 #ifdef DEBUG
         printf ("Preparing XWD header ... win_attr.x = %i\n", job->win_attr.x);

@@ -1,5 +1,5 @@
-/* 
- * capture.h
+/**
+ * \file capture.h
  *
  * Copyright (C) 1997 Rasca Gmelch, Berlin
  *
@@ -27,32 +27,41 @@
 
 #include <X11/Intrinsic.h>
 
+/** \brief since the capture functions have been merged, we need a way for the
+ *      commonCapture() function to distinguish between the possible sources.
+ */
 enum captureFunctions
 {
+    /** \brief plain X11 */
     X11,
 #ifdef HAVE_SHMAT
+    /** \brief X11 with SHM extension */
     SHM,
 #endif     // HAVE_SHMAT
+    /** \brief element counter */
     NUMFUNCTIONS
 };
 
-long TCbCaptureX11 (XtPointer);
+/*
+ * functions from capture.c
+ */
+long TCbCaptureX11 ();
 
 #ifdef HAVE_SHMAT
-long TCbCaptureSHM (XtPointer);
+long TCbCaptureSHM ();
 #else
 #define TCbCaptureSHM TCbCaptureX11
 #endif
 
 // the rest is not really used atm
 #ifdef HasDGA
-long TCbCaptureDGA (XtPointer);
+long TCbCaptureDGA ();
 #else
 #define TCbCaptureDGA TCbCaptureX11
 #endif
 
 #ifdef HasVideo4Linux
-long TCbCaptureV4L (XtPointer);
+long TCbCaptureV4L ();
 #else
 #define TCbCaptureV4L TCbCaptureX11
 #endif

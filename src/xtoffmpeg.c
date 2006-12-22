@@ -70,6 +70,7 @@
 extern xvCodec tCodecs[NUMCODECS];
 extern xvFFormat tFFormats[NUMCODECS];
 extern xvAuCodec tAuCodecs[NUMAUCODECS];
+extern AppData *app;
 
 static AVCodec *codec;  // params for the codecs video 
 static AVFrame *p_inpic;    // a AVFrame as wrapper around the
@@ -98,6 +99,7 @@ static double audio_pts, video_pts;
 
 static ColorInfo c_info;
 static uint8_t *scratchbuf8bit;
+static CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
 void dump8bit (XImage * image, u_int32_t * ct);
@@ -228,8 +230,8 @@ add_audio_stream (Job * job)
     // audio_init();
 
     if (grab_audio) {
-        ap->sample_rate = job->snd_rate;
-        ap->channels = job->snd_channels;
+        ap->sample_rate = target->sndrate;
+        ap->channels = target->sndchannels;
 
         grab_iformat = av_find_input_format ("audio_device");
 
@@ -301,9 +303,9 @@ add_audio_stream (Job * job)
     // put sample parameters 
     au_c->codec_id = tAuCodecs[job->au_targetCodec].ffmpeg_id;
     au_c->codec_type = CODEC_TYPE_AUDIO;
-    au_c->bit_rate = job->snd_smplsize;
-    au_c->sample_rate = job->snd_rate;
-    au_c->channels = job->snd_channels;
+    au_c->bit_rate = target->sndsize;
+    au_c->sample_rate = target->sndrate;
+    au_c->channels = target->sndchannels;
     // au_c->debug = 0x00000FFF;
 
     // prepare output stream 
@@ -682,7 +684,7 @@ capture_audio_thread (Job * job)
         stop_s = thr_curr_time.tv_sec;
         stop = thr_curr_time.tv_usec;
         stop += ((stop_s - start_s) * 1000000);
-        sleep = (1000000 / job->snd_rate) - (stop - start);
+        sleep = (1000000 / target->sndrate) - (stop - start);
         // FIXME: perhaps this whole stuff is irrelevant. Haven't really
         // seen a situation
         // where the encoding was faster than the time needed for a 
@@ -940,8 +942,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
 #define DEBUGFUNCTION "add_video_stream()"
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
-    int fps = job->fps / 100, quality = job->quality;
-    int percentage_offset = 0, absolute_offset = 0;
+    int fps = target->fps / 100, quality = target->quality;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -968,11 +969,11 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     // put sample parameters 
     // resolution must be a multiple of two ... this is taken care of
     // elsewhere but needs to be ensured for rescaled dimensions, too
-    if (job->rescale != 100) {
+    if (app->rescale != 100) {
         int n;
         double r;
 
-        r = sqrt (100 / job->rescale);
+        r = sqrt (100 / app->rescale);
 
         n = image->width / r;
         if (n % 2 > 0)
@@ -1137,11 +1138,10 @@ guess_input_pix_fmt (XImage * image, ColorInfo * c_info)
  * write ximage as mpeg file to 'fp'
  */
 void
-XImageToFFMPEG (FILE * fp, XImage * image, Job * job)
+XImageToFFMPEG (FILE * fp, XImage * image)
 {
 #define DEBUGFUNCTION "XImageToFFMPEG()"
-
-    int ret;
+    Job *job = xvc_job_ptr();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1154,6 +1154,13 @@ XImageToFFMPEG (FILE * fp, XImage * image, Job * job)
         printf ("%s %s: doing x2ffmpeg init for targetCodec %i\n",
                 DEBUGFILE, DEBUGFUNCTION, job->targetCodec);
 #endif     // DEBUG
+
+#ifdef USE_FFMPEG
+    if (app->current_mode > 0)
+        target = &(app->multi_frame);
+    else
+#endif     // USE_FFMPEG
+        target = &(app->single_frame);
 
         // determine input picture format 
         // 
@@ -1555,9 +1562,10 @@ XImageToFFMPEG (FILE * fp, XImage * image, Job * job)
  * KHB: FFMPEG cleanup
  */
 void
-FFMPEGClean (Job * job)
+FFMPEGClean ()
 {
 #define DEBUGFUNCTION "FFMPEGClean()"
+    Job *job = xvc_job_ptr();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);

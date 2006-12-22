@@ -22,8 +22,8 @@
 #ifndef __X_TO_FFMPEG_H__
 #define __X_TO_FFMPEG_H__
 
-void XImageToFFMPEG (FILE * fp, XImage * image, Job * job);
+void XImageToFFMPEG (FILE * fp, XImage * image);
 void *FFMPEGcolorTable (XColor * colors, int ncolors);
-void FFMPEGClean (Job * job);
+void FFMPEGClean ();
 
 #endif     // __X_TO_FFMPEG_H__

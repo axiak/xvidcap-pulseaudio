@@ -52,7 +52,6 @@ xvc_write_options_file ()
     char *home, *element = NULL;
     char file[PATH_MAX + 1];
     FILE *fp;
-    Job *job = xvc_job_ptr ();
 
     // save it to $HOME/.xvidcaprc
     home = getenv ("HOME");
@@ -92,10 +91,10 @@ xvc_write_options_file ()
              ((app->flags & FLG_SAVE_GEOMETRY) ? 1 : 0));
     if ((app->flags & FLG_SAVE_GEOMETRY) > 0) {
         fprintf (fp, _("# area to capture as in --capture_geometry\n"));
-        fprintf (fp, "cap_geometry: %ix%i", job->area->width,
-                 job->area->height);
-        if (job->area->x >= 0 && job->area->y >= 0)
-            fprintf (fp, "+%i+%i\n", job->area->x, job->area->y);
+        fprintf (fp, "cap_geometry: %ix%i", app->area->width,
+                 app->area->height);
+        if (app->area->x >= 0 && app->area->y >= 0)
+            fprintf (fp, "+%i+%i\n", app->area->x, app->area->y);
         else
             fprintf (fp, "\n");
     }
@@ -434,9 +433,9 @@ xvc_read_options_file ()
                                  ("reading unsupported save_geometry preferences from options file\nresetting to capture geometry not saved\n"));
                     }
                 } else if (strcasecmp (token, "cap_geometry") == 0) {
-                    sscanf (value, "%dx%d+%d+%d", &(app->cap_width),
-                            &(app->cap_height), &(app->cap_pos_x),
-                            &(app->cap_pos_y));
+                    sscanf (value, "%hux%hu+%hi+%hi", &(app->area->width),
+                            &(app->area->height), &(app->area->x),
+                            &(app->area->y));
                 } else if (strcasecmp (token, "show_time") == 0) {
                     // FIXME: this is not at all implemented, yet
                     if (atoi (value) == 1)

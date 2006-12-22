@@ -612,15 +612,11 @@ preferences_submit ()
 {
 #define DEBUGFUNCTION "preferences_submit()"
 
-    Job *job = xvc_job_ptr ();
-
     xvc_app_data_copy (app, &pref_app);
 
-    if (!job)
-        job = xvc_job_new ();
     xvc_job_set_from_app_data (app);
     // validate the job parameters
-    xvc_job_validate ();
+//    xvc_job_validate ();
 
     // set controls active/inactive/sensitive/insensitive according to
     // current options
@@ -674,9 +670,6 @@ xvc_pref_do_OK ()
             xvc_warn_main_window =
                 xvc_create_warning_with_errors (errors_after_cli, 0);
             // printf("gtk2_options: pointer to errors_after_cli: %p - rc: 
-            // 
-            // 
-            // 
             // %i\n", errors_after_cli, rc);
             OK_attempts++;
 
@@ -2011,7 +2004,7 @@ on_xvc_pref_commands_sf_play_try_button_clicked (GtkButton * button,
                          pref_app.single_frame.file,
                          pref_app.single_frame.start_no,
                          (pref_app.single_frame.start_no + 1),
-                         pref_app.cap_width, pref_app.cap_height,
+                         pref_app.area->width, pref_app.area->height,
                          pref_app.single_frame.fps);
 
 #ifdef DEBUG
@@ -2043,7 +2036,7 @@ on_xvc_pref_commands_sf_encode_try_button_clicked (GtkButton * button,
                          pref_app.single_frame.file,
                          pref_app.single_frame.start_no,
                          (pref_app.single_frame.start_no + 1),
-                         pref_app.cap_width, pref_app.cap_height,
+                         pref_app.area->width, pref_app.area->height,
                          pref_app.single_frame.fps);
 
 #ifdef DEBUG
@@ -2076,7 +2069,7 @@ on_xvc_pref_commands_sf_edit_try_button_clicked (GtkButton * button,
                          pref_app.single_frame.file,
                          pref_app.single_frame.start_no,
                          (pref_app.single_frame.start_no + 1),
-                         pref_app.cap_width, pref_app.cap_height,
+                         pref_app.area->width, pref_app.area->height,
                          pref_app.single_frame.fps);
 
 #ifdef DEBUG
@@ -2109,7 +2102,7 @@ on_xvc_pref_commands_mf_play_try_button_clicked (GtkButton * button,
                          pref_app.multi_frame.file,
                          pref_app.multi_frame.start_no,
                          (pref_app.multi_frame.start_no + 1),
-                         pref_app.cap_width, pref_app.cap_height,
+                         pref_app.area->width, pref_app.area->height,
                          pref_app.multi_frame.fps);
 
 #ifdef DEBUG
@@ -2143,7 +2136,7 @@ on_xvc_pref_commands_mf_encode_try_button_clicked (GtkButton * button,
                          pref_app.multi_frame.file,
                          pref_app.multi_frame.start_no,
                          (pref_app.multi_frame.start_no + 1),
-                         pref_app.cap_width, pref_app.cap_height,
+                         pref_app.area->width, pref_app.area->height,
                          pref_app.multi_frame.fps);
 
 #ifdef DEBUG
@@ -2177,7 +2170,7 @@ on_xvc_pref_commands_mf_edit_try_button_clicked (GtkButton * button,
                          pref_app.multi_frame.file,
                          pref_app.multi_frame.start_no,
                          (pref_app.multi_frame.start_no + 1),
-                         pref_app.cap_width, pref_app.cap_height,
+                         pref_app.area->width, pref_app.area->height,
                          pref_app.multi_frame.fps);
 
 #ifdef DEBUG

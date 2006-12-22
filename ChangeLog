@@ -1,4 +1,10 @@
 
+2006-12-22  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/*.[ch]: loads of code cleanup, most notably: removed
+		redundancies in AppData and Job where possible, 
+		reduced passing around of Job pointers where xvc_job_ptr
+		does the job, started doxygen documentation
+
 2006-12-21  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: code cleanup
 	* src: gnome_ui.c, app_data.c, job.c, job.h, main.c, frame.c:
