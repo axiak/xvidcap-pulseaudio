@@ -1,4 +1,4 @@
-/* 
+/** 
  * xtoffmpeg.c
  *
  * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
@@ -67,10 +67,12 @@
  *
  * first libavcodec related stuff
  */
-extern xvCodec tCodecs[NUMCODECS];
-extern xvFFormat tFFormats[NUMCODECS];
-extern xvAuCodec tAuCodecs[NUMAUCODECS];
-extern AppData *app;
+//extern XVC_AppData *app;
+/*
+extern XVC_Codec xvc_codecs[NUMCODECS];
+extern XVC_FFormat xvc_formats[NUMCODECS];
+extern XVC_AuCodec xvc_audio_codecs[NUMAUCODECS];
+*/
 
 static AVCodec *codec;  // params for the codecs video 
 static AVFrame *p_inpic;    // a AVFrame as wrapper around the
@@ -99,7 +101,7 @@ static double audio_pts, video_pts;
 
 static ColorInfo c_info;
 static uint8_t *scratchbuf8bit;
-static CapTypeOptions *target = NULL;
+static XVC_CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
 void dump8bit (XImage * image, u_int32_t * ct);
@@ -301,7 +303,7 @@ add_audio_stream (Job * job)
         return 1;
     }
     // put sample parameters 
-    au_c->codec_id = tAuCodecs[job->au_targetCodec].ffmpeg_id;
+    au_c->codec_id = xvc_audio_codecs[job->au_targetCodec].ffmpeg_id;
     au_c->codec_type = CODEC_TYPE_AUDIO;
     au_c->bit_rate = target->sndsize;
     au_c->sample_rate = target->sndrate;
@@ -942,7 +944,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
 #define DEBUGFUNCTION "add_video_stream()"
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
-    int fps = target->fps / 100, quality = target->quality;
+    int quality = target->quality;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -992,8 +994,8 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     // terms of which frame timestamps are represented. for fixed-fps
     // content, timebase should be 1/framerate and timestamp increments
     // should be identically 1. 
-    st->codec->time_base.den = fps;
-    st->codec->time_base.num = 1;
+    st->codec->time_base.den = target->fps.num;
+    st->codec->time_base.num = target->fps.den;
     // emit one intra frame every fifty frames at most
     st->codec->gop_size = 50;
     st->codec->mb_decision = 2;
@@ -1206,17 +1208,17 @@ XImageToFFMPEG (FILE * fp, XImage * image)
         av_register_all ();
 
         /* // next call the right init() function for the file format
-         * (e.g. // avienc_init()) if ( tFFormats[job->target].init )
-         * (*tFFormats[job->target].init) (); */
+         * (e.g. // avienc_init()) if ( xvc_formats[job->target].init )
+         * (*xvc_formats[job->target].init) (); */
         // guess AVOutputFormat
         if (job->target >= CAP_MF)
             file_oformat =
-                guess_format (tFFormats[job->target].ffmpeg_name, NULL, NULL);
+                guess_format (xvc_formats[job->target].ffmpeg_name, NULL, NULL);
         else {
             char tmp_fn[30];
 
             snprintf (tmp_fn, 29, "test-%%d.%s",
-                      xvc_next_element (tFFormats[job->target].extensions));
+                      xvc_formats[job->target].extensions[0]);
             file_oformat = guess_format (NULL, tmp_fn, NULL);
         }
         if (!file_oformat) {
@@ -1234,7 +1236,7 @@ XImageToFFMPEG (FILE * fp, XImage * image)
         printf
             ("%s %s: found based on: target %i - targetCodec %i - ffmpeg codec id %i\n",
              DEBUGFILE, DEBUGFUNCTION, job->target, job->targetCodec,
-             tCodecs[job->targetCodec].ffmpeg_id);
+             xvc_codecs[job->targetCodec].ffmpeg_id);
 #endif     // DEBUG
 
         // prepare AVFormatContext
@@ -1272,7 +1274,7 @@ XImageToFFMPEG (FILE * fp, XImage * image)
             add_video_stream (output_file, image,
                               (input_pixfmt ==
                                PIX_FMT_PAL8 ? PIX_FMT_RGB24 : input_pixfmt),
-                              tCodecs[job->targetCodec].ffmpeg_id, job);
+                              xvc_codecs[job->targetCodec].ffmpeg_id, job);
 
         // FIXME: set params
         // memset (p_fParams, 0, sizeof(*p_fParams));

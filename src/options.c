@@ -1,4 +1,4 @@
-/* 
+/** 
  * options.c
  *
  * Copyright (C) 1997,98 Rasca, Berlin
@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <ctype.h>
+#include <math.h>
 
 #include "job.h"
 #include "app_data.h"
@@ -37,10 +38,12 @@
 
 #define OPS_FILE ".xvidcaprc"
 
-extern AppData *app;
-extern xvCodec tCodecs[NUMCODECS];
-extern xvFFormat tFFormats[NUMCAPS];
-extern xvAuCodec tAuCodecs[NUMAUCODECS];
+//extern XVC_AppData *app;
+/*
+extern XVC_Codec xvc_codecs[NUMCODECS];
+extern XVC_FFormat xvc_formats[NUMCAPS];
+extern XVC_AuCodec xvc_audio_codecs[NUMAUCODECS];
+*/
 
 /* 
  * save the values
@@ -48,8 +51,8 @@ extern xvAuCodec tAuCodecs[NUMAUCODECS];
 Boolean
 xvc_write_options_file ()
 {
-    int n;
-    char *home, *element = NULL;
+    int n, m;
+    char *home;
     char file[PATH_MAX + 1];
     FILE *fp;
 
@@ -120,14 +123,9 @@ xvc_write_options_file ()
 #else
     for (n = CAP_NONE; n < NUMCAPS; n++) {
 #endif     // USE_FFMPEG
-        if (tFFormats[n].extensions) {
-            element = xvc_next_element (tFFormats[n].extensions);
-            while (element != NULL) {
-                fprintf (fp, "%s", element);
-                element = xvc_next_element (NULL);
-                if (element != NULL)
-                    fprintf (fp, ", ");
-            }
+        if (xvc_formats[n].extensions) {
+            for (m = 0; m < xvc_formats[n].num_extensions; m++) {
+                printf (".%s", xvc_formats[n].extensions[m]);
 #ifdef USE_FFMPEG
             if (n < (CAP_FFM - 1))
                 fprintf (fp, ", ");
@@ -135,6 +133,7 @@ xvc_write_options_file ()
             if (n < (NUMCAPS - 1))
                 fprintf (fp, ", ");
 #endif     // USE_FFMPEG
+            }
         }
     }
     fprintf (fp, "\n");
@@ -148,20 +147,17 @@ xvc_write_options_file ()
 #else
     for (n = (CAP_NONE + 1); n < NUMCAPS; n++) {
 #endif     // USE_FFMPEG
-        if (tFFormats[n].name) {
-            element = xvc_next_element (tFFormats[n].name);
-            while (element != NULL) {
-                fprintf (fp, "%s", element);
-                element = xvc_next_element (NULL);
-                if (element != NULL)
-                    fprintf (fp, ", ");
-            }
+                fprintf (fp, "%s", xvc_formats[n].name);
+#ifdef USE_FFMPEG
+            if (n < (CAP_FFM - 1))
+                fprintf (fp, ", ");
+#else
             if (n < (NUMCAPS - 1))
                 fprintf (fp, ", ");
-        }
+#endif     // USE_FFMPEG
     }
     fprintf (fp, "\n");
-    fprintf (fp, "sf_format: %s\n", tFFormats[app->single_frame.target].name);
+    fprintf (fp, "sf_format: %s\n", xvc_formats[app->single_frame.target].name);
     fprintf (fp,
              _
              ("# video codec used by ffmpeg - use AUTO to auto-detect codec\n"));
@@ -171,24 +167,22 @@ xvc_write_options_file ()
 #else
     for (n = (CODEC_NONE + 1); n < NUMCODECS; n++) {
 #endif     // USE_FFMPEG
-        if (tCodecs[n].name) {
-            element = xvc_next_element (tCodecs[n].name);
-            while (element != NULL) {
-                fprintf (fp, "%s", element);
-                element = xvc_next_element (NULL);
-                if (element != NULL)
-                    fprintf (fp, ", ");
-            }
+                fprintf (fp, "%s", xvc_codecs[n].name);
+#ifdef USE_FFMPEG
+            if (n < (CODEC_MF - 1))
+                fprintf (fp, ", ");
+#else
             if (n < (NUMCODECS - 1))
                 fprintf (fp, ", ");
-        }
+#endif     // USE_FFMPEG
     }
     fprintf (fp, "\n#sf_codec: %s\n",
-             tCodecs[app->single_frame.targetCodec].name);
+             xvc_codecs[app->single_frame.targetCodec].name);
     fprintf (fp, _("# audio codec (for future use)\nsf_au_codec: %s\n"),
              "NONE");
-    fprintf (fp, _("# frames per second\nsf_fps: %.2f\n"),
-             ((float) app->single_frame.fps / 100));
+    fprintf (fp, _("# frames per second\n# put as normal decimal number or a fraction like \"30000/10001\"\n"));
+    fprintf (fp, _("sf_fps: %i/%i\n"), 
+                    app->single_frame.fps.num, app->single_frame.fps.den );
     fprintf (fp, _("# max time (0 = unlimited)\nsf_max_time: %i\n"),
              app->single_frame.time);
     fprintf (fp, _("# max frames (0 = unlimited)\nsf_max_frames: %d\n"),
@@ -223,12 +217,10 @@ xvc_write_options_file ()
              ("# file pattern\n# this defines the filetype to write via the extension provided\n"));
     fprintf (fp, _("# valid extensions are: "));
     for (n = CAP_FFM; n < NUMCAPS; n++) {
-        if (tFFormats[n].extensions) {
-            element = xvc_next_element (tFFormats[n].extensions);
-            while (element != NULL) {
-                fprintf (fp, ".%s", element);
-                element = xvc_next_element (NULL);
-                if (element != NULL)
+        if (xvc_formats[n].extensions) {
+            for (m = 0; m < xvc_formats[n].num_extensions; m++) {
+                fprintf (fp, ".%s", xvc_formats[n].extensions[m]);
+                if (xvc_formats[n].num_extensions < (m + 1))
                     fprintf (fp, ", ");
             }
         }
@@ -239,63 +231,41 @@ xvc_write_options_file ()
              _
              ("# file format - use AUTO to select format through file extension\n"));
     fprintf (fp, _("# Otherwise specify one of the following: "));
-    for (n = CAP_MF; n < NUMCAPS; n++) {
-        if (tFFormats[n].name) {
-            element = xvc_next_element (tFFormats[n].name);
-            while (element != NULL) {
-                fprintf (fp, "%s", element);
-                element = xvc_next_element (NULL);
-                if (element != NULL)
+    for (n = CAP_FFM; n < NUMCAPS; n++) {
+                fprintf (fp, ".%s", xvc_formats[n].name);
+                if (NUMCAPS < (n + 1))
                     fprintf (fp, ", ");
-            }
-            if (n < (NUMCAPS - 1))
-                fprintf (fp, ", ");
-        }
     }
     fprintf (fp, "\n");
-    fprintf (fp, "mf_format: %s\n", tFFormats[app->multi_frame.target].name);
+    fprintf (fp, "mf_format: %s\n", xvc_formats[app->multi_frame.target].name);
     fprintf (fp,
              _
              ("# video codec used by ffmpeg - use AUTO to auto-detect codec\n"));
     fprintf (fp, _("# Otherwise specify one of the following: "));
     for (n = CODEC_MF; n < NUMCODECS; n++) {
-        if (tCodecs[n].name) {
-            element = xvc_next_element (tCodecs[n].name);
-            while (element != NULL) {
-                fprintf (fp, "%s", element);
-                element = xvc_next_element (NULL);
-                if (element != NULL)
-                    fprintf (fp, ", ");
-            }
-            if (n < (NUMCODECS - 1))
-                fprintf (fp, ", ");
-        }
+        fprintf (fp, "%s", xvc_codecs[n].name);
+        if (NUMCODECS < (n + 1))
+            fprintf (fp, ", ");
     }
     fprintf (fp, "\nmf_codec: %s\n",
-             tCodecs[app->multi_frame.targetCodec].name);
+             xvc_codecs[app->multi_frame.targetCodec].name);
     fprintf (fp,
              _
              ("# audio codec used by ffmpeg - use AUTO to auto-detect audio codec\n"));
     fprintf (fp, _("# Otherwise specify one of the following: "));
     for (n = (AU_CODEC_NONE + 1); n < NUMAUCODECS; n++) {
-        if (tAuCodecs[n].name) {
-            element = xvc_next_element (tAuCodecs[n].name);
-            while (element != NULL) {
-                fprintf (fp, "%s", element);
-                element = xvc_next_element (NULL);
-                if (element != NULL)
-                    fprintf (fp, ", ");
-            }
-            if (n < (NUMAUCODECS - 1))
-                fprintf (fp, ", ");
-        }
+        fprintf (fp, "%s", xvc_audio_codecs[n].name);
+        if (NUMAUCODECS < (n + 1))
+            fprintf (fp, ", ");
     }
+
 #ifdef HAVE_FFMPEG_AUDIO
     fprintf (fp, "\nmf_au_codec: %s\n",
-             tAuCodecs[app->multi_frame.au_targetCodec].name);
+             xvc_audio_codecs[app->multi_frame.au_targetCodec].name);
 #endif     // HAVE_FFMPEG_AUDIO
-    fprintf (fp, _("# frames per second\nmf_fps: %.2f\n"),
-             ((float) app->multi_frame.fps / 100));
+    fprintf (fp, _("# frames per second\n# put as normal decimal number or a fraction like \"30000/10001\"\n"));
+    fprintf (fp, _("mf_fps: %i/%i\n"), 
+                    app->multi_frame.fps.num, app->multi_frame.fps.den );
     fprintf (fp, _("# max time (0 = unlimited)\nmf_max_time: %i\n"),
              app->multi_frame.time);
     fprintf (fp, _("# max frames (0 = unlimited)\nmf_max_frames: %d\n"),
@@ -366,7 +336,6 @@ xvc_read_options_file ()
                 token = strtok (line, " :=\"");
                 // this has found the first token
                 // for the value we need special treatment for the command 
-                // 
                 // 
                 // parameters which
                 // consist of multiple words
@@ -481,7 +450,7 @@ xvc_read_options_file ()
                     int cap_index = 0, found_target = 0;
 
                     for (cap_index = CAP_NONE; cap_index < NUMCAPS; cap_index++) {
-                        if (strcasecmp (tFFormats[cap_index].name, token) == 0)
+                        if (strcasecmp (xvc_formats[cap_index].name, token) == 0)
                             found_target = cap_index;
                     }
                     app->single_frame.target = found_target;
@@ -490,7 +459,7 @@ xvc_read_options_file ()
 
                     for (codec_index = CODEC_NONE; codec_index < NUMCODECS;
                          codec_index++) {
-                        if (strcasecmp (tCodecs[codec_index].name, token) == 0)
+                        if (strcasecmp (xvc_codecs[codec_index].name, token) == 0)
                             found_codec = codec_index;
                     }
                     app->single_frame.targetCodec = found_codec;
@@ -502,15 +471,15 @@ xvc_read_options_file ()
                     for (auCodec_index = AU_CODEC_NONE;
                          auCodec_index < NUMAUCODECS; auCodec_index++) {
                         if (strcasecmp
-                            (tAuCodecs[auCodec_index].name, token) == 0)
+                            (xvc_audio_codecs[auCodec_index].name, token) == 0)
                             found_auCodec = auCodec_index;
                     }
                     app->single_frame.au_targetCodec = found_auCodec;
                 }
 #endif     // HAVE_FFMPEG_AUDIO
                 else if (strcasecmp (token, "sf_fps") == 0) {
-                    app->single_frame.fps =
-                        xvc_get_int_from_float_string (value);
+                    app->single_frame.fps = 
+                        xvc_read_fps_from_string(value);
                 } else if (strcasecmp (token, "sf_max_time") == 0) {
                     app->single_frame.time = atoi (value);
                     if (atof (value) > 0)
@@ -549,7 +518,7 @@ xvc_read_options_file ()
                     int n, a = -1;
 
                     for (n = CAP_FFM; n < NUMCAPS; n++) {
-                        if (strcasecmp (value, tFFormats[n].name) == 0)
+                        if (strcasecmp (value, xvc_formats[n].name) == 0)
                             a = n;
                     }
                     if (strcasecmp (value, "NONE") == 0
@@ -570,7 +539,7 @@ xvc_read_options_file ()
                     int n, a = -1;
 
                     for (n = CODEC_NONE; n < NUMCODECS; n++) {
-                        if (strcasecmp (value, tCodecs[n].name) == 0)
+                        if (strcasecmp (value, xvc_codecs[n].name) == 0)
                             a = n;
                     }
                     if (strcasecmp (value, "AUTO") == 0)
@@ -589,7 +558,7 @@ xvc_read_options_file ()
                     int n, a = -1;
 
                     for (n = AU_CODEC_NONE; n < NUMAUCODECS; n++) {
-                        if (strcasecmp (value, tAuCodecs[n].name) == 0)
+                        if (strcasecmp (value, xvc_audio_codecs[n].name) == 0)
                             a = n;
                     }
                     if (strcasecmp (value, "AUTO") == 0)
@@ -605,8 +574,8 @@ xvc_read_options_file ()
                 }
 #endif     // HAVE_FFMPEG_AUDIO
                 else if (strcasecmp (token, "mf_fps") == 0) {
-                    app->multi_frame.fps =
-                        xvc_get_int_from_float_string (value);
+                    app->multi_frame.fps = 
+                        xvc_read_fps_from_string(value);
                 } else if (strcasecmp (token, "mf_max_time") == 0) {
                     app->multi_frame.time = atoi (value);
                     if (atof (value) > 0)

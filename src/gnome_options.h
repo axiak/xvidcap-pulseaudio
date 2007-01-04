@@ -1,7 +1,9 @@
-/* 
- * gtk2_options.h
- *
- * Copyright (C) 2003,04 Karl H. Beckers, Frankfurt
+/**
+ * \file gtk2_options.h
+ */
+
+/*
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +23,12 @@
 #ifndef __GNOME_OPTIONS_H__
 #define __GNOME_OPTIONS_H__
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <gtk/gtk.h>
 #include "app_data.h"
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
-void xvc_create_pref_dialog (AppData * lapp);
+void xvc_create_pref_dialog (XVC_AppData * lapp);
 void xvc_pref_do_OK ();
 void xvc_pref_reset_OK_attempts ();
 

@@ -1,7 +1,13 @@
-/* 
- * frame.c
+/**
+ * \file frame.c
  *
+ * This file contains some state variables for the capture area frame
+ * and generic functions like setter/getter for state etc.
+ */
+
+/*
  * Copyright (C) 1997 Rasca Gmelch, Berlin
+ * Copyright (C) 2004-07 Karl, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,32 +28,60 @@
 #include <X11/Intrinsic.h>
 #include "frame.h"
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define DEBUGFILE "frame.c"
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
+/** \brief stores the state of the frame lock */
+static int xvc_frame_lock;
+
+/** \brief stores the area enclosed by the frame as an XRectangle */
 static XRectangle xvc_frame_rectangle;
 
-/* 
- * return a pointer to the current area enclosed by the frame
+/** 
+ * \brief return a pointer to the current area enclosed by the capture frame
+ *
+ * @return a pointer to an XRectangle struct
  */
 XRectangle *
 xvc_get_capture_area (void)
 {
-    extern XRectangle xvc_frame_rectangle;
-
     return (&xvc_frame_rectangle);
 }
 
-/* 
- * this is a convenience function 
+/** 
+ * \brief get the state of the frame lock
+ *
+ * @return integer state of the frame lock: 1 = locked, 0 = unlocked
  */
 int
 xvc_is_frame_locked ()
 {
-    extern int xvc_frame_lock;
-
     return (xvc_frame_lock);
 }
 
+/** 
+ * \brief set the state of the frame lock
+ *
+ * @param lock integer state of the frame lock: 0 = unlocked, >0 = locked
+ */
+void
+xvc_set_frame_locked (int lock)
+{
+    if (lock == 0)
+        xvc_frame_lock = lock;
+    else
+        xvc_frame_lock = 1;
+}
+
+/** 
+ * \brief get the window attributes for the given window
+ *
+ * @param win a Window to retrieve the attributes for. Can be a single window,
+ *      the root window (if manually selected) or None (in which case we will
+ *      select the root window ourselves
+ * @param wa return pointer to the XWindowAttributes struct to write to
+ */
 void
 xvc_get_window_attributes (Window win, XWindowAttributes * wa)
 {

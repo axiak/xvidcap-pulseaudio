@@ -1,6 +1,8 @@
-/* 
- * colors.h
- *
+/**
+ * \file colors.h
+ */
+
+/*
  * Copyright (C) 1997 Rasca Gmelch, Berlin
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +23,10 @@
 #ifndef __COLORS_H__
 #define __COLORS_H__
 
+/** 
+ * \brief struct to contain various color properties, like masks, depths,
+ *      shifts etc.
+ */
 typedef struct
 {
     unsigned long red_shift;

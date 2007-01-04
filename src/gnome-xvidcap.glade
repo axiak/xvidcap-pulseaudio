@@ -3344,7 +3344,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">XVidCap</property>
   <property name="copyright" translatable="yes">Rasca, Karl H. Beckers</property>
-  <property name="comments" translatable="no">1.1.4p1</property>
+  <property name="comments">1.1.4p1</property>
   <property name="wrap_license">False</property>
   <property name="website">http://xvidcap.sourceforge.net</property>
   <property name="website_label" translatable="yes">website</property>
@@ -3353,6 +3353,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
   <property name="artists">karl</property>
   <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
   <property name="logo">xvidcap_logo.png</property>
+  <signal name="close" handler="on_xvc_about_main_window_close" last_modification_time="Thu, 04 Jan 2007 16:13:51 GMT"/>
 </widget>
 
 <widget class="GtkFileChooserDialog" id="xvc_save_filechooserdialog">

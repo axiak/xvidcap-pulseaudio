@@ -1,6 +1,10 @@
-/* 
- * colors.c
+/** 
+ * \file colors.c
  *
+ * This file contains utility functions for retrieving color information.
+ */
+
+/*
  * Copyright (C) 1997,98 Rasca, Berlin
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,16 +27,16 @@
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include "colors.h"
+#include "app_data.h"
 
-#ifndef max
-#define max(a,b) (a>b? a:b)
-#endif
-#ifndef min
-#define min(a,b) (a<b? a:b)
-#endif
-
-/* 
- * ..
+/** 
+ * \brief retrieves XColor array for a given window
+ *
+ * @param dpy pointer to the display to retrieve the information from
+ * @param winfo pointer to window attributes for which to retrieve colors 
+ *      information
+ * @param colors return pointer to an array of XColor elements
+ * @return the number of colors retrieved
  */
 int
 xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors)
@@ -90,13 +94,15 @@ xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors)
     return (ncolors);
 }
 
-/* 
- * fill the 'ci' structure with some usefull information
- * we need to process the color values in the ximage->data
- * field
+/** 
+ * \brief fills the ColorInfo struct with some useful color information, esp.
+ *      the masks and shifts are relevant
+ *
+ * @param image pointer to the XImage to assimilate color information from
+ * @param ci pointer to a ColorInfo struct
  */
 void
-xvc_get_color_info (XImage * image, ColorInfo * ci /* return struct */ )
+xvc_get_color_info (XImage * image, ColorInfo * ci)
 {
     unsigned long red_mask, green_mask, blue_mask, alpha_mask;
 
@@ -158,10 +164,10 @@ xvc_get_color_info (XImage * image, ColorInfo * ci /* return struct */ )
      * over all max values 
      */
     // whatever they are good for
-    ci->max_val = max (ci->red_max_val, ci->green_max_val);
-    ci->max_val = max (ci->blue_max_val, ci->max_val);
-    ci->bit_depth = max (ci->red_bit_depth, ci->green_bit_depth);
-    ci->bit_depth = max (ci->blue_bit_depth, ci->bit_depth);
+    ci->max_val = XVC_MAX (ci->red_max_val, ci->green_max_val);
+    ci->max_val = XVC_MAX (ci->blue_max_val, ci->max_val);
+    ci->bit_depth = XVC_MAX (ci->red_bit_depth, ci->green_bit_depth);
+    ci->bit_depth = XVC_MAX (ci->blue_bit_depth, ci->bit_depth);
     if (image->bits_per_pixel > image->depth) {
         /* 
          * alpha? 

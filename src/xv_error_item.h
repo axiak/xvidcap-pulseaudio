@@ -61,8 +61,8 @@ extern "C"
 
     GtkType xv_error_item_get_type (void);
     GtkWidget *xv_error_item_new (void);
-    GtkWidget *xv_error_item_new_with_error (xvError * err);
-    void xv_error_item_set_error (XvErrorItem * ei, xvError * err);
+    GtkWidget *xv_error_item_new_with_error (const XVC_Error * err);
+    void xv_error_item_set_error (XvErrorItem * ei, const XVC_Error * err);
 
 #ifdef __cplusplus
 }

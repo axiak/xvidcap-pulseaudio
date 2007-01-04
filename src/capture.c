@@ -1,15 +1,19 @@
-/*
+/**
  * \file capture.c
  * 
  * This file contains routines used for capturing individual frames.
- * Theese routines are called from the record button callback in
- * the GUI and call themselves again till they are stopped by a stop
- * button event handler, a timeout, exceeding the maximum number of
- * frames (see the various VC_... states)
+ * Theese routines are called from the capture thread spawned on start of
+ * a capture session. Once started the capture is completely governed by
+ * changes in the VC_* states. It will also be stopped on reaching a 
+ * configured maximum number of frames or maximum capture time.
+ *
+ * \todo add dga and v4l again
+ */
 
+/*
  * Copyright (C) 1997-98 Rasca, Berlin
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
- * contains code written by Eduardo Gomez
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
+ * contains code written 2006 by Eduardo Gomez for the ffmpeg project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +30,14 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define DEBUGFILE "capture.c"
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
+
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif     // HAVE_STDINT_H
@@ -67,10 +76,10 @@
 #include "app_data.h"
 #include "control.h"
 
-#define DEBUGFILE "capture.c"
 
-extern int led_time;
-extern AppData *app;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+extern int xvc_led_time;
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #ifdef HAVE_LIBXFIXES
 #include "colors.h"
@@ -84,7 +93,8 @@ static unsigned char bottom[65536];
 static ColorInfo c_info;
 #endif     // HAVE_LIBXFIXES
 
-/** \brief function to find out where the mouse pointer is
+/** 
+ * \brief function to find out where the mouse pointer is
  *
  * @param x return pointer to write x coordinate to pre-existing int
  * @param y return pointer to write y coordinate to pre-existing int
@@ -149,13 +159,6 @@ static void
 paintMousePointer (XImage * image)
 {
 #define DEBUGFUNCTION "paintMousePointer()"
-#ifndef min
-#define min(a,b) (a<b? a:b)
-#endif     // min
-#ifndef max
-#define max(a,b) (a>b? a:b)
-#endif     // max
-
     /* 16x20x1bpp bitmap for the black channel of the mouse pointer */
     static const uint16_t const mousePointerBlack[] = {
         0x0000, 0x0003, 0x0005, 0x0009, 0x0011,
@@ -177,7 +180,7 @@ paintMousePointer (XImage * image)
 #ifdef HAVE_LIBXFIXES
     unsigned char topp, botp;
     unsigned long applied;
-    XFixesCursorImage *x_cursor;
+    XFixesCursorImage *x_cursor = NULL;
 #endif     // HAVE_LIBXFIXES
 
     // only paint a mouse pointer into the dummy frame if the position of
@@ -218,16 +221,17 @@ paintMousePointer (XImage * image)
             }
 
             // first: shift to right line
-            im_data += (image->bytes_per_line * max (0, (y - app->area->y)));
+            im_data +=
+                (image->bytes_per_line * XVC_MAX (0, (y - app->area->y)));
 
             // then: shift to right pixel
-            im_data += (bytes_per_pixel * max (0, (x - app->area->x)));
+            im_data += (bytes_per_pixel * XVC_MAX (0, (x - app->area->x)));
         }
 
         /* Draw the cursor - proper loop */
-        for (line = max (0, yoff);
-             line < min (cursor_height,
-                         (app->area->y + image->height) - y); line++) {
+        for (line = XVC_MAX (0, yoff);
+             line < XVC_MIN (cursor_height,
+                             (app->area->y + image->height) - y); line++) {
             uint8_t *cursor = im_data;
             int column;
             uint16_t bm_b;
@@ -255,9 +259,9 @@ paintMousePointer (XImage * image)
                 }
             }
 
-            for (column = max (0, xoff);
-                 column < min (cursor_width,
-                               (app->area->x + app->area->width) - x);
+            for (column = XVC_MAX (0, xoff);
+                 column < XVC_MIN (cursor_width,
+                                   (app->area->x + app->area->width) - x);
                  column++) {
 #ifdef HAVE_LIBXFIXES
                 if (app->flags & FLG_USE_XFIXES) {
@@ -319,7 +323,8 @@ paintMousePointer (XImage * image)
 #undef DEBUGFUNCTION
 }
 
-/** \brief reads new data in a pre-existing image structure.
+/** 
+ * \brief reads new data in a pre-existing image structure.
  *
  * @param dpy a pointer to the display to read from
  * @param d the drawable to use
@@ -379,7 +384,8 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
 #undef DEBUGFUNCTION
 }
 
-/** \brief compute the output filename depending on current capture mode and
+/** 
+ * \brief compute the output filename depending on current capture mode and
  *      frame or movie number. Then open that file for writing.
  *
  * @return a pointer to a file handle or NULL
@@ -408,7 +414,8 @@ getOutputFile ()
 #undef DEBUGFUNCTION
 }
 
-/** \brief this captures without an existing XImage and creates one along the
+/** 
+ * \brief this captures without an existing XImage and creates one along the
  *      way. This is the plain X11 version.
  *
  * @param dpy a pointer to the display to read from
@@ -448,7 +455,8 @@ captureFrameCreatingImage (Display * dpy)
 #undef DEBUGFUNCTION
 }
 
-/** \brief this captures into an existing XImage. This is the plain X11 
+/** 
+ * \brief this captures into an existing XImage. This is the plain X11 
  *      version.
  *
  * @param dpy a pointer to the display to read from
@@ -484,7 +492,8 @@ captureFrameToImage (Display * dpy, XImage * image)
 }
 
 #ifdef HAVE_SHMAT
-/** \brief this captures into an existing XImage. This is the SHM version.
+/** 
+ * \brief this captures into an existing XImage. This is the SHM version.
  *
  * @param dpy a pointer to the display to read from
  * @param image a pointer to the image to write to
@@ -518,7 +527,8 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
 #undef DEBUGFUNCTION
 }
 
-/** \brief this captures without an existing XImage and creates one along the
+/** 
+ * \brief this captures without an existing XImage and creates one along the
  *      way. This is the SHM version.
  *
  * @param dpy a pointer to the display to read from
@@ -574,7 +584,8 @@ captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
 }
 #endif     // HAVE_SHMAT
 
-/** \brief calculates in how many msecs the next capture is due based on fps
+/** 
+ * \brief calculates in how many msecs the next capture is due based on fps
  *      and the duration of the previous capture.
  *
  * @param time the time in msecs when the last capture started
@@ -593,9 +604,8 @@ checkCaptureDuration (long time, long time1)
     // time == 0 resets led_meter
     if (time1 < 1)
         time1 = 1;
-
     // this sets the frame monitor widget
-    led_time = time1;
+    xvc_led_time = time1;
 
     // calculate the remaining time we have till capture of next frame
     time1 = job->time_per_frame - time1;
@@ -621,14 +631,15 @@ checkCaptureDuration (long time, long time1)
 #undef DEBUGFUNCTION
 }
 
-/** \brief this is the merged capture function that handles all sources.
+/** 
+ * \brief this is the merged capture function that handles all sources.
  *
  * @param capfunc passes the source as specified in captureFunctions
  * @return the number of msecs in which the next capture is due
  * @see captureFunctions
  */
 static long
-commonCapture (int capfunc)
+commonCapture (enum captureFunctions capfunc)
 {
 #define DEBUGFUNCTION "commonCapture()"
     static XImage *image = NULL;
@@ -640,7 +651,7 @@ commonCapture (int capfunc)
     static XShmSegmentInfo shminfo;
 #endif     // HAVE_SHMAT
     int ret = 0;
-    CapTypeOptions *target;
+    XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
 
 #ifdef DEBUG
@@ -881,29 +892,31 @@ commonCapture (int capfunc)
 #undef DEBUGFUNCTION
 }
 
-/** \brief function used for capturing. This one is used with source = x11,
+/** 
+ * \brief function used for capturing. This one is used with source = x11,
  *      i. e. when capturing from X11 display w/o SHM
  *
  * @return the number of msecs in which the next capture is due
  */
 long
-TCbCaptureX11 ()
+xvc_capture_x11 ()
 {
-#define DEBUGFUNCTION "TCbCaptureX11()"
+#define DEBUGFUNCTION "xvc_capture_x11()"
     return commonCapture (X11);
 #undef DEBUGFUNCTION
 }
 
 #ifdef HAVE_SHMAT
-/** \brief function used for capturing. This one is used with source = shm,
+/** 
+ * \brief function used for capturing. This one is used with source = shm,
  *      i. e. when capturing from X11 with SHM support
  *
  * @return the number of msecs in which the next capture is due
  */
 long
-TCbCaptureSHM ()
+xvc_capture_shm ()
 {
-#define DEBUGFUNCTION "TCbCaptureSHM()"
+#define DEBUGFUNCTION "xvc_capture_shm()"
     return commonCapture (SHM);
 #undef DEBUGFUNCTION
 }
@@ -912,7 +925,7 @@ TCbCaptureSHM ()
 
 /*
  *
- * @todo add dga and v4l again
+ * 
  *
  */
 #ifdef HasVideo4Linux

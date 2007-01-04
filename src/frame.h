@@ -1,8 +1,10 @@
-/* 
- * frame.h
- *
+/**
+ * \file frame.h
+ */
+
+/*
  * Copyright (C) 1997 Rasca Gmelch, Berlin
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +24,14 @@
 #ifndef __XVC_FRAME_H__
 #define __XVC_FRAME_H__
 
-int xvc_frame_lock;
-
 XRectangle *xvc_get_capture_area (void);
 int xvc_is_frame_locked (void);
-Display *xvc_frame_get_capture_display ();
-void xvc_frame_drop_capture_display ();
+void xvc_set_frame_locked (int);
 void xvc_get_window_attributes (Window win, XWindowAttributes * wa);
+
+// the following are implementation dependent and actually implemented
+// in gnome_frame.c
+void xvc_frame_drop_capture_display ();
+Display *xvc_frame_get_capture_display ();
 
 #endif     // __XVC_FRAME_H__

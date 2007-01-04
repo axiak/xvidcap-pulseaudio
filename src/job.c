@@ -1,5 +1,5 @@
-/* 
- * job.c
+/** 
+ * \file job.c
  *
  * Copyright (C) 1997,98 Rasca, Berlin
  * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
@@ -44,6 +44,7 @@
 #include "colors.h"
 #include "codecs.h"
 #include "control.h"
+#include "app_data.h"
 #include "xvidcap-intl.h"
 #ifdef USE_FFMPEG
 # include "xtoffmpeg.h"
@@ -53,23 +54,11 @@
 
 static Job *job;
 
-extern xvCodec tCodecs[NUMCODECS];
-extern xvFFormat tFFormats[NUMCAPS];
-
-extern AppData *app;
-
 extern pthread_mutex_t recording_mutex;
 extern pthread_cond_t recording_condition_unpaused;
 
-int job_set_sound_dev (char *, int, int, int);
-void job_set_fps (int fps);
-int job_fps (void);
-void job_set_file (char *file);
-char *job_file (void);
-int job_compression (void);
-void job_set_capture (void);
-// void xvc_job_set_window_attributes ();
-// void xvc_job_set_display ();
+static int job_set_sound_dev (char *, int, int, int);
+static void job_set_capture (void);
 
 /* 
  * HELPER FUNCTIONS
@@ -85,30 +74,13 @@ xvc_job_new ()
         exit (1);
     }
 
-//    job->fps = 0;
     job->file = NULL;
     job->flags = 0;
     job->state = 0;
-//    job->start_no = 0;
     job->pic_no = 0;
     job->movie_no = 0;
-//    job->step = 0;
 
     job->time_per_frame = 0;
-//    job->max_frames = 0;
-//    job->max_time = 0;
-//    job->quality = 0;
-//    job->open_flags[8] = '\0', '\0', '\0', '\0', '\0', '\0', '\0', '\0';
-//    job->bpp = 0;
-//    job->vid_dev = 0;
-#ifdef HAVE_FFMPEG_AUDIO
-//    job->snd_dev = 0;
-//    job->snd_rate = 0;
-//    job->snd_smplsize = 0;
-//    job->snd_channels = 0;
-#endif     // HAVE_FFMPEG_AUDIO
-//    job->mouseWanted = 0;
-//    job->video_dev = NULL;
 #ifdef HAVE_FFMPEG_AUDIO
     job->snd_device = NULL;
 #endif     // HAVE_FFMPEG_AUDIO
@@ -121,15 +93,10 @@ xvc_job_new ()
     job->target = 0;
     job->targetCodec = 0;
     job->au_targetCodec = 0;
-//    job->crc = 0;
     job->ncolors = 0;
 
     job->color_table = NULL;
     job->colors = NULL;
-//    job->win_attr.root = None;
-//    job->dpy = NULL;
-//    job->area = NULL;
-//    job->rescale = 0;
 
     return (job);
 #undef DEBUGFUNCTION
@@ -162,11 +129,11 @@ xvc_job_set_colors ()
 
 
 void
-xvc_job_set_from_app_data (AppData * app)
+xvc_job_set_from_app_data (XVC_AppData * app)
 {
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_job_set_from_app_data()"
-    CapTypeOptions *cto;
+    XVC_CapTypeOptions *cto;
     char file[PATH_MAX + 1];
 
     // make sure we do have a job
@@ -182,23 +149,15 @@ xvc_job_set_from_app_data (AppData * app)
         cto = &(app->single_frame);
     // various manual settings
     // need to have the flags set to smth. before other functions try to
-    // do
-    // flags |= or smth.
+    // do: flags |= or smth.
     job->flags = app->flags;
 
-//    job_set_fps (cto->fps);
-    job->time_per_frame = (int) (1000 / (cto->fps / (float) 100));
+    job->time_per_frame = (int) (1000 / 
+        ((float) cto->fps.num / (float) cto->fps.den));
 
     job->state = VC_STOP;              // FIXME: better move this outta here?
-//    job->start_no = cto->start_no;
     job->pic_no = cto->start_no;
     job->movie_no = 0;                 // FIXME: make this configurable
-//    job->step = cto->step;
-//    job->max_frames = cto->frames;
-//    job->max_time = cto->time;
-//    job->quality = cto->quality;
-//    job->rescale = app->rescale;
-//    job->bpp = cto->bpp;
 #ifdef HAVE_FFMPEG_AUDIO
     if (cto->audioWanted != 0)
         job->flags |= FLG_REC_SOUND;
@@ -209,26 +168,17 @@ xvc_job_set_from_app_data (AppData * app)
     job_set_sound_dev (app->snddev, cto->sndrate, cto->sndsize,
                        cto->sndchannels);
 #endif     // HAVE_FFMPEG_AUDIO
-//    job->mouseWanted = app->mouseWanted;
-//    job->video_dev = app->device;
-
-#ifdef DEBUG
-    printf ("%s %s: target is set to %i \n", DEBUGFILE, DEBUGFUNCTION,
-            job->target);
-#endif     // DEBUG
 
     job->target = cto->target;
     if (job->target <= 0) {
         if (job->target == 0) {
             // we should be able to safely assume cto->filename is longer
-            // smaller than 0 for the next bit because
-            // with target == 0 it would have been set to a default value
-            // otherwise
+            // smaller than 0 for the next bit because with target == 0 
+            // it would have been set to a default value otherwise
             job->target = xvc_codec_get_target_from_filename (cto->file);
             // we assume job->target can never be == 0 now, because a
-            // sanity checking function
-            // should have checked before if we have a valid specification 
-            // for a target either
+            // sanity checking function should have checked before if 
+            // we have a valid specification  for a target either
             // through target itself or the filename extension
             if (job->target <= 0) {
                 fprintf (stderr,
@@ -248,7 +198,7 @@ xvc_job_set_from_app_data (AppData * app)
     job->targetCodec = cto->targetCodec;
     if (job->targetCodec <= 0) {
         if (job->targetCodec == 0)
-            job->targetCodec = tFFormats[job->target].def_vid_codec;
+            job->targetCodec = xvc_formats[job->target].def_vid_codec;
         if (job->targetCodec < 0) {
             fprintf (stderr,
                      "%s %s: Unrecoverable error while initializing job from app_data.\n",
@@ -266,11 +216,10 @@ xvc_job_set_from_app_data (AppData * app)
     job->au_targetCodec = cto->au_targetCodec;
     if (job->au_targetCodec <= 0) {
         if (job->au_targetCodec == 0)
-            job->au_targetCodec = tFFormats[job->target].def_au_codec;
+            job->au_targetCodec = xvc_formats[job->target].def_au_codec;
         // if 0 the format has no default audio codec. This should only be 
         // the case if the format does not support audio or recording
-        // without
-        // audio is encouraged
+        // without audio is encouraged
         if (job->au_targetCodec < 0) {
             fprintf (stderr,
                      "%s %s: Unrecoverable error while initializing job from app_data.\n",
@@ -295,24 +244,20 @@ xvc_job_set_from_app_data (AppData * app)
         pid = (int) getpid ();
 
         snprintf (file, (PATH_MAX + 1), "%s/.xvidcap-tmp.%i.%s", home, pid,
-                  xvc_next_element (tFFormats[job->target].extensions));
+                  xvc_formats[job->target].extensions[0]);
     } else {
         snprintf (file, (PATH_MAX + 1), "%s", cto->file);
     }
 
+    /** \todo double I need a strdup here? */
     job->file = strdup (file);
-
-    // set display and window attributes
-//    job->dpy = app->dpy;
-//    job->win_attr = app->win_attr;
-//    job->area = app->area;
 
     job_set_capture ();
 
     // the order of the following actions is key!
     // the default is to use the colormap of the root window
-    xvc_job_set_colors ();
     xvc_job_set_save_function (app->win_attr.visual, job->target);
+    xvc_job_set_colors ();
 
 #ifdef DEBUG
     printf ("%s %s: Leaving function with this job:\n", DEBUGFILE,
@@ -373,29 +318,11 @@ xvc_job_set_save_function (Visual * vis, int type)
 
 }
 
-/* 
- *
-void
-job_set_fps (int fps)
-{
-#undef DEBUGFUNCTION
-#define DEBUGFUNCTION "job_set_fps()"
-
-#ifdef DEBUG2
-    printf ("%s %s: entering with fps: %i\n", DEBUGFILE, DEBUGFUNCTION, fps);
-#endif     // DEBUG2
-
-    job->time_per_frame = (int) (1000 / (fps / (float) 100));
-//    job->fps = fps;
-}
-*/
-
 #ifdef HAVE_FFMPEG_AUDIO
 /* 
  * set and check some parameters for the sound device
  */
-
-int
+static int
 job_set_sound_dev (char *snd, int rate, int size, int channels)
 {
 #undef DEBUGFUNCTION
@@ -438,7 +365,7 @@ job_set_sound_dev (char *snd, int rate, int size, int channels)
 /* 
  * find the correct capture function
  */
-void
+static void
 job_set_capture (void)
 {
 #undef DEBUGFUNCTION
@@ -448,7 +375,7 @@ job_set_capture (void)
     switch (input) {
 #ifdef HAVE_SHMAT
     case FLG_USE_SHM:
-        job->capture = TCbCaptureSHM;
+        job->capture = xvc_capture_shm;
         break;
 #endif     // HAVE_SHMAT
     case FLG_USE_DGA:
@@ -460,7 +387,7 @@ job_set_capture (void)
         break;
 #endif
     default:
-        job->capture = TCbCaptureX11;
+        job->capture = xvc_capture_x11;
         break;
     }
 
@@ -476,50 +403,24 @@ xvc_job_dump ()
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_job_dump()"
 
-//    printf ("fps = %.2f\n", (float) (job->fps / 100.00));
     printf ("file = %s\n", job->file);
     printf ("flags = %i\n", job->flags);
     printf ("state = %i\n", job->state);
-//    printf ("start_no = %i\n", job->start_no);
     printf ("pic_no = %i\n", job->pic_no);
     printf ("movie_no = %i\n", job->movie_no);
-//    printf ("step = %i\n", job->step);
     printf ("time_per_frame = %i\n", job->time_per_frame);
-//    printf ("max_frames = %i\n", job->max_frames);
-//    printf ("max_time = %i\n", job->max_time);
-//    printf ("quality = %i\n", job->quality);
-//    printf ("rescale = %i\n", job->rescale);
-//    printf ("open_flags = %s\n", strdup (job->open_flags));
-//    printf ("bpp = %i\n", job->bpp);
-//    printf ("vid_dev = %i\n", job->vid_dev);
 #ifdef HAVE_FFMPEG_AUDIO
-//    printf ("snd_dev = %i\n", job->snd_dev);
-//    printf ("snd_rate = %i\n", job->snd_rate);
-//    printf ("snd_smplsize = %i\n", job->snd_smplsize);
-//    printf ("snd_channels = %i\n", job->snd_channels);
-#endif     // HAVE_FFMPEG_AUDIO
-//    printf ("mouseWanted = %i\n", job->mouseWanted);
-//    printf ("video_dev = %s\n", job->video_dev);
-#ifdef HAVE_FFMPEG_AUDIO
-//    printf ("snd_device = %s\n", job->snd_device);
+    printf ("snd_device = %s\n", job->snd_device);
 #endif     // HAVE_FFMPEG_AUDIO
 
-    printf ("get_colors = %p\n", job->get_colors);
+printf ("get_colors = %p\n", job->get_colors);
     printf ("save = %p\n", job->save);
     printf ("clean = %p\n", job->clean);
     printf ("capture = %p\n", job->capture);
 
-//    printf ("target = %i\n", job->target);
-//    printf ("targetCodec = %i\n", job->targetCodec);
     printf ("ncolors = %i\n", job->ncolors);
-
     printf ("color_table = %p\n", job->color_table);
     printf ("colors = %p\n", job->colors);
-//    printf ("display = %p\n", job->dpy);
-//    printf ("win_attr (w/h/x/y) = %i/%i/%i/%i\n", job->win_attr.width,
-//            job->win_attr.height, job->win_attr.x, job->win_attr.y);
-//    printf ("area (w/h/x/y) = %i/%i/%i/%i\n", job->area->width,
-//            job->area->height, job->area->x, job->area->y);
 
 }
 

@@ -1,7 +1,12 @@
-/* 
- * gnome_frame.c,
+/**
+ * \file gnome_frame.c
  *
- * Copyright (C) 2003,04,05,06 Karl H. Beckers, Frankfurt
+ * This file contains functions needed for creation and maintenance of the
+ * frame enclosing the area to capture.
+ */
+
+/* 
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,16 +28,18 @@
  * rectangle. Both Xt and GTK2 versions are in here now.
  *
  */
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
 
+#define DEBUGFILE "gnome_frame.c"
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
+
 #include <X11/Intrinsic.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
-
-/* 
- * include <bonobo.h> include <gnome.h> */
 #include <glade/glade.h>
 
 #include "app_data.h"
@@ -40,22 +47,35 @@
 #include "frame.h"
 #include "gnome_frame.h"
 
-#define DEBUGFILE "gnome_frame.c"
-
-/* 
- * some globals
- * these are from frames.c
- */
-extern AppData *app;
-Display *xvc_dpy = NULL;
-
 /* 
  * file globals (static)
  *
  */
+/** 
+ * \brief remember the Display if already retrieved
+ *
+ * This assumes that the Display to capture from cannot change once xvidcap
+ * has been started. We reuse any Display we once retrieved to avoid 
+ * potential X server roundtrip
+ */
+static Display *xvc_dpy = NULL;
+
+/** \brief make the frame parts available everywhere in this file */
 static GtkWidget *gtk_frame_top,
     *gtk_frame_left, *gtk_frame_right, *gtk_frame_bottom, *gtk_frame_center;
 
+/**
+ * \brief gets the Display to capture from
+ *
+ * If the frame has been created we retrieve the Display from GDK. Otherwise,
+ * (either we're running without GUI or we're doing this before the frame
+ * has been created, which is the case if we pass --window) we use 
+ * XOpenDisplay if xvc_dpy is not already set.
+ *
+ * @return a pointer to the Display to capture from. This Display can be
+ *      expected to be always open and only closed on program exit.
+ * @see xvc_frame_drop_capture_display
+ */
 Display *
 xvc_frame_get_capture_display ()
 {
@@ -71,6 +91,9 @@ xvc_frame_get_capture_display ()
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief cleans up the Display to capture from, i. e. close and set to NULL
+ */
 void
 xvc_frame_drop_capture_display ()
 {
@@ -82,13 +105,19 @@ xvc_frame_drop_capture_display ()
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief repositions the main control according to the frame's current 
+ *      position
+ *
+ * @param toplevel a pointer to the main control
+ */
 void
 do_reposition_control (GtkWidget * toplevel)
 {
 #define DEBUGFUNCTION "do_reposition_control()"
     int max_width = 0, max_height = 0;
     int pwidth = 0, pheight = 0;
-    XRectangle *x_rect = xvc_get_capture_area();
+    XRectangle *x_rect = xvc_get_capture_area ();
     int x = x_rect->x, y = x_rect->y;
     int width = x_rect->width, height = x_rect->height;
     GdkScreen *myscreen;
@@ -143,9 +172,15 @@ do_reposition_control (GtkWidget * toplevel)
 #undef DEBUGFUNCTION
 }
 
-/* 
- * Change Frame due to user input
+/** 
+ * \brief changes frame due to user input
  *
+ * @param x x-position to change to
+ * @param y y-position to change to
+ * @param width new frame width
+ * @param height new frame height
+ * @param reposition_control TRUE for main control should be repositioned
+ *      if frame moves, or FALSE if not
  */
 void
 xvc_change_gtk_frame (int x, int y, int width, int height,
@@ -155,7 +190,7 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     int max_width, max_height;
     extern GtkWidget *xvc_ctrl_main_window;
     Display *dpy;
-    XRectangle *x_rect = xvc_get_capture_area();
+    XRectangle *x_rect = xvc_get_capture_area ();
 
     // we have to adjust it to viewable areas
     dpy = xvc_frame_get_capture_display ();
@@ -211,28 +246,26 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     x_rect->height = height;
 
     // if the frame is locked, we have a GUI, and we also want to
-    // reposition
-    // the GUI (we don't want to except when repositioning the frame due
-    // too
-    // the cap_geometry cli parameter because the move of the frame would
-    // because
-    // triggered through a move of the control ... thus causing an
-    // infinite loop), 
-    // move the control window, too
+    // reposition the GUI (we don't want to except when repositioning the 
+    // frame due too the cap_geometry cli parameter because the move of 
+    // the frame would because triggered through a move of the control ... 
+    // thus causing an infinite loop), move the control window, too
     if (((app->flags & FLG_NOGUI) == 0) && reposition_control)
         do_reposition_control (xvc_ctrl_main_window);
 
 #undef DEBUGFUNCTION
 }
 
-// 
-// on move of window move frame too if locked
+/**
+ * \brief callback for the configure event on the main control to move
+ *      the frame if the main control moves
+ */
 static gint
 on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
 {
 #define DEBUGFUNCTION "on_gtk_frame_configure_event()"
     gint x, y, pwidth, pheight;
-    XRectangle *x_rect = xvc_get_capture_area();
+    XRectangle *x_rect = xvc_get_capture_area ();
 
     if (xvc_is_frame_locked ()) {
         x = ((GdkEventConfigure *) e)->x;
@@ -240,14 +273,22 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
         pwidth = ((GdkEventConfigure *) e)->width;
         pheight = ((GdkEventConfigure *) e)->height;
         y += pheight + FRAME_OFFSET;
-        xvc_change_gtk_frame (x, y, x_rect->width,
-                              x_rect->height, FALSE);
+        xvc_change_gtk_frame (x, y, x_rect->width, x_rect->height, FALSE);
     }
 
     return FALSE;
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief creates a frame around the area to capture
+ *
+ * @param toplevel a pointer to the main control
+ * @param pwith width for the frame
+ * @param pheight height for the frame
+ * @param px x-position for the frame
+ * @param py y-position for the frame
+ */
 void
 xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
                       int px, int py)
@@ -258,7 +299,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     GdkColormap *colormap;
     GdkRectangle rect;
     int flags = app->flags;
-    XRectangle *x_rect = xvc_get_capture_area();
+    XRectangle *x_rect = xvc_get_capture_area ();
 
 #ifdef DEBUG
     printf ("%s %s: x %d y %d width %d height %d\n", DEBUGFILE,
@@ -367,8 +408,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         if (gdk_color_parse ("red", &g_col)) {
             // do the following only if parsing color red succeeded ...
             // if not, we met an error but handle it gracefully by
-            // ignoring the frame
-            // color
+            // ignoring the frame color
             if (gdk_colormap_alloc_color
                 (GDK_COLORMAP (colormap), &g_col, FALSE, TRUE)) {
                 gtk_widget_modify_bg (GTK_WIDGET (gtk_frame_left),
@@ -417,8 +457,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         if (gdk_color_parse ("red", &g_col)) {
             // do the following only if parsing color red succeeded ...
             // if not, we met an error but handle it gracefully by
-            // ignoring the frame
-            // color
+            // ignoring the frame color
             if (gdk_colormap_alloc_color
                 (GDK_COLORMAP (colormap), &g_col, FALSE, TRUE)) {
                 gtk_widget_modify_bg (GTK_WIDGET (gtk_frame_bottom),
@@ -467,8 +506,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         if (gdk_color_parse ("red", &g_col)) {
             // do the following only if parsing color red succeeded ...
             // if not, we met an error but handle it gracefully by
-            // ignoring the frame
-            // color
+            // ignoring the frame color
             if (gdk_colormap_alloc_color
                 (GDK_COLORMAP (colormap), &g_col, FALSE, TRUE)) {
                 gtk_widget_modify_bg (GTK_WIDGET (gtk_frame_right),
@@ -528,13 +566,13 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         }
 #endif     // HasVideo4Linux
         // connect event-handler to configure event of gtk control window
-        // to redraw the
-        // selection frame if the control is moved and the frame is locked
+        // to redraw the selection frame if the control is moved and the 
+        // frame is locked
         g_signal_connect ((gpointer) toplevel, "configure-event",
                           G_CALLBACK (on_gtk_frame_configure_event), NULL);
 
     }
-    xvc_frame_lock = 1;
+    xvc_set_frame_locked (1);
 
     if (!(flags & FLG_NOGUI) && (px >= 0 || py >= 0))
         do_reposition_control (toplevel);
@@ -542,6 +580,9 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief destroys the frame around the capture area
+ */
 void
 xvc_destroy_gtk_frame ()
 {

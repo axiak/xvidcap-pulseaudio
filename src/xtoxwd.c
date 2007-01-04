@@ -32,7 +32,7 @@
 #include "job.h"
 #include "app_data.h"
 
-extern AppData *app;
+//extern XVC_AppData *app;
 
 
 /* 

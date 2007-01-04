@@ -1,7 +1,14 @@
-/* 
- * codecs.c,
+/** 
+ * \file codecs.c
  *
- * Copyright (C) 2004-06 Karl, Frankfurt
+ * This file contains all data types and functions related to video and audio
+ * codecs and file formats.
+ *
+ * \todo reenable audio for swf if libav* supports it
+ */
+
+/*
+ * Copyright (C) 2004-07 Karl, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,395 +25,482 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#define DEBUGFILE "codecs.c"
+
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef SOLARIS
 #include <strings.h>
-#else
+#else      // SOLARIS
 #include <string.h>
-#endif
-#include <locale.h>
+#endif     // SOLARIS
 #include <ctype.h>
 #include <libintl.h>
+#include <math.h>
+
+#ifdef USE_FFMPEG
+#include <ffmpeg/avcodec.h>
+#include <ffmpeg/avformat.h>
+#endif     // USE_FFMPEG
 
 #include "app_data.h"
 #include "codecs.h"
 #include "xvidcap-intl.h"
 
-#include <ffmpeg/avcodec.h>
-#include <ffmpeg/avformat.h>
-
-#define DEBUGFILE "codecs.c"
-
-xvCodec tCodecs[NUMCODECS];
-xvFFormat tFFormats[NUMCAPS];
-xvAuCodec tAuCodecs[NUMAUCODECS];
-
-const xvCodec none = {
-    "NONE",
-    N_("NONE"),
-    CODEC_NONE,
-    CODEC_ID_NONE,
-    0,
-    0,
-    NULL,
-    NULL
+/*
+ * fps and fps_rage arrays for use in the codecs array
+ */
+static const XVC_FpsRange one_to_hundred_range[] = {
+    {
+     .start = {1, 10},
+     .end = {100, 1}
+     }
 };
+static const XVC_FpsRange mpeg4_range[] = {
+    {
+     .start = {75, 10},
+     .end = {30, 1}
+     }
+};
+static const XVC_Fps mpeg1_fps[] = {
+    {24000, 1001},
+    {24, 1},
+    {25, 1},
+    {30000, 1001},
+    {30, 1},
+    {50, 1},
+    {60000, 1001},
+    {60, 1},
+};
+static const XVC_Fps dv_fps[] = {
+    {25, 1},
+    {30000, 1001},
+};
+
+/** \brief global array storing all available codecs */
+const XVC_Codec xvc_codecs[NUMCODECS] = {
+    {
+     "NONE",
+     N_("NONE"),
+     CODEC_ID_NONE,
+     .def_fps = {0, 1},
+     NULL,
+     0,
+     NULL,
+     0},
+#ifdef USE_FFMPEG
+    {
+     "PGM",
+     N_("Portable Graymap"),
+     CODEC_ID_PGM,
+     .def_fps = {24, 1},
+     one_to_hundred_range,
+     XVC_ARRAY_LENGTH (one_to_hundred_range),
+     NULL,
+     0},
+    {
+     "PPM",
+     N_("Portable Pixmap"),
+     CODEC_ID_PPM,
+     .def_fps = {24, 1},
+     one_to_hundred_range,
+     XVC_ARRAY_LENGTH (one_to_hundred_range),
+     NULL,
+     0},
+    {
+     "PNG",
+     N_("Portable Network Graphics"),
+     CODEC_ID_PNG,
+     .def_fps = {24, 1},
+     one_to_hundred_range,
+     XVC_ARRAY_LENGTH (one_to_hundred_range),
+     NULL,
+     0},
+    {
+     "JPEG",
+     N_("Joint Picture Expert Group"),
+     CODEC_ID_JPEGLS,
+     .def_fps = {24, 1},
+     one_to_hundred_range,
+     XVC_ARRAY_LENGTH (one_to_hundred_range),
+     NULL,
+     0},
+    {
+     "MPEG1",
+     N_("MPEG 1"),
+     CODEC_ID_MPEG1VIDEO,
+     .def_fps = {24, 1},
+     NULL,
+     0,
+     mpeg1_fps,
+     XVC_ARRAY_LENGTH (mpeg1_fps)
+     },
+    {
+     "MJPEG",
+     N_("MJPEG"),
+     CODEC_ID_MJPEG,
+     .def_fps = {24, 1},
+     mpeg4_range,                      /* this is actually MPEG4 ... dunno if
+                                        * this is the same here */
+     XVC_ARRAY_LENGTH (mpeg4_range),
+     NULL,
+     0},
+    {
+     "MPEG4",
+     N_("MPEG 4 (DIVX)"),
+     CODEC_ID_MPEG4,
+     .def_fps = {24, 1},
+     mpeg4_range,
+     XVC_ARRAY_LENGTH (mpeg4_range),
+     NULL,
+     0},
+    {
+     "MS_DIV2",
+     N_("Microsoft DIVX 2"),
+     CODEC_ID_MSMPEG4V2,
+     .def_fps = {24, 1},
+     mpeg4_range,                      /* this is actually MPEG4 ... dunno if
+                                        * this is the same here */
+     XVC_ARRAY_LENGTH (mpeg4_range),
+     NULL,
+     0},
+    {
+     "MS_DIV3",
+     N_("Microsoft DIVX 3"),
+     CODEC_ID_MSMPEG4V3,
+     .def_fps = {24, 1},
+     mpeg4_range,                      /* this is actually MPEG4 ... dunno if
+                                        * this is the same here */
+     XVC_ARRAY_LENGTH (mpeg4_range),
+     NULL,
+     0},
+    {
+     "FLASH_VIDEO",
+     N_("Flash Video"),
+     CODEC_ID_FLV1,
+     .def_fps = {24, 1},
+     mpeg4_range,                      /* this is actually MPEG4 ... dunno if
+                                        * this is the same here */
+     XVC_ARRAY_LENGTH (mpeg4_range),
+     NULL,
+     0},
+    {
+     "DV",
+     N_("DV Video"),
+     CODEC_ID_DVVIDEO,
+     .def_fps = {25, 1},
+     NULL,
+     0,
+     dv_fps,
+     XVC_ARRAY_LENGTH (dv_fps)
+     },
+    {
+     "MPEG2",
+     N_("MPEG2 Video"),
+     CODEC_ID_MPEG2VIDEO,
+     .def_fps = {24, 1},
+     NULL,
+     0,
+     mpeg1_fps,
+     XVC_ARRAY_LENGTH (mpeg1_fps)
+     },
+    {
+     "SVQ1",
+     N_("Soerensen VQ 1"),
+     CODEC_ID_SVQ1,
+     .def_fps = {24, 1},
+     mpeg4_range,                      /* this is actually MPEG4 ... dunno if
+                                        * this is the same here */
+     XVC_ARRAY_LENGTH (mpeg4_range),
+     NULL,
+     0}
+#endif     // USE_FFMPEG
+};
+
+/** 
+ * \brief global array storing all available audio codecs 
+ */
+const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
+    {
+     "NONE",
+     N_("NONE"),
+     CODEC_ID_NONE}
+#ifdef USE_FFMPEG
+#ifdef HAVE_FFMPEG_AUDIO
+    , {
+       "MP2",
+       N_("MPEG2"),
+       CODEC_ID_MP2}
+#ifdef HAVE_LIBMP3LAME
+    , {
+       "MP3",
+       N_("MPEG2 Layer 3"),
+       CODEC_ID_MP3}
+#endif     // HAVE_LIBMP3LAME
+    , {
+       "PCM16",
+       N_("PCM"),
+       CODEC_ID_PCM_S16LE}
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
+};
+
+/*
+ * arrays with extensions, allowed video and audio codecs for use in
+ * the global xvc_formats array
+ */
+static const char const *extension_xwd[] = { "xwd" };
 
 #ifdef USE_FFMPEG
-const xvCodec pgm = {
-    "PGM",
-    N_("Portable Graymap"),
-    CODEC_PGM,
-    CODEC_ID_PGM,
-    300000,
-    24,
-    "0.1-100",
-    NULL
-};
+static const char const *extension_pgm[] = { "pgm" };
+static const char const *extension_ppm[] = { "ppm" };
+static const char const *extension_png[] = { "png" };
+static const char const *extension_jpg[] = { "jpg", "jpeg" };
+static const char const *extension_avi[] = { "avi" };
+static const char const *extension_mpg[] = { "mpeg", "mpg" };
+static const char const *extension_asf[] = { "asf" };
+static const char const *extension_flv[] = { "flv", "flv1" };
+static const char const *extension_swf[] = { "swf" };
+static const char const *extension_dv[] = { "dv" };
+static const char const *extension_m1v[] = { "m1v", "vcd" };
+static const char const *extension_m2v[] = { "m2v", "svcd" };
+static const char const *extension_mov[] = { "mov", "qt" };
 
-const xvCodec ppm = {
-    "PPM",
-    N_("Portable Pixmap"),
-    CODEC_PPM,
-    CODEC_ID_PPM,
-    300000,
-    24,
-    "0.1-100",
-    NULL
-};
-
-const xvCodec png = {
-    "PNG",
-    N_("Portable Network Graphics"),
-    CODEC_PNG,
-    CODEC_ID_PNG,
-    300000,
-    24,
-    "0.1-100",
-    NULL
-};
-
-const xvCodec jpeg = {
-    "JPEG",
-    N_("Joint Picture Expert Group"),
-    CODEC_JPEG,
-    CODEC_ID_JPEGLS,
-    300000,
-    24,
-    "0.1-100",
-    NULL
-};
-
-const xvCodec mpeg1 = {
-    "MPEG1",
-    N_("MPEG 1"),
+static const XVC_CodecID allowed_vid_codecs_pgm[] = { CODEC_PGM };
+static const XVC_CodecID allowed_vid_codecs_ppm[] = { CODEC_PPM };
+static const XVC_CodecID allowed_vid_codecs_png[] = { CODEC_PNG };
+static const XVC_CodecID allowed_vid_codecs_jpg[] = { CODEC_JPEG };
+static const XVC_CodecID allowed_vid_codecs_avi[] = {
     CODEC_MPEG1,
-    CODEC_ID_MPEG1VIDEO,
-    300000,
-    24,
-    NULL,
-    "24|25|30|50|60"
-        // FIXME: adapt to ffmpeg's new fractional fps handling
-        // "23.976|24|25|29.97|30|50|59.94|60"
-};
-
-const xvCodec mjpeg = {
-    "MJPEG",
-    N_("MJPEG"),
     CODEC_MJPEG,
-    CODEC_ID_MJPEG,
-    300000,
-    24,
-    "7.5-30",                          // this is actually MPEG4 ... no idea if
-    // this is the same here
-    NULL
-};
-
-const xvCodec mpeg4 = {
-    "MPEG4",
-    N_("MPEG 4 (DIVX)"),
     CODEC_MPEG4,
-    CODEC_ID_MPEG4,
-    300000,
-    24,
-    "7.5-30",
-    NULL
-};
-
-const xvCodec ms_div2 = {
-    "MS_DIV2",
-    N_("Microsoft DIVX 2"),
     CODEC_MSDIV2,
-    CODEC_ID_MSMPEG4V2,
-    300000,
-    24,
-    "7.5-30",                          // this is actually MPEG4 ... no idea if
-    // this is the same here
-    NULL
-};
-
-const xvCodec ms_div3 = {
-    "MS_DIV3",
-    N_("Microsoft DIVX 3"),
-    CODEC_MSDIV3,
-    CODEC_ID_MSMPEG4V3,
-    300000,
-    24,
-    "7.5-30",                          // this is actually MPEG4 ... no idea if
-    // this is the same here
-    NULL
-};
-
-const xvCodec flv1 = {
-    "FLASH_VIDEO",
-    N_("Flash Video"),
-    CODEC_FLV,
-    CODEC_ID_FLV1,
-    300000,
-    24,
-    "7.5-30",                          // this is actually MPEG4 ... no idea if
-    // this is the same here
-    NULL
-};
-
-const xvCodec dv = {
-    "DV",
-    N_("DV Video"),
-    CODEC_DV,
-    CODEC_ID_DVVIDEO,
-    300000,
-    25,
-    NULL,
-    "25"
-        // FIXME: adapt to ffmpeg's new fractional fps handling
-        // "25|29.97"
-};
-
-const xvCodec mpeg2 = {
-    "MPEG2",
-    N_("MPEG2 Video"),
     CODEC_MPEG2,
-    CODEC_ID_MPEG2VIDEO,
-    300000,
-    24,
-    NULL,
-    "24|25|30|50|60"
-        // FIXME: adapt to ffmpeg's new fractional fps handling
-        // "23.976|24|25|29.97|30|50|59.94|60"
+    CODEC_DV
 };
-
-const xvCodec svq1 = {
-    "SVQ1",
-    N_("Soerensen VQ 1"),
-    CODEC_SVQ1,
-    CODEC_ID_SVQ1,
-    300000,
-    24,
-    "7.5-30",                          // this is actually MPEG4 ... no idea if
-    // this is the same here
-    NULL
-};
-#endif     // USE_FFMPEG
-
-// audio codecs
-
-const xvAuCodec none_aucodec = {
-    "NONE",
-    N_("NONE"),
-    AU_CODEC_NONE,
-    CODEC_ID_NONE
-};
-
-#ifdef USE_FFMPEG
-#ifdef HAVE_FFMPEG_AUDIO
-const xvAuCodec mp2 = {
-    "MP2",
-    N_("MPEG2"),
-    AU_CODEC_MP2,
-    CODEC_ID_MP2
-};
-
-#ifdef HAVE_LIBMP3LAME
-const xvAuCodec mp3 = {
-    "MP3",
-    N_("MPEG2 Layer 3"),
-    AU_CODEC_MP3,
-    CODEC_ID_MP3
-};
-#endif     // HAVE_LIBMP3LAME
-
-const xvAuCodec pcm16 = {
-    "PCM16",
-    N_("PCM"),
-    AU_CODEC_PCM16,
-    CODEC_ID_PCM_S16LE
-};
-#endif     // HAVE_FFMPEG_AUDIO
-#endif     // USE_FFMPEG
-
-// file formats
-
-const xvFFormat none_format = {
-    "NONE",
-    N_("NONE"),
-    "NONE",
-    NULL,
-    CODEC_NONE,
-    NULL,
-    AU_CODEC_NONE,
-    NULL
-};
-
-const xvFFormat xwd = {
-    "xwd",
-    N_("X11 Window Dump"),
-    NULL,
-    "xwd",
-    CODEC_NONE,
-    NULL,
-    AU_CODEC_NONE,
-    NULL
-};
-
-#ifdef USE_FFMPEG
-const xvFFormat pgm_format = {
-    "pgm",
-    N_("Portable Graymap File"),
-    NULL,
-    "pgm",
-    CODEC_PGM,
-    "PGM",
-    AU_CODEC_NONE,
-    NULL
-};
-
-const xvFFormat ppm_format = {
-    "ppm",
-    N_("Portable Anymap File"),
-    NULL,
-    "ppm",
-    CODEC_PPM,
-    "PPM",
-    AU_CODEC_NONE,
-    NULL
-};
-
-const xvFFormat png_format = {
-    "png",
-    N_("Portable Network Graphics File"),
-    NULL,
-    "png",
-    CODEC_PNG,
-    "PNG",
-    AU_CODEC_NONE,
-    NULL
-};
-
-const xvFFormat jpeg_format = {
-    "jpg",
-    N_("Joint Picture Expert Group"),
-    NULL,
-    "jpg|jpeg",
-    CODEC_JPEG,
-    "JPEG",
-    AU_CODEC_NONE,
-    NULL
-};
-
-const xvFFormat avi = {
-    "avi",
-    N_("Microsoft Audio Video Interleaved File"),
-    "avi",
-    "avi",
-    CODEC_MSDIV2,
-    "MPEG1|MJPEG|MPEG4|MS_DIV2|MPEG2|DV",
-#ifdef HAVE_FFMPEG_AUDIO
-    AU_CODEC_MP2,
-#ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16"
-#else
-    "MP2|PCM16"
-#endif     // HAVE_LIBMP3LAME
-#else
-    AU_CODEC_NONE,
-    NULL
-#endif     // HAVE_FFMPEG_AUDIO
-};
-
-const xvFFormat divx = {
-    "divx",
-    N_("General AVI file (DIVX default)"),
-    "avi",
-    "mpeg|mpg",
+static const XVC_CodecID allowed_vid_codecs_asf[] = { CODEC_MSDIV3 };
+static const XVC_CodecID allowed_vid_codecs_flv[] = { CODEC_FLV };
+static const XVC_CodecID allowed_vid_codecs_swf[] = { CODEC_FLV, CODEC_MJPEG };
+static const XVC_CodecID allowed_vid_codecs_dv[] = { CODEC_DV };
+static const XVC_CodecID allowed_vid_codecs_mpeg1[] = { CODEC_MPEG1 };
+static const XVC_CodecID allowed_vid_codecs_mpeg2[] = { CODEC_MPEG2 };
+static const XVC_CodecID allowed_vid_codecs_mov[] = {
     CODEC_MPEG4,
-    "MPEG1|MJPEG|MPEG4|MS_DIV2|MPEG2|DV",
+    CODEC_SVQ1,
+    CODEC_DV
+};
+
 #ifdef HAVE_FFMPEG_AUDIO
+static const XVC_AuCodecID allowed_au_codecs_avi[] = {
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
-    "MP2|MP3|PCM16"
-#else
-    "MP2|PCM16"
+    AU_CODEC_MP3,
 #endif     // HAVE_LIBMP3LAME
-#else
-    AU_CODEC_NONE,
-    NULL
-#endif     // HAVE_FFMPEG_AUDIO
+    AU_CODEC_PCM16
 };
-
-const xvFFormat asf = {
-    "asf",
-    N_("Microsoft Advanced Streaming Format"),
-    "asf",
-    "asf",
-    CODEC_MSDIV3,
-    "MS_DIV3",
-#ifdef HAVE_FFMPEG_AUDIO
-    AU_CODEC_NONE,
-#ifdef HAVE_LIBMP3LAME
-    "MP2|MP3"
-#else
-    "MP2"
-#endif     // HAVE_LIBMP3LAME
-#else
-    AU_CODEC_NONE,
-    NULL
-#endif     // HAVE_FFMPEG_AUDIO
-};
-
-const xvFFormat ff_flv1 = {
-    "flv1",
-    N_("Macromedia Flash Video Stream"),
-    "flv",
-    "flv|flv1",
-    CODEC_FLV,
-    "FLASH_VIDEO",
-#ifdef HAVE_FFMPEG_AUDIO
+static const XVC_AuCodecID au_codecs_mp2_and_mp3[] = {
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
-    "MP3"
-#else
-    AU_CODEC_NONE,
-    NULL
 #endif     // HAVE_LIBMP3LAME
-#else
-    AU_CODEC_NONE,
-    NULL
-#endif     // HAVE_FFMPEG_AUDIO
+    AU_CODEC_MP2
 };
+static const XVC_AuCodecID au_codecs_mp3[] = { AU_CODEC_MP3 };
+static const XVC_AuCodecID au_codecs_mp2_and_pcm[] = {
+    AU_CODEC_MP2,
+    AU_CODEC_PCM16
+};
+static const XVC_AuCodecID au_codecs_mp2[] = { AU_CODEC_MP2 };
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
 
-const xvFFormat swf = {
-    "swf",
-    N_("Macromedia Shockwave Flash File"),
-    "swf",
-    "swf",
-    CODEC_FLV,
-    "FLASH_VIDEO|MJPEG",
-/* 
+/** 
+ * \brief global array storing all available file formats 
+ */
+const XVC_FFormat xvc_formats[NUMCAPS] = {
+    {
+     "NONE",
+     N_("NONE"),
+     NULL,
+     CODEC_NONE,
+     NULL,
+     0,
+     AU_CODEC_NONE,
+     NULL,
+     0,
+     NULL,
+     0},
+    {
+     "xwd",
+     N_("X11 Window Dump"),
+     NULL,
+     CODEC_NONE,
+     NULL,
+     0,
+     AU_CODEC_NONE,
+     NULL,
+     0,
+     extension_xwd,
+     XVC_ARRAY_LENGTH (extension_xwd)
+     }
+#ifdef USE_FFMPEG
+    , {
+       "pgm",
+       N_("Portable Graymap File"),
+       NULL,
+       CODEC_PGM,
+       allowed_vid_codecs_pgm,
+       XVC_ARRAY_LENGTH (allowed_vid_codecs_pgm),
+       AU_CODEC_NONE,
+       NULL,
+       0,
+       extension_pgm,
+       XVC_ARRAY_LENGTH (extension_pgm)
+       },
+    {
+     "ppm",
+     N_("Portable Anymap File"),
+     NULL,
+     CODEC_PPM,
+     allowed_vid_codecs_ppm,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_ppm),
+     AU_CODEC_NONE,
+     NULL,
+     0,
+     extension_ppm,
+     XVC_ARRAY_LENGTH (extension_ppm)
+     },
+    {
+     "png",
+     N_("Portable Network Graphics File"),
+     NULL,
+     CODEC_PNG,
+     allowed_vid_codecs_png,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_png),
+     AU_CODEC_NONE,
+     NULL,
+     0,
+     extension_png,
+     XVC_ARRAY_LENGTH (extension_png)
+     },
+    {
+     "jpg",
+     N_("Joint Picture Expert Group"),
+     NULL,
+     CODEC_JPEG,
+     allowed_vid_codecs_jpg,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_jpg),
+     AU_CODEC_NONE,
+     NULL,
+     0,
+     extension_jpg,
+     XVC_ARRAY_LENGTH (extension_jpg)
+     },
+    {
+     "avi",
+     N_("Microsoft Audio Video Interleaved File"),
+     "avi",
+     CODEC_MSDIV2,
+     allowed_vid_codecs_avi,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_avi),
+#ifdef HAVE_FFMPEG_AUDIO
+#ifdef HAVE_LIBMP3LAME
+     AU_CODEC_MP3,
+#else      // HAVE_LIBMP3LAME
+     AU_CODEC_MP2,
+#endif     // HAVE_LIBMP3LAME
+     allowed_au_codecs_avi,
+     XVC_ARRAY_LENGTH (allowed_au_codecs_avi),
+#else      // HAVE_FFMPEG_AUDIO
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_FFMPEG_AUDIO
+     extension_avi,
+     XVC_ARRAY_LENGTH (extension_avi)
+     },
+    {
+     "divx",
+     N_("General AVI file (DIVX default)"),
+     "avi",
+     CODEC_MPEG4,
+     allowed_vid_codecs_avi,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_avi),
+#ifdef HAVE_FFMPEG_AUDIO
+#ifdef HAVE_LIBMP3LAME
+     AU_CODEC_MP3,
+#else      // HAVE_LIBMP3LAME
+     AU_CODEC_MP2,
+#endif     // HAVE_LIBMP3LAME
+     allowed_au_codecs_avi,
+     XVC_ARRAY_LENGTH (allowed_au_codecs_avi),
+#else      // HAVE_FFMPEG_AUDIO
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_FFMPEG_AUDIO
+     extension_mpg,
+     XVC_ARRAY_LENGTH (extension_mpg)
+     },
+    {
+     "asf",
+     N_("Microsoft Advanced Streaming Format"),
+     "asf",
+     CODEC_MSDIV3,
+     allowed_vid_codecs_asf,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_asf),
+     AU_CODEC_NONE,
+#ifdef HAVE_FFMPEG_AUDIO
+     au_codecs_mp2_and_mp3,
+     XVC_ARRAY_LENGTH (au_codecs_mp2_and_mp3),
+#else      // HAVE_FFMPEG_AUDIO
+     NULL,
+     0,
+#endif     // HAVE_FFMPEG_AUDIO
+     extension_asf,
+     XVC_ARRAY_LENGTH (extension_asf)
+     },
+    {
+     "flv1",
+     N_("Macromedia Flash Video Stream"),
+     "flv",
+     CODEC_FLV,
+     allowed_vid_codecs_flv,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_flv),
+#ifdef HAVE_FFMPEG_AUDIO
+#ifdef HAVE_LIBMP3LAME
+     AU_CODEC_MP3,
+     au_codecs_mp3,
+     XVC_ARRAY_LENGTH (au_codecs_mp3),
+#else      // HAVE_LIBMP3LAME
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_LIBMP3LAME
+#else      // HAVE_FFMPEG_AUDIO
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_FFMPEG_AUDIO
+     extension_flv,
+     XVC_ARRAY_LENGTH (extension_flv)
+     },
+    {
+     "swf",
+     N_("Macromedia Shockwave Flash File"),
+     "swf",
+     CODEC_FLV,
+     allowed_vid_codecs_swf,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_swf),
+     AU_CODEC_NONE,
+/*
+ * this seems to be broken in libav*
+ * 
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
@@ -417,218 +511,175 @@ const xvFFormat swf = {
 #endif                          // HAVE_LIBMP3LAME
 #else
 */
-    AU_CODEC_NONE,
-    NULL
+     NULL,
+     0,
 // #endif                          // HAVE_FFMPEG_AUDIO
-};
-
-const xvFFormat dv_format = {
-    "dv",
-    N_("DV Video Format"),
-    "dv",
-    "dv",
-    CODEC_DV,
-    "DV",
+     extension_swf,
+     XVC_ARRAY_LENGTH (extension_swf)
+     },
+    {
+     "dv",
+     N_("DV Video Format"),
+     "dv",
+     CODEC_DV,
+     allowed_vid_codecs_dv,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_dv),
 #ifdef HAVE_FFMPEG_AUDIO
-    AU_CODEC_MP2,
-    "PCM16"
-#else
-    AU_CODEC_NONE,
-    NULL
+     AU_CODEC_MP2,
+     au_codecs_mp2_and_pcm,
+     XVC_ARRAY_LENGTH (au_codecs_mp2_and_pcm),
+#else      // HAVE_FFMPEG_AUDIO
+     AU_CODEC_NONE,
+     NULL,
+     0,
 #endif     // HAVE_FFMPEG_AUDIO
-};
-
-const xvFFormat mpeg = {
-    "mpeg",
-    N_("MPEG1 System Format"),
-    "mpeg",
-    "m1v|vcd",
-    CODEC_MPEG1,
-    "MPEG1",
+     extension_dv,
+     XVC_ARRAY_LENGTH (extension_dv)
+     },
+    {
+     "mpeg",
+     N_("MPEG1 System Format"),
+     "mpeg",
+     CODEC_MPEG1,
+     allowed_vid_codecs_mpeg1,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_mpeg1),
 #ifdef HAVE_FFMPEG_AUDIO
-    AU_CODEC_MP2,
-    "MP2"
+     AU_CODEC_MP2,
+     au_codecs_mp2,
+     XVC_ARRAY_LENGTH (au_codecs_mp2),
 #else
-    AU_CODEC_NONE,
-    NULL
+     AU_CODEC_NONE,
+     NULL,
+     0,
 #endif     // HAVE_FFMPEG_AUDIO
-};
-
-const xvFFormat svcd = {
-    "mpeg2",
-    N_("MPEG2 PS Format"),
-    "svcd",
-    "m2v|svcd",
-    CODEC_MPEG2,
-    "MPEG2",
+     extension_m1v,
+     XVC_ARRAY_LENGTH (extension_m1v)
+     },
+    {
+     "mpeg2",
+     N_("MPEG2 PS Format"),
+     "svcd",
+     CODEC_MPEG2,
+     allowed_vid_codecs_mpeg2,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_mpeg2),
 #ifdef HAVE_FFMPEG_AUDIO
-    AU_CODEC_MP2,
-    "MP2"
+     AU_CODEC_MP2,
+     au_codecs_mp2,
+     XVC_ARRAY_LENGTH (au_codecs_mp2),
 #else
-    AU_CODEC_NONE,
-    NULL
+     AU_CODEC_NONE,
+     NULL,
+     0,
 #endif     // HAVE_FFMPEG_AUDIO
-};
-
-const xvFFormat mov = {
-    "mov",
-    N_("Quicktime Format"),
-    "mov",
-    "mov|qt",
-    CODEC_MPEG4,
-    "MPEG4|SVQ1|DV",
+     extension_m2v,
+     XVC_ARRAY_LENGTH (extension_m2v)
+     },
+    {
+     "mov",
+     N_("Quicktime Format"),
+     "mov",
+     CODEC_MPEG4,
+     allowed_vid_codecs_mov,
+     XVC_ARRAY_LENGTH (allowed_vid_codecs_mov),
 #ifdef HAVE_FFMPEG_AUDIO
-#ifdef HAVE_LIBMP3LAME
-    AU_CODEC_MP3,
-    "MP2|MP3|PCM16"
-#else
-    AU_CODEC_PCM16,
-    "MP2|PCM16"
-#endif     // HAVE_LIBMP3LAME
-#else
-    AU_CODEC_NONE,
-    NULL
+     AU_CODEC_MP2,
+     allowed_au_codecs_avi,
+     XVC_ARRAY_LENGTH (allowed_au_codecs_avi),
+#else      // HAVE_FFMPEG_AUDIO
+     AU_CODEC_NONE,
+     NULL,
+     0,
 #endif     // HAVE_FFMPEG_AUDIO
-};
+     extension_mov,
+     XVC_ARRAY_LENGTH (extension_mov)
+     }
 #endif     // USE_FFMPEG
+};
 
-/* 
- * must be called by main() to initialize data structures
+/** 
+ * \brief finds libavcodec's codec id from xvidcap's
+ *
+ * @param xv_codec xvidcap's codec id
+ * @return an integer codec id as understood by libavcodec. Since 0 is a valid
+ *      codec id we return -1 on failure
  */
-void
-xvc_codecs_init ()
+int
+xvc_trans_codec (XVC_CodecID xv_codec)
+{
+    int ret = -1;
+
+    if (xv_codec > 0 && xv_codec < NUMCODECS)
+        ret = xvc_codecs[xv_codec].ffmpeg_id;
+
+    return ret;
+}
+
+/** 
+ * \brief finds out if a codec is in the an array of valid video codec ids
+ *      for a given format
+ *
+ * @param format the id of the format to check
+ * @param codec the codec id to check for
+ * @return 0 for not found, otherwise the position in the array where codec
+ *      was found started at 1 (i. e. normal index + 1)
+ */
+int
+xvc_is_valid_video_codec (XVC_FFormatID format, XVC_CodecID codec)
+{
+    int i = 0, found = 0;
+
+    if (format < 0 || format >= NUMCAPS ||
+        xvc_formats[format].num_allowed_vid_codecs == 0)
+        return found;
+    for (i = 0; i < xvc_formats[format].num_allowed_vid_codecs; i++) {
+        if (xvc_formats[format].allowed_vid_codecs[i] == codec) {
+            found = ++i;
+            return found;
+        }
+    }
+    return found;
+}
+
+/** 
+ * \brief finds out if an audio codec is in the an array of valid audio codec 
+ *      ids for a given format
+ *
+ * @param format the id of the format to check
+ * @param codec the audio codec id to check for
+ * @return 0 for not found, otherwise the position in the array where codec
+ *      was found started at 1 (i. e. normal index + 1)
+ */
+int
+xvc_is_valid_audio_codec (XVC_FFormatID format, XVC_AuCodecID codec)
 {
     int i = 0;
+    int found = 0;
 
-    // these are absolutely required to be in the same order as the
-    // enumeration of CAP_* types in codecs.h
-    tCodecs[i++] = none;
-#ifdef USE_FFMPEG
-    tCodecs[i++] = pgm;
-    tCodecs[i++] = ppm;
-    tCodecs[i++] = png;
-    tCodecs[i++] = jpeg;
-    tCodecs[i++] = mpeg1;
-    tCodecs[i++] = mjpeg;
-    tCodecs[i++] = mpeg4;
-    tCodecs[i++] = ms_div2;
-    tCodecs[i++] = ms_div3;
-    tCodecs[i++] = flv1;
-    tCodecs[i++] = dv;
-    tCodecs[i++] = mpeg2;
-    tCodecs[i++] = svq1;
-#endif     // USE_FFMPEG
+    if (format < 0 || format >= NUMCAPS ||
+        xvc_formats[format].num_allowed_au_codecs == 0)
+        return found;
 
-    // dto.
-    // the target item of the array will be found by CAP_XXX - CAP_FFM
-    i = 0;
-    tFFormats[i++] = none_format;
-    tFFormats[i++] = xwd;
-#ifdef USE_FFMPEG
-    tFFormats[i++] = pgm_format;
-    tFFormats[i++] = ppm_format;
-    tFFormats[i++] = png_format;
-    tFFormats[i++] = jpeg_format;
-
-    tFFormats[i++] = avi;
-    tFFormats[i++] = divx;
-    tFFormats[i++] = asf;
-    tFFormats[i++] = ff_flv1;
-    tFFormats[i++] = swf;
-    tFFormats[i++] = dv_format;
-    tFFormats[i++] = mpeg;
-    tFFormats[i++] = svcd;
-    tFFormats[i++] = mov;
-#endif     // USE_FFMPEG
-
-    // audio codecs
-    i = 0;
-    tAuCodecs[i++] = none_aucodec;
-#ifdef USE_FFMPEG
-#ifdef HAVE_FFMPEG_AUDIO
-    tAuCodecs[i++] = mp2;
-#ifdef HAVE_LIBMP3LAME
-
-    tAuCodecs[i++] = mp3;
-#endif     // HAVE_LIBMP3LAME
-    tAuCodecs[i++] = pcm16;
-#endif     // HAVE_FFMPEG_AUDIO
-#endif     // USE_FFMPEG
+    for (i = 0; i < xvc_formats[format].num_allowed_au_codecs; i++) {
+        if (xvc_formats[format].allowed_au_codecs[i] == codec) {
+            found = ++i;
+            return found;
+        }
+    }
+    return found;
 }
 
-/* 
- * find ffmpeg codec id from xvidcap's
- * 0 is a valid id ... therefore we return -1 on failure
+/** 
+ * \brief find target file format based on filename, i. e. the extension
+ *
+ * @param file a filename to test
+ * @return the index number pointing to the array element for the format found
+ *      in the global file xvc_formats array
  */
-int
-xvc_trans_codec (int xv_codec)
+XVC_FFormatID
+xvc_codec_get_target_from_filename (const char const *file)
 {
-    int i, ret = -1;
-
-    for (i = 0; i < NUMCODECS; i++) {
-        if (tCodecs[i].id == xv_codec)
-            ret = tCodecs[i].ffmpeg_id;
-    }
-    return ret;
-}
-
-/* 
- * check if string is element in list (e.g. allowed_vid_codecs)
- */
-int
-xvc_is_element (char *xvList, char *xvElement)
-{
-    char llist[512];
-    char lelement[512];
-    char *found = NULL;
-    int ret, y;
-
-    sprintf (llist, "|%s|", xvList);
-    for (y = 0; y < strlen (llist); y++) {
-        llist[y] = toupper (llist[y]);
-    }
-
-    sprintf (lelement, "|%s|", xvElement);
-    for (y = 0; y < strlen (lelement); y++) {
-        lelement[y] = toupper (lelement[y]);
-    }
-
-    found = strstr (llist, lelement);
-    if (found != NULL)
-        ret = 1;
-    else
-        ret = 0;
-    return ret;
-}
-
-/* 
- * enumerate list (e.g. allowed_vid_codecs)
- */
-char *
-xvc_next_element (char *list)
-{
-    static char *p_list;
-    static char llist[512];
-    char *ret;
-
-    if (list != NULL) {
-        sprintf (llist, "|%s|", list);
-        ret = strtok_r (llist, "|", &p_list);
-    } else {
-        ret = strtok_r (NULL, "|", &p_list);
-    }
-    return ret;
-}
-
-/* 
- * find target based on filename
- * returns CAP_* or 0 if none found
- */
-int
-xvc_codec_get_target_from_filename (char *file)
-{
-    char *ext = NULL, *element = NULL;
-    int ret = 0, n;
+    char *ext = NULL;
+    int ret = 0, i, i2;
 
     ext = rindex (file, '.');
     if (ext == NULL) {
@@ -636,16 +687,14 @@ xvc_codec_get_target_from_filename (char *file)
     }
     ext++;
 
-    for (n = CAP_NONE; n < NUMCAPS; n++) {
-        if (tFFormats[n].extensions) {
-            element = xvc_next_element (tFFormats[n].extensions);
-            while (element != NULL) {
-                if (strcasecmp (ext, element) == 0) {
+    for (i = 0; i < NUMCAPS; i++) {
+        if (xvc_formats[i].extensions) {
+            for (i2 = 0; i2 < xvc_formats[i].num_extensions; i2++) {
+                if (strcasecmp (ext, xvc_formats[i].extensions[i2]) == 0) {
                     // then we have found the right extension in target n
-                    ret = n;
+                    ret = i;
                     return ret;
                 }
-                element = xvc_next_element (NULL);
             }
         }
     }
@@ -653,77 +702,131 @@ xvc_codec_get_target_from_filename (char *file)
     return ret;
 }
 
-/* 
- * check if fps rate is valid for given codec
- * returns 0 for false or 1 for true
+/** 
+ * \brief checks if fps rate is valid for given codec
+ *
+ * @param fps the fps rate to test
+ * @param codec the codec to test the fps rate against specified as an index
+ *      number pointing to a codec in the global codecs array
+ * @param exact if 1 the function does an exact check, if 0 it will accept
+ *      an fps value as valid, if there is a valid fps value that is
+ *      not more than 0.01 larger or smaller than the fps given
+ * @return 1 for fps is valid for given codec or 0 for not valid
  */
 int
-xvc_codec_is_valid_fps (int fps, int codec)
+xvc_codec_is_valid_fps (XVC_Fps fps, XVC_CodecID codec, int exact)
 {
 #define DEBUGFUNCTION "xvc_codec_is_valid_fps()"
-    char *element = NULL;
+    int found = 0;
 
-    if (tCodecs[codec].allowed_fps) {
-        element = xvc_next_element (tCodecs[codec].allowed_fps);
-        while (element) {
-            int f = xvc_get_int_from_float_string (element);
+    if (xvc_codecs[codec].num_allowed_fps == 0 &&
+        xvc_codecs[codec].num_allowed_fps_ranges == 0)
+        return found;
 
-            if (f < 0)
-                fprintf (stderr,
-                         "%s %s: Non-fatal error in the definition of valid fps for codec %s\n",
-                         DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
-            else if (f == fps)
-                return 1;
-            element = xvc_next_element (NULL);
+    if (xvc_get_index_of_fps_array_element (xvc_codecs[codec].num_allowed_fps,
+                                            xvc_codecs[codec].allowed_fps,
+                                            fps, exact) >= 0) {
+        found = 1;
+        return found;
+    }
+
+    if (xvc_codecs[codec].num_allowed_fps_ranges != 0) {
+        int i = 0;
+
+        for (i = 0; i < xvc_codecs[codec].num_allowed_fps_ranges; i++) {
+            XVC_FpsRange curr = xvc_codecs[codec].allowed_fps_ranges[i];
+
+            if (XVC_FPS_GTE (fps, curr.start) && XVC_FPS_LTE (fps, curr.end)) {
+                found = 1;
+                return found;
+            }
         }
     }
 
-    if (tCodecs[codec].allowed_fps_ranges) {
-        element = xvc_next_element (tCodecs[codec].allowed_fps_ranges);
-        while (element) {
-            int start = 0, end = 0;
-            char *start_str = strdup (element);
-            char *ptr = index (start_str, '-');
-
-            *ptr = '\0';
-            ptr++;
-
-            start = xvc_get_int_from_float_string (start_str);
-            end = xvc_get_int_from_float_string (ptr);
-
-            if (start < 0 || end < 0) {
-                fprintf (stderr,
-                         "%s %s: Non-fatal error in the definition of valid fps ranges for codec %s\n",
-                         DEBUGFILE, DEBUGFUNCTION, tCodecs[codec].name);
-            } else if (start <= fps && fps <= end)
-                return 1;
-            element = xvc_next_element (NULL);
-        }
-    }
-    // FIXME: what kind of error do I want to report with the return code?
-    return 0;
+    return found;
 #undef DEBUGFUNCTION
 }
 
-/* 
- * count elements in a list (e.g. allowed_vid_codecs)
+/**
+ * \brief gets the index number of a given fps value from an array of fps
+ *      values
+ *
+ * @param size the size of the array of fps values
+ * @param haystack array of XVC_Fps values
+ * @param needle the fps to search for
+ * @param exact if 1 the function looks for an exact match, if 0 it will accept
+ *      an fps value as matching, if there is a valid fps value that is
+ *      not more than 0.01 larger or smaller than the fps given
+ * @return the index number of the fps value in the array or -1 if not found
  */
 int
-xvc_num_elements (char *list)
+xvc_get_index_of_fps_array_element (int size,
+                                    const XVC_Fps * haystack,
+                                    XVC_Fps needle, int exact)
 {
-    static char *p_list;
-    static char llist[512];
-    char *elem;
-    int elem_count = 0;
+    int i, found = -1;
 
-    if (list != NULL) {
-        sprintf (llist, "|%s|", list);
-        elem = strtok_r (llist, "|", &p_list);
-        do {
-            elem_count++;
-            elem = strtok_r (NULL, "|", &p_list);
+    for (i = 0; i < size; i++) {
+        if (XVC_FPS_EQUAL (haystack[i], needle)) {
+            found = i;
+            return found;
         }
-        while (elem != NULL);
     }
-    return elem_count;
+
+    if (!exact) {
+        for (i = 0; i < size; i++) {
+            double n, h;
+
+            h = (double) haystack[i].num / (double) haystack[i].den;
+            n = (double) needle.num / (double) needle.den;
+            if (fabs (n - h) < 0.01) {
+                found = i;
+                return found;
+            }
+        }
+    }
+    return found;
+}
+
+/**
+ * \brief reads a string and returns an fps value
+ *
+ * This accepts two forms of specifying an fps value: Either as a floating
+ * point number with locale specific decimal point, or as a fraction like
+ * "int/int"
+ *
+ * @param fps_string a string representation of an fps value
+ * @return the fps value read from the string or { 0, 1}
+ */
+XVC_Fps
+xvc_read_fps_from_string (char *fps_string)
+{
+    struct lconv *loc = localeconv ();
+    XVC_Fps fps = { 0, 1 };
+
+    if ((index (fps_string, '/') &&
+         !strstr (fps_string, loc->decimal_point)) ||
+        (index (fps_string, '/') && strstr (fps_string, loc->decimal_point) &&
+         index (fps_string, '/') < strstr (fps_string, loc->decimal_point))
+        ) {
+        char *slash, *endptr;
+
+        fps.num = strtol (fps_string, &endptr, 10);
+        slash = index (fps_string, '/');
+        slash++;
+        fps.den = strtol (slash, &endptr, 10);
+    } else {
+        char *endptr = NULL;
+
+        fps.num = (int) (strtod (fps_string, &endptr) * pow (10,
+                                                             xvc_get_number_of_fraction_digits_from_float_string
+                                                             (fps_string)) +
+                         0.5);
+        fps.den =
+            (int) (pow
+                   (10,
+                    xvc_get_number_of_fraction_digits_from_float_string
+                    (fps_string)) + 0.5);
+    }
+    return fps;
 }

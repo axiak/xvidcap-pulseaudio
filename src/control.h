@@ -1,7 +1,13 @@
-/* 
- * control.h
+/** 
+ * \file control.h
  *
- * Copyright (C) 2003,04,05,06 Karl H. Beckers, Frankfurt
+ * This file contains a number of general purpose functions which are
+ * always needed regardless of the GUI implementation. They will be implemented
+ * in one of the gnome_* files.
+ */
+
+/*
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,8 +28,10 @@
 #ifndef __XVC_CONTROL_H__
 #define __XVC_CONTROL_H__
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <X11/Intrinsic.h>
 #include "xv_error_item.h"
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 // the following defines the xvc interface for UIs
 // they need to be implemented by any GUI anybody wants to add in the
@@ -32,7 +40,7 @@
 Boolean xvc_init_pre (int argc, char **argv);
 Boolean xvc_ui_create ();
 Boolean xvc_frame_create ();
-Boolean xvc_ui_init (xvErrorListItem * errors);
+Boolean xvc_ui_init (XVC_ErrorListItem * errors);
 int xvc_ui_run (void);
 
 void xvc_idle_add (void *, void *, Boolean queue_events);

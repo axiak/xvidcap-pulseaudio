@@ -1,8 +1,10 @@
-/* 
- * gnome_frame.h
- *
+/**
+ * \file gnome_frame.h
+ */
+
+/*
  * Copyright (C) 1997 Rasca Gmelch, Berlin
- * Copyright (C) 2003,04,05,06 Karl H. Beckers, Frankfurt
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +27,9 @@
 #define FRAME_WIDTH 3
 #define FRAME_OFFSET (4*FRAME_WIDTH)
 
-#include "gtk/gtk.h"
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+#include <gtk/gtk.h>
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 void xvc_change_gtk_frame (int x, int y, int width, int height,
                            Boolean reposition_control);

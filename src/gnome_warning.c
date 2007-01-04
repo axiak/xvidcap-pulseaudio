@@ -39,6 +39,7 @@
 #include "gnome_options.h"
 #include "gnome_ui.h"
 #include "xv_error_item.h"
+#include "app_data.h"
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 #define DEBUGFILE "gnome_warning.c"
@@ -54,7 +55,7 @@ static int called_from_where = 0;   // tells from where the warning
 // 1 = capture type toggle
 // 2 = initial validation in main.c
 static guint scheduled_warning_resize_id = 0;
-static xvErrorListItem *warning_elist = NULL;
+static XVC_ErrorListItem *warning_elist = NULL;
 
 /* const char *XVC_WARN_LABEL_TEXT = "Your input bears a number of
  * inconsistencies! \nPlease review the list below and click \"OK\" to
@@ -62,7 +63,7 @@ static xvErrorListItem *warning_elist = NULL;
  * dialog."; */
 
 GtkWidget *xvc_warn_main_window;
-extern AppData *app;
+//extern XVC_AppData *app;
 extern GtkWidget *xvc_ctrl_m1;
 extern GtkWidget *xvc_pref_main_window;
 
@@ -155,7 +156,7 @@ on_xvc_warn_main_window_response (GtkDialog * dialog, gint response_id,
     case GTK_RESPONSE_OK:
 
         if (warning_elist != NULL) {
-            xvErrorListItem *err;
+            XVC_ErrorListItem *err;
 
             err = warning_elist;
             for (; err != NULL; err = err->next) {
@@ -163,7 +164,7 @@ on_xvc_warn_main_window_response (GtkDialog * dialog, gint response_id,
             }
         }
 
-        warning_elist = xvc_errors_delete_list (warning_elist);
+        warning_elist = xvc_errorlist_delete (warning_elist);
 
         switch (called_from_where) {
         case 0:
@@ -212,7 +213,7 @@ on_xvc_warn_main_window_response (GtkDialog * dialog, gint response_id,
         g_assert (mitem);
         gtk_widget_set_sensitive (GTK_WIDGET (mitem), FALSE);
 
-        warning_elist = xvc_errors_delete_list (warning_elist);
+        warning_elist = xvc_errorlist_delete (warning_elist);
         xvc_pref_reset_OK_attempts ();
 
         gtk_widget_destroy (xvc_warn_main_window);
@@ -293,7 +294,7 @@ auto_resize_warning_dialog ()
 }
 
 GtkWidget *
-xvc_create_warning_with_errors (xvErrorListItem * elist, int from_where)
+xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
 {
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_create_warning_with_errors()"
@@ -325,7 +326,7 @@ xvc_create_warning_with_errors (xvErrorListItem * elist, int from_where)
 
     // set the error list
     if (elist != NULL) {
-        xvErrorListItem *err = NULL;
+        XVC_ErrorListItem *err = NULL;
 
         vbox = glade_xml_get_widget (xml, "xvc_warn_errors_vbox");
         g_assert (vbox);
@@ -334,8 +335,8 @@ xvc_create_warning_with_errors (xvErrorListItem * elist, int from_where)
         for (; err != NULL; err = err->next) {
             GtkWidget *eitem;
 
-            if (err->err->type != XV_ERR_INFO || (app->flags & FLG_RUN_VERBOSE)) {
-                if (err->err->type == XV_ERR_FATAL)
+            if (err->err->type != XVC_ERR_INFO || (app->flags & FLG_RUN_VERBOSE)) {
+                if (err->err->type == XVC_ERR_FATAL)
                     count_fatal_messages++;
                 eitem = xv_error_item_new_with_error (err->err);
                 gtk_box_pack_start (GTK_BOX (vbox), eitem, FALSE, FALSE, 0);

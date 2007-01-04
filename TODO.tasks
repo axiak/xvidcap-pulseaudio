@@ -175,11 +175,6 @@ may need testing withouth SMP</comment>
       <comment>if you first have a very long filename (like with ask-user-for-filename) and then a short one, the button stays wide</comment>
     </item>
     <item>
-      <attribute id="1166789679" priority="1" done="0" start_date="732667" enddate="99999999" notify="0" endtime="-60" last_edited="1166789679"/>
-      <summary>finish doxygen docs</summary>
-      <comment/>
-    </item>
-    <item>
       <attribute id="1166789704" priority="1" done="0" start_date="732667" enddate="99999999" notify="0" endtime="-60" last_edited="1166789704"/>
       <summary>rename gnome* files back</summary>
       <comment/>
@@ -187,7 +182,12 @@ may need testing withouth SMP</comment>
     <item>
       <attribute id="1166789719" priority="1" done="0" start_date="732667" enddate="99999999" notify="0" endtime="-60" last_edited="1166789719"/>
       <summary>make frame draggable</summary>
-      <comment></comment>
+      <comment/>
+    </item>
+    <item>
+      <attribute id="1166789679" priority="1" done="0" start_date="732667" enddate="99999999" notify="0" endtime="-60" last_edited="1166826108"/>
+      <summary>finish doxygen docs</summary>
+      <comment>got to colors.h</comment>
     </item>
   </category>
   <category title="Business" place="1"/>

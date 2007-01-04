@@ -30,7 +30,7 @@ STRIP_FROM_INC_PATH    =
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
 MULTILINE_CPP_IS_BRIEF = NO
-DETAILS_AT_TOP         = NO
+DETAILS_AT_TOP         = YES
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 8
@@ -231,7 +231,8 @@ EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = /home/kb87850/Quellen/xvidcap/trunk/
 INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = HAVE_CONFIG_H=1
+PREDEFINED             = HAVE_CONFIG_H=1 \
+                         DOXYGEN_SHOULD_SKIP_THIS=1
 EXPAND_AS_DEFINED      = 
 SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------

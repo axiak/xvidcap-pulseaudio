@@ -1,7 +1,10 @@
 /**
  * \file capture.h
- *
+ */
+
+/*
  * Copyright (C) 1997 Rasca Gmelch, Berlin
+ * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,13 +24,16 @@
 #ifndef __CAPTURE_H__
 #define __CAPTURE_H__
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
 
 #include <X11/Intrinsic.h>
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-/** \brief since the capture functions have been merged, we need a way for the
+/** 
+ * \brief since the capture functions have been merged, we need a way for the
  *      commonCapture() function to distinguish between the possible sources.
  */
 enum captureFunctions
@@ -45,25 +51,25 @@ enum captureFunctions
 /*
  * functions from capture.c
  */
-long TCbCaptureX11 ();
+long xvc_capture_x11 ();
 
 #ifdef HAVE_SHMAT
-long TCbCaptureSHM ();
+long xvc_capture_shm ();
 #else
-#define TCbCaptureSHM TCbCaptureX11
+#define xvc_capture_shm xvc_capture_x11
 #endif
 
 // the rest is not really used atm
 #ifdef HasDGA
 long TCbCaptureDGA ();
 #else
-#define TCbCaptureDGA TCbCaptureX11
+#define TCbCaptureDGA xvc_capture_x11
 #endif
 
 #ifdef HasVideo4Linux
 long TCbCaptureV4L ();
 #else
-#define TCbCaptureV4L TCbCaptureX11
+#define TCbCaptureV4L xvc_capture_x11
 #endif
 
 #endif     // __CAPTURE_H__

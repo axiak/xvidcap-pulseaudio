@@ -31,7 +31,7 @@
 #include <math.h>
 
 #include "xv_error_item.h"
-#include "app_data.h"
+//#include "app_data.h"
 #include "xvidcap-intl.h"
 
 enum
@@ -237,7 +237,7 @@ xv_error_item_new ()
 }
 
 GtkWidget *
-xv_error_item_new_with_error (xvError * err)
+xv_error_item_new_with_error (const XVC_Error * err)
 {
     GtkWidget *wid;
 
@@ -248,31 +248,31 @@ xv_error_item_new_with_error (xvError * err)
 }
 
 void
-xv_error_item_set_error (XvErrorItem * ei, xvError * err)
+xv_error_item_set_error (XvErrorItem * ei, const XVC_Error * err)
 {
     if (err != NULL && ei != NULL) {
         char ttag[128];
 
         switch (err->type) {
-        case XV_ERR_FATAL:
+        case XVC_ERR_FATAL:
             gtk_image_set_from_stock (GTK_IMAGE (ei->image),
                                       "gtk-dialog-error",
                                       GTK_ICON_SIZE_LARGE_TOOLBAR);
             snprintf (ttag, 128, _("FATAL\nERROR (%i):"), err->code);
             break;
-        case XV_ERR_ERROR:
+        case XVC_ERR_ERROR:
             gtk_image_set_from_stock (GTK_IMAGE (ei->image),
                                       "gtk-dialog-warning",
                                       GTK_ICON_SIZE_LARGE_TOOLBAR);
             snprintf (ttag, 128, _("ERROR (%i):"), err->code);
             break;
-        case XV_ERR_WARN:
+        case XVC_ERR_WARN:
             gtk_image_set_from_stock (GTK_IMAGE (ei->image),
                                       "gtk-dialog-info",
                                       GTK_ICON_SIZE_LARGE_TOOLBAR);
             snprintf (ttag, 128, _("WARNING (%i):"), err->code);
             break;
-        case XV_ERR_INFO:
+        case XVC_ERR_INFO:
             gtk_image_set_from_stock (GTK_IMAGE (ei->image),
                                       "gtk-dialog-info",
                                       GTK_ICON_SIZE_LARGE_TOOLBAR);
