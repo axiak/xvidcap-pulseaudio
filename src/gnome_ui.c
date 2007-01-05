@@ -2321,7 +2321,7 @@ on_xvc_ctrl_main_window_key_press_event (GtkWidget * widget, GdkEvent * event)
 
 void
 on_xvc_about_main_window_close (GtkAboutDialog * window, gpointer user_data) {
-    gtk_widget_destroy(window);
+    gtk_widget_destroy(GTK_WIDGET(window));
 }
 
 void

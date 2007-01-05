@@ -3349,11 +3349,12 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
   <property name="website">http://xvidcap.sourceforge.net</property>
   <property name="website_label" translatable="yes">website</property>
   <property name="authors">Karl H. Beckers</property>
-  <property name="documenters">karl</property>
-  <property name="artists">karl</property>
+  <property name="documenters">Karl H. Beckers</property>
+  <property name="artists">Karl H. Beckers</property>
   <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
   <property name="logo">xvidcap_logo.png</property>
   <signal name="close" handler="on_xvc_about_main_window_close" last_modification_time="Thu, 04 Jan 2007 16:13:51 GMT"/>
+  <signal name="response" handler="on_xvc_about_main_window_close" last_modification_time="Fri, 05 Jan 2007 08:02:41 GMT"/>
 </widget>
 
 <widget class="GtkFileChooserDialog" id="xvc_save_filechooserdialog">
