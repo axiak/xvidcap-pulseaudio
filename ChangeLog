@@ -1,4 +1,7 @@
 
+2007-01-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in: fixed typo in check for db2x_docbook2man
+
 2007-01-05  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, gnome-xvidcap.glade: fix for bug
 		#1623959 (About's Close does not close)

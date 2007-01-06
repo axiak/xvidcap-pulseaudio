@@ -40,10 +40,10 @@ AC_PATH_PROG(DOCBOOK2X_MAN,docbook2x-man,no)
 if test x$DOCBOOK2X_MAN = xno; then
   AC_MSG_NOTICE(Couldn't find docbook2x-man to generate current man pages. Will try db2x_docbook2man.)
   unset ac_cv_path_DOCBOOK2X_MAN
-  AC_PATH_PROG(DOCBOOK2X_MAN,db2x-docbook2man,no)
+  AC_PATH_PROG(DOCBOOK2X_MAN,db2x_docbook2man,no)
 fi
 if test x$DOCBOOK2X_MAN = xno; then
-  AC_MSG_NOTICE(Couldn't find neither docbook2x-man nor db2x-docbook2man to generate current man pages. Will install pre-generated ones if present.)
+  AC_MSG_NOTICE(Couldn't find neither docbook2x-man nor db2x_docbook2man to generate current man pages. Will install pre-generated ones if present.)
 fi
 
 AC_PATH_PROG(XML2PO,xml2po,no)
