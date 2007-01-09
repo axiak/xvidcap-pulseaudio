@@ -1,7 +1,10 @@
 /** 
- * gnome_ui.c
+ * \file gnome_ui.c
  *
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * This file contains the main control UI for xvidcap
+ */
+
+/* Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,9 +23,13 @@
  *
  *
  */
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#define DEBUGFILE "gnome_ui.c"
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <sys/time.h>                  // for timeval struct and related
 #include <stdlib.h>
@@ -55,38 +62,85 @@
 #include "xvidcap-intl.h"
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
-#define DEBUGFILE "gnome_ui.c"
 
 /* 
  * globals
- * need to define this here, because we're calling it from
- * an event and/or the preferences (gtk2_options.c)
  */
-GtkWidget *xvc_ctrl_main_window = NULL;
-GtkWidget *xvc_ctrl_m1 = NULL;
-GtkWidget *xvc_result_dialog = NULL;
-int xvc_led_time = 0;
-
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern GtkWidget *xvc_pref_main_window;
 extern GtkWidget *xvc_warn_main_window;
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
+/** \brief make the main control panel globally available */
+GtkWidget *xvc_ctrl_main_window = NULL;
+/** 
+ * \brief make the main control panel's menu globally available 
+ *
+ * @note this is needed because the warning dialog may need to change the
+ *      status of capture type select buttons. If you change from e. g.
+ *      single-frame capture to multi-frame capture, xvidcap checks your
+ *      preferences for the new capture type and finding errors allows you
+ *      to cancel back out of the change ... and needs to reset the menu.
+ */
+GtkWidget *xvc_ctrl_m1 = NULL;
+/** 
+ * \brief the value here is picked up by the LED frame drop monitor widget.
+ *      Set to 0 to clear the widget.
+ */
+int xvc_led_time = 0;
 
 // those are for recording video in thread
+/** \brief mutex for the recording, state changes and pausing/unpausing */
 pthread_mutex_t recording_mutex = PTHREAD_MUTEX_INITIALIZER;
+/** \brief condition for pausing/unpausing a recording effectively */
 pthread_cond_t recording_condition_unpaused;
+/** \brief the recording thread */
 static pthread_t recording_thread;
+/** \brief attributes of the recording thread */
 static pthread_attr_t recording_thread_attr;
+/** \brief is the recording thread running?
+ *
+ * \todo find out if there's a way to tell that from the tread directly
+ */
 static Boolean recording_thread_running = FALSE;
 
+/** \brief make the results dialog globally available to callbacks here */
+static GtkWidget *xvc_result_dialog = NULL;
+/** \brief remember the previous led_time set */
 static int last_led_time = 0;
+/** \brief remember the previously set picture number to allow for a quick
+ *      check on the next call if we need to do anything */
 static int last_pic_no = 0;
+/** \brief store a timer that may be registered when setting a max recording
+ *      time */
 static guint stop_timer_id = 0;
+/** calculate recording time */
 static long start_time = 0, pause_time = 0, time_captured = 0;
+/** \brief used to faciltate passing the filename selection from a file 
+ *      selector dialog back off the results dialog back to the results
+ *      dialog and eventually the main dialog */
 static char *target_file_name = NULL;
-
+/** 
+ * \brief the errors found on submitting a set of preferences
+ *
+ * Used to pass this between the various components involved in deciding
+ * what to do when OK is clicked
+ * \todo the whole display of preferences and warning dialogs should be
+ *      simplified through _run_dialog()
+ */
 static XVC_ErrorListItem *errors_after_cli = NULL;
+/** 
+ * \brief remember the number of attempts to submit a set of preferences
+ *
+ * Hitting OK on a warning may make automatic changes to the preferences.
+ * But it may not resolve all conflicts in one go and pop up the warning
+ * dialog again, again offering automatic resultion actions. This should be
+ * a rare case, however
+ */
 static int OK_attempts = 0;
 
 // functions
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 static gboolean stop_recording_gui_stuff ();
 static gboolean stop_recording_nongui_stuff ();
 static gboolean start_recording_gui_stuff ();
@@ -96,60 +150,60 @@ static gboolean timer_stop_recording ();
 void warning_submit ();
 void xvc_reset_ctrl_main_window_according_to_current_prefs ();
 void GtkChangeLabel (int pic_no);
+GtkWidget *
+glade_create_led_meter (gchar * widget_name, gchar * string1,
+                        gchar * string2, gint int1, gint int2);
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
-/* 
- * XVIDCAP GUI API ( IF THAT WORD IS ALLOWED HERE ;) )
- *
- * XVC_PREINIT IS FOR GUI PREINITIALIZATION LIKE SETTING FALLBACK OPTIONS
- * XVC_CREATEGUI IS FOR GUI CREATION
- * XVC_CREATEFRAME SHOULD CREATE THE SELECTION FRAME
- * XVC_INITGUI IS FOR MISCELLANEOUS INITIALIZATION STUFF
- * XVC_RUNGUI IS A WRAPPER AROUND THE UI'S MAIN LOOP
- *
- * XVC_ADDTIMEOUT IS A WRAPPER AROUND THE GUI'S FUNCTIONALITY FOR TRIGGERING ACTIONS AT A
- * GIVEN TIME
- * XVC_CHANGEGUILABEL IS A WRAPPER AROUND A FUNCTION TO CHANGE THE DISPLAY
- * OF THE CURRENT FRAME NUMBER (NOT NECESSARY IN A LABEL)
- * XVC_STOPCAPTURE IS A HOOK FOR RESETTING THE GUI TO A STOPPED STATE
- * XVC_STARTCAPTURE IS A HOOK FOR STARTING A CAPTURE SESSION
+/**
+ * XVIDCAP GUI API<br>
+ * ( IF THAT WORD IS ALLOWED HERE ;) )<br>
+ * <br><table>
+ * <tr><td>xvc_init_pre</td><td>do gui preintialization like setting fallback options, initializing thread libraries and the like</td></tr>
+ * <tr><td>xvc_ui_create</td><td>create the gui</td></tr>
+ * <tr><td>xvc_frame_create</td><td>create the frame for selecting the area to capture</td></tr>
+ * <tr><td>xvc_frame_destroy</td><td>destroy the frame around the area to capture</td></tr>
+ * <tr><td>xvc_check_start_options</td><td>check the preferences on program start</td></tr>
+ * <tr><td>xvc_ui_init</td><td>gui initialization</td></tr>
+ * <tr><td>xvc_ui_run</td><td>start the ui's main loop</td></tr>
+ * <tr><td>xvc_idle_add</td><td>queue an idle action</td></tr>
+ * <tr><td>xvc_change_filename_display</td><td>update the display of the current frame/file</td></tr>
+ * <tr><td>xvc_capture_stop_signal</td><td>tell the ui you want it to stop recording</td></tr>
+ * <tr><td>xvc_capture_stop</td><td>implements the functions for actually stopping</td></tr>
+ * <tr><td>xvc_capture_start</td><td>implements the functions for starting a recording</td></tr>
+ * <tr><td>xvc_frame_change</td><td>change the area to capture</td></tr>
+ * <tr><td>xvc_frame_monitor</td><td>update a widget monitoring frame rate</td></tr>
+ * </table>
  */
 
+
+/**
+ * \brief does gui preintialization, mainly initializing thread libraries
+ *      and calling gtk_init with the command line arguments
+ *
+ * @param argc number of command line arguments
+ * @param argv pointer to the command line arguments
+ * @return Could be FALSE for failure, but de facto always TRUE
+ */
 Boolean
 xvc_init_pre (int argc, char **argv)
 {
 #define DEBUGFUNCTION "xvc_init_pre()"
-
     g_thread_init (NULL);
     gdk_threads_init ();
 
-    // gnome program initialization
-    // make gnome init ignore command line options (we want to handle them
-    // ourselves
-    // char *nothing[] = { "--disable-crash-dialog", "--help" };
-    // gnome_program_init(PACKAGE, VERSION, LIBGNOMEUI_MODULE,
-    // 2, nothing,
-    // GNOME_PARAM_APP_DATADIR, PACKAGE_DATA_DIR, NULL);
     gtk_init (&argc, &argv);
     return TRUE;
 #undef DEBUGFUNCTION
 }
 
-GtkWidget *
-glade_create_led_meter (gchar * widget_name, gchar * string1,
-                        gchar * string2, gint int1, gint int2)
-{
-#define DEBUGFUNCTION "glade_create_led_meter()"
-    GtkWidget *frame_monitor = led_meter_new ();
-
-    g_assert (frame_monitor);
-
-    gtk_widget_set_name (GTK_WIDGET (frame_monitor), widget_name);
-    gtk_widget_show (GTK_WIDGET (frame_monitor));
-
-    return frame_monitor;
-#undef DEBUGFUNCTION
-}
-
+/**
+ * \brief creates the main control and menu from the glade definition,
+ *      connects the signals and stores the widget pointers for further
+ *      reference.
+ *
+ * @return Could be FALSE for failure, but de facto always TRUE
+ */
 Boolean
 xvc_ui_create ()
 {
@@ -190,18 +244,27 @@ xvc_ui_create ()
 #endif     // DEBUG
 
     return TRUE;
-
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief creates the frame around the area to capture by calling the
+ *      actual implementation in xvc_create_gtk_frame
+ *
+ * @see xvc_create_gtk_frame
+ * @param win a Window (ID) to allow passing a window id for selecting
+ *      the area to capture (i.e. capture that window ... but not if you
+ *      move the window afterwards)
+ * @return Could be FALSE for failure, but de facto always TRUE
+ */
 Boolean
 xvc_frame_create (Window win)
 {
 #define DEBUGFUNCTION "xvc_frame_create()"
 
     g_assert (app);
-    if ((app->flags & FLG_NOGUI) == 0) {    // there's one reason for not
-        // having a main window
+    if ((app->flags & FLG_NOGUI) == 0) {    /* there's one good reason for not
+having a main window */
         g_assert (xvc_ctrl_main_window);
     }
 
@@ -232,12 +295,27 @@ xvc_frame_create (Window win)
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief destroys the frame around the area to capture by calling the 
+ *      implementation in xvc_destroy_gtk_frame
+ *
+ * @see xvc_destroy_gtk_frame
+ */
 void
 xvc_frame_destroy ()
 {
     xvc_destroy_gtk_frame ();
 }
 
+/**
+ * \brief checks the current preferences and should be used to check
+ *      preferences right before running the UI
+ *
+ * This does not return anything but must react on errors found on its own.
+ * It is global mainly for allowing it to be called from the warning dialog
+ * in case the startup check produced an error with a default action, you
+ * clicked OK and then the validation needs to run again.
+ */
 void
 xvc_check_start_options ()
 {
@@ -342,6 +420,15 @@ xvc_check_start_options ()
 #undef DEBUGFUNCTION
 }
 
+
+/**
+ * \brief initializes the UI by mainly ensuring xvc_check_start_options is
+ *      called with the errors found in main
+ *
+ * @see xvc_check_start_options
+ * @param errors the errors in the preferences found in the main function
+ * @return Could be FALSE for failure, but de facto always TRUE
+ */
 Boolean
 xvc_ui_init (XVC_ErrorListItem * errors)
 {
@@ -354,8 +441,7 @@ xvc_ui_init (XVC_ErrorListItem * errors)
     // display warning dialog if required
     errors_after_cli = errors;
     // the gui warning dialog needs a realized window, therefore we
-    // schedule it
-    // do be displayed (potentially) when the main loop starts
+    // schedule it do be displayed (potentially) when the main loop starts
     // this does not seem to work with nogui
     if (!(app->flags & FLG_NOGUI)) {
         gtk_init_add ((GtkFunction) xvc_check_start_options, NULL);
@@ -372,6 +458,12 @@ xvc_ui_init (XVC_ErrorListItem * errors)
 #undef DEBUGFUNCTION
 }
 
+
+/**
+ * \brief runs the UI by executing the main loop
+ *
+ * @return Could be any integer for failure, but de facto always 0
+ */
 int
 xvc_ui_run ()
 {
@@ -383,6 +475,18 @@ xvc_ui_run ()
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief adds an action to the event queue to be executed when there's time
+ *
+ * The functions added here are executed whenever there's time until they 
+ * return FALSE.
+ *
+ * @param func a pointer to a function to queue
+ * @param data a pointer to an argument to that function
+ * @param queue_events if FALSE the function will not be queued if there
+ *      currently are events in the queue
+ * \todo the queue_events bit is not required anymore ... remove it
+ */
 void
 xvc_idle_add (void *func, void *data, Boolean queue_events)
 {
@@ -391,6 +495,15 @@ xvc_idle_add (void *func, void *data, Boolean queue_events)
     }
 }
 
+
+/**
+ * \brief updates the display of the current frame/filename according to
+ *      the current state of job.
+ *
+ * This is meant to be used through xvc_idle_add during recording
+ * @return TRUE for as long as the recording thread is running or FALSE
+ *      otherwise
+ */
 Boolean
 xvc_change_filename_display ()
 {
@@ -399,7 +512,7 @@ xvc_change_filename_display ()
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
     Job *job = xvc_job_ptr ();
-    int ret = recording_thread_running;
+    Boolean ret = recording_thread_running;
 
     if (!ret) {
         last_pic_no = 0;
@@ -410,13 +523,22 @@ xvc_change_filename_display ()
     }
 #ifdef DEBUG
     printf ("%s %s: Leaving! ...continuing? %i\n", DEBUGFILE, DEBUGFUNCTION,
-            ret);
+            (int) ret);
 #endif     // DEBUG
 
     return ret;
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief tell the recording thread to stop
+ * 
+ * The actual stopping is done through the capture's state machine. This 
+ * just sets the state to VC_STOP and sends the recording thread an ALARM
+ * signal to terminate a potential usleep. It may then wait for the thread
+ * to finish.
+ * @param wait should this function actually wait for the thread to finish?
+ */
 void
 xvc_capture_stop_signal (Boolean wait)
 {
@@ -454,7 +576,10 @@ xvc_capture_stop_signal (Boolean wait)
 #undef DEBUGFUNCTION
 }
 
-
+/**
+ * \brief implements the actual actions required when stopping a recording 
+ *      session, both GUI related an not.
+ */
 Boolean
 xvc_capture_stop ()
 {
@@ -480,7 +605,9 @@ xvc_capture_stop ()
 #undef DEBUGFUNCTION
 }
 
-
+/**
+ * \brief starts a recording session
+ */
 void
 xvc_capture_start ()
 {
@@ -495,13 +622,20 @@ xvc_capture_start ()
 #undef DEBUGFUNCTION
 }
 
-
+/**
+ * \brief changes the frame around the area to capture by calling the
+ *      implementing function xvc_change_gtk_frame
+ *
+ * @see xvc_change_gtk_frame
+ * \todo sice nobody outside this file is calling it, it needs to be neither
+ *      global nor in the "API" functions. Prolly don't need this wrapper at
+ *      all .... remove
+ */
 void
 xvc_frame_change (int x, int y, int width, int height,
                   Boolean reposition_control)
 {
 #define DEBUGFUNCTION "xvc_frame_change()"
-
     xvc_change_gtk_frame (x, y, width, height, reposition_control);
 #undef DEBUGFUNCTION
 }
@@ -568,6 +702,21 @@ xvc_frame_monitor ()
  *
  *
  */
+GtkWidget *
+glade_create_led_meter (gchar * widget_name, gchar * string1,
+                        gchar * string2, gint int1, gint int2)
+{
+#define DEBUGFUNCTION "glade_create_led_meter()"
+    GtkWidget *frame_monitor = led_meter_new ();
+
+    g_assert (frame_monitor);
+
+    gtk_widget_set_name (GTK_WIDGET (frame_monitor), widget_name);
+    gtk_widget_show (GTK_WIDGET (frame_monitor));
+
+    return frame_monitor;
+#undef DEBUGFUNCTION
+}
 
 /* 
  * this isn't used atm

@@ -2,10 +2,12 @@
  * \file gnome_options.c
  *
  * This file contains the options dialog for the GTK2 control
+ * \todo the whole display of preferences and warning dialogs should be
+ *      simplified through _run_dialog()
  */
 
 /* 
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,17 +63,66 @@
 GtkWidget *xvc_pref_main_window = NULL;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+/* the following is a pointer to the warning dialog */
 extern GtkWidget *xvc_warn_main_window;
+/* the following is a pointer to the main control */
 extern GtkWidget *xvc_ctrl_main_window;
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
+/**
+ * \brief an XVC_AppData struct with the model used by the preferences dialog
+ *
+ * this is copied off the global app struct on creation of the preferences
+ * dialog, set on submit and assimilated back to the global app struct
+ */
 static XVC_AppData pref_app;
+/** 
+ * \brief holds the strings to fill the dropdown box for multi-frame capture
+ * formats supported. 
+ * 
+ * They are formed of the combined longname and first extension
+ */
 static char *format_combo_entries[NUMCAPS];
+/** 
+ * \brief remember the number of attempts to submit a set of preferences
+ *
+ * Hitting OK on a warning may make automatic changes to the preferences.
+ * But it may not resolve all conflicts in one go and pop up the warning
+ * dialog again, again offering automatic resultion actions. This should be
+ * a rare case, however
+ */
 static int OK_attempts = 0;
+/** 
+ * \brief the errors found on submitting a set of preferences
+ *
+ * Used to pass this between the various components involved in deciding
+ * what to do when OK is clicked
+ * \todo the whole display of preferences and warning dialogs should be
+ *      simplified through _run_dialog()
+ */
 static XVC_ErrorListItem *errors_after_cli = NULL;
 
 #ifdef USE_FFMPEG
+/** 
+ * \brief Upon change of a file format for multi-frame capture the callback
+ *      saves the new value here, so that next time around it is the old one.
+ *
+ * When the callback is executed, the current value in the dropdown box is 
+ * already the new one. To evaluate what needs to be done on codecs and 
+ * audio codecs we need to know what format was previously selected, because
+ * the number of the selected codec is relative to the array of available
+ * codecs for a given format. In other words: If codec 1 is selected from 
+ * the codecs combobox, that may be a different one depending on format
+ */
 static XVC_FFormatID old_selected_format = CAP_NONE;
+/**
+ * \brief Upon change of a codec for multi-frame capture the callback 
+ *      saves the new value here, so that next time around it is the old one.
+ * 
+ * There is a similar relation between mf codec and fps as with 
+ * old_selected_format, format and codec.
+ * @see old_selected_format
+ */
 static XVC_CodecID mf_fps_widget_save_old_codec = -1;
 #endif // USE_FFMPEG
 
@@ -100,9 +151,6 @@ get_index_of_array_element(int size, int *haystack, int needle) {
     return found;
 }
 
-// callbacks here ...
-// 
-// 
 /**
  * \brief read the settings from the preferences window back into an
  *      XVC_AppData struct
@@ -549,6 +597,10 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
 #undef DEBUGFUNCTION
 }
 
+
+/**
+ * \brief assimilates the changed preferences into xvidcap's current config
+ */
 void
 preferences_submit ()
 {
@@ -557,8 +609,6 @@ preferences_submit ()
     xvc_appdata_copy (app, &pref_app);
 
     xvc_job_set_from_app_data (app);
-    // validate the job parameters
-//    xvc_job_validate ();
 
     // set controls active/inactive/sensitive/insensitive according to
     // current options
@@ -693,7 +743,11 @@ doHelp ()
 #undef DEBUGFUNCTION
 }
 
-// this handles the shortcut keybindings 
+
+/*
+ * callbacks
+ */
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 /**
  * \brief callback for key press events to have shortcuts for displaying
  *      the help pages.
@@ -858,15 +912,17 @@ on_xvc_pref_capture_mouse_checkbutton_toggled (GtkToggleButton *
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief callback sets the file format selected on change of filename
+ *      if automatic selection is active.
+ */
 void
 on_xvc_pref_sf_filename_entry_changed (GtkEntry * entry, gpointer user_data)
 {
 #define DEBUGFUNCTION "on_xvc_pref_sf_filename_entry_changed()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
-    int i, a = 0;
-    GtkListStore *sf_format_list_store = NULL;
-    gboolean valid;
+    int i;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -878,53 +934,18 @@ on_xvc_pref_sf_filename_entry_changed (GtkEntry * entry, gpointer user_data)
     g_assert (w);
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
-        GtkTreeIter iter;
-
         i = xvc_codec_get_target_from_filename ((char *)
                                                 gtk_entry_get_text (GTK_ENTRY
                                                                     (entry)));
-
-        w = glade_xml_get_widget (xml, "xvc_pref_sf_format_combobox");
-        g_assert (w);
-        sf_format_list_store =
-            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
-        g_assert (sf_format_list_store);
-
-        valid =
-            gtk_tree_model_get_iter_first (GTK_TREE_MODEL
-                                           (sf_format_list_store), &iter);
 
 #ifdef USE_FFMPEG
         if (i > 0 && i < CAP_MF) {
 #else      // USE_FFMPEG
         if (i > 0 && i < NUMCAPS) {
 #endif     // USE_FFMPEG
-            while (valid) {
-                gchar *str_data;
-
-                // Make sure you terminate calls to gtk_tree_model_get()
-                // with a '-1' value
-                gtk_tree_model_get (GTK_TREE_MODEL (sf_format_list_store),
-                                    &iter, 0, &str_data, -1);
-
-#ifdef DEBUG
-                printf ("%s %s: format_combo_entries %i %s\n", DEBUGFILE,
-                        DEBUGFUNCTION, (i - 1), format_combo_entries[i - 1]);
-#endif     // DEBUG
-                if (strcasecmp (str_data, format_combo_entries[i - 1]) == 0) {
-#ifdef DEBUG
-                    printf ("%s %s: found %s\n", DEBUGFILE, DEBUGFUNCTION,
-                            str_data);
-#endif     // DEBUG
-                    gtk_combo_box_set_active (GTK_COMBO_BOX (w), a);
-                }
-                g_free (str_data);
-
-                valid =
-                    gtk_tree_model_iter_next (GTK_TREE_MODEL
-                                              (sf_format_list_store), &iter);
-                a++;
-            }
+            w = glade_xml_get_widget (xml, "xvc_pref_sf_format_combobox");
+            g_assert (w);
+            gtk_combo_box_set_active (GTK_COMBO_BOX (w), (i - 1));
         }
     }
 #ifdef DEBUG
@@ -965,6 +986,14 @@ on_xvc_pref_sf_format_auto_checkbutton_toggled (GtkToggleButton *
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief sets the selected format if autodetection is active and either
+ *      a change has been made to the filename or the autodection is just
+ *      being turned on and the currently selected format is not the default.
+ *
+ * In other words: this callback is also hooked up to the changed event of
+ * the auto checkbutton
+ */
 void
 on_xvc_pref_mf_filename_entry_changed (GtkEntry * entry, gpointer user_data)
 {
@@ -972,9 +1001,7 @@ on_xvc_pref_mf_filename_entry_changed (GtkEntry * entry, gpointer user_data)
 #define DEBUGFUNCTION "on_xvc_pref_mf_filename_entry_changed()"
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
-    int i, a = 0;
-    GtkListStore *mf_format_list_store = NULL;
-    gboolean valid = FALSE;
+    int i;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -994,49 +1021,14 @@ on_xvc_pref_mf_filename_entry_changed (GtkEntry * entry, gpointer user_data)
     g_assert (w);
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
-        GtkTreeIter iter;
-
         i = xvc_codec_get_target_from_filename ((char *)
                                                 gtk_entry_get_text (GTK_ENTRY
                                                                     (entry)));
 
-        w = glade_xml_get_widget (xml, "xvc_pref_mf_format_combobox");
-        g_assert (w);
-        mf_format_list_store =
-            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
-        g_assert (mf_format_list_store);
-
-        valid =
-            gtk_tree_model_get_iter_first (GTK_TREE_MODEL
-                                           (mf_format_list_store), &iter);
-
         if (i >= CAP_MF && i < NUMCAPS) {
-            while (valid) {
-                gchar *str_data;
-
-                // Make sure you terminate calls to gtk_tree_model_get()
-                // with a '-1' value
-                gtk_tree_model_get (GTK_TREE_MODEL (mf_format_list_store),
-                                    &iter, 0, &str_data, -1);
-
-#ifdef DEBUG
-                printf ("%s %s: format_combo_entries %i %s\n", DEBUGFILE,
-                        DEBUGFUNCTION, (i - 1), format_combo_entries[i - 1]);
-#endif     // DEBUG
-                if (strcasecmp (str_data, format_combo_entries[i - 1]) == 0) {
-#ifdef DEBUG
-                    printf ("%s %s: found %s\n", DEBUGFILE, DEBUGFUNCTION,
-                            str_data);
-#endif     // DEBUG
-                    gtk_combo_box_set_active (GTK_COMBO_BOX (w), a);
-                }
-                g_free (str_data);
-
-                valid =
-                    gtk_tree_model_iter_next (GTK_TREE_MODEL
-                                              (mf_format_list_store), &iter);
-                a++;
-            }
+            w = glade_xml_get_widget (xml, "xvc_pref_mf_format_combobox");
+            g_assert (w);
+            gtk_combo_box_set_active (GTK_COMBO_BOX (w), (i - CAP_MF));
         }
     }
 #ifdef DEBUG
@@ -1135,8 +1127,16 @@ on_xvc_pref_mf_audio_codec_auto_checkbutton_toggled (GtkToggleButton *
 #undef DEBUGFUNCTION
 }
 
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
+/**
+ * \brief fill the mf codec combobox with valid codecs for the given
+ *      format
+ *
+ * @param format the id of the selected format
+ */
 static void
-mf_codec_combo_set_contents_from_format (int format)
+mf_codec_combo_set_contents_from_format (XVC_FFormatID format)
 {
 #define DEBUGFUNCTION "mf_codec_combo_set_contents_from_format()"
     GladeXML *xml = NULL;
@@ -1186,8 +1186,14 @@ mf_codec_combo_set_contents_from_format (int format)
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief fill the mf audio codec combobox with valid audio codecs for the 
+ *      given format
+ *
+ * @param format the id of the selected format
+ */
 static void
-mf_audio_codec_combo_set_contents_from_format (int format)
+mf_audio_codec_combo_set_contents_from_format (XVC_FFormatID format)
 {
 #define DEBUGFUNCTION "mf_audio_codec_combo_set_contents_from_format()"
     GladeXML *xml = NULL;
@@ -1238,8 +1244,20 @@ mf_audio_codec_combo_set_contents_from_format (int format)
 }
 
 
-    // this is actually implicit in GTK
-//    if (format_selected == old_selected_format && change_on_cb) return;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+/**
+ * \brief implement the change of a mf format selection and call all the
+ *      resulting actions that may be required
+ *
+ * This resets the valid codecs and audio codecs, keeps old selections if
+ * possible or tries to select default values.
+ * @note For audio codecs it is actually possible to have a default audio
+ *      codec of AU_CODEC_NONE even if audio support is present. Therefore
+ *      one must not assume that the comboboxes will always have a valid
+ *      selection
+ * @note dont't need to check for format_selected != old_selected_format 
+ *      because that is implicit in GTK
+ */
 void
 on_xvc_pref_mf_format_combobox_changed (GtkComboBox * combobox,
                                         gpointer user_data)
@@ -1532,8 +1550,20 @@ on_xvc_pref_mf_audio_checkbutton_toggled (GtkToggleButton * togglebutton,
 #undef DEBUGFUNCTION
 }
 
+
+/**
+ * \brief sets the widget to select mf fps values according to the codec
+ *      selected.
+ *
+ * Some codecs allow a range of fps values (like from 1 - 5 fps) while others
+ * only support certain fixed values. The first uses a horizontal scale, the
+ * second a combobox. In theory there could be codecs which combine the two
+ * kinds of specifying valid fps, but to date we have none.<br>
+ * Both widgets are actually present all the time with only one visible at
+ * any given point in time.
+ */
 static void
-set_mf_fps_widget_from_codec (int codec)
+set_mf_fps_widget_from_codec (XVC_AuCodecID codec)
 {
 #ifdef USE_FFMPEG
 
@@ -2112,7 +2142,14 @@ on_xvc_pref_mf_audio_input_device_select_button_clicked (GtkButton * button,
 #endif     // DEBUG
 #undef DEBUGFUNCTION
 }
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
+/**
+ * \brief creates the preferences dialog and sets the widgets according to
+ *      current preferences
+ *
+ * Callbacks are connected at the end
+ */
 void
 xvc_create_pref_dialog (XVC_AppData * lapp)
 {

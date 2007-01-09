@@ -1,5 +1,5 @@
 /**
- * \file gtk2_options.h
+ * \file gnome_options.h
  */
 
 /*

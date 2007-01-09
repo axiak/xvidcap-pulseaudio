@@ -1005,18 +1005,18 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
         // start: fps
         if (lapp->current_mode == 0) {
             // if the fps is "almost" valid, find the valid fps and select it
-            if (xvc_codec_is_valid_fps (target->fps, t_codec, 1) == 0 &&
-                xvc_codec_is_valid_fps (target->fps, t_codec, 0) != 0) {
+            if (xvc_codec_is_valid_fps (non_target->fps, t_codec, 1) == 0 &&
+                xvc_codec_is_valid_fps (non_target->fps, t_codec, 0) != 0) {
                 int fps_index =
                     xvc_get_index_of_fps_array_element (xvc_codecs[t_codec].
                                                         num_allowed_fps,
                                                         xvc_codecs[t_codec].
                                                         allowed_fps,
-                                                        target->fps,
+                                                        non_target->fps,
                                                         0);
 
-                target->fps = xvc_codecs[t_codec].allowed_fps[fps_index];
-            } else if (xvc_codec_is_valid_fps (target->fps, t_codec, 1) == 0) {
+                non_target->fps = xvc_codecs[t_codec].allowed_fps[fps_index];
+            } else if (xvc_codec_is_valid_fps (non_target->fps, t_codec, 1) == 0) {
                 errors = errorlist_append (27, errors, lapp);
                 if (!errors) {
                     *rc = -1;
