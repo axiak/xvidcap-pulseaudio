@@ -1,7 +1,8 @@
-/* 
- * led_meter.h
- *
- * Copyright (C) 2003-06 Karl, Frankfurt
+/**
+ * \file led_meter.h
+ */
+/*
+ * Copyright (C) 2003-07 Karl, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,13 +33,21 @@ extern "C"
 #define LED_METER(obj) GTK_CHECK_CAST (obj, led_meter_get_type (), LedMeter)
 #define LED_METER_CLASS(klass) GTK_CHECK_CLASS_CAST (klass, led_meter_get_type (), LedMeterClass)
 #define IS_LED_METER(obj) GTK_CHECK_TYPE (obj, led_meter_get_type ())
+/** \brief the number of leds */
 #define LM_NUM_DAS 10
+/** \brief the highest led number regarded as low frame drop */
 #define LM_LOW_THRESHOLD 3
+/** \brief the highest led number regarded as medium frame drop */
 #define LM_MEDIUM_THRESHOLD 6
+/** \brief the highest led number regarded as high frame drop */    
 #define LM_HIGH_THRESHOLD LM_NUM_DAS
-#define LM_LOW 0
-#define LM_MEDIUM 1
-#define LM_HIGH 2
+
+/** \brief the categories the led display is divided in */
+enum LED_METER_DACategory {
+    LM_LOW,
+    LM_MEDIUM,
+    LM_HIGH
+};
 
     typedef struct _LedMeter LedMeter;
     typedef struct _LedMeterClass LedMeterClass;

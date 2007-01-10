@@ -1,5 +1,7 @@
 /** 
  * \file app_data.h
+ *
+ * \todo rename the global variable app to xvc_app
  */
 
 /*

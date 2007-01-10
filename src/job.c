@@ -1,8 +1,15 @@
 /** 
  * \file job.c
  *
+ * This file contains functions for setting up and manipulating Job structs.
+ * One esp. important thing here is the setter functions for the recording
+ * state machine. Because state changes should be atomic one MUST NOT set
+ * job->state manually.
+ */
+/*
+ *
  * Copyright (C) 1997,98 Rasca, Berlin
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +31,13 @@
  *
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#define DEBUGFILE "job.c"
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,23 +61,75 @@
 # include "xtoffmpeg.h"
 #endif     // USE_FFMPEG
 
-#define DEBUGFILE "job.c"
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+extern pthread_mutex_t recording_mutex;
+extern pthread_cond_t recording_condition_unpaused;
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 static Job *job;
 
-extern pthread_mutex_t recording_mutex;
-extern pthread_cond_t recording_condition_unpaused;
-
-static int job_set_sound_dev (char *, int, int, int);
 static void job_set_capture (void);
 
-/* 
- * HELPER FUNCTIONS
+
+#ifdef HAVE_FFMPEG_AUDIO
+/**
+ * \brief set and check some parameters for the sound device
+ *
+ * @param snd the name of the audio input device or "-" for stdin
+ * @param rate the sample rate
+ * @param size the sample size
+ * @param channels the number of channels to record
  */
-Job *
-xvc_job_new ()
+static void
+job_set_sound_dev (char *snd, int rate, int size, int channels)
 {
-#define DEBUGFUNCTION "xvc_job_new()"
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "job_set_sound_dev()"
+    extern int errno;
+    struct stat statbuf;
+    int stat_ret;
+
+    job->snd_device = snd;
+    if (job->flags & FLG_REC_SOUND) {
+        if (strcmp (snd, "-") != 0) {
+            stat_ret = stat (snd, &statbuf);
+
+            if (stat_ret != 0) {
+                switch (errno) {
+                case EACCES:
+                    fprintf (stderr,
+                             _
+                             ("Insufficient permission to access sound input from %s\n"),
+                             snd);
+                    fprintf (stderr, _("Sound disabled!\n"));
+                    job->flags &= ~FLG_REC_SOUND;
+                    break;
+                default:
+                    fprintf (stderr,
+                             _("Error accessing sound input from %s\n"), snd);
+                    fprintf (stderr, _("Sound disabled!\n"));
+                    job->flags &= ~FLG_REC_SOUND;
+                    break;
+                }
+            }
+        }
+    }
+
+    return;
+}
+#endif     // HAVE_FFMPEG_AUDIO
+
+
+/**
+ * \brief create a new job
+ *
+ * Since this does a malloc, the job needs to be freed
+ * @return a new Job struct with variables set to 0|NULL where possible
+ */
+static Job *
+job_new ()
+{
+#define DEBUGFUNCTION "job_new()"
 
     job = (Job *) malloc (sizeof (Job));
     if (!job) {
@@ -102,6 +165,9 @@ xvc_job_new ()
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief frees a Job
+ */
 void
 xvc_job_free ()
 {
@@ -114,6 +180,9 @@ xvc_job_free ()
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief set the Job's color information
+ */
 void
 xvc_job_set_colors ()
 {
@@ -127,7 +196,11 @@ xvc_job_set_colors ()
 #undef DEBUGFUNCTION
 }
 
-
+/**
+ * \brief set the Job's contents from the current preferences
+ *
+ * @param app the preferences struct to set the Job from
+ */
 void
 xvc_job_set_from_app_data (XVC_AppData * app)
 {
@@ -138,7 +211,7 @@ xvc_job_set_from_app_data (XVC_AppData * app)
 
     // make sure we do have a job
     if (!job) {
-        xvc_job_new ();
+        job_new ();
     }
     // switch sf or mf
 #ifdef USE_FFMPEG
@@ -256,7 +329,7 @@ xvc_job_set_from_app_data (XVC_AppData * app)
 
     // the order of the following actions is key!
     // the default is to use the colormap of the root window
-    xvc_job_set_save_function (app->win_attr.visual, job->target);
+    xvc_job_set_save_function (job->target);
     xvc_job_set_colors ();
 
 #ifdef DEBUG
@@ -267,103 +340,64 @@ xvc_job_set_from_app_data (XVC_AppData * app)
 #undef DEBUGFUNCTION
 }
 
-/* 
- * get a pointer to the static Job
+/**
+ * \brief get a pointer to the current Job struct
  *
+ * @return a pointer to the current job struct. If a Job had not been 
+ *      initialized before, it will be initialized now.
  */
 Job *
 xvc_job_ptr (void)
 {
 #define DEBUGFUNCTION "xvc_job_ptr()"
     if (!job)
-        xvc_job_new ();
+        job_new ();
     return (job);
 #undef DEBUGFUNCTION
 }
 
-/* 
- * Select Function to use for processing the captured frame
+/**
+ * \brief selects functions to use for processing the captured frame
+ *
+ * @param type the id of the target file format used
  */
 void
-xvc_job_set_save_function (Visual * vis, int type)
+xvc_job_set_save_function (XVC_FFormatID type)
 {
 #define DEBUGFUNCTION "xvc_job_set_save_function()"
 
 #ifdef DEBUG2
-    printf ("%s %s: entering with type: %i\n", DEBUGFILE, DEBUGFUNCTION, type);
+    printf ("%s %s: entering with type: %i\n", DEBUGFILE, DEBUGFUNCTION, 
+        (int) type);
 #endif     // DEBUG2
 
 #ifdef USE_FFMPEG
     if (type >= CAP_MF) {
-        job->clean = FFMPEGClean;
+        job->clean = xvc_ffmpeg_clean;
         if (job->targetCodec == CODEC_NONE) {
             job->targetCodec = CODEC_MPEG1;
         }
-        job->get_colors = FFMPEGcolorTable;
-        job->save = XImageToFFMPEG;
+        job->get_colors = xvc_ffmpeg_get_color_table;
+        job->save = xvc_ffmpeg_save_frame;
     } else if (type >= CAP_FFM) {
-        job->clean = FFMPEGClean;
+        job->clean = xvc_ffmpeg_clean;
         if (job->targetCodec == CODEC_NONE) {
             job->targetCodec = CODEC_PGM;
         }
-        job->get_colors = FFMPEGcolorTable;
-        job->save = XImageToFFMPEG;
+        job->get_colors = xvc_ffmpeg_get_color_table;
+        job->save = xvc_ffmpeg_save_frame;
     } else
 #endif     // USE_FFMPEG
     {
-        job->save = XImageToXWD;
-        job->get_colors = XWDcolorTable;
+        job->save = xvc_xwd_save_frame;
+        job->get_colors = xvc_xwd_get_color_table;
         job->clean = NULL;
     }
 
 }
 
-#ifdef HAVE_FFMPEG_AUDIO
-/* 
- * set and check some parameters for the sound device
- */
-static int
-job_set_sound_dev (char *snd, int rate, int size, int channels)
-{
-#undef DEBUGFUNCTION
-#define DEBUGFUNCTION "job_set_sound_dev()"
-    extern int errno;
-    struct stat statbuf;
-    int stat_ret;
-
-    job->snd_device = snd;
-    if (job->flags & FLG_REC_SOUND) {
-        if (strcmp (snd, "-") != 0) {
-            stat_ret = stat (snd, &statbuf);
-
-            if (stat_ret != 0) {
-                switch (errno) {
-                case EACCES:
-                    fprintf (stderr,
-                             _
-                             ("Insufficient permission to access sound input from %s\n"),
-                             snd);
-                    fprintf (stderr, _("Sound disabled!\n"));
-                    job->flags &= ~FLG_REC_SOUND;
-                    break;
-                default:
-                    fprintf (stderr,
-                             _("Error accessing sound input from %s\n"), snd);
-                    fprintf (stderr, _("Sound disabled!\n"));
-                    job->flags &= ~FLG_REC_SOUND;
-                    break;
-                }
-            }
-        }
-    }
-
-    return 0;
-}
-#endif     // HAVE_FFMPEG_AUDIO
-
-
-/* 
- * find the correct capture function
+/**
+ * \brief find the correct capture function
  */
 static void
 job_set_capture (void)
@@ -394,8 +428,8 @@ job_set_capture (void)
 }
 
 
-/* 
- * dump job settings
+/**
+ * \brief dump current job's settings to stdout for debugging
  */
 void
 xvc_job_dump ()
@@ -424,7 +458,13 @@ printf ("get_colors = %p\n", job->get_colors);
 
 }
 
-
+/**
+ * \brief signal the recording thread for certain state changes so it will
+ *      be unpaused.
+ *
+ * @param orig_state previous state
+ * @param new_state new state
+ */
 void
 job_state_change_signals_thread (int orig_state, int new_state)
 {
@@ -437,8 +477,13 @@ job_state_change_signals_thread (int orig_state, int new_state)
     }
 }
 
+/**
+ * \brief set the state overwriting any previous state information
+ *
+ * @param state state to set
+ */
 void
-job_set_state (int state)
+xvc_job_set_state (int state)
 {
     int orig_state = job->state;
 
@@ -448,8 +493,13 @@ job_set_state (int state)
     pthread_mutex_unlock (&recording_mutex);
 }
 
+/**
+ * \brief merge the state with present state information
+ * 
+ * @param state the state to merge (OR) with the current state
+ */
 void
-job_merge_state (int state)
+xvc_job_merge_state (int state)
 {
     int orig_state = job->state;
 
@@ -459,8 +509,13 @@ job_merge_state (int state)
     pthread_mutex_unlock (&recording_mutex);
 }
 
+/**
+ * \brief removes a certain state from the current state information
+ * 
+ * @param state the state to remove from the current state
+ */
 void
-job_remove_state (int state)
+xvc_job_remove_state (int state)
 {
     int orig_state = job->state;
 
@@ -470,8 +525,14 @@ job_remove_state (int state)
     pthread_mutex_unlock (&recording_mutex);
 }
 
+/**
+ * \brief merge one state with current state information and remove another
+ *
+ * @param merge_state the state flag to merge with the current state
+ * @param remove_state the state flag to remove from the current state
+ */
 void
-job_merge_and_remove_state (int merge_state, int remove_state)
+xvc_job_merge_and_remove_state (int merge_state, int remove_state)
 {
     int orig_state = job->state;
 
@@ -482,8 +543,13 @@ job_merge_and_remove_state (int merge_state, int remove_state)
     pthread_mutex_unlock (&recording_mutex);
 }
 
+/**
+ * \brief keeps the specified state flag if set
+ *
+ * @param state the state flag to keep if set (all others are unset)
+ */
 void
-job_keep_state (int state)
+xvc_job_keep_state (int state)
 {
     int orig_state = job->state;
 
@@ -493,8 +559,15 @@ job_keep_state (int state)
     pthread_mutex_unlock (&recording_mutex);
 }
 
+/**
+ * \brief keeps one state and merges with another
+ *
+ * @param keep_state the state flag to keep
+ * @param merge_state the state to merge with the kept
+ * @see xvc_job_keep_state
+ */
 void
-job_keep_and_merge_state (int keep_state, int merge_state)
+xvc_job_keep_and_merge_state (int keep_state, int merge_state)
 {
     int orig_state = job->state;
 

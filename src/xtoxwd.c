@@ -32,20 +32,16 @@
 #include "job.h"
 #include "app_data.h"
 
-//extern XVC_AppData *app;
-
 
 /* 
  * image size for ZPixmap 
  */
 #define ZImageSize(i) (i->bytes_per_line * i->height)
 
-// a couple of byte swap functions originally from util.c
-
 /* 
  * swap the byte order of a 16 bit word;
  */
-void
+static void
 swap_2byte (unsigned short *i)
 {
     unsigned char t;
@@ -59,7 +55,7 @@ swap_2byte (unsigned short *i)
 /* 
  * swap the byte order of a long integer (32 byte)
  */
-void
+static void
 swap_4byte (unsigned long *i)
 {
     unsigned char t;
@@ -76,7 +72,7 @@ swap_4byte (unsigned long *i)
 /* 
  * swap the byte order of a 32 bit word;
  */
-void
+static void
 swap_n_4byte (unsigned char *p, unsigned long n)
 {
     register unsigned char t;
@@ -93,10 +89,11 @@ swap_n_4byte (unsigned char *p, unsigned long n)
     }
 }
 
+#if 0
 /* 
  * swap n bytes in a char array
  */
-void
+static void
 swap_n_bytes (unsigned char *p, unsigned long n)
 {
     unsigned char t;
@@ -109,6 +106,7 @@ swap_n_bytes (unsigned char *p, unsigned long n)
         *(p + (n - i)) = t;
     }
 }
+#endif
 
 /* 
  * global, we need this to check if we must swap some bytes
@@ -119,7 +117,7 @@ static unsigned long little_endian = 1;
  * prepare the color table for the xwd file
  */
 void *
-XWDcolorTable (XColor * colors, int ncolors)
+xvc_xwd_get_color_table (XColor * colors, int ncolors)
 {
     XWDColor *color_table;
     int i;
@@ -149,7 +147,7 @@ XWDcolorTable (XColor * colors, int ncolors)
  * write ximage as xwd file to 'fp'
  */
 void
-XImageToXWD (FILE * fp, XImage * image)
+xvc_xwd_save_frame (FILE * fp, XImage * image)
 {
     static XWDFileHeader head;
     static int file_name_len;
@@ -210,7 +208,3 @@ XImageToXWD (FILE * fp, XImage * image)
             sizeof (XWDFileHeader), job->win_attr.visual->class);
 #endif
 }
-
-/* 
- * XwdClean() is not needed 
- */

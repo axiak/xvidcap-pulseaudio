@@ -21,7 +21,7 @@
 #ifndef __X_TO_XWD_H__
 #define __X_TO_XWD_H__
 
-void XImageToXWD (FILE * fp, XImage * image);
-void *XWDcolorTable (XColor * colors, int ncolors);
+void xvc_xwd_save_frame (FILE * fp, XImage * image);
+void * xvc_xwd_get_color_table (XColor * colors, int ncolors);
 
 #endif     // __X_TO_XWD_H__

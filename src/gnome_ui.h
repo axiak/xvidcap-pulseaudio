@@ -1,7 +1,8 @@
-/* 
- * gnome_ui.h
- *
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+/** 
+ * \file gnome_ui.h
+ */
+/*
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
  * This program is free software; you can redistribute it and/or modify

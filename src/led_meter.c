@@ -1,7 +1,11 @@
-/* 
- * led_meter.c
+/** 
+ * \file led_meter.c
  *
- * Copyright (C) 2003-06 Karl, Frankfurt
+ * This file contains a composite widget drawing a led display used for
+ * monitoring frame drop.
+ */
+/*
+ * Copyright (C) 2003-07 Karl, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -160,12 +164,23 @@ led_meter_init (LedMeter * lm)
     gtk_widget_show (lm->ebox);
 }
 
+/**
+ * \brief creates a new led_meter widget
+ *
+ * @return new led_meter widget
+ */
 GtkWidget *
 led_meter_new ()
 {
     return GTK_WIDGET (g_object_new (led_meter_get_type (), NULL));
 }
 
+/**
+ * \brief sets the percentage to use for the amplitude in the led meter
+ *
+ * @param lm pointer to the led meter widget to work on
+ * @param percet percentag value (1-100)
+ */
 void
 led_meter_set_percent (LedMeter * lm, int percent)
 {
@@ -209,6 +224,12 @@ led_meter_set_percent (LedMeter * lm, int percent)
 
 }
 
+/**
+ * \brief sets tooltip on an led meter widget
+ * 
+ * @param lm pointer to led meter widget to work on
+ * @param tip string to set as tooltip
+ */
 void
 led_meter_set_tip (LedMeter * lm, char *tip)
 {
@@ -217,7 +238,4 @@ led_meter_set_tip (LedMeter * lm, char *tip)
     tooltips = gtk_tooltips_new ();
 
     gtk_tooltips_set_tip (tooltips, lm->ebox, tip, NULL);
-
-    // "Monitor current rate of dropped frames\nyellow = 10-60 %, red =
-    // 60+ %", 
 }

@@ -1,7 +1,8 @@
-/* 
- * gnome_warning.h
- *
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+/**
+ * \file gnome_warning.h
+ */
+/*
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +22,9 @@
 #ifndef __GNOME_WARNING_H__
 #define __GNOME_WARNING_H__
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include "app_data.h"
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 GtkWidget *xvc_create_warning_with_errors (XVC_ErrorListItem * elist,
                                            int from_where);

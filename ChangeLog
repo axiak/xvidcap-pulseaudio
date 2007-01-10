@@ -1,4 +1,11 @@
 
+2007-01-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, src: led_meter.c, xtoxwd.h, led_meter.h, control.h, 
+		gnome_warning.c, xtoffmpeg.c, gnome_warning.h, gnome_ui.c, 
+		capture.c, xtoffmpeg.h, gnome_ui.h, app_data.c, job.c, 
+		app_data.h, job.h, gnome_options.c, main.c, options.c, 
+		xtoxwd.c: more code cleanup and doxygenification
+
 2007-01-09  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, gnome_options.c, gnome_options.h: more
 		code cleanup and doxygenification

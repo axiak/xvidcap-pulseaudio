@@ -1,10 +1,15 @@
-/* 
- * gnome_warning.c
+/**
+ * \file gnome_warning.c
  *
  * this file contains the warnings dialog for the options dialog of
  * the GTK2 control
  *
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * \todo investigate what's to be done with the warning text and line breaks
+ * \todo make the warning text generally applicable or distinguish between
+ *      the cases.
+ */
+/*
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,9 +27,13 @@
  *
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#define DEBUGFILE "gnome_warning.c"
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -42,34 +51,231 @@
 #include "app_data.h"
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
-#define DEBUGFILE "gnome_warning.c"
 
 /* 
  * global variables
  */
-// static gint xvc_warn_label_width = 0;
-static int called_from_where = 0;   // tells from where the warning
-
-// originates
-// 0 = preferences dialog
-// 1 = capture type toggle
-// 2 = initial validation in main.c
-static guint scheduled_warning_resize_id = 0;
-static XVC_ErrorListItem *warning_elist = NULL;
-
-/* const char *XVC_WARN_LABEL_TEXT = "Your input bears a number of
- * inconsistencies! \nPlease review the list below and click \"OK\" to
- * accept the suggested actions or \"Cancel\" to return to the Preferences 
- * dialog."; */
-
+/** \brief make the warning window globally available */
 GtkWidget *xvc_warn_main_window;
-//extern XVC_AppData *app;
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern GtkWidget *xvc_ctrl_m1;
 extern GtkWidget *xvc_pref_main_window;
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
+// static gint xvc_warn_label_width = 0;
+/** 
+ * \brief tells from where the warning originates 
+ *
+ * <ul><li>0 = preferences dialog</li>
+ * <li>1 = capture type toggle</li>
+ * <li>2 = initial validation in main.c</li></ul>
+ */
+static int called_from_where = 0;
+/** 
+ * \brief the initial resize of the warning needs to be done a little time
+ *      after the display of the dialog, so the actual size of the components
+ *      can be determined. Therefor this is done through a timed function
+ *      and the id of that is stored here. 
+ *
+ * @see auto_resize_warning_dialog
+ */
+static guint scheduled_warning_resize_id = 0;
+/** \brief the list of errors that caused this warning to be displayed */
+static XVC_ErrorListItem *warning_elist = NULL;
+
+/*
+ * helper functions
+ */
+/**
+ * \brief displays the xvidcap user manual. This is used when a user
+ *      clicks the Help button on the warning dialog.
+ */
+static void
+doHelp ()
+{
+    system ("yelp ghelp:xvidcap?xvidcap-warning &");
+}
+
+/**
+ * \brief the initial resize of the warning needs to be done a little time
+ *      after the display of the dialog, so the actual size of the components
+ *      can be determined. Therefor this is done through a timed function.
+ */
+void
+auto_resize_warning_dialog ()
+{
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "auto_resize_warning_dialog()"
+    GtkRequisition vp_size;
+    int set_size = 0, orig_vp_size = 0;
+    gint win_width = 0;
+    gint win_height = 0;
+    GtkWidget *vbox = NULL, *viewport = NULL, *eitem = NULL;
+    GList *elist = NULL;
+    int ind = 0, height = 0;
+    GladeXML *xml = NULL;
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    g_assert (xvc_warn_main_window);
+    xml = glade_get_widget_tree (GTK_WIDGET (xvc_warn_main_window));
+    vbox = glade_xml_get_widget (xml, "xvc_warn_errors_vbox");
+    g_assert (vbox);
+
+    elist = gtk_container_get_children (GTK_CONTAINER (vbox));
+    eitem = g_list_nth_data (elist, 0);
+    // the hack keeps getting uglier ...
+    if (eitem->allocation.height > 1) {
+
+        for (ind = 0; ind < g_list_length (elist); ind++) {
+            eitem = g_list_nth_data (elist, ind);
+            g_assert (eitem);
+            height += (eitem->allocation.height + 1);
+        }
+
+        set_size = (height > 400 ? 400 : height);
+
+        viewport = glade_xml_get_widget (xml, "xvc_warn_errors_viewport");
+        g_assert (viewport);
+
+        gtk_widget_size_request (viewport, &vp_size);
+        orig_vp_size = vp_size.height;
+
+        gtk_widget_set_size_request (viewport, -1, set_size);
+        gtk_widget_size_request (viewport, &vp_size);
+
+        gtk_window_get_size (GTK_WINDOW (xvc_warn_main_window), &win_width,
+                             &win_height);
+        gtk_window_resize (GTK_WINDOW (xvc_warn_main_window), win_width,
+                           win_height - (orig_vp_size - vp_size.height) + 1);
+
+        g_source_remove (scheduled_warning_resize_id);
+    }
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+}
+
+/**
+ * \brief creates a warning dialog widget displaying the errors contained
+ *      in the list passed.
+ *
+ * @param elist the list of errors to display
+ * @param from_where flag to tell the warning where it originated from. The 
+ *      values recognized are defined with called_from_where.
+ * @return the warning dialog widget
+ * @see called_from_where
+ */
+GtkWidget *
+xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
+{
+#undef DEBUGFUNCTION
+#define DEBUGFUNCTION "xvc_create_warning_with_errors()"
+    GtkWidget *vbox = NULL, *w = NULL;
+    GladeXML *xml = NULL;
+    int count_fatal_messages = 0;
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    // save list for cleanup
+    warning_elist = elist;
+    // save the origin
+    called_from_where = from_where;
+
+    // load the interface
+    xml = glade_xml_new (GLADE_FILE, "xvc_warn_main_window", NULL);
+    g_assert (xml);
+
+    // connect the signals in the interface 
+    glade_xml_signal_autoconnect (xml);
+    // store the toplevel widget for further reference
+    xvc_warn_main_window = glade_xml_get_widget (xml, "xvc_warn_main_window");
+    g_assert (xvc_warn_main_window);
+
+    // set the error list
+    if (elist != NULL) {
+        XVC_ErrorListItem *err = NULL;
+
+        vbox = glade_xml_get_widget (xml, "xvc_warn_errors_vbox");
+        g_assert (vbox);
+
+        err = elist;
+        for (; err != NULL; err = err->next) {
+            GtkWidget *eitem;
+
+            if (err->err->type != XVC_ERR_INFO || (app->flags & FLG_RUN_VERBOSE)) {
+                if (err->err->type == XVC_ERR_FATAL)
+                    count_fatal_messages++;
+                eitem = xv_error_item_new_with_error (err->err);
+                gtk_box_pack_start (GTK_BOX (vbox), eitem, FALSE, FALSE, 0);
+                gtk_widget_show (eitem);
+            }
+        }
+    } else {
+        fprintf (stderr,
+                 "%s %s: displaying a warning with a NULL error list\n",
+                 DEBUGFILE, DEBUGFUNCTION);
+    }
+
+    // depending on where we're called from make different buttons
+    // visible/sensitive
+    switch (called_from_where) {
+    case 0:
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_warn_pref_button");
+        g_assert (w);
+        gtk_widget_hide (w);
+
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_warn_cancel_button");
+        g_assert (w);
+        gtk_widget_show (w);
+        break;
+    case 1:
+    case 2:
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_warn_pref_button");
+        g_assert (w);
+        gtk_widget_show (w);
+
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_warn_cancel_button");
+        g_assert (w);
+        gtk_widget_hide (w);
+        break;
+    default:
+        break;
+    }
+#ifdef DEBUG
+    printf ("%s %s: called from where %i\n", DEBUGFILE, DEBUGFUNCTION,
+            called_from_where);
+#endif     // DEBUG
+
+    // auto-resize the dialog ... this is one ugly hack but the only way
+    // to do it
+    scheduled_warning_resize_id = g_timeout_add ((guint32) 5, (GtkFunction)
+                                                 auto_resize_warning_dialog,
+                                                 NULL);
+
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    return xvc_warn_main_window;
+}
+
+
 
 /* 
  * callbacks
  */
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 /* 
  * // // recalculate line breaks when size changes typedef struct
@@ -130,12 +336,6 @@ void
 on_xvc_warn_main_window_destroy (GtkButton * button, gpointer user_data)
 {
     // empty as yet ...
-}
-
-static void
-doHelp ()
-{
-    system ("yelp ghelp:xvidcap?xvidcap-warning &");
 }
 
 void
@@ -227,172 +427,4 @@ on_xvc_warn_main_window_response (GtkDialog * dialog, gint response_id,
 #endif     // DEBUG
 }
 
-/* 
- * this is one ugly hack
- */
-void
-auto_resize_warning_dialog ()
-{
-#undef DEBUGFUNCTION
-#define DEBUGFUNCTION "auto_resize_warning_dialog()"
-    GtkRequisition vp_size;
-    int set_size = 0, orig_vp_size = 0;
-    gint win_width = 0;
-    gint win_height = 0;
-    GtkWidget *vbox = NULL, *viewport = NULL, *eitem = NULL;
-    GList *elist = NULL;
-    int ind = 0, height = 0;
-    GladeXML *xml = NULL;
-
-#ifdef DEBUG
-    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-    g_assert (xvc_warn_main_window);
-    xml = glade_get_widget_tree (GTK_WIDGET (xvc_warn_main_window));
-    vbox = glade_xml_get_widget (xml, "xvc_warn_errors_vbox");
-    g_assert (vbox);
-
-    elist = gtk_container_get_children (GTK_CONTAINER (vbox));
-    eitem = g_list_nth_data (elist, 0);
-    // the hack keeps getting uglier ...
-    if (eitem->allocation.height > 1) {
-
-        for (ind = 0; ind < g_list_length (elist); ind++) {
-            eitem = g_list_nth_data (elist, ind);
-            g_assert (eitem);
-            // printf("eitem height: %i\n", eitem->allocation.height);
-            height += (eitem->allocation.height + 1);
-        }
-
-        set_size = (height > 400 ? 400 : height);
-
-        viewport = glade_xml_get_widget (xml, "xvc_warn_errors_viewport");
-        g_assert (viewport);
-
-        gtk_widget_size_request (viewport, &vp_size);
-        orig_vp_size = vp_size.height;
-        // printf("gtk2_warning: setting vp height to: %i ... old height:
-        // %i \n", set_size, orig_vp_size);
-
-        gtk_widget_set_size_request (viewport, -1, set_size);
-        gtk_widget_size_request (viewport, &vp_size);
-        // printf("gtk2_warning: new vp height: %i \n", vp_size.height);
-
-        gtk_window_get_size (GTK_WINDOW (xvc_warn_main_window), &win_width,
-                             &win_height);
-        // printf("gtk2_warning: the window height is: %i \n",
-        // win_height);
-        gtk_window_resize (GTK_WINDOW (xvc_warn_main_window), win_width,
-                           win_height - (orig_vp_size - vp_size.height) + 1);
-
-        g_source_remove (scheduled_warning_resize_id);
-    }
-#ifdef DEBUG
-    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-}
-
-GtkWidget *
-xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
-{
-#undef DEBUGFUNCTION
-#define DEBUGFUNCTION "xvc_create_warning_with_errors()"
-    GtkWidget *vbox = NULL, *w = NULL;
-    GladeXML *xml = NULL;
-    int count_fatal_messages = 0;
-
-#ifdef DEBUG
-    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-    // save list for cleanup
-    warning_elist = elist;
-    // from_where = 0 means called from preferences dialog
-    // = 1 means from control
-    // = 2 means from startup check
-    called_from_where = from_where;
-
-    // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_warn_main_window", NULL);
-
-    g_assert (xml);
-
-    // connect the signals in the interface 
-    glade_xml_signal_autoconnect (xml);
-    // store the toplevel widget for further reference
-    xvc_warn_main_window = glade_xml_get_widget (xml, "xvc_warn_main_window");
-    g_assert (xvc_warn_main_window);
-
-    // set the error list
-    if (elist != NULL) {
-        XVC_ErrorListItem *err = NULL;
-
-        vbox = glade_xml_get_widget (xml, "xvc_warn_errors_vbox");
-        g_assert (vbox);
-
-        err = elist;
-        for (; err != NULL; err = err->next) {
-            GtkWidget *eitem;
-
-            if (err->err->type != XVC_ERR_INFO || (app->flags & FLG_RUN_VERBOSE)) {
-                if (err->err->type == XVC_ERR_FATAL)
-                    count_fatal_messages++;
-                eitem = xv_error_item_new_with_error (err->err);
-                gtk_box_pack_start (GTK_BOX (vbox), eitem, FALSE, FALSE, 0);
-                gtk_widget_show (eitem);
-            }
-        }
-    } else {
-        fprintf (stderr,
-                 "%s %s: displaying a warning with a NULL error list\n",
-                 DEBUGFILE, DEBUGFUNCTION);
-    }
-
-    // FIXME: depending on where we're called from make different buttons
-    // visible/sensitive
-
-    switch (called_from_where) {
-    case 0:
-        w = NULL;
-        w = glade_xml_get_widget (xml, "xvc_warn_pref_button");
-        g_assert (w);
-        gtk_widget_hide (w);
-
-        w = NULL;
-        w = glade_xml_get_widget (xml, "xvc_warn_cancel_button");
-        g_assert (w);
-        gtk_widget_show (w);
-        break;
-    case 1:
-    case 2:
-        w = NULL;
-        w = glade_xml_get_widget (xml, "xvc_warn_pref_button");
-        g_assert (w);
-        gtk_widget_show (w);
-
-        w = NULL;
-        w = glade_xml_get_widget (xml, "xvc_warn_cancel_button");
-        g_assert (w);
-        gtk_widget_hide (w);
-        break;
-    default:
-        break;
-    }
-#ifdef DEBUG
-    printf ("%s %s: called from where %i\n", DEBUGFILE, DEBUGFUNCTION,
-            called_from_where);
-#endif     // DEBUG
-
-    // auto-resize the dialog ... this is one ugly hack but the only way
-    // to do it
-    scheduled_warning_resize_id = g_timeout_add ((guint32) 5, (GtkFunction)
-                                                 auto_resize_warning_dialog,
-                                                 NULL);
-
-#ifdef DEBUG
-    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-    return xvc_warn_main_window;
-}
+#endif // DOXYGEN_SHOULD_SKIP_THIS

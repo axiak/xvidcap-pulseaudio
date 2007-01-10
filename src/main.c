@@ -1,9 +1,9 @@
 /** 
- * main.c
+ * \file main.c
+ */
+/*
  * Copyright (C) 1997-98 Rasca, Berlin
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
- * 
- * main.c is free software.
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * 
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
@@ -21,9 +21,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#define DEBUGFILE "main.c"
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -51,18 +55,22 @@
 #include "frame.h"
 #include "xvidcap-intl.h"
 
-#define DEBUGFILE "main.c"
-
 typedef void (*sighandler_t) (int);
 
 /* 
  * GLOBAL VARIABLES 
  */
-Window capture_window = None;
 XVC_AppData sapp, *app;
+
+static Window capture_window = None;
 
 /* 
  * HELPER FUNCTIONS 
+ */
+/**
+ * \brief displays usage information
+ *
+ * @param prog string containing the program as it was called
  */
 void
 usage (char *prog)
@@ -139,9 +147,36 @@ usage (char *prog)
     exit (1);
 }
 
-void
-xvc_init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
+/**
+ * \brief does initialization
+ *
+ * This does the gtk_init stuff, initializes the global preferences variables,
+ * and removes any argv values gtk_init might have NULLed
+ * @param ctos pointer to the XVC_CapTypeOptions struct for the current type
+ *      of capture (sf vs. mf)
+ * @param argc number of cli args
+ * @param argv the array of command line options
+ */
+static void
+init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
 {
+#define DEBUGFUNCTION "init()"
+    int i;
+
+    // Xlib threading initialization
+    // this is here instead of with the gtk/glib stuff in gnome_ui.c|h 
+    // because this is UI independant and would need to be here even with Qt
+    XInitThreads ();
+
+    // this is a hook for a GUI to do some pre-init functions ...
+    // possibly to set some fallback options read from a rc file or
+    // Xdefaults
+    if (!xvc_init_pre (argc, argv)) {
+        fprintf (stderr,
+                 _("%s %s: can't do GUI pre-initialization ... aborting\n"),
+                 DEBUGFILE, DEBUGFUNCTION);
+        exit (2);
+    }
     // 
     // some variable initialization
     // 
@@ -149,10 +184,33 @@ xvc_init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
     xvc_appdata_init (app);
     xvc_appdata_set_defaults (app);
     xvc_captypeoptions_init (ctos);
+    
+    // gtk_init may replace argv values with NULL ... that's bad for
+    // getopt_long
+    for (i = argc; i > 0; i--) {
+        int j;
+
+        // printf("arg %i = %s\n", i, argv[i]);
+        if (argv[i - 1] == NULL) {
+            if (i == argc)
+                argc--;
+            else {
+                for (j = i; j < argc; j++) {
+                    argv[i - 1] = argv[i];
+                }
+                argv[argc - 1] = NULL;
+                argc--;
+            }
+        }
+    }
+#undef DEBUGFUNCTION
 }
 
-void
-xvc_cleanup ()
+/**
+ * \brief cleans up after the program
+ */
+static void
+cleanup ()
 {
     Job *job = xvc_job_ptr ();
 
@@ -166,7 +224,15 @@ xvc_cleanup ()
 #endif
 }
 
-void
+/**
+ * \brief sets an XVC_CapTypeOptions struct according to the cli arguments
+ *
+ * @param tmp_capture_options pointer to a pre-existing XVC_CapTypeOptions
+ *      struct to be set
+ * @param argc number of cli arguments
+ * @param argv array of cli arguments
+ */
+static void
 parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
                    char *_argv[])
 {
@@ -618,7 +684,15 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
 #undef DEBUGFUNCTION
 }
 
-XVC_CapTypeOptions *
+/**
+ * \brief merges an XVC_CapTypeOptions struct into the current preferences
+ *
+ * @param tmp_capture_options the XVC_CapTypeOptions to assimilate
+ * @return a pointer to the XVC_CapTypeOptions within the current preferences,
+ *      i.e. the global XVC_AppData struct representing the currently 
+ *      active capture mode
+ */
+static XVC_CapTypeOptions *
 merge_cli_options (XVC_CapTypeOptions * tmp_capture_options)
 {
 #define DEBUGFUNCTION "merge_cli_options()"
@@ -628,18 +702,14 @@ merge_cli_options (XVC_CapTypeOptions * tmp_capture_options)
     // evaluate tmp_capture_options and set real ones accordingly
 
     // determine capture mode
-    // either explicitly set in cli options
-    // or default_mode in options (prefs/xdefaults), the latter does not
-    // need
-    // special action because it will have been set by now or fall back to 
-    // 
-    // 
-    // the
+    // either explicitly set in cli options or default_mode in options 
+    // (prefs/xdefaults), the latter does not need special action because 
+    // it will have been set by now or fall back to the
     // default set in init_app_data.
 
     // app->current_mode is either -1 (not explicitly specified), 0
-    // (single_frame),
-    // or 1 (multi_frame) ... setting current_mode_by_* accordingly
+    // (single_frame), or 1 (multi_frame) ... 
+    // setting current_mode_by_* accordingly
 
     // by filename
     if (tmp_capture_options->file == NULL)
@@ -702,17 +772,22 @@ merge_cli_options (XVC_CapTypeOptions * tmp_capture_options)
         else
             target = &(app->multi_frame);
     }
-    // printf("Doing %s capture.\n",
-    // ((app->current_mode == 0) ? "single-frame" : "multi-frame"));
 
     // merge cli options with app
     xvc_appdata_merge_captypeoptions (tmp_capture_options, app);
 
     return target;
-
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief function to add a signal handler
+ *
+ * This is in this function because for multi-platform compatibility we
+ * do not rely on special signal flags to automatically reregister a
+ * handler after execution but instead add it again if needed within the
+ * signal handler.
+ */
 static sighandler_t
 my_signal_add (int sig_nr, sighandler_t sighandler)
 {
@@ -726,7 +801,12 @@ my_signal_add (int sig_nr, sighandler_t sighandler)
     return alt_sig.sa_handler;
 }
 
-void
+/**
+ * \brief implements the signal handler
+ *
+ * @param signal the signal number to handle
+ */
+static void
 xvc_signal_handler (int signal)
 {
 #define DEBUGFUNCTION "xvc_signal_handler()"
@@ -742,7 +822,7 @@ xvc_signal_handler (int signal)
         job = xvc_job_ptr ();
         if (job)
             xvc_capture_stop_signal (TRUE);
-        xvc_cleanup ();
+        cleanup ();
         exit (0);
         break;
     case SIGALRM:
@@ -759,7 +839,18 @@ xvc_signal_handler (int signal)
 #undef DEBUGFUNCTION
 }
 
-void
+/**
+ * \brief prints the current settings, i.e. the stuff in the global
+ *      XVC_AppData struct but only stepping into the XVC_CapTypeOptions
+ *      for the currently active capture mode (sf vs. mf).
+ *
+ * Output is to stdout for debbuging purposes
+ * @param target pointer to the XVC_CapTypeOptions representing the 
+ *      currently active capture mode within the global XVC_AppData struct
+ * \todo make the options output take new app_data structure with
+ *      parallel capTypeOptions into account
+ */
+static void
 print_current_settings (XVC_CapTypeOptions * target)
 {
     char *mp;
@@ -774,9 +865,6 @@ print_current_settings (XVC_CapTypeOptions * target)
     default:
         mp = _("none");
     }
-
-    // FIXME: make the options output take new app_data structure with
-    // parallel capTypeOptions into account
 
     printf (_("Current settings:\n"));
     printf (_(" flags = %d\n"), app->flags);
@@ -825,7 +913,7 @@ print_current_settings (XVC_CapTypeOptions * target)
     printf (_(" edit frame command= %s\n"), target->edit_cmd);
 }
 
-/* 
+/*
  * main
  */
 int
@@ -834,17 +922,12 @@ main (int argc, char *argv[])
 #undef DEBUGFUNCTION
 #define DEBUGFUNCTION "main()"
     XVC_ErrorListItem *errors_after_cli = NULL;
-    int resultCode, i;
+    int resultCode;
     XVC_CapTypeOptions s_tmp_capture_options, *target;
 
 #ifdef HasDGA
     int dga_evb, dga_errb;
 #endif     // HasDGA
-
-    // Xlib threading initialization
-    // this is here with the gtk/glib stuff in gnome_ui.c|h because this
-    // is UI independant and would need to be here even with Qt
-    XInitThreads ();
 
 #ifdef ENABLE_NLS
     // i18n initialization
@@ -853,35 +936,8 @@ main (int argc, char *argv[])
     textdomain (GETTEXT_PACKAGE);
 #endif
 
-    // this is a hook for a GUI to do some pre-init functions ...
-    // possibly to set some fallback options read from a rc file or
-    // Xdefaults
-    if (!xvc_init_pre (argc, argv)) {
-        fprintf (stderr,
-                 _("%s %s: can't do GUI pre-initialization ... aborting\n"),
-                 DEBUGFILE, DEBUGFUNCTION);
-        exit (2);
-    }
     // xvc initialization
-    xvc_init (&s_tmp_capture_options, argc, argv);
-    // gtk_init may replace argv values with NULL ... that's bad for
-    // getopt_long
-    for (i = argc; i > 0; i--) {
-        int j;
-
-        // printf("arg %i = %s\n", i, argv[i]);
-        if (argv[i - 1] == NULL) {
-            if (i == argc)
-                argc--;
-            else {
-                for (j = i; j < argc; j++) {
-                    argv[i - 1] = argv[i];
-                }
-                argv[argc - 1] = NULL;
-                argc--;
-            }
-        }
-    }
+    init (&s_tmp_capture_options, argc, argv);
 
     // read options file now 
     xvc_read_options_file (app);
@@ -935,6 +991,6 @@ main (int argc, char *argv[])
     // this is a hook for the GUI's main loop
     resultCode = xvc_ui_run ();
 
-    xvc_cleanup ();
+    cleanup ();
     return (resultCode);
 }

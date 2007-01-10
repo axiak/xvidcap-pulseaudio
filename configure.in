@@ -87,15 +87,23 @@ AC_SUBST(PACKAGE_LIBS)
 # linking fail if you first configured with static and then with
 # dynamic ffmpeg
 #########################################################
-rm ffmpeg/avcodec.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/avformat.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/avutil.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/avio.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/int*.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/mathematics.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/rational.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/common.h >/dev/null 2>&1 || echo "" > /dev/null
-rm ffmpeg/rt*.h >/dev/null 2>&1 || echo "" > /dev/null
+rm ffmpeg/adler32.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/avcodec.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/avutil.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/common.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/dsputil.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/integer.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/intfloat_readwrite.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/log.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/mathematics.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/md5.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/rational.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/avformat.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/avio.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/rtp.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/rtsp.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/rtspcodes.h >/dev/null 2>1 || echo "" > /dev/null
+rm ffmpeg/fifo.h >/dev/null 2>&1 || echo "" > /dev/null
 rm ffmpeg/swscale.h >/dev/null 2>&1 || echo "" > /dev/null
 rm ffmpeg/rgb2rgb.h >/dev/null 2>&1 || echo "" > /dev/null
 #########################################################
@@ -293,8 +301,24 @@ test x$ac_cv_lib_mp3lame_lame_init = xyes && ac_my_ffmpeg_cfg_lame_switch="--ena
 # if cache empty (not tested or failed) and want static avcodec (then it failed) ...
 if ( `test \( \( x${ac_cv_lib_avutil_av_rescale+set} = x \) -a \( x$static_avutil = xyes \) \)` ) ; then
 	# build embedded ffmpeg
-	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} --enable-gpl ${ac_my_ffmpeg_cfg_lame_switch} --enable-pthreads --enable-swscaler --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ln -s libswscale/swscale.h ./ && ln -s libswscale/rgb2rgb.h . && ${MAKE-make} )
-	#echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && ( cd ./ffmpeg/ && ./configure --cc=${CC} ${ac_my_ffmpeg_cfg_lame_switch} --enable-pthreads --disable-ffserver --disable-ffplay && ln -s libavcodec/avcodec.h && ln -s libavformat/avformat.h && ln -s libavformat/avio.h && ln -s libavformat/rt*.h ./ && ln -s libavutil/common.h ./ && ln -s libavutil/avutil.h ./ && ln -s libavutil/mathematics.h ./ && ln -s libavutil/int*.h ./ && ln -s libavutil/rational.h ./ && ${MAKE-make} )
+	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && \
+	( cd ./ffmpeg/ && \
+	./configure --cc=${CC} --enable-gpl ${ac_my_ffmpeg_cfg_lame_switch} --enable-pthreads --enable-swscaler --disable-ffserver --disable-ffplay && \
+	ln -s libavcodec/avcodec.h ./ && \
+	ln -s libavcodec/dsputil.h ./ && \
+	ln -s libavformat/avformat.h ./ && \
+	ln -s libavformat/avio.h ./ && \
+	ln -s libavformat/rt*.h ./ && \
+	ln -s libavutil/common.h ./ && \
+	ln -s libavutil/avutil.h ./ && \
+	ln -s libavutil/mathematics.h ./ && \
+	ln -s libavutil/integer.h ./ && \
+	ln -s libavutil/intfloat_readwrite.h ./ && \
+	ln -s libavutil/rational.h ./ && \
+	ln -s libavutil/fifo.h ./ && \
+	ln -s libswscale/swscale.h ./ && \
+	ln -s libswscale/rgb2rgb.h ./ && \
+	${MAKE-make} )
 	# try to link it statically, or reset cache, set static_avcodec=no
 	top_srcdir=`pwd`
 	ac_my_ldflags_save=${LDFLAGS} ; LDFLAGS="${LDFLAGS} -L$top_srcdir/ffmpeg/libavcodec -L$top_srcdir/ffmpeg/libavformat -L$top_srcdir/ffmpeg/libavutil -L$top_srcdir/ffmpeg/libswscale"

@@ -1,7 +1,8 @@
 /** 
- * xtoffmpeg.c
- *
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * \file xtoffmpeg.c
+ */
+/*
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,11 +21,13 @@
  *
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif     // HAVE_CONFIG_H
 
 #define DEBUGFILE "xtoffmpeg.c"
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #ifdef USE_FFMPEG
 
@@ -35,8 +38,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-#include <sys/time.h>                  // for timeval struct and related
-                                // functions
+#include <sys/time.h>                  /* for timeval struct and related
+functions */
 #include <math.h>
 
 #include <X11/Intrinsic.h>
@@ -52,61 +55,56 @@
 // ffmpeg stuff
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
-#include "swscale.h"
-#include "rgb2rgb.h"
-#include "framehook.h"
-#include "dsputil.h"
-#include "opt.h"
-#include "fifo.h"
+#include <ffmpeg/dsputil.h>
+#include <ffmpeg/swscale.h>
+#include <ffmpeg/rgb2rgb.h>
+#include <ffmpeg/fifo.h>
 
-#define PIX_FMT_ARGB32 PIX_FMT_RGBA32  // this is just my personal
-// convenience
+#define PIX_FMT_ARGB32 PIX_FMT_RGBA32  /* this is just my personal
+convenience */
 
 /* 
- * globals
- *
- * first libavcodec related stuff
+ * file globals
  */
-//extern XVC_AppData *app;
-/*
-extern XVC_Codec xvc_codecs[NUMCODECS];
-extern XVC_FFormat xvc_formats[NUMCODECS];
-extern XVC_AuCodec xvc_audio_codecs[NUMAUCODECS];
-*/
+/** \brief params for the codecs video */
+static AVCodec *codec;
+/** \brief an AVFrame as wrapper around the original image data */
+static AVFrame *p_inpic;
+/** \brief and one for the image converted to yuv420p */
+static AVFrame *p_outpic;
+/** \brief data buffer for output frame */
+static uint8_t *outpic_buf;
+/** \brief output buffer for encoded frame */
+static uint8_t *outbuf;
+/** \brief the size of the outbuf may be other than image_size */
+static int outbuf_size;
+/** \brief output file via avformat */
+static AVFormatContext *output_file;
+/** \brief ... plus related data */
+static AVOutputFormat *file_oformat;
+static AVStream *out_st = NULL;
+/** \brief context for image resampling */
+static struct SwsContext *img_resample_ctx;
 
-static AVCodec *codec;  // params for the codecs video 
-static AVFrame *p_inpic;    // a AVFrame as wrapper around the
+/** \brief size of yuv image */
+static int image_size;
+/** \brief pix_fmt of original image */
+static int input_pixfmt;
+/** \brief store current video_pts for a/v sync */
+static double video_pts;
 
-                                        // original image data 
-static AVFrame *p_outpic;   // and one for the image converted to
-
-                                        // yuv420p 
-static uint8_t *outpic_buf; // data buffer for output frame
-static uint8_t *outbuf; // output buffer for encoded frame 
-static int outbuf_size; // the size of the outbuf may be
-
-                                        // other than image_size
-static AVFormatContext *output_file;    // output file via avformat 
-static AVOutputFormat *file_oformat;    // ... plus related data 
-static AVStream *out_st = NULL; // ... 
-static struct SwsContext *img_resample_ctx; // for image resampling
-
-static int image_size, input_pixfmt;    // size of yuv image, pix_fmt of
-
-                                        // original image 
-static int out_size;    // size of the encoded frame to write to
-
-                                        // file 
-static double audio_pts, video_pts;
-
+/** \brief store obtained color info */
 static ColorInfo c_info;
+/** \brief buffer memory used during 8bit palette conversion */
 static uint8_t *scratchbuf8bit;
+/** \brief pointer to the XVC_CapTypeOptions representing the currently
+ * active capture mode (which certainly is mf here) */
 static XVC_CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
-void dump8bit (XImage * image, u_int32_t * ct);
-void dump32bit (XImage * input);
-void x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp);
+static void dump8bit (XImage * image, u_int32_t * ct);
+static void dump32bit (XImage * input);
+static void x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp);
 #endif     // DEBUG
 
 #ifdef HAVE_FFMPEG_AUDIO
@@ -116,23 +114,18 @@ void x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp);
 #include <pthread.h>
 #include <signal.h>
 
+/**
+ * \brief AVOutputStream taken from ffmpeg.c
+ */
 typedef struct AVOutputStream
 {
     int file_index; /* file index */
     int index;  /* stream index in the output file */
     int source_index;   /* AVInputStream index */
     AVStream *st;   /* stream in the output file */
-    int encoding_needed;    /* true if encoding needed for this stream 
-                             */
+    int encoding_needed;    /* true if encoding needed for this stream */
     int frame_number;
     /* input pts and corresponding output pts for A/V sync */
-    // double sync_ipts; /* dts from the AVPacket of the demuxer in second 
-    // 
-    // 
-    // 
-    // 
-    // 
-    // units */
     struct AVInputStream *sync_ist; /* input stream to sync against */
     int64_t sync_opts;  /* output frame counter, could be changed
                          * to some true timestamp */
@@ -180,28 +173,68 @@ typedef struct AVInputStream
                      * discontinuity */
 } AVInputStream;
 
-// external variables for thread synchronization
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+/** 
+ * \brief external variables for thread synchronization. This is the 
+ *      global mutex lock for recording (changing state and such).
+ *
+ * This is needed for pausing audio capture when the recording thread is
+ * paused.
+ */
 extern pthread_mutex_t recording_mutex;
+/** 
+ * \brief external variables for thread synchronization. This is the 
+ *      paused condition.
+ *
+ * This is needed for pausing audio capture when the recording thread is
+ * paused.
+ */
 extern pthread_cond_t recording_condition_unpaused;
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 // FIXME: check if this all needs to be global
+/** \brief audio codec */
 static AVCodec *au_codec = NULL;
+/** \brief audio codec context */
 static AVCodecContext *au_c = NULL;
+/** \brief format context for audio input */
 static AVFormatContext *ic = NULL;
+/** \brief input format for audio input */
 static AVInputFormat *grab_iformat = NULL;
+/** \brief audio output stream */
 static AVOutputStream *au_out_st = NULL;
+/** \brief audio input stream */
 static AVInputStream *au_in_st = NULL;
 
+/** \brief buffer used during audio capture */
 static uint8_t *audio_buf = NULL;
+/** \brief buffer used during audio encoding */
 static uint8_t *audio_out = NULL;
 
+/** \brief thread coordination variables for interleaving audio and video
+ *      capture. This is the thread's attributes */
 static pthread_attr_t tattr;
+/** \brief thread coordination variables for interleaving audio and video
+ *      capture. This is the mutex lock */
 static pthread_mutex_t mp = PTHREAD_MUTEX_INITIALIZER;
+/** \brief thread coordination variables for interleaving audio and video
+ *      capture. This is the thread's id */
 static pthread_t tid = 0;
-static int tret = 0;
 
-// functions ...
+/** \brief store current audio_pts for a/v sync */
+static double audio_pts;
 
+/*
+ * functions ...
+ *
+ */
+
+/**
+ * \brief adds an audio stream to AVFormatContext output_file
+ *
+ * @param job the current job
+ * @return 0 on success or smth. else on failure
+ */
 static int
 add_audio_stream (Job * job)
 {
@@ -224,12 +257,6 @@ add_audio_stream (Job * job)
     // prepare input stream
     memset (ap, 0, sizeof (*ap));
     ap->device = job->snd_device;
-
-    // this is required to guarantee import of the audio input format
-    // context
-    // for some strange reason this only works here and not further down
-    // with av_register_all
-    // audio_init();
 
     if (grab_audio) {
         ap->sample_rate = target->sndrate;
@@ -448,6 +475,15 @@ add_audio_stream (Job * job)
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief encode and write audio samples
+ *
+ * @param s output format context (output_file)
+ * @param ost pointer to audio output stream
+ * @param ist input stream information
+ * @param buf the actual data sampled
+ * @param size the size of the data sampled
+ */
 static void
 do_audio_out (AVFormatContext * s, AVOutputStream * ost,
               AVInputStream * ist, unsigned char *buf, int size)
@@ -528,7 +564,7 @@ do_audio_out (AVFormatContext * s, AVOutputStream * ost,
 #undef DEBUGFUNCTION
 }
 
-void
+static void
 cleanup_thread_when_stopped ()
 {
 #define DEBUGFUNCTION "cleanup_thread_when_stopped()"
@@ -833,9 +869,9 @@ myPAL8toRGB24 (XImage * image, AVFrame * p_inpic, Job * job)
  * logically, not byte-wise
  */
 u_int32_t *
-FFMPEGcolorTable (XColor * colors, int ncolors)
+xvc_ffmpeg_get_color_table (XColor * colors, int ncolors)
 {
-#define DEBUGFUNCTION "FFMPEGcolorTable()"
+#define DEBUGFUNCTION "xvc_ffmpeg_get_color_table()"
 
     u_int32_t *color_table, *pixel;
     int i; // , n;
@@ -1140,10 +1176,12 @@ guess_input_pix_fmt (XImage * image, ColorInfo * c_info)
  * write ximage as mpeg file to 'fp'
  */
 void
-XImageToFFMPEG (FILE * fp, XImage * image)
+xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 {
-#define DEBUGFUNCTION "XImageToFFMPEG()"
+#define DEBUGFUNCTION "xvc_ffmpeg_save_frame()"
     Job *job = xvc_job_ptr();
+    /* size of the encoded frame to write to file */
+    int out_size;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1310,6 +1348,7 @@ XImageToFFMPEG (FILE * fp, XImage * image)
             pthread_mutex_init (&mp, NULL);
 
             if (au_ret == 0) {
+                int tret;
                 // create and start capture thread 
                 // initialized with default attributes 
                 tret = pthread_attr_init (&tattr);
@@ -1564,7 +1603,7 @@ XImageToFFMPEG (FILE * fp, XImage * image)
  * KHB: FFMPEG cleanup
  */
 void
-FFMPEGClean ()
+xvc_ffmpeg_clean ()
 {
 #define DEBUGFUNCTION "FFMPEGClean()"
     Job *job = xvc_job_ptr();
@@ -1669,7 +1708,7 @@ FFMPEGClean ()
 // 
 // dump info about XImage - for debugging purposes
 // 
-void
+static void
 x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp)
 {
 #define DEBUGFUNCTION "x2ffmpeg_dump_ximage_info()"
@@ -1710,7 +1749,7 @@ x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp)
 // dump 32bit image to pnm
 // this is just used for debugging purposes
 // 
-void
+static void
 dump32bit (XImage * input)
 {
 #define DEBUGFUNCTION "dump32bit()"
@@ -1774,7 +1813,7 @@ dump32bit (XImage * input)
 // dump 8 bit image to ppm
 // this is just used for debugging purposes
 // 
-void
+static void
 dump8bit (XImage * image, u_int32_t * ct)
 {
 #define DEBUGFUNCTION "dump8bit()"

@@ -1,7 +1,8 @@
-/* 
- * xtoffmpeg.h
- *
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+/**
+ * \file xtoffmpeg.h
+ */
+/*
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,8 +23,8 @@
 #ifndef __X_TO_FFMPEG_H__
 #define __X_TO_FFMPEG_H__
 
-void XImageToFFMPEG (FILE * fp, XImage * image);
-void *FFMPEGcolorTable (XColor * colors, int ncolors);
-void FFMPEGClean ();
+void xvc_ffmpeg_save_frame (FILE * fp, XImage * image);
+void *xvc_ffmpeg_get_color_table (XColor * colors, int ncolors);
+void xvc_ffmpeg_clean ();
 
 #endif     // __X_TO_FFMPEG_H__

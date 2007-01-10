@@ -5,7 +5,6 @@
  * always needed regardless of the GUI implementation. They will be implemented
  * in one of the gnome_* files.
  */
-
 /*
  * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
@@ -40,25 +39,21 @@
 Boolean xvc_init_pre (int argc, char **argv);
 Boolean xvc_ui_create ();
 Boolean xvc_frame_create ();
+void xvc_check_start_options ();
 Boolean xvc_ui_init (XVC_ErrorListItem * errors);
 int xvc_ui_run (void);
 
 void xvc_idle_add (void *, void *, Boolean queue_events);
 Boolean xvc_change_filename_display ();
+void xvc_capture_stop_signal (Boolean wait_for_termination);
+Boolean xvc_capture_stop ();
+void xvc_capture_start ();
 void xvc_frame_change (int x, int y, int width, int height,
                        Boolean reposition_control);
-
-Boolean xvc_capture_stop ();
-void xvc_capture_stop_signal (Boolean wait_for_termination);
-void xvc_capture_start ();
-
-Boolean xvc_read_options_file ();
-Boolean xvc_write_options_file ();
-void xvc_check_start_options ();
-
 Boolean xvc_frame_monitor ();
 
-// this one is defined in main.c because it is not GUI dependant
-void xvc_signal_handler (int signal);
+// these are defined in options.c
+Boolean xvc_read_options_file ();
+Boolean xvc_write_options_file ();
 
 #endif     // __XVC_CONTROL_H__

@@ -165,7 +165,9 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     GtkWidget *w = NULL;
     XVC_FFormatID read_mf_format = CAP_NONE;
     XVC_CodecID read_mf_codec = CODEC_NONE;
+#ifdef HAVE_FFMPEG_AUDIO
     XVC_AuCodecID read_mf_au_codec = AU_CODEC_NONE;
+#endif // HAVE_FFMPEG_AUDIO
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -743,6 +745,779 @@ doHelp ()
 #undef DEBUGFUNCTION
 }
 
+/**
+ * \brief fill the mf codec combobox with valid codecs for the given
+ *      format
+ *
+ * @param format the id of the selected format
+ */
+static void
+mf_codec_combo_set_contents_from_format (XVC_FFormatID format)
+{
+#define DEBUGFUNCTION "mf_codec_combo_set_contents_from_format()"
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL;
+
+#ifdef DEBUG
+    printf ("%s %s: Entering with format %i\n", DEBUGFILE, DEBUGFUNCTION,
+            format);
+#endif     // DEBUG
+
+    if (format <= 0)
+        return;
+
+    xml = glade_get_widget_tree (GTK_WIDGET (xvc_pref_main_window));
+    g_assert (xml);
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_codec_combobox");
+
+    if (w != NULL) {
+        int a;
+
+        GtkListStore *mf_codec_list_store =
+            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
+        // NOTE: for this to work ther must ALWAYS be a dummy entry
+        // present in glade otherwise glade will not create a model 
+        // at all (let alone a list store)
+        g_assert (mf_codec_list_store);
+        gtk_list_store_clear (GTK_LIST_STORE (mf_codec_list_store));
+
+        for (a = 0; a < xvc_formats[format].num_allowed_vid_codecs; a++) {
+            
+#ifdef DEBUG
+            printf
+                ("%s %s: Adding this text (item %i) to mf codec combobox %s\n",
+                 DEBUGFILE, DEBUGFUNCTION, a, 
+                 _(xvc_codecs[xvc_formats[format].allowed_vid_codecs[a]].longname));
+#endif     // DEBUG
+            // FIXME: do I need to do the utf8 conversion?
+            gtk_combo_box_append_text (GTK_COMBO_BOX (w), 
+                strdup(
+                _(xvc_codecs[xvc_formats[format].allowed_vid_codecs[a]].longname)));
+        }
+    }
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+#undef DEBUGFUNCTION
+}
+
+#ifdef HAVE_FFMPEG_AUDIO
+/**
+ * \brief fill the mf audio codec combobox with valid audio codecs for the 
+ *      given format
+ *
+ * @param format the id of the selected format
+ */
+static void
+mf_audio_codec_combo_set_contents_from_format (XVC_FFormatID format)
+{
+#define DEBUGFUNCTION "mf_audio_codec_combo_set_contents_from_format()"
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL;
+
+#ifdef DEBUG
+    printf ("%s %s: Entering with format %i\n", DEBUGFILE, DEBUGFUNCTION,
+            format);
+#endif     // DEBUG
+
+    if (format <= 0)
+        return;
+
+    xml = glade_get_widget_tree (GTK_WIDGET (xvc_pref_main_window));
+    g_assert (xml);
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_codec_combobox");
+
+    if (w != NULL) {
+        int a;
+
+        GtkListStore *mf_au_codec_list_store =
+            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
+        // NOTE: for this to work ther must ALWAYS be a dummy entry
+        // present in glade otherwise glade will not create a model 
+        // at all (let alone a list store)
+        g_assert (mf_au_codec_list_store);
+        gtk_list_store_clear (GTK_LIST_STORE (mf_au_codec_list_store));
+
+        for (a = 0; a < xvc_formats[format].num_allowed_au_codecs; a++) {
+            
+#ifdef DEBUG
+            printf
+                ("%s %s: Adding this text (item %i) to mf codec combobox %s\n",
+                 DEBUGFILE, DEBUGFUNCTION, a, 
+                 _(xvc_audio_codecs[xvc_formats[format].allowed_au_codecs[a]].name));
+#endif     // DEBUG
+            // FIXME: do I need to do the utf8 conversion?
+            gtk_combo_box_append_text (GTK_COMBO_BOX (w), 
+                strdup(
+                _(xvc_audio_codecs[xvc_formats[format].allowed_au_codecs[a]].name)));
+        }
+    }
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+#undef DEBUGFUNCTION
+}
+#endif // HAVE_FFMPEG_AUDIO
+
+/**
+ * \brief creates the preferences dialog and sets the widgets according to
+ *      current preferences
+ *
+ * Callbacks are connected at the end
+ */
+void
+xvc_create_pref_dialog (XVC_AppData * lapp)
+{
+#define DEBUGFUNCTION "xvc_create_pref_dialog()"
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL;
+    
+    XVC_FFormatID sf_t_format = CAP_NONE;
+    XVC_CodecID sf_t_codec = CODEC_NONE;
+#ifdef USE_FFMPEG
+    XVC_FFormatID mf_t_format = CAP_NONE;
+    XVC_CodecID mf_t_codec = CODEC_NONE;
+#ifdef HAVE_FFMPEG_AUDIO
+    XVC_AuCodecID mf_t_au_codec = AU_CODEC_NONE;
+    XVC_AuCodecID sf_t_au_codec = AU_CODEC_NONE;
+#endif // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
+
+
+    // load the interface
+    xml = glade_xml_new (GLADE_FILE, "xvc_pref_main_window", NULL);
+    g_assert (xml);
+
+    xvc_pref_main_window = glade_xml_get_widget (xml, "xvc_pref_main_window");
+    g_assert (xvc_pref_main_window);
+
+    // first copy the pass parameters to a temporary structure
+    xvc_appdata_copy (&pref_app, lapp);
+
+    sf_t_format = pref_app.single_frame.target;
+    if (!sf_t_format)
+        sf_t_format =
+            xvc_codec_get_target_from_filename (pref_app.single_frame.file);
+    sf_t_codec = pref_app.single_frame.targetCodec;
+    if (!sf_t_codec)
+        sf_t_codec = xvc_formats[sf_t_format].def_vid_codec;
+#ifdef HAVE_FFMPEG_AUDIO
+    sf_t_au_codec = pref_app.single_frame.au_targetCodec;
+    if (!sf_t_au_codec)
+        sf_t_au_codec = xvc_formats[sf_t_format].def_au_codec;
+#endif     // HAVE_FFMPEG_AUDIO
+
+#ifdef USE_FFMPEG
+    mf_t_format = pref_app.multi_frame.target;
+    if (!mf_t_format)
+        mf_t_format =
+            xvc_codec_get_target_from_filename (pref_app.multi_frame.file);
+    mf_t_codec = pref_app.multi_frame.targetCodec;
+    if (!mf_t_codec)
+        mf_t_codec = xvc_formats[mf_t_format].def_vid_codec;
+#ifdef HAVE_FFMPEG_AUDIO
+    mf_t_au_codec = pref_app.multi_frame.au_targetCodec;
+    if (!mf_t_au_codec)
+        mf_t_au_codec = xvc_formats[mf_t_format].def_au_codec;
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
+
+#ifdef DEBUG
+    printf
+        ("%s %s: Determined Formats sf/mf %i/%i and Codecs sf/mf %i/%i Audio Codecs sf/mf %i/%i\n",
+         DEBUGFILE, DEBUGFUNCTION, sf_t_format,
+#ifdef USE_FFMPEG
+         mf_t_format,
+#else
+         0,
+#endif     // USE_FFMPEG
+         sf_t_codec,
+#ifdef USE_FFMPEG
+         mf_t_codec,
+#else
+         0,
+#endif     // USE_FFMPEG
+         sf_t_au_codec
+#ifdef HAVE_FFMPEG_AUDIO
+         , mf_t_au_codec
+#else
+         , 0
+#endif     // HAVE_FFMPEG_AUDIO
+        );
+#endif     // DEBUG
+
+    // prepare the arrays with the entries for the dynamic comboboxes 
+    {
+        int a;
+        char buf[256];
+        gchar *utf8text;
+        GError *error = NULL;
+
+        for (a = 1; a < NUMCAPS; a++) {
+            sprintf (buf, "%s (%s)", _(xvc_formats[a].longname),
+                     xvc_formats[a].extensions[0]);
+            utf8text =
+                g_convert ((gchar *) buf, strlen (buf), "UTF-8",
+                           "ISO-8859-1", NULL, NULL, &error);
+
+            if (error != NULL)
+                printf
+                    ("%s %s: couldn't convert format name to utf8\n",
+                     DEBUGFILE, DEBUGFUNCTION);
+
+            format_combo_entries[a - 1] = strdup ((char *) utf8text);
+#ifdef DEBUG
+            printf ("%s %s: format_combo_entries %i : %s\n", DEBUGFILE,
+                    DEBUGFUNCTION, (a - 1), format_combo_entries[a - 1]);
+#endif
+        }
+    }
+
+#ifdef DEBUG
+    printf ("%s %s: Constructed strings for format comboboxes\n", DEBUGFILE,
+            DEBUGFUNCTION);
+#endif     // DEBUG
+
+    // default capture mode radio buttons
+#ifdef USE_FFMPEG
+    if (pref_app.default_mode == 0) {
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_default_capture_mode_sf_radiobutton");
+        if (w != NULL)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    } else {
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_default_capture_mode_mf_radiobutton");
+        if (w != NULL)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    }
+#else      // USE_FFMPEG
+    w = NULL;
+    w = glade_xml_get_widget (xml,
+                              "xvc_pref_default_capture_mode_sf_radiobutton");
+    if (w != NULL) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
+    }
+
+    w = NULL;
+    w = glade_xml_get_widget (xml,
+                              "xvc_pref_default_capture_mode_mf_radiobutton");
+    if (w != NULL)
+        gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
+#endif     // USE_FFMPEG
+
+    // mouse wanted radio buttons
+    if (!pref_app.flags & FLG_USE_XFIXES) {
+        if (pref_app.mouseWanted == 1) {
+            w = NULL;
+            w = glade_xml_get_widget (xml,
+                                      "xvc_pref_capture_mouse_white_radiobutton");
+            if (w != NULL)
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        } else if (pref_app.mouseWanted == 2) {
+            w = NULL;
+            w = glade_xml_get_widget (xml,
+                                      "xvc_pref_capture_mouse_black_radiobutton");
+            if (w != NULL)
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        }
+    } else {
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_capture_mouse_white_radiobutton");
+        if (w != NULL)
+            gtk_widget_hide (w);
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_capture_mouse_black_radiobutton");
+        if (w != NULL)
+            gtk_widget_hide (w);
+    }
+    if (pref_app.mouseWanted == 0) {
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_pref_capture_mouse_checkbutton");
+        if (w != NULL)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_capture_mouse_black_radiobutton");
+        if (w != NULL)
+            gtk_widget_set_sensitive (w, FALSE);
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_capture_mouse_white_radiobutton");
+        if (w != NULL)
+            gtk_widget_set_sensitive (w, FALSE);
+    } else {
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_pref_capture_mouse_checkbutton");
+        if (w != NULL)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    }
+
+    // save geometry
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_save_geometry_checkbutton");
+    if (w != NULL) {
+        if ((pref_app.flags & FLG_SAVE_GEOMETRY) != 0) {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        } else {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+        }
+    }
+    // shared memory
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_shared_mem_checkbutton");
+#ifdef HAVE_SHMAT
+    if ((pref_app.flags & FLG_USE_SHM) != 0) {
+        if (w != NULL)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    } else {
+        if (w != NULL)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    }
+#else
+    if (w != NULL) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+        gtk_widget_set_sensitive (w, FALSE);
+    }
+#endif     // HAVE_SHMAT
+
+    // autocontinue
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_autocontinue_checkbutton");
+    if ((pref_app.flags & FLG_AUTO_CONTINUE) != 0) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    } else {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    }
+
+    // always show result dialog
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_always_show_results_checkbutton");
+    if ((pref_app.flags & FLG_ALWAYS_SHOW_RESULTS) != 0) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    } else {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    }
+
+    // rescale
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_rescale_hscale");
+    if (w != NULL)
+        gtk_range_set_value (GTK_RANGE (w), pref_app.rescale);
+
+#ifdef DEBUG
+    printf ("%s %s: Set widgets for general tab\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    // 
+    // single frame
+    
+    // file
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_filename_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w), strdup (pref_app.single_frame.file));
+    }
+
+    // format
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_format_combobox");
+
+    if (w != NULL) {
+        int a;
+        gboolean auto_is_active;
+        GtkWidget *check = NULL;
+        GtkListStore *sf_format_list_store =
+            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
+        // NOTE: for this to work ther must ALWAYS be a dummy entry
+        // present in glade otherwise glade will not create a model at all 
+        // (let alone a list store) ... on the other hand, this requires
+        // deleting the list first
+        g_assert (sf_format_list_store);
+        gtk_list_store_clear (GTK_LIST_STORE (sf_format_list_store));
+
+#ifdef USE_FFMPEG
+        for (a = 0; a < (CAP_MF - 1); a++)
+#else
+        for (a = 0; a < (NUMCAPS - 1); a++)
+#endif     // USE_FFMPEG
+        {
+#ifdef DEBUG
+            printf
+                ("%s %s: Adding this text (item %i) to sf format combobox: %s\n",
+                 DEBUGFILE, DEBUGFUNCTION, a, format_combo_entries[a]);
+#endif     // DEBUG
+            gtk_combo_box_append_text (GTK_COMBO_BOX (w),
+                                       format_combo_entries[a]);
+        }
+
+        auto_is_active = (pref_app.single_frame.target == 0);
+        check =
+            glade_xml_get_widget (xml, "xvc_pref_sf_format_auto_checkbutton");
+        if (check != NULL) {
+            int found = (auto_is_active?
+                xvc_codec_get_target_from_filename (pref_app.single_frame.file):
+                pref_app.single_frame.target) - 1;
+            // if we specified an invalid target on the command line
+            if (found > a) 
+                found = 
+                    xvc_codec_get_target_from_filename (pref_app.single_frame.file);
+
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), 
+                auto_is_active);
+            gtk_widget_set_sensitive (w, !auto_is_active);
+            gtk_combo_box_set_active (GTK_COMBO_BOX (w), found);
+        }
+    }
+
+    // fps
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_fps_hscale");
+    if (w != NULL)
+        gtk_range_set_value (GTK_RANGE (w),
+                             ((float) pref_app.single_frame.fps.num / 
+                             (float) pref_app.single_frame.fps.den));
+
+    // quality
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_quality_hscale");
+    if (w != NULL)
+        gtk_range_set_value (GTK_RANGE (w), pref_app.single_frame.quality);
+
+    // max time
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_max_time_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.single_frame.time);
+
+    // max frames
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_max_frames_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.single_frame.frames);
+
+    // start number
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_start_no_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.single_frame.start_no);
+
+    // frame increment
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_sf_frame_increment_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.single_frame.step);
+
+    // 
+    // multi_frame
+
+#ifdef USE_FFMPEG
+    // file
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_filename_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w), strdup (pref_app.multi_frame.file));
+    }
+
+    // format
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_format_combobox");
+
+    if (w != NULL) {
+        int a;
+        gboolean auto_is_active = FALSE;
+        GtkWidget *check = NULL;
+        GtkListStore *mf_format_list_store =
+            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
+        // NOTE: for this to work ther must ALWAYS be a dummy entry
+        // present in glade otherwise glade will not create a model at all 
+        // (let alone a list store) ... on the other hand, this requires
+        // deleting the list first
+        g_assert (mf_format_list_store);
+        gtk_list_store_clear (GTK_LIST_STORE (mf_format_list_store));
+
+        for (a = (CAP_MF - 1); a < (NUMCAPS - 1); a++) {
+#ifdef DEBUG
+            printf
+                ("%s %s: Adding this text (item %i) to mf format combobox %s\n",
+                 DEBUGFILE, DEBUGFUNCTION, a, format_combo_entries[a]);
+#endif     // DEBUG
+            gtk_combo_box_append_text (GTK_COMBO_BOX (w),
+                                       format_combo_entries[a]);
+        }
+        
+        auto_is_active = (pref_app.multi_frame.target == 0);    
+        check =
+            glade_xml_get_widget (xml, "xvc_pref_mf_format_auto_checkbutton");
+        if (check != NULL) {
+            int found = (auto_is_active?
+                xvc_codec_get_target_from_filename (pref_app.multi_frame.file):
+                pref_app.multi_frame.target) - CAP_MF;
+            // if we specified an invalid target on the command line
+            if (found > a) 
+                found = 
+                    xvc_codec_get_target_from_filename (pref_app.multi_frame.file) -
+                    CAP_MF;
+
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), 
+                auto_is_active);
+            gtk_widget_set_sensitive (w, !auto_is_active);
+            gtk_combo_box_set_active (GTK_COMBO_BOX (w), found);
+        }
+    }
+
+    // codec
+    mf_codec_combo_set_contents_from_format (mf_t_format);
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_codec_auto_checkbutton");
+    if (w != NULL) {
+        GtkWidget *codec_combob = NULL;
+        gboolean auto_is_active = (pref_app.multi_frame.targetCodec == 0);
+            
+        codec_combob =
+                glade_xml_get_widget (xml, "xvc_pref_mf_codec_combobox");
+
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), auto_is_active);
+        if (codec_combob != NULL) {
+            gtk_widget_set_sensitive (codec_combob, !auto_is_active);
+            int found = get_index_of_array_element(
+                        xvc_formats[mf_t_format].num_allowed_vid_codecs, 
+                        (int*) xvc_formats[mf_t_format].allowed_vid_codecs, 
+                        (auto_is_active 
+                            || mf_t_codec >= 
+                            xvc_formats[mf_t_format].num_allowed_vid_codecs ? 
+                            xvc_formats[mf_t_format].def_vid_codec :
+                            mf_t_codec));
+            if (found >= 0)
+                        gtk_combo_box_set_active (GTK_COMBO_BOX(codec_combob), 
+                        found);
+        }
+    }
+    
+    // fps
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_fps_hscale");
+    if (w != NULL)
+        gtk_range_set_value (GTK_RANGE (w),
+                             ((float) pref_app.multi_frame.fps.num / 
+                             (float) pref_app.multi_frame.fps.den));
+
+    // max time
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_max_time_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.multi_frame.time);
+
+    // max frames
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_max_frames_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.multi_frame.frames);
+
+    // quality
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_quality_hscale");
+    if (w != NULL)
+        gtk_range_set_value (GTK_RANGE (w), pref_app.multi_frame.quality);
+
+#ifdef HAVE_FFMPEG_AUDIO
+    // audio check
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_checkbutton");
+    if (w != NULL) {
+        if (pref_app.multi_frame.audioWanted > 0)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        else
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    }
+    // audio codec
+    mf_audio_codec_combo_set_contents_from_format (mf_t_format);
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_codec_auto_checkbutton");
+    if (w != NULL) {
+        GtkWidget *au_codec_combob = NULL;
+        int found = -1;
+        gboolean auto_is_active = 
+            (pref_app.multi_frame.au_targetCodec == 0? 1: 0);
+            
+        au_codec_combob =
+                glade_xml_get_widget (xml, "xvc_pref_mf_audio_codec_combobox");
+
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), auto_is_active);
+        if (au_codec_combob != NULL) {
+            gtk_widget_set_sensitive (au_codec_combob, !auto_is_active);
+            found = get_index_of_array_element(
+                        xvc_formats[mf_t_format].num_allowed_au_codecs, 
+                        (int*) xvc_formats[mf_t_format].allowed_au_codecs, 
+                        (auto_is_active 
+                            || mf_t_au_codec >= 
+                            xvc_formats[mf_t_format].num_allowed_au_codecs ? 
+                            xvc_formats[mf_t_format].def_au_codec :
+                            mf_t_au_codec));
+
+            if (found >= 0)
+                        gtk_combo_box_set_active (GTK_COMBO_BOX(au_codec_combob), 
+                        found);
+        }
+    }
+    // audio sample rate
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_sample_rate_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.multi_frame.sndrate);
+
+    // audio bit rate
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_bit_rate_spinbutton");
+    if (w != NULL)
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
+                                   pref_app.multi_frame.sndsize);
+
+    // audio capture device
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_input_device_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w), strdup (pref_app.snddev));
+    }
+    // audio channels
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_channels_hscale");
+    if (w != NULL)
+        gtk_range_set_value (GTK_RANGE (w), pref_app.multi_frame.sndchannels);
+#else      // HAVE_FFMPEG_AUDIO
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_multi_frame_audio_frame");
+
+    if (w != NULL) {
+        gint f, e;
+        guint p;
+        GtkPackType pt;
+        GtkWidget *container = NULL;
+
+        gtk_widget_hide (GTK_WIDGET (w));
+
+        container =
+            glade_xml_get_widget (xml, "xvc_pref_nb_tab_multi_frame_vbox");
+        if (container != NULL)
+            gtk_container_remove (GTK_CONTAINER (container), GTK_WIDGET (w));
+
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_nb_tab_multi_frame_video_frame");
+        g_assert (w);
+
+        if (container != NULL && w != NULL) {
+            gtk_box_query_child_packing (GTK_BOX (container),
+                                         GTK_WIDGET (w), &e, &f, &p, &pt);
+            gtk_box_set_child_packing (GTK_BOX (container),
+                                       GTK_WIDGET (w), (gboolean) TRUE,
+                                       (gboolean) TRUE, p, pt);
+        }
+    }
+#endif     // HAVE_FFMPEG_AUDIO
+
+#else      // no USE_FFMPEG
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_multi_frame_vbox");
+    g_assert (w);
+    gtk_widget_hide (GTK_WIDGET (w));
+
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_single_frame_label");
+    g_assert (w);
+    gtk_label_set_markup_with_mnemonic (GTK_LABEL (w), _("C_apture"));
+#endif     // USE_FFMPEG
+
+    // sf play command
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_play_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w),
+                            strdup (pref_app.single_frame.play_cmd));
+    }
+    // sf encoding command
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_encode_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w),
+                            strdup (pref_app.single_frame.video_cmd));
+    }
+    // sf edit command
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_edit_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w),
+                            strdup (pref_app.single_frame.edit_cmd));
+    }
+#ifdef USE_FFMPEG
+    // mf play command
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_play_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w),
+                            strdup (pref_app.multi_frame.play_cmd));
+    }
+    // mf encoding command
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_encode_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w),
+                            strdup (pref_app.multi_frame.video_cmd));
+    }
+    // mf edit command
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_edit_entry");
+
+    if (w != NULL) {
+        gtk_entry_set_text (GTK_ENTRY (w),
+                            strdup (pref_app.multi_frame.edit_cmd));
+    }
+#else      // USE_FFMPEG
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_commands_mf_frame");
+    g_assert (w);
+    gtk_widget_hide (GTK_WIDGET (w));
+#endif     // USE_FFMPEG
+
+    // connect the signals in the interface 
+printf("before %p\n", xml); 
+    glade_xml_signal_autoconnect (xml);
+printf("after %p\n", xml);
+    
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+#undef DEBUGFUNCTION
+}
 
 /*
  * callbacks
@@ -1127,124 +1902,6 @@ on_xvc_pref_mf_audio_codec_auto_checkbutton_toggled (GtkToggleButton *
 #undef DEBUGFUNCTION
 }
 
-#endif // DOXYGEN_SHOULD_SKIP_THIS
-
-/**
- * \brief fill the mf codec combobox with valid codecs for the given
- *      format
- *
- * @param format the id of the selected format
- */
-static void
-mf_codec_combo_set_contents_from_format (XVC_FFormatID format)
-{
-#define DEBUGFUNCTION "mf_codec_combo_set_contents_from_format()"
-    GladeXML *xml = NULL;
-    GtkWidget *w = NULL;
-
-#ifdef DEBUG
-    printf ("%s %s: Entering with format %i\n", DEBUGFILE, DEBUGFUNCTION,
-            format);
-#endif     // DEBUG
-
-    if (format <= 0)
-        return;
-
-    xml = glade_get_widget_tree (GTK_WIDGET (xvc_pref_main_window));
-    g_assert (xml);
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_codec_combobox");
-
-    if (w != NULL) {
-        int a;
-
-        GtkListStore *mf_codec_list_store =
-            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
-        // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model 
-        // at all (let alone a list store)
-        g_assert (mf_codec_list_store);
-        gtk_list_store_clear (GTK_LIST_STORE (mf_codec_list_store));
-
-        for (a = 0; a < xvc_formats[format].num_allowed_vid_codecs; a++) {
-            
-#ifdef DEBUG
-            printf
-                ("%s %s: Adding this text (item %i) to mf codec combobox %s\n",
-                 DEBUGFILE, DEBUGFUNCTION, a, 
-                 _(xvc_codecs[xvc_formats[format].allowed_vid_codecs[a]].longname));
-#endif     // DEBUG
-            // FIXME: do I need to do the utf8 conversion?
-            gtk_combo_box_append_text (GTK_COMBO_BOX (w), 
-                strdup(
-                _(xvc_codecs[xvc_formats[format].allowed_vid_codecs[a]].longname)));
-        }
-    }
-#ifdef DEBUG
-    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-#undef DEBUGFUNCTION
-}
-
-/**
- * \brief fill the mf audio codec combobox with valid audio codecs for the 
- *      given format
- *
- * @param format the id of the selected format
- */
-static void
-mf_audio_codec_combo_set_contents_from_format (XVC_FFormatID format)
-{
-#define DEBUGFUNCTION "mf_audio_codec_combo_set_contents_from_format()"
-    GladeXML *xml = NULL;
-    GtkWidget *w = NULL;
-
-#ifdef DEBUG
-    printf ("%s %s: Entering with format %i\n", DEBUGFILE, DEBUGFUNCTION,
-            format);
-#endif     // DEBUG
-
-    if (format <= 0)
-        return;
-
-    xml = glade_get_widget_tree (GTK_WIDGET (xvc_pref_main_window));
-    g_assert (xml);
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_codec_combobox");
-
-    if (w != NULL) {
-        int a;
-
-        GtkListStore *mf_au_codec_list_store =
-            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
-        // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model 
-        // at all (let alone a list store)
-        g_assert (mf_au_codec_list_store);
-        gtk_list_store_clear (GTK_LIST_STORE (mf_au_codec_list_store));
-
-        for (a = 0; a < xvc_formats[format].num_allowed_au_codecs; a++) {
-            
-#ifdef DEBUG
-            printf
-                ("%s %s: Adding this text (item %i) to mf codec combobox %s\n",
-                 DEBUGFILE, DEBUGFUNCTION, a, 
-                 _(xvc_audio_codecs[xvc_formats[format].allowed_au_codecs[a]].name));
-#endif     // DEBUG
-            // FIXME: do I need to do the utf8 conversion?
-            gtk_combo_box_append_text (GTK_COMBO_BOX (w), 
-                strdup(
-                _(xvc_audio_codecs[xvc_formats[format].allowed_au_codecs[a]].name)));
-        }
-    }
-#ifdef DEBUG
-    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-#undef DEBUGFUNCTION
-}
-
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 /**
  * \brief implement the change of a mf format selection and call all the
  *      resulting actions that may be required
@@ -1805,6 +2462,8 @@ on_xvc_pref_commands_sf_play_try_button_clicked (GtkButton * button,
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
+    xml = glade_get_widget_tree (GTK_WIDGET (xvc_pref_main_window));
+    g_assert (xml);
     w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_play_entry");
     g_assert (w);
 
@@ -2144,655 +2803,3 @@ on_xvc_pref_mf_audio_input_device_select_button_clicked (GtkButton * button,
 }
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
-/**
- * \brief creates the preferences dialog and sets the widgets according to
- *      current preferences
- *
- * Callbacks are connected at the end
- */
-void
-xvc_create_pref_dialog (XVC_AppData * lapp)
-{
-#define DEBUGFUNCTION "xvc_create_pref_dialog()"
-
-#ifdef DEBUG
-    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-    GladeXML *xml = NULL;
-    GtkWidget *w = NULL;
-    
-    XVC_FFormatID sf_t_format = CAP_NONE;
-    XVC_CodecID sf_t_codec = CODEC_NONE;
-    XVC_AuCodecID sf_t_au_codec = AU_CODEC_NONE;
-#ifdef USE_FFMPEG
-    XVC_FFormatID mf_t_format = CAP_NONE;
-    XVC_CodecID mf_t_codec = CODEC_NONE;
-    XVC_AuCodecID mf_t_au_codec = AU_CODEC_NONE;
-#endif     // USE_FFMPEG
-
-
-    // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_pref_main_window", NULL);
-    g_assert (xml);
-
-    xvc_pref_main_window = glade_xml_get_widget (xml, "xvc_pref_main_window");
-    g_assert (xvc_pref_main_window);
-
-    // first copy the pass parameters to a temporary structure
-    xvc_appdata_copy (&pref_app, lapp);
-
-    sf_t_format = pref_app.single_frame.target;
-    if (!sf_t_format)
-        sf_t_format =
-            xvc_codec_get_target_from_filename (pref_app.single_frame.file);
-    sf_t_codec = pref_app.single_frame.targetCodec;
-    if (!sf_t_codec)
-        sf_t_codec = xvc_formats[sf_t_format].def_vid_codec;
-#ifdef HAVE_FFMPEG_AUDIO
-    sf_t_au_codec = pref_app.single_frame.au_targetCodec;
-    if (!sf_t_au_codec)
-        sf_t_au_codec = xvc_formats[sf_t_format].def_au_codec;
-#endif     // HAVE_FFMPEG_AUDIO
-
-#ifdef USE_FFMPEG
-    mf_t_format = pref_app.multi_frame.target;
-    if (!mf_t_format)
-        mf_t_format =
-            xvc_codec_get_target_from_filename (pref_app.multi_frame.file);
-    mf_t_codec = pref_app.multi_frame.targetCodec;
-    if (!mf_t_codec)
-        mf_t_codec = xvc_formats[mf_t_format].def_vid_codec;
-#ifdef HAVE_FFMPEG_AUDIO
-    mf_t_au_codec = pref_app.multi_frame.au_targetCodec;
-    if (!mf_t_au_codec)
-        mf_t_au_codec = xvc_formats[mf_t_format].def_au_codec;
-#endif     // HAVE_FFMPEG_AUDIO
-#endif     // USE_FFMPEG
-
-#ifdef DEBUG
-    printf
-        ("%s %s: Determined Formats sf/mf %i/%i and Codecs sf/mf %i/%i Audio Codecs sf/mf %i/%i\n",
-         DEBUGFILE, DEBUGFUNCTION, sf_t_format,
-#ifdef USE_FFMPEG
-         mf_t_format,
-#else
-         0,
-#endif     // USE_FFMPEG
-         sf_t_codec,
-#ifdef USE_FFMPEG
-         mf_t_codec,
-#else
-         0,
-#endif     // USE_FFMPEG
-         sf_t_au_codec
-#ifdef HAVE_FFMPEG_AUDIO
-         , mf_t_au_codec
-#else
-         , 0
-#endif     // HAVE_FFMPEG_AUDIO
-        );
-#endif     // DEBUG
-
-    // prepare the arrays with the entries for the dynamic comboboxes 
-    {
-        int a;
-        char buf[256];
-        gchar *utf8text;
-        GError *error = NULL;
-
-        for (a = 1; a < NUMCAPS; a++) {
-            sprintf (buf, "%s (%s)", _(xvc_formats[a].longname),
-                     xvc_formats[a].extensions[0]);
-            utf8text =
-                g_convert ((gchar *) buf, strlen (buf), "UTF-8",
-                           "ISO-8859-1", NULL, NULL, &error);
-
-            if (error != NULL)
-                printf
-                    ("%s %s: couldn't convert format name to utf8\n",
-                     DEBUGFILE, DEBUGFUNCTION);
-
-            format_combo_entries[a - 1] = strdup ((char *) utf8text);
-#ifdef DEBUG
-            printf ("%s %s: format_combo_entries %i : %s\n", DEBUGFILE,
-                    DEBUGFUNCTION, (a - 1), format_combo_entries[a - 1]);
-#endif
-        }
-    }
-
-#ifdef DEBUG
-    printf ("%s %s: Constructed strings for format comboboxes\n", DEBUGFILE,
-            DEBUGFUNCTION);
-#endif     // DEBUG
-
-    // default capture mode radio buttons
-#ifdef USE_FFMPEG
-    if (pref_app.default_mode == 0) {
-        w = NULL;
-        w = glade_xml_get_widget (xml,
-                                  "xvc_pref_default_capture_mode_sf_radiobutton");
-        if (w != NULL)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-    } else {
-        w = NULL;
-        w = glade_xml_get_widget (xml,
-                                  "xvc_pref_default_capture_mode_mf_radiobutton");
-        if (w != NULL)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-    }
-#else      // USE_FFMPEG
-    w = NULL;
-    w = glade_xml_get_widget (xml,
-                              "xvc_pref_default_capture_mode_sf_radiobutton");
-    if (w != NULL) {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-        gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
-    }
-
-    w = NULL;
-    w = glade_xml_get_widget (xml,
-                              "xvc_pref_default_capture_mode_mf_radiobutton");
-    if (w != NULL)
-        gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
-#endif     // USE_FFMPEG
-
-    // mouse wanted radio buttons
-    if (!pref_app.flags & FLG_USE_XFIXES) {
-        if (pref_app.mouseWanted == 1) {
-            w = NULL;
-            w = glade_xml_get_widget (xml,
-                                      "xvc_pref_capture_mouse_white_radiobutton");
-            if (w != NULL)
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-        } else if (pref_app.mouseWanted == 2) {
-            w = NULL;
-            w = glade_xml_get_widget (xml,
-                                      "xvc_pref_capture_mouse_black_radiobutton");
-            if (w != NULL)
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-        }
-    } else {
-        w = NULL;
-        w = glade_xml_get_widget (xml,
-                                  "xvc_pref_capture_mouse_white_radiobutton");
-        if (w != NULL)
-            gtk_widget_hide (w);
-        w = NULL;
-        w = glade_xml_get_widget (xml,
-                                  "xvc_pref_capture_mouse_black_radiobutton");
-        if (w != NULL)
-            gtk_widget_hide (w);
-    }
-    if (pref_app.mouseWanted == 0) {
-        w = NULL;
-        w = glade_xml_get_widget (xml, "xvc_pref_capture_mouse_checkbutton");
-        if (w != NULL)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
-
-        w = NULL;
-        w = glade_xml_get_widget (xml,
-                                  "xvc_pref_capture_mouse_black_radiobutton");
-        if (w != NULL)
-            gtk_widget_set_sensitive (w, FALSE);
-        w = NULL;
-        w = glade_xml_get_widget (xml,
-                                  "xvc_pref_capture_mouse_white_radiobutton");
-        if (w != NULL)
-            gtk_widget_set_sensitive (w, FALSE);
-    } else {
-        w = NULL;
-        w = glade_xml_get_widget (xml, "xvc_pref_capture_mouse_checkbutton");
-        if (w != NULL)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-    }
-
-    // save geometry
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_save_geometry_checkbutton");
-    if (w != NULL) {
-        if ((pref_app.flags & FLG_SAVE_GEOMETRY) != 0) {
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-        } else {
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
-        }
-    }
-    // shared memory
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_shared_mem_checkbutton");
-#ifdef HAVE_SHMAT
-    if ((pref_app.flags & FLG_USE_SHM) != 0) {
-        if (w != NULL)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-    } else {
-        if (w != NULL)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
-    }
-#else
-    if (w != NULL) {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
-        gtk_widget_set_sensitive (w, FALSE);
-    }
-#endif     // HAVE_SHMAT
-
-    // autocontinue
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_autocontinue_checkbutton");
-    if ((pref_app.flags & FLG_AUTO_CONTINUE) != 0) {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-    } else {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
-    }
-
-    // always show result dialog
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_always_show_results_checkbutton");
-    if ((pref_app.flags & FLG_ALWAYS_SHOW_RESULTS) != 0) {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-    } else {
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
-    }
-
-    // rescale
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_rescale_hscale");
-    if (w != NULL)
-        gtk_range_set_value (GTK_RANGE (w), pref_app.rescale);
-
-#ifdef DEBUG
-    printf ("%s %s: Set widgets for general tab\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-    // 
-    // single frame
-    
-    // file
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_filename_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w), strdup (pref_app.single_frame.file));
-    }
-
-    // format
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_format_combobox");
-
-    if (w != NULL) {
-        int a;
-        gboolean auto_is_active;
-        GtkWidget *check = NULL;
-        GtkListStore *sf_format_list_store =
-            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
-        // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model at all 
-        // (let alone a list store) ... on the other hand, this requires
-        // deleting the list first
-        g_assert (sf_format_list_store);
-        gtk_list_store_clear (GTK_LIST_STORE (sf_format_list_store));
-
-#ifdef USE_FFMPEG
-        for (a = 0; a < (CAP_MF - 1); a++)
-#else
-        for (a = 0; a < (NUMCAPS - 1); a++)
-#endif     // USE_FFMPEG
-        {
-#ifdef DEBUG
-            printf
-                ("%s %s: Adding this text (item %i) to sf format combobox: %s\n",
-                 DEBUGFILE, DEBUGFUNCTION, a, format_combo_entries[a]);
-#endif     // DEBUG
-            gtk_combo_box_append_text (GTK_COMBO_BOX (w),
-                                       format_combo_entries[a]);
-        }
-
-        auto_is_active = (pref_app.single_frame.target == 0);
-        check =
-            glade_xml_get_widget (xml, "xvc_pref_sf_format_auto_checkbutton");
-        if (check != NULL) {
-            int found = (auto_is_active?
-                xvc_codec_get_target_from_filename (pref_app.single_frame.file):
-                pref_app.single_frame.target) - 1;
-            // if we specified an invalid target on the command line
-            if (found > a) 
-                found = 
-                    xvc_codec_get_target_from_filename (pref_app.single_frame.file);
-
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), 
-                auto_is_active);
-            gtk_widget_set_sensitive (w, !auto_is_active);
-            gtk_combo_box_set_active (GTK_COMBO_BOX (w), found);
-        }
-    }
-
-    // fps
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_fps_hscale");
-    if (w != NULL)
-        gtk_range_set_value (GTK_RANGE (w),
-                             ((float) pref_app.single_frame.fps.num / 
-                             (float) pref_app.single_frame.fps.den));
-
-    // quality
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_quality_hscale");
-    if (w != NULL)
-        gtk_range_set_value (GTK_RANGE (w), pref_app.single_frame.quality);
-
-    // max time
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_max_time_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.single_frame.time);
-
-    // max frames
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_max_frames_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.single_frame.frames);
-
-    // start number
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_start_no_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.single_frame.start_no);
-
-    // frame increment
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_sf_frame_increment_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.single_frame.step);
-
-    // 
-    // multi_frame
-
-#ifdef USE_FFMPEG
-    // file
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_filename_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w), strdup (pref_app.multi_frame.file));
-    }
-
-    // format
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_format_combobox");
-
-    if (w != NULL) {
-        int a;
-        gboolean auto_is_active = FALSE;
-        GtkWidget *check = NULL;
-        GtkListStore *mf_format_list_store =
-            GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
-        // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model at all 
-        // (let alone a list store) ... on the other hand, this requires
-        // deleting the list first
-        g_assert (mf_format_list_store);
-        gtk_list_store_clear (GTK_LIST_STORE (mf_format_list_store));
-
-        for (a = (CAP_MF - 1); a < (NUMCAPS - 1); a++) {
-#ifdef DEBUG
-            printf
-                ("%s %s: Adding this text (item %i) to mf format combobox %s\n",
-                 DEBUGFILE, DEBUGFUNCTION, a, format_combo_entries[a]);
-#endif     // DEBUG
-            gtk_combo_box_append_text (GTK_COMBO_BOX (w),
-                                       format_combo_entries[a]);
-        }
-        
-        auto_is_active = (pref_app.multi_frame.target == 0);    
-        check =
-            glade_xml_get_widget (xml, "xvc_pref_mf_format_auto_checkbutton");
-        if (check != NULL) {
-            int found = (auto_is_active?
-                xvc_codec_get_target_from_filename (pref_app.multi_frame.file):
-                pref_app.multi_frame.target) - CAP_MF;
-            // if we specified an invalid target on the command line
-            if (found > a) 
-                found = 
-                    xvc_codec_get_target_from_filename (pref_app.multi_frame.file) -
-                    CAP_MF;
-
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), 
-                auto_is_active);
-            gtk_widget_set_sensitive (w, !auto_is_active);
-            gtk_combo_box_set_active (GTK_COMBO_BOX (w), found);
-        }
-    }
-
-    // codec
-    mf_codec_combo_set_contents_from_format (mf_t_format);
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_codec_auto_checkbutton");
-    if (w != NULL) {
-        GtkWidget *codec_combob = NULL;
-        gboolean auto_is_active = (pref_app.multi_frame.targetCodec == 0);
-            
-        codec_combob =
-                glade_xml_get_widget (xml, "xvc_pref_mf_codec_combobox");
-
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), auto_is_active);
-        if (codec_combob != NULL) {
-            gtk_widget_set_sensitive (codec_combob, !auto_is_active);
-            int found = get_index_of_array_element(
-                        xvc_formats[mf_t_format].num_allowed_vid_codecs, 
-                        (int*) xvc_formats[mf_t_format].allowed_vid_codecs, 
-                        (auto_is_active 
-                            || mf_t_codec >= 
-                            xvc_formats[mf_t_format].num_allowed_vid_codecs ? 
-                            xvc_formats[mf_t_format].def_vid_codec :
-                            mf_t_codec));
-            if (found >= 0)
-                        gtk_combo_box_set_active (GTK_COMBO_BOX(codec_combob), 
-                        found);
-        }
-    }
-    
-    // fps
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_fps_hscale");
-    if (w != NULL)
-        gtk_range_set_value (GTK_RANGE (w),
-                             ((float) pref_app.multi_frame.fps.num / 
-                             (float) pref_app.multi_frame.fps.den));
-
-    // max time
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_max_time_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.multi_frame.time);
-
-    // max frames
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_max_frames_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.multi_frame.frames);
-
-    // quality
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_quality_hscale");
-    if (w != NULL)
-        gtk_range_set_value (GTK_RANGE (w), pref_app.multi_frame.quality);
-
-#ifdef HAVE_FFMPEG_AUDIO
-    // audio check
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_checkbutton");
-    if (w != NULL) {
-        if (pref_app.multi_frame.audioWanted > 0)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
-        else
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
-    }
-    // audio codec
-    mf_audio_codec_combo_set_contents_from_format (mf_t_format);
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_codec_auto_checkbutton");
-    if (w != NULL) {
-        GtkWidget *au_codec_combob = NULL;
-        int found = -1;
-        gboolean auto_is_active = 
-            (pref_app.multi_frame.au_targetCodec == 0? 1: 0);
-            
-        au_codec_combob =
-                glade_xml_get_widget (xml, "xvc_pref_mf_audio_codec_combobox");
-
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), auto_is_active);
-        if (au_codec_combob != NULL) {
-            gtk_widget_set_sensitive (au_codec_combob, !auto_is_active);
-            found = get_index_of_array_element(
-                        xvc_formats[mf_t_format].num_allowed_au_codecs, 
-                        (int*) xvc_formats[mf_t_format].allowed_au_codecs, 
-                        (auto_is_active 
-                            || mf_t_au_codec >= 
-                            xvc_formats[mf_t_format].num_allowed_au_codecs ? 
-                            xvc_formats[mf_t_format].def_au_codec :
-                            mf_t_au_codec));
-
-            if (found >= 0)
-                        gtk_combo_box_set_active (GTK_COMBO_BOX(au_codec_combob), 
-                        found);
-        }
-    }
-    // audio sample rate
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_sample_rate_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.multi_frame.sndrate);
-
-    // audio bit rate
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_bit_rate_spinbutton");
-    if (w != NULL)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
-                                   pref_app.multi_frame.sndsize);
-
-    // audio capture device
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_input_device_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w), strdup (pref_app.snddev));
-    }
-    // audio channels
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_channels_hscale");
-    if (w != NULL)
-        gtk_range_set_value (GTK_RANGE (w), pref_app.multi_frame.sndchannels);
-#else      // HAVE_FFMPEG_AUDIO
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_multi_frame_audio_frame");
-
-    if (w != NULL) {
-        gint f, e, p;
-        GtkPackType pt;
-        GtkWidget *container = NULL;
-
-        gtk_widget_hide (GTK_WIDGET (w));
-
-        container =
-            glade_xml_get_widget (xml, "xvc_pref_nb_tab_multi_frame_vbox");
-        if (container != NULL)
-            gtk_container_remove (GTK_CONTAINER (container), GTK_WIDGET (w));
-
-        w = NULL;
-        w = glade_xml_get_widget (xml,
-                                  "xvc_pref_nb_tab_multi_frame_video_frame");
-        g_assert (w);
-
-        if (container != NULL && w != NULL) {
-            gtk_box_query_child_packing (GTK_BOX (container),
-                                         GTK_WIDGET (w), &e, &f, &p, &pt);
-            gtk_box_set_child_packing (GTK_BOX (container),
-                                       GTK_WIDGET (w), (gboolean) TRUE,
-                                       (gboolean) TRUE, p, pt);
-        }
-    }
-#endif     // HAVE_FFMPEG_AUDIO
-
-#else      // no USE_FFMPEG
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_multi_frame_vbox");
-    g_assert (w);
-    gtk_widget_hide (GTK_WIDGET (w));
-
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_single_frame_label");
-    g_assert (w);
-    gtk_label_set_markup_with_mnemonic (GTK_LABEL (w), _("C_apture"));
-#endif     // USE_FFMPEG
-
-    // sf play command
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_play_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w),
-                            strdup (pref_app.single_frame.play_cmd));
-    }
-    // sf encoding command
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_encode_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w),
-                            strdup (pref_app.single_frame.video_cmd));
-    }
-    // sf edit command
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_edit_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w),
-                            strdup (pref_app.single_frame.edit_cmd));
-    }
-#ifdef USE_FFMPEG
-    // mf play command
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_play_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w),
-                            strdup (pref_app.multi_frame.play_cmd));
-    }
-    // mf encoding command
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_encode_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w),
-                            strdup (pref_app.multi_frame.video_cmd));
-    }
-    // mf edit command
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_edit_entry");
-
-    if (w != NULL) {
-        gtk_entry_set_text (GTK_ENTRY (w),
-                            strdup (pref_app.multi_frame.edit_cmd));
-    }
-#else      // USE_FFMPEG
-    w = NULL;
-    w = glade_xml_get_widget (xml, "xvc_pref_nb_tab_commands_mf_frame");
-    g_assert (w);
-    gtk_widget_hide (GTK_WIDGET (w));
-#endif     // USE_FFMPEG
-
-    // connect the signals in the interface 
-    glade_xml_signal_autoconnect (xml);
-    
-#ifdef DEBUG
-    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-#undef DEBUGFUNCTION
-}

@@ -245,9 +245,9 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     lapp->multi_frame.file = "test-%04d.mpeg";
 
     lapp->multi_frame.edit_cmd =
-        _("xterm -e 'echo \"none specified\" ; sleep 20'");
+        _("xterm -e \"echo none specified; echo hit enter to dismiss; read\"");
     lapp->multi_frame.video_cmd =
-        _("xterm -e 'echo \"not needed for multi-frame capture\" ; sleep 20'");
+        _("xterm -e \"echo not needed for multi-frame capture; echo hit enter to dismiss; read\"");
     lapp->multi_frame.play_cmd = "mplayer \"${XVFILE}\" &";
 #endif     // USE_FFMPEG
     lapp->single_frame.play_cmd =

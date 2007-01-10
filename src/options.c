@@ -1,8 +1,12 @@
 /** 
- * options.c
+ * \file options.c
  *
+ * Contains common functions for handling persisten preferences storage
+ * \todo implement the show_time feature
+ */
+/*
  * Copyright (C) 1997,98 Rasca, Berlin
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,9 +25,11 @@
  *
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,15 +44,10 @@
 
 #define OPS_FILE ".xvidcaprc"
 
-//extern XVC_AppData *app;
-/*
-extern XVC_Codec xvc_codecs[NUMCODECS];
-extern XVC_FFormat xvc_formats[NUMCAPS];
-extern XVC_AuCodec xvc_audio_codecs[NUMAUCODECS];
-*/
-
-/* 
- * save the values
+/**
+ * \brief saves the preferences to file
+ *
+ * @return TRUE on success, FALSE otherwise
  */
 Boolean
 xvc_write_options_file ()
@@ -56,7 +57,7 @@ xvc_write_options_file ()
     char file[PATH_MAX + 1];
     FILE *fp;
 
-    // save it to $HOME/.xvidcaprc
+    // save it to $HOME/<OPS_FILE>
     home = getenv ("HOME");
     sprintf (file, "%s/%s", home, OPS_FILE);
     fp = fopen (file, "w");
@@ -300,8 +301,10 @@ xvc_write_options_file ()
     return TRUE;
 }
 
-/* 
- * read options file
+/**
+ * \brief read options file
+ *
+ * @return TRUE on success, FALSE otherwise
  */
 Boolean
 xvc_read_options_file ()
@@ -336,9 +339,7 @@ xvc_read_options_file ()
                 token = strtok (line, " :=\"");
                 // this has found the first token
                 // for the value we need special treatment for the command 
-                // 
-                // parameters which
-                // consist of multiple words
+                // parameters which consist of multiple words
                 // all other values are just a single token
                 for (y = 0; y < strlen (token); y++) {
                     low_token[y] = tolower (token[y]);

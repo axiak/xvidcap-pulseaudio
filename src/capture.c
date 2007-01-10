@@ -439,7 +439,7 @@ captureFrameCreatingImage (Display * dpy)
         printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
                 DEBUGFILE, DEBUGFUNCTION, app->area->width,
                 app->area->height, app->area->x, app->area->y);
-        job_set_state (VC_STOP);
+        xvc_job_set_state (VC_STOP);
     } else {
         // paint the mouse pointer into the captured image if necessary
         if (app->mouseWanted > 0) {
@@ -553,7 +553,7 @@ captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
         printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
                 DEBUGFILE, DEBUGFUNCTION, app->area->width,
                 app->area->height, app->area->x, app->area->y);
-        job_set_state (VC_STOP);
+        xvc_job_set_state (VC_STOP);
     } else {
         shminfo->shmid = shmget (IPC_PRIVATE,
                                  image->bytes_per_line * image->height,
@@ -693,7 +693,7 @@ commonCapture (enum captureFunctions capfunc)
             // code know we need
             // to restart again afterwards
             if (app->flags & FLG_AUTO_CONTINUE) {
-                job_merge_state (VC_CONTINUE);
+                xvc_job_merge_state (VC_CONTINUE);
             }
 
             goto CLEAN_CAPTURE;
@@ -752,7 +752,7 @@ commonCapture (enum captureFunctions capfunc)
             if (image) {
                 // call the necessary XtoXYZ function to process the image
                 (*job->save) (fp, image);
-                job_remove_state (VC_START);
+                xvc_job_remove_state (VC_START);
             } else
                 printf ("%s %s: could not acquire pixmap!\n", DEBUGFILE,
                         DEBUGFUNCTION);
@@ -819,7 +819,7 @@ commonCapture (enum captureFunctions capfunc)
         // this might be a single step. If so, remove the state flag so we 
         // don't keep single stepping
         if (job->state & VC_STEP) {
-            job_remove_state (VC_STEP);
+            xvc_job_remove_state (VC_STEP);
             // the time is the pause between this and the next snapshot
             // for step mode this makes no sense and could be 0. Setting
             // it to 50 is just to give the led meter the chance to flash
@@ -847,7 +847,7 @@ commonCapture (enum captureFunctions capfunc)
             image = NULL;
         }
 
-        job_set_state (VC_STOP);
+        xvc_job_set_state (VC_STOP);
 
         // set the sensitive stuff for the control panel if we don't
         // autocontinue 
@@ -865,7 +865,7 @@ commonCapture (enum captureFunctions capfunc)
 
         if ((orig_state & VC_CONTINUE) == 0) {
             // after this we're ready to start recording again 
-            job_merge_state (VC_READY);
+            xvc_job_merge_state (VC_READY);
         } else {
 
 #ifdef DEBUG
@@ -877,7 +877,7 @@ commonCapture (enum captureFunctions capfunc)
             // prepare autocontinue
             job->movie_no += 1;
             job->pic_no = target->start_no;
-            job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
+            xvc_job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
 
             return time;
         }
