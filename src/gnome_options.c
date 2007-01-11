@@ -2016,8 +2016,7 @@ on_xvc_pref_mf_format_combobox_changed (GtkComboBox * combobox,
             {
                 found =
                     get_index_of_array_element (xvc_formats[format_selected].
-                                                num_allowed_vid_codecs,
-                                                (int *)
+                                                num_allowed_vid_codecs, (int *)
                                                 xvc_formats[format_selected].
                                                 allowed_vid_codecs,
                                                 old_selected_codec);
@@ -2036,8 +2035,7 @@ on_xvc_pref_mf_format_combobox_changed (GtkComboBox * combobox,
             } else {
                 found =
                     get_index_of_array_element (xvc_formats[format_selected].
-                                                num_allowed_vid_codecs,
-                                                (int *)
+                                                num_allowed_vid_codecs, (int *)
                                                 xvc_formats[format_selected].
                                                 allowed_vid_codecs,
                                                 xvc_formats[format_selected].
@@ -2068,8 +2066,7 @@ on_xvc_pref_mf_format_combobox_changed (GtkComboBox * combobox,
                                                (au_codec_auto))) {
                 found =
                     get_index_of_array_element (xvc_formats[format_selected].
-                                                num_allowed_au_codecs,
-                                                (int *)
+                                                num_allowed_au_codecs, (int *)
                                                 xvc_formats[format_selected].
                                                 allowed_au_codecs,
                                                 old_selected_aucodec);
@@ -2089,8 +2086,7 @@ on_xvc_pref_mf_format_combobox_changed (GtkComboBox * combobox,
             } else {
                 found =
                     get_index_of_array_element (xvc_formats[format_selected].
-                                                num_allowed_au_codecs,
-                                                (int *)
+                                                num_allowed_au_codecs, (int *)
                                                 xvc_formats[format_selected].
                                                 allowed_au_codecs,
                                                 xvc_formats[format_selected].
