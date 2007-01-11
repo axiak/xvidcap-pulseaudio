@@ -8,6 +8,12 @@
 		more code cleanup and doxygenification
 	* src/gnome_options.c: fixed indentation
 	* Changelog: fixed date for new Italian translation
+	* src: led_meter.c, codecs.c, colors.c, codecs.h, colors.h, 
+		control.h, gnome_warning.c, xtoffmpeg.c, gnome_ui.c, 
+		capture.c, gnome_ui.h, capture.h, app_data.c, job.c, 
+		app_data.h, job.h, gnome_frame.c, gnome_options.c, 
+		main.c, frame.c, options.c, xtoxwd.c: remove trailing
+		whitespace
 
 2007-01-11  Vincenzo Reale <smart2128@baslug.org>
 	* po/it.po: updated Italian translation

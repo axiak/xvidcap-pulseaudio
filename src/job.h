@@ -1,4 +1,4 @@
-/** 
+/**
  * \file job.h
  *
  * \todo rename the Job struct to XVC_Job
@@ -35,7 +35,7 @@
 #endif
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-/** 
+/**
  * \brief state flags for the recording state machine
  */
 #define VC_STOP 1
@@ -59,10 +59,10 @@ typedef struct _Job
 {
     /** \brief filename */
     char *file;
-    /** 
+    /**
      * \brief various flags
      *
-     * @see app_data.h 
+     * @see app_data.h
      */
     int flags;
     /** \brief state flags */
@@ -78,8 +78,8 @@ typedef struct _Job
     char *snd_device;
 #endif     // HAVE_FFMPEG_AUDIO
 
-    /* 
-     * some function pointers 
+    /*
+     * some function pointers
      */
     /** \brief function to retrieve color information */
     void *(*get_colors) (XColor *, int);
@@ -90,30 +90,30 @@ typedef struct _Job
     /** \brief function to capture the frames */
     long (*capture) ();
 
-    /* 
-     * target format, e.g. CAP_XWD 
+    /*
+     * target format, e.g. CAP_XWD
      */
-    /** 
+    /**
      * \brief target format
      *
      * @see app_data.h
      */
     int target;
-    /** 
+    /**
      * \brief target video codec
      *
      * @see app_data.h
      */
     int targetCodec;
-    /** 
+    /**
      * \brief target audio codec
      *
      * @see app_data.h
      */
     int au_targetCodec;
 
-    /* 
-     * color information for the output file 
+    /*
+     * color information for the output file
      */
     /** \brief the number of colors in the pseudo color color table */
     int ncolors;

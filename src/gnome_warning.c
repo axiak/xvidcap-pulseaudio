@@ -52,7 +52,7 @@
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 
-/* 
+/*
  * global variables
  */
 /** \brief make the warning window globally available */
@@ -64,8 +64,8 @@ extern GtkWidget *xvc_pref_main_window;
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 // static gint xvc_warn_label_width = 0;
-/** 
- * \brief tells from where the warning originates 
+/**
+ * \brief tells from where the warning originates
  *
  * <ul><li>0 = preferences dialog</li>
  * <li>1 = capture type toggle</li>
@@ -73,11 +73,11 @@ extern GtkWidget *xvc_pref_main_window;
  */
 static int called_from_where = 0;
 
-/** 
+/**
  * \brief the initial resize of the warning needs to be done a little time
  *      after the display of the dialog, so the actual size of the components
  *      can be determined. Therefor this is done through a timed function
- *      and the id of that is stored here. 
+ *      and the id of that is stored here.
  *
  * @see auto_resize_warning_dialog
  */
@@ -166,7 +166,7 @@ auto_resize_warning_dialog ()
  *      in the list passed.
  *
  * @param elist the list of errors to display
- * @param from_where flag to tell the warning where it originated from. The 
+ * @param from_where flag to tell the warning where it originated from. The
  *      values recognized are defined with called_from_where.
  * @return the warning dialog widget
  * @see called_from_where
@@ -193,7 +193,7 @@ xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
     xml = glade_xml_new (GLADE_FILE, "xvc_warn_main_window", NULL);
     g_assert (xml);
 
-    // connect the signals in the interface 
+    // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
     // store the toplevel widget for further reference
     xvc_warn_main_window = glade_xml_get_widget (xml, "xvc_warn_main_window");
@@ -272,49 +272,49 @@ xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
     return xvc_warn_main_window;
 }
 
-/* 
+/*
  * callbacks
  */
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-/* 
+/*
  * // // recalculate line breaks when size changes typedef struct
  * _LabelWrapWidth LabelWrapWidth; struct _LabelWrapWidth { gint width;
  * PangoFontDescription *font_desc; };
- * 
- * static void set_label_wrap_width (GtkLabel *label, gint set_width) { // 
+ *
+ * static void set_label_wrap_width (GtkLabel *label, gint set_width) { //
  * PangoLayout *layout; GtkStyle *style = GTK_WIDGET (label)->style;
  * g_assert(style);
- * 
+ *
  * LabelWrapWidth *wrap_width = g_object_get_data (G_OBJECT (style),
  * "gtk-label-wrap-width"); if (!wrap_width) { wrap_width = g_new0
  * (LabelWrapWidth, 1); g_object_set_data_full (G_OBJECT (style),
  * "gtk-label-wrap-width", wrap_width, label_wrap_width_free ); }
- * 
+ *
  * // printf("gtk2_warning: setting wrap_width to %i\n", ( set_width *
  * 1000 ) ); wrap_width->width = ( set_width * 1000 ); }
- * 
- * 
+ *
+ *
  * void on_xvc_warn_main_window_size_allocate(GtkWidget *w, gpointer
  * user_data) { gint new_width = w->allocation.width; GladeXML *xml =
  * NULL; GtkWidget *label = NULL;
- * 
- * xml = glade_get_widget_tree(xvc_warn_main_window); g_assert(xml); label 
+ *
+ * xml = glade_get_widget_tree(xvc_warn_main_window); g_assert(xml); label
  * = glade_xml_get_widget(xml, "xvc_warn_label"); g_assert(label);
- * 
+ *
  * // printf("gtk2_warning: got wrap_width: %i\n", wrap_width); //
  * GtkStyle *style = GTK_WIDGET (label)->style; // g_assert(style);
- * 
+ *
  * // LabelWrapWidth *wrap = g_object_get_data (G_OBJECT (style),
  * "gtk-label-wrap-width"); // printf("gtk2_warning: old_width %i -
  * new_width %i\n", (int) label2_width, (int) new_width);
- * 
+ *
  * if ( xvc_warn_label_width != new_width ) { xvc_warn_label_width =
  * new_width;
- * 
+ *
  * set_label_wrap_width( GTK_LABEL(label), new_width );
- * gtk_label_set_text(GTK_LABEL(label), XVC_WARN_LABEL_TEXT); } } 
+ * gtk_label_set_text(GTK_LABEL(label), XVC_WARN_LABEL_TEXT); } }
  */
 
 gboolean

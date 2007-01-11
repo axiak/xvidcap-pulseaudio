@@ -1,4 +1,4 @@
-/** 
+/**
  * \file led_meter.c
  *
  * This file contains a composite widget drawing a led display used for
@@ -226,7 +226,7 @@ led_meter_set_percent (LedMeter * lm, int percent)
 
 /**
  * \brief sets tooltip on an led meter widget
- * 
+ *
  * @param lm pointer to led meter widget to work on
  * @param tip string to set as tooltip
  */

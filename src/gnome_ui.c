@@ -1,4 +1,4 @@
-/** 
+/**
  * \file gnome_ui.c
  *
  * This file contains the main control UI for xvidcap
@@ -67,7 +67,7 @@
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 
-/* 
+/*
  * globals
  */
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -78,8 +78,8 @@ extern GtkWidget *xvc_warn_main_window;
 /** \brief make the main control panel globally available */
 GtkWidget *xvc_ctrl_main_window = NULL;
 
-/** 
- * \brief make the main control panel's menu globally available 
+/**
+ * \brief make the main control panel's menu globally available
  *
  * @note this is needed because the warning dialog may need to change the
  *      status of capture type select buttons. If you change from e. g.
@@ -89,7 +89,7 @@ GtkWidget *xvc_ctrl_main_window = NULL;
  */
 GtkWidget *xvc_ctrl_m1 = NULL;
 
-/** 
+/**
  * \brief the value here is picked up by the LED frame drop monitor widget.
  *      Set to 0 to clear the widget.
  */
@@ -131,12 +131,12 @@ static guint stop_timer_id = 0;
 /** calculate recording time */
 static long start_time = 0, pause_time = 0, time_captured = 0;
 
-/** \brief used to faciltate passing the filename selection from a file 
+/** \brief used to faciltate passing the filename selection from a file
  *      selector dialog back off the results dialog back to the results
  *      dialog and eventually the main dialog */
 static char *target_file_name = NULL;
 
-/** 
+/**
  * \brief the errors found on submitting a set of preferences
  *
  * Used to pass this between the various components involved in deciding
@@ -146,7 +146,7 @@ static char *target_file_name = NULL;
  */
 static XVC_ErrorListItem *errors_after_cli = NULL;
 
-/** 
+/**
  * \brief remember the number of attempts to submit a set of preferences
  *
  * Hitting OK on a warning may make automatic changes to the preferences.
@@ -172,7 +172,7 @@ glade_create_led_meter (gchar * widget_name, gchar * string1,
                         gchar * string2, gint int1, gint int2); */
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-/* 
+/*
  * HELPER FUNCTIONS ...
  *
  *
@@ -205,7 +205,7 @@ glade_create_led_meter (gchar * widget_name, gchar * string1,
 #undef DEBUGFUNCTION
 }
 
-/* 
+/*
  * this isn't used atm
  *
  gint keySnooper (GtkWidget *grab_widget, GdkEventKey *event, gpointer func_data) {
@@ -260,7 +260,7 @@ GtkChangeLabel (int pic_no)
     // set the text
     gtk_button_set_label (GTK_BUTTON (w), file);
 
-    // adjust the size of the filname button 
+    // adjust the size of the filname button
     layout = gtk_widget_create_pango_layout (w, file);
     g_assert (layout);
     pango_layout_get_pixel_size (layout, &width, &height);
@@ -353,7 +353,7 @@ xvc_toggle_cap_type ()
 }
 
 /**
- * \brief this undoes an attempt to toggle the type of capture (sf vs. mf) 
+ * \brief this undoes an attempt to toggle the type of capture (sf vs. mf)
  *      currently active
  *
  * This is global because it can be necessary to call this from the warning
@@ -398,7 +398,7 @@ xvc_undo_toggle_cap_type ()
 #endif     // USE_FFMPEG
 
 /**
- * \brief this is what the thread spawned on record actually does. It is 
+ * \brief this is what the thread spawned on record actually does. It is
  *      normally stopped by setting the state machine to VC_STOP
  */
 void
@@ -513,7 +513,7 @@ do_results_help ()
 }
 
 /**
- * \brief implements the GUI related actions involved when stopping a 
+ * \brief implements the GUI related actions involved when stopping a
  *      capture session.
  *
  * @return always FALSE
@@ -625,7 +625,7 @@ stop_recording_gui_stuff ()
         // load the interface
         xml = glade_xml_new (GLADE_FILE, "xvc_result_dialog", NULL);
         g_assert (xml);
-        // connect the signals in the interface 
+        // connect the signals in the interface
         glade_xml_signal_autoconnect (xml);
         // get the widget
         xvc_result_dialog = glade_xml_get_widget (xml, "xvc_result_dialog");
@@ -667,7 +667,7 @@ stop_recording_gui_stuff ()
                   ((float) target->fps.num / (float) target->fps.den));
         gtk_label_set_text (GTK_LABEL (w), buf);
 
-        // achieved fps 
+        // achieved fps
         w = glade_xml_get_widget (xml, "xvc_result_dialog_actual_fps_label");
         g_assert (w);
         {
@@ -817,7 +817,7 @@ stop_recording_gui_stuff ()
 }
 
 /**
- * \brief this function is hooked up as the action to execute when a 
+ * \brief this function is hooked up as the action to execute when a
  *      capture session with max_time set times out.
  *
  * \todo might be able to trigger xvc_capture_stop_signal directly
@@ -832,7 +832,7 @@ timer_stop_recording ()
 }
 
 /**
- * \brief implements the GUI related actions involved in starting a 
+ * \brief implements the GUI related actions involved in starting a
  *      capture session
  *
  * @return always FALSE
@@ -932,7 +932,7 @@ start_recording_gui_stuff ()
 
 /**
  * \brief implements those actions involved in starting a capture session
- *      that are not GUI related 
+ *      that are not GUI related
  *
  * @return always FALSE
  * \todo the return value is present because this was originally called as
@@ -1064,9 +1064,9 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
 
     // various GUI initialization things
 
-    // 
+    //
     // first: the autocontinue menu item
-    // 
+    //
     // make autocontinue menuitem invisible if no ffmpeg
 #ifndef USE_FFMPEG
     w = NULL;
@@ -1106,14 +1106,14 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     }
 #endif     // USE_FFMPEG
 
-    // 
+    //
     // the filename button
-    // 
+    //
     GtkChangeLabel (jobp->pic_no);
 
     // previous and next buttons have different meanings for on-the-fly
-    // encoding and individual frame capture ... 
-    // this sets the tooltips accordingly 
+    // encoding and individual frame capture ...
+    // this sets the tooltips accordingly
     if (app->current_mode == 0) {
         tooltips = gtk_tooltips_new ();
         g_assert (tooltips);
@@ -1201,9 +1201,9 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
         gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (w), tooltips, NULL, NULL);
     }
 
-    // 
+    //
     // capture type radio buttons
-    // 
+    //
     // make capture type radio buttons invisible if no ffmpeg
 #ifndef USE_FFMPEG
     w = NULL;
@@ -1298,7 +1298,7 @@ xvc_ui_create ()
 
         g_assert (xml);
 
-        // connect the signals in the interface 
+        // connect the signals in the interface
         glade_xml_signal_autoconnect (xml);
         // store the toplevel widget for further reference
         xvc_ctrl_main_window =
@@ -1311,7 +1311,7 @@ xvc_ui_create ()
 
         g_assert (xml);
 
-        // connect the signals in the interface 
+        // connect the signals in the interface
         glade_xml_signal_autoconnect (xml);
         xvc_ctrl_m1 = glade_xml_get_widget (xml, "xvc_ctrl_m1");
     }
@@ -1539,7 +1539,7 @@ xvc_ui_run ()
 /**
  * \brief adds an action to the event queue to be executed when there's time
  *
- * The functions added here are executed whenever there's time until they 
+ * The functions added here are executed whenever there's time until they
  * return FALSE.
  *
  * @param func a pointer to a function to queue
@@ -1592,8 +1592,8 @@ xvc_change_filename_display ()
 
 /**
  * \brief tell the recording thread to stop
- * 
- * The actual stopping is done through the capture's state machine. This 
+ *
+ * The actual stopping is done through the capture's state machine. This
  * just sets the state to VC_STOP and sends the recording thread an ALARM
  * signal to terminate a potential usleep. It may then wait for the thread
  * to finish.
@@ -1637,7 +1637,7 @@ xvc_capture_stop_signal (Boolean wait)
 }
 
 /**
- * \brief implements the actual actions required when stopping a recording 
+ * \brief implements the actual actions required when stopping a recording
  *      session, both GUI related an not.
  */
 Boolean
@@ -1953,7 +1953,7 @@ on_xvc_result_dialog_key_press_event (GtkWidget * widget, GdkEvent * event)
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    // Tell calling code that we have not handled this event; pass it on. 
+    // Tell calling code that we have not handled this event; pass it on.
     return FALSE;
 #undef DEBUGFUNCTION
 }
@@ -1975,7 +1975,7 @@ on_xvc_result_dialog_select_filename_button_clicked (GtkButton * button,
     // load the interface
     xml = glade_xml_new (GLADE_FILE, "xvc_save_filechooserdialog", NULL);
     g_assert (xml);
-    // connect the signals in the interface 
+    // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
 
     dialog = glade_xml_get_widget (xml, "xvc_save_filechooserdialog");
@@ -2461,7 +2461,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                         GCBackground | GCForeground | GCFunction |
                         GCPlaneMask | GCSubwindowMode, &gcv);
         // grab the mouse
-        // 
+        //
         if (XGrabPointer (display, root, False,
                           PointerMotionMask | ButtonPressMask |
                           ButtonReleaseMask, GrabModeSync,
@@ -2476,7 +2476,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
         while (buttons < 2) {
             // allow pointer events
             XAllowEvents (display, SyncPointer, CurrentTime);
-            // search in the queue for button events 
+            // search in the queue for button events
             XWindowEvent (display, root,
                           PointerMotionMask | ButtonPressMask |
                           ButtonReleaseMask, &event);
@@ -2484,8 +2484,8 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
             case ButtonPress:
                 x_down = event.xbutton.x;
                 y_down = event.xbutton.y;
-                target_win = event.xbutton.subwindow;   // window selected 
-                // 
+                target_win = event.xbutton.subwindow;   // window selected
+                //
                 if (target_win == None) {
                     target_win = root;
                 }
@@ -2497,13 +2497,13 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                 buttons++;
                 break;
             default:
-                // motion notify 
+                // motion notify
                 if (buttons == 1) {
                     if (width) {
-                        // remove old frame 
+                        // remove old frame
                         XDrawRectangle (display, root, gc, x, y, width, height);
                     }
-                    // button is pressed 
+                    // button is pressed
                     if (x_down > event.xbutton.x) {
                         width = x_down - event.xbutton.x + 1;
                         x = event.xbutton.x;
@@ -2523,9 +2523,9 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                 break;
             }
         }
-        if (width > 0)                 // remove old frame 
+        if (width > 0)                 // remove old frame
             XDrawRectangle (display, root, gc, x, y, width, height);
-        XUngrabPointer (display, CurrentTime);  // Done with pointer 
+        XUngrabPointer (display, CurrentTime);  // Done with pointer
         XFreeCursor (display, cursor);
         XFreeGC (display, gc);
 
@@ -2550,7 +2550,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
             app->area->height = height;
         } else {
             if (target_win != root) {
-                // get the real window 
+                // get the real window
                 target_win = XmuClientWindow (display, target_win);
             }
             xvc_appdata_set_window_attributes (target_win);
@@ -2562,9 +2562,9 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
         app->area->y = y;
 
 #ifdef USE_FFMPEG
-        // 
+        //
         // make sure we have even width and height for ffmpeg
-        // 
+        //
         if (app->current_mode > 0) {
             Boolean changed = FALSE;
 
@@ -2697,10 +2697,10 @@ on_xvc_ctrl_filename_button_button_press_event (GtkWidget * widget,
                         position_popup_menu, widget, bevent->button,
                         bevent->time);
         // Tell calling code that we have handled this event; the buck
-        // stops here. 
+        // stops here.
         return TRUE;
     }
-    // Tell calling code that we have not handled this event; pass it on. 
+    // Tell calling code that we have not handled this event; pass it on.
     return FALSE;
 #undef DEBUGFUNCTION
 }
@@ -2758,7 +2758,7 @@ on_xvc_ctrl_main_window_key_press_event (GtkWidget * widget, GdkEvent * event)
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    // Tell calling code that we have not handled this event; pass it on. 
+    // Tell calling code that we have not handled this event; pass it on.
     return FALSE;
 #undef DEBUGFUNCTION
 }
@@ -2777,7 +2777,7 @@ on_xvc_ctrl_m1_mitem_about_activate (GtkMenuItem * menuitem, gpointer user_data)
     // load the interface
     xml = glade_xml_new (GLADE_FILE, "xvc_about_main_window", NULL);
     g_assert (xml);
-    // connect the signals in the interface 
+    // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
 }
 

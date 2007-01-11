@@ -174,8 +174,8 @@ xvc_xwd_save_frame (FILE * fp, XImage * image)
     Job *job = xvc_job_ptr ();
     char *file = job->file;
 
-    /* 
-     * header must be prepared only once .. 
+    /*
+     * header must be prepared only once ..
      */
     if (job->state & VC_START /* it's the first call */ ) {
         XWindowAttributes win_attr = app->win_attr;

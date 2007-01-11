@@ -38,7 +38,7 @@ static int xvc_frame_lock;
 /** \brief stores the area enclosed by the frame as an XRectangle */
 static XRectangle xvc_frame_rectangle;
 
-/** 
+/**
  * \brief return a pointer to the current area enclosed by the capture frame
  *
  * @return a pointer to an XRectangle struct
@@ -49,7 +49,7 @@ xvc_get_capture_area (void)
     return (&xvc_frame_rectangle);
 }
 
-/** 
+/**
  * \brief get the state of the frame lock
  *
  * @return integer state of the frame lock: 1 = locked, 0 = unlocked
@@ -60,7 +60,7 @@ xvc_is_frame_locked ()
     return (xvc_frame_lock);
 }
 
-/** 
+/**
  * \brief set the state of the frame lock
  *
  * @param lock integer state of the frame lock: 0 = unlocked, >0 = locked
@@ -74,7 +74,7 @@ xvc_set_frame_locked (int lock)
         xvc_frame_lock = 1;
 }
 
-/** 
+/**
  * \brief get the window attributes for the given window
  *
  * @param win a Window to retrieve the attributes for. Can be a single window,

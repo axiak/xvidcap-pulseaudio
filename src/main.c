@@ -1,19 +1,19 @@
-/** 
+/**
  * \file main.c
  */
 /*
  * Copyright (C) 1997-98 Rasca, Berlin
  * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
- * 
+ *
  * You may redistribute it and/or modify it under the terms of the
  * GNU General Public License, as published by the Free Software
  * Foundation; either version 2, or (at your option) any later version.
- * 
+ *
  * main.c is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with main.c. See the file "COPYING". If not,
  * write to: The Free Software Foundation, Inc.,
@@ -56,15 +56,15 @@
 
 typedef void (*sighandler_t) (int);
 
-/* 
- * GLOBAL VARIABLES 
+/*
+ * GLOBAL VARIABLES
  */
 XVC_AppData sapp, *app;
 
 static Window capture_window = None;
 
-/* 
- * HELPER FUNCTIONS 
+/*
+ * HELPER FUNCTIONS
  */
 /**
  * \brief displays usage information
@@ -164,7 +164,7 @@ init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
     int i;
 
     // Xlib threading initialization
-    // this is here instead of with the gtk/glib stuff in gnome_ui.c|h 
+    // this is here instead of with the gtk/glib stuff in gnome_ui.c|h
     // because this is UI independant and would need to be here even with Qt
     XInitThreads ();
 
@@ -177,9 +177,9 @@ init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
                  DEBUGFILE, DEBUGFUNCTION);
         exit (2);
     }
-    // 
+    //
     // some variable initialization
-    // 
+    //
     app = &sapp;
     xvc_appdata_init (app);
     xvc_appdata_set_defaults (app);
@@ -690,7 +690,7 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
  *
  * @param tmp_capture_options the XVC_CapTypeOptions to assimilate
  * @return a pointer to the XVC_CapTypeOptions within the current preferences,
- *      i.e. the global XVC_AppData struct representing the currently 
+ *      i.e. the global XVC_AppData struct representing the currently
  *      active capture mode
  */
 static XVC_CapTypeOptions *
@@ -703,13 +703,13 @@ merge_cli_options (XVC_CapTypeOptions * tmp_capture_options)
     // evaluate tmp_capture_options and set real ones accordingly
 
     // determine capture mode
-    // either explicitly set in cli options or default_mode in options 
-    // (prefs/xdefaults), the latter does not need special action because 
+    // either explicitly set in cli options or default_mode in options
+    // (prefs/xdefaults), the latter does not need special action because
     // it will have been set by now or fall back to the
     // default set in init_app_data.
 
     // app->current_mode is either -1 (not explicitly specified), 0
-    // (single_frame), or 1 (multi_frame) ... 
+    // (single_frame), or 1 (multi_frame) ...
     // setting current_mode_by_* accordingly
 
     // by filename
@@ -846,7 +846,7 @@ xvc_signal_handler (int signal)
  *      for the currently active capture mode (sf vs. mf).
  *
  * Output is to stdout for debbuging purposes
- * @param target pointer to the XVC_CapTypeOptions representing the 
+ * @param target pointer to the XVC_CapTypeOptions representing the
  *      currently active capture mode within the global XVC_AppData struct
  * \todo make the options output take new app_data structure with
  *      parallel capTypeOptions into account
@@ -941,7 +941,7 @@ main (int argc, char *argv[])
     // xvc initialization
     init (&s_tmp_capture_options, argc, argv);
 
-    // read options file now 
+    // read options file now
     xvc_read_options_file (app);
 
     // parse cli options and merge with app data
@@ -985,7 +985,7 @@ main (int argc, char *argv[])
     if (app->verbose) {
         print_current_settings (target);
     }
-    // signal handling for --gui no operation (CTRL-C) and 
+    // signal handling for --gui no operation (CTRL-C) and
     // unsleeping the recoring thread on stop
     my_signal_add (SIGALRM, xvc_signal_handler);
     my_signal_add (SIGINT, xvc_signal_handler);

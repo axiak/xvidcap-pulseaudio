@@ -6,7 +6,7 @@
  *      simplified through _run_dialog()
  */
 
-/* 
+/*
  * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
@@ -56,8 +56,8 @@
 
 #define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 
-/* 
- * these are global 
+/*
+ * these are global
  */
 /** \brief make the preferences window globally available */
 GtkWidget *xvc_pref_main_window = NULL;
@@ -78,15 +78,15 @@ extern GtkWidget *xvc_ctrl_main_window;
  */
 static XVC_AppData pref_app;
 
-/** 
+/**
  * \brief holds the strings to fill the dropdown box for multi-frame capture
- * formats supported. 
- * 
+ * formats supported.
+ *
  * They are formed of the combined longname and first extension
  */
 static char *format_combo_entries[NUMCAPS];
 
-/** 
+/**
  * \brief remember the number of attempts to submit a set of preferences
  *
  * Hitting OK on a warning may make automatic changes to the preferences.
@@ -96,7 +96,7 @@ static char *format_combo_entries[NUMCAPS];
  */
 static int OK_attempts = 0;
 
-/** 
+/**
  * \brief the errors found on submitting a set of preferences
  *
  * Used to pass this between the various components involved in deciding
@@ -107,24 +107,24 @@ static int OK_attempts = 0;
 static XVC_ErrorListItem *errors_after_cli = NULL;
 
 #ifdef USE_FFMPEG
-/** 
+/**
  * \brief Upon change of a file format for multi-frame capture the callback
  *      saves the new value here, so that next time around it is the old one.
  *
- * When the callback is executed, the current value in the dropdown box is 
- * already the new one. To evaluate what needs to be done on codecs and 
+ * When the callback is executed, the current value in the dropdown box is
+ * already the new one. To evaluate what needs to be done on codecs and
  * audio codecs we need to know what format was previously selected, because
  * the number of the selected codec is relative to the array of available
- * codecs for a given format. In other words: If codec 1 is selected from 
+ * codecs for a given format. In other words: If codec 1 is selected from
  * the codecs combobox, that may be a different one depending on format
  */
 static XVC_FFormatID old_selected_format = CAP_NONE;
 
 /**
- * \brief Upon change of a codec for multi-frame capture the callback 
+ * \brief Upon change of a codec for multi-frame capture the callback
  *      saves the new value here, so that next time around it is the old one.
- * 
- * There is a similar relation between mf codec and fps as with 
+ *
+ * There is a similar relation between mf codec and fps as with
  * old_selected_format, format and codec.
  * @see old_selected_format
  */
@@ -132,10 +132,10 @@ static XVC_CodecID mf_fps_widget_save_old_codec = -1;
 #endif     // USE_FFMPEG
 
 // utility functions here ...
-// 
+//
 /**
  * \brief find an int element in an array of ints and return the index of
- *      the element. Such arrays are esp xvc_formats, xvc_codecs, 
+ *      the element. Such arrays are esp xvc_formats, xvc_codecs,
  *      xvc_audio_codecs
  *
  * @param size the size of the array to search in
@@ -183,8 +183,8 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     xml = glade_get_widget_tree (GTK_WIDGET (xvc_pref_main_window));
     g_assert (xml);
 
-    // general tab 
-    // default capture mode 
+    // general tab
+    // default capture mode
     w = NULL;
     w = glade_xml_get_widget (xml,
                               "xvc_pref_default_capture_mode_sf_radiobutton");
@@ -193,7 +193,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->default_mode =
         ((gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) ? 0 : 1);
 
-    // capture mouse pointer 
+    // capture mouse pointer
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_capture_mouse_checkbutton");
     g_assert (w);
@@ -213,7 +213,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
         lapp->mouseWanted = 0;
     }
 
-    // save geometry 
+    // save geometry
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_save_geometry_checkbutton");
     g_assert (w);
@@ -225,7 +225,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     }
 
 #ifdef HAVE_SHMAT
-    // use shared-memory 
+    // use shared-memory
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_shared_mem_checkbutton");
     g_assert (w);
@@ -237,7 +237,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     }
 #endif     // HAVE_SHMAT
 
-    // autocontinue 
+    // autocontinue
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_autocontinue_checkbutton");
     g_assert (w);
@@ -265,7 +265,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->rescale = gtk_range_get_value (GTK_RANGE (w));
 
     // sf
-    // file name 
+    // file name
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_sf_filename_entry");
     g_assert (w);
@@ -296,7 +296,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     // codec is always 0 for sf
     lapp->single_frame.targetCodec = 0;
 #ifdef HAVE_FFMPEG_AUDIO
-    // au_targetCodec is always 0 for sf 
+    // au_targetCodec is always 0 for sf
     lapp->single_frame.au_targetCodec = 0;
 #endif     // HAVE_FFMPEG_AUDIO
 
@@ -310,14 +310,14 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
                pow (10, gtk_scale_get_digits (GTK_SCALE (w))));
     lapp->single_frame.fps.den = pow (10, gtk_scale_get_digits (GTK_SCALE (w)));
 
-    // quality 
+    // quality
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_sf_quality_hscale");
     g_assert (w);
 
     lapp->single_frame.quality = gtk_range_get_value (GTK_RANGE (w));
 
-    // max time 
+    // max time
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_sf_max_time_spinbutton");
     g_assert (w);
@@ -325,7 +325,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->single_frame.time =
         (int) gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (w));
 
-    // max frames 
+    // max frames
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_sf_max_frames_spinbutton");
     g_assert (w);
@@ -333,7 +333,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->single_frame.frames =
         (int) gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (w));
 
-    // start_no 
+    // start_no
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_sf_start_no_spinbutton");
     g_assert (w);
@@ -341,7 +341,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->single_frame.start_no =
         (int) gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (w));
 
-    // step 
+    // step
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_sf_frame_increment_spinbutton");
     g_assert (w);
@@ -353,7 +353,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
 
     // mf
 
-    // file name 
+    // file name
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_filename_entry");
     g_assert (w);
@@ -361,7 +361,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->multi_frame.file =
         strdup ((char *) gtk_entry_get_text (GTK_ENTRY (w)));
 
-    // format 
+    // format
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_format_auto_checkbutton");
     g_assert (w);
@@ -386,7 +386,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
         read_mf_format =
             xvc_codec_get_target_from_filename (lapp->multi_frame.file);
 
-    // codec 
+    // codec
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_codec_auto_checkbutton");
     g_assert (w);
@@ -411,7 +411,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     if (!read_mf_codec)
         read_mf_codec = xvc_formats[read_mf_format].def_vid_codec;
 
-    // fps 
+    // fps
     // we need codec determined before here
     {
         gboolean combobox_visible = FALSE, hscale_visible = FALSE;
@@ -451,7 +451,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
 #endif     // DEBUG
     }
 
-    // max time 
+    // max time
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_max_time_spinbutton");
     g_assert (w);
@@ -459,7 +459,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->multi_frame.time =
         (int) gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (w));
 
-    // max frames 
+    // max frames
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_max_frames_spinbutton");
     g_assert (w);
@@ -475,8 +475,8 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->multi_frame.quality = gtk_range_get_value (GTK_RANGE (w));
 
 #ifdef HAVE_FFMPEG_AUDIO
-    // mf audio settings 
-    // au_targetCodec 
+    // mf audio settings
+    // au_targetCodec
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_codec_auto_checkbutton");
     g_assert (w);
@@ -505,7 +505,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     if (!read_mf_au_codec)
         read_mf_au_codec = xvc_formats[read_mf_format].def_au_codec;
 
-    // audio wanted 
+    // audio wanted
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_checkbutton");
     g_assert (w);
@@ -513,7 +513,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->multi_frame.audioWanted =
         (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)) ? 1 : 0);
 
-    // sample rate 
+    // sample rate
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_sample_rate_spinbutton");
     g_assert (w);
@@ -536,7 +536,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
 
     lapp->snddev = strdup ((char *) gtk_entry_get_text (GTK_ENTRY (w)));
 
-    // audio channels 
+    // audio channels
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_mf_audio_channels_hscale");
     g_assert (w);
@@ -546,10 +546,10 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
 
 #endif     // USE_FFMPEG
 
-    // commands 
+    // commands
 
-    // sf commands 
-    // sf playback command 
+    // sf commands
+    // sf playback command
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_play_entry");
     g_assert (w);
@@ -557,7 +557,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->single_frame.play_cmd =
         strdup ((char *) gtk_entry_get_text (GTK_ENTRY (w)));
 
-    // sf encoding command 
+    // sf encoding command
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_encode_entry");
     g_assert (w);
@@ -565,7 +565,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->single_frame.video_cmd =
         strdup ((char *) gtk_entry_get_text (GTK_ENTRY (w)));
 
-    // sf edit command 
+    // sf edit command
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_commands_sf_edit_entry");
     g_assert (w);
@@ -574,8 +574,8 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
         strdup ((char *) gtk_entry_get_text (GTK_ENTRY (w)));
 
 #ifdef USE_FFMPEG
-    // mf commands 
-    // mf playback command 
+    // mf commands
+    // mf playback command
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_play_entry");
     g_assert (w);
@@ -583,7 +583,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->multi_frame.play_cmd =
         strdup ((char *) gtk_entry_get_text (GTK_ENTRY (w)));
 
-    // mf encoding command 
+    // mf encoding command
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_encode_entry");
     g_assert (w);
@@ -591,7 +591,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     lapp->multi_frame.video_cmd =
         strdup ((char *) gtk_entry_get_text (GTK_ENTRY (w)));
 
-    // mf edit command 
+    // mf edit command
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_commands_mf_edit_entry");
     g_assert (w);
@@ -644,7 +644,7 @@ xvc_pref_reset_OK_attempts ()
 
 /**
  * \brief tries to submit a set of preferences. This will validate the
- *      settings and pop up a warning in case of errors. This is called 
+ *      settings and pop up a warning in case of errors. This is called
  *      when a user clicks OK in the preferences window.
  */
 void
@@ -674,7 +674,7 @@ xvc_pref_do_OK ()
             || (app->flags & FLG_RUN_VERBOSE && OK_attempts == 0)) {
             xvc_warn_main_window =
                 xvc_create_warning_with_errors (errors_after_cli, 0);
-            // printf("gtk2_options: pointer to errors_after_cli: %p - rc: 
+            // printf("gtk2_options: pointer to errors_after_cli: %p - rc:
             // %i\n", errors_after_cli, rc);
             OK_attempts++;
 
@@ -689,7 +689,7 @@ xvc_pref_do_OK ()
     // fprintf (stderr, "gtk2_options: Can't resolve all conflicts in
     // input data. Please double-check your input.\n");
     // exit (1);
-    // } 
+    // }
 #undef DEBUGFUNCTION
 }
 
@@ -780,7 +780,7 @@ mf_codec_combo_set_contents_from_format (XVC_FFormatID format)
         GtkListStore *mf_codec_list_store =
             GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model 
+        // present in glade otherwise glade will not create a model
         // at all (let alone a list store)
         g_assert (mf_codec_list_store);
         gtk_list_store_clear (GTK_LIST_STORE (mf_codec_list_store));
@@ -811,7 +811,7 @@ mf_codec_combo_set_contents_from_format (XVC_FFormatID format)
 
 #ifdef HAVE_FFMPEG_AUDIO
 /**
- * \brief fill the mf audio codec combobox with valid audio codecs for the 
+ * \brief fill the mf audio codec combobox with valid audio codecs for the
  *      given format
  *
  * @param format the id of the selected format
@@ -842,7 +842,7 @@ mf_audio_codec_combo_set_contents_from_format (XVC_FFormatID format)
         GtkListStore *mf_au_codec_list_store =
             GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model 
+        // present in glade otherwise glade will not create a model
         // at all (let alone a list store)
         g_assert (mf_au_codec_list_store);
         gtk_list_store_clear (GTK_LIST_STORE (mf_au_codec_list_store));
@@ -964,7 +964,7 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
         );
 #endif     // DEBUG
 
-    // prepare the arrays with the entries for the dynamic comboboxes 
+    // prepare the arrays with the entries for the dynamic comboboxes
     {
         int a;
         char buf[256];
@@ -1133,7 +1133,7 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
     printf ("%s %s: Set widgets for general tab\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    // 
+    //
     // single frame
 
     // file
@@ -1154,7 +1154,7 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
         GtkListStore *sf_format_list_store =
             GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model at all 
+        // present in glade otherwise glade will not create a model at all
         // (let alone a list store) ... on the other hand, this requires
         // deleting the list first
         g_assert (sf_format_list_store);
@@ -1238,7 +1238,7 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (w),
                                    pref_app.single_frame.step);
 
-    // 
+    //
     // multi_frame
 
 #ifdef USE_FFMPEG
@@ -1260,7 +1260,7 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
         GtkListStore *mf_format_list_store =
             GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (w)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model at all 
+        // present in glade otherwise glade will not create a model at all
         // (let alone a list store) ... on the other hand, this requires
         // deleting the list first
         g_assert (mf_format_list_store);
@@ -1526,7 +1526,7 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
     gtk_widget_hide (GTK_WIDGET (w));
 #endif     // USE_FFMPEG
 
-    // connect the signals in the interface 
+    // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
 
 #ifdef DEBUG
@@ -1565,7 +1565,7 @@ on_xvc_pref_main_window_key_press_event (GtkWidget * widget, GdkEvent * event)
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    // Tell calling code that we have not handled this event; pass it on. 
+    // Tell calling code that we have not handled this event; pass it on.
     return FALSE;
 #undef DEBUGFUNCTION
 }
@@ -1578,7 +1578,7 @@ on_xvc_pref_main_window_response (GtkDialog * dialog, gint response_id,
 
     Job *job;
 
-    // printf("response id : %i \n", response_id); 
+    // printf("response id : %i \n", response_id);
     switch (response_id) {
     case GTK_RESPONSE_OK:
 #ifdef DEBUG
@@ -1595,7 +1595,7 @@ on_xvc_pref_main_window_response (GtkDialog * dialog, gint response_id,
             );
 #endif     // DEBUG
 
-        // need to read pref_data from gui 
+        // need to read pref_data from gui
         read_app_data_from_pref_gui (&pref_app);
 
 #ifdef DEBUG
@@ -1929,7 +1929,7 @@ on_xvc_pref_mf_audio_codec_auto_checkbutton_toggled (GtkToggleButton *
  *      codec of AU_CODEC_NONE even if audio support is present. Therefore
  *      one must not assume that the comboboxes will always have a valid
  *      selection
- * @note dont't need to check for format_selected != old_selected_format 
+ * @note dont't need to check for format_selected != old_selected_format
  *      because that is implicit in GTK
  */
 void
@@ -2315,12 +2315,12 @@ set_mf_fps_widget_from_codec (XVC_AuCodecID codec)
     if (xvc_codecs[codec].num_allowed_fps != 0 &&
         xvc_codecs[codec].num_allowed_fps_ranges == 0) {
         // we only have a number of non-continuous fps allowed for this
-        // codec 
+        // codec
 
         GtkListStore *fps_list_store =
             GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (combobox)));
         // NOTE: for this to work ther must ALWAYS be a dummy entry
-        // present in glade otherwise glade will not create a model at all 
+        // present in glade otherwise glade will not create a model at all
         // (let alone a list store)
         int active_item = -1, default_item = -1, a = 0;
 
@@ -2332,7 +2332,7 @@ set_mf_fps_widget_from_codec (XVC_AuCodecID codec)
 
         for (a = 0; a < xvc_codecs[codec].num_allowed_fps; a++) {
             // the following is needed for correct handling of locale's
-            // decimal point 
+            // decimal point
             char lelement[256];
 
             sprintf (lelement, "%.2f",
@@ -2356,7 +2356,7 @@ set_mf_fps_widget_from_codec (XVC_AuCodecID codec)
 
     } else if (xvc_codecs[codec].num_allowed_fps_ranges != 0 &&
                xvc_codecs[codec].num_allowed_fps_ranges == 1) {
-        // we only have exactly one range 
+        // we only have exactly one range
         XVC_FpsRange range = xvc_codecs[codec].allowed_fps_ranges[0];
         XVC_Fps start = range.start;
         XVC_Fps end = range.end;
@@ -2364,7 +2364,7 @@ set_mf_fps_widget_from_codec (XVC_AuCodecID codec)
         gtk_widget_show (GTK_WIDGET (hscale));
         gtk_widget_hide (GTK_WIDGET (combobox));
 
-        // check current fps value 
+        // check current fps value
         if (((float) curr_fps_val.num / (float) curr_fps_val.den) <
             ((float) start.num / (float) start.den) ||
             ((float) curr_fps_val.num / (float) curr_fps_val.den) >
@@ -2379,7 +2379,7 @@ set_mf_fps_widget_from_codec (XVC_AuCodecID codec)
                              (gdouble) ((float) curr_fps_val.num /
                                         (float) curr_fps_val.den));
     } else {
-        // we have both 
+        // we have both
         XVC_Fps start = (XVC_Fps) { INT_MAX, 1 }
         , end = (XVC_Fps) {
         0, 1};
@@ -2413,7 +2413,7 @@ set_mf_fps_widget_from_codec (XVC_AuCodecID codec)
         gtk_widget_show (GTK_WIDGET (hscale));
         gtk_widget_hide (GTK_WIDGET (combobox));
 
-        // check current fps value 
+        // check current fps value
         if (((float) curr_fps_val.num / (float) curr_fps_val.den) <
             ((float) start.num / (float) start.den) ||
             ((float) curr_fps_val.num / (float) curr_fps_val.den) >
@@ -2720,7 +2720,7 @@ on_xvc_pref_sf_filename_select_button_clicked (GtkButton * button,
     // load the interface
     xml = glade_xml_new (GLADE_FILE, "xvc_save_filechooserdialog", NULL);
     g_assert (xml);
-    // connect the signals in the interface 
+    // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
 
     dialog = glade_xml_get_widget (xml, "xvc_save_filechooserdialog");
@@ -2771,7 +2771,7 @@ on_xvc_pref_mf_filename_select_button_clicked (GtkButton * button,
     // load the interface
     xml = glade_xml_new (GLADE_FILE, "xvc_save_filechooserdialog", NULL);
     g_assert (xml);
-    // connect the signals in the interface 
+    // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
 
     dialog = glade_xml_get_widget (xml, "xvc_save_filechooserdialog");
@@ -2822,7 +2822,7 @@ on_xvc_pref_mf_audio_input_device_select_button_clicked (GtkButton * button,
     // load the interface
     xml = glade_xml_new (GLADE_FILE, "xvc_open_filechooserdialog", NULL);
     g_assert (xml);
-    // connect the signals in the interface 
+    // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
 
     dialog = glade_xml_get_widget (xml, "xvc_open_filechooserdialog");

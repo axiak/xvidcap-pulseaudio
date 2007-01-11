@@ -1,4 +1,4 @@
-/** 
+/**
  * \file xtoffmpeg.c
  *
  * This file contains the functions for encoding captured frames on-the-fly
@@ -66,7 +66,7 @@
 #define PIX_FMT_ARGB32 PIX_FMT_RGBA32  /* this is just my personal
                                         * convenience */
 
-/* 
+/*
  * file globals
  */
 /** \brief params for the codecs video */
@@ -173,7 +173,7 @@ typedef struct AVInputStream
     int file_index;
     int index;
     AVStream *st;
-    int discard;    /* true if stream data should be discarded 
+    int discard;    /* true if stream data should be discarded
                      */
     int decoding_needed;    /* true if the packets must be decoded in
                              * 'raw_fifo' */
@@ -189,8 +189,8 @@ typedef struct AVInputStream
 } AVInputStream;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-/** 
- * \brief external variables for thread synchronization. This is the 
+/**
+ * \brief external variables for thread synchronization. This is the
  *      global mutex lock for recording (changing state and such).
  *
  * This is needed for pausing audio capture when the recording thread is
@@ -198,8 +198,8 @@ typedef struct AVInputStream
  */
 extern pthread_mutex_t recording_mutex;
 
-/** 
- * \brief external variables for thread synchronization. This is the 
+/**
+ * \brief external variables for thread synchronization. This is the
  *      paused condition.
  *
  * This is needed for pausing audio capture when the recording thread is
@@ -320,7 +320,7 @@ add_audio_stream (Job * job)
     au_in_st->st = ic->streams[0];
 
     // If not enough info to get the stream parameters, we decode
-    // the first frames to get it. (used in mpeg case for example) 
+    // the first frames to get it. (used in mpeg case for example)
     ret = av_find_stream_info (ic);
     if (ret < 0) {
         fprintf (stderr, _("%s %s: could not find codec parameters\n"),
@@ -353,7 +353,7 @@ add_audio_stream (Job * job)
         }
         return 1;
     }
-    // put sample parameters 
+    // put sample parameters
     au_c->codec_id = xvc_audio_codecs[job->au_targetCodec].ffmpeg_id;
     au_c->codec_type = CODEC_TYPE_AUDIO;
     au_c->bit_rate = target->sndsize;
@@ -361,7 +361,7 @@ add_audio_stream (Job * job)
     au_c->channels = target->sndchannels;
     // au_c->debug = 0x00000FFF;
 
-    // prepare output stream 
+    // prepare output stream
     au_out_st = av_mallocz (sizeof (AVOutputStream));
     if (!au_out_st) {
         fprintf (stderr,
@@ -410,9 +410,9 @@ add_audio_stream (Job * job)
     } else {
         if (au_c->channels != au_in_st->st->codec->channels &&
             au_in_st->st->codec->codec_id == CODEC_ID_AC3) {
-            // Special case for 5:1 AC3 input 
-            // and mono or stereo output 
-            // Request specific number of channels 
+            // Special case for 5:1 AC3 input
+            // and mono or stereo output
+            // Request specific number of channels
             au_in_st->st->codec->channels = au_c->channels;
             if (au_c->sample_rate == au_in_st->st->codec->sample_rate)
                 au_out_st->audio_resample = 0;
@@ -434,7 +434,7 @@ add_audio_stream (Job * job)
                     return 1;
                 }
             }
-            // Request specific number of channels 
+            // Request specific number of channels
             au_in_st->st->codec->channels = au_c->channels;
         } else {
             au_out_st->audio_resample = 1;
@@ -540,9 +540,9 @@ do_audio_out (AVFormatContext * s, AVOutputStream * ost,
         size_out = size;
     }
 
-    // now encode as many frames as possible 
+    // now encode as many frames as possible
     if (enc->frame_size > 1) {
-        // output resampled raw samples 
+        // output resampled raw samples
         av_fifo_write (&ost->fifo, buftmp, size_out);
         frame_bytes = enc->frame_size * 2 * enc->channels;
 
@@ -567,7 +567,7 @@ do_audio_out (AVFormatContext * s, AVOutputStream * ost,
             pkt.data = audio_out;
 
             if (pthread_mutex_trylock (&mp) == 0) {
-                // write the compressed frame in the media file 
+                // write the compressed frame in the media file
                 if (av_interleaved_write_frame (s, &pkt) != 0) {
                     fprintf (stderr,
                              _("%s %s: Error while writing audio frame\n"),
@@ -667,15 +667,15 @@ capture_audio_thread (Job * job)
                 out_st->time_base.den;
 
             // sometimes we need to pause writing audio packets for a/v
-            // sync (when audio_pts >= video_pts) 
-            // now, if we're reading from a file/pipe, we stop sampling or 
-            // else the audio track in the video would become choppy (packets 
+            // sync (when audio_pts >= video_pts)
+            // now, if we're reading from a file/pipe, we stop sampling or
+            // else the audio track in the video would become choppy (packets
             // missing where they were read but not written)
             // for real-time sampling we can't do that because otherwise
-            // the input packets queue up and will eventually be sampled 
+            // the input packets queue up and will eventually be sampled
             // (only later) and lead to out-of-sync audio (video faster)
             if (audio_pts < video_pts) {
-                // read a packet from it and output it in the fifo 
+                // read a packet from it and output it in the fifo
                 if (av_read_packet (ic, &pkt) < 0) {
                     fprintf (stderr,
                              _("%s %s: error reading audio packet\n"),
@@ -684,14 +684,14 @@ capture_audio_thread (Job * job)
                 len = pkt.size;
                 ptr = pkt.data;
                 while (len > 0) {
-                    // decode the packet if needed 
+                    // decode the packet if needed
                     data_buf = NULL;   /* fail safe */
                     data_size = 0;
 
                     if (au_in_st->decoding_needed) {
-                        /* 
+                        /*
                          * XXX: could avoid copy if PCM 16 bits with same
-                         * endianness as CPU 
+                         * endianness as CPU
                          */
                         retval =
                             avcodec_decode_audio (au_in_st->st->codec,
@@ -704,10 +704,10 @@ capture_audio_thread (Job * job)
                                      DEBUGFILE, DEBUGFUNCTION);
                             break;
                         }
-                        // Some bug in mpeg audio decoder gives 
-                        // data_size < 0, it seems they are overflows 
+                        // Some bug in mpeg audio decoder gives
+                        // data_size < 0, it seems they are overflows
                         if (data_size <= 0) {
-                            // no audio frame 
+                            // no audio frame
 #ifdef DEBUG
                             fprintf (stderr, _("%s %s: no audio frame\n"),
                                      DEBUGFILE, DEBUGFUNCTION);
@@ -754,13 +754,13 @@ capture_audio_thread (Job * job)
         stop = thr_curr_time.tv_usec;
         stop += ((stop_s - start_s) * 1000000);
         sleep = (1000000 / target->sndrate) - (stop - start);
-        /** 
+        /**
          * \todo perhaps this whole stuff is irrelevant. Haven't really
-         *      seen a situation where the encoding was faster than the time 
-         *      needed for a decent frame-rate. need to look into more 
+         *      seen a situation where the encoding was faster than the time
+         *      needed for a decent frame-rate. need to look into more
          *      details about audio/video sync in libavcodec/-format
          *      the strange thing, however is: If I leave away the getting of
-         *      start/end time and the usleep stuff, normal audio capture 
+         *      start/end time and the usleep stuff, normal audio capture
          *      works, piped audio doesn't *BLINK*
          */
         if (sleep < 0)
@@ -831,7 +831,7 @@ do_video_out (AVFormatContext * s, AVStream * ost, unsigned char *buf, int size)
  *
  * needed on Solaris/SPARC because the ffmpeg version used doesn't know
  * PIX_FMT_ABGR32, i.e. byte ordering is not taken care of
- * @param image the XImage to convert 
+ * @param image the XImage to convert
  */
 static void
 myABGR32toARGB32 (XImage * image)
@@ -849,7 +849,7 @@ myABGR32toARGB32 (XImage * image)
          counter < (pdata + (image->width * image->height * 4)); counter += 4) {
         char swap;
 
-        if (image->byte_order) {       // MSBFirst has order argb -> abgr 
+        if (image->byte_order) {       // MSBFirst has order argb -> abgr
             // = rgba32
             swap = *(counter + 1);
             *(counter + 1) = *(counter + 3);
@@ -887,10 +887,10 @@ myPAL8toRGB24 (XImage * image, AVFrame * p_inpic, Job * job)
     uint8_t *out_cursor = NULL;
     uint8_t *out = (uint8_t *) p_inpic->data[0];
 
-    /** 
+    /**
      * 8bit pseudo-color images may have lines padded by excess bytes
-     * these need to be removed before conversion 
-     * \todo other formats might also have this problem 
+     * these need to be removed before conversion
+     * \todo other formats might also have this problem
      */
     for (y = 0; y < image->height; y++) {
         out_cursor = (uint8_t *) image->data + (y * image->bytes_per_line);
@@ -906,11 +906,11 @@ myPAL8toRGB24 (XImage * image, AVFrame * p_inpic, Job * job)
 }
 
 /**
- * \brief prepare the color table for pseudo color input to libavcodec's 
+ * \brief prepare the color table for pseudo color input to libavcodec's
  *      imgconvert
  *
  * I'm downsampling the 16 bit color entries to 8 bit as it expects
- * 32 bit (=4 * 8) from looking at imgconvert_template.c I'd say libavcodec 
+ * 32 bit (=4 * 8) from looking at imgconvert_template.c I'd say libavcodec
  * expects argb logically, not byte-wise
  * @param colors a pointer to the colors as contained in the captured XImage
  * @param ncolors the number of colors present
@@ -945,7 +945,7 @@ xvc_ffmpeg_get_color_table (XColor * colors, int ncolors)
         color_table_entry = (color_table_entry | swap);
 
         swap = colors[i].green;
-        swap &= 0x0000FF00;            /* color is 16 bits, ms 8 bits already 
+        swap &= 0x0000FF00;            /* color is 16 bits, ms 8 bits already
                                         * in position, delete ls 8 bits */
         color_table_entry = (color_table_entry | swap);
 
@@ -992,7 +992,7 @@ prepareOutputFile (char *jFileName, AVFormatContext * oc, int number)
          DEBUGFILE, DEBUGFUNCTION, jFileName, oc, number);
 #endif     // DEBUG
 
-    // prepare output file for format context 
+    // prepare output file for format context
 
     if ((strcasecmp (jFileName, "-") == 0)
         || (strcasecmp (jFileName, "pipe:") == 0)) {
@@ -1008,7 +1008,7 @@ prepareOutputFile (char *jFileName, AVFormatContext * oc, int number)
 
         // if the filename's first char is a / we have an absolute path
         // and we want one for the file URL. If we don't have one, we
-        // construct one 
+        // construct one
         if (first != '/') {
             sprintf (oc->filename, "file://%s/%s", getenv ("PWD"), tmp_buf);
         } else {
@@ -1027,7 +1027,7 @@ prepareOutputFile (char *jFileName, AVFormatContext * oc, int number)
 
 /**
  * \brief add a video output stream to the output format
- * 
+ *
  * @param oc output format context (output_file)
  * @param image captured XImage
  * @param input_pixfmt picture format of the input picture
@@ -1059,14 +1059,14 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     st->codec->codec_id = codec_id;
     st->codec->codec_type = CODEC_TYPE_VIDEO;
 
-    // find the video encoder 
+    // find the video encoder
     codec = avcodec_find_encoder (st->codec->codec_id);
     if (!codec) {
         fprintf (stderr, _("%s %s: video codec not found\n"),
                  DEBUGFILE, DEBUGFUNCTION);
         exit (1);
     }
-    // put sample parameters 
+    // put sample parameters
     // resolution must be a multiple of two ... this is taken care of
     // elsewhere but needs to be ensured for rescaled dimensions, too
     if (app->rescale != 100) {
@@ -1091,7 +1091,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     // time base: this is the fundamental unit of time (in seconds) in
     // terms of which frame timestamps are represented. for fixed-fps
     // content, timebase should be 1/framerate and timestamp increments
-    // should be identically 1. 
+    // should be identically 1.
     st->codec->time_base.den = target->fps.num;
     st->codec->time_base.num = target->fps.den;
     // emit one intra frame every fifty frames at most
@@ -1212,9 +1212,9 @@ guess_input_pix_fmt (XImage * image, ColorInfo * c_info)
         break;
     case 32:
         if (c_info->alpha_mask == 0xFF000000 && image->green_mask == 0xFF00) {
-            // byte order is relevant here, not endianness endianness is 
-            // handled by avcodec, but atm no such thing as having ABGR, 
-            // instead of ARGB in a word. Since we need this for 
+            // byte order is relevant here, not endianness endianness is
+            // handled by avcodec, but atm no such thing as having ABGR,
+            // instead of ARGB in a word. Since we need this for
             // Solaris/SPARC, but need to do the conversion
             // for every frame we do it outside of this loop, cf.
             // below this matches both ARGB32 and ABGR32
@@ -1259,7 +1259,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    // encoder needs to be prepared only once .. 
+    // encoder needs to be prepared only once ..
     if (job->state & VC_START) {       // it's the first call
 
 #ifdef DEBUG
@@ -1274,8 +1274,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 #endif     // USE_FFMPEG
             target = &(app->single_frame);
 
-        // color info only needs to be retrieved once for true color X ... 
-        // dunno about pseudo color 
+        // color info only needs to be retrieved once for true color X ...
+        // dunno about pseudo color
         xvc_get_color_info (image, &c_info);
 
 #ifdef DEBUG
@@ -1304,7 +1304,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
                 LSBFirst);
 #endif     // DEBUG
 
-        // determine input picture format 
+        // determine input picture format
         input_pixfmt = guess_input_pix_fmt (image, &c_info);
 
         // register all libav* related stuff
@@ -1367,9 +1367,9 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         output_file->max_delay = (int) (0.7 * AV_TIME_BASE);
         // output_file->loop_output = loop_output;
 
-        // add the video stream and initialize the codecs 
-        // 
-        // prepare stream 
+        // add the video stream and initialize the codecs
+        //
+        // prepare stream
         out_st =
             add_video_stream (output_file, image,
                               (input_pixfmt ==
@@ -1382,7 +1382,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         // p_fParams->time_base.den = out_st->codec->time_base.den;
         // p_fParams->time_base.num = out_st->codec->time_base.num;
         // p_fParams->width = out_st->codec->width;
-        // p_fParams->height = out_st->codec->height; 
+        // p_fParams->height = out_st->codec->height;
         // if (av_set_parameters (output_file, p_fParams) < 0) {
         if (av_set_parameters (output_file, NULL) < 0) {
             fprintf (stderr,
@@ -1390,7 +1390,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
                      DEBUGFILE, DEBUGFUNCTION);
             exit (1);
         }
-        // open the codec 
+        // open the codec
         if (avcodec_open (out_st->codec, codec) < 0) {
             fprintf (stderr, _("%s %s: could not open video codec\n"),
                      DEBUGFILE, DEBUGFUNCTION);
@@ -1404,17 +1404,17 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
             dump_format (output_file, 0, output_file->filename, 1);
 #endif     // DEBUG
 
-            // initialize a mutex lock to its default value 
+            // initialize a mutex lock to its default value
             pthread_mutex_init (&mp, NULL);
 
             if (au_ret == 0) {
                 int tret;
 
-                // create and start capture thread 
-                // initialized with default attributes 
+                // create and start capture thread
+                // initialized with default attributes
                 tret = pthread_attr_init (&tattr);
 
-                // create the thread 
+                // create the thread
                 tret =
                     pthread_create (&tid, &tattr,
                                     (void *) capture_audio_thread, job);
@@ -1422,8 +1422,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         }
 #endif     // HAVE_FFMPEG_AUDIO
 
-        /* 
-         * prepare pictures 
+        /*
+         * prepare pictures
          */
         // input picture
         p_inpic = avcodec_alloc_frame ();
@@ -1466,8 +1466,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
                         out_st->codec->pix_fmt, out_st->codec->width,
                         out_st->codec->height);
 
-        /* 
-         * prepare output buffer for encoded frames 
+        /*
+         * prepare output buffer for encoded frames
          */
         if ((image_size + 200) < FF_MIN_BUFFER_SIZE)
             outbuf_size = FF_MIN_BUFFER_SIZE;
@@ -1502,7 +1502,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
             // filename
             prepareOutputFile (job->file, output_file, job->movie_no);
 
-            // open the file 
+            // open the file
             if (url_fopen
                 (&output_file->pb, output_file->filename, URL_WRONLY) < 0) {
                 fprintf (stderr,
@@ -1551,7 +1551,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         // after this output_file->filename should have the right filename
         prepareOutputFile (job->file, output_file, job->pic_no);
 
-        // open the file 
+        // open the file
         if (url_fopen (&output_file->pb, output_file->filename, URL_WRONLY)
             < 0) {
             fprintf (stderr, _("%s %s: Could not open '%s' ... aborting\n"),
@@ -1569,8 +1569,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         }
     }
 
-    /* 
-     * convert input pic to pixel format the encoder expects 
+    /*
+     * convert input pic to pixel format the encoder expects
      */
 #ifdef DEBUG
     if (input_pixfmt == PIX_FMT_ARGB32)
@@ -1579,7 +1579,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         dump8bit (image, (u_int32_t *) job->color_table);
 #endif     // DEBUG
 
-    /** \todo test if the special image conversion for Solaris is still 
+    /** \todo test if the special image conversion for Solaris is still
      *      necessary */
     if (input_pixfmt == PIX_FMT_ARGB32 && c_info.alpha_mask == 0xFF000000
         && image->red_mask == 0xFF && image->green_mask == 0xFF00
@@ -1600,8 +1600,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         exit (1);
     }
 
-    /* 
-     * encode the image 
+    /*
+     * encode the image
      */
 #ifdef DEBUG
     printf
@@ -1631,8 +1631,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
     }
 #endif     // HAVE_FFMPEG_AUDIO
 
-    /* 
-     * write frame to file 
+    /*
+     * write frame to file
      */
     if (out_size > 0) {
         do_video_out (output_file, out_st, outbuf, out_size);
@@ -1642,8 +1642,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         url_fclose (&output_file->pb);
 
 #ifdef HAVE_FFMPEG_AUDIO
-    /* 
-     * release the mutex 
+    /*
+     * release the mutex
      */
     if (job->flags & FLG_REC_SOUND) {
         if (pthread_mutex_unlock (&mp) > 0) {
@@ -1657,7 +1657,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief cleanup capture session
  */
 void
@@ -1684,8 +1684,8 @@ xvc_ffmpeg_clean ()
 #endif     // HAVE_FFMPEG_AUDIO
 
     if (output_file) {
-        /* 
-         * write trailer 
+        /*
+         * write trailer
          */
         av_write_trailer (output_file);
     }
@@ -1693,12 +1693,12 @@ xvc_ffmpeg_clean ()
     if (output_file) {
         int i;
 
-        /* 
+        /*
          * close file if multi-frame capture ... otherwise closed already
          */
         if (job->target >= CAP_MF)
             url_fclose (&output_file->pb);
-        /* 
+        /*
          * free streams
          */
         for (i = 0; i < output_file->nb_streams; i++) {
@@ -1715,8 +1715,8 @@ xvc_ffmpeg_clean ()
         if (au_out_st)
             au_out_st = NULL;
 #endif     // HAVE_FFMPEG_AUDIO
-        /* 
-         * free format context 
+        /*
+         * free format context
          */
         av_free (output_file->priv_data);
         output_file->priv_data = NULL;
@@ -1845,19 +1845,19 @@ dump32bit (XImage * input)
             *output++ = ((*p32 & bm) >> bs);
             p32++;                     // ignore alpha values
         }
-        // 
+        //
         // eat paded bytes, for better speed we use shifting,
-        // (bytes_per_line - bits_per_pixel / 8 * width ) / 4 
-        // 
+        // (bytes_per_line - bits_per_pixel / 8 * width ) / 4
+        //
         p32 += (input->bytes_per_line - (input->bits_per_pixel >> 3)
                 * input->width) >> 2;
     }
 
     fp2 = fopen ("/tmp/pic.rgb.pnm", "w");
     fwrite (head, strlen (head), 1, fp2);
-    // 
-    // x2ffmpeg_dump_ximage_info (input, fp2); 
-    // 
+    //
+    // x2ffmpeg_dump_ximage_info (input, fp2);
+    //
     fwrite (ptr2, size, 1, fp2);
     fclose (fp2);
     free (ptr2);
@@ -1912,9 +1912,9 @@ dump8bit (XImage * image, u_int32_t * ct)
     }
     fwrite (pnm_image, image_size, 1, fp2);
 
-    // 
-    // x2ffmpeg_dump_ximage_info (input, fp2); 
-    // 
+    //
+    // x2ffmpeg_dump_ximage_info (input, fp2);
+    //
     fclose (fp2);
     free (pnm_image);
 

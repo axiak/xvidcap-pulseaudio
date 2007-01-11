@@ -1,4 +1,4 @@
-/** 
+/**
  * \file app_data.c
  *
  * This file contains functions for manipulating the general data model used
@@ -6,14 +6,14 @@
  * which in turn contains two XVC_CapTypeOptions structs for storing information
  * related to the two modes of operation (single-frame capture and multi-frame
  * capture).<br>
- * On start of a record session xvidcap creates a Job from this and keeps the 
- * volatile state there. Also, some settings can be set to autodetect in 
- * XVC_AppData and are only determined on creation of the Job to keep the 
+ * On start of a record session xvidcap creates a Job from this and keeps the
+ * volatile state there. Also, some settings can be set to autodetect in
+ * XVC_AppData and are only determined on creation of the Job to keep the
  * autodetection settings in the XVC_AppData.<br>
  * This file also contains all the data types and functions related to error
  * checking.
  *
- * \todo error_exit_action should cleanup before exiting 
+ * \todo error_exit_action should cleanup before exiting
  *
  */
 
@@ -75,10 +75,10 @@ static void error_write_action_msg (int code);
 static void appdata_set_display ();
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-/**  
+/**
  * \brief initializes an empty XVC_CapTypeOptions structure.
  *
- * @param cto a pointer to a pre-existing XVC_CapTypeOptions struct to 
+ * @param cto a pointer to a pre-existing XVC_CapTypeOptions struct to
  *      initialize.
  * @see XVC_CapTypeOptions
  */
@@ -107,7 +107,7 @@ xvc_captypeoptions_init (XVC_CapTypeOptions * cto)
 #endif     // HAVE_FFMPEG_AUDIO
 }
 
-/** 
+/**
  * \brief initializes an empty XVC_AppData structure.
  *
  * @param lapp a pointer to a pre-existing XVC_AppData struct to initialize.
@@ -138,7 +138,7 @@ xvc_appdata_init (XVC_AppData * lapp)
 #endif     // USE_FFMPEG
 }
 
-/**  
+/**
  * \brief sets default values for XVC_AppData structure.
  *
  * @param lapp a pointer to a pre-existing XVC_AppData struct to set.
@@ -258,10 +258,10 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     lapp->single_frame.edit_cmd = "gimp \"${XVFILE}\" &";
 }
 
-/** 
+/**
  * \brief copy a XVC_CapTypeOptions struct
  *
- * @param topts a pointer to a pre-existing XVC_CapTypeOptions struct to 
+ * @param topts a pointer to a pre-existing XVC_CapTypeOptions struct to
  *      copy to
  * @param sopts a pointer to a XVC_CapTypeOptions struct to copy from
  * @see XVC_CapTypeOptions
@@ -292,7 +292,7 @@ xvc_captypeoptions_copy (XVC_CapTypeOptions * topts, XVC_CapTypeOptions * sopts)
 #endif     // HAVE_FFMPEG_AUDIO
 }
 
-/** 
+/**
  * \brief do a deep copy of an XVC_AppData struct
  *
  * @param tapp a pointer to a pre-existing XVC_AppData struc to copy to
@@ -326,13 +326,13 @@ xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
 #endif     // USE_FFMPEG
 }
 
-/** 
+/**
  * \brief checks an XVC_AppData struct for consistency
  *
  * @param lapp a pointer to the XVC_AppData struct to validate
  * @param mode toggles check for XVC_CapTypeOptions not currently active. mode = 0
  *      does a full check, mode = 1 ignores XVC_CapTypeOptions not currently active
- * @param rc a pointer to an int where a return code will be set. They can be 0 for 
+ * @param rc a pointer to an int where a return code will be set. They can be 0 for
  *      no error found, 1 an error was found, or -1 for an internal error
  *      occurred during the check.
  * @return a double-linked list of errors wrapped in XVC_ErrorListItem structs.
@@ -527,7 +527,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
     }
     // end: rescale
 
-    /* 
+    /*
      * Now check target capture type options
      */
 
@@ -558,7 +558,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
             if (target->target == CAP_NONE) {
                 // this is an empty filename string which signifies "ask
                 // the user" however we do not support "ask-user" and target
-                // auto-detect combined at this time ... so we change to 
+                // auto-detect combined at this time ... so we change to
                 // default filename
                 errors = errorlist_append (13, errors, lapp);
                 if (!errors) {
@@ -675,7 +675,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
         } else
             if (target->target == CODEC_NONE
                 && target->au_targetCodec != CODEC_NONE) {
-            // if target is auto-detected we also want to auto-detect 
+            // if target is auto-detected we also want to auto-detect
             // au_targetCodec
             errors = errorlist_append (25, errors, lapp);
             if (!errors) {
@@ -804,7 +804,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
     }
     // end: quality
 
-    // audioWanted is checked with target 
+    // audioWanted is checked with target
 
     /**
      * \todo implement some sanity checks if possible<br>
@@ -813,7 +813,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
      * - int sndchannels;                  // number of channels to record audio to<br>
      */
 
-    /** 
+    /**
      * \todo can there be a meaningful check to validate the following?<br>
      * - char *play_cmd;                   // command for animate function<br>
      * - char *video_cmd;                  // command for make video function<br>
@@ -824,7 +824,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
     // the target
 #ifdef USE_FFMPEG
     if (mode == 0) {
-        /* 
+        /*
          * Now check non-target capture type options
          */
 
@@ -854,8 +854,8 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
             } else {
                 if (non_target->target == CAP_NONE) {
                     // this is an empty filename string which signifies
-                    // "ask the user" however we do not support "ask-user" and 
-                    // target auto-detect combined at this time ... so we 
+                    // "ask the user" however we do not support "ask-user" and
+                    // target auto-detect combined at this time ... so we
                     // change to default filename
                     errors = errorlist_append (13, errors, lapp);
                     if (!errors) {
@@ -1101,7 +1101,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
         }
         // end: quality
 
-        // audioWanted is checked with target 
+        // audioWanted is checked with target
 
         /**
          * \todo implement some sanity checks if possible<br>
@@ -1110,7 +1110,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
          * - int sndchannels;                  // number of channels to record audio to<br>
          */
 
-        /** 
+        /**
          * \todo can there be a meaningful check to validate the following?<br>
          * - char *play_cmd;                   // command for animate function<br>
          * - char *video_cmd;                  // command for make video function<br>
@@ -1133,12 +1133,12 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
 #undef DEBUGFUNCTION
 }
 
-/**  
- * \brief merges a XVC_CapTypeOptions structure into an XVC_AppData as current 
+/**
+ * \brief merges a XVC_CapTypeOptions structure into an XVC_AppData as current
  *      target
  *
- * This is mainly used for assimilating command line parameters into the 
- * XVC_AppData. Command line parameters are always regarded to manipulate 
+ * This is mainly used for assimilating command line parameters into the
+ * XVC_AppData. Command line parameters are always regarded to manipulate
  * global settings or settings for the currently active capture mode.
  *
  * @param cto a pointer to the XVC_CapTypeOptions struct to assimilate into an
@@ -1220,13 +1220,13 @@ xvc_appdata_merge_captypeoptions (XVC_CapTypeOptions * cto, XVC_AppData * lapp)
 #undef DEBUGFUNCTION
 }
 
-/* 
+/*
  * error handling
  * each error has at least one XVC_Error struct and possibly a function
  * for use as a default action
  */
 
-/** 
+/**
  * \brief default action shared by all fatal errors
  *
  * @param err a pointer to the actual error raising this.
@@ -1237,7 +1237,7 @@ error_exit_action (XVC_ErrorListItem * err)
     exit (1);
 }
 
-/** 
+/**
  * \brief default action shared by all informational error messages
  *
  * @param err a pointer to the actual error raising this.
@@ -1248,7 +1248,7 @@ error_null_action (XVC_ErrorListItem * err)
     // empty
 }
 
-/** 
+/**
  * \brief dummy error action which just prints debug info
  *
  * @param err a pointer to the actual error raising this.
@@ -1630,7 +1630,7 @@ error_42_action (XVC_ErrorListItem * err)
 }
 #endif     // HAVE_FFMPEG_AUDIO
 
-/**  
+/**
  * \brief an array of all preferences related errors known to xvidcap.
  *
  * The array consists of XVC_ErrorListItem elements.
@@ -2011,7 +2011,7 @@ const XVC_Error xvc_errors[NUMERRORS] = {
 #endif     // HAVE_FFMPEG_AUDIO
 };
 
-/** 
+/**
  * \brief adds a new error to an error list
  *
  * An XVC_Error of the specified code is wrapped in an XVC_ErrorListItem and
@@ -2021,7 +2021,7 @@ const XVC_Error xvc_errors[NUMERRORS] = {
  * it was passed in or pointing to a new error list if it was NULL.
  *
  * @param code an integer error code
- * @param err an element in a list of XVC_ErrorListItems, can be NULL. 
+ * @param err an element in a list of XVC_ErrorListItems, can be NULL.
  * @param app a pointer to the XVC_AppData struct to refer to from the
  *      new XVC_ErrorListItem.
  * @return the original list with the new element appended or a new
@@ -2067,7 +2067,7 @@ errorlist_append (int code, XVC_ErrorListItem * err, XVC_AppData * app)
     return err;
 }
 
-/** 
+/**
  * \brief recursively free error list
  *
  * @param err a pointer to the list of XVC_ErrorElements to free
@@ -2099,7 +2099,7 @@ xvc_errorlist_delete (XVC_ErrorListItem * err)
     return iterator;
 }
 
-/* 
+/*
  * fucntions for printing error messages
  */
 static int
@@ -2168,7 +2168,7 @@ lineprint (char *txt, int out_or_err, int pre, int len)
 
 }
 
-/** 
+/**
  * \brief prints an error message to stdout
  *
  * @param code the integer code of the error to print
@@ -2255,7 +2255,7 @@ xvc_error_write_msg (int code, int print_action_or_not)
 
 }
 
-/** 
+/**
  * \brief print action msg
  *
  * @param code the integer code of the error in question
@@ -2287,7 +2287,7 @@ error_write_action_msg (int code)
 
 }
 
-/** 
+/**
  * \brief executes one of the helper commands
  *
  * This executes on of the helper commands that xvidcap uses for animating
@@ -2409,7 +2409,7 @@ xvc_command_execute (char *command, int flag, int number, char *file,
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief checks if filename has pattern to include frame - or movie number
  *
  * @param filename the filename to check
@@ -2428,7 +2428,7 @@ xvc_is_filename_mutable (char *filename)
     }
 }
 
-/** 
+/**
  * \brief extract number of digits after the decimal point from a string
  *      containing a float number.
  *
@@ -2436,7 +2436,7 @@ xvc_is_filename_mutable (char *filename)
  * locale into account, i. e. if a user has ',' as the decimal point, that
  * will be used.
  *
- * @param input string containing a string representation of a floating 
+ * @param input string containing a string representation of a floating
  *      point number
  * @return an integer build of the float parsed to the second digit after
  *      the comma times 100
@@ -2459,7 +2459,7 @@ xvc_get_number_of_fraction_digits_from_float_string (const char const *input)
     return post;
 }
 
-/** 
+/**
  * \brief gets the current display and store it in the XVC_AppData struct
  */
 static void
@@ -2487,7 +2487,7 @@ appdata_set_display ()
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief retrieves the XWindowAttributes for the specified Window and stores
  *      them in the XVC_AppData struct.
  *

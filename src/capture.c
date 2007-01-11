@@ -1,10 +1,10 @@
 /**
  * \file capture.c
- * 
+ *
  * This file contains routines used for capturing individual frames.
  * Theese routines are called from the capture thread spawned on start of
  * a capture session. Once started the capture is completely governed by
- * changes in the VC_* states. It will also be stopped on reaching a 
+ * changes in the VC_* states. It will also be stopped on reaching a
  * configured maximum number of frames or maximum capture time.
  *
  * \todo add dga and v4l again
@@ -92,7 +92,7 @@ static unsigned char bottom[65536];
 static ColorInfo c_info;
 #endif     // HAVE_LIBXFIXES
 
-/** 
+/**
  * \brief function to find out where the mouse pointer is
  *
  * @param x return pointer to write x coordinate to pre-existing int
@@ -318,7 +318,7 @@ paintMousePointer (XImage * image)
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief reads new data in a pre-existing image structure.
  *
  * @param dpy a pointer to the display to read from
@@ -344,7 +344,7 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
         return (False);
     LockDisplay (dpy);
     GetReq (GetImage, req);
-    /* 
+    /*
      * first set up the standard stuff in the request
      */
     req->drawable = d;
@@ -379,7 +379,7 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief compute the output filename depending on current capture mode and
  *      frame or movie number. Then open that file for writing.
  *
@@ -409,7 +409,7 @@ getOutputFile ()
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief this captures without an existing XImage and creates one along the
  *      way. This is the plain X11 version.
  *
@@ -450,8 +450,8 @@ captureFrameCreatingImage (Display * dpy)
 #undef DEBUGFUNCTION
 }
 
-/** 
- * \brief this captures into an existing XImage. This is the plain X11 
+/**
+ * \brief this captures into an existing XImage. This is the plain X11
  *      version.
  *
  * @param dpy a pointer to the display to read from
@@ -487,7 +487,7 @@ captureFrameToImage (Display * dpy, XImage * image)
 }
 
 #ifdef HAVE_SHMAT
-/** 
+/**
  * \brief this captures into an existing XImage. This is the SHM version.
  *
  * @param dpy a pointer to the display to read from
@@ -522,7 +522,7 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief this captures without an existing XImage and creates one along the
  *      way. This is the SHM version.
  *
@@ -580,7 +580,7 @@ captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
 }
 #endif     // HAVE_SHMAT
 
-/** 
+/**
  * \brief calculates in how many msecs the next capture is due based on fps
  *      and the duration of the previous capture.
  *
@@ -627,7 +627,7 @@ checkCaptureDuration (long time, long time1)
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief this is the merged capture function that handles all sources.
  *
  * @param capfunc passes the source as specified in captureFunctions
@@ -641,7 +641,7 @@ commonCapture (enum captureFunctions capfunc)
     static XImage *image = NULL;
     static FILE *fp = NULL; // file handle to write the frame to
     long time, time1;   /* for measuring the duration of a frame capture */
-    struct timeval curr_time;   /* for measuring the duration of a frame 
+    struct timeval curr_time;   /* for measuring the duration of a frame
                                  * capture */
 #ifdef HAVE_SHMAT
     static XShmSegmentInfo shminfo;
@@ -699,7 +699,7 @@ commonCapture (enum captureFunctions capfunc)
         time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
 
         // open the output file we need to do this for every frame for
-        // individual frame 
+        // individual frame
         // capture and only once for capture to movie
         if ((app->current_mode == 0) ||
             (app->current_mode > 0 && job->state & VC_START)) {
@@ -760,7 +760,7 @@ commonCapture (enum captureFunctions capfunc)
 
         } else {
             // we're recording and not in the first frame ....
-            // so we just read new data into the present image structure 
+            // so we just read new data into the present image structure
 #ifdef DEBUG
             printf ("%s %s: reading an image in a data sturctur present\n",
                     DEBUGFILE, DEBUGFUNCTION);
@@ -797,7 +797,7 @@ commonCapture (enum captureFunctions capfunc)
             fclose (fp);
         }
         // substract the time we needed for creating and saving the frame
-        // to the file 
+        // to the file
         gettimeofday (&curr_time, NULL);
         time1 = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
 
@@ -812,7 +812,7 @@ commonCapture (enum captureFunctions capfunc)
 
         job->pic_no += target->step;
 
-        // this might be a single step. If so, remove the state flag so we 
+        // this might be a single step. If so, remove the state flag so we
         // don't keep single stepping
         if (job->state & VC_STEP) {
             xvc_job_remove_state (VC_STEP);
@@ -828,7 +828,7 @@ commonCapture (enum captureFunctions capfunc)
     } else {
         int orig_state;
 
-        // clean up 
+        // clean up
       CLEAN_CAPTURE:
 
 #ifdef DEBUG
@@ -846,11 +846,11 @@ commonCapture (enum captureFunctions capfunc)
         xvc_job_set_state (VC_STOP);
 
         // set the sensitive stuff for the control panel if we don't
-        // autocontinue 
+        // autocontinue
         if ((orig_state & VC_CONTINUE) == 0)
             xvc_idle_add (xvc_capture_stop, job, TRUE);
 
-        // clean up the save routines in xtoXXX.c 
+        // clean up the save routines in xtoXXX.c
         if (job->clean)
             (*job->clean) ();
         // if we're recording to a movie, we must close the file now
@@ -860,7 +860,7 @@ commonCapture (enum captureFunctions capfunc)
         fp = NULL;
 
         if ((orig_state & VC_CONTINUE) == 0) {
-            // after this we're ready to start recording again 
+            // after this we're ready to start recording again
             xvc_job_merge_state (VC_READY);
         } else {
 
@@ -888,7 +888,7 @@ commonCapture (enum captureFunctions capfunc)
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief function used for capturing. This one is used with source = x11,
  *      i. e. when capturing from X11 display w/o SHM
  *
@@ -903,7 +903,7 @@ xvc_capture_x11 ()
 }
 
 #ifdef HAVE_SHMAT
-/** 
+/**
  * \brief function used for capturing. This one is used with source = shm,
  *      i. e. when capturing from X11 with SHM support
  *
@@ -921,18 +921,18 @@ xvc_capture_shm ()
 
 /*
  *
- * 
+ *
  *
  */
 #ifdef HasVideo4Linux
-/* 
+/*
  * timer callback for capturing direct from bttv driver (only linux)
  */
 #ifndef linux
 #error only for linux
 #endif
-/* 
- * from bttv.h 
+/*
+ * from bttv.h
  */
 
 Boolean
@@ -996,7 +996,7 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
             }
         }
         if (job->state & VC_START) {
-            /* 
+            /*
              * the first time this procedure is started
              * we must prepare some stuff ..
              */
@@ -1011,8 +1011,8 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
                 goto CLEAN_V4L;
             }
             vi_pict.depth = 0;
-            /* 
-             * read default values for hue, etc.. 
+            /*
+             * read default values for hue, etc..
              */
             ioctl (video->fd, VIDIOCGPICT, &vi_pict);
 
@@ -1085,13 +1085,13 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
             vi_mmap.frame = 0;
             image->data = video->mmap;
         }
-        /* 
-         * just read new data in the image structure 
+        /*
+         * just read new data in the image structure
          */
         if (ioctl (video->fd, VIDIOCMCAPTURE, &vi_mmap) < 0) {
             perror ("ioctl(capture)");
-            /* 
-             * if (vb.frame) vb.frame = 0; else vb.frame = 1; 
+            /*
+             * if (vb.frame) vb.frame = 0; else vb.frame = 1;
              */
             goto CLEAN_V4L;
         }
@@ -1107,9 +1107,9 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
         if (!(job->flags & FLG_MULTI_IMAGE))
             (*job->close) (fp);
 
-        /* 
+        /*
          * substract the time we needed for creating and saving the frame
-         * to the file 
+         * to the file
          */
         gettimeofday (&curr_time, NULL);
         time1 = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
@@ -1151,8 +1151,8 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
     } else {
         int orig_state;
 
-        /* 
-         * clean up 
+        /*
+         * clean up
          */
       CLEAN_V4L:
         orig_state = job->state;       // store state here
@@ -1174,15 +1174,15 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
             video = NULL;
         }
 
-        /* 
+        /*
          * set the sensitive stuff for the control panel if we don't
-         * autocontinue 
+         * autocontinue
          */
         if ((orig_state & VC_CONTINUE) == 0)
             xvc_capture_stop (job);
 
-        /* 
-         * clean up the save routines in xtoXXX.c 
+        /*
+         * clean up the save routines in xtoXXX.c
          */
         if (job->clean)
             (*job->clean) (job);
@@ -1192,8 +1192,8 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
         fp = NULL;
 
         if ((orig_state & VC_CONTINUE) == 0) {
-            /* 
-             * after this we're ready to start recording again 
+            /*
+             * after this we're ready to start recording again
              */
             job->state |= VC_READY;
         } else {
@@ -1208,8 +1208,8 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
 
     }
 
-    /* 
-     * after this we're ready to start recording again 
+    /*
+     * after this we're ready to start recording again
      */
     job->state |= VC_READY;
 
@@ -1222,7 +1222,7 @@ TCbCaptureV4L (XtPointer xtp, XtIntervalId id *)
 #endif     /* HasVideo4Linux */
 
 #ifdef HasDGA
-/* 
+/*
  * direct graphic access
  * this doesn't work until now and may be removed in future..!?
  *
@@ -1276,7 +1276,7 @@ TCbCaptureDGA (XtPointer xtp, XtIntervalId id *)
             }
         }
         if (job->state & VC_START) {
-            /* 
+            /*
              * the first time this procedure is started
              * we must create a new image structure ..
              */
@@ -1307,8 +1307,8 @@ TCbCaptureDGA (XtPointer xtp, XtIntervalId id *)
             XF86DGADirectVideo (dpy, XDefaultScreen (dpy), 0);
             job->state &= ~VC_START;
         } else {
-            /* 
-             * just read new data in the image structure 
+            /*
+             * just read new data in the image structure
              */
             XF86DGADirectVideo (dpy, XDefaultScreen (dpy),
                                 XF86DGADirectGraphics);
@@ -1318,9 +1318,9 @@ TCbCaptureDGA (XtPointer xtp, XtIntervalId id *)
         if (!(job->flags & FLG_MULTI_IMAGE))
             (*job->close) (fp);
 
-        /* 
+        /*
          * substract the time we needed for creating and saving the frame
-         * to the file 
+         * to the file
          */
         gettimeofday (&curr_time, NULL);
         time = (curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000) - time;
@@ -1335,18 +1335,18 @@ TCbCaptureDGA (XtPointer xtp, XtIntervalId id *)
         XtAppAddTimeOut (XtWidgetToApplicationContext (job->toplevel),
                          time, (XtTimerCallbackProc) job->capture, job);
         job->pic_no += job->step;
-        /* 
-         * update the label if we have time to do this 
+        /*
+         * update the label if we have time to do this
          */
         if (time)
             ChangeLabel (job->pic_no);
     } else {
-        /* 
-         * clean up 
+        /*
+         * clean up
          */
       CLEAN_DGA:
-        /* 
-         * may be the last update failed .. so do it here before stop 
+        /*
+         * may be the last update failed .. so do it here before stop
          */
         ChangeLabel (job->pic_no);
         job->state = VC_STOP;
@@ -1355,13 +1355,13 @@ TCbCaptureDGA (XtPointer xtp, XtIntervalId id *)
             image = NULL;
         }
         XF86DGADirectVideo (dpy, XDefaultScreen (dpy), 0);
-        /* 
-         * set the sensitive stuff for the control panel 
+        /*
+         * set the sensitive stuff for the control panel
          */
         CbStop (NULL, NULL, NULL);
 
-        /* 
-         * clean up the save routines in xtoXXX.c 
+        /*
+         * clean up the save routines in xtoXXX.c
          */
         if (job->clean)
             (*job->clean) (job);

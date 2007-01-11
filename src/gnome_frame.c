@@ -5,7 +5,7 @@
  * frame enclosing the area to capture.
  */
 
-/* 
+/*
  * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
@@ -47,15 +47,15 @@
 #include "frame.h"
 #include "gnome_frame.h"
 
-/* 
+/*
  * file globals (static)
  *
  */
-/** 
+/**
  * \brief remember the Display if already retrieved
  *
  * This assumes that the Display to capture from cannot change once xvidcap
- * has been started. We reuse any Display we once retrieved to avoid 
+ * has been started. We reuse any Display we once retrieved to avoid
  * potential X server roundtrip
  */
 static Display *xvc_dpy = NULL;
@@ -69,7 +69,7 @@ static GtkWidget *gtk_frame_top,
  *
  * If the frame has been created we retrieve the Display from GDK. Otherwise,
  * (either we're running without GUI or we're doing this before the frame
- * has been created, which is the case if we pass --window) we use 
+ * has been created, which is the case if we pass --window) we use
  * XOpenDisplay if xvc_dpy is not already set.
  *
  * @return a pointer to the Display to capture from. This Display can be
@@ -106,7 +106,7 @@ xvc_frame_drop_capture_display ()
 }
 
 /**
- * \brief repositions the main control according to the frame's current 
+ * \brief repositions the main control according to the frame's current
  *      position
  *
  * @param toplevel a pointer to the main control
@@ -172,7 +172,7 @@ do_reposition_control (GtkWidget * toplevel)
 #undef DEBUGFUNCTION
 }
 
-/** 
+/**
  * \brief changes frame due to user input
  *
  * @param x x-position to change to
@@ -246,9 +246,9 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     x_rect->height = height;
 
     // if the frame is locked, we have a GUI, and we also want to
-    // reposition the GUI (we don't want to except when repositioning the 
-    // frame due too the cap_geometry cli parameter because the move of 
-    // the frame would because triggered through a move of the control ... 
+    // reposition the GUI (we don't want to except when repositioning the
+    // frame due too the cap_geometry cli parameter because the move of
+    // the frame would because triggered through a move of the control ...
     // thus causing an infinite loop), move the control window, too
     if (((app->flags & FLG_NOGUI) == 0) && reposition_control)
         do_reposition_control (xvc_ctrl_main_window);
@@ -562,11 +562,11 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
             // NULL);
             // XtVaCreateManagedWidget ("text", xwLabelWidgetClass, blind,
             // XtNlabel, "Source: Video4Linux", NULL);
-            // XtPopup(blind, XtGrabNone); 
+            // XtPopup(blind, XtGrabNone);
         }
 #endif     // HasVideo4Linux
         // connect event-handler to configure event of gtk control window
-        // to redraw the selection frame if the control is moved and the 
+        // to redraw the selection frame if the control is moved and the
         // frame is locked
         g_signal_connect ((gpointer) toplevel, "configure-event",
                           G_CALLBACK (on_gtk_frame_configure_event), NULL);

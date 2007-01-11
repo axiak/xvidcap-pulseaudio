@@ -32,7 +32,7 @@
 #include <X11/Intrinsic.h>
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-/** 
+/**
  * \brief since the capture functions have been merged, we need a way for the
  *      commonCapture() function to distinguish between the possible sources.
  */

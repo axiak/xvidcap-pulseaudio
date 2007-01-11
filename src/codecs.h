@@ -31,7 +31,7 @@
 #endif
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-/** 
+/**
  * \brief ffmpeg does fractional fps handling through AVRational structs
  *      which look exactly like this. Because we cannot otherwise hope to
  *      exactly match ffmpeg framerates with a float of our own, we mimic
@@ -44,7 +44,7 @@ typedef struct _XVC_Fps
     int den;
 } XVC_Fps;
 
-/** 
+/**
  * \brief some codecs support ranges of framerates. The GUI needs to know
  *      about those, so we wrap the XVC_Fps struct in XVC_FpsRange structs
  *      with a defined start and end
@@ -55,7 +55,7 @@ typedef struct _XVC_FpsRange
     XVC_Fps end;
 } XVC_FpsRange;
 
-/** 
+/**
  * \brief codec ID's used by xvidcap. Because these are in the same order as
  *      the elements of the global codecs array, the elements of the array
  *      can be referenced using these telling names.
@@ -103,9 +103,9 @@ typedef struct _XVC_Codec
 
 extern const XVC_Codec xvc_codecs[NUMCODECS];
 
-/** 
- * \brief audio codec ID's used by xvidcap. Because these are in the same 
- *      order as the elements of the global xvc_audio_codecs array, the 
+/**
+ * \brief audio codec ID's used by xvidcap. Because these are in the same
+ *      order as the elements of the global xvc_audio_codecs array, the
  *      elements of the array can be referenced using these telling names.
  */
 typedef enum
@@ -131,9 +131,9 @@ typedef struct _XVC_AuCodec
 
 extern const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS];
 
-/** 
- * \brief file format ID's used by xvidcap. Because these are in the same 
- *      order as the elements of the global xvc_formats array, the elements of 
+/**
+ * \brief file format ID's used by xvidcap. Because these are in the same
+ *      order as the elements of the global xvc_formats array, the elements of
  *      the array can be referenced using these telling names.
  */
 typedef enum
@@ -183,7 +183,7 @@ typedef struct _XVC_FFormat
 
 extern const XVC_FFormat xvc_formats[NUMCAPS];
 
-/** 
+/**
  * \brief this is a convenience function for getting an array's length
  *
  * Remember that this uses sizeof and sizeof can only be used on dynamic

@@ -1,4 +1,4 @@
-/** 
+/**
  * \file options.c
  *
  * Contains common functions for handling persisten preferences storage
@@ -342,7 +342,7 @@ xvc_read_options_file ()
 
                 token = strtok (line, " :=\"");
                 // this has found the first token
-                // for the value we need special treatment for the command 
+                // for the value we need special treatment for the command
                 // parameters which consist of multiple words
                 // all other values are just a single token
                 for (y = 0; y < strlen (token); y++) {

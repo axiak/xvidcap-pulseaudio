@@ -1,4 +1,4 @@
-/** 
+/**
  * \file app_data.h
  *
  * \todo rename the global variable app to xvc_app
@@ -37,7 +37,7 @@
 #define XVC_MAX(a,b) ((a)>b? (a):(b))
 #define XVC_MIN(a,b) ((a)<b? (a):(b))
 
-/* 
+/*
  * some flags to toggle on/off options
  */
 #define FLG_NONE                0
@@ -47,15 +47,15 @@
 /** \brief use shared memory access to X11 */
 #define FLG_USE_SHM             2
 #endif     // HAVE_SHMAT
-/** 
- * \brief use dga for capturing 
- * 
+/**
+ * \brief use dga for capturing
+ *
  * @note this is not at all used atm.
  */
 #define FLG_USE_DGA             4
-/** 
- * \brief use video for linux for capturing 
- * 
+/**
+ * \brief use video for linux for capturing
+ *
  * @note this is not at all used atm.
  */
 #define FLG_USE_V4L             8
@@ -67,9 +67,9 @@
 /** \brief shorthand for the sum of source flags */
 #define FLG_SOURCE (FLG_USE_DGA | FLG_USE_V4L)
 #endif     // HAVE_SHMAT
-/** 
+/**
  * \brief should we record sound
- * 
+ *
  * @note this is used inside the job to be able to unset audio capture if
  *      the user wants it in the XVC_AppData struct, but audio capture is not
  *      possible
@@ -81,9 +81,9 @@
 #define FLG_AUTO_CONTINUE       64
 /** \brief save the capture geometry to the preferences file */
 #define FLG_SAVE_GEOMETRY       128
-/** 
- * \brief use video for linux for capturing 
- * 
+/**
+ * \brief use video for linux for capturing
+ *
  * @note this is not at all used atm.
  */
 #define FLG_SHOW_TIME           256
@@ -92,7 +92,7 @@
 /** \brief use the xfixes extension, i. e. capture the real mouse pointer */
 #define FLG_USE_XFIXES          1024
 
-/** 
+/**
  * \brief This structure contains the settings for one of the two capture
  *      modes (single-frame vs. multi-frame).
  */
@@ -101,7 +101,7 @@ typedef struct
     /** \brief file name pattern */
     char *file;
     /** \brief target file format, 0 means autodetect */
-    int target; // 
+    int target; //
     /** \brief target codec, 0 means autodetect */
     int targetCodec;
     /** \brief frames per second */
@@ -136,7 +136,7 @@ typedef struct
     char *edit_cmd;
 } XVC_CapTypeOptions;
 
-/** 
+/**
  * \brief This structure has all the user options passed to the application.
  *
  * It contains two XVC_CapTypeOptions structs to keep the settings for the two
@@ -146,15 +146,15 @@ typedef struct
 {
     /** \brief level of verbosity */
     int verbose;
-    /** \brief general flags 
+    /** \brief general flags
      *
      * @see FLG_NONE
      */
     int flags;
     /** \brief rescale to percentage */
     int rescale;
-    /** 
-     * \brief capture mouse pointer: 0 none, 1 white , 2 black. 
+    /**
+     * \brief capture mouse pointer: 0 none, 1 white , 2 black.
      *
      * When Xfixes is used to capture the real mouse pointer only 0 or != 0 is
      * relevant.
@@ -170,8 +170,8 @@ typedef struct
     /** \brief v4l device to capture from */
     char *device;
 #endif     // HasVideo4Linux
-    /** 
-     * \brief window attributes for area to capture. 
+    /**
+     * \brief window attributes for area to capture.
      *
      * This is mostly relevant for captures on 8-bit pseudo-color displays with
      * potential for colormap flashing. In such cases selecting a single window for
@@ -180,17 +180,17 @@ typedef struct
      * Also the geometry will be retrieved in that way.
      */
     XWindowAttributes win_attr;
-    /** 
+    /**
      * \brief store the display here, so we don't open and close it everywhere
-     *      we need it 
+     *      we need it
      */
     Display *dpy;
     /** \brief the area to capture */
     XRectangle *area;
 
-    /** 
+    /**
      * \brief the default capture mode (if detection fails). 0 = single-frame
-     *      1 = multi-frame 
+     *      1 = multi-frame
      */
     int default_mode;
     /** \brief the current capture mode, values as with default_mode */
@@ -214,10 +214,10 @@ enum XVC_ErrorType
     XVC_ERR_ERROR,
 /** \brief error severity warning (default action is a minor change to input)*/
     XVC_ERR_WARN,
-/** 
- * \brief error severity info (smth's strange but does NOT require a change) 
+/**
+ * \brief error severity info (smth's strange but does NOT require a change)
  *
- * In other words: an INFO MUST NOT NEED TO CHANGE ANYTHING! xvidcap will 
+ * In other words: an INFO MUST NOT NEED TO CHANGE ANYTHING! xvidcap will
  * continue when there are only INFO messages left.
  */
     XVC_ERR_INFO
@@ -225,7 +225,7 @@ enum XVC_ErrorType
 
 struct _XVC_ErrorListItem;
 
-/** 
+/**
  * \brief all information about a given error related to an inconsistency
  *      regarding user preferences is contained here.
  */
@@ -233,8 +233,8 @@ typedef struct _XVC_Error
 {
     /** \brief error code */
     const enum XVC_ErrorType code;
-    /** 
-     * \brief one of the error types 
+    /**
+     * \brief one of the error types
      *
      * @see XVC_ERR_FATAL
      */
@@ -245,8 +245,8 @@ typedef struct _XVC_Error
     const char *long_msg;
     /** \brief default action */
     void (*action) (struct _XVC_ErrorListItem *);
-    /** 
-     * \brief describes what the default action does 
+    /**
+     * \brief describes what the default action does
      *
      * formulate like you're completing the sentence: to resolve this I will ...
      */
@@ -265,7 +265,7 @@ typedef struct _XVC_Error
 
 extern const XVC_Error xvc_errors[NUMERRORS];
 
-/** 
+/**
  * \brief wraps an xv_Error in an XVC_ErrorListItem to create a double-linked
  *      list of errors.
  */

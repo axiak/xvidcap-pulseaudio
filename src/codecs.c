@@ -1,4 +1,4 @@
-/** 
+/**
  * \file codecs.c
  *
  * This file contains all data types and functions related to video and audio
@@ -223,8 +223,8 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
 #endif     // USE_FFMPEG
 };
 
-/** 
- * \brief global array storing all available audio codecs 
+/**
+ * \brief global array storing all available audio codecs
  */
 const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
     {
@@ -319,8 +319,8 @@ static const XVC_AuCodecID au_codecs_mp2[] = { AU_CODEC_MP2 };
 #endif     // HAVE_FFMPEG_AUDIO
 #endif     // USE_FFMPEG
 
-/** 
- * \brief global array storing all available file formats 
+/**
+ * \brief global array storing all available file formats
  */
 const XVC_FFormat xvc_formats[NUMCAPS] = {
     {
@@ -500,7 +500,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      AU_CODEC_NONE,
 /*
  * this seems to be broken in libav*
- * 
+ *
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
@@ -596,7 +596,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
 #endif     // USE_FFMPEG
 };
 
-/** 
+/**
  * \brief finds libavcodec's codec id from xvidcap's
  *
  * @param xv_codec xvidcap's codec id
@@ -614,7 +614,7 @@ xvc_trans_codec (XVC_CodecID xv_codec)
     return ret;
 }
 
-/** 
+/**
  * \brief finds out if a codec is in the an array of valid video codec ids
  *      for a given format
  *
@@ -640,8 +640,8 @@ xvc_is_valid_video_codec (XVC_FFormatID format, XVC_CodecID codec)
     return found;
 }
 
-/** 
- * \brief finds out if an audio codec is in the an array of valid audio codec 
+/**
+ * \brief finds out if an audio codec is in the an array of valid audio codec
  *      ids for a given format
  *
  * @param format the id of the format to check
@@ -668,7 +668,7 @@ xvc_is_valid_audio_codec (XVC_FFormatID format, XVC_AuCodecID codec)
     return found;
 }
 
-/** 
+/**
  * \brief find target file format based on filename, i. e. the extension
  *
  * @param file a filename to test
@@ -702,7 +702,7 @@ xvc_codec_get_target_from_filename (const char const *file)
     return ret;
 }
 
-/** 
+/**
  * \brief checks if fps rate is valid for given codec
  *
  * @param fps the fps rate to test

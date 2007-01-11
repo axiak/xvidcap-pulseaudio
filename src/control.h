@@ -1,4 +1,4 @@
-/** 
+/**
  * \file control.h
  *
  * This file contains a number of general purpose functions which are

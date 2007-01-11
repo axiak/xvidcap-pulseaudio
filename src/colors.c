@@ -1,4 +1,4 @@
-/** 
+/**
  * \file colors.c
  *
  * This file contains utility functions for retrieving color information.
@@ -29,11 +29,11 @@
 #include "colors.h"
 #include "app_data.h"
 
-/** 
+/**
  * \brief retrieves XColor array for a given window
  *
  * @param dpy pointer to the display to retrieve the information from
- * @param winfo pointer to window attributes for which to retrieve colors 
+ * @param winfo pointer to window attributes for which to retrieve colors
  *      information
  * @param colors return pointer to an array of XColor elements
  * @return the number of colors retrieved
@@ -94,7 +94,7 @@ xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors)
     return (ncolors);
 }
 
-/** 
+/**
  * \brief fills the ColorInfo struct with some useful color information, esp.
  *      the masks and shifts are relevant
  *
@@ -160,8 +160,8 @@ xvc_get_color_info (XImage * image, ColorInfo * ci)
     }
     ci->blue_max_val = (1 << ci->blue_bit_depth) - 1;
 
-    /* 
-     * over all max values 
+    /*
+     * over all max values
      */
     // whatever they are good for
     ci->max_val = XVC_MAX (ci->red_max_val, ci->green_max_val);
@@ -169,8 +169,8 @@ xvc_get_color_info (XImage * image, ColorInfo * ci)
     ci->bit_depth = XVC_MAX (ci->red_bit_depth, ci->green_bit_depth);
     ci->bit_depth = XVC_MAX (ci->blue_bit_depth, ci->bit_depth);
     if (image->bits_per_pixel > image->depth) {
-        /* 
-         * alpha? 
+        /*
+         * alpha?
          */
         // this seems to not reflect X's ignorance of alpha in its
         // masks

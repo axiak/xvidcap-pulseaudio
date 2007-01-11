@@ -23,7 +23,7 @@
 #ifndef __COLORS_H__
 #define __COLORS_H__
 
-/** 
+/**
  * \brief struct to contain various color properties, like masks, depths,
  *      shifts etc.
  */

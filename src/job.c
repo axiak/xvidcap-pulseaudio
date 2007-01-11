@@ -1,4 +1,4 @@
-/** 
+/**
  * \file job.c
  *
  * This file contains functions for setting up and manipulating Job structs.
@@ -243,11 +243,11 @@ xvc_job_set_from_app_data (XVC_AppData * app)
     if (job->target <= 0) {
         if (job->target == 0) {
             // we should be able to safely assume cto->filename is longer
-            // smaller than 0 for the next bit because with target == 0 
+            // smaller than 0 for the next bit because with target == 0
             // it would have been set to a default value otherwise
             job->target = xvc_codec_get_target_from_filename (cto->file);
             // we assume job->target can never be == 0 now, because a
-            // sanity checking function should have checked before if 
+            // sanity checking function should have checked before if
             // we have a valid specification  for a target either
             // through target itself or the filename extension
             if (job->target <= 0) {
@@ -287,7 +287,7 @@ xvc_job_set_from_app_data (XVC_AppData * app)
     if (job->au_targetCodec <= 0) {
         if (job->au_targetCodec == 0)
             job->au_targetCodec = xvc_formats[job->target].def_au_codec;
-        // if 0 the format has no default audio codec. This should only be 
+        // if 0 the format has no default audio codec. This should only be
         // the case if the format does not support audio or recording
         // without audio is encouraged
         if (job->au_targetCodec < 0) {
@@ -340,7 +340,7 @@ xvc_job_set_from_app_data (XVC_AppData * app)
 /**
  * \brief get a pointer to the current Job struct
  *
- * @return a pointer to the current job struct. If a Job had not been 
+ * @return a pointer to the current job struct. If a Job had not been
  *      initialized before, it will be initialized now.
  */
 Job *
@@ -489,7 +489,7 @@ xvc_job_set_state (int state)
 
 /**
  * \brief merge the state with present state information
- * 
+ *
  * @param state the state to merge (OR) with the current state
  */
 void
@@ -505,7 +505,7 @@ xvc_job_merge_state (int state)
 
 /**
  * \brief removes a certain state from the current state information
- * 
+ *
  * @param state the state to remove from the current state
  */
 void
