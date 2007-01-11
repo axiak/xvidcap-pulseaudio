@@ -284,7 +284,7 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
  * \brief creates a frame around the area to capture
  *
  * @param toplevel a pointer to the main control
- * @param pwith width for the frame
+ * @param pwidth width for the frame
  * @param pheight height for the frame
  * @param px x-position for the frame
  * @param py y-position for the frame

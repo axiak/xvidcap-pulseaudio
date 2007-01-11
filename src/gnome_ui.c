@@ -33,7 +33,7 @@
 #endif
 
 #define DEBUGFILE "gnome_ui.c"
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <sys/time.h>                  // for timeval struct and related
 #include <stdlib.h>
@@ -73,10 +73,11 @@
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern GtkWidget *xvc_pref_main_window;
 extern GtkWidget *xvc_warn_main_window;
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 /** \brief make the main control panel globally available */
 GtkWidget *xvc_ctrl_main_window = NULL;
+
 /** 
  * \brief make the main control panel's menu globally available 
  *
@@ -87,6 +88,7 @@ GtkWidget *xvc_ctrl_main_window = NULL;
  *      to cancel back out of the change ... and needs to reset the menu.
  */
 GtkWidget *xvc_ctrl_m1 = NULL;
+
 /** 
  * \brief the value here is picked up by the LED frame drop monitor widget.
  *      Set to 0 to clear the widget.
@@ -96,12 +98,16 @@ int xvc_led_time = 0;
 // those are for recording video in thread
 /** \brief mutex for the recording, state changes and pausing/unpausing */
 pthread_mutex_t recording_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 /** \brief condition for pausing/unpausing a recording effectively */
 pthread_cond_t recording_condition_unpaused;
+
 /** \brief the recording thread */
 static pthread_t recording_thread;
+
 /** \brief attributes of the recording thread */
 static pthread_attr_t recording_thread_attr;
+
 /** \brief is the recording thread running?
  *
  * \todo find out if there's a way to tell that from the tread directly
@@ -110,20 +116,26 @@ static Boolean recording_thread_running = FALSE;
 
 /** \brief make the results dialog globally available to callbacks here */
 static GtkWidget *xvc_result_dialog = NULL;
+
 /** \brief remember the previous led_time set */
 static int last_led_time = 0;
+
 /** \brief remember the previously set picture number to allow for a quick
  *      check on the next call if we need to do anything */
 static int last_pic_no = 0;
+
 /** \brief store a timer that may be registered when setting a max recording
  *      time */
 static guint stop_timer_id = 0;
+
 /** calculate recording time */
 static long start_time = 0, pause_time = 0, time_captured = 0;
+
 /** \brief used to faciltate passing the filename selection from a file 
  *      selector dialog back off the results dialog back to the results
  *      dialog and eventually the main dialog */
 static char *target_file_name = NULL;
+
 /** 
  * \brief the errors found on submitting a set of preferences
  *
@@ -133,6 +145,7 @@ static char *target_file_name = NULL;
  *      simplified through _run_dialog()
  */
 static XVC_ErrorListItem *errors_after_cli = NULL;
+
 /** 
  * \brief remember the number of attempts to submit a set of preferences
  *
@@ -157,8 +170,7 @@ void GtkChangeLabel (int pic_no);
 GtkWidget *
 glade_create_led_meter (gchar * widget_name, gchar * string1,
                         gchar * string2, gint int1, gint int2); */
-#endif // DOXYGEN_SHOULD_SKIP_THIS
-
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 /* 
  * HELPER FUNCTIONS ...
@@ -385,7 +397,6 @@ xvc_undo_toggle_cap_type ()
 }
 #endif     // USE_FFMPEG
 
-
 /**
  * \brief this is what the thread spawned on record actually does. It is 
  *      normally stopped by setting the state machine to VC_STOP
@@ -394,7 +405,7 @@ void
 do_record_thread ()
 {
 #define DEBUGFUNCTION "do_record_thread()"
-    Job *job = xvc_job_ptr();
+    Job *job = xvc_job_ptr ();
     long pause = 1000;
 
 #ifdef DEBUG
@@ -602,7 +613,7 @@ stop_recording_gui_stuff ()
     GtkChangeLabel (jobp->pic_no);
 
     if ((strlen (target->file) < 1 ||
-        (app->flags & FLG_ALWAYS_SHOW_RESULTS) > 0) &&
+         (app->flags & FLG_ALWAYS_SHOW_RESULTS) > 0) &&
         (app->flags & FLG_AUTO_CONTINUE) == 0) {
         int result = 0;
         float fps_ratio = 0;
@@ -635,7 +646,8 @@ stop_recording_gui_stuff ()
         // video format
         w = glade_xml_get_widget (xml, "xvc_result_dialog_video_format_label");
         g_assert (w);
-        gtk_label_set_text (GTK_LABEL (w), _(xvc_formats[jobp->target].longname));
+        gtk_label_set_text (GTK_LABEL (w),
+                            _(xvc_formats[jobp->target].longname));
 
         // video codec
         w = glade_xml_get_widget (xml, "xvc_result_dialog_video_codec_label");
@@ -651,7 +663,8 @@ stop_recording_gui_stuff ()
         // set fps
         w = glade_xml_get_widget (xml, "xvc_result_dialog_fps_label");
         g_assert (w);
-        snprintf (buf, 99, "%.2f", ((float) target->fps.num / (float) target->fps.den));
+        snprintf (buf, 99, "%.2f",
+                  ((float) target->fps.num / (float) target->fps.den));
         gtk_label_set_text (GTK_LABEL (w), buf);
 
         // achieved fps 
@@ -659,13 +672,17 @@ stop_recording_gui_stuff ()
         g_assert (w);
         {
             char *str_template = NULL;
-            float total_frames = ((float) jobp->pic_no / (float) target->step) + 1;
+            float total_frames =
+                ((float) jobp->pic_no / (float) target->step) + 1;
             float actual_fps =
                 ((float) total_frames) / ((float) time_captured / 1000);
 
-            if (actual_fps > ((float) target->fps.num / (float) target->fps.den))
+            if (actual_fps >
+                ((float) target->fps.num / (float) target->fps.den))
                 actual_fps = (float) target->fps.num / (float) target->fps.den;
-            fps_ratio = actual_fps / ((float) target->fps.num / (float) target->fps.den);
+            fps_ratio =
+                actual_fps / ((float) target->fps.num /
+                              (float) target->fps.den);
 
             if (fps_ratio > (((float) LM_NUM_DAS - LM_LOW_THRESHOLD) / 10)) {
                 str_template = "%.2f";
@@ -814,7 +831,6 @@ timer_stop_recording ()
 #undef DEBUGFUNCTION
 }
 
-
 /**
  * \brief implements the GUI related actions involved in starting a 
  *      capture session
@@ -929,15 +945,15 @@ start_recording_nongui_stuff ()
 #define DEBUGFUNCTION "start_recording_nongui_stuff()"
     if (!recording_thread_running) {
         struct timeval curr_time;
-        Job *job = xvc_job_ptr();
+        Job *job = xvc_job_ptr ();
         XVC_CapTypeOptions *target = NULL;
 
 #ifdef USE_FFMPEG
-    if (app->current_mode > 0)
-        target = &(app->multi_frame);
-    else
+        if (app->current_mode > 0)
+            target = &(app->multi_frame);
+        else
 #endif     // USE_FFMPEG
-        target = &(app->single_frame);
+            target = &(app->single_frame);
 
         // the following also unsets VC_READY
         xvc_job_keep_and_merge_state (VC_PAUSE, (VC_REC | VC_START));
@@ -1015,7 +1031,6 @@ position_popup_menu (GtkMenu * menu, gint * x, gint * y,
     *y = ty + pheight;
 #undef DEBUGFUNCTION
 }
-
 
 /**
  * \brief resets the main control window according to the preferences
@@ -1218,7 +1233,6 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
 #undef DEBUGFUNCTION
 }
 
-
 /**
  * XVIDCAP GUI API<br>
  * ( IF THAT WORD IS ALLOWED HERE ;) )<br>
@@ -1238,7 +1252,6 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
  * <tr><td>xvc_frame_monitor</td><td>update a widget monitoring frame rate</td></tr>
  * </table>
  */
-
 
 /**
  * \brief does gui preintialization, mainly initializing thread libraries
@@ -1327,7 +1340,7 @@ xvc_frame_create (Window win)
 
     g_assert (app);
     if ((app->flags & FLG_NOGUI) == 0) {    /* there's one good reason for not
-having a main window */
+                                             * having a main window */
         g_assert (xvc_ctrl_main_window);
     }
 
@@ -1435,10 +1448,9 @@ xvc_check_start_options ()
                     if (err->err->type != XVC_ERR_INFO ||
                         app->flags & FLG_RUN_VERBOSE) {
                         xvc_error_write_msg (err->err->code,
-                                                    ((app->
-                                                      flags &
-                                                      FLG_RUN_VERBOSE) ? 1 :
-                                                     0));
+                                             ((app->
+                                               flags &
+                                               FLG_RUN_VERBOSE) ? 1 : 0));
                         (*err->err->action) (err);
                     }
                 }
@@ -1470,7 +1482,6 @@ xvc_check_start_options ()
 
 #undef DEBUGFUNCTION
 }
-
 
 /**
  * \brief initializes the UI by mainly ensuring xvc_check_start_options is
@@ -1509,7 +1520,6 @@ xvc_ui_init (XVC_ErrorListItem * errors)
 #undef DEBUGFUNCTION
 }
 
-
 /**
  * \brief runs the UI by executing the main loop
  *
@@ -1545,7 +1555,6 @@ xvc_idle_add (void *func, void *data, Boolean queue_events)
         g_idle_add (func, data);
     }
 }
-
 
 /**
  * \brief updates the display of the current frame/filename according to
@@ -1691,7 +1700,6 @@ xvc_frame_change (int x, int y, int width, int height,
 #undef DEBUGFUNCTION
 }
 
-
 /**
  * \brief updates the widget monitoring the current frame rate based on
  *      the current value of xvc_led_time and last_led_time
@@ -1758,11 +1766,10 @@ xvc_frame_monitor ()
 #undef DEBUGFUNCTION
 }
 
-
 /*
  * callbacks here ....
  *
- */ 
+ */
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 gboolean
 on_xvc_ctrl_main_window_delete_event (GtkWidget * widget,
@@ -1819,7 +1826,6 @@ on_xvc_ctrl_m1_mitem_save_preferences_activate (GtkMenuItem *
     xvc_write_options_file (jobp);
 #undef DEBUGFUNCTION
 }
-
 
 void
 on_xvc_ctrl_m1_mitem_sf_capture_activate (GtkMenuItem * menuitem,
@@ -1894,7 +1900,6 @@ on_xvc_ctrl_m1_mitem_make_activate (GtkMenuItem * menuitem, gpointer user_data)
 #endif     // USE_FFMPEG
         target = &(app->single_frame);
 
-
     if (!app->current_mode) {
         xvc_command_execute (target->video_cmd, 0, 0,
                              jobp->file, target->start_no, jobp->pic_no,
@@ -1926,7 +1931,6 @@ on_xvc_ctrl_m1_mitem_quit_activate (GtkMenuItem * menuitem, gpointer user_data)
                            "destroy_event", 0, &ignore);
 #undef DEBUGFUNCTION
 }
-
 
 gint
 on_xvc_result_dialog_key_press_event (GtkWidget * widget, GdkEvent * event)
@@ -2012,7 +2016,6 @@ on_xvc_result_dialog_select_filename_button_clicked (GtkButton * button,
 #undef DEBUGFUNCTION
 }
 
-
 void
 on_xvc_ctrl_stop_toggle_toggled (GtkToggleToolButton * button,
                                  gpointer user_data)
@@ -2043,7 +2046,6 @@ on_xvc_ctrl_stop_toggle_toggled (GtkToggleToolButton * button,
     }
 #undef DEBUGFUNCTION
 }
-
 
 void
 on_xvc_ctrl_record_toggle_toggled (GtkToggleToolButton * button,
@@ -2386,8 +2388,8 @@ on_xvc_ctrl_lock_toggle_toggled (GtkToggleToolButton *
     tooltips = gtk_tooltips_new ();
 
     if (gtk_toggle_tool_button_get_active (togglebutton)) {
-        xvc_set_frame_locked (1);       /* button pressed = move frame with
-control */
+        xvc_set_frame_locked (1);      /* button pressed = move frame with
+                                        * control */
         gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (togglebutton), tooltips,
                                    _("Detach selection frame"),
                                    _("Detach selection frame"));
@@ -2439,11 +2441,11 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
         XVC_CapTypeOptions *target = NULL;
 
 #ifdef USE_FFMPEG
-    if (app->current_mode > 0)
-        target = &(app->multi_frame);
-    else
+        if (app->current_mode > 0)
+            target = &(app->multi_frame);
+        else
 #endif     // USE_FFMPEG
-        target = &(app->single_frame);
+            target = &(app->single_frame);
 
         g_assert (display);
 
@@ -2552,7 +2554,8 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                 target_win = XmuClientWindow (display, target_win);
             }
             xvc_appdata_set_window_attributes (target_win);
-            XTranslateCoordinates (display, target_win, root, 0, 0, &x, &y, &temp);
+            XTranslateCoordinates (display, target_win, root, 0, 0, &x, &y,
+                                   &temp);
         }
 
         app->area->x = x;
@@ -2761,8 +2764,9 @@ on_xvc_ctrl_main_window_key_press_event (GtkWidget * widget, GdkEvent * event)
 }
 
 void
-on_xvc_about_main_window_close (GtkAboutDialog * window, gpointer user_data) {
-    gtk_widget_destroy(GTK_WIDGET(window));
+on_xvc_about_main_window_close (GtkAboutDialog * window, gpointer user_data)
+{
+    gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 void
@@ -2777,5 +2781,4 @@ on_xvc_ctrl_m1_mitem_about_activate (GtkMenuItem * menuitem, gpointer user_data)
     glade_xml_signal_autoconnect (xml);
 }
 
-#endif // DOXYGEN_SHOULD_SKIP_THIS
-
+#endif     // DOXYGEN_SHOULD_SKIP_THIS

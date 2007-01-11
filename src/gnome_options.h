@@ -26,7 +26,7 @@
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <gtk/gtk.h>
 #include "app_data.h"
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 void xvc_create_pref_dialog (XVC_AppData * lapp);
 void xvc_pref_do_OK ();

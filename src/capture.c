@@ -76,7 +76,6 @@
 #include "app_data.h"
 #include "control.h"
 
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern int xvc_led_time;
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
@@ -150,10 +149,6 @@ apply_masks (uint8_t * dst, uint32_t and, uint32_t or, int bits_per_pixel)
  * Paints a mouse pointer in an X11 image.
  *
  * @param image Image where to paint the mouse pointer
- * @param s context used to retrieve original grabbing rectangle
- *          coordinates
- * @param x Mouse pointer coordinate
- * @param y Mouse pointer coordinate
  */
 static void
 paintMousePointer (XImage * image)
@@ -532,6 +527,7 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
  *      way. This is the SHM version.
  *
  * @param dpy a pointer to the display to read from
+ * @param shminfo shared memory information
  * @return a pointer to an XImage or NULL
  */
 static XImage *

@@ -27,7 +27,7 @@
 #endif
 
 #define DEBUGFILE "main.c"
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -43,7 +43,6 @@
 #include <signal.h>
 #include <math.h>
 #include <locale.h>
-
 
 #ifdef USE_FFMPEG
 #include <ffmpeg/avcodec.h>
@@ -81,18 +80,19 @@ usage (char *prog)
         (_
          ("Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
          prog, VERSION);
-    printf (_("[--fps #.#]      frames per second (float) or a fraction string like \"30000/1001\"\n"));
+    printf (_
+            ("[--fps #.#]      frames per second (float) or a fraction string like \"30000/1001\"\n"));
     printf (_("[--verbose #]    verbose level, '-v' is --verbose 1\n"));
     printf (_("[--time #.#]     time to record in seconds (float)\n"));
     printf (_("[--frames #]     frames to record, don't use it with --time\n"));
     printf (_
-             ("[--continue [yes|no]] autocontinue after maximum frames/time\n"));
+            ("[--continue [yes|no]] autocontinue after maximum frames/time\n"));
     printf (_
             ("[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"));
     printf (_
             ("[--window <hex-window-id>] a hexadecimal window id (ref. xwininfo)\n"));
     printf (_
-             ("[--rescale #]    relative output size in percent compared to input (1-100)\n"));
+            ("[--rescale #]    relative output size in percent compared to input (1-100)\n"));
     printf (_("[--quality #]    recording quality (1-100)\n"));
     printf (_("[--start_no #]   start number for the file names\n"));
 #ifdef HAVE_SHMAT
@@ -102,28 +102,28 @@ usage (char *prog)
     printf (_("[--gui [yes|no]] turn on/off gui\n"));
 #ifdef USE_FFMPEG
     printf (_
-             ("[--sf|--mf]      request single-frame or multi-frame capture mode\n"));
+            ("[--sf|--mf]      request single-frame or multi-frame capture mode\n"));
 #endif     // USE_FFMPEG
     printf
         (_
-             ("[--auto]         cause auto-detection of output format, video-, and audio codec\n"));
+         ("[--auto]         cause auto-detection of output format, video-, and audio codec\n"));
     printf (_
             ("[--codec <codec>] specify codec to use for multi-frame capture\n"));
     printf (_
-             ("[--codec-help]   list available codecs for multi-frame capture\n"));
+            ("[--codec-help]   list available codecs for multi-frame capture\n"));
     printf (_
             ("[--format <format>] specify file format to override the extension in the filename\n"));
     printf (_("[--format-help]  list available file formats\n"));
 #ifdef HAVE_FFMPEG_AUDIO
     printf
         (_
-             ("[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"));
+         ("[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"));
     printf (_
-             ("[--aucodec-help] list available audio codecs for multi-frame capture\n"));
+            ("[--aucodec-help] list available audio codecs for multi-frame capture\n"));
     printf (_("[--audio [yes|no]] turn on/off audio capture\n"));
     printf
         (_
-             ("[--audio_in <src>] specify audio input device or '-' for pipe input\n"));
+         ("[--audio_in <src>] specify audio input device or '-' for pipe input\n"));
     printf (_("[--audio_rate #] sample rate for audio capture\n"));
     printf (_("[--audio_bits #] bit rate for audio capture\n"));
     printf (_("[--audio_channels #] number of audio channels\n"));
@@ -184,7 +184,7 @@ init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
     xvc_appdata_init (app);
     xvc_appdata_set_defaults (app);
     xvc_captypeoptions_init (ctos);
-    
+
     // gtk_init may replace argv values with NULL ... that's bad for
     // getopt_long
     for (i = argc; i > 0; i--) {
@@ -230,7 +230,7 @@ cleanup ()
  * @param tmp_capture_options pointer to a pre-existing XVC_CapTypeOptions
  *      struct to be set
  * @param argc number of cli arguments
- * @param argv array of cli arguments
+ * @param _argv array of cli arguments
  */
 static void
 parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
@@ -276,8 +276,7 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
         case 0:                       // it's a long option
             switch (opt_index) {
             case 0:                   // fps
-                tmp_capture_options->fps = 
-                    xvc_read_fps_from_string(optarg);
+                tmp_capture_options->fps = xvc_read_fps_from_string (optarg);
                 break;
             case 1:                   // file
                 tmp_capture_options->file = strdup (optarg);
@@ -293,8 +292,7 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
                 break;
             case 5:                   // cap_geometry
                 sscanf (optarg, "%hux%hu+%hi+%hi", &(app->area->width),
-                        &(app->area->height), &(app->area->x),
-                        &(app->area->y));
+                        &(app->area->height), &(app->area->x), &(app->area->y));
                 break;
             case 6:                   // start_no
                 tmp_capture_options->start_no = atoi (optarg);
@@ -567,7 +565,8 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
                     for (n = CAP_NONE; n < NUMCAPS; n++) {
                         if (xvc_formats[n].extensions) {
                             for (m = 0; m < strlen (xvc_formats[n].name); m++) {
-                                tmp_format[m] = tolower (xvc_formats[n].name[m]);
+                                tmp_format[m] =
+                                    tolower (xvc_formats[n].name[m]);
                             }
                             tmp_format[strlen (xvc_formats[n].name)] = '\0';
                             printf ("%s", tmp_format);
@@ -627,7 +626,8 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
 
                     for (n = 1; n < NUMAUCODECS; n++) {
                         for (m = 0; m < strlen (xvc_audio_codecs[n].name); m++) {
-                            tmp_codec[m] = tolower (xvc_audio_codecs[n].name[m]);
+                            tmp_codec[m] =
+                                tolower (xvc_audio_codecs[n].name[m]);
                         }
                         tmp_codec[strlen (xvc_audio_codecs[n].name)] = '\0';
                         printf ("%s", tmp_codec);
@@ -659,6 +659,7 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
             case 27:
                 {
                     unsigned int win_id = 0;
+
                     sscanf (optarg, "%X", &win_id);
                     capture_window = (Window) win_id;
                     break;
@@ -877,8 +878,8 @@ print_current_settings (XVC_CapTypeOptions * target)
         printf ("+%i+%i", app->area->x, app->area->y);
     printf ("\n");
     printf (_(" rescale output to = %i\n"), app->rescale);
-    printf (_(" frames per second = %.2f\n"), ((float) target->fps.num / 
-        (float) target->fps.den));
+    printf (_(" frames per second = %.2f\n"), ((float) target->fps.num /
+                                               (float) target->fps.den));
     printf (_(" file pattern = %s\n"), target->file);
     printf (_(" file format = %s\n"),
             ((target->target ==
@@ -889,7 +890,8 @@ print_current_settings (XVC_CapTypeOptions * target)
 #ifdef HAVE_FFMPEG_AUDIO
     printf (_(" audio codec = %s\n"),
             ((target->au_targetCodec ==
-              CODEC_NONE) ? "AUTO" : xvc_audio_codecs[target->au_targetCodec].name));
+              CODEC_NONE) ? "AUTO" : xvc_audio_codecs[target->au_targetCodec].
+             name));
 #endif     // HAVE_FFMPEG_AUDIO
     printf (_(" verbose level = %d\n"), app->verbose);
     printf (_(" frame start no = %d\n"), target->start_no);

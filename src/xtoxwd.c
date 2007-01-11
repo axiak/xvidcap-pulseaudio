@@ -1,6 +1,10 @@
-/* 
- * xtoxwd.c
+/**
+ * \file xtoxwd.c
  *
+ * This file contains the functions for saving captured frames to individual
+ * xwd files.
+ */
+/*
  * Copyright (C) 1997,98 Rasca, Berlin
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,9 +22,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif     // HAVE_CONFIG_H
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,14 +38,13 @@
 #include "job.h"
 #include "app_data.h"
 
-
-/* 
- * image size for ZPixmap 
- */
+/** \brief image size for ZPixmap */
 #define ZImageSize(i) (i->bytes_per_line * i->height)
 
-/* 
- * swap the byte order of a 16 bit word;
+/**
+ * \brief swap the byte order of a 16 bit word
+ *
+ * @param i 16-bit word to swap
  */
 static void
 swap_2byte (unsigned short *i)
@@ -52,8 +57,10 @@ swap_2byte (unsigned short *i)
     p[1] = t;
 }
 
-/* 
- * swap the byte order of a long integer (32 byte)
+/**
+ * \brief swap the byte order of a long integer (32 byte)
+ *
+ * @param i the 32-bit word to swap
  */
 static void
 swap_4byte (unsigned long *i)
@@ -69,8 +76,11 @@ swap_4byte (unsigned long *i)
     p[2] = t;
 }
 
-/* 
- * swap the byte order of a 32 bit word;
+/**
+ * \brief swap the byte order of a number of 32 bit word
+ *
+ * @param p pointer to a number of 32-bit words
+ * @param n number of 32-bit words to swap
  */
 static void
 swap_n_4byte (unsigned char *p, unsigned long n)
@@ -90,8 +100,11 @@ swap_n_4byte (unsigned char *p, unsigned long n)
 }
 
 #if 0
-/* 
- * swap n bytes in a char array
+/**
+ * \brief swap n bytes in a char array
+ *
+ * @param p pointer to a number of 16-bit words where the bytes are swapped
+ * @param n number of bytes (not 16-bit words)
  */
 static void
 swap_n_bytes (unsigned char *p, unsigned long n)
@@ -108,13 +121,15 @@ swap_n_bytes (unsigned char *p, unsigned long n)
 }
 #endif
 
-/* 
- * global, we need this to check if we must swap some bytes
- */
+/** \brief we need this to check if we must swap some bytes */
 static unsigned long little_endian = 1;
 
-/* 
- * prepare the color table for the xwd file
+/**
+ * \brief prepare the color table for the xwd file
+ *
+ * @param colors colors as represented in the XImage
+ * @param ncolors number of colors
+ * @return a pointer to the converted color table
  */
 void *
 xvc_xwd_get_color_table (XColor * colors, int ncolors)
@@ -143,15 +158,20 @@ xvc_xwd_get_color_table (XColor * colors, int ncolors)
     return (color_table);
 }
 
-/* 
- * write ximage as xwd file to 'fp'
+/**
+ * \brief main function to write ximage as individual frame to 'fp'
+ *
+ * @param fp file handle, this, however, is only used here
+ * @param image the captured XImage to save
+ * \todo remove fp from outside the save function. It is only needed here
+ *      and should be handled here.
  */
 void
 xvc_xwd_save_frame (FILE * fp, XImage * image)
 {
     static XWDFileHeader head;
     static int file_name_len;
-    Job *job = xvc_job_ptr();
+    Job *job = xvc_job_ptr ();
     char *file = job->file;
 
     /* 

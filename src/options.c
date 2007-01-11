@@ -29,7 +29,7 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -128,11 +128,11 @@ xvc_write_options_file ()
             for (m = 0; m < xvc_formats[n].num_extensions; m++) {
                 printf (".%s", xvc_formats[n].extensions[m]);
 #ifdef USE_FFMPEG
-            if (n < (CAP_FFM - 1))
-                fprintf (fp, ", ");
+                if (n < (CAP_FFM - 1))
+                    fprintf (fp, ", ");
 #else
-            if (n < (NUMCAPS - 1))
-                fprintf (fp, ", ");
+                if (n < (NUMCAPS - 1))
+                    fprintf (fp, ", ");
 #endif     // USE_FFMPEG
             }
         }
@@ -148,13 +148,13 @@ xvc_write_options_file ()
 #else
     for (n = (CAP_NONE + 1); n < NUMCAPS; n++) {
 #endif     // USE_FFMPEG
-                fprintf (fp, "%s", xvc_formats[n].name);
+        fprintf (fp, "%s", xvc_formats[n].name);
 #ifdef USE_FFMPEG
-            if (n < (CAP_FFM - 1))
-                fprintf (fp, ", ");
+        if (n < (CAP_FFM - 1))
+            fprintf (fp, ", ");
 #else
-            if (n < (NUMCAPS - 1))
-                fprintf (fp, ", ");
+        if (n < (NUMCAPS - 1))
+            fprintf (fp, ", ");
 #endif     // USE_FFMPEG
     }
     fprintf (fp, "\n");
@@ -168,22 +168,24 @@ xvc_write_options_file ()
 #else
     for (n = (CODEC_NONE + 1); n < NUMCODECS; n++) {
 #endif     // USE_FFMPEG
-                fprintf (fp, "%s", xvc_codecs[n].name);
+        fprintf (fp, "%s", xvc_codecs[n].name);
 #ifdef USE_FFMPEG
-            if (n < (CODEC_MF - 1))
-                fprintf (fp, ", ");
+        if (n < (CODEC_MF - 1))
+            fprintf (fp, ", ");
 #else
-            if (n < (NUMCODECS - 1))
-                fprintf (fp, ", ");
+        if (n < (NUMCODECS - 1))
+            fprintf (fp, ", ");
 #endif     // USE_FFMPEG
     }
     fprintf (fp, "\n#sf_codec: %s\n",
              xvc_codecs[app->single_frame.targetCodec].name);
     fprintf (fp, _("# audio codec (for future use)\nsf_au_codec: %s\n"),
              "NONE");
-    fprintf (fp, _("# frames per second\n# put as normal decimal number or a fraction like \"30000/10001\"\n"));
-    fprintf (fp, _("sf_fps: %i/%i\n"), 
-                    app->single_frame.fps.num, app->single_frame.fps.den );
+    fprintf (fp,
+             _
+             ("# frames per second\n# put as normal decimal number or a fraction like \"30000/10001\"\n"));
+    fprintf (fp, _("sf_fps: %i/%i\n"), app->single_frame.fps.num,
+             app->single_frame.fps.den);
     fprintf (fp, _("# max time (0 = unlimited)\nsf_max_time: %i\n"),
              app->single_frame.time);
     fprintf (fp, _("# max frames (0 = unlimited)\nsf_max_frames: %d\n"),
@@ -233,9 +235,9 @@ xvc_write_options_file ()
              ("# file format - use AUTO to select format through file extension\n"));
     fprintf (fp, _("# Otherwise specify one of the following: "));
     for (n = CAP_FFM; n < NUMCAPS; n++) {
-                fprintf (fp, ".%s", xvc_formats[n].name);
-                if (NUMCAPS < (n + 1))
-                    fprintf (fp, ", ");
+        fprintf (fp, ".%s", xvc_formats[n].name);
+        if (NUMCAPS < (n + 1))
+            fprintf (fp, ", ");
     }
     fprintf (fp, "\n");
     fprintf (fp, "mf_format: %s\n", xvc_formats[app->multi_frame.target].name);
@@ -264,9 +266,11 @@ xvc_write_options_file ()
     fprintf (fp, "\nmf_au_codec: %s\n",
              xvc_audio_codecs[app->multi_frame.au_targetCodec].name);
 #endif     // HAVE_FFMPEG_AUDIO
-    fprintf (fp, _("# frames per second\n# put as normal decimal number or a fraction like \"30000/10001\"\n"));
-    fprintf (fp, _("mf_fps: %i/%i\n"), 
-                    app->multi_frame.fps.num, app->multi_frame.fps.den );
+    fprintf (fp,
+             _
+             ("# frames per second\n# put as normal decimal number or a fraction like \"30000/10001\"\n"));
+    fprintf (fp, _("mf_fps: %i/%i\n"), app->multi_frame.fps.num,
+             app->multi_frame.fps.den);
     fprintf (fp, _("# max time (0 = unlimited)\nmf_max_time: %i\n"),
              app->multi_frame.time);
     fprintf (fp, _("# max frames (0 = unlimited)\nmf_max_frames: %d\n"),
@@ -451,7 +455,8 @@ xvc_read_options_file ()
                     int cap_index = 0, found_target = 0;
 
                     for (cap_index = CAP_NONE; cap_index < NUMCAPS; cap_index++) {
-                        if (strcasecmp (xvc_formats[cap_index].name, token) == 0)
+                        if (strcasecmp (xvc_formats[cap_index].name, token) ==
+                            0)
                             found_target = cap_index;
                     }
                     app->single_frame.target = found_target;
@@ -460,7 +465,8 @@ xvc_read_options_file ()
 
                     for (codec_index = CODEC_NONE; codec_index < NUMCODECS;
                          codec_index++) {
-                        if (strcasecmp (xvc_codecs[codec_index].name, token) == 0)
+                        if (strcasecmp (xvc_codecs[codec_index].name, token) ==
+                            0)
                             found_codec = codec_index;
                     }
                     app->single_frame.targetCodec = found_codec;
@@ -479,8 +485,7 @@ xvc_read_options_file ()
                 }
 #endif     // HAVE_FFMPEG_AUDIO
                 else if (strcasecmp (token, "sf_fps") == 0) {
-                    app->single_frame.fps = 
-                        xvc_read_fps_from_string(value);
+                    app->single_frame.fps = xvc_read_fps_from_string (value);
                 } else if (strcasecmp (token, "sf_max_time") == 0) {
                     app->single_frame.time = atoi (value);
                     if (atof (value) > 0)
@@ -575,8 +580,7 @@ xvc_read_options_file ()
                 }
 #endif     // HAVE_FFMPEG_AUDIO
                 else if (strcasecmp (token, "mf_fps") == 0) {
-                    app->multi_frame.fps = 
-                        xvc_read_fps_from_string(value);
+                    app->multi_frame.fps = xvc_read_fps_from_string (value);
                 } else if (strcasecmp (token, "mf_max_time") == 0) {
                     app->multi_frame.time = atoi (value);
                     if (atof (value) > 0)

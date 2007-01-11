@@ -1,9 +1,14 @@
+/**
+ * \file xvidcap-intl.h
+ */
 #ifndef __XVIDCAP_INTL_H__
 #define __XVIDCAP_INTL_H__
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif     /* HAVE_CONFIG_H */
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #ifdef ENABLE_NLS
 #include <libintl.h>

@@ -179,7 +179,7 @@ led_meter_new ()
  * \brief sets the percentage to use for the amplitude in the led meter
  *
  * @param lm pointer to the led meter widget to work on
- * @param percet percentag value (1-100)
+ * @param percent percentag value (1-100)
  */
 void
 led_meter_set_percent (LedMeter * lm, int percent)

@@ -247,7 +247,8 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     lapp->multi_frame.edit_cmd =
         _("xterm -e \"echo none specified; echo hit enter to dismiss; read\"");
     lapp->multi_frame.video_cmd =
-        _("xterm -e \"echo not needed for multi-frame capture; echo hit enter to dismiss; read\"");
+        _
+        ("xterm -e \"echo not needed for multi-frame capture; echo hit enter to dismiss; read\"");
     lapp->multi_frame.play_cmd = "mplayer \"${XVFILE}\" &";
 #endif     // USE_FFMPEG
     lapp->single_frame.play_cmd =
@@ -1016,7 +1017,8 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
                                                         0);
 
                 non_target->fps = xvc_codecs[t_codec].allowed_fps[fps_index];
-            } else if (xvc_codec_is_valid_fps (non_target->fps, t_codec, 1) == 0) {
+            } else if (xvc_codec_is_valid_fps (non_target->fps, t_codec, 1) ==
+                       0) {
                 errors = errorlist_append (27, errors, lapp);
                 if (!errors) {
                     *rc = -1;

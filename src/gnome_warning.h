@@ -24,7 +24,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include "app_data.h"
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 GtkWidget *xvc_create_warning_with_errors (XVC_ErrorListItem * elist,
                                            int from_where);

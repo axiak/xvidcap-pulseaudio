@@ -37,7 +37,7 @@
 #endif
 
 #define DEBUGFILE "job.c"
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,12 +64,11 @@
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern pthread_mutex_t recording_mutex;
 extern pthread_cond_t recording_condition_unpaused;
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 static Job *job;
 
 static void job_set_capture (void);
-
 
 #ifdef HAVE_FFMPEG_AUDIO
 /**
@@ -83,7 +82,6 @@ static void job_set_capture (void);
 static void
 job_set_sound_dev (char *snd, int rate, int size, int channels)
 {
-#undef DEBUGFUNCTION
 #define DEBUGFUNCTION "job_set_sound_dev()"
     extern int errno;
     struct stat statbuf;
@@ -116,9 +114,9 @@ job_set_sound_dev (char *snd, int rate, int size, int channels)
     }
 
     return;
+#undef DEBUGFUNCTION
 }
 #endif     // HAVE_FFMPEG_AUDIO
-
 
 /**
  * \brief create a new job
@@ -204,7 +202,6 @@ xvc_job_set_colors ()
 void
 xvc_job_set_from_app_data (XVC_AppData * app)
 {
-#undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_job_set_from_app_data()"
     XVC_CapTypeOptions *cto;
     char file[PATH_MAX + 1];
@@ -225,8 +222,8 @@ xvc_job_set_from_app_data (XVC_AppData * app)
     // do: flags |= or smth.
     job->flags = app->flags;
 
-    job->time_per_frame = (int) (1000 / 
-        ((float) cto->fps.num / (float) cto->fps.den));
+    job->time_per_frame = (int) (1000 /
+                                 ((float) cto->fps.num / (float) cto->fps.den));
 
     job->state = VC_STOP;              // FIXME: better move this outta here?
     job->pic_no = cto->start_no;
@@ -367,8 +364,8 @@ xvc_job_set_save_function (XVC_FFormatID type)
 #define DEBUGFUNCTION "xvc_job_set_save_function()"
 
 #ifdef DEBUG2
-    printf ("%s %s: entering with type: %i\n", DEBUGFILE, DEBUGFUNCTION, 
-        (int) type);
+    printf ("%s %s: entering with type: %i\n", DEBUGFILE, DEBUGFUNCTION,
+            (int) type);
 #endif     // DEBUG2
 
 #ifdef USE_FFMPEG
@@ -393,7 +390,7 @@ xvc_job_set_save_function (XVC_FFormatID type)
         job->get_colors = xvc_xwd_get_color_table;
         job->clean = NULL;
     }
-
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -402,7 +399,6 @@ xvc_job_set_save_function (XVC_FFormatID type)
 static void
 job_set_capture (void)
 {
-#undef DEBUGFUNCTION
 #define DEBUGFUNCTION "job_set_capture()"
     int input = job->flags & FLG_SOURCE;
 
@@ -424,9 +420,8 @@ job_set_capture (void)
         job->capture = xvc_capture_x11;
         break;
     }
-
+#undef DEBUGFUNCTION
 }
-
 
 /**
  * \brief dump current job's settings to stdout for debugging
@@ -434,7 +429,6 @@ job_set_capture (void)
 void
 xvc_job_dump ()
 {
-#undef DEBUGFUNCTION
 #define DEBUGFUNCTION "xvc_job_dump()"
 
     printf ("file = %s\n", job->file);
@@ -447,7 +441,7 @@ xvc_job_dump ()
     printf ("snd_device = %s\n", job->snd_device);
 #endif     // HAVE_FFMPEG_AUDIO
 
-printf ("get_colors = %p\n", job->get_colors);
+    printf ("get_colors = %p\n", job->get_colors);
     printf ("save = %p\n", job->save);
     printf ("clean = %p\n", job->clean);
     printf ("capture = %p\n", job->capture);
@@ -455,7 +449,7 @@ printf ("get_colors = %p\n", job->get_colors);
     printf ("ncolors = %i\n", job->ncolors);
     printf ("color_table = %p\n", job->color_table);
     printf ("colors = %p\n", job->colors);
-
+#undef DEBUGFUNCTION
 }
 
 /**

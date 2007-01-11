@@ -33,7 +33,7 @@
 #endif
 
 #define DEBUGFILE "gnome_warning.c"
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -61,7 +61,7 @@ GtkWidget *xvc_warn_main_window;
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern GtkWidget *xvc_ctrl_m1;
 extern GtkWidget *xvc_pref_main_window;
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 // static gint xvc_warn_label_width = 0;
 /** 
@@ -72,6 +72,7 @@ extern GtkWidget *xvc_pref_main_window;
  * <li>2 = initial validation in main.c</li></ul>
  */
 static int called_from_where = 0;
+
 /** 
  * \brief the initial resize of the warning needs to be done a little time
  *      after the display of the dialog, so the actual size of the components
@@ -81,6 +82,7 @@ static int called_from_where = 0;
  * @see auto_resize_warning_dialog
  */
 static guint scheduled_warning_resize_id = 0;
+
 /** \brief the list of errors that caused this warning to be displayed */
 static XVC_ErrorListItem *warning_elist = NULL;
 
@@ -208,7 +210,8 @@ xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
         for (; err != NULL; err = err->next) {
             GtkWidget *eitem;
 
-            if (err->err->type != XVC_ERR_INFO || (app->flags & FLG_RUN_VERBOSE)) {
+            if (err->err->type != XVC_ERR_INFO
+                || (app->flags & FLG_RUN_VERBOSE)) {
                 if (err->err->type == XVC_ERR_FATAL)
                     count_fatal_messages++;
                 eitem = xv_error_item_new_with_error (err->err);
@@ -268,8 +271,6 @@ xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
 
     return xvc_warn_main_window;
 }
-
-
 
 /* 
  * callbacks
@@ -427,4 +428,4 @@ on_xvc_warn_main_window_response (GtkDialog * dialog, gint response_id,
 #endif     // DEBUG
 }
 
-#endif // DOXYGEN_SHOULD_SKIP_THIS
+#endif     // DOXYGEN_SHOULD_SKIP_THIS

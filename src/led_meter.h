@@ -39,15 +39,16 @@ extern "C"
 #define LM_LOW_THRESHOLD 3
 /** \brief the highest led number regarded as medium frame drop */
 #define LM_MEDIUM_THRESHOLD 6
-/** \brief the highest led number regarded as high frame drop */    
+/** \brief the highest led number regarded as high frame drop */
 #define LM_HIGH_THRESHOLD LM_NUM_DAS
 
 /** \brief the categories the led display is divided in */
-enum LED_METER_DACategory {
-    LM_LOW,
-    LM_MEDIUM,
-    LM_HIGH
-};
+    enum LED_METER_DACategory
+    {
+        LM_LOW,
+        LM_MEDIUM,
+        LM_HIGH
+    };
 
     typedef struct _LedMeter LedMeter;
     typedef struct _LedMeterClass LedMeterClass;

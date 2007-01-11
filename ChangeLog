@@ -1,4 +1,15 @@
 
+2007-01-11  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: led_meter.c, xtoxwd.h, led_meter.h, xvidcap-intl.h, 
+		gnome_warning.c, gnome_warning.h, xtoffmpeg.c, 
+		gnome_ui.c, capture.c, app_data.c, job.c, gnome_frame.c, 
+		job.h, gnome_options.c, xv_error_item.c, main.c, 
+		gnome_options.h, xv_error_item.h, options.c, xtoxwd.c:
+		more code cleanup and doxygenification
+
+2006-10-24  Vincenzo Reale <smart2128@baslug.org>
+	* po/it.po: updated Italian translation
+
 2007-01-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, src: led_meter.c, xtoxwd.h, led_meter.h, control.h, 
 		gnome_warning.c, xtoffmpeg.c, gnome_warning.h, gnome_ui.c, 

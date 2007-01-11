@@ -1,6 +1,10 @@
-/* 
- * xv_error_item.c
+/**
+ * \file xv_error_item.c
  *
+ * this file contains the widget used for displaying an individual error in
+ * the warning dialog.
+ */
+/*
  * Copyright (C) 2003 Karl H. Beckers, Frankfurt
  * EMail: khb@jarre-de-the.net
  *
@@ -31,7 +35,6 @@
 #include <math.h>
 
 #include "xv_error_item.h"
-//#include "app_data.h"
 #include "xvidcap-intl.h"
 
 enum

@@ -1,6 +1,7 @@
-/* 
- * xtoxwd.h
- *
+/**
+ * \file xtoxwd.h
+ */
+/*
  * Copyright (C) 1997 Rasca Gmelch, Berlin
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +23,6 @@
 #define __X_TO_XWD_H__
 
 void xvc_xwd_save_frame (FILE * fp, XImage * image);
-void * xvc_xwd_get_color_table (XColor * colors, int ncolors);
+void *xvc_xwd_get_color_table (XColor * colors, int ncolors);
 
 #endif     // __X_TO_XWD_H__
