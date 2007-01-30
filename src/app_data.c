@@ -14,6 +14,7 @@
  * checking.
  *
  * \todo error_exit_action should cleanup before exiting
+ * \todo add validation for use_xdamage
  *
  */
 
@@ -48,6 +49,7 @@
 #include <string.h>
 #include <limits.h>                    // PATH_MAX
 #include <ctype.h>
+#include <pthread.h>
 
 #ifdef HAVE_LIBXFIXES
 #include <X11/X.h>
@@ -57,6 +59,12 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/Xfixes.h>
 #endif     // HAVE_LIBXFIXES
+#ifdef USE_XDAMAGE
+#include "gnome_ui.h"
+#include <X11/extensions/Xdamage.h>
+#include <X11/Xatom.h>
+//#include <gdk/gdk.h>
+#endif     // USE_XDAMAGE
 #ifdef HAVE_SHMAT
 #include <X11/extensions/XShm.h>
 #endif     // HAVE_SHMAT
@@ -74,6 +82,52 @@ static XVC_ErrorListItem *errorlist_append (int code, XVC_ErrorListItem * err,
 static void error_write_action_msg (int code);
 static void appdata_set_display ();
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
+
+static XVC_AppData *app = NULL;
+
+static XVC_AppData *
+app_data_new ()
+{
+#define DEBUGFUNCTION "app_data_new()"
+    app = (XVC_AppData *) malloc (sizeof (XVC_AppData));
+    if (!app) {
+        perror ("%s %s: malloc failed?!?");
+        exit (1);
+    }
+    return app;
+#undef DEBUGFUNCTION
+}
+
+/**
+ * \brief frees the global XVC_AppData struct
+ */
+void
+xvc_app_data_free ()
+{
+#define DEBUGFUNCTION "xvc_app_data_free()"
+    if (app) {
+        free (app);
+    }
+#undef DEBUGFUNCTION
+}
+
+/**
+ * \brief get a pointer to the current XVC_AppData struct
+ *
+ * @return a pointer to the current XVC_AppData struct. If a XVC_AppData had
+ *      not been allocated before, it will be now.
+ */
+XVC_AppData *
+xvc_app_data_ptr (void)
+{
+#define DEBUGFUNCTION "xvc_app_data_ptr()"
+    if (!app) {
+        app_data_new ();
+        xvc_appdata_init (app);
+    }
+    return (app);
+#undef DEBUGFUNCTION
+}
 
 /**
  * \brief initializes an empty XVC_CapTypeOptions structure.
@@ -121,6 +175,7 @@ xvc_appdata_init (XVC_AppData * lapp)
     lapp->rescale = 0;
     lapp->mouseWanted = 0;
     lapp->source = NULL;
+    lapp->use_xdamage = -1;
 #ifdef HAVE_FFMPEG_AUDIO
     lapp->snddev = NULL;
 #endif     // HAVE_FFMPEG_AUDIO
@@ -131,6 +186,9 @@ xvc_appdata_init (XVC_AppData * lapp)
     lapp->current_mode = -1;
     lapp->dpy = NULL;
     lapp->area = NULL;
+#ifdef USE_XDAMAGE
+    lapp->dmg_event_base = 0;
+#endif     // USE_XDAMAGE
 
     xvc_captypeoptions_init (&(lapp->single_frame));
 #ifdef USE_FFMPEG
@@ -147,15 +205,76 @@ xvc_appdata_init (XVC_AppData * lapp)
 void
 xvc_appdata_set_defaults (XVC_AppData * lapp)
 {
+#define DEBUGFUNCTION "xvc_appdata_set_defaults"
+    lapp->dpy = xvc_frame_get_capture_display ();
+
     // initialize general options
     // flags related ones first
     lapp->flags = FLG_ALWAYS_SHOW_RESULTS;
 #ifdef HAVE_LIBXFIXES
     {
         int a, b;
+        Display *dpy = xvc_frame_get_capture_display ();
 
-        if (XFixesQueryExtension (xvc_frame_get_capture_display (), &a, &b))
+        if (XFixesQueryExtension (dpy, &a, &b))
             lapp->flags |= FLG_USE_XFIXES;
+
+#ifdef USE_XDAMAGE
+        a = 2;
+        b = 0;
+        if (lapp->use_xdamage != 0 &&
+            XFixesQueryVersion (dpy, &a, &b) && a >= 2) {
+            if (XDamageQueryExtension (dpy, &(lapp->dmg_event_base), &b)) {
+                Window *wm_child = NULL;
+                Atom nwm_atom, utf8_string, wm_name_atom, rt;
+                unsigned long nbytes, nitems;
+                char *wm_name_str = NULL;
+                int fmt;
+
+                utf8_string = XInternAtom (dpy, "UTF8_STRING", False);
+
+                nwm_atom = XInternAtom (dpy, "_NET_SUPPORTING_WM_CHECK", True);
+                wm_name_atom = XInternAtom (dpy, "_NET_WM_NAME", True);
+
+                if (nwm_atom != None && wm_name_atom != None) {
+                    if (XGetWindowProperty (dpy, DefaultRootWindow (dpy),
+                                            nwm_atom, 0, 100,
+                                            False, XA_WINDOW,
+                                            &rt, &fmt, &nitems, &nbytes,
+                                            (unsigned char **) ((void *)
+                                                                &wm_child))
+                        != Success) {
+                        fprintf (stderr,
+                                 "%s %s: Error while trying to get a window to identify the window manager.\n",
+                                 DEBUGFILE, DEBUGFUNCTION);
+                    }
+                    if ((wm_child == NULL)
+                        ||
+                        (XGetWindowProperty
+                         (dpy, *wm_child, wm_name_atom, 0, 100, False,
+                          utf8_string, &rt, &fmt, &nitems, &nbytes,
+                          (unsigned char **) ((void *) &wm_name_str))
+                         != Success)) {
+                        fprintf (stderr,
+                                 "%s %s: Warning!!!\nYour window manager appears to be non-compliant!\n",
+                                 DEBUGFILE, DEBUGFUNCTION);
+                    }
+                }
+                //Right now only wm's that I know of performing 3d compositing
+                // are beryl and compiz. names can be compiz for compiz and
+                // beryl/beryl-co/beryl-core for beryl(so it's strncmp )
+                if (lapp->use_xdamage != 1
+                    && (!strcmp (wm_name_str, "compiz")
+                        || !strncmp (wm_name_str, "beryl", 5))) {
+                    lapp->dmg_event_base = 0;
+                } else {
+                    lapp->flags |= FLG_USE_XDAMAGE;
+                }
+            } else {
+                lapp->dmg_event_base = 0;
+            }
+        }
+#endif     // USE_XDAMAGE
     }
 #endif     // HAVE_LIBXFIXES
 #ifdef HasDGA
@@ -205,7 +324,6 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     lapp->area->width = 192;
     lapp->area->height = 144;
     lapp->area->x = lapp->area->y = -1;
-    lapp->dpy = xvc_frame_get_capture_display ();
     xvc_get_window_attributes (None, &(lapp->win_attr));
 
     // default mode of capture
@@ -256,6 +374,8 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     lapp->single_frame.video_cmd =
         "ppm2mpeg.sh \"${XVFILE}\" ${XVFFRAME} ${XVLFRAME} ${XVWIDTH} ${XVHEIGHT} ${XVFPS} ${XVTIME} &";
     lapp->single_frame.edit_cmd = "gimp \"${XVFILE}\" &";
+
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -302,6 +422,7 @@ xvc_captypeoptions_copy (XVC_CapTypeOptions * topts, XVC_CapTypeOptions * sopts)
 void
 xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
 {
+    tapp->use_xdamage = sapp->use_xdamage;
     tapp->verbose = sapp->verbose;
     tapp->flags = sapp->flags;
     tapp->rescale = sapp->rescale;
@@ -309,6 +430,9 @@ xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
     tapp->dpy = sapp->dpy;
     tapp->win_attr = sapp->win_attr;
     tapp->area = sapp->area;
+#ifdef USE_XDAMAGE
+    tapp->dmg_event_base = sapp->dmg_event_base;
+#endif     // USE_XDAMAGE
 
     tapp->source = strdup (sapp->source);
 #ifdef HAVE_FFMPEG_AUDIO
@@ -2499,9 +2623,5 @@ xvc_appdata_set_window_attributes (Window win)
 #define DEBUGFUNCTION "xvc_appdata_set_window_attributes()"
     appdata_set_display ();
     xvc_get_window_attributes (win, &(app->win_attr));
-    app->area->x = app->win_attr.x;
-    app->area->y = app->win_attr.y;
-    app->area->width = app->win_attr.width;
-    app->area->height = app->win_attr.height;
 #undef DEBUGFUNCTION
 }

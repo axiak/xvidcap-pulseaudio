@@ -1043,6 +1043,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
     int quality = target->quality;
+    XVC_AppData *app = xvc_app_data_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1251,6 +1252,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 {
 #define DEBUGFUNCTION "xvc_ffmpeg_save_frame()"
     Job *job = xvc_job_ptr ();
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     /* size of the encoded frame to write to file */
     int out_size;

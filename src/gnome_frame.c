@@ -80,6 +80,8 @@ Display *
 xvc_frame_get_capture_display ()
 {
 #define DEBUGFUNCTION "xvc_frame_get_capure_display()"
+    XVC_AppData *app = xvc_app_data_ptr ();
+
     if (!(app->flags & FLG_NOGUI) && gtk_frame_top) {
         xvc_dpy = GDK_DRAWABLE_XDISPLAY (GTK_WIDGET (gtk_frame_top)->window);
     } else {
@@ -98,6 +100,8 @@ void
 xvc_frame_drop_capture_display ()
 {
 #define DEBUGFUNCTION "xvc_frame_drop_capture_display()"
+    XVC_AppData *app = xvc_app_data_ptr ();
+
     if (app->flags & FLG_NOGUI && xvc_dpy) {
         XCloseDisplay (xvc_dpy);
         xvc_dpy = NULL;
@@ -191,6 +195,7 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     extern GtkWidget *xvc_ctrl_main_window;
     Display *dpy;
     XRectangle *x_rect = xvc_get_capture_area ();
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     // we have to adjust it to viewable areas
     dpy = xvc_frame_get_capture_display ();
@@ -298,6 +303,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     GdkColor g_col;
     GdkColormap *colormap;
     GdkRectangle rect;
+    XVC_AppData *app = xvc_app_data_ptr ();
     int flags = app->flags;
     XRectangle *x_rect = xvc_get_capture_area ();
 

@@ -237,6 +237,27 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     }
 #endif     // HAVE_SHMAT
 
+    // use xdamage
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_auto_checkbutton");
+    g_assert (w);
+
+    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
+        lapp->use_xdamage = -1;
+    } else {
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_no_radiobutton");
+        g_assert (w);
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
+            lapp->use_xdamage = 0;
+            lapp->flags &= ~FLG_USE_XDAMAGE;
+        } else {
+            lapp->use_xdamage = 1;
+            if (lapp->dmg_event_base != 0)
+                lapp->flags |= FLG_USE_XDAMAGE;
+        }
+    }
+
     // autocontinue
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_autocontinue_checkbutton");
@@ -610,6 +631,7 @@ void
 preferences_submit ()
 {
 #define DEBUGFUNCTION "preferences_submit()"
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     xvc_appdata_copy (app, &pref_app);
 
@@ -652,6 +674,7 @@ xvc_pref_do_OK ()
 {
 #define DEBUGFUNCTION "xvc_pref_do_OK()"
     int count_non_info_messages = 0, rc = 0;
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     errors_after_cli = xvc_appdata_validate (&pref_app, 0, &rc);
     if (rc == -1) {
@@ -1028,19 +1051,17 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
 #endif     // USE_FFMPEG
 
     // mouse wanted radio buttons
-    if (!pref_app.flags & FLG_USE_XFIXES) {
+    if (!(pref_app.flags & FLG_USE_XFIXES)) {
+        w = NULL;
+        w = glade_xml_get_widget (xml,
+                                  "xvc_pref_capture_mouse_white_radiobutton");
+
         if (pref_app.mouseWanted == 1) {
-            w = NULL;
-            w = glade_xml_get_widget (xml,
-                                      "xvc_pref_capture_mouse_white_radiobutton");
             if (w != NULL)
                 gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
         } else if (pref_app.mouseWanted == 2) {
-            w = NULL;
-            w = glade_xml_get_widget (xml,
-                                      "xvc_pref_capture_mouse_black_radiobutton");
             if (w != NULL)
-                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
         }
     } else {
         w = NULL;
@@ -1098,12 +1119,46 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
         if (w != NULL)
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
     }
-#else
+#else      // HAVE_SHMAT
     if (w != NULL) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
         gtk_widget_set_sensitive (w, FALSE);
     }
 #endif     // HAVE_SHMAT
+
+    // XDamage use
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_auto_checkbutton");
+#ifdef USE_XDAMAGE
+    if (pref_app.use_xdamage == -1) {
+        if (w != NULL)
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_yes_radiobutton");
+        if (w != NULL)
+            gtk_widget_set_sensitive (w, FALSE);
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_no_radiobutton");
+        if (w != NULL)
+            gtk_widget_set_sensitive (w, FALSE);
+    } else {
+        if (w != NULL) {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        }
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_no_radiobutton");
+
+        if (pref_app.use_xdamage == 0) {
+            if (w != NULL)
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        } else {
+            if (w != NULL)
+                gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+        }
+    }
+# else     // USE_XDAMAGE
+
+#endif     // USE_XDAMAGE
 
     // autocontinue
     w = NULL;
@@ -1694,6 +1749,44 @@ on_xvc_pref_capture_mouse_checkbutton_toggled (GtkToggleButton *
         gtk_widget_set_sensitive (w, FALSE);
         w = glade_xml_get_widget (xml,
                                   "xvc_pref_capture_mouse_white_radiobutton");
+        g_assert (w);
+        gtk_widget_set_sensitive (w, FALSE);
+    }
+
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+#undef DEBUGFUNCTION
+}
+
+void
+on_xvc_pref_use_xdamage_auto_checkbutton_toggled (GtkToggleButton *
+                                                  togglebutton,
+                                                  gpointer user_data)
+{
+#define DEBUGFUNCTION "on_xvc_pref_use_xdamage_auto_checkbutton_toggled()"
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL;
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    xml = glade_get_widget_tree (GTK_WIDGET (xvc_pref_main_window));
+    g_assert (xml);
+
+    if (gtk_toggle_button_get_active (togglebutton)) {
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_no_radiobutton");
+        g_assert (w);
+        gtk_widget_set_sensitive (w, TRUE);
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_yes_radiobutton");
+        g_assert (w);
+        gtk_widget_set_sensitive (w, TRUE);
+    } else {
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_no_radiobutton");
+        g_assert (w);
+        gtk_widget_set_sensitive (w, FALSE);
+        w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_yes_radiobutton");
         g_assert (w);
         gtk_widget_set_sensitive (w, FALSE);
     }

@@ -69,6 +69,9 @@
 /* Define to 1 if you have the `swscale' library (-lswscale). */
 #undef HAVE_LIBSWSCALE
 
+/* Define to 1 if you have the `Xdamage' library (-lXdamage). */
+#undef HAVE_LIBXDAMAGE
+
 /* Define to 1 if you have the `Xfixes' library (-lXfixes). */
 #undef HAVE_LIBXFIXES
 
@@ -184,6 +187,9 @@
 
 /* define if libavcodec is usable */
 #undef USE_FFMPEG
+
+/* define if Xdamage and Xfixes are usable */
+#undef USE_XDAMAGE
 
 /* Version number of package */
 #undef VERSION

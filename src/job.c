@@ -66,6 +66,13 @@ extern pthread_mutex_t recording_mutex;
 extern pthread_cond_t recording_condition_unpaused;
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+extern pthread_mutex_t damage_regions_mutex;
+
 static Job *job;
 
 static void job_set_capture (void);
@@ -128,6 +135,7 @@ static Job *
 job_new ()
 {
 #define DEBUGFUNCTION "job_new()"
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     job = (Job *) malloc (sizeof (Job));
     if (!job) {
@@ -159,6 +167,13 @@ job_new ()
     job->color_table = NULL;
     job->colors = NULL;
 
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+    job->dmg_region = XFixesCreateRegion (app->dpy, NULL, 0);
+
     return (job);
 #undef DEBUGFUNCTION
 }
@@ -170,9 +185,17 @@ void
 xvc_job_free ()
 {
 #define DEBUGFUNCTION "xvc_job_free()"
+    XVC_AppData *app = xvc_app_data_ptr ();
+
     if (job) {
         if (job->color_table)
             free (job->color_table);
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+        XFixesDestroyRegion (app->dpy, job->dmg_region);
         free (job);
     }
 #undef DEBUGFUNCTION
@@ -185,6 +208,8 @@ void
 xvc_job_set_colors ()
 {
 #define DEBUGFUNCTION "xvc_job_set_colors()"
+    XVC_AppData *app = xvc_app_data_ptr ();
+
     job->ncolors = xvc_get_colors (app->dpy, &(app->win_attr), &(job->colors));
     if (job->get_colors) {
         if (job->color_table)
@@ -570,4 +595,23 @@ xvc_job_keep_and_merge_state (int keep_state, int merge_state)
     job->state |= merge_state;
     job_state_change_signals_thread (orig_state, job->state);
     pthread_mutex_unlock (&recording_mutex);
+}
+
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+XserverRegion
+xvc_get_damage_region ()
+{
+    XserverRegion region, dmg_region;
+    XVC_AppData *app = xvc_app_data_ptr ();
+
+    pthread_mutex_lock (&damage_regions_mutex);
+    region = XFixesCreateRegion (app->dpy, 0, 0);
+    dmg_region = job->dmg_region;
+    job->dmg_region = region;
+    pthread_mutex_unlock (&damage_regions_mutex);
+    return dmg_region;
 }

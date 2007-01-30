@@ -59,9 +59,10 @@ typedef void (*sighandler_t) (int);
 /*
  * GLOBAL VARIABLES
  */
-XVC_AppData sapp, *app;
-
+static XVC_AppData *app;
 static Window capture_window = None;
+
+extern pthread_mutex_t damage_regions_mutex;
 
 /*
  * HELPER FUNCTIONS
@@ -158,20 +159,26 @@ usage (char *prog)
  * @param argv the array of command line options
  */
 static void
-init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
+init (XVC_CapTypeOptions * ctos, int *argc, char *argv[])
 {
 #define DEBUGFUNCTION "init()"
     int i;
+
+    app = xvc_app_data_ptr ();
 
     // Xlib threading initialization
     // this is here instead of with the gtk/glib stuff in gnome_ui.c|h
     // because this is UI independant and would need to be here even with Qt
     XInitThreads ();
 
+#if USE_XDAMAGE
+    pthread_mutex_init (&damage_regions_mutex, NULL);
+#endif     // USE_XDAMAGE
+
     // this is a hook for a GUI to do some pre-init functions ...
     // possibly to set some fallback options read from a rc file or
     // Xdefaults
-    if (!xvc_init_pre (argc, argv)) {
+    if (!xvc_init_pre (*argc, argv)) {
         fprintf (stderr,
                  _("%s %s: can't do GUI pre-initialization ... aborting\n"),
                  DEBUGFILE, DEBUGFUNCTION);
@@ -180,27 +187,22 @@ init (XVC_CapTypeOptions * ctos, int argc, char *argv[])
     //
     // some variable initialization
     //
-    app = &sapp;
-    xvc_appdata_init (app);
     xvc_appdata_set_defaults (app);
     xvc_captypeoptions_init (ctos);
 
     // gtk_init may replace argv values with NULL ... that's bad for
     // getopt_long
-    for (i = argc; i > 0; i--) {
+    for (i = *argc; i > 0; i--) {
         int j;
 
-        // printf("arg %i = %s\n", i, argv[i]);
+        //printf("arg %i = %s\n", i-1, argv[i-1]);
         if (argv[i - 1] == NULL) {
-            if (i == argc)
-                argc--;
-            else {
-                for (j = i; j < argc; j++) {
-                    argv[i - 1] = argv[i];
+            if (i < *argc) {
+                for (j = i; j < *argc; j++) {
+                    argv[j - 1] = argv[j];
                 }
-                argv[argc - 1] = NULL;
-                argc--;
             }
+            *argc = *argc - 1;
         }
     }
 #undef DEBUGFUNCTION
@@ -939,7 +941,7 @@ main (int argc, char *argv[])
 #endif
 
     // xvc initialization
-    init (&s_tmp_capture_options, argc, argv);
+    init (&s_tmp_capture_options, &argc, argv);
 
     // read options file now
     xvc_read_options_file (app);

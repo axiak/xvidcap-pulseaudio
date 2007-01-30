@@ -8,6 +8,7 @@
  * configured maximum number of frames or maximum capture time.
  *
  * \todo add dga and v4l again
+ * \todo check for XShmDetach
  */
 
 /*
@@ -59,6 +60,9 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <X11/extensions/XShm.h>
+#include <X11/extensions/shmstr.h>
+#include <X11/extensions/extutil.h>
+
 #endif     // HAVE_SHMAT
 #ifdef HasDGA
 #include <X11/extensions/xf86dga.h>
@@ -104,6 +108,7 @@ getCurrentPointer (int *x, int *y)
 #define DEBUGFUNCTION "getCurrentPointer()"
     Window mrootwindow, childwindow;
     int dummy;
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     mrootwindow = DefaultRootWindow (app->dpy);
 
@@ -150,7 +155,7 @@ apply_masks (uint8_t * dst, uint32_t and, uint32_t or, int bits_per_pixel)
  *
  * @param image Image where to paint the mouse pointer
  */
-static void
+static XRectangle
 paintMousePointer (XImage * image)
 {
 #define DEBUGFUNCTION "paintMousePointer()"
@@ -171,6 +176,8 @@ paintMousePointer (XImage * image)
     };
 
     int x, y, cursor_width = 16, cursor_height = 20;
+    XVC_AppData *app = xvc_app_data_ptr ();
+    XRectangle pArea;
 
 #ifdef HAVE_LIBXFIXES
     unsigned char topp, botp;
@@ -315,6 +322,14 @@ paintMousePointer (XImage * image)
             im_data += image->bytes_per_line;
         }
     }
+
+    pArea.x = x;
+    pArea.y = y;
+    pArea.width = cursor_width;
+    pArea.height = cursor_height;
+
+    return pArea;
+
 #undef DEBUGFUNCTION
 }
 
@@ -329,7 +344,8 @@ paintMousePointer (XImage * image)
  * @return we were successfull TRUE or FALSE
  */
 static Boolean
-XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
+XGetZPixmap (Display * dpy, Drawable d, char *data, int x, int y,
+             int width, int height)
 {
 #define DEBUGFUNCTION "XGetZPixmap()"
     register xGetImageReq *req = NULL;
@@ -340,8 +356,9 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    if (!image)
+    if (!data)
         return (False);
+
     LockDisplay (dpy);
     GetReq (GetImage, req);
     /*
@@ -350,13 +367,12 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
     req->drawable = d;
     req->x = x;
     req->y = y;
-    req->width = image->width;
-    req->height = image->height;
+    req->width = width;
+    req->height = height;
     req->planeMask = AllPlanes;
     req->format = ZPixmap;
-
     if (_XReply (dpy, (xReply *) & rep, 0, xFalse) == 0 || rep.length == 0) {
-        UnlockDisplay (dpy);
+        XUnlockDisplay (dpy);
         SyncHandle ();
         return (False);
     }
@@ -366,8 +382,7 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
     printf ("%s %s: read %li bytes\n", DEBUGFILE, DEBUGFUNCTION, nbytes);
 #endif     // DEBUG
 
-    _XReadPad (dpy, image->data, nbytes);
-
+    _XReadPad (dpy, data, nbytes);
     UnlockDisplay (dpy);
     SyncHandle ();
 
@@ -377,6 +392,88 @@ XGetZPixmap (Display * dpy, Drawable d, XImage * image, int x, int y)
 
     return (True);
 #undef DEBUGFUNCTION
+}
+
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+static Boolean
+XGetZPixmapToXImage (Display * dpy, Drawable d, XImage * image, int x, int y)
+{
+    return XGetZPixmap (dpy, d, (char *) image->data, x, y,
+                        image->width, image->height);
+}
+
+static Boolean
+XGetZPixmapSHM (Display * dpy, Drawable d, XShmSegmentInfo * shminfo,
+                int shm_opcode, char *data, int x, int y, int width, int height)
+{
+#define DEBUGFUNCTION "XGetZPixmapSHM()"
+    register xShmGetImageReq *req = NULL;
+    xShmGetImageReply rep;
+    long nbytes;
+
+    if (!data || !shminfo || !shm_opcode)
+        return (False);
+    LockDisplay (dpy);
+    GetReq (ShmGetImage, req);
+    /*
+     * first set up the standard stuff in the request
+     */
+    req->reqType = shm_opcode;
+    req->shmReqType = X_ShmGetImage;
+    req->shmseg = shminfo->shmseg;
+
+    req->drawable = d;
+    req->x = x;
+    req->y = y;
+    req->width = width;
+    req->height = height;
+    req->planeMask = AllPlanes;
+    req->format = ZPixmap;
+
+    req->offset = data - shminfo->shmaddr;
+
+    if (_XReply (dpy, (xReply *) & rep, 0, xFalse) == 0 || rep.length == 0) {
+        UnlockDisplay (dpy);
+        SyncHandle ();
+        return (False);
+    }
+
+    nbytes = (long) rep.length << 2;
+
+    _XReadPad (dpy, data, nbytes);
+
+    UnlockDisplay (dpy);
+    SyncHandle ();
+
+    return (True);
+#undef DEBUGFUNCTION
+}
+
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+static void
+placeImageInImage (char *needle, int needle_x, int needle_y,
+                   int needle_width, int needle_height, char *haystack,
+                   int haystack_width, int haystack_height)
+{
+    char *h_cursor, *n_cursor;
+    int i;
+
+    h_cursor = haystack + ((needle_x + (needle_y * haystack_width)) * 4);
+    n_cursor = needle;
+    for (i = 0; i < needle_height; i++) {
+        memcpy (h_cursor, n_cursor, needle_width * 4);
+        h_cursor += (haystack_width * 4);
+        n_cursor += (needle_width * 4);
+    }
+
 }
 
 /**
@@ -392,6 +489,7 @@ getOutputFile ()
     char file[PATH_MAX + 1];
     FILE *fp = NULL;
     Job *job = xvc_job_ptr ();
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     if (app->current_mode > 0) {
         sprintf (file, job->file, job->movie_no);
@@ -410,6 +508,80 @@ getOutputFile ()
 }
 
 /**
+ * \brief this captures into an existing XImage. This is the plain X11
+ *      version.
+ *
+ * @param dpy a pointer to the display to read from
+ * @param image a pointer to the image to write to
+ * @return 1 on success, 0 on failure
+ */
+static int
+captureFrameToImage (Display * dpy, XImage * image)
+{
+#define DEBUGFUNCTION "captureFrameToImage()"
+    int ret = 0;
+    XVC_AppData *app = xvc_app_data_ptr ();
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    // get the image here
+    if (XGetZPixmapToXImage (dpy,
+                             RootWindow (dpy, DefaultScreen (dpy)),
+                             image, app->area->x, app->area->y)) {
+        // paint the mouse pointer into the captured image if necessary
+        ret = 1;
+    }
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    return ret;
+#undef DEBUGFUNCTION
+}
+
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+static XImage *
+createImage (Display * dpy, int width, int height)
+{
+#define DEBUGFUNCTION "createImage()"
+    XImage *image = NULL;
+    XVC_AppData *app = xvc_app_data_ptr ();
+    Job *job = xvc_job_ptr ();
+    int bytes_per_line = width * 4;
+    char *buf = malloc (bytes_per_line * height);
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    // get the image here
+/*
+    image = XCreateImage (dpy, app->win_attr.visual, app->win_attr.depth,
+                ZPixmap, 0, buf, width,
+                height, 0, 0);
+ *
+ * need XInitImage
+ */
+
+    image = XGetImage (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+                       app->area->x, app->area->y,
+                       app->area->width, app->area->height, AllPlanes, ZPixmap);
+    g_assert (image);
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    return image;
+#undef DEBUGFUNCTION
+}
+
+/**
  * \brief this captures without an existing XImage and creates one along the
  *      way. This is the plain X11 version.
  *
@@ -421,6 +593,7 @@ captureFrameCreatingImage (Display * dpy)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImage()"
     XImage *image = NULL;
+    XVC_AppData *app = xvc_app_data_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -434,14 +607,8 @@ captureFrameCreatingImage (Display * dpy)
         printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
                 DEBUGFILE, DEBUGFUNCTION, app->area->width,
                 app->area->height, app->area->x, app->area->y);
-        xvc_job_set_state (VC_STOP);
-    } else {
-        // paint the mouse pointer into the captured image if necessary
-        if (app->mouseWanted > 0) {
-            paintMousePointer (image);
-        }
+        exit (1);
     }
-
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -450,43 +617,8 @@ captureFrameCreatingImage (Display * dpy)
 #undef DEBUGFUNCTION
 }
 
-/**
- * \brief this captures into an existing XImage. This is the plain X11
- *      version.
- *
- * @param dpy a pointer to the display to read from
- * @param image a pointer to the image to write to
- * @return 1 on success, 0 on failure
- */
-static int
-captureFrameToImage (Display * dpy, XImage * image)
-{
-#define DEBUGFUNCTION "captureFrameToImage()"
-    int ret = 0;
-
-#ifdef DEBUG
-    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-    // get the image here
-    if (XGetZPixmap (dpy,
-                     RootWindow (dpy, DefaultScreen (dpy)),
-                     image, app->area->x, app->area->y)) {
-        // paint the mouse pointer into the captured image if necessary
-        if (app->mouseWanted > 0) {
-            paintMousePointer (image);
-        }
-        ret = 1;
-    }
-#ifdef DEBUG
-    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
-
-    return ret;
-#undef DEBUGFUNCTION
-}
-
 #ifdef HAVE_SHMAT
+
 /**
  * \brief this captures into an existing XImage. This is the SHM version.
  *
@@ -499,6 +631,7 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImageSHM()"
     int ret = 0;
+    XVC_AppData *app = xvc_app_data_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -509,9 +642,6 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
                       RootWindow (dpy, DefaultScreen (dpy)),
                       image, app->area->x, app->area->y, AllPlanes)) {
         // paint the mouse pointer into the captured image if necessary
-        if (app->mouseWanted > 0) {
-            paintMousePointer (image);
-        }
         ret = 1;
     }
 #ifdef DEBUG
@@ -523,17 +653,15 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
 }
 
 /**
- * \brief this captures without an existing XImage and creates one along the
- *      way. This is the SHM version.
  *
- * @param dpy a pointer to the display to read from
- * @param shminfo shared memory information
- * @return a pointer to an XImage or NULL
+ * \todo ... clean this up
+ *
  */
 static XImage *
-captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
+createImageSHM (Display * dpy, XShmSegmentInfo * shminfo, int width, int height)
 {
-#define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
+#define DEBUGFUNCTION "createImageSHM()"
+    XVC_AppData *app = xvc_app_data_ptr ();
     XImage *image = NULL;
     Visual *visual = app->win_attr.visual;
     unsigned int depth = app->win_attr.depth;
@@ -544,13 +672,8 @@ captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
 
     // get the image here
     image = XShmCreateImage (dpy, visual, depth, ZPixmap, NULL,
-                             shminfo, app->area->width, app->area->height);
-    if (!image) {
-        printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
-                DEBUGFILE, DEBUGFUNCTION, app->area->width,
-                app->area->height, app->area->x, app->area->y);
-        xvc_job_set_state (VC_STOP);
-    } else {
+                             shminfo, width, height);
+    if (image) {
         shminfo->shmid = shmget (IPC_PRIVATE,
                                  image->bytes_per_line * image->height,
                                  IPC_CREAT | 0777);
@@ -568,8 +691,48 @@ captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
             exit (1);
         }
 
-        captureFrameToImageSHM (dpy, image);
+        image->data = shminfo->shmaddr;
+        shmctl (shminfo->shmid, IPC_RMID, 0);
     }
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    return image;
+#undef DEBUGFUNCTION
+}
+
+/**
+ * \brief this captures without an existing XImage and creates one along the
+ *      way. This is the SHM version.
+ *
+ * @param dpy a pointer to the display to read from
+ * @param shminfo shared memory information
+ * @return a pointer to an XImage or NULL
+ */
+static XImage *
+captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
+{
+#define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
+    XVC_AppData *app = xvc_app_data_ptr ();
+    XImage *image = NULL;
+    Visual *visual = app->win_attr.visual;
+    unsigned int depth = app->win_attr.depth;
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    // get the image here
+    image = createImageSHM (dpy, shminfo, app->area->width, app->area->height);
+    if (!image) {
+        printf ("%s %s: Can't get image: %dx%d+%d+%d\n",
+                DEBUGFILE, DEBUGFUNCTION, app->area->width,
+                app->area->height, app->area->x, app->area->y);
+        exit (1);
+    }
+
+    captureFrameToImageSHM (dpy, image);
 
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -578,6 +741,7 @@ captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
     return image;
 #undef DEBUGFUNCTION
 }
+
 #endif     // HAVE_SHMAT
 
 /**
@@ -593,6 +757,7 @@ checkCaptureDuration (long time, long time1)
 {
 #define DEBUGFUNCTION "checkCaptureDuration()"
     Job *job = xvc_job_ptr ();
+    XVC_AppData *app = xvc_app_data_ptr ();
     struct timeval curr_time;   /* for measuring the duration of a frame
                                  * capture */
 
@@ -643,12 +808,26 @@ commonCapture (enum captureFunctions capfunc)
     long time, time1;   /* for measuring the duration of a frame capture */
     struct timeval curr_time;   /* for measuring the duration of a frame
                                  * capture */
-#ifdef HAVE_SHMAT
-    static XShmSegmentInfo shminfo;
-#endif     // HAVE_SHMAT
+    static int shm_opcode = 0, shm_event_base = 0, shm_error_base = 0;
+    XVC_AppData *app = xvc_app_data_ptr ();
     int ret = 0;
     XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
+
+#ifdef USE_XDAMAGE
+    XserverRegion damaged_region;
+
+#ifdef HAVE_SHMAT
+    static XShmSegmentInfo dmg_shminfo;
+#endif     // HAVE_SHMAT
+    static XImage *dmg_image = NULL;
+    static XRectangle pointer_area;
+    static XserverRegion region = None, clip_region = None;
+#endif     // USE_XDAMAGE
+
+#ifdef HAVE_SHMAT
+    static XShmSegmentInfo shminfo;
+#endif     // HAVE_SHMAT
 
 #ifdef DEBUG
     printf ("%s %s: Entering pic_no=%d - state=%i\n", DEBUGFILE, DEBUGFUNCTION,
@@ -735,17 +914,48 @@ commonCapture (enum captureFunctions capfunc)
             }
 #endif     // HAVE_LIBXFIXES
 
+#ifdef USE_XDAMAGE
+            if (app->flags & FLG_USE_XDAMAGE) {
+                // get the damaged region
+                // stuff damaged between starting the damage poll thread and
+                // this (capture of the first frame) ... we can safely discard
+                // the damage
+                damaged_region = xvc_get_damage_region ();
+                XFixesDestroyRegion (app->dpy, damaged_region);
+                region = XFixesCreateRegion (app->dpy, 0, 0);
+                clip_region = XFixesCreateRegion (app->dpy, 0, 0);
+            }
+#endif     // USE_XDAMAGE
+
             switch (capfunc) {
 #ifdef HAVE_SHMAT
             case SHM:
                 image = captureFrameCreatingImageSHM (app->dpy, &shminfo);
+#ifdef USE_XDAMAGE
+                if (app->flags & FLG_USE_XDAMAGE) {
+                    XQueryExtension (app->dpy, "MIT-SHM", &shm_opcode,
+                                     &shm_event_base, &shm_error_base);
+                    dmg_image =
+                        createImageSHM (app->dpy, &dmg_shminfo,
+                                        app->area->width, app->area->height);
+                }
+#endif     // USE_XDAMAGE
                 break;
 #endif     // HAVE_SHMAT
             case X11:
             default:
                 image = captureFrameCreatingImage (app->dpy);
+#ifdef USE_XDAMAGE
+                if (app->flags & FLG_USE_XDAMAGE) {
+                    dmg_image = createImage (app->dpy, app->area->width,
+                                             app->area->height);
+                }
+#endif     // USE_XDAMAGE
             }
             if (image) {
+                if (app->mouseWanted > 0) {
+                    pointer_area = paintMousePointer (image);
+                }
                 // call the necessary XtoXYZ function to process the image
                 (*job->save) (fp, image);
                 xvc_job_remove_state (VC_START);
@@ -765,24 +975,82 @@ commonCapture (enum captureFunctions capfunc)
             printf ("%s %s: reading an image in a data sturctur present\n",
                     DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
+#ifdef USE_XDAMAGE
+            if (app->flags & FLG_USE_XDAMAGE) {
+                int num_dmg_rects, rcount;
+                XRectangle *dmg_rects;
 
-            switch (capfunc) {
+                damaged_region = xvc_get_damage_region ();
+                if (app->mouseWanted > 0) {
+                    XFixesSetRegion (app->dpy, region, &(pointer_area), 1);
+                    XFixesSetRegion (app->dpy, clip_region, app->area, 1);
+
+                    XFixesIntersectRegion (app->dpy, region, region,
+                                           clip_region);
+                    XFixesUnionRegion (app->dpy, damaged_region, damaged_region,
+                                       region);
+                }
+                dmg_rects = XFixesFetchRegion (app->dpy, damaged_region,
+                                               &num_dmg_rects);
+
+//            if (num_dmg_rects > 0) XSync(app->dpy, False);
+                for (rcount = 0; rcount < num_dmg_rects; rcount++) {
+                    switch (capfunc) {
 #ifdef HAVE_SHMAT
-            case SHM:
-                ret = captureFrameToImage (app->dpy, image);
-                break;
+                    case SHM:
+                        XGetZPixmapSHM (app->dpy,
+                                        RootWindow (app->dpy,
+                                                    DefaultScreen (app->dpy)),
+                                        &dmg_shminfo, shm_opcode,
+                                        dmg_image->data, dmg_rects[rcount].x,
+                                        dmg_rects[rcount].y,
+                                        dmg_rects[rcount].width,
+                                        dmg_rects[rcount].height);
+                        break;
 #endif     // HAVE_SHMAT
-            case X11:
-            default:
-                ret = captureFrameToImage (app->dpy, image);
+                    case X11:
+                    default:
+                        XGetZPixmap (app->dpy,
+                                     RootWindow (app->dpy,
+                                                 DefaultScreen (app->dpy)),
+                                     dmg_image->data, dmg_rects[rcount].x,
+                                     dmg_rects[rcount].y,
+                                     dmg_rects[rcount].width,
+                                     dmg_rects[rcount].height);
+                    }
+                    placeImageInImage (dmg_image->data,
+                                       dmg_rects[rcount].x - app->area->x,
+                                       dmg_rects[rcount].y - app->area->y,
+                                       dmg_rects[rcount].width,
+                                       dmg_rects[rcount].height, image->data,
+                                       image->width, image->height);
+                }
+                if (num_dmg_rects > 0) {
+                    XFree (dmg_rects);
+                }
+                XFixesDestroyRegion (app->dpy, damaged_region);
+            } else {
+#endif     // USE_XDAMAGE
+                switch (capfunc) {
+#ifdef HAVE_SHMAT
+                case SHM:
+                    captureFrameToImageSHM (app->dpy, image);
+                    break;
+#endif     // HAVE_SHMAT
+                case X11:
+                default:
+                    captureFrameToImage (app->dpy, image);
+                }
+
+#if USE_XDAMAGE
             }
-            if (ret > 0)
-                // call the necessary XtoXYZ function to process the image
-                (*job->save) (fp, image);
-            else
-                printf
-                    ("%s %s: attempt to acquire pixmap returned 'False'!\n",
-                     DEBUGFILE, DEBUGFUNCTION);
+#endif     // USE_XDAMAGE
+
+            if (app->mouseWanted > 0) {
+                pointer_area = paintMousePointer (image);
+            }
+            // call the necessary XtoXYZ function to process the image
+            (*job->save) (fp, image);
         }
 
         // this again is for recording, no matter if first frame or any
@@ -842,6 +1110,16 @@ commonCapture (enum captureFunctions capfunc)
             XDestroyImage (image);
             image = NULL;
         }
+#ifdef USE_XDAMAGE
+        if (app->flags & FLG_USE_XDAMAGE) {
+            if (capfunc == SHM) {
+                XShmDetach (app->dpy, &dmg_shminfo);
+                XShmDetach (app->dpy, &shminfo);
+            }
+            if (dmg_image)
+                XDestroyImage (dmg_image);
+        }
+#endif     // USE_XDAMAGE
 
         xvc_job_set_state (VC_STOP);
 

@@ -1,4 +1,11 @@
 
+2007-01-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_warning.c, xtoffmpeg.c, gnome_frame.c, main.c,
+		xtoxwd.c: more code cleanup
+	* configure.in, src: gnome_ui.c, capture.c, app_data.c, job.c,
+		job.h, app_data.h, gnome_options.c, options.c, 
+		gnome-xvidcap.glade: added XDamage capture 
+
 2007-01-11  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: led_meter.c, xtoxwd.h, led_meter.h, xvidcap-intl.h, 
 		gnome_warning.c, gnome_warning.h, xtoffmpeg.c, 

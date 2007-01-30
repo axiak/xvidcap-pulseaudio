@@ -30,6 +30,15 @@
 #include <stdio.h>
 #include "app_data.h"
 
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+#include <X11/extensions/Xfixes.h>
+#include <X11/extensions/Xdamage.h>
+//#include <glib.h>
+
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
@@ -121,6 +130,14 @@ typedef struct _Job
     void *color_table;
     /** \brief the colors as X11 sends them with the captured image */
     XColor *colors;
+
+/**
+ *
+ * \todo ... clean this up
+ *
+ */
+    XserverRegion dmg_region;
+
 } Job;
 
 void xvc_job_free ();
@@ -137,4 +154,5 @@ void xvc_job_merge_and_remove_state (int merge_state, int remove_state);
 void xvc_job_keep_state (int state);
 void xvc_job_keep_and_merge_state (int merge_state, int remove_state);
 
+XserverRegion xvc_get_damage_region ();
 #endif     // __JOB_H__

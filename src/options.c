@@ -56,6 +56,7 @@ xvc_write_options_file ()
     char *home;
     char file[PATH_MAX + 1];
     FILE *fp;
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     // save it to $HOME/<OPS_FILE>
     home = getenv ("HOME");
@@ -79,6 +80,19 @@ xvc_write_options_file ()
              0);
 #endif     // USE_FFMPEG
     fprintf (fp, _("# capture source\nsource: %s\n"), app->source);
+    fprintf (fp,
+             _
+             ("# take screenshots using the XDamage extension for efficiency.\n"));
+    fprintf (fp,
+             _
+             ("# this does not work well for 3D compositing window managers like compiz or beryl.\n"));
+    fprintf (fp,
+             _
+             ("# therefore xvidcap disables this by default for those window managers.\n"));
+    fprintf (fp,
+             _
+             ("# set this to \"-1\" for auto-detection, \"0\" for disabled, or \"1\" for enabled.\n"));
+    fprintf (fp, "use_xdamage: %i\n", app->use_xdamage);
     fprintf (fp, _("# hide GUI\nnogui: %d\n"),
              ((app->flags & FLG_NOGUI) ? 1 : 0));
 #ifdef HAVE_FFMPEG_AUDIO
@@ -120,13 +134,14 @@ xvc_write_options_file ()
              ("# file pattern\n# this defines the filetype to write via the extension provided\n"));
     fprintf (fp, _("# valid extensions are: "));
 #ifdef USE_FFMPEG
-    for (n = CAP_NONE; n < CAP_FFM; n++) {
+    for (n = CAP_NONE; n < CAP_MF; n++) {
 #else
     for (n = CAP_NONE; n < NUMCAPS; n++) {
 #endif     // USE_FFMPEG
         if (xvc_formats[n].extensions) {
             for (m = 0; m < xvc_formats[n].num_extensions; m++) {
-                printf (".%s", xvc_formats[n].extensions[m]);
+                fprintf (fp, ".%s ", xvc_formats[n].extensions[m]);
+#if 0
 #ifdef USE_FFMPEG
                 if (n < (CAP_FFM - 1))
                     fprintf (fp, ", ");
@@ -134,6 +149,7 @@ xvc_write_options_file ()
                 if (n < (NUMCAPS - 1))
                     fprintf (fp, ", ");
 #endif     // USE_FFMPEG
+#endif     // 0
             }
         }
     }
@@ -150,7 +166,7 @@ xvc_write_options_file ()
 #endif     // USE_FFMPEG
         fprintf (fp, "%s", xvc_formats[n].name);
 #ifdef USE_FFMPEG
-        if (n < (CAP_FFM - 1))
+        if (n < (CAP_MF - 1))
             fprintf (fp, ", ");
 #else
         if (n < (NUMCAPS - 1))
@@ -222,9 +238,9 @@ xvc_write_options_file ()
     for (n = CAP_FFM; n < NUMCAPS; n++) {
         if (xvc_formats[n].extensions) {
             for (m = 0; m < xvc_formats[n].num_extensions; m++) {
-                fprintf (fp, ".%s", xvc_formats[n].extensions[m]);
-                if (xvc_formats[n].num_extensions < (m + 1))
-                    fprintf (fp, ", ");
+                fprintf (fp, "%s ", xvc_formats[n].extensions[m]);
+//                if (xvc_formats[n].num_extensions > (m + 1))
+//                    fprintf (fp, " ");
             }
         }
     }
@@ -235,8 +251,8 @@ xvc_write_options_file ()
              ("# file format - use AUTO to select format through file extension\n"));
     fprintf (fp, _("# Otherwise specify one of the following: "));
     for (n = CAP_FFM; n < NUMCAPS; n++) {
-        fprintf (fp, ".%s", xvc_formats[n].name);
-        if (NUMCAPS < (n + 1))
+        fprintf (fp, "%s", xvc_formats[n].name);
+        if (NUMCAPS > (n + 1))
             fprintf (fp, ", ");
     }
     fprintf (fp, "\n");
@@ -247,7 +263,7 @@ xvc_write_options_file ()
     fprintf (fp, _("# Otherwise specify one of the following: "));
     for (n = CODEC_MF; n < NUMCODECS; n++) {
         fprintf (fp, "%s", xvc_codecs[n].name);
-        if (NUMCODECS < (n + 1))
+        if (NUMCODECS > (n + 1))
             fprintf (fp, ", ");
     }
     fprintf (fp, "\nmf_codec: %s\n",
@@ -258,7 +274,7 @@ xvc_write_options_file ()
     fprintf (fp, _("# Otherwise specify one of the following: "));
     for (n = (AU_CODEC_NONE + 1); n < NUMAUCODECS; n++) {
         fprintf (fp, "%s", xvc_audio_codecs[n].name);
-        if (NUMAUCODECS < (n + 1))
+        if (NUMAUCODECS > (n + 1))
             fprintf (fp, ", ");
     }
 
@@ -317,6 +333,7 @@ xvc_read_options_file ()
     char *home;
     char file[PATH_MAX + 1];
     FILE *fp;
+    XVC_AppData *app = xvc_app_data_ptr ();
 
     home = getenv ("HOME");
     sprintf (file, "%s/%s", home, OPS_FILE);
@@ -376,6 +393,17 @@ xvc_read_options_file ()
 #endif     // USE_FFMPEG
                 if (strcasecmp (token, "source") == 0) {
                     app->source = strdup (value);
+                } else if (strcasecmp (token, "use_xdamage") == 0) {
+/**
+ * \todo remove this check after adding check to app_data_validate
+ */
+                    if (-1 <= atoi (value) && atoi (value) <= 1) {
+                        app->use_xdamage = atoi (value);
+                        if (app->use_xdamage == 0)
+                            app->flags &= ~FLG_USE_XDAMAGE;
+                        if (app->use_xdamage == 1 && app->dmg_event_base != 0)
+                            app->flags |= FLG_USE_XDAMAGE;
+                    }
                 } else if (strcasecmp (token, "nogui") == 0) {
                     if (atoi (value) == 1)
                         app->flags |= FLG_NOGUI;

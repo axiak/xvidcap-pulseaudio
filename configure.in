@@ -233,6 +233,9 @@ AC_CHECK_LIB(Xmu,XmuClientWindow,,[unset ac_cv_lib_Xmu_XmuClientWindow; echo "Co
 # first check for Xfixes without tweaking, then in X11 paths
 AC_CHECK_LIB(Xfixes,XFixesGetCursorImage,,[unset ac_cv_lib_Xfixes_XFixesGetCursorImage; echo "Couldn't find libXfixes in LD_LIBRARY_PATH, checking X11 paths"; AC_CHECK_LIB(Xfixes,XFixesGetCursorImage,LDFLAGS="${LDFLAGS} -L${ac_x_libraries} -Xlinker -R${ac_x_libraries}"; LIBS="${LIBS} -lXfixes",[echo "libXfixes not available, cannot capture real mouse pointer"],[-L${ac_x_libraries}])])
 
+# first check for Xdamage without tweaking, then in X11 paths
+AC_CHECK_LIB(Xdamage,XDamageSubtract,,[unset ac_cv_lib_Xdamage_XDamageSubtract; echo "Couldn't find libXdamage in LD_LIBRARY_PATH, checking X11 paths"; AC_CHECK_LIB(Xdamage,XDamageSubtract,LDFLAGS="${LDFLAGS} -L${ac_x_libraries} -Xlinker -R${ac_x_libraries}"; LIBS="${LIBS} -lXdamage",[echo "libXdamage not available, cannot use delta screenshots"],[-L${ac_x_libraries}])])
+
 ## libice test is present, but we need to bail out if not there
 
 if test "x${ac_cv_lib_ICE_IceConnectionNumber+set}" = "x"; then
@@ -458,6 +461,10 @@ AH_TEMPLATE([u_int32_t], [Solaris has uint32_t])
 test x${SOLARIS_TRUE} = "x" && AC_DEFINE([u_int32_t], [uint32_t])
 AH_TEMPLATE([HAVE_FFMPEG_AUDIO], [this machine can support audio capture with ffmpeg])
 test x${HAVE_FFMPEG_AUDIO_TRUE} = "x" && AC_DEFINE([HAVE_FFMPEG_AUDIO], [1])
+AH_TEMPLATE([USE_XDAMAGE], [define if Xdamage and Xfixes are usable])
+test x${ac_cv_lib_Xdamage_XDamageSubtract} = "xyes" && 
+test x${ac_cv_lib_Xfixes_XFixesGetCursorImage} = "xyes" && 
+AC_DEFINE([USE_XDAMAGE], [1])
 
 ################################################################
 ################################################################

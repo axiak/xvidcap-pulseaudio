@@ -40,33 +40,28 @@
 /*
  * some flags to toggle on/off options
  */
-#define FLG_NONE                0
+enum XVC_Flags
+{
+    FLG_NONE = 0,
 /** \brief run xvidcap with verbose output */
-#define FLG_RUN_VERBOSE         1
+    FLG_RUN_VERBOSE = 1,
 #ifdef HAVE_SHMAT
 /** \brief use shared memory access to X11 */
-#define FLG_USE_SHM             2
+    FLG_USE_SHM = 2,
 #endif     // HAVE_SHMAT
 /**
  * \brief use dga for capturing
  *
  * @note this is not at all used atm.
  */
-#define FLG_USE_DGA             4
+    FLG_USE_DGA = 4,
 /**
  * \brief use video for linux for capturing
  *
  * @note this is not at all used atm.
  */
-#define FLG_USE_V4L             8
+    FLG_USE_V4L = 8,
 
-#ifdef HAVE_SHMAT
-/** \brief shorthand for the sum of source flags */
-#define FLG_SOURCE (FLG_USE_DGA | FLG_USE_SHM | FLG_USE_V4L)
-#else
-/** \brief shorthand for the sum of source flags */
-#define FLG_SOURCE (FLG_USE_DGA | FLG_USE_V4L)
-#endif     // HAVE_SHMAT
 /**
  * \brief should we record sound
  *
@@ -74,23 +69,35 @@
  *      the user wants it in the XVC_AppData struct, but audio capture is not
  *      possible
  */
-#define FLG_REC_SOUND           16
+    FLG_REC_SOUND = 16,
 /** \brief run without GUI */
-#define FLG_NOGUI               32
+    FLG_NOGUI = 32,
 /** \brief enable auto-continue feature */
-#define FLG_AUTO_CONTINUE       64
+    FLG_AUTO_CONTINUE = 64,
 /** \brief save the capture geometry to the preferences file */
-#define FLG_SAVE_GEOMETRY       128
+    FLG_SAVE_GEOMETRY = 128,
 /**
  * \brief use video for linux for capturing
  *
  * @note this is not at all used atm.
  */
-#define FLG_SHOW_TIME           256
+    FLG_SHOW_TIME = 256,
 /** \brief always show the results dialog */
-#define FLG_ALWAYS_SHOW_RESULTS 512
+    FLG_ALWAYS_SHOW_RESULTS = 512,
 /** \brief use the xfixes extension, i. e. capture the real mouse pointer */
-#define FLG_USE_XFIXES          1024
+    FLG_USE_XFIXES = 1024,
+/** \brief should we capture screen updates as deltas using Xdamage
+ * extension */
+    FLG_USE_XDAMAGE = 2048
+};
+
+#ifdef HAVE_SHMAT
+/** \brief shorthand for the sum of source flags */
+#define FLG_SOURCE (FLG_USE_DGA | FLG_USE_SHM | FLG_USE_V4L)
+#else      // HAVE_SHMAT
+/** \brief shorthand for the sum of source flags */
+#define FLG_SOURCE (FLG_USE_DGA | FLG_USE_V4L)
+#endif     // HAVE_SHMAT
 
 /**
  * \brief This structure contains the settings for one of the two capture
@@ -162,6 +169,9 @@ typedef struct
     int mouseWanted;
     /** \brief video capture source */
     char *source;
+    /** \brief controls the use of the XDamage extension for screen capture
+     * -1 == auto, 0 == off, 1 == on */
+    int use_xdamage;
 #ifdef HAVE_FFMPEG_AUDIO
     /** \brief audio capture source */
     char *snddev;
@@ -187,6 +197,11 @@ typedef struct
     Display *dpy;
     /** \brief the area to capture */
     XRectangle *area;
+#ifdef USE_XDAMAGE
+    /** \brief event base for damage events to be used for delta screenshot
+     *      capture */
+    int dmg_event_base;
+#endif     // USE_XDAMAGE
 
     /**
      * \brief the default capture mode (if detection fails). 0 = single-frame
@@ -200,8 +215,6 @@ typedef struct
     /** \brief options for multi-frame capture mode */
     XVC_CapTypeOptions multi_frame;
 } XVC_AppData;
-
-extern XVC_AppData *app;
 
 /*
  * error related constants
@@ -284,6 +297,8 @@ typedef struct _XVC_ErrorListItem
 /*
  * Functions from app_data.c
  */
+void xvc_app_data_free ();
+XVC_AppData *xvc_app_data_ptr (void);
 void xvc_appdata_init (XVC_AppData * lapp);
 void xvc_appdata_set_defaults (XVC_AppData * lapp);
 void xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp);
