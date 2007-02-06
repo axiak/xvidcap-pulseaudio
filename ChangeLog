@@ -1,4 +1,7 @@
 
+2007-02-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/job.h: fix bug 1651517
+
 2007-01-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_warning.c, xtoffmpeg.c, gnome_frame.c, main.c,
 		xtoxwd.c: more code cleanup

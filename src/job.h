@@ -30,14 +30,10 @@
 #include <stdio.h>
 #include "app_data.h"
 
-/**
- *
- * \todo ... clean this up
- *
- */
+#ifdef USE_XDAMAGE
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/Xdamage.h>
-//#include <glib.h>
+#endif     // USE_XDAMAGE
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
