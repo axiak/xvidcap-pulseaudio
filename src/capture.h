@@ -4,7 +4,7 @@
 
 /*
  * Copyright (C) 1997 Rasca Gmelch, Berlin
- * Copyright (C) 2003-06 Karl H. Beckers, Frankfurt
+ * Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

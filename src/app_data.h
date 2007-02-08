@@ -1,7 +1,5 @@
 /**
  * \file app_data.h
- *
- * \todo rename the global variable app to xvc_app
  */
 
 /*
@@ -315,8 +313,7 @@ XVC_ErrorListItem *xvc_errorlist_delete (XVC_ErrorListItem * err);
 void xvc_error_write_msg (int code, int print_action_or_not);
 
 Boolean xvc_is_filename_mutable (char *);
-int xvc_get_number_of_fraction_digits_from_float_string (const char const
-                                                         *input);
+int xvc_get_number_of_fraction_digits_from_float_string (const char *input);
 void xvc_command_execute (char *command, int flag, int number, char *file,
                           int fframe, int lframe, int width, int height,
                           XVC_Fps fps);

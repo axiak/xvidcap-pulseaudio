@@ -66,12 +66,9 @@ extern pthread_mutex_t recording_mutex;
 extern pthread_cond_t recording_condition_unpaused;
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-/**
- *
- * \todo ... clean this up
- *
- */
+#ifdef USE_XDAMAGE
 extern pthread_mutex_t damage_regions_mutex;
+#endif     // USE_XDAMAGE
 
 static Job *job;
 
@@ -167,12 +164,9 @@ job_new ()
     job->color_table = NULL;
     job->colors = NULL;
 
-/**
- *
- * \todo ... clean this up
- *
- */
+#ifdef USE_XDAMAGE
     job->dmg_region = XFixesCreateRegion (app->dpy, NULL, 0);
+#endif     // USE_XDAMAGE
 
     return (job);
 #undef DEBUGFUNCTION
@@ -190,12 +184,10 @@ xvc_job_free ()
     if (job) {
         if (job->color_table)
             free (job->color_table);
-/**
- *
- * \todo ... clean this up
- *
- */
+
+#ifdef USE_XDAMAGE
         XFixesDestroyRegion (app->dpy, job->dmg_region);
+#endif     // USE_XDAMAGE
         free (job);
     }
 #undef DEBUGFUNCTION
@@ -597,11 +589,7 @@ xvc_job_keep_and_merge_state (int keep_state, int merge_state)
     pthread_mutex_unlock (&recording_mutex);
 }
 
-/**
- *
- * \todo ... clean this up
- *
- */
+#ifdef USE_XDAMAGE
 XserverRegion
 xvc_get_damage_region ()
 {
@@ -615,3 +603,4 @@ xvc_get_damage_region ()
     pthread_mutex_unlock (&damage_regions_mutex);
     return dmg_region;
 }
+#endif     // USE_XDAMAGE

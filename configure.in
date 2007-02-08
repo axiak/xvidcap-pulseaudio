@@ -3,7 +3,7 @@ dnl Process this file with autoconf to produce a configure script.
 #GENERAL STUFF##############################################
 #########################################################
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(xvidcap, 1.1.4p1)
+AM_INIT_AUTOMAKE(xvidcap, 1.1.5rc1)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 

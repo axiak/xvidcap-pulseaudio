@@ -63,7 +63,6 @@
 #include "gnome_ui.h"
 #include <X11/extensions/Xdamage.h>
 #include <X11/Xatom.h>
-//#include <gdk/gdk.h>
 #endif     // USE_XDAMAGE
 #ifdef HAVE_SHMAT
 #include <X11/extensions/XShm.h>
@@ -75,7 +74,8 @@
 #include "xvidcap-intl.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-/* functions
+/* 
+ * functions purely as forward declarations
  */
 static XVC_ErrorListItem *errorlist_append (int code, XVC_ErrorListItem * err,
                                             XVC_AppData * app);
@@ -83,8 +83,17 @@ static void error_write_action_msg (int code);
 static void appdata_set_display ();
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
+/**
+ * \brief pointer to the application's main XVC_AppData structure
+ */
 static XVC_AppData *app = NULL;
 
+/**
+ * \brief allocates a new XVC_AppData structure. It needs to be freed when
+ *      no longer used.
+ *
+ * @return a pointer to an allocated XVC_AppData struct
+ */
 static XVC_AppData *
 app_data_new ()
 {
@@ -206,11 +215,13 @@ void
 xvc_appdata_set_defaults (XVC_AppData * lapp)
 {
 #define DEBUGFUNCTION "xvc_appdata_set_defaults"
+    // initialize general options
+    // we need the display first
     lapp->dpy = xvc_frame_get_capture_display ();
 
-    // initialize general options
-    // flags related ones first
+    // flags related settings
     lapp->flags = FLG_ALWAYS_SHOW_RESULTS;
+
 #ifdef HAVE_LIBXFIXES
     {
         int a, b;
@@ -260,12 +271,12 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
                                  DEBUGFILE, DEBUGFUNCTION);
                     }
                 }
-                //Right now only wm's that I know of performing 3d compositing
+                // Right now only wm's that I know of performing 3d compositing
                 // are beryl and compiz. names can be compiz for compiz and
-                // beryl/beryl-co/beryl-core for beryl(so it's strncmp )
-                if (lapp->use_xdamage != 1
-                    && (!strcmp (wm_name_str, "compiz")
-                        || !strncmp (wm_name_str, "beryl", 5))) {
+                // beryl/beryl-co/beryl-core for beryl (so it's strncmp )
+                if (lapp->use_xdamage != 1 && (!strcmp (wm_name_str, "compiz")
+                                               || !strncmp (wm_name_str,
+                                                            "beryl", 5))) {
                     lapp->dmg_event_base = 0;
                 } else {
                     lapp->flags |= FLG_USE_XDAMAGE;
@@ -2441,8 +2452,8 @@ xvc_command_execute (char *command, int flag, int number, char *file,
                      int fframe, int lframe, int width, int height, XVC_Fps fps)
 {
 #define DEBUGFUNCTION "xvc_command_execute()"
-    int buflength = (PATH_MAX * 5) + 1;
-    char buf[buflength];
+#define BUFLENGTH ((PATH_MAX * 5) + 1)
+    char buf[BUFLENGTH];
     char *myfile = NULL;
     char *shell = NULL;
 
@@ -2500,14 +2511,14 @@ xvc_command_execute (char *command, int flag, int number, char *file,
 
     shell = getenv ("SHELL");
     if (shell) {
-        snprintf (buf, buflength,
+        snprintf (buf, BUFLENGTH,
                   "%s -c 'XVFFRAME=\"%i\" XVLFRAME=\"%i\" XVWIDTH=\"%i\" XVHEIGHT=\"%i\" XVFPS=\"%f\" XVTIME=\"%f\" XVFILE=\"%s\" ; %s'",
                   shell, fframe, lframe, width, height,
                   ((float) fps.num / (float) fps.den),
                   (float) 1000 / ((float) fps.num / (float) fps.den), myfile,
                   command);
     } else {
-        snprintf (buf, buflength,
+        snprintf (buf, BUFLENGTH,
                   "XVFFRAME=\"%i\" XVLFRAME=\"%i\" XVWIDTH=\"%i\" XVHEIGHT=\"%i\" XVFPS=\"%f\" XVTIME=\"%f\" XVFILE=\"%s\" ; %s",
                   fframe, lframe, width, height,
                   ((float) fps.num / (float) fps.den),
@@ -2530,6 +2541,7 @@ xvc_command_execute (char *command, int flag, int number, char *file,
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
+#undef BUFLENGTH
 #undef DEBUGFUNCTION
 }
 
@@ -2566,7 +2578,7 @@ xvc_is_filename_mutable (char *filename)
  *      the comma times 100
  */
 int
-xvc_get_number_of_fraction_digits_from_float_string (const char const *input)
+xvc_get_number_of_fraction_digits_from_float_string (const char *input)
 {
     int pre = 0, post = 0;
     char *ptr;

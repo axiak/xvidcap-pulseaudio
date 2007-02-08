@@ -91,14 +91,14 @@ typedef enum
 /** \brief struct containing codec properties */
 typedef struct _XVC_Codec
 {
-    const char const *name;
-    const char const *longname;
-    const int const ffmpeg_id;
-    const XVC_Fps const def_fps;
-    const XVC_FpsRange const *allowed_fps_ranges;
-    const int const num_allowed_fps_ranges;
-    const XVC_Fps const *allowed_fps;
-    const int const num_allowed_fps;
+    const char *name;
+    const char *longname;
+    const int ffmpeg_id;
+    const XVC_Fps def_fps;
+    const XVC_FpsRange *allowed_fps_ranges;
+    const int num_allowed_fps_ranges;
+    const XVC_Fps *allowed_fps;
+    const int num_allowed_fps;
 } XVC_Codec;
 
 extern const XVC_Codec xvc_codecs[NUMCODECS];
@@ -124,9 +124,9 @@ typedef enum
 /** \brief struct containing audio codec properties */
 typedef struct _XVC_AuCodec
 {
-    const char const *name;
-    const char const *longname;
-    const int const ffmpeg_id;
+    const char *name;
+    const char *longname;
+    const int ffmpeg_id;
 } XVC_AuCodec;
 
 extern const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS];
@@ -168,17 +168,17 @@ typedef enum
 /** \brief struct containing file format properties */
 typedef struct _XVC_FFormat
 {
-    const char const *name;
-    const char const *longname;
-    const char const *ffmpeg_name;
-    const XVC_CodecID const def_vid_codec;
-    const XVC_CodecID const *allowed_vid_codecs;
-    const int const num_allowed_vid_codecs;
-    const XVC_AuCodecID const def_au_codec;
-    const XVC_AuCodecID const *allowed_au_codecs;
-    const int const num_allowed_au_codecs;
-    const char const **extensions;
-    const int const num_extensions;
+    const char *name;
+    const char *longname;
+    const char *ffmpeg_name;
+    const XVC_CodecID def_vid_codec;
+    const XVC_CodecID *allowed_vid_codecs;
+    const int num_allowed_vid_codecs;
+    const XVC_AuCodecID def_au_codec;
+    const XVC_AuCodecID *allowed_au_codecs;
+    const int num_allowed_au_codecs;
+    const char **extensions;
+    const int num_extensions;
 } XVC_FFormat;
 
 extern const XVC_FFormat xvc_formats[NUMCAPS];
@@ -213,7 +213,7 @@ extern const XVC_FFormat xvc_formats[NUMCAPS];
 int xvc_trans_codec (XVC_CodecID xv_codec);
 int xvc_is_valid_video_codec (XVC_FFormatID format, XVC_CodecID codec);
 int xvc_is_valid_audio_codec (XVC_FFormatID format, XVC_AuCodecID codec);
-XVC_FFormatID xvc_codec_get_target_from_filename (const char const *file);
+XVC_FFormatID xvc_codec_get_target_from_filename (const char *file);
 int xvc_codec_is_valid_fps (XVC_Fps fps, XVC_CodecID codec, int exact);
 int xvc_get_index_of_fps_array_element (int size,
                                         const XVC_Fps * haystack,

@@ -3412,7 +3412,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">XVidCap</property>
   <property name="copyright" translatable="yes">Rasca, Karl H. Beckers</property>
-  <property name="comments">1.1.4p1</property>
+  <property name="comments">1.1.5rc1</property>
   <property name="wrap_license">False</property>
   <property name="website">http://xvidcap.sourceforge.net</property>
   <property name="website_label" translatable="yes">website</property>

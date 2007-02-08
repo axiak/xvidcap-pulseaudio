@@ -1,4 +1,12 @@
 
+2007-02-08  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: codecs.c, codecs.h, gnome_ui.c, capture.c, capture.h, 
+		app_data.c, job.c, app_data.h, job.h, gnome_options.c, 
+		main.c: code cleanup, documentation and #ifdefs
+	* po/de.po, po/en.po: German translation updated
+	* configure.in, src/gnome-xvidcap.glade, debian: changelog, rules
+		version bump to 1.1.5rc1 (not for docs)
+
 2007-02-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/job.h: fix bug 1651517
 

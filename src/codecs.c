@@ -43,6 +43,7 @@
 #include <ctype.h>
 #include <libintl.h>
 #include <math.h>
+#include <locale.h>
 
 #ifdef USE_FFMPEG
 #include <ffmpeg/avcodec.h>
@@ -58,14 +59,14 @@
  */
 static const XVC_FpsRange one_to_hundred_range[] = {
     {
-     .start = {1, 10},
-     .end = {100, 1}
+     {1, 10},
+     {100, 1}
      }
 };
 static const XVC_FpsRange mpeg4_range[] = {
     {
-     .start = {75, 10},
-     .end = {30, 1}
+     {75, 10},
+     {30, 1}
      }
 };
 static const XVC_Fps mpeg1_fps[] = {
@@ -89,7 +90,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "NONE",
      N_("NONE"),
      CODEC_ID_NONE,
-     .def_fps = {0, 1},
+     {0, 1},
      NULL,
      0,
      NULL,
@@ -99,7 +100,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "PGM",
      N_("Portable Graymap"),
      CODEC_ID_PGM,
-     .def_fps = {24, 1},
+     {24, 1},
      one_to_hundred_range,
      XVC_ARRAY_LENGTH (one_to_hundred_range),
      NULL,
@@ -108,7 +109,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "PPM",
      N_("Portable Pixmap"),
      CODEC_ID_PPM,
-     .def_fps = {24, 1},
+     {24, 1},
      one_to_hundred_range,
      XVC_ARRAY_LENGTH (one_to_hundred_range),
      NULL,
@@ -117,7 +118,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "PNG",
      N_("Portable Network Graphics"),
      CODEC_ID_PNG,
-     .def_fps = {24, 1},
+     {24, 1},
      one_to_hundred_range,
      XVC_ARRAY_LENGTH (one_to_hundred_range),
      NULL,
@@ -126,7 +127,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "JPEG",
      N_("Joint Picture Expert Group"),
      CODEC_ID_JPEGLS,
-     .def_fps = {24, 1},
+     {24, 1},
      one_to_hundred_range,
      XVC_ARRAY_LENGTH (one_to_hundred_range),
      NULL,
@@ -135,7 +136,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "MPEG1",
      N_("MPEG 1"),
      CODEC_ID_MPEG1VIDEO,
-     .def_fps = {24, 1},
+     {24, 1},
      NULL,
      0,
      mpeg1_fps,
@@ -145,7 +146,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "MJPEG",
      N_("MJPEG"),
      CODEC_ID_MJPEG,
-     .def_fps = {24, 1},
+     {24, 1},
      mpeg4_range,                      /* this is actually MPEG4 ... dunno if
                                         * this is the same here */
      XVC_ARRAY_LENGTH (mpeg4_range),
@@ -155,7 +156,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "MPEG4",
      N_("MPEG 4 (DIVX)"),
      CODEC_ID_MPEG4,
-     .def_fps = {24, 1},
+     {24, 1},
      mpeg4_range,
      XVC_ARRAY_LENGTH (mpeg4_range),
      NULL,
@@ -164,7 +165,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "MS_DIV2",
      N_("Microsoft DIVX 2"),
      CODEC_ID_MSMPEG4V2,
-     .def_fps = {24, 1},
+     {24, 1},
      mpeg4_range,                      /* this is actually MPEG4 ... dunno if
                                         * this is the same here */
      XVC_ARRAY_LENGTH (mpeg4_range),
@@ -174,7 +175,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "MS_DIV3",
      N_("Microsoft DIVX 3"),
      CODEC_ID_MSMPEG4V3,
-     .def_fps = {24, 1},
+     {24, 1},
      mpeg4_range,                      /* this is actually MPEG4 ... dunno if
                                         * this is the same here */
      XVC_ARRAY_LENGTH (mpeg4_range),
@@ -184,7 +185,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "FLASH_VIDEO",
      N_("Flash Video"),
      CODEC_ID_FLV1,
-     .def_fps = {24, 1},
+     {24, 1},
      mpeg4_range,                      /* this is actually MPEG4 ... dunno if
                                         * this is the same here */
      XVC_ARRAY_LENGTH (mpeg4_range),
@@ -194,7 +195,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "DV",
      N_("DV Video"),
      CODEC_ID_DVVIDEO,
-     .def_fps = {25, 1},
+     {25, 1},
      NULL,
      0,
      dv_fps,
@@ -204,7 +205,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "MPEG2",
      N_("MPEG2 Video"),
      CODEC_ID_MPEG2VIDEO,
-     .def_fps = {24, 1},
+     {24, 1},
      NULL,
      0,
      mpeg1_fps,
@@ -214,7 +215,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      "SVQ1",
      N_("Soerensen VQ 1"),
      CODEC_ID_SVQ1,
-     .def_fps = {24, 1},
+     {24, 1},
      mpeg4_range,                      /* this is actually MPEG4 ... dunno if
                                         * this is the same here */
      XVC_ARRAY_LENGTH (mpeg4_range),
@@ -255,22 +256,22 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
  * arrays with extensions, allowed video and audio codecs for use in
  * the global xvc_formats array
  */
-static const char const *extension_xwd[] = { "xwd" };
+static const char *extension_xwd[] = { "xwd" };
 
 #ifdef USE_FFMPEG
-static const char const *extension_pgm[] = { "pgm" };
-static const char const *extension_ppm[] = { "ppm" };
-static const char const *extension_png[] = { "png" };
-static const char const *extension_jpg[] = { "jpg", "jpeg" };
-static const char const *extension_avi[] = { "avi" };
-static const char const *extension_mpg[] = { "mpeg", "mpg" };
-static const char const *extension_asf[] = { "asf" };
-static const char const *extension_flv[] = { "flv", "flv1" };
-static const char const *extension_swf[] = { "swf" };
-static const char const *extension_dv[] = { "dv" };
-static const char const *extension_m1v[] = { "m1v", "vcd" };
-static const char const *extension_m2v[] = { "m2v", "svcd" };
-static const char const *extension_mov[] = { "mov", "qt" };
+static const char *extension_pgm[] = { "pgm" };
+static const char *extension_ppm[] = { "ppm" };
+static const char *extension_png[] = { "png" };
+static const char *extension_jpg[] = { "jpg", "jpeg" };
+static const char *extension_avi[] = { "avi" };
+static const char *extension_mpg[] = { "mpeg", "mpg" };
+static const char *extension_asf[] = { "asf" };
+static const char *extension_flv[] = { "flv", "flv1" };
+static const char *extension_swf[] = { "swf" };
+static const char *extension_dv[] = { "dv" };
+static const char *extension_m1v[] = { "m1v", "vcd" };
+static const char *extension_m2v[] = { "m2v", "svcd" };
+static const char *extension_mov[] = { "mov", "qt" };
 
 static const XVC_CodecID allowed_vid_codecs_pgm[] = { CODEC_PGM };
 static const XVC_CodecID allowed_vid_codecs_ppm[] = { CODEC_PPM };
@@ -676,7 +677,7 @@ xvc_is_valid_audio_codec (XVC_FFormatID format, XVC_AuCodecID codec)
  *      in the global file xvc_formats array
  */
 XVC_FFormatID
-xvc_codec_get_target_from_filename (const char const *file)
+xvc_codec_get_target_from_filename (const char *file)
 {
     char *ext = NULL;
     int ret = 0, i, i2;

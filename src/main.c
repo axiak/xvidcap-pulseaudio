@@ -62,7 +62,9 @@ typedef void (*sighandler_t) (int);
 static XVC_AppData *app;
 static Window capture_window = None;
 
+#ifdef USE_XDAMAGE
 extern pthread_mutex_t damage_regions_mutex;
+#endif     // USE_XDAMAGE
 
 /*
  * HELPER FUNCTIONS

@@ -43,13 +43,16 @@
 /**
  * \brief state flags for the recording state machine
  */
-#define VC_STOP 1
-#define VC_START 2
-#define VC_REC 4
-#define VC_PAUSE 8
-#define VC_STEP 16
-#define VC_READY 32
-#define VC_CONTINUE 64
+enum JobStates
+{
+    VC_STOP = 1,
+    VC_START = 2,
+    VC_REC = 4,
+    VC_PAUSE = 8,
+    VC_STEP = 16,
+    VC_READY = 32,
+    VC_CONTINUE = 64
+};
 
 /**
  * \brief keeps data about the current recording job
@@ -127,12 +130,9 @@ typedef struct _Job
     /** \brief the colors as X11 sends them with the captured image */
     XColor *colors;
 
-/**
- *
- * \todo ... clean this up
- *
- */
+#ifdef USE_XDAMAGE
     XserverRegion dmg_region;
+#endif     // USE_XDAMAGE
 
 } Job;
 

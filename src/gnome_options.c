@@ -1157,7 +1157,20 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
         }
     }
 # else     // USE_XDAMAGE
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_auto_checkbutton");
+    if (w != NULL)
+        gtk_widget_hide (w);
 
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_yes_radiobutton");
+    if (w != NULL)
+        gtk_widget_hide (w);
+
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_no_radiobutton");
+    if (w != NULL)
+        gtk_widget_hide (w);
 #endif     // USE_XDAMAGE
 
     // autocontinue

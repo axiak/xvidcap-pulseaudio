@@ -8,7 +8,6 @@
  * configured maximum number of frames or maximum capture time.
  *
  * \todo add dga and v4l again
- * \todo check for XShmDetach
  */
 
 /*
@@ -85,15 +84,17 @@ extern int xvc_led_time;
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #ifdef HAVE_LIBXFIXES
+/** \brief we need to get color information for processing the real mouse
+ *      pointer. */
 #include "colors.h"
+/** \brief color information required for paintig of real mouse pointer */
+static ColorInfo c_info;
+
 /** \brief vectors used for alpha masking of real mouse pointer */
 static unsigned char top[65536];
 
 /** \brief vectors used for alpha masking of real mouse pointer */
 static unsigned char bottom[65536];
-
-/** \brief color information required for paintig of real mouse pointer */
-static ColorInfo c_info;
 #endif     // HAVE_LIBXFIXES
 
 /**
@@ -334,11 +335,11 @@ paintMousePointer (XImage * image)
 }
 
 /**
- * \brief reads new data in a pre-existing image structure.
+ * \brief reads data from the Xserver to a chunk of memory on the client
  *
  * @param dpy a pointer to the display to read from
  * @param d the drawable to use
- * @param image a pointer to the image to return data to
+ * @param data a pointer to the chunk of memory to store the image
  * @param x origin x coordinate
  * @param y origin y coordinate
  * @return we were successfull TRUE or FALSE
@@ -395,9 +396,14 @@ XGetZPixmap (Display * dpy, Drawable d, char *data, int x, int y,
 }
 
 /**
+ * \brief reads new data in a pre-existing image structure.
  *
- * \todo ... clean this up
- *
+ * @param dpy a pointer to the display to read from
+ * @param d the drawable to use
+ * @param image a pointer to the image to return data to
+ * @param x origin x coordinate
+ * @param y origin y coordinate
+ * @return we were successfull TRUE or FALSE
  */
 static Boolean
 XGetZPixmapToXImage (Display * dpy, Drawable d, XImage * image, int x, int y)
@@ -406,6 +412,19 @@ XGetZPixmapToXImage (Display * dpy, Drawable d, XImage * image, int x, int y)
                         image->width, image->height);
 }
 
+/**
+ * \brief reads data from the Xserver to a chunk of memory on the client.
+ *      This version uses shared memory access to X11.
+ *
+ * @param dpy a pointer to the display to read from
+ * @param d the drawable to use
+ * @param shminfo shared segment info attached to the XImage
+ * @param shm_opcode the major opcode for the shm extension
+ * @param data a pointer to the chunk of memory to store the image
+ * @param x origin x coordinate
+ * @param y origin y coordinate
+ * @return we were successfull TRUE or FALSE
+ */
 static Boolean
 XGetZPixmapSHM (Display * dpy, Drawable d, XShmSegmentInfo * shminfo,
                 int shm_opcode, char *data, int x, int y, int width, int height)
@@ -454,9 +473,16 @@ XGetZPixmapSHM (Display * dpy, Drawable d, XShmSegmentInfo * shminfo,
 }
 
 /**
+ * \brief copies a small image into another larger image
  *
- * \todo ... clean this up
- *
+ * @param needle pointer to the memory containing the small image
+ * @param needle_x the x position of the small image within the larger image
+ * @param needle_y the y position of the small image within the larger image
+ * @param needle_width the width of the small image
+ * @param needle_height the height of the small image
+ * @param haystack pointer to the memory holding the larger image
+ * @param haystack_width the width of the larger image
+ * @param haystack_height the height of the larger image
  */
 static void
 placeImageInImage (char *needle, int needle_x, int needle_y,
@@ -542,9 +568,14 @@ captureFrameToImage (Display * dpy, XImage * image)
 }
 
 /**
+ * \brief creates a new XImage. This is the plain X11 version.
  *
- * \todo ... clean this up
- *
+ * @param dpy pointer to an open Display
+ * @param width width of the image to create
+ * @param height height of the image to create
+ * @return a pointer to the new XImage
+ * \todo XCreateImage should work without getting the image data from the
+ *      Xserver. Cannot seem to get this to work, though. Using XGetImage.
  */
 static XImage *
 createImage (Display * dpy, int width, int height)
@@ -552,9 +583,6 @@ createImage (Display * dpy, int width, int height)
 #define DEBUGFUNCTION "createImage()"
     XImage *image = NULL;
     XVC_AppData *app = xvc_app_data_ptr ();
-    Job *job = xvc_job_ptr ();
-    int bytes_per_line = width * 4;
-    char *buf = malloc (bytes_per_line * height);
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -653,9 +681,13 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
 }
 
 /**
+ * \brief creates a new XImage. This is the SHM version.
  *
- * \todo ... clean this up
- *
+ * @param dpy pointer to an open X11 Display
+ * @param shminfo shared memory segment info to attach
+ * @param width width of the image to create
+ * @param height height of the image to create
+ * @return pointer to the XImage created
  */
 static XImage *
 createImageSHM (Display * dpy, XShmSegmentInfo * shminfo, int width, int height)
@@ -716,8 +748,6 @@ captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
 #define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
     XVC_AppData *app = xvc_app_data_ptr ();
     XImage *image = NULL;
-    Visual *visual = app->win_attr.visual;
-    unsigned int depth = app->win_attr.depth;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -816,13 +846,13 @@ commonCapture (enum captureFunctions capfunc)
 
 #ifdef USE_XDAMAGE
     XserverRegion damaged_region;
+    static XImage *dmg_image = NULL;
+    static XRectangle pointer_area;
+    static XserverRegion region = None, clip_region = None;
 
 #ifdef HAVE_SHMAT
     static XShmSegmentInfo dmg_shminfo;
 #endif     // HAVE_SHMAT
-    static XImage *dmg_image = NULL;
-    static XRectangle pointer_area;
-    static XserverRegion region = None, clip_region = None;
 #endif     // USE_XDAMAGE
 
 #ifdef HAVE_SHMAT
@@ -1110,12 +1140,13 @@ commonCapture (enum captureFunctions capfunc)
             XDestroyImage (image);
             image = NULL;
         }
+        if (capfunc == SHM)
+            XShmDetach (app->dpy, &shminfo);
+
 #ifdef USE_XDAMAGE
         if (app->flags & FLG_USE_XDAMAGE) {
-            if (capfunc == SHM) {
+            if (capfunc == SHM)
                 XShmDetach (app->dpy, &dmg_shminfo);
-                XShmDetach (app->dpy, &shminfo);
-            }
             if (dmg_image)
                 XDestroyImage (dmg_image);
         }

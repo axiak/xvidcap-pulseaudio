@@ -47,14 +47,11 @@
 #include <X11/cursorfont.h>
 #include <X11/Xmu/WinUtil.h>
 
-/**
- *
- * \todo ... clean this up
- *
- */
+#ifdef USE_XDAMAGE
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/Xdamage.h>
 #include <X11/Xproto.h>
+#endif     // USE_XDAMAGE
 
 #include <glib.h>
 #include <gdk/gdkx.h>
@@ -118,14 +115,11 @@ static pthread_t recording_thread;
 /** \brief attributes of the recording thread */
 static pthread_attr_t recording_thread_attr;
 
-/**
- *
- * \todo ... clean this up
- *
- */
-// those are for recording video in thread
-/** \brief mutex for the recording, state changes and pausing/unpausing */
+#ifdef USE_XDAMAGE
+/** \brief mutex for the Xdamage support. It governs write access to the
+ *      damaged region storage */
 pthread_mutex_t damage_regions_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif     // USE_XDAMAGE
 
 /** \brief is the recording thread running?
  *
@@ -174,22 +168,6 @@ static XVC_ErrorListItem *errors_after_cli = NULL;
  * a rare case, however
  */
 static int OK_attempts = 0;
-
-// functions
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-/*static gboolean stop_recording_gui_stuff ();
-static gboolean stop_recording_nongui_stuff ();
-static gboolean start_recording_gui_stuff ();
-static gboolean start_recording_nongui_stuff ();
-static gboolean timer_stop_recording ();
-
-void warning_submit ();
-void xvc_reset_ctrl_main_window_according_to_current_prefs ();
-void GtkChangeLabel (int pic_no);
-GtkWidget *
-glade_create_led_meter (gchar * widget_name, gchar * string1,
-                        gchar * string2, gint int1, gint int2); */
-#endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 /*
  * HELPER FUNCTIONS ...
@@ -420,10 +398,14 @@ xvc_undo_toggle_cap_type ()
 }
 #endif     // USE_FFMPEG
 
+#ifdef USE_XDAMAGE
 /**
+ * \brief event filter to register with gdk to retrieve X11 events
  *
- * \todo ... clean this up
- *
+ * @param xevent pointer to the wrapped X11 event
+ * @param event pointer to the GdkEvent
+ * @param user_data pointer to other data
+ * @return flag to gdk whether to pass the event on or drop it
  */
 GdkFilterReturn
 xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
@@ -486,8 +468,8 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
     }
 
     return GDK_FILTER_CONTINUE;
-
 }
+#endif     // USE_XDAMAGE
 
 /**
  * \brief this is what the thread spawned on record actually does. It is
@@ -589,8 +571,12 @@ stop_recording_nongui_stuff ()
     if (stop_timer_id)
         g_source_remove (stop_timer_id);
 
-    gdk_window_remove_filter (NULL,
-                              (GdkFilterFunc) xvc_xdamage_event_filter, NULL);
+#ifdef USE_XDAMAGE
+    if (app->flags & FLG_USE_XDAMAGE)
+        gdk_window_remove_filter (NULL,
+                                  (GdkFilterFunc) xvc_xdamage_event_filter,
+                                  NULL);
+#endif     // USE_XDAMAGE
 
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1047,7 +1033,6 @@ start_recording_nongui_stuff ()
         Job *job = xvc_job_ptr ();
         XVC_CapTypeOptions *target = NULL;
         XVC_AppData *app = xvc_app_data_ptr ();
-        int damage_error;
 
 #ifdef USE_FFMPEG
         if (app->current_mode > 0)
@@ -1076,7 +1061,7 @@ start_recording_nongui_stuff ()
                                      (GtkFunction) timer_stop_recording, job);
             }
         }
-
+#ifdef USE_XDAMAGE
         if (job->flags & FLG_USE_XDAMAGE) {
             GdkDisplay *gdpy = gdk_x11_lookup_xdisplay (app->dpy);
             Window *children, root_return, parent_return, root;
@@ -1120,6 +1105,7 @@ start_recording_nongui_stuff ()
                                                   app->dmg_event_base,
                                                   XDamageNumberEvents);
         }
+#endif     // USE_XDAMAGE
         // initialize recording thread
         pthread_mutex_init (&recording_mutex, NULL);
         pthread_cond_init (&recording_condition_unpaused, NULL);
