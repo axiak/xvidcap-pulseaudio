@@ -1891,7 +1891,7 @@ msgstr ""
 #: ../src/xtoffmpeg.c:326
 #, c-format
 msgid "%s %s: could not find codec parameters\n"
-msgstr "%s %s: %s: Konnte Codec Parameter nicht finden\n"
+msgstr "%s %s: Konnte Codec Parameter nicht finden\n"
 
 #: ../src/xtoffmpeg.c:348
 #, c-format
