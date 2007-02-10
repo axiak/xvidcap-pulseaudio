@@ -622,7 +622,6 @@ cleanup_thread_when_stopped ()
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    tid = 0;
     pthread_exit (&retval);
 #undef DEBUGFUNCTION
 }
