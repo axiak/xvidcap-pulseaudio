@@ -2471,11 +2471,14 @@ xvc_command_execute (char *command, int flag, int number, char *file,
             int i = 0, n = 0;
 
             p = file;
-            while (*p && (p - file) <= PATH_MAX) {
+            while (*p && (p - file) <= PATH_MAX && (p - file) <= strlen (file)) {
                 if (*p == '%') {
                     p++;
+                    if (*p == '.')
+                        p++;
                     sscanf (p, "%dd", &n);
-                    if ((p - file + n) <= PATH_MAX) {
+                    if ((p - file + n) <= PATH_MAX
+                        && (p - file) <= strlen (file)) {
                         while (n) {
                             file_buf[i++] = '?';
                             n--;

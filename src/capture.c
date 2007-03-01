@@ -8,6 +8,12 @@
  * configured maximum number of frames or maximum capture time.
  *
  * \todo add dga and v4l again
+ * \todo for placing a small image in a larger, we assume that a line in an
+ *      image retrieved from X11 will always be 4-byte aligned. Find out if
+ *      this is ALWAYS correct, or if there is a way for retrieving the
+ *      correct value from X11
+ * \todo for painting the real mouse pointer in pal8 we assume a certain form
+ *      of color table which may not be present for xwd capture.
  */
 
 /*
@@ -52,6 +58,7 @@
 #include <X11/Xlibint.h>
 #include <X11/Xproto.h>
 #include <X11/Xutil.h>
+#include <X11/XWDFile.h>
 #ifdef HAVE_LIBXFIXES
 #include <X11/extensions/Xfixes.h>
 #endif     // HAVE_LIBXFIXES
@@ -152,7 +159,24 @@ apply_masks (uint8_t * dst, uint32_t and, uint32_t or, int bits_per_pixel)
 }
 
 /**
- * Paints a mouse pointer in an X11 image.
+ * \brief Counts the bits set in a long word
+ *
+ * @param bits a long integer as a bitfield
+ * @return the number of bits set
+ */
+static int
+count_one_bits (long bits)
+{
+    int i, res = 0;
+    for (i = 0; i < (sizeof(long) * 8); i++) {
+        if ((bits & (0x1 << i)) > 0)
+            res++;
+    }
+    return res;
+}
+
+/**
+ * \brief Paints a mouse pointer in an X11 image.
  *
  * @param image Image where to paint the mouse pointer
  */
@@ -271,38 +295,146 @@ paintMousePointer (XImage * image)
                     int count;
                     int rel_x = (x - app->area->x + column);
                     int rel_y = (y - app->area->y + line);
+
+                    /** \brief alpha mask of the pointer pixel */
                     int mask = (*pix_pointer & 0xFF000000) >> 24;
                     int shift, src_shift, src_mask;
 
-                    applied = 0;
+                    /* The manpage of XGetPixel say the return value is
+                     * "normalized". No idea what's meant by that, because
+                     * the values returned are definetely exactly as in the
+                     * XImage, i.e. a 8 bit palette element for PAL8 or a
+                     * 16bit RGB value for RGB16 expanded to a long */
+                    long pixel = XGetPixel (image, rel_x, rel_y);
+                    Job *job = xvc_job_ptr ();
 
-                    for (count = 2; count >= 0; count--) {
-                        shift = count * 8;
+                    /* alpha masking on 8bit palette seems to have issues with
+                     * high transparencies. We just ignore those. */
+                    if (image->depth == 8) {
+                        if (mask < 10)
+                            mask = 0;
+                    }
+                    // shortcut
+                    if (mask == 0) {
+                        applied = pixel;
+                    } else {
+                        applied = 0;
 
-                        switch (count) {
-                        case 2:
-                            src_shift = c_info.red_shift;
-                            src_mask = image->red_mask;
-                            break;
-                        case 1:
-                            src_shift = c_info.green_shift;
-                            src_mask = image->green_mask;
-                            break;
-                        default:
-                            src_shift = c_info.blue_shift;
-                            src_mask = image->blue_mask;
+                        /* if we're on PAL8 we want the actual RGB values from
+                         * the palette rather than the palette element. We can
+                         * safely ignore alpha, here. */
+                        if (image->depth == 8) {
+                            if (job->target != CAP_XWD) {
+                                pixel =
+                                    ((u_int32_t *) job->
+                                     color_table)[(pixel & 0x00FFFFFF)];
+                            } else {
+                                long opixel = pixel;
+				pixel = (((XWDColor*) job->color_table)[(opixel & 0x00FFFFFF)].red & 0xFF00) << 16;
+				pixel |= (((XWDColor*) job->color_table)[(opixel & 0x00FFFFFF)].green & 0xFF00) << 8;
+				pixel = ((XWDColor*) job->color_table)[(opixel & 0x00FFFFFF)].blue & 0xFF00;
+                            }
+                        }
+                        // treat one color element at a time
+                        for (count = 2; count >= 0; count--) {
+                            shift = count * 8;
+
+                            /* if we don't have PAL8, we have RGB and need to
+                             * take native bit shifts and masks taken from X11
+                             * into account.
+                             * Otherwise we got the RGB values from the palette
+                             * where they are always 8 bit per color. */
+                            if (image->depth != 8) {
+                                switch (count) {
+                                case 2:
+                                    src_shift = c_info.red_shift;
+                                    src_mask = image->red_mask;
+                                    break;
+                                case 1:
+                                    src_shift = c_info.green_shift;
+                                    src_mask = image->green_mask;
+                                    break;
+                                default:
+                                    src_shift = c_info.blue_shift;
+                                    src_mask = image->blue_mask;
+                                }
+                            } else {
+                                src_shift = shift;
+                                src_mask = 0xFF << src_shift;
+                            }
+
+                            // alpha blending next
+                            topp =
+                                top[(mask << 8) +
+                                    ((*pix_pointer >> shift) & 0xFF)];
+                            botp =
+                                bottom[(mask << 8) +
+                                       (((pixel & src_mask) >> src_shift) &
+                                        0xFF)];
+
+                            applied |=
+                                ((topp +
+                                  botp) & (src_mask >> src_shift)) << src_shift;
                         }
 
-                        topp =
-                            top[(mask << 8) + ((*pix_pointer >> shift) & 0xFF)];
-                        botp =
-                            bottom[(mask << 8) +
-                                   (((XGetPixel (image, rel_x, rel_y) &
-                                      src_mask) >> src_shift) & 0xFF)];
+                        /* if we have PAL8 we need to find the palette element
+                         * closest to the result of the alpha blending before
+                         * writing back to the XImage. We do this by calculating
+                         * the number of bits matching between the blended RGB
+                         * value and each palette entry until we find an exact
+                         * match. */
+                        if (image->depth == 8) {
+                            int elem = 0;
+                            int i = 0, delta = 0;
+                            int elem_delta;
+                            long ct_pixel;
 
-                        applied |= (topp + botp) << shift;
+                            if (job->target != CAP_XWD)
+                                ct_pixel = ((u_int32_t*) job->color_table)[i];
+                            else {
+				ct_pixel = (((XWDColor*) job->color_table)[i].red & 0xFF00) << 16;
+				ct_pixel |= (((XWDColor*) job->color_table)[i].green & 0xFF00) << 8;
+				ct_pixel = ((XWDColor*) job->color_table)[i].blue & 0xFF00;
+                            }
+
+                            elem_delta = count_one_bits ((applied &
+                                                  ct_pixel) &
+                                                0x00FFFFFF);
+                            elem_delta +=
+                                count_one_bits ((~applied &
+                                                   ~ct_pixel) &
+                                                0x00FFFFFF);
+
+                            if (elem != applied) {
+                                for (i = 1; i < job->ncolors; i++) {
+                                    if (job->target != CAP_XWD)
+                                        ct_pixel = ((u_int32_t*) job->color_table)[i];
+                                    else {
+				        ct_pixel = (((XWDColor*) job->color_table)[i].red & 0xFF00) << 16;
+				        ct_pixel |= (((XWDColor*) job->color_table)[i].green & 0xFF00) << 8;
+				        ct_pixel = ((XWDColor*) job->color_table)[i].blue & 0xFF00;
+                                    }
+                                    delta =
+                                        count_one_bits ((applied &
+                                                  ct_pixel) &
+                                                0x00FFFFFF);
+                                    delta +=
+                                        count_one_bits ((~applied &
+                                                   ~ct_pixel) &
+                                                0x00FFFFFF);
+                                    if (delta > elem_delta) {
+                                        elem_delta = delta;
+                                        elem = i;
+                                        if (elem_delta == 24)
+                                            break;
+                                    }
+                                }
+                                applied = elem;
+                            }
+                        }
                     }
 
+                    // write pixel
                     XPutPixel (image, rel_x, rel_y, applied);
 
                     pix_pointer++;
@@ -479,27 +611,44 @@ XGetZPixmapSHM (Display * dpy, Drawable d, XShmSegmentInfo * shminfo,
  * @param needle_x the x position of the small image within the larger image
  * @param needle_y the y position of the small image within the larger image
  * @param needle_width the width of the small image
+ * @param needle_bytes_pl number of bytes per line in the small image (may be
+ *      padded.)
  * @param needle_height the height of the small image
  * @param haystack pointer to the memory holding the larger image
  * @param haystack_width the width of the larger image
+ * @param haystack_bytes_pl number of bytes per line in the larger image (may
+ *      be padded.)
  * @param haystack_height the height of the larger image
+ * @param bytes_per_pixel the number of bytes a pixel requires for 
+ *      representation, e.g. 4 for rgba, 1 for pal8. This requires the value
+ *      to be identical for needle and haystack.
  */
 static void
 placeImageInImage (char *needle, int needle_x, int needle_y,
-                   int needle_width, int needle_height, char *haystack,
-                   int haystack_width, int haystack_height)
+                   int needle_width, int needle_bytes_pl, int needle_height,
+                   char *haystack, int haystack_width, int haystack_bytes_pl,
+                   int haystack_height, int bytes_per_pixel)
 {
+#define DEBUGFUNCTION "placeImageInImage()"
     char *h_cursor, *n_cursor;
     int i;
 
-    h_cursor = haystack + ((needle_x + (needle_y * haystack_width)) * 4);
+    h_cursor =
+        haystack + ((needle_x * bytes_per_pixel) +
+                    (needle_y * haystack_bytes_pl));
     n_cursor = needle;
     for (i = 0; i < needle_height; i++) {
-        memcpy (h_cursor, n_cursor, needle_width * 4);
-        h_cursor += (haystack_width * 4);
-        n_cursor += (needle_width * 4);
+        if (h_cursor + (needle_width * bytes_per_pixel) >
+            haystack + (haystack_height * haystack_bytes_pl)) {
+            fprintf (stderr, "%s %s: out of bounds ... clipped correctly?\n",
+                     DEBUGFILE, DEBUGFUNCTION);
+            break;
+        }
+        memcpy (h_cursor, n_cursor, needle_width * bytes_per_pixel);
+        h_cursor += haystack_bytes_pl;
+        n_cursor += needle_bytes_pl;
     }
-
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -840,7 +989,8 @@ commonCapture (enum captureFunctions capfunc)
                                  * capture */
     static int shm_opcode = 0, shm_event_base = 0, shm_error_base = 0;
     XVC_AppData *app = xvc_app_data_ptr ();
-    int ret = 0;
+
+    //int ret = 0;
     XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
 
@@ -1025,6 +1175,8 @@ commonCapture (enum captureFunctions capfunc)
 
 //            if (num_dmg_rects > 0) XSync(app->dpy, False);
                 for (rcount = 0; rcount < num_dmg_rects; rcount++) {
+                    int bpl;
+
                     switch (capfunc) {
 #ifdef HAVE_SHMAT
                     case SHM:
@@ -1048,12 +1200,30 @@ commonCapture (enum captureFunctions capfunc)
                                      dmg_rects[rcount].width,
                                      dmg_rects[rcount].height);
                     }
+                    /* the following assumes lines in images retrieved from
+                     * X11 will always be aligned to 4-byte boundaries. You
+                     * can determine the alignment from the bytes_per_line
+                     * member of an XImage. However, for performance reasons,
+                     * we do not always retrieve a complete XImage. */
+                    bpl =
+                        ((dmg_rects[rcount].width *
+                          (image->bits_per_pixel >> 3)) % 4 >
+                         0
+                         ? ((dmg_rects[rcount].width *
+                             (image->bits_per_pixel >> 3)) / 4) * 4 +
+                         4 : dmg_rects[rcount].width *
+                         (image->bits_per_pixel >> 3)
+                        );
                     placeImageInImage (dmg_image->data,
                                        dmg_rects[rcount].x - app->area->x,
                                        dmg_rects[rcount].y - app->area->y,
                                        dmg_rects[rcount].width,
+                                       bpl,
                                        dmg_rects[rcount].height, image->data,
-                                       image->width, image->height);
+                                       image->width,
+                                       image->bytes_per_line,
+                                       image->height,
+                                       image->bits_per_pixel >> 3);
                 }
                 if (num_dmg_rects > 0) {
                     XFree (dmg_rects);

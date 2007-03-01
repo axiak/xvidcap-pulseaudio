@@ -218,9 +218,6 @@ static AVCodecContext *au_c = NULL;
 /** \brief format context for audio input */
 static AVFormatContext *ic = NULL;
 
-/** \brief input format for audio input */
-static AVInputFormat *grab_iformat = NULL;
-
 /** \brief audio output stream */
 static AVOutputStream *au_out_st = NULL;
 
@@ -263,6 +260,7 @@ static int
 add_audio_stream (Job * job)
 {
 #define DEBUGFUNCTION "add_audio_stream()"
+    AVInputFormat *grab_iformat = NULL;
     Boolean grab_audio = TRUE;
     AVFormatParameters params, *ap = &params;   // audio stream params
     int err, ret;
@@ -287,7 +285,6 @@ add_audio_stream (Job * job)
         ap->channels = target->sndchannels;
 
         grab_iformat = av_find_input_format ("audio_device");
-
 #ifdef DEBUG
         printf ("%s %s: grab iformat %p\n", DEBUGFILE, DEBUGFUNCTION,
                 grab_iformat);
@@ -295,20 +292,15 @@ add_audio_stream (Job * job)
             printf ("%s %s: grab iformat name %s\n", DEBUGFILE,
                     DEBUGFUNCTION, grab_iformat->name);
 #endif     // DEBUG
+    }
 
-        if (av_open_input_file (&ic, "", grab_iformat, 0, ap) < 0) {
-            fprintf (stderr,
-                     _("%s %s:Could not find audio grab device %s\n"),
-                     DEBUGFILE, DEBUGFUNCTION, job->snd_device);
-            return 1;
-        }
-    } else {
-        err = av_open_input_file (&ic, ap->device, NULL, 0, ap);
-        if (err < 0) {
-            fprintf (stderr, _("%s %s: error opening input file %s: %i\n"),
-                     DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
-            return 1;
-        }
+    err =
+        av_open_input_file (&ic, ap->device, (grab_audio ? grab_iformat : NULL),
+                            0, ap);
+    if (err < 0) {
+        fprintf (stderr, _("%s %s: error opening input file %s: %i\n"),
+                 DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
+        return 1;
     }
     au_in_st = av_mallocz (sizeof (AVInputStream));
     if (!au_in_st || !ic) {
@@ -610,7 +602,6 @@ cleanup_thread_when_stopped ()
         av_free (audio_buf);
         audio_buf = NULL;
     }
-    grab_iformat = NULL;
     if (au_in_st) {
         av_free (au_in_st);
         au_in_st = NULL;
@@ -1099,7 +1090,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     st->codec->mb_decision = 2;
 
     // find suitable pix_fmt for codec
-    if (&(codec->pix_fmts) != NULL) {
+    if (codec->pix_fmts != NULL) {
         for (i = 0; codec->pix_fmts[i] != -1; i++) {
             pix_fmt_mask |= (1 << codec->pix_fmts[i]);
         }
@@ -1121,7 +1112,10 @@ add_video_stream (AVFormatContext * oc, XImage * image,
 #endif     // DEBUG
 
     // flags
-    st->codec->flags |= (CODEC_FLAG_TRELLIS_QUANT | CODEC_FLAG2_FAST);
+    st->codec->flags |= CODEC_FLAG2_FAST;
+    // there is no trellis quantiser in libav* for mjpeg
+    if (st->codec->codec_id != CODEC_ID_MJPEG)
+        st->codec->flags |= CODEC_FLAG_TRELLIS_QUANT;
     st->codec->flags &= ~CODEC_FLAG_OBMC;
     // some formats want stream headers to be seperate
     if (oc->oformat->flags & AVFMT_GLOBALHEADER)
