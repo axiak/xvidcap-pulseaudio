@@ -19,7 +19,7 @@ LOC_TRANSCODE=`which transcode`
 LOC_FFMPEG=`which ffmpeg`
 LOC_MENCODER=`which mencoder`
 EXTENSION=`echo "${1}" | nawk -F "." '{print tolower($NF)}'`
-FILE=`echo "${1}" | sed 's/%[0-9]*[i|d]/*/g'`
+FILE=`echo "${1}" | sed 's/%[\.]*[0-9]*[i|d]/*/g'`
 OUTPUTFILE="/tmp/output.avi"
 
 
@@ -32,8 +32,9 @@ if ( test -z ${LOC_FFMPEG} ) ; then
 else
 	if test "x${EXTENSION}" = "xpng" -o "x${EXTENSION}" = "xppm" -o "x${EXTENSION}" = "xpgm" ; then
 		echo "Encoding with ffmpeg found at: ${LOC_FFMPEG}"
+		FFMPEG_FILE=`echo "${1}" | sed 's/%[\.]*/%/g'`
 
-		${LOC_FFMPEG} -y -r 10 -i ${1} ${OUTPUTFILE}
+		${LOC_FFMPEG} -y -r 10 -i ${FFMPEG_FILE} ${OUTPUTFILE}
 		exit 0
 	else
 		echo "of xvidcap's output files ffmpeg only supports png, ppm, and pnm."

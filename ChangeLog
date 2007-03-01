@@ -1,4 +1,22 @@
 
+2007-02-28  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* ppm2mpeg.sh: fix for mutable filenames with '.' right
+		after the '%' of the format specifier.
+	* ffmpeg, ffmpeg-svn6791, ffmpeg-svn8133, configure.in,
+		src/xtoffmpeg.c: libav* version bump
+	* src/xtoffmpeg.c: fix bug # 1584093 on the xvidcap side
+		(adding a trellis quantiser to ffmpeg is beyond my
+		skill and time at hand)
+	* src/capture.c: fixed XDamage stuff that was completely 
+		broken for anything but 32bit RGBA
+	* src/app_data.c: fixed animate command for mutable filenames
+		that have a '.' right after the '%' of the format
+		specifier.
+
+2007-02-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in: change gtk+ dependency from 2.4 to 2.5 because
+		of references to stock items not present before
+
 2007-02-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: fix for bug # 1656983
 
