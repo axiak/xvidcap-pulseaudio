@@ -311,7 +311,9 @@ static const XVC_AuCodecID au_codecs_mp2_and_mp3[] = {
 #endif     // HAVE_LIBMP3LAME
     AU_CODEC_MP2
 };
+#ifdef HAVE_LIBMP3LAME
 static const XVC_AuCodecID au_codecs_mp3[] = { AU_CODEC_MP3 };
+#endif     // HAVE_LIBMP3LAME
 static const XVC_AuCodecID au_codecs_mp2_and_pcm[] = {
     AU_CODEC_MP2,
     AU_CODEC_PCM16

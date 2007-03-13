@@ -1,4 +1,7 @@
 
+2007-03-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/codecs.c: fix for bug # 1679545
+
 2007-02-28  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* ppm2mpeg.sh: fix for mutable filenames with '.' right
 		after the '%' of the format specifier.
