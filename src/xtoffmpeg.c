@@ -545,10 +545,10 @@ do_audio_out (AVFormatContext * s, AVOutputStream * ost,
             av_init_packet (&pkt);
 
             pkt.size =
-                avcodec_encode_audio (enc, audio_out, audio_out_size,
+                avcodec_encode_audio (enc, audio_out, size_out,
                                       (short *) audio_buf);
 
-            if (enc->coded_frame) {
+            if (enc->coded_frame && enc->coded_frame->pts != AV_NOPTS_VALUE) {
                 pkt.pts =
                     av_rescale_q (enc->coded_frame->pts, enc->time_base,
                                   ost->st->time_base);
@@ -557,7 +557,6 @@ do_audio_out (AVFormatContext * s, AVOutputStream * ost,
             pkt.stream_index = ost->st->index;
 
             pkt.data = audio_out;
-
             if (pthread_mutex_trylock (&mp) == 0) {
                 // write the compressed frame in the media file
                 if (av_interleaved_write_frame (s, &pkt) != 0) {
@@ -576,7 +575,48 @@ do_audio_out (AVFormatContext * s, AVOutputStream * ost,
                 }
             }
         }
+    } else {
+        AVPacket pkt;
+
+        av_init_packet (&pkt);
+
+        /* output a pcm frame */
+        /* XXX: change encoding codec API to avoid this ? */
+        switch (enc->codec->id) {
+        case CODEC_ID_PCM_S32LE:
+        case CODEC_ID_PCM_S32BE:
+        case CODEC_ID_PCM_U32LE:
+        case CODEC_ID_PCM_U32BE:
+            size_out = size_out << 1;
+            break;
+        case CODEC_ID_PCM_S24LE:
+        case CODEC_ID_PCM_S24BE:
+        case CODEC_ID_PCM_U24LE:
+        case CODEC_ID_PCM_U24BE:
+        case CODEC_ID_PCM_S24DAUD:
+            size_out = size_out / 2 * 3;
+            break;
+        case CODEC_ID_PCM_S16LE:
+        case CODEC_ID_PCM_S16BE:
+        case CODEC_ID_PCM_U16LE:
+        case CODEC_ID_PCM_U16BE:
+            break;
+        default:
+            size_out = size_out >> 1;
+            break;
+        }
+        pkt.size =
+            avcodec_encode_audio (enc, audio_out, size_out, (short *) buftmp);
+        pkt.stream_index = ost->st->index;
+        pkt.data = audio_out;
+        if (enc->coded_frame && enc->coded_frame->pts != AV_NOPTS_VALUE)
+            pkt.pts =
+                av_rescale_q (enc->coded_frame->pts, enc->time_base,
+                              ost->st->time_base);
+        pkt.flags |= PKT_FLAG_KEY;
+        av_interleaved_write_frame (s, &pkt);
     }
+
 #undef DEBUGFUNCTION
 }
 
@@ -588,12 +628,55 @@ static void
 cleanup_thread_when_stopped ()
 {
 #define DEBUGFUNCTION "cleanup_thread_when_stopped()"
-    int retval = 0;
+    int ret;
+    AVPacket pkt;
+    int fifo_bytes;
+    AVCodecContext *enc;
+    int bit_buffer_size = 1024 * 256;
+    uint8_t *bit_buffer = NULL;
+    short *samples = NULL;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
+    av_init_packet (&pkt);
+//    pkt.stream_index= ost->index;
+
+    enc = au_out_st->st->codec;
+    samples = av_malloc (AVCODEC_MAX_AUDIO_FRAME_SIZE);
+    bit_buffer = av_malloc (bit_buffer_size);
+    fifo_bytes = av_fifo_size (&au_out_st->fifo);
+    ret = 0;
+
+    /* encode any samples remaining in fifo */
+    if (fifo_bytes > 0 &&
+        enc->codec->capabilities & CODEC_CAP_SMALL_LAST_FRAME &&
+        bit_buffer && samples) {
+        int fs_tmp = enc->frame_size;
+
+        enc->frame_size = fifo_bytes / (2 * enc->channels);
+        if (av_fifo_read (&au_out_st->fifo, (uint8_t *) samples, fifo_bytes) ==
+            0) {
+            ret =
+                avcodec_encode_audio (enc, bit_buffer, bit_buffer_size,
+                                      samples);
+        }
+        enc->frame_size = fs_tmp;
+    }
+    if (ret <= 0) {
+        ret = avcodec_encode_audio (enc, bit_buffer, bit_buffer_size, NULL);
+    }
+    pkt.flags |= PKT_FLAG_KEY;
+
+    if (samples) {
+        av_free (samples);
+        samples = NULL;
+    }
+    if (bit_buffer) {
+        av_free (bit_buffer);
+        bit_buffer = NULL;
+    }
     if (audio_out) {
         av_free (audio_out);
         audio_out = NULL;
@@ -613,7 +696,7 @@ cleanup_thread_when_stopped ()
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    pthread_exit (&retval);
+    pthread_exit (&ret);
 #undef DEBUGFUNCTION
 }
 
@@ -630,9 +713,10 @@ capture_audio_thread (Job * job)
     unsigned long start, stop, start_s, stop_s;
     struct timeval thr_curr_time;
     long sleep;
-    int retval = -1, len, data_size;
+    int ret, len, data_size;
     uint8_t *ptr, *data_buf;
-    short samples[AVCODEC_MAX_AUDIO_FRAME_SIZE / 2];
+    static unsigned int samples_size = 0;
+    static short *samples = NULL;
     AVPacket pkt;
 
     signal (SIGUSR1, cleanup_thread_when_stopped);
@@ -666,7 +750,7 @@ capture_audio_thread (Job * job)
             // (only later) and lead to out-of-sync audio (video faster)
             if (audio_pts < video_pts) {
                 // read a packet from it and output it in the fifo
-                if (av_read_packet (ic, &pkt) < 0) {
+                if (av_read_frame (ic, &pkt) < 0) {
                     fprintf (stderr,
                              _("%s %s: error reading audio packet\n"),
                              DEBUGFILE, DEBUGFUNCTION);
@@ -679,31 +763,32 @@ capture_audio_thread (Job * job)
                     data_size = 0;
 
                     if (au_in_st->decoding_needed) {
-                        /*
-                         * XXX: could avoid copy if PCM 16 bits with same
-                         * endianness as CPU
-                         */
-                        retval =
-                            avcodec_decode_audio (au_in_st->st->codec,
-                                                  samples, &data_size, ptr,
-                                                  len);
-                        if (retval < 0) {
+                        samples = av_fast_realloc (samples, &samples_size,
+                                                   FFMAX (pkt.size,
+                                                          AVCODEC_MAX_AUDIO_FRAME_SIZE));
+                        data_size = samples_size;
+                        /* XXX: could avoid copy if PCM 16 bits with same
+                         * endianness as CPU */
+                        ret =
+                            avcodec_decode_audio2 (au_in_st->st->codec, samples,
+                                                   &data_size, ptr, len);
+                        if (ret < 0) {
                             fprintf (stderr,
                                      _
                                      ("%s %s: couldn't decode captured audio packet\n"),
                                      DEBUGFILE, DEBUGFUNCTION);
                             break;
                         }
-                        // Some bug in mpeg audio decoder gives
-                        // data_size < 0, it seems they are overflows
+                        ptr += ret;
+                        len -= ret;
+                        /* Some bug in mpeg audio decoder gives */
+                        /* data_size < 0, it seems they are overflows */
                         if (data_size <= 0) {
-                            // no audio frame
+                            /* no audio frame */
 #ifdef DEBUG
                             fprintf (stderr, _("%s %s: no audio frame\n"),
                                      DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
-                            ptr += retval;
-                            len -= retval;
                             continue;
                         }
                         data_buf = (uint8_t *) samples;
@@ -714,12 +799,15 @@ capture_audio_thread (Job * job)
                     } else {
                         // FIXME: dunno about the following
                         au_in_st->next_pts +=
-                            ((int64_t) AV_TIME_BASE / 2 * data_size) /
+                            ((int64_t) AV_TIME_BASE *
+                             au_in_st->st->codec->frame_size) /
                             (au_in_st->st->codec->sample_rate *
                              au_in_st->st->codec->channels);
+                        data_buf = ptr;
+                        data_size = len;
+                        ret = len;
+                        len = 0;
                     }
-                    ptr += retval;
-                    len -= retval;
 
                     do_audio_out (output_file, au_out_st, au_in_st,
                                   data_buf, data_size);
@@ -729,7 +817,7 @@ capture_audio_thread (Job * job)
             }                          // end outside if pts ...
             else {
                 if (strcmp (job->snd_device, "pipe:") < 0)
-                    if (av_read_packet (ic, &pkt) < 0) {
+                    if (av_read_frame (ic, &pkt) < 0) {
                         fprintf (stderr, _("error reading audio packet\n"));
                     }
 #ifdef DEBUG
@@ -758,8 +846,8 @@ capture_audio_thread (Job * job)
 
         usleep (sleep);
     }                                  // end while(TRUE) loop
-    retval = 1;
-    pthread_exit (&retval);
+    ret = 1;
+    pthread_exit (&ret);
 #undef DEBUGFUNCTION
 }
 
@@ -792,9 +880,11 @@ do_video_out (AVFormatContext * s, AVStream * ost, unsigned char *buf, int size)
     av_init_packet (&pkt);
 
     if (enc->coded_frame) {
-        pkt.pts =
-            av_rescale_q (enc->coded_frame->pts, enc->time_base,
-                          ost->time_base);
+        if (enc->coded_frame->pts != AV_NOPTS_VALUE) {
+            pkt.pts =
+                av_rescale_q (enc->coded_frame->pts, enc->time_base,
+                              ost->time_base);
+        }
         if (enc->coded_frame->key_frame)
             pkt.flags |= PKT_FLAG_KEY;
     }

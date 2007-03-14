@@ -28,6 +28,12 @@
 #endif     // HAVE_CONFIG_H
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#else
+#include <inttypes.h>
+#endif     // HAVE_STDINT_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -63,7 +69,7 @@ swap_2byte (unsigned short *i)
  * @param i the 32-bit word to swap
  */
 static void
-swap_4byte (unsigned long *i)
+swap_4byte (uint32_t *i)
 {
     unsigned char t;
     unsigned char *p = (unsigned char *) i;
@@ -213,7 +219,7 @@ xvc_xwd_save_frame (FILE * fp, XImage * image)
 
         if (*(char *) &little_endian)
             swap_n_4byte ((unsigned char *) &head,
-                          sizeof (head) / sizeof (long));
+                          sizeof (head) / sizeof (uint32_t));
     }
     if (fwrite ((char *) &head, sizeof (head), 1, fp) < 1)
         perror (file);

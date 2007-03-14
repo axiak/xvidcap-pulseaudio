@@ -1,4 +1,8 @@
 
+2007-03-15  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c: fix for bug # 1669717
+	* src/xtoxwd.c: fix for bug # 1680765
+
 2007-03-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/codecs.c: fix for bug # 1679545
 
