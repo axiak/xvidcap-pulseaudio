@@ -34,7 +34,7 @@ else
 		echo "Encoding with ffmpeg found at: ${LOC_FFMPEG}"
 		FFMPEG_FILE=`echo "${1}" | sed 's/%[\.]*/%/g'`
 
-		${LOC_FFMPEG} -y -r 10 -i ${FFMPEG_FILE} ${OUTPUTFILE}
+		${LOC_FFMPEG} -y -r ${6} -i ${FFMPEG_FILE} ${OUTPUTFILE}
 		exit 0
 	else
 		echo "of xvidcap's output files ffmpeg only supports png, ppm, and pnm."
