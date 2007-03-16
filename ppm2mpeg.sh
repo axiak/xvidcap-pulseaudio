@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 if ( test ${#} -lt 1 ) ; then
 cat << !EOF

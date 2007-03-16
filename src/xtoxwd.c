@@ -37,6 +37,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <netinet/in.h>
+
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include <X11/XWDFile.h>
@@ -48,38 +50,20 @@
 #define ZImageSize(i) (i->bytes_per_line * i->height)
 
 /**
- * \brief swap the byte order of a 16 bit word
- *
- * @param i 16-bit word to swap
- */
-static void
-swap_2byte (unsigned short *i)
-{
-    unsigned char t;
-    unsigned char *p = (unsigned char *) i;
-
-    t = p[0];
-    p[0] = p[1];
-    p[1] = t;
-}
-
-/**
  * \brief swap the byte order of a long integer (32 byte)
  *
  * @param i the 32-bit word to swap
  */
 static void
-swap_4byte (uint32_t *i)
+swap_4byte (uint32_t * i)
 {
-    unsigned char t;
-    unsigned char *p = (unsigned char *) i;
+    if (sizeof (long) != sizeof (uint32_t)) {
+        *i = htonl (*i);
+    } else {
+        long *cursor = (long *) i;
 
-    t = p[0];
-    p[0] = p[3];
-    p[3] = t;
-    t = p[1];
-    p[1] = p[2];
-    p[2] = t;
+        *cursor = htonl (*cursor);
+    }
 }
 
 /**
@@ -91,41 +75,21 @@ swap_4byte (uint32_t *i)
 static void
 swap_n_4byte (unsigned char *p, unsigned long n)
 {
-    register unsigned char t;
     register unsigned long i;
 
     for (i = 0; i < n; i++) {
-        t = p[0];
-        p[0] = p[3];
-        p[3] = t;
-        t = p[1];
-        p[1] = p[2];
-        p[2] = t;
+        if (sizeof (long) != sizeof (uint32_t)) {
+            uint32_t *cursor = (uint32_t *) p;
+
+            *cursor = htonl (*cursor);
+        } else {
+            long *cursor = (long *) p;
+
+            *cursor = htonl (*cursor);
+        }
         p += 4;
     }
 }
-
-#if 0
-/**
- * \brief swap n bytes in a char array
- *
- * @param p pointer to a number of 16-bit words where the bytes are swapped
- * @param n number of bytes (not 16-bit words)
- */
-static void
-swap_n_bytes (unsigned char *p, unsigned long n)
-{
-    unsigned char t;
-    unsigned int i, h;
-
-    h = n-- / 2;
-    for (i = 0; i < h; i++) {
-        t = *(p + i);
-        *(p + i) = *(p + (n - i));
-        *(p + (n - i)) = t;
-    }
-}
-#endif
 
 /** \brief we need this to check if we must swap some bytes */
 static unsigned long little_endian = 1;
@@ -155,10 +119,10 @@ xvc_xwd_get_color_table (XColor * colors, int ncolors)
     }
     if (*(char *) &little_endian) {
         for (i = 0; i < ncolors; i++) {
-            swap_4byte (&color_table[i].pixel);
-            swap_2byte (&color_table[i].red);
-            swap_2byte (&color_table[i].green);
-            swap_2byte (&color_table[i].blue);
+            swap_4byte ((uint32_t *) (void *) &(color_table[i].pixel));
+            color_table[i].red = htons (color_table[i].red);
+            color_table[i].green = htons (color_table[i].green);
+            color_table[i].blue = htons (color_table[i].blue);
         }
     }
     return (color_table);

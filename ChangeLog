@@ -1,4 +1,10 @@
 
+2007-03-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, src/xtoxwd.c: better fix for bug # 1680765
+	* src/app_data.c: fix for bug # 1681107
+	* src/capture.c: cosmetics
+	* ppm2mpeg.sh: remove tracing
+
 2007-03-15  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: fix for bug # 1669717
 	* src/xtoxwd.c: fix for bug # 1680765

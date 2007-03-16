@@ -2997,8 +2997,9 @@ static int RENAME(swScale)(SwsContext *c, uint8_t* src[], int srcStride[], int s
 	srcStride[1]<<= c->vChrDrop;
 	srcStride[2]<<= c->vChrDrop;
 
-//	printf("swscale %X %X %X -> %X %X %X\n", (int)src[0], (int)src[1], (int)src[2],
-//		(int)dst[0], (int)dst[1], (int)dst[2]);
+	av_log(NULL, AV_LOG_INFO, 
+	 "swscale %X %X %X -> %X %X %X\n", (int)src[0], (int)src[1], (int)src[2],
+		(int)dst[0], (int)dst[1], (int)dst[2]);
 
 #if 0 //self test FIXME move to a vfilter or something
 {
@@ -3010,8 +3011,9 @@ i--;
 }
 #endif
 
-//printf("sws Strides:%d %d %d -> %d %d %d\n", srcStride[0],srcStride[1],srcStride[2],
-//dstStride[0],dstStride[1],dstStride[2]);
+	av_log(NULL, AV_LOG_INFO, 
+	    	"sws Strides:%d %d %d -> %d %d %d\n", srcStride[0],srcStride[1],srcStride[2],
+		dstStride[0],dstStride[1],dstStride[2]);
 
 	if(dstStride[0]%8 !=0 || dstStride[1]%8 !=0 || dstStride[2]%8 !=0)
 	{

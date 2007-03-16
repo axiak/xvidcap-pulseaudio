@@ -619,7 +619,7 @@ XGetZPixmapSHM (Display * dpy, Drawable d, XShmSegmentInfo * shminfo,
  * @param haystack_bytes_pl number of bytes per line in the larger image (may
  *      be padded.)
  * @param haystack_height the height of the larger image
- * @param bytes_per_pixel the number of bytes a pixel requires for 
+ * @param bytes_per_pixel the number of bytes a pixel requires for
  *      representation, e.g. 4 for rgba, 1 for pal8. This requires the value
  *      to be identical for needle and haystack.
  */

@@ -74,7 +74,7 @@
 #include "xvidcap-intl.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-/* 
+/*
  * functions purely as forward declarations
  */
 static XVC_ErrorListItem *errorlist_append (int code, XVC_ErrorListItem * err,
@@ -381,7 +381,7 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     lapp->multi_frame.play_cmd = "mplayer \"${XVFILE}\" &";
 #endif     // USE_FFMPEG
     lapp->single_frame.play_cmd =
-        "animate \"${XVFILE}\" -delay $((XVTIME/10)) &";
+        "animate -delay \"${XVTIME%,*}x1000\" \"${XVFILE}\" &";
     lapp->single_frame.video_cmd =
         "ppm2mpeg.sh \"${XVFILE}\" ${XVFFRAME} ${XVLFRAME} ${XVWIDTH} ${XVHEIGHT} ${XVFPS} ${XVTIME} &";
     lapp->single_frame.edit_cmd = "gimp \"${XVFILE}\" &";
