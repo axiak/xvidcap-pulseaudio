@@ -259,13 +259,12 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
                                  "%s %s: Error while trying to get a window to identify the window manager.\n",
                                  DEBUGFILE, DEBUGFUNCTION);
                     }
-                    if ((wm_child == NULL)
-                        ||
-                        (XGetWindowProperty
-                         (dpy, *wm_child, wm_name_atom, 0, 100, False,
-                          utf8_string, &rt, &fmt, &nitems, &nbytes,
-                          (unsigned char **) ((void *) &wm_name_str))
-                         != Success)) {
+                    if ((wm_child == NULL) ||
+                        (XGetWindowProperty (dpy, *wm_child, wm_name_atom, 0, 
+                                100, False, utf8_string, &rt, &fmt, &nitems, 
+                                &nbytes, 
+                                (unsigned char **) ((void *) &wm_name_str))
+                        != Success)) {
                         fprintf (stderr,
                                  "%s %s: Warning!!!\nYour window manager appears to be non-compliant!\n",
                                  DEBUGFILE, DEBUGFUNCTION);
@@ -274,8 +273,9 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
                 // Right now only wm's that I know of performing 3d compositing
                 // are beryl and compiz. names can be compiz for compiz and
                 // beryl/beryl-co/beryl-core for beryl (so it's strncmp )
-                if (lapp->use_xdamage != 1 && (!strcmp (wm_name_str, "compiz")
-                                               || !strncmp (wm_name_str,
+                if (lapp->use_xdamage != 1 && (!wm_name_str || 
+                                                !strcmp (wm_name_str, "compiz")
+                                                || !strncmp (wm_name_str,
                                                             "beryl", 5))) {
                     lapp->dmg_event_base = 0;
                 } else {
