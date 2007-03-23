@@ -1,4 +1,8 @@
 
+2007-03-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: capture.c, job.h, gnome_options.c, options.c:
+		fix for bug # 1651517
+
 2007-03-21  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* ffmpeg, ffmpeg-8195, ffmpeg-8133: updated ffmpeg to
 		rev 8195 to fix bug # 1656899

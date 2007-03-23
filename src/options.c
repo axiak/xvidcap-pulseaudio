@@ -393,7 +393,9 @@ xvc_read_options_file ()
 #endif     // USE_FFMPEG
                 if (strcasecmp (token, "source") == 0) {
                     app->source = strdup (value);
-                } else if (strcasecmp (token, "use_xdamage") == 0) {
+                }
+#ifdef USE_XDAMAGE
+                else if (strcasecmp (token, "use_xdamage") == 0) {
 /**
  * \todo remove this check after adding check to app_data_validate
  */
@@ -416,6 +418,7 @@ xvc_read_options_file ()
                                  ("reading unsupported GUI preferences from options file\nresetting to GUI not hidden\n"));
                     }
                 }
+#endif     // USE_XDAMAGE
 #ifdef HAVE_FFMPEG_AUDIO
                 else if (strcasecmp (token, "audio_in") == 0) {
                     app->snddev = strdup (value);

@@ -988,16 +988,15 @@ commonCapture (enum captureFunctions capfunc)
     struct timeval curr_time;   /* for measuring the duration of a frame
                                  * capture */
     static int shm_opcode = 0, shm_event_base = 0, shm_error_base = 0;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    static XRectangle pointer_area;
 
-    //int ret = 0;
+    XVC_AppData *app = xvc_app_data_ptr ();
     XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
 
 #ifdef USE_XDAMAGE
     XserverRegion damaged_region;
     static XImage *dmg_image = NULL;
-    static XRectangle pointer_area;
     static XserverRegion region = None, clip_region = None;
 
 #ifdef HAVE_SHMAT

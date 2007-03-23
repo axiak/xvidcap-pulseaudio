@@ -150,5 +150,7 @@ void xvc_job_merge_and_remove_state (int merge_state, int remove_state);
 void xvc_job_keep_state (int state);
 void xvc_job_keep_and_merge_state (int merge_state, int remove_state);
 
+#ifdef USE_XDAMAGE
 XserverRegion xvc_get_damage_region ();
+#endif     // USE_XDAMAGE
 #endif     // __JOB_H__

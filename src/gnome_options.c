@@ -237,6 +237,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
     }
 #endif     // HAVE_SHMAT
 
+#ifdef USE_XDAMAGE
     // use xdamage
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_use_xdamage_auto_checkbutton");
@@ -257,6 +258,7 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
                 lapp->flags |= FLG_USE_XDAMAGE;
         }
     }
+#endif     // USE_XDAMAGE
 
     // autocontinue
     w = NULL;
