@@ -1,4 +1,10 @@
 
+2007-03-21  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* ffmpeg, ffmpeg-8195, ffmpeg-8133: updated ffmpeg to
+		rev 8195 to fix bug # 1656899
+	* src/app_data.c: fixes a segfault when running without
+		any window manager
+
 2007-03-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, src/xtoxwd.c: better fix for bug # 1680765
 	* src/app_data.c: fix for bug # 1681107
