@@ -62,6 +62,29 @@
 #include <ffmpeg/swscale.h>
 #include <ffmpeg/rgb2rgb.h>
 #include <ffmpeg/fifo.h>
+#define swscale_isRGB(x)       ((x)==PIX_FMT_BGR32 || (x)==PIX_FMT_RGB24        \
+                        || (x)==PIX_FMT_RGB565 || (x)==PIX_FMT_RGB555   \
+                        || (x)==PIX_FMT_RGB8 || (x)==PIX_FMT_RGB4 || (x)==PIX_FMT_RGB4_BYTE     \
+                        || (x)==PIX_FMT_MONOBLACK)
+#define swscale_isBGR(x)       ((x)==PIX_FMT_RGB32 || (x)==PIX_FMT_BGR24        \
+                        || (x)==PIX_FMT_BGR565 || (x)==PIX_FMT_BGR555   \
+                        || (x)==PIX_FMT_BGR8 || (x)==PIX_FMT_BGR4 || (x)==PIX_FMT_BGR4_BYTE     \
+                        || (x)==PIX_FMT_MONOBLACK)
+#define swscale_isSupportedIn(x)  ((x)==PIX_FMT_YUV420P || (x)==PIX_FMT_YUYV422 || (x)==PIX_FMT_UYVY422\
+                        || (x)==PIX_FMT_RGB32|| (x)==PIX_FMT_BGR24|| (x)==PIX_FMT_BGR565|| (x)==PIX_FMT_BGR555\
+                        || (x)==PIX_FMT_BGR32|| (x)==PIX_FMT_RGB24|| (x)==PIX_FMT_RGB565|| (x)==PIX_FMT_RGB555\
+                        || (x)==PIX_FMT_GRAY8 || (x)==PIX_FMT_YUV410P\
+                        || (x)==PIX_FMT_GRAY16BE || (x)==PIX_FMT_GRAY16LE\
+                        || (x)==PIX_FMT_YUV444P || (x)==PIX_FMT_YUV422P || (x)==PIX_FMT_YUV411P\
+                        || (x)==PIX_FMT_PAL8 || (x)==PIX_FMT_BGR8 || (x)==PIX_FMT_RGB8\
+                        || (x)==PIX_FMT_BGR4_BYTE  || (x)==PIX_FMT_RGB4_BYTE)
+#define swscale_isSupportedOut(x) ((x)==PIX_FMT_YUV420P || (x)==PIX_FMT_YUYV422 || (x)==PIX_FMT_UYVY422\
+                        || (x)==PIX_FMT_YUV444P || (x)==PIX_FMT_YUV422P || (x)==PIX_FMT_YUV411P\
+                        || swscale_isRGB(x) || swscale_isBGR(x)\
+                        || (x)==PIX_FMT_NV12 || (x)==PIX_FMT_NV21\
+                        || (x)==PIX_FMT_GRAY16BE || (x)==PIX_FMT_GRAY16LE\
+                        || (x)==PIX_FMT_GRAY8 || (x)==PIX_FMT_YUV410P)
+
 
 #define PIX_FMT_ARGB32 PIX_FMT_RGBA32  /* this is just my personal
                                         * convenience */
@@ -1201,6 +1224,20 @@ add_video_stream (AVFormatContext * oc, XImage * image,
          st->codec->pix_fmt);
 #endif     // DEBUG
 
+    if (!swscale_isSupportedIn(input_pixfmt)) {
+            fprintf (stderr,
+                     _
+                     ("%s %s: The picture format you are grabbing (%i) is not supported by libswscale ... aborting\n"),
+                     DEBUGFILE, DEBUGFUNCTION, input_pixfmt);
+            exit (1);
+    }
+    if (!swscale_isSupportedOut(st->codec->pix_fmt)) {
+        if (job->target >= CAP_MF)
+            st->codec->pix_fmt = PIX_FMT_YUV420P;
+        else
+            st->codec->pix_fmt = PIX_FMT_RGB24;
+    }
+
     // flags
     st->codec->flags |= CODEC_FLAG2_FAST;
     // there is no trellis quantiser in libav* for mjpeg
@@ -1485,10 +1522,6 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         if ((job->flags & FLG_REC_SOUND) && (job->au_targetCodec > 0)) {
             int au_ret = add_audio_stream (job);
 
-#ifdef DEBUG
-            dump_format (output_file, 0, output_file->filename, 1);
-#endif     // DEBUG
-
             // initialize a mutex lock to its default value
             pthread_mutex_init (&mp, NULL);
 
@@ -1506,6 +1539,10 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
             }
         }
 #endif     // HAVE_FFMPEG_AUDIO
+
+#ifdef DEBUG
+            dump_format (output_file, 0, output_file->filename, 1);
+#endif     // DEBUG
 
         /*
          * prepare pictures
