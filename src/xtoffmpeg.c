@@ -129,9 +129,6 @@ static int input_pixfmt;
 /** \brief store current video_pts for a/v sync */
 static double video_pts;
 
-/** \brief store obtained color info */
-static ColorInfo c_info;
-
 /** \brief buffer memory used during 8bit palette conversion */
 static uint8_t *scratchbuf8bit;
 
@@ -141,7 +138,7 @@ static XVC_CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
 static void dump8bit (XImage * image, u_int32_t * ct);
-static void dump32bit (XImage * input);
+static void dump32bit (XImage * input, ColorInfo *c_info);
 static void x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp);
 #endif     // DEBUG
 
@@ -1396,10 +1393,6 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 #endif     // USE_FFMPEG
             target = &(app->single_frame);
 
-        // color info only needs to be retrieved once for true color X ...
-        // dunno about pseudo color
-        xvc_get_color_info (image, &c_info);
-
 #ifdef DEBUG
         {
             FILE *errout;
@@ -1408,15 +1401,15 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
             errout = fdopen (2, "w");
             // x2ffmpeg_dump_ximage_info(image, errout);
             printf ("%s %s: alpha_mask: 0x%.8X\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.alpha_mask);
+                    DEBUGFILE, DEBUGFUNCTION, job->c_info->alpha_mask);
             printf ("%s %s: alpha_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.alpha_shift);
+                    DEBUGFILE, DEBUGFUNCTION, job->c_info->alpha_shift);
             printf ("%s %s: red_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.red_shift);
+                    DEBUGFILE, DEBUGFUNCTION, job->c_info->red_shift);
             printf ("%s %s: green_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.green_shift);
+                    DEBUGFILE, DEBUGFUNCTION, job->c_info->green_shift);
             printf ("%s %s: blue_shift: %li\n",
-                    DEBUGFILE, DEBUGFUNCTION, c_info.blue_shift);
+                    DEBUGFILE, DEBUGFUNCTION, job->c_info->blue_shift);
         }
 #endif     // DEBUG
 
@@ -1427,7 +1420,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 #endif     // DEBUG
 
         // determine input picture format
-        input_pixfmt = guess_input_pix_fmt (image, &c_info);
+        input_pixfmt = guess_input_pix_fmt (image, job->c_info);
 
         // register all libav* related stuff
         av_register_all ();
@@ -1664,7 +1657,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
                 DEBUGFUNCTION, audio_pts, video_pts);
 
         printf ("%s %s: c_info %p - scratchbuf8bit %p\n", DEBUGFILE,
-                DEBUGFUNCTION, &c_info, scratchbuf8bit);
+                DEBUGFUNCTION, job->c_info, scratchbuf8bit);
 #endif     // DEBUG
     }
 
@@ -1696,14 +1689,14 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
      */
 #ifdef DEBUG
     if (input_pixfmt == PIX_FMT_ARGB32)
-        dump32bit (image);
+        dump32bit (image, job->c_info);
     if (input_pixfmt == PIX_FMT_PAL8)
         dump8bit (image, (u_int32_t *) job->color_table);
 #endif     // DEBUG
 
     /** \todo test if the special image conversion for Solaris is still
      *      necessary */
-    if (input_pixfmt == PIX_FMT_ARGB32 && c_info.alpha_mask == 0xFF000000
+    if (input_pixfmt == PIX_FMT_ARGB32 && job->c_info->alpha_mask == 0xFF000000
         && image->red_mask == 0xFF && image->green_mask == 0xFF00
         && image->blue_mask == 0xFF0000) {
         myABGR32toARGB32 (image);
@@ -1932,7 +1925,7 @@ x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp)
  * @param input XImage to dump to pnm
  */
 static void
-dump32bit (XImage * input)
+dump32bit (XImage * input, ColorInfo *c_info)
 {
 #define DEBUGFUNCTION "dump32bit()"
 
@@ -1947,9 +1940,9 @@ dump32bit (XImage * input)
         rm = input->red_mask,
         gm = input->green_mask,
         bm = input->blue_mask,
-        rs = c_info.red_shift,
-        gs = c_info.green_shift,
-        bs = c_info.blue_shift, *p32 = (unsigned int *) input->data;
+        rs = c_info->red_shift,
+        gs = c_info->green_shift,
+        bs = c_info->blue_shift, *p32 = (unsigned int *) input->data;
 
 #ifdef DEBUG
     printf ("%s %s: Entering with image %p\n", DEBUGFILE, DEBUGFUNCTION, input);

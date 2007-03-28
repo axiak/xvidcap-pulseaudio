@@ -29,6 +29,7 @@
 #include <X11/Intrinsic.h>
 #include <stdio.h>
 #include "app_data.h"
+#include "colors.h"
 
 #ifdef USE_XDAMAGE
 #include <X11/extensions/Xfixes.h>
@@ -129,6 +130,8 @@ typedef struct _Job
     void *color_table;
     /** \brief the colors as X11 sends them with the captured image */
     XColor *colors;
+    /** \brief color information retrieved from first XImage */
+    ColorInfo *c_info;
 
 #ifdef USE_XDAMAGE
     XserverRegion dmg_region;

@@ -136,7 +136,7 @@ job_new ()
 
     job = (Job *) malloc (sizeof (Job));
     if (!job) {
-        perror ("%s %s: malloc failed?!?");
+        fprintf (stderr, "%s %s: malloc failed?!?", DEBUGFILE, DEBUGFUNCTION);
         exit (1);
     }
 
@@ -163,6 +163,7 @@ job_new ()
 
     job->color_table = NULL;
     job->colors = NULL;
+    job->c_info = NULL;
 
 #ifdef USE_XDAMAGE
     job->dmg_region = XFixesCreateRegion (app->dpy, NULL, 0);
@@ -188,6 +189,10 @@ xvc_job_free ()
 #ifdef USE_XDAMAGE
         XFixesDestroyRegion (app->dpy, job->dmg_region);
 #endif     // USE_XDAMAGE
+
+        if (job->c_info)
+            free (job->c_info);
+
         free (job);
     }
 #undef DEBUGFUNCTION

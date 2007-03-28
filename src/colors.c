@@ -29,6 +29,8 @@
 #include "colors.h"
 #include "app_data.h"
 
+#define DEBUGFILE "colors.c"
+
 /**
  * \brief retrieves XColor array for a given window
  *
@@ -101,15 +103,24 @@ xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors)
  * @param image pointer to the XImage to assimilate color information from
  * @param ci pointer to a ColorInfo struct
  */
-void
-xvc_get_color_info (XImage * image, ColorInfo * ci)
+ColorInfo *
+xvc_get_color_info (XImage * image)
 {
+#define DEBUGFUNCTION "xvc_get_color_info"
+
     unsigned long red_mask, green_mask, blue_mask, alpha_mask;
+    ColorInfo *ci;
+
+    ci = (ColorInfo *) malloc (sizeof (ColorInfo));
+    if (!ci) {
+        fprintf (stderr, "%s %s: malloc failed?!?", DEBUGFILE, DEBUGFUNCTION);
+        exit (1);
+    }
 
     // the shifts are unsigned longs as well
 
     if (!ci)
-        return;
+        return NULL;
 
     // setting shifts and bit_depths to zero
     ci->red_shift = ci->green_shift = ci->blue_shift = ci->alpha_shift = 0;
@@ -206,4 +217,6 @@ xvc_get_color_info (XImage * image, ColorInfo * ci)
             ci->alpha_mask, ci->alpha_bit_depth, ci->alpha_shift,
             ci->alpha_max_val);
 #endif
+    return ci;
+#undef DEBUGFUNCTION
 }

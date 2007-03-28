@@ -94,8 +94,6 @@ extern int xvc_led_time;
 /** \brief we need to get color information for processing the real mouse
  *      pointer. */
 #include "colors.h"
-/** \brief color information required for paintig of real mouse pointer */
-static ColorInfo c_info;
 
 /** \brief vectors used for alpha masking of real mouse pointer */
 static unsigned char top[65536];
@@ -202,6 +200,7 @@ paintMousePointer (XImage * image)
 
     int x, y, cursor_width = 16, cursor_height = 20;
     XVC_AppData *app = xvc_app_data_ptr ();
+    Job *job = xvc_job_ptr ();
     XRectangle pArea;
 
 #ifdef HAVE_LIBXFIXES
@@ -297,7 +296,8 @@ paintMousePointer (XImage * image)
                     int rel_y = (y - app->area->y + line);
 
                     /** \brief alpha mask of the pointer pixel */
-                    int mask = (*pix_pointer & 0xFF000000) >> 24;
+                    int mask = (*pix_pointer & job->c_info->alpha_mask) >> 
+                        job->c_info->alpha_shift;
                     int shift, src_shift, src_mask;
 
                     /* The manpage of XGetPixel say the return value is
@@ -306,7 +306,6 @@ paintMousePointer (XImage * image)
                      * XImage, i.e. a 8 bit palette element for PAL8 or a
                      * 16bit RGB value for RGB16 expanded to a long */
                     long pixel = XGetPixel (image, rel_x, rel_y);
-                    Job *job = xvc_job_ptr ();
 
                     /* alpha masking on 8bit palette seems to have issues with
                      * high transparencies. We just ignore those. */
@@ -316,9 +315,9 @@ paintMousePointer (XImage * image)
                     }
                     // shortcut
                     if (mask == 0) {
-                        applied = pixel;
+                        applied = pixel | job->c_info->alpha_mask;
                     } else {
-                        applied = 0;
+                        applied = job->c_info->alpha_mask;
 
                         /* if we're on PAL8 we want the actual RGB values from
                          * the palette rather than the palette element. We can
@@ -330,9 +329,12 @@ paintMousePointer (XImage * image)
                                      color_table)[(pixel & 0x00FFFFFF)];
                             } else {
                                 long opixel = pixel;
-				pixel = (((XWDColor*) job->color_table)[(opixel & 0x00FFFFFF)].red & 0xFF00) << 16;
-				pixel |= (((XWDColor*) job->color_table)[(opixel & 0x00FFFFFF)].green & 0xFF00) << 8;
-				pixel = ((XWDColor*) job->color_table)[(opixel & 0x00FFFFFF)].blue & 0xFF00;
+				pixel = (((XWDColor*) job->color_table)[
+                                    (opixel & 0x00FFFFFF)].red & 0xFF00) << 16;
+				pixel |= (((XWDColor*) job->color_table)[
+                                    (opixel & 0x00FFFFFF)].green & 0xFF00) << 8;
+				pixel = ((XWDColor*) job->color_table)[
+                                    (opixel & 0x00FFFFFF)].blue & 0xFF00;
                             }
                         }
                         // treat one color element at a time
@@ -347,15 +349,15 @@ paintMousePointer (XImage * image)
                             if (image->depth != 8) {
                                 switch (count) {
                                 case 2:
-                                    src_shift = c_info.red_shift;
+                                    src_shift = job->c_info->red_shift;
                                     src_mask = image->red_mask;
                                     break;
                                 case 1:
-                                    src_shift = c_info.green_shift;
+                                    src_shift = job->c_info->green_shift;
                                     src_mask = image->green_mask;
                                     break;
                                 default:
-                                    src_shift = c_info.blue_shift;
+                                    src_shift = job->c_info->blue_shift;
                                     src_mask = image->blue_mask;
                                 }
                             } else {
@@ -1131,6 +1133,12 @@ commonCapture (enum captureFunctions capfunc)
                 }
 #endif     // USE_XDAMAGE
             }
+
+            // need to determine c_info from image FIRST
+            if (!(job->c_info))
+                job->c_info = xvc_get_color_info (image);
+
+            // now we can draw the mouse pointer
             if (image) {
                 if (app->mouseWanted > 0) {
                     pointer_area = paintMousePointer (image);
@@ -1141,12 +1149,6 @@ commonCapture (enum captureFunctions capfunc)
             } else
                 printf ("%s %s: could not acquire pixmap!\n", DEBUGFILE,
                         DEBUGFUNCTION);
-
-#ifdef HAVE_LIBXFIXES
-            if (app->flags & FLG_USE_XFIXES)
-                xvc_get_color_info (image, &c_info);
-#endif     // HAVE_LIBXFIXES
-
         } else {
             // we're recording and not in the first frame ....
             // so we just read new data into the present image structure

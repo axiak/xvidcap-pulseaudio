@@ -1,4 +1,10 @@
 
+2007-03-28  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c: partial fix for bug # 1689959
+	* src: colors.c, colors.h, xtoffmpeg.c, capture.c, 
+		job.c, app_data.h, job.h: fix for 
+		bug # 1689984
+
 2007-03-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: capture.c, job.h, gnome_options.c, options.c:
 		fix for bug # 1651517

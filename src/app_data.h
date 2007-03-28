@@ -32,8 +32,8 @@
 #include "codecs.h"
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
-#define XVC_MAX(a,b) ((a)>b? (a):(b))
-#define XVC_MIN(a,b) ((a)<b? (a):(b))
+#define XVC_MAX(a,b) ((a)>(b)? (a):(b))
+#define XVC_MIN(a,b) ((a)<(b)? (a):(b))
 
 /*
  * some flags to toggle on/off options
