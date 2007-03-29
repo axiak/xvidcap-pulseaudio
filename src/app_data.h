@@ -295,8 +295,8 @@ typedef struct _XVC_ErrorListItem
 /*
  * Functions from app_data.c
  */
-void xvc_app_data_free ();
-XVC_AppData *xvc_app_data_ptr (void);
+void xvc_appdata_free ();
+XVC_AppData *xvc_appdata_ptr (void);
 void xvc_appdata_init (XVC_AppData * lapp);
 void xvc_appdata_set_defaults (XVC_AppData * lapp);
 void xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp);

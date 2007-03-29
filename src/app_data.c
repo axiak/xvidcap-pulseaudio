@@ -95,9 +95,9 @@ static XVC_AppData *app = NULL;
  * @return a pointer to an allocated XVC_AppData struct
  */
 static XVC_AppData *
-app_data_new ()
+appdata_new ()
 {
-#define DEBUGFUNCTION "app_data_new()"
+#define DEBUGFUNCTION "appdata_new()"
     app = (XVC_AppData *) malloc (sizeof (XVC_AppData));
     if (!app) {
         perror ("%s %s: malloc failed?!?");
@@ -111,9 +111,9 @@ app_data_new ()
  * \brief frees the global XVC_AppData struct
  */
 void
-xvc_app_data_free ()
+xvc_appdata_free ()
 {
-#define DEBUGFUNCTION "xvc_app_data_free()"
+#define DEBUGFUNCTION "xvc_appdata_free()"
     if (app) {
         free (app);
     }
@@ -127,11 +127,11 @@ xvc_app_data_free ()
  *      not been allocated before, it will be now.
  */
 XVC_AppData *
-xvc_app_data_ptr (void)
+xvc_appdata_ptr (void)
 {
-#define DEBUGFUNCTION "xvc_app_data_ptr()"
+#define DEBUGFUNCTION "xvc_appdata_ptr()"
     if (!app) {
-        app_data_new ();
+        appdata_new ();
         xvc_appdata_init (app);
     }
     return (app);
@@ -260,11 +260,12 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
                                  DEBUGFILE, DEBUGFUNCTION);
                     }
                     if ((wm_child == NULL) ||
-                        (XGetWindowProperty (dpy, *wm_child, wm_name_atom, 0, 
-                                100, False, utf8_string, &rt, &fmt, &nitems, 
-                                &nbytes, 
-                                (unsigned char **) ((void *) &wm_name_str))
-                        != Success)) {
+                        (XGetWindowProperty (dpy, *wm_child, wm_name_atom, 0,
+                                             100, False, utf8_string, &rt, &fmt,
+                                             &nitems, &nbytes,
+                                             (unsigned char **) ((void *)
+                                                                 &wm_name_str))
+                         != Success)) {
                         fprintf (stderr,
                                  "%s %s: Warning!!!\nYour window manager appears to be non-compliant!\n",
                                  DEBUGFILE, DEBUGFUNCTION);
@@ -273,9 +274,9 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
                 // Right now only wm's that I know of performing 3d compositing
                 // are beryl and compiz. names can be compiz for compiz and
                 // beryl/beryl-co/beryl-core for beryl (so it's strncmp )
-                if (lapp->use_xdamage != 1 && (!wm_name_str || 
-                                                !strcmp (wm_name_str, "compiz")
-                                                || !strncmp (wm_name_str,
+                if (lapp->use_xdamage != 1 && (!wm_name_str ||
+                                               !strcmp (wm_name_str, "compiz")
+                                               || !strncmp (wm_name_str,
                                                             "beryl", 5))) {
                     lapp->dmg_event_base = 0;
                 } else {

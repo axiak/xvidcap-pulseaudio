@@ -56,7 +56,7 @@ xvc_write_options_file ()
     char *home;
     char file[PATH_MAX + 1];
     FILE *fp;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     // save it to $HOME/<OPS_FILE>
     home = getenv ("HOME");
@@ -333,7 +333,7 @@ xvc_read_options_file ()
     char *home;
     char file[PATH_MAX + 1];
     FILE *fp;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     home = getenv ("HOME");
     sprintf (file, "%s/%s", home, OPS_FILE);

@@ -85,7 +85,6 @@
                         || (x)==PIX_FMT_GRAY16BE || (x)==PIX_FMT_GRAY16LE\
                         || (x)==PIX_FMT_GRAY8 || (x)==PIX_FMT_YUV410P)
 
-
 #define PIX_FMT_ARGB32 PIX_FMT_RGBA32  /* this is just my personal
                                         * convenience */
 
@@ -138,7 +137,7 @@ static XVC_CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
 static void dump8bit (XImage * image, u_int32_t * ct);
-static void dump32bit (XImage * input, ColorInfo *c_info);
+static void dump32bit (XImage * input, ColorInfo * c_info);
 static void x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp);
 #endif     // DEBUG
 
@@ -1143,7 +1142,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
     int quality = target->quality;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1200,6 +1199,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     st->codec->mb_decision = 2;
 
     // find suitable pix_fmt for codec
+    st->codec->pix_fmt = -1;
     if (codec->pix_fmts != NULL) {
         for (i = 0; codec->pix_fmts[i] != -1; i++) {
             pix_fmt_mask |= (1 << codec->pix_fmts[i]);
@@ -1208,11 +1208,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
             avcodec_find_best_pix_fmt (pix_fmt_mask, input_pixfmt,
                                        (input_pixfmt ==
                                         PIX_FMT_ARGB32 ? 1 : 0), NULL);
-        if (st->codec->pix_fmt < 0)
-            st->codec->pix_fmt = PIX_FMT_YUV420P;
-    } else
-        st->codec->pix_fmt = PIX_FMT_YUV420P;
-
+    }
 #ifdef DEBUG
     printf
         ("%s %s: pix_fmt_mask %i, has alpha %i, input_pixfmt %i, output pixfmt %i\n",
@@ -1221,20 +1217,26 @@ add_video_stream (AVFormatContext * oc, XImage * image,
          st->codec->pix_fmt);
 #endif     // DEBUG
 
-    if (!swscale_isSupportedIn(input_pixfmt)) {
-            fprintf (stderr,
-                     _
-                     ("%s %s: The picture format you are grabbing (%i) is not supported by libswscale ... aborting\n"),
-                     DEBUGFILE, DEBUGFUNCTION, input_pixfmt);
-            exit (1);
+    if (!swscale_isSupportedIn (input_pixfmt)) {
+        fprintf (stderr,
+                 _
+                 ("%s %s: The picture format you are grabbing (%i) is not supported by libswscale ... aborting\n"),
+                 DEBUGFILE, DEBUGFUNCTION, input_pixfmt);
+        exit (1);
     }
-    if (!swscale_isSupportedOut(st->codec->pix_fmt)) {
-        if (job->target >= CAP_MF)
-            st->codec->pix_fmt = PIX_FMT_YUV420P;
-        else
-            st->codec->pix_fmt = PIX_FMT_RGB24;
+    if (!swscale_isSupportedOut (st->codec->pix_fmt)) {
+        st->codec->pix_fmt = -1;
     }
 
+    if (st->codec->pix_fmt < 0 || st->codec->pix_fmt == PIX_FMT_ARGB32) {
+        if (job->target >= CAP_MF) {
+            st->codec->pix_fmt = PIX_FMT_YUV420P;
+        } else if (job->target == CAP_JPG) {
+            st->codec->pix_fmt = PIX_FMT_YUVJ422P;
+        } else {
+            st->codec->pix_fmt = PIX_FMT_RGB24;
+        }
+    }
     // flags
     st->codec->flags |= CODEC_FLAG2_FAST;
     // there is no trellis quantiser in libav* for mjpeg
@@ -1369,7 +1371,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 {
 #define DEBUGFUNCTION "xvc_ffmpeg_save_frame()"
     Job *job = xvc_job_ptr ();
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     /* size of the encoded frame to write to file */
     int out_size;
@@ -1534,7 +1536,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 #endif     // HAVE_FFMPEG_AUDIO
 
 #ifdef DEBUG
-            dump_format (output_file, 0, output_file->filename, 1);
+        dump_format (output_file, 0, output_file->filename, 1);
 #endif     // DEBUG
 
         /*
@@ -1925,7 +1927,7 @@ x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp)
  * @param input XImage to dump to pnm
  */
 static void
-dump32bit (XImage * input, ColorInfo *c_info)
+dump32bit (XImage * input, ColorInfo * c_info)
 {
 #define DEBUGFUNCTION "dump32bit()"
 

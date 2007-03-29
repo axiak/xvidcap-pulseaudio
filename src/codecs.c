@@ -126,7 +126,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
     {
      "JPEG",
      N_("Joint Picture Expert Group"),
-     CODEC_ID_JPEGLS,
+     CODEC_ID_MJPEG,
      {24, 1},
      one_to_hundred_range,
      XVC_ARRAY_LENGTH (one_to_hundred_range),
@@ -311,6 +311,7 @@ static const XVC_AuCodecID au_codecs_mp2_and_mp3[] = {
 #endif     // HAVE_LIBMP3LAME
     AU_CODEC_MP2
 };
+
 #ifdef HAVE_LIBMP3LAME
 static const XVC_AuCodecID au_codecs_mp3[] = { AU_CODEC_MP3 };
 #endif     // HAVE_LIBMP3LAME

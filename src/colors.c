@@ -116,7 +116,6 @@ xvc_get_color_info (XImage * image)
         fprintf (stderr, "%s %s: malloc failed?!?", DEBUGFILE, DEBUGFUNCTION);
         exit (1);
     }
-
     // the shifts are unsigned longs as well
 
     if (!ci)

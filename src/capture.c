@@ -114,7 +114,7 @@ getCurrentPointer (int *x, int *y)
 #define DEBUGFUNCTION "getCurrentPointer()"
     Window mrootwindow, childwindow;
     int dummy;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     mrootwindow = DefaultRootWindow (app->dpy);
 
@@ -166,7 +166,7 @@ static int
 count_one_bits (long bits)
 {
     int i, res = 0;
-    for (i = 0; i < (sizeof(long) * 8); i++) {
+    for (i = 0; i < (sizeof (long) * 8); i++) {
         if ((bits & (0x1 << i)) > 0)
             res++;
     }
@@ -199,7 +199,7 @@ paintMousePointer (XImage * image)
     };
 
     int x, y, cursor_width = 16, cursor_height = 20;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
     Job *job = xvc_job_ptr ();
     XRectangle pArea;
 
@@ -296,7 +296,7 @@ paintMousePointer (XImage * image)
                     int rel_y = (y - app->area->y + line);
 
                     /** \brief alpha mask of the pointer pixel */
-                    int mask = (*pix_pointer & job->c_info->alpha_mask) >> 
+                    int mask = (*pix_pointer & job->c_info->alpha_mask) >>
                         job->c_info->alpha_shift;
                     int shift, src_shift, src_mask;
 
@@ -315,9 +315,9 @@ paintMousePointer (XImage * image)
                     }
                     // shortcut
                     if (mask == 0) {
-                        applied = pixel | job->c_info->alpha_mask;
+                        applied = pixel;    // | job->c_info->alpha_mask;
                     } else {
-                        applied = job->c_info->alpha_mask;
+                        applied = 0;   //job->c_info->alpha_mask;
 
                         /* if we're on PAL8 we want the actual RGB values from
                          * the palette rather than the palette element. We can
@@ -329,12 +329,19 @@ paintMousePointer (XImage * image)
                                      color_table)[(pixel & 0x00FFFFFF)];
                             } else {
                                 long opixel = pixel;
-				pixel = (((XWDColor*) job->color_table)[
-                                    (opixel & 0x00FFFFFF)].red & 0xFF00) << 16;
-				pixel |= (((XWDColor*) job->color_table)[
-                                    (opixel & 0x00FFFFFF)].green & 0xFF00) << 8;
-				pixel = ((XWDColor*) job->color_table)[
-                                    (opixel & 0x00FFFFFF)].blue & 0xFF00;
+
+                                pixel = (((XWDColor *) job->color_table)[(opixel
+                                                                          &
+                                                                          0x00FFFFFF)].
+                                         red & 0xFF00) << 16;
+                                pixel |=
+                                    (((XWDColor *) job->
+                                      color_table)[(opixel & 0x00FFFFFF)].
+                                     green & 0xFF00) << 8;
+                                pixel =
+                                    ((XWDColor *) job->
+                                     color_table)[(opixel & 0x00FFFFFF)].
+                                    blue & 0xFF00;
                             }
                         }
                         // treat one color element at a time
@@ -392,38 +399,50 @@ paintMousePointer (XImage * image)
                             long ct_pixel;
 
                             if (job->target != CAP_XWD)
-                                ct_pixel = ((u_int32_t*) job->color_table)[i];
+                                ct_pixel = ((u_int32_t *) job->color_table)[i];
                             else {
-				ct_pixel = (((XWDColor*) job->color_table)[i].red & 0xFF00) << 16;
-				ct_pixel |= (((XWDColor*) job->color_table)[i].green & 0xFF00) << 8;
-				ct_pixel = ((XWDColor*) job->color_table)[i].blue & 0xFF00;
+                                ct_pixel =
+                                    (((XWDColor *) job->color_table)[i].
+                                     red & 0xFF00) << 16;
+                                ct_pixel |=
+                                    (((XWDColor *) job->color_table)[i].
+                                     green & 0xFF00) << 8;
+                                ct_pixel =
+                                    ((XWDColor *) job->color_table)[i].
+                                    blue & 0xFF00;
                             }
 
                             elem_delta = count_one_bits ((applied &
-                                                  ct_pixel) &
-                                                0x00FFFFFF);
+                                                          ct_pixel) &
+                                                         0x00FFFFFF);
                             elem_delta +=
                                 count_one_bits ((~applied &
-                                                   ~ct_pixel) &
-                                                0x00FFFFFF);
+                                                 ~ct_pixel) & 0x00FFFFFF);
 
                             if (elem != applied) {
                                 for (i = 1; i < job->ncolors; i++) {
                                     if (job->target != CAP_XWD)
-                                        ct_pixel = ((u_int32_t*) job->color_table)[i];
+                                        ct_pixel =
+                                            ((u_int32_t *) job->color_table)[i];
                                     else {
-				        ct_pixel = (((XWDColor*) job->color_table)[i].red & 0xFF00) << 16;
-				        ct_pixel |= (((XWDColor*) job->color_table)[i].green & 0xFF00) << 8;
-				        ct_pixel = ((XWDColor*) job->color_table)[i].blue & 0xFF00;
+                                        ct_pixel =
+                                            (((XWDColor *) job->color_table)[i].
+                                             red & 0xFF00) << 16;
+                                        ct_pixel |=
+                                            (((XWDColor *) job->color_table)[i].
+                                             green & 0xFF00) << 8;
+                                        ct_pixel =
+                                            ((XWDColor *) job->color_table)[i].
+                                            blue & 0xFF00;
                                     }
                                     delta =
                                         count_one_bits ((applied &
-                                                  ct_pixel) &
-                                                0x00FFFFFF);
+                                                         ct_pixel) &
+                                                        0x00FFFFFF);
                                     delta +=
                                         count_one_bits ((~applied &
-                                                   ~ct_pixel) &
-                                                0x00FFFFFF);
+                                                         ~ct_pixel) &
+                                                        0x00FFFFFF);
                                     if (delta > elem_delta) {
                                         elem_delta = delta;
                                         elem = i;
@@ -666,7 +685,7 @@ getOutputFile ()
     char file[PATH_MAX + 1];
     FILE *fp = NULL;
     Job *job = xvc_job_ptr ();
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     if (app->current_mode > 0) {
         sprintf (file, job->file, job->movie_no);
@@ -697,7 +716,7 @@ captureFrameToImage (Display * dpy, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImage()"
     int ret = 0;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -733,7 +752,7 @@ createImage (Display * dpy, int width, int height)
 {
 #define DEBUGFUNCTION "createImage()"
     XImage *image = NULL;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -772,7 +791,7 @@ captureFrameCreatingImage (Display * dpy)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImage()"
     XImage *image = NULL;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -810,7 +829,7 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
 {
 #define DEBUGFUNCTION "captureFrameToImageSHM()"
     int ret = 0;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -844,7 +863,7 @@ static XImage *
 createImageSHM (Display * dpy, XShmSegmentInfo * shminfo, int width, int height)
 {
 #define DEBUGFUNCTION "createImageSHM()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
     XImage *image = NULL;
     Visual *visual = app->win_attr.visual;
     unsigned int depth = app->win_attr.depth;
@@ -897,7 +916,7 @@ static XImage *
 captureFrameCreatingImageSHM (Display * dpy, XShmSegmentInfo * shminfo)
 {
 #define DEBUGFUNCTION "captureFrameCreatingImageSHM()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
     XImage *image = NULL;
 
 #ifdef DEBUG
@@ -938,7 +957,7 @@ checkCaptureDuration (long time, long time1)
 {
 #define DEBUGFUNCTION "checkCaptureDuration()"
     Job *job = xvc_job_ptr ();
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
     struct timeval curr_time;   /* for measuring the duration of a frame
                                  * capture */
 
@@ -992,7 +1011,7 @@ commonCapture (enum captureFunctions capfunc)
     static int shm_opcode = 0, shm_event_base = 0, shm_error_base = 0;
     static XRectangle pointer_area;
 
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
     XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
 

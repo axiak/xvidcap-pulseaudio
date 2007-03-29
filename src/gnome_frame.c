@@ -41,6 +41,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <glade/glade.h>
+#include <stdlib.h>
 
 #include "app_data.h"
 #include "job.h"
@@ -63,6 +64,10 @@ static Display *xvc_dpy = NULL;
 /** \brief make the frame parts available everywhere in this file */
 static GtkWidget *gtk_frame_top,
     *gtk_frame_left, *gtk_frame_right, *gtk_frame_bottom, *gtk_frame_center;
+static gboolean in_frame_top = FALSE, in_frame_left = FALSE,
+    in_frame_right = FALSE, in_frame_bottom = FALSE;
+static gboolean button_pressed = FALSE;
+static gint frame_drag_cursor = GDK_X_CURSOR;
 
 /**
  * \brief gets the Display to capture from
@@ -80,7 +85,7 @@ Display *
 xvc_frame_get_capture_display ()
 {
 #define DEBUGFUNCTION "xvc_frame_get_capure_display()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     if (!(app->flags & FLG_NOGUI) && gtk_frame_top) {
         xvc_dpy = GDK_DRAWABLE_XDISPLAY (GTK_WIDGET (gtk_frame_top)->window);
@@ -100,7 +105,7 @@ void
 xvc_frame_drop_capture_display ()
 {
 #define DEBUGFUNCTION "xvc_frame_drop_capture_display()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     if (app->flags & FLG_NOGUI && xvc_dpy) {
         XCloseDisplay (xvc_dpy);
@@ -195,7 +200,7 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     extern GtkWidget *xvc_ctrl_main_window;
     Display *dpy;
     XRectangle *x_rect = xvc_get_capture_area ();
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     // we have to adjust it to viewable areas
     dpy = xvc_frame_get_capture_display ();
@@ -214,12 +219,12 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     if (x + width > max_width)
         x = max_width - width;
 
+    if (y < 0)
+        y = 0;
     if (height > max_height)
         height = max_height;
     if (y + height > max_height)
         y = max_height - height;
-    if (y < 0)
-        y = 0;
 
     if ((app->flags & FLG_NOGUI) == 0) {
         // move the frame if not running without GUI
@@ -270,19 +275,280 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
 {
 #define DEBUGFUNCTION "on_gtk_frame_configure_event()"
     gint x, y, pwidth, pheight;
-    XRectangle *x_rect = xvc_get_capture_area ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     if (xvc_is_frame_locked ()) {
         x = ((GdkEventConfigure *) e)->x;
         y = ((GdkEventConfigure *) e)->y;
         pwidth = ((GdkEventConfigure *) e)->width;
         pheight = ((GdkEventConfigure *) e)->height;
-        y += pheight + FRAME_OFFSET;
-        xvc_change_gtk_frame (x, y, x_rect->width, x_rect->height, FALSE);
-    }
 
+        y += pheight + FRAME_OFFSET + FRAME_WIDTH;
+        xvc_change_gtk_frame (x, y, app->area->width, app->area->height, FALSE);
+    }
     return FALSE;
 #undef DEBUGFUNCTION
+}
+
+/**
+ * \todo make the frame not sensitive when capturing
+ */
+gint
+on_gtk_frame_enter_notify_event (GtkWidget * w, GdkEventCrossing * event)
+{
+    gint x, y;
+    GdkModifierType mt;
+    GdkCursor *cursor;
+
+//printf("entering\n");
+
+    if (!button_pressed) {
+        gdk_window_get_pointer (w->window, &x, &y, &mt);
+
+        if (w == gtk_frame_right) {
+            if (y < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.height / 3)) {
+                frame_drag_cursor = GDK_TOP_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (y > XVC_MAX (w->allocation.height - FRAME_EDGE_SIZE,
+                                    (w->allocation.height << 1) / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_RIGHT_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_right)->window,
+                                   cursor);
+            gdk_cursor_destroy (cursor);
+        } else if (w == gtk_frame_top) {
+            if (x < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.width / 3)) {
+                frame_drag_cursor = GDK_TOP_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (x > XVC_MAX (w->allocation.width - FRAME_EDGE_SIZE,
+                                    (w->allocation.width << 1) / 3)) {
+                frame_drag_cursor = GDK_TOP_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_TOP_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_top)->window, cursor);
+            gdk_cursor_destroy (cursor);
+        } else if (w == gtk_frame_bottom) {
+            if (x < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.width / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (x > XVC_MAX (w->allocation.width - FRAME_EDGE_SIZE,
+                                    (w->allocation.width << 1) / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_BOTTOM_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_bottom)->window,
+                                   cursor);
+            gdk_cursor_destroy (cursor);
+        } else {
+            if (y < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.height / 3)) {
+                frame_drag_cursor = GDK_TOP_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (y > XVC_MAX (w->allocation.height - FRAME_EDGE_SIZE,
+                                    (w->allocation.height << 1) / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_LEFT_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_left)->window, cursor);
+            gdk_cursor_destroy (cursor);
+        }
+
+    }
+    return 0;
+}
+
+gint
+on_gtk_frame_leave_notify_event (GtkWidget * w, GdkEventCrossing * event)
+{
+    if (!button_pressed) {
+        frame_drag_cursor = GDK_X_CURSOR;
+        gdk_window_set_cursor (GTK_WIDGET (gtk_frame_right)->window, NULL);
+    }
+    return 0;
+}
+
+gint
+on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
+{
+    gint x, y, x_root, y_root;
+    GdkModifierType mt;
+    GdkCursor *cursor;
+    XVC_AppData *app = xvc_appdata_ptr ();
+
+    x = (int) event->x;
+    y = (int) event->y;
+    x_root = (int) event->x_root;
+    y_root = (int) event->y_root;
+//printf("button_pressed %i\n", button_pressed);
+    if (!button_pressed) {
+        if (w == gtk_frame_right) {
+            if (y < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.height / 3)) {
+                frame_drag_cursor = GDK_TOP_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (y > XVC_MAX (w->allocation.height - FRAME_EDGE_SIZE,
+                                    (w->allocation.height << 1) / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_RIGHT_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_right)->window,
+                                   cursor);
+            gdk_cursor_destroy (cursor);
+        } else if (w == gtk_frame_top) {
+            if (x < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.width / 3)) {
+                frame_drag_cursor = GDK_TOP_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (x > XVC_MAX (w->allocation.width - FRAME_EDGE_SIZE,
+                                    (w->allocation.width << 1) / 3)) {
+                frame_drag_cursor = GDK_TOP_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_TOP_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_top)->window, cursor);
+            gdk_cursor_destroy (cursor);
+        } else if (w == gtk_frame_bottom) {
+            if (x < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.width / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (x > XVC_MAX (w->allocation.width - FRAME_EDGE_SIZE,
+                                    (w->allocation.width << 1) / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_RIGHT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_BOTTOM_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_bottom)->window,
+                                   cursor);
+            gdk_cursor_destroy (cursor);
+        } else {
+            if (y < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.height / 3)) {
+                frame_drag_cursor = GDK_TOP_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else if (y > XVC_MAX (w->allocation.height - FRAME_EDGE_SIZE,
+                                    (w->allocation.height << 1) / 3)) {
+                frame_drag_cursor = GDK_BOTTOM_LEFT_CORNER;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            } else {
+                frame_drag_cursor = GDK_LEFT_SIDE;
+                cursor = gdk_cursor_new (frame_drag_cursor);
+            }
+            gdk_window_set_cursor (GTK_WIDGET (gtk_frame_left)->window, cursor);
+            gdk_cursor_destroy (cursor);
+        }
+    } else {
+        if (frame_drag_cursor == GDK_TOP_RIGHT_CORNER) {
+            if (x_root < (app->area->x + 20))
+                x_root = app->area->x + 20;
+            if (y_root > (app->area->y + app->area->height - 20))
+                y_root = app->area->y + app->area->height - 20;
+
+            xvc_change_gtk_frame (app->area->x, y_root,
+                                  abs (x_root - app->area->x),
+                                  abs (y_root -
+                                       (app->area->y + app->area->height)),
+                                  FALSE);
+        } else if (frame_drag_cursor == GDK_BOTTOM_RIGHT_CORNER) {
+            if (x_root < (app->area->x + 20))
+                x_root = app->area->x + 20;
+            if (y_root < (app->area->y + 20))
+                y_root = app->area->y + 20;
+
+            xvc_change_gtk_frame (app->area->x, app->area->y,
+                                  abs (x_root - app->area->x),
+                                  abs (y_root - app->area->y), FALSE);
+        } else if (frame_drag_cursor == GDK_RIGHT_SIDE) {
+            if (x_root < (app->area->x + 20))
+                x_root = app->area->x + 20;
+
+            xvc_change_gtk_frame (app->area->x, app->area->y,
+                                  abs (x_root - app->area->x),
+                                  app->area->height, FALSE);
+        } else if (frame_drag_cursor == GDK_TOP_SIDE) {
+            if (y_root > (app->area->y + app->area->height - 20))
+                y_root = app->area->y + app->area->height - 20;
+
+            xvc_change_gtk_frame (app->area->x, y_root,
+                                  app->area->width,
+                                  abs (y_root -
+                                       (app->area->y + app->area->height)),
+                                  FALSE);
+        } else if (frame_drag_cursor == GDK_TOP_LEFT_CORNER) {
+            if (x_root > (app->area->x + app->area->width - 20))
+                x_root = app->area->x + app->area->width - 20;
+            if (y_root > (app->area->y + app->area->height - 20))
+                y_root = app->area->y + app->area->height - 20;
+
+            xvc_change_gtk_frame (x_root, y_root,
+                                  abs (x_root -
+                                       (app->area->x + app->area->width)),
+                                  abs (y_root -
+                                       (app->area->y + app->area->height)),
+                                  FALSE);
+        } else if (frame_drag_cursor == GDK_LEFT_SIDE) {
+            if (x_root > (app->area->x + app->area->width - 20))
+                x_root = app->area->x + app->area->width - 20;
+
+            xvc_change_gtk_frame (x_root, app->area->y,
+                                  abs (x_root -
+                                       (app->area->x + app->area->width)),
+                                  app->area->height, FALSE);
+        } else if (frame_drag_cursor == GDK_BOTTOM_LEFT_CORNER) {
+            if (x_root > (app->area->x + app->area->width - 20))
+                x_root = app->area->x + app->area->width - 20;
+            if (y_root < (app->area->y + 20))
+                y_root = app->area->y + 20;
+
+            xvc_change_gtk_frame (x_root, app->area->y,
+                                  abs (x_root -
+                                       (app->area->x + app->area->width)),
+                                  abs (y_root - app->area->y), FALSE);
+        } else {                       // GDK_BOTTOM_SIDE
+            if (y_root < (app->area->y + 20))
+                y_root = app->area->y + 20;
+
+            xvc_change_gtk_frame (app->area->x, app->area->y,
+                                  app->area->width,
+                                  abs (y_root - app->area->y), FALSE);
+        }
+    }
+    return 0;
+}
+
+gint
+on_gtk_frame_button_press_event (GtkWidget * w, GdkEventButton * event)
+{
+    button_pressed = TRUE;
+    return 0;
+}
+
+gint
+on_gtk_frame_button_release_event (GtkWidget * w, GdkEventButton * event)
+{
+    if (xvc_is_frame_locked ()) {
+        XVC_AppData *app = xvc_appdata_ptr ();
+
+        xvc_change_gtk_frame (app->area->x, app->area->y,
+                              app->area->width, app->area->height, TRUE);
+    }
+    button_pressed = FALSE;
+    return 0;
 }
 
 /**
@@ -303,9 +569,10 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     GdkColor g_col;
     GdkColormap *colormap;
     GdkRectangle rect;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
     int flags = app->flags;
     XRectangle *x_rect = xvc_get_capture_area ();
+    GtkWidget *r_eb = NULL;
 
 #ifdef DEBUG
     printf ("%s %s: x %d y %d width %d height %d\n", DEBUGFILE,
@@ -346,19 +613,20 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     if (!(flags & FLG_NOGUI)) {
 
         // top of frame
-        gtk_frame_top = gtk_dialog_new ();
-
+        gtk_frame_top = gtk_window_new (GTK_WINDOW_POPUP);
         g_assert (gtk_frame_top);
 
         gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_top),
                                      (pwidth + 2 * FRAME_WIDTH), FRAME_WIDTH);
-        gtk_widget_set_sensitive (GTK_WIDGET (gtk_frame_top), FALSE);
         gtk_window_set_title (GTK_WINDOW (gtk_frame_top), "gtk_frame_top");
-        GTK_WINDOW (gtk_frame_top)->type = GTK_WINDOW_POPUP;
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_top), FALSE);
-        gtk_dialog_set_has_separator (GTK_DIALOG (gtk_frame_top), FALSE);
-        colormap = gtk_widget_get_colormap (GTK_WIDGET (gtk_frame_top));
+        gtk_widget_add_events (GTK_WIDGET (gtk_frame_top),
+//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+                               (GDK_POINTER_MOTION_MASK |
+                                GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
+                                | GDK_BUTTON_RELEASE_MASK));
 
+        colormap = gtk_widget_get_colormap (GTK_WIDGET (gtk_frame_top));
         g_assert (colormap);
 
         if (gdk_color_parse ("red", &g_col)) {
@@ -396,19 +664,20 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
                          (y - FRAME_WIDTH));
 
         // left side of frame
-        gtk_frame_left = gtk_dialog_new ();
-
+        gtk_frame_left = gtk_window_new (GTK_WINDOW_POPUP);
         g_assert (gtk_frame_left);
 
         gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_left),
                                      FRAME_WIDTH, pheight);
-        gtk_widget_set_sensitive (GTK_WIDGET (gtk_frame_left), FALSE);
         gtk_window_set_title (GTK_WINDOW (gtk_frame_left), "gtk_frame_left");
-        GTK_WINDOW (gtk_frame_left)->type = GTK_WINDOW_POPUP;
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_left), FALSE);
-        gtk_dialog_set_has_separator (GTK_DIALOG (gtk_frame_left), FALSE);
-        colormap = gtk_widget_get_colormap (GTK_WIDGET (gtk_frame_left));
+        gtk_widget_add_events (GTK_WIDGET (gtk_frame_left),
+//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+                               (GDK_POINTER_MOTION_MASK |
+                                GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
+                                | GDK_BUTTON_RELEASE_MASK));
 
+        colormap = gtk_widget_get_colormap (GTK_WIDGET (gtk_frame_left));
         g_assert (colormap);
 
         if (gdk_color_parse ("red", &g_col)) {
@@ -444,20 +713,21 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         gtk_window_move (GTK_WINDOW (gtk_frame_left), (x - FRAME_WIDTH), y);
 
         // bottom of frame
-        gtk_frame_bottom = gtk_dialog_new ();
-
+        gtk_frame_bottom = gtk_window_new (GTK_WINDOW_POPUP);
         g_assert (gtk_frame_bottom);
 
         gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_bottom),
                                      (pwidth + 2 * FRAME_WIDTH), FRAME_WIDTH);
-        gtk_widget_set_sensitive (GTK_WIDGET (gtk_frame_bottom), FALSE);
         gtk_window_set_title (GTK_WINDOW (gtk_frame_bottom),
                               "gtk_frame_bottom");
-        GTK_WINDOW (gtk_frame_bottom)->type = GTK_WINDOW_POPUP;
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_bottom), FALSE);
-        gtk_dialog_set_has_separator (GTK_DIALOG (gtk_frame_bottom), FALSE);
-        colormap = gtk_widget_get_colormap (gtk_frame_bottom);
+        gtk_widget_add_events (GTK_WIDGET (gtk_frame_bottom),
+//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+                               (GDK_POINTER_MOTION_MASK |
+                                GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
+                                | GDK_BUTTON_RELEASE_MASK));
 
+        colormap = gtk_widget_get_colormap (gtk_frame_bottom);
         g_assert (colormap);
 
         if (gdk_color_parse ("red", &g_col)) {
@@ -494,19 +764,20 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
                          (y + pheight));
 
         // right side of frame
-        gtk_frame_right = gtk_dialog_new ();
-
+        gtk_frame_right = gtk_window_new (GTK_WINDOW_POPUP);
         g_assert (gtk_frame_right);
 
         gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_right),
                                      FRAME_WIDTH, pheight);
-        gtk_widget_set_sensitive (GTK_WIDGET (gtk_frame_right), FALSE);
         gtk_window_set_title (GTK_WINDOW (gtk_frame_right), "gtk_frame_right");
-        GTK_WINDOW (gtk_frame_right)->type = GTK_WINDOW_POPUP;
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_right), FALSE);
-        gtk_dialog_set_has_separator (GTK_DIALOG (gtk_frame_right), FALSE);
-        colormap = gtk_widget_get_colormap (gtk_frame_right);
+        gtk_widget_add_events (GTK_WIDGET (gtk_frame_right),
+//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+                               (GDK_POINTER_MOTION_MASK |
+                                GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
+                                | GDK_BUTTON_RELEASE_MASK));
 
+        colormap = gtk_widget_get_colormap (gtk_frame_right);
         g_assert (colormap);
 
         if (gdk_color_parse ("red", &g_col)) {
@@ -574,8 +845,53 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         // connect event-handler to configure event of gtk control window
         // to redraw the selection frame if the control is moved and the
         // frame is locked
-        g_signal_connect ((gpointer) toplevel, "configure-event",
+        g_signal_connect (G_OBJECT (toplevel), "configure-event",
                           G_CALLBACK (on_gtk_frame_configure_event), NULL);
+
+        g_signal_connect (G_OBJECT (gtk_frame_top), "enter_notify_event",
+                          G_CALLBACK (on_gtk_frame_enter_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_left), "enter_notify_event",
+                          G_CALLBACK (on_gtk_frame_enter_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_bottom), "enter_notify_event",
+                          G_CALLBACK (on_gtk_frame_enter_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_right), "enter_notify_event",
+                          G_CALLBACK (on_gtk_frame_enter_notify_event), NULL);
+
+        g_signal_connect (G_OBJECT (gtk_frame_top), "leave_notify_event",
+                          G_CALLBACK (on_gtk_frame_leave_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_left), "leave_notify_event",
+                          G_CALLBACK (on_gtk_frame_leave_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_bottom), "leave_notify_event",
+                          G_CALLBACK (on_gtk_frame_leave_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_right), "leave_notify_event",
+                          G_CALLBACK (on_gtk_frame_leave_notify_event), NULL);
+
+        g_signal_connect (G_OBJECT (gtk_frame_top), "motion_notify_event",
+                          G_CALLBACK (on_gtk_frame_motion_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_left), "motion_notify_event",
+                          G_CALLBACK (on_gtk_frame_motion_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_bottom), "motion_notify_event",
+                          G_CALLBACK (on_gtk_frame_motion_notify_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_right), "motion_notify_event",
+                          G_CALLBACK (on_gtk_frame_motion_notify_event), NULL);
+
+        g_signal_connect (G_OBJECT (gtk_frame_top), "button_press_event",
+                          G_CALLBACK (on_gtk_frame_button_press_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_left), "button_press_event",
+                          G_CALLBACK (on_gtk_frame_button_press_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_bottom), "button_press_event",
+                          G_CALLBACK (on_gtk_frame_button_press_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_right), "button_press_event",
+                          G_CALLBACK (on_gtk_frame_button_press_event), NULL);
+
+        g_signal_connect (G_OBJECT (gtk_frame_top), "button_release_event",
+                          G_CALLBACK (on_gtk_frame_button_release_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_left), "button_release_event",
+                          G_CALLBACK (on_gtk_frame_button_release_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_bottom), "button_release_event",
+                          G_CALLBACK (on_gtk_frame_button_release_event), NULL);
+        g_signal_connect (G_OBJECT (gtk_frame_right), "button_release_event",
+                          G_CALLBACK (on_gtk_frame_button_release_event), NULL);
 
     }
     xvc_set_frame_locked (1);

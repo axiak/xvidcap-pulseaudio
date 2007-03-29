@@ -1,4 +1,14 @@
 
+2007-03-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: codecs.c, gnome_warning.c, xtoffmpeg.c, 
+		gnome_ui.c, capture.c, app_data.c, job.c, 
+		app_data.h, gnome_frame.c, gnome_options.c, 
+		gnome_frame.h, main.c, options.c, xtoxwd.c:
+		initial support for dragging frame to resize,
+		fix for bug # 1689984 and bug # 1689959,
+		also code cleanup
+	* src/colors.c, src/colors.h: indentation
+
 2007-03-28  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: partial fix for bug # 1689959
 	* src: colors.c, colors.h, xtoffmpeg.c, capture.c, 

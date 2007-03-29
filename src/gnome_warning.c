@@ -179,7 +179,7 @@ xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
     GtkWidget *vbox = NULL, *w = NULL;
     GladeXML *xml = NULL;
     int count_fatal_messages = 0;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);

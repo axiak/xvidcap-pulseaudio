@@ -132,7 +132,7 @@ static Job *
 job_new ()
 {
 #define DEBUGFUNCTION "job_new()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     job = (Job *) malloc (sizeof (Job));
     if (!job) {
@@ -180,7 +180,7 @@ void
 xvc_job_free ()
 {
 #define DEBUGFUNCTION "xvc_job_free()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     if (job) {
         if (job->color_table)
@@ -205,7 +205,7 @@ void
 xvc_job_set_colors ()
 {
 #define DEBUGFUNCTION "xvc_job_set_colors()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     job->ncolors = xvc_get_colors (app->dpy, &(app->win_attr), &(job->colors));
     if (job->get_colors) {
@@ -599,7 +599,7 @@ XserverRegion
 xvc_get_damage_region ()
 {
     XserverRegion region, dmg_region;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     pthread_mutex_lock (&damage_regions_mutex);
     region = XFixesCreateRegion (app->dpy, 0, 0);

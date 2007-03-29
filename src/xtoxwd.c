@@ -143,7 +143,7 @@ xvc_xwd_save_frame (FILE * fp, XImage * image)
     static int file_name_len;
     Job *job = xvc_job_ptr ();
     char *file = job->file;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     /*
      * header must be prepared only once ..

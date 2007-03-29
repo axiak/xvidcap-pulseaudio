@@ -166,7 +166,7 @@ init (XVC_CapTypeOptions * ctos, int *argc, char *argv[])
 #define DEBUGFUNCTION "init()"
     int i;
 
-    app = xvc_app_data_ptr ();
+    app = xvc_appdata_ptr ();
 
     // Xlib threading initialization
     // this is here instead of with the gtk/glib stuff in gnome_ui.c|h

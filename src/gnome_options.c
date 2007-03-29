@@ -633,7 +633,7 @@ void
 preferences_submit ()
 {
 #define DEBUGFUNCTION "preferences_submit()"
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     xvc_appdata_copy (app, &pref_app);
 
@@ -676,7 +676,7 @@ xvc_pref_do_OK ()
 {
 #define DEBUGFUNCTION "xvc_pref_do_OK()"
     int count_non_info_messages = 0, rc = 0;
-    XVC_AppData *app = xvc_app_data_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
 
     errors_after_cli = xvc_appdata_validate (&pref_app, 0, &rc);
     if (rc == -1) {

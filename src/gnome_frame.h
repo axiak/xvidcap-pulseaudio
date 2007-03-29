@@ -26,6 +26,7 @@
 
 #define FRAME_WIDTH 3
 #define FRAME_OFFSET (4*FRAME_WIDTH)
+#define FRAME_EDGE_SIZE 30
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <gtk/gtk.h>
