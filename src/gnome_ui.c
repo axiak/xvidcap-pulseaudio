@@ -2659,10 +2659,6 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
             default:
                 // motion notify
                 if (buttons == 1) {
-                    if (width) {
-                        // remove old frame
-                        XDrawRectangle (display, root, gc, x, y, width, height);
-                    }
                     // button is pressed
                     if (x_down > event.xbutton.x) {
                         width = x_down - event.xbutton.x + 1;
@@ -2678,13 +2674,18 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                         height = event.xbutton.y - y_down + 1;
                         y = y_down;
                     }
-                    XDrawRectangle (display, root, gc, x, y, width, height);
+                    xvc_frame_change(x, y, width, height, FALSE);
+                    // the previous call changes the frame edges, which are
+                    // gtk windows. we need to call the gtk main loop for
+                    // them to be drawn properly within this callback
+                    while (gtk_events_pending())
+                        gtk_main_iteration();
                 }
                 break;
             }
         }
         if (width > 0)                 // remove old frame
-            XDrawRectangle (display, root, gc, x, y, width, height);
+            xvc_frame_change(x, y, width, height, FALSE);
 
         XUngrabPointer (display, CurrentTime);  // Done with pointer
 

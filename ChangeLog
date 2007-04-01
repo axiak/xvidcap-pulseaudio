@@ -2,7 +2,13 @@
 2007-04-01  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: fix for jpeg and mjpeg quality
 		issues as reported in bug # 1689959 and
-		bug # 1584093
+		bug # 1584093. This completely changes
+		encoding to use VBR with fixed qscale
+		and qmin and qmax set to qscale
+	* src/app_data.c: quality is much more effective
+		now. Change default to 90.
+	* src/gnome_ui.c: make frame selection through
+		select button more consistent with dragging.
 	
 2007-03-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: codecs.c, gnome_warning.c, xtoffmpeg.c, 

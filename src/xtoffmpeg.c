@@ -1147,7 +1147,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
 #define DEBUGFUNCTION "add_video_stream()"
     AVStream *st;
     int pix_fmt_mask = 0, i = 0;
-    int quality = target->quality;
+    int quality = target->quality, qscale = 0;
     XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
@@ -1209,6 +1209,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     // emit one intra frame every fifty frames at most
     st->codec->gop_size = 50;
     st->codec->mb_decision = 2;
+    st->codec->me_method = 1;
 
     // find suitable pix_fmt for codec
     st->codec->pix_fmt = -1;
@@ -1253,6 +1254,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
         }
     }
     // flags
+
     st->codec->flags |= CODEC_FLAG2_FAST;
     // there is no trellis quantiser in libav* for mjpeg
     if (st->codec->codec_id != CODEC_ID_MJPEG)
@@ -1262,20 +1264,13 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     if (oc->oformat->flags & AVFMT_GLOBALHEADER)
         st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
-    // bit rate calculation
-    st->codec->bit_rate = (st->codec->width * st->codec->height *
-                           (((((st->codec->height +
-                                st->codec->width) / 100) - 5) >> 1) + 10)
-                           * quality) / 100;
-    if (st->codec->bit_rate < 300000)
-        st->codec->bit_rate = 300000;
-
-    // quality for mjpeg|jpeg
-    if (st->codec->codec_id == CODEC_ID_MJPEG) {
-            st->codec->flags |= CODEC_FLAG_QSCALE;
-            st->codec->global_quality=
-                st->quality = FF_QP2LAMBDA * 0.0; // 0.0 = default qscale
-    }
+    // quality through VBR
+    st->codec->flags |= CODEC_FLAG_QSCALE;
+    qscale = (100.0 - quality + 1.0) / 3.3;
+    st->codec->global_quality =
+        st->quality = FF_QP2LAMBDA * qscale;
+        // 0.0 = default qscale
+    st->codec->qmin = st->codec->qmax = qscale;
 
 #ifdef DEBUG
     printf ("%s %s: Leaving with %i streams in oc and bitrate %i\n", DEBUGFILE,

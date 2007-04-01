@@ -346,7 +346,7 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
 #endif     // USE_FFMPEG
 
     // initialzie options specific to either single- or multi-frame capture
-    lapp->single_frame.quality = lapp->multi_frame.quality = 75;
+    lapp->single_frame.quality = lapp->multi_frame.quality = 90;
     lapp->single_frame.step = lapp->multi_frame.step = 1;
     lapp->single_frame.start_no = lapp->multi_frame.start_no = 0;
     lapp->single_frame.file = "test-%04d.xwd";
