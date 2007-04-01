@@ -1241,20 +1241,25 @@ add_video_stream (AVFormatContext * oc, XImage * image,
         st->codec->pix_fmt = -1;
     }
 
-    if (st->codec->pix_fmt < 0 || st->codec->pix_fmt == PIX_FMT_ARGB32) {
+    if (st->codec->pix_fmt < 0 || 
+        st->codec->pix_fmt == PIX_FMT_ARGB32 ||
+        job->target == CAP_PGM) {
         if (job->target == CAP_JPG || job->targetCodec == CODEC_MJPEG) {
             // for some reason yuvj422p does not seem to work with mf mjpeg 
             st->codec->pix_fmt = PIX_FMT_YUVJ420P;
         }
-        else if(job->target >= CAP_MF) {
+        else if (job->target == CAP_PGM) {
+            st->codec->pix_fmt = PIX_FMT_GRAY8;
+        }
+        else if (job->target >= CAP_MF) {
             st->codec->pix_fmt = PIX_FMT_YUV420P;
         }
         else {
             st->codec->pix_fmt = PIX_FMT_RGB24;
         }
     }
-    // flags
 
+    // flags
     st->codec->flags |= CODEC_FLAG2_FAST;
     // there is no trellis quantiser in libav* for mjpeg
     if (st->codec->codec_id != CODEC_ID_MJPEG)

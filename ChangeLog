@@ -9,6 +9,9 @@
 		now. Change default to 90.
 	* src/gnome_ui.c: make frame selection through
 		select button more consistent with dragging.
+	* src/xtoffmpeg.c: fix for pgm encoding which was
+		broken due to correct pix_fmt detection in
+		libavcodec (broken vcodec_find_best_pix_fmt)
 	
 2007-03-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: codecs.c, gnome_warning.c, xtoffmpeg.c, 
