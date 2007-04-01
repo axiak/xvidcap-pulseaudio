@@ -1,4 +1,9 @@
 
+2007-04-01  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c: fix for jpeg and mjpeg quality
+		issues as reported in bug # 1689959 and
+		bug # 1584093
+	
 2007-03-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: codecs.c, gnome_warning.c, xtoffmpeg.c, 
 		gnome_ui.c, capture.c, app_data.c, job.c, 

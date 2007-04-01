@@ -26,7 +26,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif     // HAVE_CONFIG_H
 
 #define DEBUGFILE "xtoffmpeg.c"
@@ -62,28 +62,34 @@
 #include <ffmpeg/swscale.h>
 #include <ffmpeg/rgb2rgb.h>
 #include <ffmpeg/fifo.h>
-#define swscale_isRGB(x)       ((x)==PIX_FMT_BGR32 || (x)==PIX_FMT_RGB24        \
-                        || (x)==PIX_FMT_RGB565 || (x)==PIX_FMT_RGB555   \
-                        || (x)==PIX_FMT_RGB8 || (x)==PIX_FMT_RGB4 || (x)==PIX_FMT_RGB4_BYTE     \
-                        || (x)==PIX_FMT_MONOBLACK)
-#define swscale_isBGR(x)       ((x)==PIX_FMT_RGB32 || (x)==PIX_FMT_BGR24        \
-                        || (x)==PIX_FMT_BGR565 || (x)==PIX_FMT_BGR555   \
-                        || (x)==PIX_FMT_BGR8 || (x)==PIX_FMT_BGR4 || (x)==PIX_FMT_BGR4_BYTE     \
-                        || (x)==PIX_FMT_MONOBLACK)
-#define swscale_isSupportedIn(x)  ((x)==PIX_FMT_YUV420P || (x)==PIX_FMT_YUYV422 || (x)==PIX_FMT_UYVY422\
-                        || (x)==PIX_FMT_RGB32|| (x)==PIX_FMT_BGR24|| (x)==PIX_FMT_BGR565|| (x)==PIX_FMT_BGR555\
-                        || (x)==PIX_FMT_BGR32|| (x)==PIX_FMT_RGB24|| (x)==PIX_FMT_RGB565|| (x)==PIX_FMT_RGB555\
-                        || (x)==PIX_FMT_GRAY8 || (x)==PIX_FMT_YUV410P\
-                        || (x)==PIX_FMT_GRAY16BE || (x)==PIX_FMT_GRAY16LE\
-                        || (x)==PIX_FMT_YUV444P || (x)==PIX_FMT_YUV422P || (x)==PIX_FMT_YUV411P\
-                        || (x)==PIX_FMT_PAL8 || (x)==PIX_FMT_BGR8 || (x)==PIX_FMT_RGB8\
-                        || (x)==PIX_FMT_BGR4_BYTE  || (x)==PIX_FMT_RGB4_BYTE)
-#define swscale_isSupportedOut(x) ((x)==PIX_FMT_YUV420P || (x)==PIX_FMT_YUYV422 || (x)==PIX_FMT_UYVY422\
-                        || (x)==PIX_FMT_YUV444P || (x)==PIX_FMT_YUV422P || (x)==PIX_FMT_YUV411P\
-                        || swscale_isRGB(x) || swscale_isBGR(x)\
-                        || (x)==PIX_FMT_NV12 || (x)==PIX_FMT_NV21\
-                        || (x)==PIX_FMT_GRAY16BE || (x)==PIX_FMT_GRAY16LE\
-                        || (x)==PIX_FMT_GRAY8 || (x)==PIX_FMT_YUV410P)
+#define swscale_isRGB(x) ((x)==PIX_FMT_BGR32 || (x)==PIX_FMT_RGB24 \
+                        || (x)==PIX_FMT_RGB565 || (x)==PIX_FMT_RGB555 \
+                        || (x)==PIX_FMT_RGB8 || (x)==PIX_FMT_RGB4 \
+                        || (x)==PIX_FMT_RGB4_BYTE || (x)==PIX_FMT_MONOBLACK)
+#define swscale_isBGR(x) ((x)==PIX_FMT_RGB32 || (x)==PIX_FMT_BGR24 \
+                        || (x)==PIX_FMT_BGR565 || (x)==PIX_FMT_BGR555 \
+                        || (x)==PIX_FMT_BGR8 || (x)==PIX_FMT_BGR4 \
+                        || (x)==PIX_FMT_BGR4_BYTE || (x)==PIX_FMT_MONOBLACK)
+#define swscale_isSupportedIn(x) ((x)==PIX_FMT_YUV420P || (x)==PIX_FMT_YUYV422 \
+                        || (x)==PIX_FMT_UYVY422 || (x)==PIX_FMT_RGB32 \
+                        || (x)==PIX_FMT_BGR24 || (x)==PIX_FMT_BGR565 \
+                        || (x)==PIX_FMT_BGR555 || (x)==PIX_FMT_BGR32 \
+                        || (x)==PIX_FMT_RGB24|| (x)==PIX_FMT_RGB565 \
+                        || (x)==PIX_FMT_RGB555 || (x)==PIX_FMT_GRAY8 \
+                        || (x)==PIX_FMT_YUV410P || (x)==PIX_FMT_GRAY16BE \
+                        || (x)==PIX_FMT_GRAY16LE || (x)==PIX_FMT_YUV444P \
+                        || (x)==PIX_FMT_YUV422P || (x)==PIX_FMT_YUV411P \
+                        || (x)==PIX_FMT_PAL8 || (x)==PIX_FMT_BGR8 \
+                        || (x)==PIX_FMT_RGB8 || (x)==PIX_FMT_BGR4_BYTE \
+                        || (x)==PIX_FMT_RGB4_BYTE)
+#define swscale_isSupportedOut(x) ((x)==PIX_FMT_YUV420P \
+                        || (x)==PIX_FMT_YUYV422 || (x)==PIX_FMT_UYVY422 \
+                        || (x)==PIX_FMT_YUV444P || (x)==PIX_FMT_YUV422P \
+                        || (x)==PIX_FMT_YUV411P || swscale_isRGB(x) \
+                        || swscale_isBGR(x) || (x)==PIX_FMT_NV12 \
+                        || (x)==PIX_FMT_NV21 || (x)==PIX_FMT_GRAY16BE \
+                        || (x)==PIX_FMT_GRAY16LE || (x)==PIX_FMT_GRAY8 \
+                        || (x)==PIX_FMT_YUV410P)
 
 #define PIX_FMT_ARGB32 PIX_FMT_RGBA32  /* this is just my personal
                                         * convenience */
@@ -1159,6 +1165,12 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     st->codec->codec_id = codec_id;
     st->codec->codec_type = CODEC_TYPE_VIDEO;
 
+    // mt init
+    if (codec_id == CODEC_ID_MPEG4 || codec_id == CODEC_ID_MPEG1VIDEO ||
+            codec_id == CODEC_ID_MPEG2VIDEO) {
+        avcodec_thread_init(st->codec, 4);
+    }
+
     // find the video encoder
     codec = avcodec_find_encoder (st->codec->codec_id);
     if (!codec) {
@@ -1229,11 +1241,14 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     }
 
     if (st->codec->pix_fmt < 0 || st->codec->pix_fmt == PIX_FMT_ARGB32) {
-        if (job->target >= CAP_MF) {
+        if (job->target == CAP_JPG || job->targetCodec == CODEC_MJPEG) {
+            // for some reason yuvj422p does not seem to work with mf mjpeg 
+            st->codec->pix_fmt = PIX_FMT_YUVJ420P;
+        }
+        else if(job->target >= CAP_MF) {
             st->codec->pix_fmt = PIX_FMT_YUV420P;
-        } else if (job->target == CAP_JPG) {
-            st->codec->pix_fmt = PIX_FMT_YUVJ422P;
-        } else {
+        }
+        else {
             st->codec->pix_fmt = PIX_FMT_RGB24;
         }
     }
@@ -1254,6 +1269,13 @@ add_video_stream (AVFormatContext * oc, XImage * image,
                            * quality) / 100;
     if (st->codec->bit_rate < 300000)
         st->codec->bit_rate = 300000;
+
+    // quality for mjpeg|jpeg
+    if (st->codec->codec_id == CODEC_ID_MJPEG) {
+            st->codec->flags |= CODEC_FLAG_QSCALE;
+            st->codec->global_quality=
+                st->quality = FF_QP2LAMBDA * 0.0; // 0.0 = default qscale
+    }
 
 #ifdef DEBUG
     printf ("%s %s: Leaving with %i streams in oc and bitrate %i\n", DEBUGFILE,
