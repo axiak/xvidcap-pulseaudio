@@ -2,6 +2,8 @@
 2007-04-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: some cleanup of output pix
 		format calculation
+	* src/codecs.c: backport of const arrays to be
+		compatible with gcc pre 4.1.x
 
 2007-04-01  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: fix for jpeg and mjpeg quality
