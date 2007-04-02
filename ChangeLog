@@ -1,4 +1,8 @@
 
+2007-04-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c: some cleanup of output pix
+		format calculation
+
 2007-04-01  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: fix for jpeg and mjpeg quality
 		issues as reported in bug # 1689959 and

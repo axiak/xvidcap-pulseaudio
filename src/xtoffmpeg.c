@@ -82,6 +82,8 @@
                         || (x)==PIX_FMT_PAL8 || (x)==PIX_FMT_BGR8 \
                         || (x)==PIX_FMT_RGB8 || (x)==PIX_FMT_BGR4_BYTE \
                         || (x)==PIX_FMT_RGB4_BYTE)
+// added jpeg stuff myself (yuvj*) because swscale actually DOES
+// accept them
 #define swscale_isSupportedOut(x) ((x)==PIX_FMT_YUV420P \
                         || (x)==PIX_FMT_YUYV422 || (x)==PIX_FMT_UYVY422 \
                         || (x)==PIX_FMT_YUV444P || (x)==PIX_FMT_YUV422P \
@@ -89,7 +91,9 @@
                         || swscale_isBGR(x) || (x)==PIX_FMT_NV12 \
                         || (x)==PIX_FMT_NV21 || (x)==PIX_FMT_GRAY16BE \
                         || (x)==PIX_FMT_GRAY16LE || (x)==PIX_FMT_GRAY8 \
-                        || (x)==PIX_FMT_YUV410P)
+                        || (x)==PIX_FMT_YUV410P \
+                        || (x)==PIX_FMT_YUVJ420P || (x)==PIX_FMT_YUVJ422P \
+                        || (x)==PIX_FMT_YUVJ444P)
 
 #define PIX_FMT_ARGB32 PIX_FMT_RGBA32  /* this is just my personal
                                         * convenience */
@@ -1215,18 +1219,19 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     st->codec->pix_fmt = -1;
     if (codec->pix_fmts != NULL) {
         for (i = 0; codec->pix_fmts[i] != -1; i++) {
-            pix_fmt_mask |= (1 << codec->pix_fmts[i]);
+            if (0 <= codec->pix_fmts[i] &&
+                codec->pix_fmts[i] < (sizeof(int)* 8))
+                pix_fmt_mask |= (1 << codec->pix_fmts[i]);
         }
         st->codec->pix_fmt =
             avcodec_find_best_pix_fmt (pix_fmt_mask, input_pixfmt,
-                                       (input_pixfmt ==
-                                        PIX_FMT_ARGB32 ? 1 : 0), NULL);
+                                        FALSE, NULL);
     }
 #ifdef DEBUG
     printf
         ("%s %s: pix_fmt_mask %i, has alpha %i, input_pixfmt %i, output pixfmt %i\n",
          DEBUGFILE, DEBUGFUNCTION, pix_fmt_mask,
-         (input_pixfmt == PIX_FMT_ARGB32 ? 1 : 0), input_pixfmt,
+         FALSE, input_pixfmt,
          st->codec->pix_fmt);
 #endif     // DEBUG
 
@@ -1241,17 +1246,9 @@ add_video_stream (AVFormatContext * oc, XImage * image,
         st->codec->pix_fmt = -1;
     }
 
-    if (st->codec->pix_fmt < 0 || 
-        st->codec->pix_fmt == PIX_FMT_ARGB32 ||
-        job->target == CAP_PGM) {
-        if (job->target == CAP_JPG || job->targetCodec == CODEC_MJPEG) {
-            // for some reason yuvj422p does not seem to work with mf mjpeg 
-            st->codec->pix_fmt = PIX_FMT_YUVJ420P;
-        }
-        else if (job->target == CAP_PGM) {
-            st->codec->pix_fmt = PIX_FMT_GRAY8;
-        }
-        else if (job->target >= CAP_MF) {
+    // fallback pix fmts
+    if (st->codec->pix_fmt < 0) {
+        if (job->target >= CAP_MF) {
             st->codec->pix_fmt = PIX_FMT_YUV420P;
         }
         else {
