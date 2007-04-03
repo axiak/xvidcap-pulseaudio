@@ -33,7 +33,7 @@
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 void xvc_change_gtk_frame (int x, int y, int width, int height,
-                           Boolean reposition_control);
+                           Boolean reposition_control, Boolean show_dimensions);
 void xvc_create_gtk_frame (GtkWidget * w, int width, int height, int x, int y);
 void xvc_destroy_gtk_frame (void);
 

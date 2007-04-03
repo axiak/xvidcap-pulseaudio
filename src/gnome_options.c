@@ -54,8 +54,6 @@
 #include "gnome_ui.h"
 #include "xvidcap-intl.h"
 
-#define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
-
 /*
  * these are global
  */
@@ -928,7 +926,7 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
 #endif     // USE_FFMPEG
 
     // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_pref_main_window", NULL);
+    xml = glade_xml_new (XVC_GLADE_FILE, "xvc_pref_main_window", NULL);
     g_assert (xml);
 
     xvc_pref_main_window = glade_xml_get_widget (xml, "xvc_pref_main_window");
@@ -2826,7 +2824,7 @@ on_xvc_pref_sf_filename_select_button_clicked (GtkButton * button,
 #endif     // DEBUG
 
     // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_save_filechooserdialog", NULL);
+    xml = glade_xml_new (XVC_GLADE_FILE, "xvc_save_filechooserdialog", NULL);
     g_assert (xml);
     // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
@@ -2877,7 +2875,7 @@ on_xvc_pref_mf_filename_select_button_clicked (GtkButton * button,
 #endif     // DEBUG
 
     // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_save_filechooserdialog", NULL);
+    xml = glade_xml_new (XVC_GLADE_FILE, "xvc_save_filechooserdialog", NULL);
     g_assert (xml);
     // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
@@ -2928,7 +2926,7 @@ on_xvc_pref_mf_audio_input_device_select_button_clicked (GtkButton * button,
 #endif     // DEBUG
 
     // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_open_filechooserdialog", NULL);
+    xml = glade_xml_new (XVC_GLADE_FILE, "xvc_open_filechooserdialog", NULL);
     g_assert (xml);
     // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);

@@ -50,8 +50,6 @@
 #include "xv_error_item.h"
 #include "app_data.h"
 
-#define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
-
 /*
  * global variables
  */
@@ -191,7 +189,7 @@ xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
     called_from_where = from_where;
 
     // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_warn_main_window", NULL);
+    xml = glade_xml_new (XVC_GLADE_FILE, "xvc_warn_main_window", NULL);
     g_assert (xml);
 
     // connect the signals in the interface

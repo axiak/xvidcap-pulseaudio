@@ -72,8 +72,6 @@
 #include "gnome_frame.h"
 #include "xvidcap-intl.h"
 
-#define GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
-
 /*
  * globals
  */
@@ -707,7 +705,7 @@ stop_recording_gui_stuff ()
         GtkWidget *w = NULL;
 
         // load the interface
-        xml = glade_xml_new (GLADE_FILE, "xvc_result_dialog", NULL);
+        xml = glade_xml_new (XVC_GLADE_FILE, "xvc_result_dialog", NULL);
         g_assert (xml);
         // connect the signals in the interface
         glade_xml_signal_autoconnect (xml);
@@ -1057,8 +1055,8 @@ start_recording_nongui_stuff ()
                 // install a timer which stops recording
                 // we need milli secs ..
                 stop_timer_id =
-                    gtk_timeout_add ((guint32) (target->time * 1000),
-                                     (GtkFunction) timer_stop_recording, job);
+                    g_timeout_add ((guint32) (target->time * 1000),
+                                   (GtkFunction) timer_stop_recording, job);
             }
         }
 #ifdef USE_XDAMAGE
@@ -1427,7 +1425,7 @@ xvc_ui_create ()
     if ((app->flags & FLG_NOGUI) == 0) {
         // main window
         // load the interface
-        xml = glade_xml_new (GLADE_FILE, "xvc_ctrl_main_window", NULL);
+        xml = glade_xml_new (XVC_GLADE_FILE, "xvc_ctrl_main_window", NULL);
 
         g_assert (xml);
 
@@ -1440,7 +1438,7 @@ xvc_ui_create ()
         xml = NULL;
         // popup window
         // load the interface
-        xml = glade_xml_new (GLADE_FILE, "xvc_ctrl_m1", NULL);
+        xml = glade_xml_new (XVC_GLADE_FILE, "xvc_ctrl_m1", NULL);
 
         g_assert (xml);
 
@@ -1840,10 +1838,11 @@ xvc_capture_start ()
  */
 void
 xvc_frame_change (int x, int y, int width, int height,
-                  Boolean reposition_control)
+                  Boolean reposition_control, Boolean show_dimensions)
 {
 #define DEBUGFUNCTION "xvc_frame_change()"
-    xvc_change_gtk_frame (x, y, width, height, reposition_control);
+    xvc_change_gtk_frame (x, y, width, height, reposition_control,
+                          show_dimensions);
 #undef DEBUGFUNCTION
 }
 
@@ -2126,7 +2125,7 @@ on_xvc_result_dialog_select_filename_button_clicked (GtkButton * button,
 #endif     // DEBUG
 
     // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_save_filechooserdialog", NULL);
+    xml = glade_xml_new (XVC_GLADE_FILE, "xvc_save_filechooserdialog", NULL);
     g_assert (xml);
     // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
@@ -2569,7 +2568,7 @@ on_xvc_ctrl_lock_toggle_toggled (GtkToggleToolButton *
             y = 0;
         frame_rectangle = xvc_get_capture_area ();
         xvc_frame_change (x, y, frame_rectangle->width,
-                          frame_rectangle->height, FALSE);
+                          frame_rectangle->height, FALSE, TRUE);
     } else {
         xvc_set_frame_locked (0);
         gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (togglebutton), tooltips,
@@ -2674,18 +2673,18 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                         height = event.xbutton.y - y_down + 1;
                         y = y_down;
                     }
-                    xvc_frame_change(x, y, width, height, FALSE);
+                    xvc_frame_change (x, y, width, height, FALSE, TRUE);
                     // the previous call changes the frame edges, which are
                     // gtk windows. we need to call the gtk main loop for
                     // them to be drawn properly within this callback
-                    while (gtk_events_pending())
-                        gtk_main_iteration();
+                    while (gtk_events_pending ())
+                        gtk_main_iteration ();
                 }
                 break;
             }
         }
-        if (width > 0)                 // remove old frame
-            xvc_frame_change(x, y, width, height, FALSE);
+//        if (width > 0)                 // remove old frame
+//            xvc_frame_change(x, y, width, height, FALSE, TRUE);
 
         XUngrabPointer (display, CurrentTime);  // Done with pointer
 
@@ -2761,7 +2760,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
 #endif     // USE_FFMPEG
 
         xvc_change_gtk_frame (x, y, app->area->width,
-                              app->area->height, xvc_is_frame_locked ());
+                              app->area->height, xvc_is_frame_locked (), FALSE);
 
         // update colors and colormap
         xvc_job_set_colors ();
@@ -2943,7 +2942,7 @@ on_xvc_ctrl_m1_mitem_about_activate (GtkMenuItem * menuitem, gpointer user_data)
     GladeXML *xml = NULL;
 
     // load the interface
-    xml = glade_xml_new (GLADE_FILE, "xvc_about_main_window", NULL);
+    xml = glade_xml_new (XVC_GLADE_FILE, "xvc_about_main_window", NULL);
     g_assert (xml);
     // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);

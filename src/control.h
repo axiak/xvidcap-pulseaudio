@@ -49,7 +49,7 @@ void xvc_capture_stop_signal (Boolean wait_for_termination);
 Boolean xvc_capture_stop ();
 void xvc_capture_start ();
 void xvc_frame_change (int x, int y, int width, int height,
-                       Boolean reposition_control);
+                       Boolean reposition_control, Boolean show_dimensions);
 Boolean xvc_frame_monitor ();
 
 // these are defined in options.c

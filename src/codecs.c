@@ -63,6 +63,7 @@ static const XVC_FpsRange one_to_hundred_range[] = {
      {100, 1}
      }
 };
+
 #define len_one_to_hundred_range (sizeof(one_to_hundred_range) / \
     sizeof(XVC_FpsRange))
 
@@ -72,6 +73,7 @@ static const XVC_FpsRange mpeg4_range[] = {
      {30, 1}
      }
 };
+
 #define len_mpeg4_range (sizeof(mpeg4_range) / sizeof(XVC_FpsRange))
 
 static const XVC_Fps mpeg1_fps[] = {
@@ -84,12 +86,14 @@ static const XVC_Fps mpeg1_fps[] = {
     {60000, 1001},
     {60, 1},
 };
+
 #define len_mpeg1_fps (sizeof(mpeg1_fps) / sizeof(XVC_Fps))
 
 static const XVC_Fps dv_fps[] = {
     {25, 1},
     {30000, 1001},
 };
+
 #define len_dv_fps (sizeof(dv_fps) / sizeof(XVC_Fps))
 
 /** \brief global array storing all available codecs */
@@ -148,8 +152,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      NULL,
      0,
      mpeg1_fps,
-     len_mpeg1_fps
-     },
+     len_mpeg1_fps},
     {
      "MJPEG",
      N_("MJPEG"),
@@ -207,8 +210,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      NULL,
      0,
      dv_fps,
-     len_dv_fps
-     },
+     len_dv_fps},
     {
      "MPEG2",
      N_("MPEG2 Video"),
@@ -217,8 +219,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      NULL,
      0,
      mpeg1_fps,
-     len_mpeg1_fps
-     },
+     len_mpeg1_fps},
     {
      "SVQ1",
      N_("Soerensen VQ 1"),
@@ -265,61 +266,79 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
  * the global xvc_formats array
  */
 static const char *extension_xwd[] = { "xwd" };
+
 #define len_extension_xwd (sizeof(extension_xwd) / sizeof(char*))
 
 #ifdef USE_FFMPEG
 static const char *extension_pgm[] = { "pgm" };
+
 #define len_extension_pgm (sizeof(extension_pgm) / sizeof(char*))
 
 static const char *extension_ppm[] = { "ppm" };
+
 #define len_extension_ppm (sizeof(extension_ppm) / sizeof(char*))
 
 static const char *extension_png[] = { "png" };
+
 #define len_extension_png (sizeof(extension_png) / sizeof(char*))
 
 static const char *extension_jpg[] = { "jpg", "jpeg" };
+
 #define len_extension_jpg (sizeof(extension_jpg) / sizeof(char*))
 
 static const char *extension_avi[] = { "avi" };
+
 #define len_extension_avi (sizeof(extension_avi) / sizeof(char*))
 
 static const char *extension_mpg[] = { "mpeg", "mpg" };
+
 #define len_extension_mpg (sizeof(extension_mpg) / sizeof(char*))
 
 static const char *extension_asf[] = { "asf" };
+
 #define len_extension_asf (sizeof(extension_asf) / sizeof(char*))
 
 static const char *extension_flv[] = { "flv", "flv1" };
+
 #define len_extension_flv (sizeof(extension_flv) / sizeof(char*))
 
 static const char *extension_swf[] = { "swf" };
+
 #define len_extension_swf (sizeof(extension_swf) / sizeof(char*))
 
 static const char *extension_dv[] = { "dv" };
+
 #define len_extension_dv (sizeof(extension_dv) / sizeof(char*))
 
 static const char *extension_m1v[] = { "m1v", "vcd" };
+
 #define len_extension_m1v (sizeof(extension_m1v) / sizeof(char*))
 
 static const char *extension_m2v[] = { "m2v", "svcd" };
+
 #define len_extension_m2v (sizeof(extension_m2v) / sizeof(char*))
 
 static const char *extension_mov[] = { "mov", "qt" };
+
 #define len_extension_mov (sizeof(extension_mov) / sizeof(char*))
 
 static const XVC_CodecID allowed_vid_codecs_pgm[] = { CODEC_PGM };
+
 #define len_allowed_vid_codecs_pgm (sizeof(allowed_vid_codecs_pgm) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_ppm[] = { CODEC_PPM };
+
 #define len_allowed_vid_codecs_ppm (sizeof(allowed_vid_codecs_ppm) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_png[] = { CODEC_PNG };
+
 #define len_allowed_vid_codecs_png (sizeof(allowed_vid_codecs_png) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_jpg[] = { CODEC_JPEG };
+
 #define len_allowed_vid_codecs_jpg (sizeof(allowed_vid_codecs_jpg) / \
     sizeof(XVC_CodecID))
 
@@ -331,30 +350,37 @@ static const XVC_CodecID allowed_vid_codecs_avi[] = {
     CODEC_MPEG2,
     CODEC_DV
 };
+
 #define len_allowed_vid_codecs_avi (sizeof(allowed_vid_codecs_avi) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_asf[] = { CODEC_MSDIV3 };
+
 #define len_allowed_vid_codecs_asf (sizeof(allowed_vid_codecs_asf) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_flv[] = { CODEC_FLV };
+
 #define len_allowed_vid_codecs_flv (sizeof(allowed_vid_codecs_flv) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_swf[] = { CODEC_FLV, CODEC_MJPEG };
+
 #define len_allowed_vid_codecs_swf (sizeof(allowed_vid_codecs_swf) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_dv[] = { CODEC_DV };
+
 #define len_allowed_vid_codecs_dv (sizeof(allowed_vid_codecs_dv) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_mpeg1[] = { CODEC_MPEG1 };
+
 #define len_allowed_vid_codecs_mpeg1 (sizeof(allowed_vid_codecs_mpeg1) / \
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_mpeg2[] = { CODEC_MPEG2 };
+
 #define len_allowed_vid_codecs_mpeg2 (sizeof(allowed_vid_codecs_mpeg2) / \
     sizeof(XVC_CodecID))
 
@@ -363,6 +389,7 @@ static const XVC_CodecID allowed_vid_codecs_mov[] = {
     CODEC_SVQ1,
     CODEC_DV
 };
+
 #define len_allowed_vid_codecs_mov (sizeof(allowed_vid_codecs_mov) / \
     sizeof(XVC_CodecID))
 
@@ -374,6 +401,7 @@ static const XVC_AuCodecID allowed_au_codecs_avi[] = {
 #endif     // HAVE_LIBMP3LAME
     AU_CODEC_PCM16
 };
+
 #define len_allowed_au_codecs_avi (sizeof(allowed_au_codecs_avi) / \
     sizeof(XVC_AuCodecID))
 
@@ -383,11 +411,13 @@ static const XVC_AuCodecID au_codecs_mp2_and_mp3[] = {
 #endif     // HAVE_LIBMP3LAME
     AU_CODEC_MP2
 };
+
 #define len_au_codecs_mp2_and_mp3 (sizeof(au_codecs_mp2_and_mp3) / \
     sizeof(XVC_AuCodecID))
 
 #ifdef HAVE_LIBMP3LAME
 static const XVC_AuCodecID au_codecs_mp3[] = { AU_CODEC_MP3 };
+
 #define len_au_codecs_mp3 (sizeof(au_codecs_mp3) / \
     sizeof(XVC_AuCodecID))
 #endif     // HAVE_LIBMP3LAME
@@ -396,10 +426,12 @@ static const XVC_AuCodecID au_codecs_mp2_and_pcm[] = {
     AU_CODEC_MP2,
     AU_CODEC_PCM16
 };
+
 #define len_au_codecs_mp2_and_pcm (sizeof(au_codecs_mp2_and_pcm) / \
     sizeof(XVC_AuCodecID))
 
 static const XVC_AuCodecID au_codecs_mp2[] = { AU_CODEC_MP2 };
+
 #define len_au_codecs_mp2 (sizeof(au_codecs_mp2) / \
     sizeof(XVC_AuCodecID))
 #endif     // HAVE_FFMPEG_AUDIO
@@ -432,8 +464,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      NULL,
      0,
      extension_xwd,
-     len_extension_xwd
-     }
+     len_extension_xwd}
 #ifdef USE_FFMPEG
     , {
        "pgm",
@@ -446,8 +477,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
        NULL,
        0,
        extension_pgm,
-       len_extension_pgm
-       },
+       len_extension_pgm},
     {
      "ppm",
      N_("Portable Anymap File"),
@@ -459,8 +489,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      NULL,
      0,
      extension_ppm,
-     len_extension_ppm
-     },
+     len_extension_ppm},
     {
      "png",
      N_("Portable Network Graphics File"),
@@ -472,8 +501,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      NULL,
      0,
      extension_png,
-     len_extension_png
-     },
+     len_extension_png},
     {
      "jpg",
      N_("Joint Picture Expert Group"),
@@ -485,8 +513,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      NULL,
      0,
      extension_jpg,
-     len_extension_jpg
-     },
+     len_extension_jpg},
     {
      "avi",
      N_("Microsoft Audio Video Interleaved File"),
@@ -508,8 +535,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_avi,
-     len_extension_avi
-     },
+     len_extension_avi},
     {
      "divx",
      N_("General AVI file (DIVX default)"),
@@ -531,8 +557,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_mpg,
-     len_extension_mpg
-     },
+     len_extension_mpg},
     {
      "asf",
      N_("Microsoft Advanced Streaming Format"),
@@ -549,8 +574,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_asf,
-     len_extension_asf
-     },
+     len_extension_asf},
     {
      "flv1",
      N_("Macromedia Flash Video Stream"),
@@ -574,8 +598,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_flv,
-     len_extension_flv
-     },
+     len_extension_flv},
     {
      "swf",
      N_("Macromedia Shockwave Flash File"),
@@ -601,8 +624,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 // #endif                          // HAVE_FFMPEG_AUDIO
      extension_swf,
-     len_extension_swf
-     },
+     len_extension_swf},
     {
      "dv",
      N_("DV Video Format"),
@@ -620,8 +642,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_dv,
-     len_extension_dv
-     },
+     len_extension_dv},
     {
      "mpeg",
      N_("MPEG1 System Format"),
@@ -639,8 +660,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_m1v,
-     len_extension_m1v
-     },
+     len_extension_m1v},
     {
      "mpeg2",
      N_("MPEG2 PS Format"),
@@ -658,8 +678,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_m2v,
-     len_extension_m2v
-     },
+     len_extension_m2v},
     {
      "mov",
      N_("Quicktime Format"),
@@ -677,8 +696,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_mov,
-     len_extension_mov
-     }
+     len_extension_mov}
 #endif     // USE_FFMPEG
 };
 

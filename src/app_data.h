@@ -34,6 +34,7 @@
 
 #define XVC_MAX(a,b) ((a)>(b)? (a):(b))
 #define XVC_MIN(a,b) ((a)<(b)? (a):(b))
+#define XVC_GLADE_FILE PACKAGE_DATA_DIR"/xvidcap/glade/gnome-xvidcap.glade"
 
 /*
  * some flags to toggle on/off options

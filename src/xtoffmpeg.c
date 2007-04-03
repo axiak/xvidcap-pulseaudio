@@ -1171,10 +1171,9 @@ add_video_stream (AVFormatContext * oc, XImage * image,
 
     // mt init
     if (codec_id == CODEC_ID_MPEG4 || codec_id == CODEC_ID_MPEG1VIDEO ||
-            codec_id == CODEC_ID_MPEG2VIDEO) {
-        avcodec_thread_init(st->codec, 4);
+        codec_id == CODEC_ID_MPEG2VIDEO) {
+        avcodec_thread_init (st->codec, 4);
     }
-
     // find the video encoder
     codec = avcodec_find_encoder (st->codec->codec_id);
     if (!codec) {
@@ -1220,19 +1219,17 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     if (codec->pix_fmts != NULL) {
         for (i = 0; codec->pix_fmts[i] != -1; i++) {
             if (0 <= codec->pix_fmts[i] &&
-                codec->pix_fmts[i] < (sizeof(int)* 8))
+                codec->pix_fmts[i] < (sizeof (int) * 8))
                 pix_fmt_mask |= (1 << codec->pix_fmts[i]);
         }
         st->codec->pix_fmt =
-            avcodec_find_best_pix_fmt (pix_fmt_mask, input_pixfmt,
-                                        FALSE, NULL);
+            avcodec_find_best_pix_fmt (pix_fmt_mask, input_pixfmt, FALSE, NULL);
     }
 #ifdef DEBUG
     printf
         ("%s %s: pix_fmt_mask %i, has alpha %i, input_pixfmt %i, output pixfmt %i\n",
          DEBUGFILE, DEBUGFUNCTION, pix_fmt_mask,
-         FALSE, input_pixfmt,
-         st->codec->pix_fmt);
+         FALSE, input_pixfmt, st->codec->pix_fmt);
 #endif     // DEBUG
 
     if (!swscale_isSupportedIn (input_pixfmt)) {
@@ -1245,17 +1242,14 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     if (!swscale_isSupportedOut (st->codec->pix_fmt)) {
         st->codec->pix_fmt = -1;
     }
-
     // fallback pix fmts
     if (st->codec->pix_fmt < 0) {
         if (job->target >= CAP_MF) {
             st->codec->pix_fmt = PIX_FMT_YUV420P;
-        }
-        else {
+        } else {
             st->codec->pix_fmt = PIX_FMT_RGB24;
         }
     }
-
     // flags
     st->codec->flags |= CODEC_FLAG2_FAST;
     // there is no trellis quantiser in libav* for mjpeg
@@ -1269,9 +1263,8 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     // quality through VBR
     st->codec->flags |= CODEC_FLAG_QSCALE;
     qscale = (100.0 - quality + 1.0) / 3.3;
-    st->codec->global_quality =
-        st->quality = FF_QP2LAMBDA * qscale;
-        // 0.0 = default qscale
+    st->codec->global_quality = st->quality = FF_QP2LAMBDA * qscale;
+    // 0.0 = default qscale
     st->codec->qmin = st->codec->qmax = qscale;
 
 #ifdef DEBUG

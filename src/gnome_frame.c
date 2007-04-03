@@ -42,11 +42,14 @@
 #include <gdk/gdkx.h>
 #include <glade/glade.h>
 #include <stdlib.h>
+#include <sys/time.h>                  // for timeval struct and related
 
 #include "app_data.h"
 #include "job.h"
 #include "frame.h"
 #include "gnome_frame.h"
+
+#define XVC_FRAME_DIM_SHOW_TIME 1
 
 /*
  * file globals (static)
@@ -64,10 +67,10 @@ static Display *xvc_dpy = NULL;
 /** \brief make the frame parts available everywhere in this file */
 static GtkWidget *gtk_frame_top,
     *gtk_frame_left, *gtk_frame_right, *gtk_frame_bottom, *gtk_frame_center;
-static gboolean in_frame_top = FALSE, in_frame_left = FALSE,
-    in_frame_right = FALSE, in_frame_bottom = FALSE;
+static GtkWidget *xvc_frame_dimensions_window;
 static gboolean button_pressed = FALSE;
 static gint frame_drag_cursor = GDK_X_CURSOR;
+static long frame_dimensions_hide_time = 0;
 
 /**
  * \brief gets the Display to capture from
@@ -181,6 +184,20 @@ do_reposition_control (GtkWidget * toplevel)
 #undef DEBUGFUNCTION
 }
 
+static void
+frame_dimensions_hide ()
+{
+    struct timeval curr_time;
+    long current_time = 0;
+
+    gettimeofday (&curr_time, NULL);
+    current_time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
+    if (xvc_frame_dimensions_window &&
+        GTK_IS_WIDGET (xvc_frame_dimensions_window) &&
+        current_time >= frame_dimensions_hide_time)
+        gtk_widget_hide (xvc_frame_dimensions_window);
+}
+
 /**
  * \brief changes frame due to user input
  *
@@ -193,7 +210,7 @@ do_reposition_control (GtkWidget * toplevel)
  */
 void
 xvc_change_gtk_frame (int x, int y, int width, int height,
-                      Boolean reposition_control)
+                      Boolean reposition_control, Boolean show_dimensions)
 {
 #define DEBUGFUNCTION "xvc_change_gtk_frame()"
     int max_width, max_height;
@@ -201,6 +218,11 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     Display *dpy;
     XRectangle *x_rect = xvc_get_capture_area ();
     XVC_AppData *app = xvc_appdata_ptr ();
+    struct timeval curr_time;
+    GladeXML *xml = NULL;
+    GtkWidget *w = NULL;
+    char buf[64];
+    int wwidth, wheight;
 
     // we have to adjust it to viewable areas
     dpy = xvc_frame_get_capture_display ();
@@ -263,6 +285,32 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     if (((app->flags & FLG_NOGUI) == 0) && reposition_control)
         do_reposition_control (xvc_ctrl_main_window);
 
+    if (show_dimensions) {
+        xml = glade_get_widget_tree (GTK_WIDGET (xvc_frame_dimensions_window));
+        g_assert (xml);
+        w = glade_xml_get_widget (xml, "xvc_frame_size_label");
+        g_assert (w);
+        sprintf (buf, "%i x %i", width, height);
+        gtk_label_set_text (GTK_LABEL (w), buf);
+        w = glade_xml_get_widget (xml, "xvc_frame_position_label");
+        g_assert (w);
+        sprintf (buf, "%i + %i", x, y);
+        gtk_label_set_text (GTK_LABEL (w), buf);
+
+        gtk_widget_show (GTK_WIDGET (xvc_frame_dimensions_window));
+        gtk_window_set_gravity (GTK_WINDOW (xvc_frame_dimensions_window),
+                                GDK_GRAVITY_CENTER);
+        gtk_window_get_size (GTK_WINDOW (xvc_frame_dimensions_window),
+                             &wwidth, &wheight);
+        gtk_window_move (GTK_WINDOW (xvc_frame_dimensions_window),
+                         (x + (width >> 1) - (wwidth >> 1)),
+                         (y + (height >> 1) - (wheight >> 1)));
+        gettimeofday (&curr_time, NULL);
+        frame_dimensions_hide_time =
+            (curr_time.tv_sec + XVC_FRAME_DIM_SHOW_TIME) * 1000;
+        g_timeout_add ((guint32) (XVC_FRAME_DIM_SHOW_TIME * 1000 + 100),
+                       (GtkFunction) frame_dimensions_hide, NULL);
+    }
 #undef DEBUGFUNCTION
 }
 
@@ -284,7 +332,8 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
         pheight = ((GdkEventConfigure *) e)->height;
 
         y += pheight + FRAME_OFFSET + FRAME_WIDTH;
-        xvc_change_gtk_frame (x, y, app->area->width, app->area->height, FALSE);
+        xvc_change_gtk_frame (x, y, app->area->width, app->area->height,
+                              FALSE, FALSE);
     }
     return FALSE;
 #undef DEBUGFUNCTION
@@ -383,7 +432,6 @@ gint
 on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
 {
     gint x, y, x_root, y_root;
-    GdkModifierType mt;
     GdkCursor *cursor;
     XVC_AppData *app = xvc_appdata_ptr ();
 
@@ -463,7 +511,7 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
                                   abs (x_root - app->area->x),
                                   abs (y_root -
                                        (app->area->y + app->area->height)),
-                                  FALSE);
+                                  FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_BOTTOM_RIGHT_CORNER) {
             if (x_root < (app->area->x + 20))
                 x_root = app->area->x + 20;
@@ -472,14 +520,14 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
 
             xvc_change_gtk_frame (app->area->x, app->area->y,
                                   abs (x_root - app->area->x),
-                                  abs (y_root - app->area->y), FALSE);
+                                  abs (y_root - app->area->y), FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_RIGHT_SIDE) {
             if (x_root < (app->area->x + 20))
                 x_root = app->area->x + 20;
 
             xvc_change_gtk_frame (app->area->x, app->area->y,
                                   abs (x_root - app->area->x),
-                                  app->area->height, FALSE);
+                                  app->area->height, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_TOP_SIDE) {
             if (y_root > (app->area->y + app->area->height - 20))
                 y_root = app->area->y + app->area->height - 20;
@@ -488,7 +536,7 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
                                   app->area->width,
                                   abs (y_root -
                                        (app->area->y + app->area->height)),
-                                  FALSE);
+                                  FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_TOP_LEFT_CORNER) {
             if (x_root > (app->area->x + app->area->width - 20))
                 x_root = app->area->x + app->area->width - 20;
@@ -500,7 +548,7 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
                                        (app->area->x + app->area->width)),
                                   abs (y_root -
                                        (app->area->y + app->area->height)),
-                                  FALSE);
+                                  FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_LEFT_SIDE) {
             if (x_root > (app->area->x + app->area->width - 20))
                 x_root = app->area->x + app->area->width - 20;
@@ -508,7 +556,7 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
             xvc_change_gtk_frame (x_root, app->area->y,
                                   abs (x_root -
                                        (app->area->x + app->area->width)),
-                                  app->area->height, FALSE);
+                                  app->area->height, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_BOTTOM_LEFT_CORNER) {
             if (x_root > (app->area->x + app->area->width - 20))
                 x_root = app->area->x + app->area->width - 20;
@@ -518,14 +566,14 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
             xvc_change_gtk_frame (x_root, app->area->y,
                                   abs (x_root -
                                        (app->area->x + app->area->width)),
-                                  abs (y_root - app->area->y), FALSE);
+                                  abs (y_root - app->area->y), FALSE, TRUE);
         } else {                       // GDK_BOTTOM_SIDE
             if (y_root < (app->area->y + 20))
                 y_root = app->area->y + 20;
 
             xvc_change_gtk_frame (app->area->x, app->area->y,
                                   app->area->width,
-                                  abs (y_root - app->area->y), FALSE);
+                                  abs (y_root - app->area->y), FALSE, TRUE);
         }
     }
     return 0;
@@ -545,7 +593,7 @@ on_gtk_frame_button_release_event (GtkWidget * w, GdkEventButton * event)
         XVC_AppData *app = xvc_appdata_ptr ();
 
         xvc_change_gtk_frame (app->area->x, app->area->y,
-                              app->area->width, app->area->height, TRUE);
+                              app->area->width, app->area->height, TRUE, FALSE);
     }
     button_pressed = FALSE;
     return 0;
@@ -572,7 +620,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     XVC_AppData *app = xvc_appdata_ptr ();
     int flags = app->flags;
     XRectangle *x_rect = xvc_get_capture_area ();
-    GtkWidget *r_eb = NULL;
+    GladeXML *xml = NULL;
 
 #ifdef DEBUG
     printf ("%s %s: x %d y %d width %d height %d\n", DEBUGFILE,
@@ -812,6 +860,12 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         gtk_widget_show (GTK_WIDGET (gtk_frame_right));
         gtk_window_move (GTK_WINDOW (gtk_frame_right), (x + pwidth), y);
 
+        xml =
+            glade_xml_new (XVC_GLADE_FILE, "xvc_frame_dimensions_window", NULL);
+        g_assert (xml);
+        xvc_frame_dimensions_window =
+            glade_xml_get_widget (xml, "xvc_frame_dimensions_window");
+
 #ifdef HasVideo4Linux
         if (flags & FLG_USE_V4L) {
             gtk_frame_center = gtk_dialog_new ();
@@ -914,6 +968,7 @@ xvc_destroy_gtk_frame ()
     gtk_widget_destroy (gtk_frame_right);
     gtk_widget_destroy (gtk_frame_left);
     gtk_widget_destroy (gtk_frame_top);
+    gtk_widget_destroy (xvc_frame_dimensions_window);
     if (gtk_frame_center) {
         gtk_widget_destroy (gtk_frame_center);
     }

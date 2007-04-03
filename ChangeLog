@@ -1,4 +1,12 @@
 
+2007-04-03  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: control.h, gnome_warning.c, gnome_ui.c, 
+		app_data.h, gnome_frame.c, gnome_options.c, 
+		gnome_frame.h, gnome-xvidcap.glade:
+		finish new frame change code by adding
+		fading frame dimensions display
+	* src: codecs.c, xtoffmpeg.c: indentation and such
+
 2007-04-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: some cleanup of output pix
 		format calculation
