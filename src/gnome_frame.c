@@ -49,7 +49,7 @@
 #include "frame.h"
 #include "gnome_frame.h"
 
-#define XVC_FRAME_DIM_SHOW_TIME 1
+#define XVC_FRAME_DIM_SHOW_TIME 2
 
 /*
  * file globals (static)
@@ -348,6 +348,9 @@ on_gtk_frame_enter_notify_event (GtkWidget * w, GdkEventCrossing * event)
     gint x, y;
     GdkModifierType mt;
     GdkCursor *cursor;
+    Job *job = xvc_job_ptr();
+
+    if (job->state != VC_READY) return 0;
 
 //printf("entering\n");
 

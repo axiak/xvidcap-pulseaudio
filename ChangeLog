@@ -1,4 +1,10 @@
 
+2007-04-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/gnome_frame.c: only allow resize of frame
+		through dragging when not recording, 
+		also increase the duration the frame
+		dimensions are displayed
+
 2007-04-03  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: control.h, gnome_warning.c, gnome_ui.c, 
 		app_data.h, gnome_frame.c, gnome_options.c, 
