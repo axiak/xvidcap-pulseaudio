@@ -10,9 +10,9 @@
 
 <!DOCTYPE article  PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" 
 	"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY appversion "1.1.4p1">
-  <!ENTITY manrevision "0.1">
-  <!ENTITY date "September 2006">
+  <!ENTITY appversion "1.1.5rc3">
+  <!ENTITY manrevision "0.2">
+  <!ENTITY date "April 2007">
   <!ENTITY app "xvidcap">
   <!ENTITY mf-cap "multi-frame capture">
   <!ENTITY sf-cap "single-frame capture">
@@ -24,7 +24,7 @@
     <articleinfo>
         <title>&app; Manual V&manrevision;</title>
         <copyright>
-            <year>2006</year>
+            <year>2007</year>
             <holder>Karl H. Beckers</holder> 
         </copyright>
 
@@ -85,8 +85,17 @@
             <!-- Remember to remove the &manrevision; entity from the revision entries other
             than the current revision. -->
             <revision>
-                <revnumber>&app; V&manrevision;</revnumber>
+                <revnumber>&app; V0.1</revnumber>
                 <date>2006</date>
+                <revdescription>
+                    <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email>
+                    </para>
+                    <para role="publisher">Karl H. Beckers</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>&app; V&manrevision;</revnumber>
+                <date>2007</date>
                 <revdescription>
                     <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email>
                     </para>
@@ -278,7 +287,10 @@
                                     To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate,
                                     quit as many other applications putting stress on your system as possible, or run on a more 
                                     powerful machine. It may also help to <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">downscale</ulink>
-                                    the captured data.
+                                    the captured data. Another means for making screen capture lighter on your system is to
+				    make use of the XDamage extension. See the corresponding paragraph about the 
+				    <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-general">general options tab</ulink>
+				    of the preferences dialog.
                                 </para>
                             </entry>
                         </row>
@@ -480,9 +492,25 @@
                                                 at a resolution of 1400 x 1050 means encoding about 4 times the data rate of a DVD
                                                 in real time -- not something you will be doing with a pencil and paper.
                                             </para>
+						It is not just the encoding of a full screen capture, though, that may put 
+						too much stress on your system. Grabbing the complete capture area from the X11 
+						display is a heavy task on its own right. Using the XDamage extension may ease
+						the effect of that, however there may be caveats. See the corresponding paragraph about the 
+						<ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-set-xdamage">general options tab</ulink>
+						of the preferences dialog.
+                                            <para>
+                                            </para>
                                         </caution>
                                     </listitem>
                                 </itemizedlist>
+        			<tip>
+            				<title>Resize By Dragging</title>
+            				<para>
+					Starting with version 1.1.5, you can also resize the area to capture by dragging on
+					the edges of the frame while not capturing. Use that feature as you would resize a
+					normal window.
+					</para>
+        			</tip>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-edit">
@@ -820,22 +848,17 @@
                             </entry>
                             <entry>
                                 <para>
-                                    Check this to capture mouse pointer position. Once checked, you can select
-                                    whether you want to capture a black or a white mouse pointer. This is 
-                                    required because <application>&app;</application> does not have a way of capturing the real, current
-                                    mouse pointer, only its position. Therefore <application>&app;</application> generates a dummy mouse
-                                    pointer in the captured movie.
+                                    Check this to capture the mouse pointer.
                                 </para>
                                 <caution>
                                     <title>Custom Mouse Pointer Shapes</title>
                                     <para>
-                                        For above mentioned reasons, <application>&app;</application> cannot capture the shape of you
-                                        mouse pointer. If, therefore, the application you're capturing 
-                                        changes the shape of your mouse pointer to a specific shape you
-                                        will loose that in the captured movie. If the logic of the captured
-                                        content heavily relies on this you will want to ensure you either
-                                        have other means of showing the mouse pointer shape or elaborate
-                                        on it in your spoken comments.
+					Without the XFixes extension to X11, there is no way for <application>&app;</application> to 
+                                    	capture the real, current mouse pointer, only its position. If the extension is not available both
+					on the machine where <application>&app;</application> was built and where it is run, 
+					<application>&app;</application> generates a dummy mouse pointer in the captured movie.
+					In this case you will find a radiobutton next to this checkbox which
+					allows you to select whether the dummy pointer should be white or black.
                                     </para>
                                 </caution>
                             </entry>
@@ -873,6 +896,36 @@
                                         typically the case, nowadays. You will need to turn this off, however, if
                                         X11 server and client are not running on the same machine, e. g. 
                                         if you are on a X terminal thin client.
+                                    </para>
+                                </caution>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-set-xdamage">
+                            <entry>
+                                <para>
+                                    Manually Set XDamage
+                                </para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    Check this if you want to override the decision <application>&app;</application> makes
+				    about whether or not to use the XDamage extension to speed up screen capture. This 
+				    extension allows <application>&app;</application> to be notified about the portions
+				    of the screen that have changed between individual frames, so it does not need to 
+				    fetch the complete area to capture for every frame. <application>&app;</application> will
+				    default to using XDamage if it was available at build-time, if it is available at
+				    runtime, and if the window manager used is not compiz or beryl. If you are using
+				    beryl and still want to use the XDamage extension, check this control to enable the
+				    radiobuttons to the right and choose "enabled".
+                                </para>
+                                <caution>
+                                    <title>XDamage and compiz or beryl</title>
+                                    <para>
+					Due to the advanced visual effects possible with compiz, beryl and the likes,
+					the notifications received by <application>&app;</application> through XDamage
+					may not be sufficient for determining the right screen portions to capture.
+					You can still force <application>&app;</application> to use it as described
+					above, but your mileage may vary.
                                     </para>
                                 </caution>
                             </entry>
@@ -927,6 +980,13 @@
                                     original each. Thus the image size of the output will be 25 percent of
                                     the captured area.
                                 </para>
+                                <caution>
+                                    <title>Rescale does not work with XWD output</title>
+                                    <para>
+					Rescaling output frames does work with all output formats and codecs
+					other than XWD.
+                                    </para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>
@@ -1085,6 +1145,15 @@
                                 <para>
                                     Desired output quality
                                 </para>
+                                <caution>
+                                    <title>Quality Setting changed in 1.1.5</title>
+                                    <para>
+					The effect of setting quality to a value below 100 % has changed in
+					<application>&app;</application> 1.1.5. Be sure to test the values
+					in your stored preferences. Quality settings do not apply to XWD
+					output.
+                                    </para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>
@@ -1219,6 +1288,20 @@
                                 <para>
                                     Desired output quality
                                 </para>
+                                <caution>
+                                    <title>Quality Setting changed in 1.1.5</title>
+                                    <para>
+					The effect of setting quality to a value below 100 % has changed in
+					<application>&app;</application> 1.1.5. Be sure to test the values
+					in your stored preferences. In the past a quality setting of <quote>20</quote>
+					could yield good results depending on the codec chosen. This is no longer
+					the case. A setting of <quote>75</quote> may be acceptable to you, a
+					value of <quote>85</quote> will typically be. A video resulting from a
+					capture with a quality setting of <quote>90</quote> will not normally
+					be easy to distinguish from one captured at <quote>100</quote> percent
+					quality.
+                                    </para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>

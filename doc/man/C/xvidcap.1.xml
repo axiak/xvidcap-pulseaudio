@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
-<refentry revision="1.1.4p1">
+<refentry revision="1.1.5rc3">
     <refmeta>
         <refentrytitle>xvidcap</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo>September 2006</refmiscinfo>
+        <refmiscinfo>April 2007</refmiscinfo>
     </refmeta>
     <refnamediv id='name'>
         <refname>XVidCap</refname>
@@ -168,7 +168,8 @@
                 <listitem>
                     <para>
                         Rescale the output to a percentage of the original input. A value of <literal>25</literal>, e. g.
-                        makes the output size be 25 percent of the original input area.
+                        makes the output size be 25 percent of the original input area. Rescaling does not work with XWD
+			output.
                     </para> 
                 </listitem>
             </varlistentry>
@@ -177,7 +178,8 @@
                 <listitem>
                     <para>
                         Specify a value between <literal>0</literal> and <literal>100</literal> to define the quality encoding. The 
-                        default value is <literal>75</literal>. 
+                        default value is <literal>75</literal>. Note that the effect of a value below <literal>100</literal> has changed in version
+			1.1.5.
                     </para> 
                 </listitem>
             </varlistentry>

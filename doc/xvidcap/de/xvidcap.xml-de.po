@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
-"POT-Creation-Date: 2006-10-18 11:54+0200\n"
+"POT-Creation-Date: 2007-04-09 18:26+0200\n"
 "PO-Revision-Date: 2006-10-09 21:24+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: German\n"
@@ -11,215 +11,215 @@ msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:211(None)
+#: ../C/xvidcap.xml:220(None)
 msgid ""
 "@@image: 'figures/xvidcap-main-ctrl.png'; "
-"md5=d61ad3e0f69906346be4e66a70e7f0b2"
-msgstr ""
+"md5=fb6e04bae4e182bd3b31e8e974063c39"
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:235(None)
+#: ../C/xvidcap.xml:244(None)
 msgid ""
-"@@image: 'figures/filename-button.png'; md5=8aad0250f9e4fa2bf4d881492251618a"
-msgstr ""
+"@@image: 'figures/filename-button.png'; md5=2ad3a896d39e80e9825954c1760953f6"
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:264(None)
+#: ../C/xvidcap.xml:273(None)
 msgid ""
 "@@image: 'figures/frame-drop-meter.png'; md5=2b4a7a787d2712f4dcff835a16d00f76"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:290(None)
+#: ../C/xvidcap.xml:302(None)
 msgid ""
-"@@image: 'figures/stop-toggle.png'; md5=f698f6076c895346f0ba4289b19f3787"
-msgstr ""
+"@@image: 'figures/stop-toggle.png'; md5=2e9e545991286d196f134c944ddda4ae"
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:308(None)
+#: ../C/xvidcap.xml:320(None)
 msgid ""
 "@@image: 'figures/pause-toggle.png'; md5=e9acf1faf7b1de9b6c595bee6eaf0a9e"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:327(None)
+#: ../C/xvidcap.xml:339(None)
 msgid ""
 "@@image: 'figures/record-toggle.png'; md5=a6f7cba0147d53e5e378be6dae311197"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:345(None)
+#: ../C/xvidcap.xml:357(None)
 msgid ""
 "@@image: 'figures/step-button.png'; md5=2a60eae2f06537207aa3e8af6ecd4593"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:364(None)
+#: ../C/xvidcap.xml:376(None)
 msgid ""
 "@@image: 'figures/back-button.png'; md5=0c017d328bc6f988b62c37f2d40233e4"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:396(None)
+#: ../C/xvidcap.xml:408(None)
 msgid "@@image: 'figures/fwd-button.png'; md5=a2637f30cbce26c3e026351ba09e9d68"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:415(None)
+#: ../C/xvidcap.xml:427(None)
 msgid ""
-"@@image: 'figures/lock-toggle.png'; md5=77768c90461410415481f0a22f0168bd"
-msgstr ""
+"@@image: 'figures/lock-toggle.png'; md5=5f9d5046048590afedcfefaae1c9fb52"
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:435(None)
+#: ../C/xvidcap.xml:447(None)
 msgid ""
 "@@image: 'figures/selector-button.png'; md5=8705218824b8081f522892cad3583180"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:493(None)
+#: ../C/xvidcap.xml:521(None)
 msgid ""
 "@@image: 'figures/edit-button.png'; md5=6c7af87da31d776e5eb45096dfda9bb3"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:526(None)
-msgid "@@image: 'figures/menu.png'; md5=d19293507555b63ed72123b79a6745c1"
-msgstr ""
+#: ../C/xvidcap.xml:554(None)
+msgid "@@image: 'figures/menu.png'; md5=d38670a2c359b6e233aee31497ad012d"
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:545(None)
+#: ../C/xvidcap.xml:573(None)
 msgid "@@image: 'figures/menu-prefs.png'; md5=806996853c6dd88b8506fc19222344df"
-msgstr ""
-
-#. When image changes, this message will be marked fuzzy or untranslated for you.
-#. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:563(None)
-msgid ""
-"@@image: 'figures/menu-save-prefs.png'; md5=0bcf42a4c043dae129db58b72ca30106"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:591(None)
+msgid ""
+"@@image: 'figures/menu-save-prefs.png'; md5=0bcf42a4c043dae129db58b72ca30106"
+msgstr "dummy"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/xvidcap.xml:619(None)
 msgid "@@image: 'figures/menu-mf.png'; md5=ca3623a6444caa2638019bbca3088e0b"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:617(None)
+#: ../C/xvidcap.xml:645(None)
 msgid "@@image: 'figures/menu-sf.png'; md5=dcda10a46b3fb118f2b3c78f7c812f94"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:635(None)
+#: ../C/xvidcap.xml:663(None)
 msgid "@@image: 'figures/menu-cont.png'; md5=9559b557c77d491bf43bfc8f497db33e"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:659(None)
+#: ../C/xvidcap.xml:687(None)
 msgid ""
 "@@image: 'figures/menu-make-video.png'; md5=df3ce8ca6e7b4fc422c50c1824640b0e"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:686(None)
+#: ../C/xvidcap.xml:714(None)
 msgid ""
 "@@image: 'figures/menu-animate.png'; md5=7bf120a287b92d182d9d77a7bd1311c2"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:710(None)
+#: ../C/xvidcap.xml:738(None)
 msgid "@@image: 'figures/menu-help.png'; md5=418258a847d357c07efac51c541bff49"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:728(None)
+#: ../C/xvidcap.xml:756(None)
 msgid "@@image: 'figures/menu-about.png'; md5=27b0c0ffc8a7737ce34c05123e56cca8"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:746(None)
+#: ../C/xvidcap.xml:774(None)
 msgid "@@image: 'figures/menu-quit.png'; md5=97770bce6e5724f83bed779264a00564"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:788(None)
+#: ../C/xvidcap.xml:816(None)
 msgid ""
-"@@image: 'figures/prefs-general.png'; md5=e83682061bdd2d0dca1b96e8492aaaa4"
-msgstr ""
+"@@image: 'figures/prefs-general.png'; md5=055d3cf5f17670aa0f2b1e013e745548"
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:950(None)
+#: ../C/xvidcap.xml:1010(None)
 msgid "@@image: 'figures/prefs-sf.png'; md5=790652174e153ab45c997992bd0fcc19"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:1107(None)
+#: ../C/xvidcap.xml:1176(None)
 msgid "@@image: 'figures/prefs-mf.png'; md5=105b394b2691be6a183b404c99949869"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:1361(None)
+#: ../C/xvidcap.xml:1444(None)
 msgid ""
 "@@image: 'figures/prefs-commands.png'; md5=a80e8aef0f3dc2adef95aaffa3e2c081"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:1615(None)
+#: ../C/xvidcap.xml:1698(None)
 msgid ""
 "@@image: 'figures/results-dialog-ask.png'; "
 "md5=1c2a7587450d593a79555efc3cd233e7"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:1641(None)
+#: ../C/xvidcap.xml:1724(None)
 msgid ""
 "@@image: 'figures/results-dialog.png'; md5=413abc56484e9b12b74391db78c030b5"
-msgstr ""
+msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: ../C/xvidcap.xml:1665(None)
+#: ../C/xvidcap.xml:1748(None)
 msgid ""
 "@@image: 'figures/xvidcap-warning.png'; md5=dbae204ebc258d14d742941f1398c939"
-msgstr ""
+msgstr "dummy"
 
 #: ../C/xvidcap.xml:25(title)
-msgid "xvidcap Manual V0.1"
-msgstr "xvidcap Handbuch V0.1"
+msgid "xvidcap Manual V0.2"
+msgstr "xvidcap Handbuch V0.2"
 
-#: ../C/xvidcap.xml:27(year) ../C/xvidcap.xml:89(date)
-msgid "2006"
-msgstr "2006"
+#: ../C/xvidcap.xml:27(year) ../C/xvidcap.xml:98(date)
+msgid "2007"
+msgstr "2007"
 
 #: ../C/xvidcap.xml:28(holder) ../C/xvidcap.xml:40(publishername)
-#: ../C/xvidcap.xml:93(para)
+#: ../C/xvidcap.xml:93(para) ../C/xvidcap.xml:102(para)
 msgid "Karl H. Beckers"
 msgstr "Karl H. Beckers"
 
@@ -243,19 +243,27 @@ msgstr "karl.h.beckers@gmx.net"
 msgid "xvidcap V0.1"
 msgstr "xvidcap V0.1"
 
-#: ../C/xvidcap.xml:91(para)
+#: ../C/xvidcap.xml:89(date)
+msgid "2006"
+msgstr "2006"
+
+#: ../C/xvidcap.xml:91(para) ../C/xvidcap.xml:100(para)
 msgid "Karl H. Beckers <email>karl.h.beckers@gmx.net</email>"
 msgstr "Karl H. Beckers <email>karl.h.beckers@gmx.net</email>"
 
-#: ../C/xvidcap.xml:98(releaseinfo)
-msgid "This manual describes version 1.1.4p1 of xvidcap."
-msgstr "Dieses Handbuch beschreibt Version 1.1.4p1 von xvidcap"
+#: ../C/xvidcap.xml:97(revnumber)
+msgid "xvidcap V0.2"
+msgstr "xvidcap V0.2"
 
-#: ../C/xvidcap.xml:101(title)
+#: ../C/xvidcap.xml:107(releaseinfo)
+msgid "This manual describes version 1.1.5rc3 of xvidcap."
+msgstr "Dieses Handbuch beschreibt Version 1.1.5rc3 von xvidcap"
+
+#: ../C/xvidcap.xml:110(title)
 msgid "Feedback"
 msgstr "Rückmeldungen"
 
-#: ../C/xvidcap.xml:102(para) ../C/xvidcap.xml:167(para)
+#: ../C/xvidcap.xml:111(para) ../C/xvidcap.xml:176(para)
 msgid ""
 "To report a bug or make a suggestion regarding the <application>xvidcap</"
 "application> application or this manual, follow the directions on <ulink url="
@@ -267,27 +275,27 @@ msgstr ""
 "Sie bitte den Hinweisen auf <ulink url=\"http://www.sourceforge.net/projects/"
 "xvidcap\">xvidcap's SourceForge Seite</ulink>."
 
-#: ../C/xvidcap.xml:109(para)
+#: ../C/xvidcap.xml:118(para)
 msgid "User manual for the xvidcap screencam application."
 msgstr "Benutzerhandbuch für die ScreenCam Anwendung xvidcap."
 
-#: ../C/xvidcap.xml:112(primary)
+#: ../C/xvidcap.xml:121(primary)
 msgid "xvidcap"
 msgstr "xvidcap"
 
-#: ../C/xvidcap.xml:113(primary)
+#: ../C/xvidcap.xml:122(primary)
 msgid "screencam"
 msgstr "screencam"
 
-#: ../C/xvidcap.xml:114(primary)
+#: ../C/xvidcap.xml:123(primary)
 msgid "screencast"
 msgstr "screencast"
 
-#: ../C/xvidcap.xml:119(title)
+#: ../C/xvidcap.xml:128(title)
 msgid "Introduction"
 msgstr "Überblick"
 
-#: ../C/xvidcap.xml:120(para)
+#: ../C/xvidcap.xml:129(para)
 msgid ""
 "<application>xvidcap</application> is a tool that captures movement on a "
 "selected area of an X11 screen to files. It does this by taking a "
@@ -306,35 +314,26 @@ msgstr ""
 "<application>Lotus Screencam</application> und diente als Inspiration für "
 "<application>xvidcap</application>."
 
-#: ../C/xvidcap.xml:132(para)
-msgid ""
-"<guilabel>single-frame capture</guilabel> -- capture individual screenshots "
-"to one file each."
-msgstr ""
-"<guilabel>Einzelbild-Aufnahme</guilabel> -- macht einzelne Bildschirmfotos "
-"und speichere sie in je eine Datei."
-
 #: ../C/xvidcap.xml:137(para)
 msgid ""
-"<guilabel>multi-frame capture</guilabel> -- capture and encode to video on "
-"the fly."
-msgstr ""
-"<guilabel>Film-Aufnahme</guilabel> -- nimmt Bildschirm auf und kodiert zur "
-"Laufzeit zu einem Video."
-
-#: ../C/xvidcap.xml:128(para)
-msgid ""
 "<application>xvidcap</application> can be used in two distinct modes of "
-"operation: <placeholder-1/>"
+"operation: <orderedlist><listitem><para><guilabel>single-frame capture</"
+"guilabel> -- capture individual screenshots to one file each. </para></"
+"listitem><listitem><para><guilabel>multi-frame capture</guilabel> -- capture "
+"and encode to video on the fly. </para></listitem></orderedlist>"
 msgstr ""
-"<application>xvidcap</application>  kann auf zwei unterschiedliche Arten "
-"verwendet werden: <placeholder-1/>"
+"<application>xvidcap</application> kann auf zwei unterschiedliche Arten "
+"verwendet werden: <orderedlist><listitem><para><guilabel>Einzelbild-"
+"Aufnahme</guilabel> -- Aufnahme einzelner Bildschirmfotos in jeweils eine "
+"Datei. </para></listitem><listitem><para><guilabel>Film-Aufnahme</guilabel> "
+"-- Aufnahme und Kodierung zu einer Video-Datei in Echtzeit. </para></"
+"listitem></orderedlist>"
 
-#: ../C/xvidcap.xml:145(title)
+#: ../C/xvidcap.xml:154(title)
 msgid "Mnemonic"
 msgstr "Merker"
 
-#: ../C/xvidcap.xml:146(para)
+#: ../C/xvidcap.xml:155(para)
 msgid ""
 "The naming of the modes of operation derives from the number of frames that "
 "get stored in the output file: One or many."
@@ -343,11 +342,11 @@ msgstr ""
 "Aufnahme</quote> richtet sich danach was in einer einzelnen Datei "
 "gespeichert wird: Ein Einzelbild oder ein Film."
 
-#: ../C/xvidcap.xml:153(title)
+#: ../C/xvidcap.xml:162(title)
 msgid "Audio Capture"
 msgstr "Ton Aufnahme"
 
-#: ../C/xvidcap.xml:154(para)
+#: ../C/xvidcap.xml:163(para)
 msgid ""
 "<application>xvidcap</application> can capture audio, but only in multi-"
 "frame capture operation."
@@ -355,7 +354,7 @@ msgstr ""
 "<application>xvidcap</application>  kann Ton mit aufnehmen, jedoch nur bei "
 "einer Film-Aufnahme."
 
-#: ../C/xvidcap.xml:159(para)
+#: ../C/xvidcap.xml:168(para)
 msgid ""
 "Recording in single-frame capture mode may be more convenient if you wish to "
 "preprocess the images before encoding, or if you need other video codecs "
@@ -372,25 +371,25 @@ msgstr ""
 "ulink>, or <ulink type=\"help\" url=\"man:transcode\">transcode</ulink> "
 "nachträglich kodiert werden."
 
-#: ../C/xvidcap.xml:174(title)
+#: ../C/xvidcap.xml:183(title)
 msgid "Getting Started"
 msgstr "Erste Schritte"
 
-#: ../C/xvidcap.xml:177(title)
+#: ../C/xvidcap.xml:186(title)
 msgid "To Start xvidcap"
 msgstr "xvidcap Starten"
 
-#: ../C/xvidcap.xml:178(para)
+#: ../C/xvidcap.xml:187(para)
 msgid "You can start <application>xvidcap</application> in the following ways:"
 msgstr ""
 "Sie können <application>xvidcap</application> auf die folgenden Arten und "
 "Weisen starten:"
 
-#: ../C/xvidcap.xml:181(term)
+#: ../C/xvidcap.xml:190(term)
 msgid "<guimenu>Applications</guimenu> menu"
 msgstr "Menü <guimenu>Anwendungen</guimenu>"
 
-#: ../C/xvidcap.xml:183(para)
+#: ../C/xvidcap.xml:192(para)
 msgid ""
 "Choose <menuchoice><guisubmenu>Sound &amp; Video</"
 "guisubmenu><guimenuitem>XVidCap Screen Capture</guimenuitem></menuchoice>."
@@ -398,11 +397,11 @@ msgstr ""
 "Wählen Sie <menuchoice><guisubmenu>Unterhaltungsmedien</"
 "guisubmenu><guimenuitem>XVidCap Screen Capture</guimenuitem></menuchoice>."
 
-#: ../C/xvidcap.xml:190(term)
+#: ../C/xvidcap.xml:199(term)
 msgid "Command line"
 msgstr "Befehlszeile"
 
-#: ../C/xvidcap.xml:192(para)
+#: ../C/xvidcap.xml:201(para)
 msgid ""
 "Execute the following command: <command>xvidcap</command>. For more "
 "information about command line usage see <ulink type=\"help\" url=\"man:"
@@ -412,11 +411,11 @@ msgstr ""
 "command>. Weitere Informationen zur Verwendung der Befehlszeile finden Sie "
 "in der <ulink type=\"help\" url=\"man:xvidcap\">the xvidcap manpage</ulink>."
 
-#: ../C/xvidcap.xml:203(title)
+#: ../C/xvidcap.xml:212(title)
 msgid "When You Start <application>xvidcap</application>"
 msgstr "Wenn Sie <application>xvidcap</application> starten:"
 
-#: ../C/xvidcap.xml:204(para)
+#: ../C/xvidcap.xml:213(para)
 msgid ""
 "When you start <application>xvidcap</application>, the following window is "
 "displayed:"
@@ -424,15 +423,15 @@ msgstr ""
 "Wenn Sie <application>xvidcap</application> starten, wird das folgende "
 "Fenster angezeigt:"
 
-#: ../C/xvidcap.xml:207(title)
+#: ../C/xvidcap.xml:216(title)
 msgid "xvidcap Control"
 msgstr "xvidcap Bedienfenster"
 
-#: ../C/xvidcap.xml:213(phrase)
+#: ../C/xvidcap.xml:222(phrase)
 msgid "Shows <application>xvidcap</application> control."
 msgstr "Zeigt das <application>xvidcap</application> Bedienfenster:"
 
-#: ../C/xvidcap.xml:219(para)
+#: ../C/xvidcap.xml:228(para)
 msgid ""
 "The window with a proper title and buttons is xvidcap's main control, while "
 "the red rectangle is the selection frame enclosing the area to capture."
@@ -441,15 +440,15 @@ msgstr ""
 "Bedienfenster von xvidcap, während das rote Rechteck der Auswahlrahmen ist, "
 "der den aufzunehmenden Bereich einschliesst."
 
-#: ../C/xvidcap.xml:225(title)
+#: ../C/xvidcap.xml:234(title)
 msgid "xvidcap's main control elements:"
 msgstr "Die Elemente des Bedienfensters:"
 
-#: ../C/xvidcap.xml:237(phrase)
+#: ../C/xvidcap.xml:246(phrase)
 msgid "Filename Display and Menu"
 msgstr "Dateinamensanzeige und Menü"
 
-#: ../C/xvidcap.xml:243(para)
+#: ../C/xvidcap.xml:252(para)
 msgid ""
 "The <guilabel>Filename Display and Menu</guilabel> displays the current "
 "output filename and, if in multi-frame capture mode, the index number of the "
@@ -463,7 +462,7 @@ msgstr ""
 "rechteckigen Klammern. Bei der Einzelbild-Aufnahme ist diese Nummer in der "
 "Regel Teil des Dateinamens."
 
-#: ../C/xvidcap.xml:248(para)
+#: ../C/xvidcap.xml:257(para)
 msgid ""
 "When in single-frame capture mode a left click resets the frame count to the "
 "start. A right-click while not capturing will pop up the <ulink type=\"help"
@@ -474,11 +473,11 @@ msgstr ""
 "Maustaste zeigt, bei gestoppter Aufnahme, das <ulink type=\"help\" url="
 "\"ghelp:xvidcap?xvidcap-menu\">Hauptmenü</ulink> an."
 
-#: ../C/xvidcap.xml:253(title) ../C/xvidcap.xml:804(para)
+#: ../C/xvidcap.xml:262(title) ../C/xvidcap.xml:832(para)
 msgid "Default Capture Mode"
 msgstr "Vorgabewert für Art der Aufnahme"
 
-#: ../C/xvidcap.xml:254(para)
+#: ../C/xvidcap.xml:263(para)
 msgid ""
 "By default, <application>xvidcap</application> starts in multi-frame capture "
 "mode."
@@ -486,11 +485,11 @@ msgstr ""
 "Per Vorgabe startet <application>xvidcap</application> eingestellt für die "
 "Film-Aufnahme."
 
-#: ../C/xvidcap.xml:266(phrase)
+#: ../C/xvidcap.xml:275(phrase)
 msgid "Frame Drop Meter"
 msgstr "Bild-Verlust Messer"
 
-#: ../C/xvidcap.xml:272(para)
+#: ../C/xvidcap.xml:281(para)
 msgid ""
 "The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well "
 "your capture session can capture at your desired frame rate. If your system "
@@ -503,7 +502,10 @@ msgid ""
 "frame rate, quit as many other applications putting stress on your system as "
 "possible, or run on a more powerful machine. It may also help to <ulink type="
 "\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-rescale\">downscale</ulink> "
-"the captured data."
+"the captured data. Another means for making screen capture lighter on your "
+"system is to make use of the XDamage extension. See the corresponding "
+"paragraph about the <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-"
+"general\">general options tab</ulink> of the preferences dialog."
 msgstr ""
 "Der <guilabel>Bild-Verlust Messer</guilabel> bietet einen Anhaltspunkt "
 "darüber, wie gut Ihre Aufnahmesitzung mit der von Ihnen eingestellten "
@@ -518,23 +520,27 @@ msgstr ""
 "wählen, alle anderen Anwendungen beenden oder auf einer leistungsfähigeren "
 "Maschine aufnehmen. Es kann unter Umständen auch helfen, die Eingangsbilder "
 "zu <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-rescale"
-"\">verkleinern</ulink>."
+"\">verkleinern</ulink>. Eine weitere Möglichkeit, die Aufnahme für Ihr "
+"System leichter zu machen, ist es die XDamage Erweiterung zu verwenden. "
+"Vergleichen Sie den entsprechenden Absatz über den Reiter <ulink type=\"help"
+"\" url=\"ghelp:xvidcap?xvidcap-prefs-general\">Allgemeine Einstellungen</"
+"ulink> des Einstellungen Dialogs."
 
-#: ../C/xvidcap.xml:292(phrase)
+#: ../C/xvidcap.xml:304(phrase)
 msgid "Stop Button"
 msgstr "Aufnahme Beenden Schaltfläche"
 
-#: ../C/xvidcap.xml:298(para)
+#: ../C/xvidcap.xml:310(para)
 msgid "The <guilabel>Stop Button</guilabel> stops a running recording session."
 msgstr ""
 "Die <guilabel>Aufnahme Beenden</guilabel> Schaltfläche beendet eine laufende "
 "Aufnahmesitzung."
 
-#: ../C/xvidcap.xml:310(phrase)
+#: ../C/xvidcap.xml:322(phrase)
 msgid "Pause Button"
 msgstr "Aufnahme pausieren Schaltfläche"
 
-#: ../C/xvidcap.xml:316(para)
+#: ../C/xvidcap.xml:328(para)
 msgid ""
 "The <guilabel>Pause Button</guilabel> pauses a running or continues a paused "
 "recording session. You can also select this before starting to record to "
@@ -544,21 +550,21 @@ msgstr ""
 "laufende Aufnahmesitzung oder setzt eine pausierte Sitzung fort. Sie können "
 "diese Schaltfläche auch vor der Aufnahme verwenden, um pausiert zu starten."
 
-#: ../C/xvidcap.xml:329(phrase)
+#: ../C/xvidcap.xml:341(phrase)
 msgid "Record Button"
 msgstr "Aufnahme beginnen Schaltfläche"
 
-#: ../C/xvidcap.xml:335(para)
+#: ../C/xvidcap.xml:347(para)
 msgid "The <guilabel>Record Button</guilabel> starts a recording session."
 msgstr ""
 "Die <guilabel>Aufnahme beginnen</guilabel> Schaltfläche startet eine "
 "Aufnahmesitzung."
 
-#: ../C/xvidcap.xml:347(phrase)
+#: ../C/xvidcap.xml:359(phrase)
 msgid "Single Snaphot Button"
 msgstr "Einzelbild aufnehmen Schaltfläche"
 
-#: ../C/xvidcap.xml:353(para)
+#: ../C/xvidcap.xml:365(para)
 msgid ""
 "The <guilabel>Single Snapshot Button</guilabel> is only active in a paused "
 "single-frame capture mode capturing session. Then it allows you to take "
@@ -568,11 +574,11 @@ msgstr ""
 "pausierten Einzelbild-Aufnahme Sitzung aktiv. Dann erlaubt sie eine "
 "einzelnene Aufnahme per Knopfdruck."
 
-#: ../C/xvidcap.xml:366(phrase)
+#: ../C/xvidcap.xml:378(phrase)
 msgid "Rewind Button"
 msgstr "Zurück Schaltfläche"
 
-#: ../C/xvidcap.xml:372(para)
+#: ../C/xvidcap.xml:384(para)
 msgid ""
 "The <guilabel>Rewind Button</guilabel> has different uses depending on the "
 "current capture mode."
@@ -580,7 +586,7 @@ msgstr ""
 "Die <guilabel>Zurück</guilabel> Schaltfläche hat unterschiedliche "
 "Anwendungen in Abhängigkeit von der aktuell gewählten Art der Aufnahme."
 
-#: ../C/xvidcap.xml:375(para)
+#: ../C/xvidcap.xml:387(para)
 msgid ""
 "In single-frame capture mode <quote>rewinding</quote> relates to the index "
 "number of the current frame to capture. Imagine you have a stopped capture "
@@ -602,7 +608,7 @@ msgstr ""
 "den Dateien <quote>test-0008.png</quote> und <quote>test-0009.png</quote> "
 "überschrieben."
 
-#: ../C/xvidcap.xml:383(para)
+#: ../C/xvidcap.xml:395(para)
 msgid ""
 "In multi-frame capture mode the rewind button works quite similar. It does "
 "not, however, manipulate the index number of the current frame, but rather "
@@ -615,11 +621,11 @@ msgstr ""
 "hinsichtlich der automatischen <ulink type=\"help\" url=\"ghelp:xvidcap?"
 "xvidcap-prefs-TBL-autocontinue\">Aufnahmefortsetzung</ulink>."
 
-#: ../C/xvidcap.xml:398(phrase)
+#: ../C/xvidcap.xml:410(phrase)
 msgid "Forward Button"
 msgstr "Vorwärts Schaltfläche"
 
-#: ../C/xvidcap.xml:404(para)
+#: ../C/xvidcap.xml:416(para)
 msgid ""
 "The <guilabel>Forward Button</guilabel> does the opposite of the rewind "
 "button in that it increments the current frame's index number or the movie "
@@ -630,11 +636,11 @@ msgstr ""
 "aktuellen Einzelbildes oder Films hochzählt in Abhängigkeit von der "
 "gewählten Art der Aufnahme."
 
-#: ../C/xvidcap.xml:417(phrase)
+#: ../C/xvidcap.xml:429(phrase)
 msgid "Frame Selection Lock"
 msgstr "Sperre des Auswahlrahmens"
 
-#: ../C/xvidcap.xml:423(para)
+#: ../C/xvidcap.xml:435(para)
 msgid ""
 "The <guilabel>Frame Selection Lock</guilabel> makes the capture selection "
 "move with the main control if selected. If deselected, the capture selection "
@@ -645,11 +651,11 @@ msgstr ""
 "abgewählt, bleibt der Auswahlrahmen wo er ist, wenn sich das Bedienfenster "
 "bewegt."
 
-#: ../C/xvidcap.xml:437(phrase)
+#: ../C/xvidcap.xml:449(phrase)
 msgid "Frame Selector Button"
 msgstr "Bereichsauswahl Schaltfläche"
 
-#: ../C/xvidcap.xml:443(para)
+#: ../C/xvidcap.xml:455(para)
 msgid ""
 "Click the <guilabel>Frame Selector Button</guilabel> to change the area you "
 "want to capture. When you click it, the cursor changes to a cross-hair "
@@ -660,15 +666,15 @@ msgstr ""
 "Schaltfläche anclicken, wird der Mauszeiger zu einem Fadenkreuz.  Danach "
 "können Sie entweder:"
 
-#: ../C/xvidcap.xml:449(para)
+#: ../C/xvidcap.xml:461(para)
 msgid "click on a single window to capture that window."
 msgstr "Ein einzelnes Fenster anclicken, um dieses Fenster aufzunehmen."
 
-#: ../C/xvidcap.xml:453(title)
+#: ../C/xvidcap.xml:465(title)
 msgid "Moving Captured Windows"
 msgstr "Bewegen aufgenomenner Fenster während der Aufnahme"
 
-#: ../C/xvidcap.xml:454(para)
+#: ../C/xvidcap.xml:466(para)
 msgid ""
 "Note that the area selection is not sticky to the window in the sense that "
 "it would follow the window you originally selected, if you move it away. All "
@@ -686,29 +692,32 @@ msgstr ""
 "denn Sie haben die Sperre des Auswahlrahmens aktiviert und bewegen das "
 "Bedienfenster an die entsprechende Position."
 
-#: ../C/xvidcap.xml:465(para)
+#: ../C/xvidcap.xml:477(para)
 msgid "click and drag to select an arbitrary portion of the screen."
 msgstr ""
 "Clicken und Ziehen, um einen beliebigen Bereich des Bildschirms auszuwählen."
 
-#: ../C/xvidcap.xml:470(para)
+#: ../C/xvidcap.xml:482(para)
 msgid "click on the backdrop to select full-screen capture."
 msgstr ""
 "Auf den Bildschirmhintergrund clicken, um Vollbild-Aufnahme auszuwählen."
 
-#: ../C/xvidcap.xml:474(title)
-msgid "Full-Screen Capture"
-msgstr "Vollbild-Aufnahme"
-
-#: ../C/xvidcap.xml:475(para)
+#: ../C/xvidcap.xml:485(caution)
 msgid ""
-"With current display sizes, full-screen capture has a very high probability "
-"of putting too much stress on your system. Watch the frame drop monitor and "
-"possibly adjust your screen resolution if you absolutely must capture full-"
-"screen. Remember that DVDs typically contain resolutions of 720 x 486. "
-"Capturing full-screen at a resolution of 1400 x 1050 means encoding about 4 "
-"times the data rate of a DVD in real time -- not something you will be doing "
-"with a pencil and paper."
+"<title>Full-Screen Capture</title><para> With current display sizes, full-"
+"screen capture has a very high probability of putting too much stress on "
+"your system. Watch the frame drop monitor and possibly adjust your screen "
+"resolution if you absolutely must capture full-screen. Remember that DVDs "
+"typically contain resolutions of 720 x 486. Capturing full-screen at a "
+"resolution of 1400 x 1050 means encoding about 4 times the data rate of a "
+"DVD in real time -- not something you will be doing with a pencil and paper. "
+"</para> It is not just the encoding of a full screen capture, though, that "
+"may put too much stress on your system. Grabbing the complete capture area "
+"from the X11 display is a heavy task on its own right. Using the XDamage "
+"extension may ease the effect of that, however there may be caveats. See the "
+"corresponding paragraph about the <ulink type=\"help\" url=\"ghelp:xvidcap?"
+"xvidcap-prefs-TBL-set-xdamage\">general options tab</ulink> of the "
+"preferences dialog. <para></para>"
 msgstr ""
 "Bei aktuellen Anzeigegrößen besteht bei Vollbild-Aufnahme eine hohe "
 "Wahrscheinlichkeit, zu viel Last auf Ihrem System zu verursachen. Beobachten "
@@ -717,13 +726,36 @@ msgstr ""
 "müssen. Bedenken Sie, dass eine DVD üblicherweise Auflösungen um 720 x 486 "
 "enthält. Eine Vollbild-Aufnahme bei einer Auflösung von 1400 x 1050 wird "
 "ungefähr die vierfache Menge der Datenrate einer DVD zur Laufzeit kodiert -- "
-"nicht etwas, was Sie mit Stift und Papier berechnen."
+"nicht etwas, was Sie mit Stift und Papier berechnen.</para> Es ist jedoch "
+"nicht nur das Kodieren einer Vollbild-Aufnahme, die Überlast auf Ihrem "
+"System erzeugen kann. Den gesamten Aufnahmebereich für jedes Einzelbild "
+"vollständig zu erfassen, ist schon für sich genommen eine erhebliche "
+"Aufgabe. Die Verwendung der XDamage Erweiterung kann die resultierenden "
+"Effekte vermeiden helfen, es könnten jedoch Seiteneffekte auftreten. "
+"Vergleichen Sie den entsprechenden Absatz zum Reiter <ulink type=\"help\" "
+"url=\"ghelp:xvidcap?xvidcap-prefs-TBL-set-xdamage\">Allgemeine "
+"Einstellungen</ulink> des Einstellungen Dialogs. <para></para>"
 
-#: ../C/xvidcap.xml:495(phrase)
+#: ../C/xvidcap.xml:507(title)
+msgid "Resize By Dragging"
+msgstr "Größe durch Ziehen ändern"
+
+#: ../C/xvidcap.xml:508(para)
+msgid ""
+"Starting with version 1.1.5, you can also resize the area to capture by "
+"dragging on the edges of the frame while not capturing. Use that feature as "
+"you would resize a normal window."
+msgstr ""
+"Ab Version 1.1.5 können Sie die Größe des Aufnahmebereichs auch durch Ziehen "
+"an den Rändern des Rahmens ändern, wenn gerade nicht aufgenommen wird. "
+"Verwenden Sie die Funktionalität so wie Sie die Größe eines normalen "
+"Fensters ändern."
+
+#: ../C/xvidcap.xml:523(phrase)
 msgid "Edit Button"
 msgstr "Bearbeiten Schaltfläche"
 
-#: ../C/xvidcap.xml:501(para)
+#: ../C/xvidcap.xml:529(para)
 msgid ""
 "The <guilabel>Edit Button</guilabel> calls an external program to edit the "
 "most recently captured frame in single-frame capture mode or the current "
@@ -743,42 +775,42 @@ msgstr ""
 "Beide Einstellungen können durch den <ulink type=\"help\" url=\"ghelp:"
 "xvidcap?xvidcap-prefs-cmd\">Einstellungen Dialog</ulink> geändert werden."
 
-#: ../C/xvidcap.xml:518(title) ../C/xvidcap.xml:522(title)
-#: ../C/xvidcap.xml:528(phrase)
+#: ../C/xvidcap.xml:546(title) ../C/xvidcap.xml:550(title)
+#: ../C/xvidcap.xml:556(phrase)
 msgid "Main Menu"
 msgstr "Hauptmenü"
 
-#: ../C/xvidcap.xml:519(para)
+#: ../C/xvidcap.xml:547(para)
 msgid "A right-click on the filename display pops up the following menu:"
 msgstr ""
 "Ein Click mit der rechten Maustaste auf die Dateinamensanzeige öffnet "
 "folgendes Menü:"
 
-#: ../C/xvidcap.xml:535(title)
+#: ../C/xvidcap.xml:563(title)
 msgid "the main menu's items:"
 msgstr "Punkte des Hauptmenüs"
 
-#: ../C/xvidcap.xml:547(phrase)
+#: ../C/xvidcap.xml:575(phrase)
 msgid "Preferences Menuitem"
 msgstr "Menüpunkt Einstellungen"
 
-#: ../C/xvidcap.xml:553(para)
+#: ../C/xvidcap.xml:581(para)
 msgid "open the preferences dialog"
 msgstr "öffnet den Einstellungen Dialog"
 
-#: ../C/xvidcap.xml:565(phrase)
+#: ../C/xvidcap.xml:593(phrase)
 msgid "Save Preferences Menuitem"
 msgstr "Menüpunkt Einstellungen Speichern"
 
-#: ../C/xvidcap.xml:571(para)
+#: ../C/xvidcap.xml:599(para)
 msgid "save the current settings"
 msgstr "speichert die aktuellen Einstellungen"
 
-#: ../C/xvidcap.xml:575(title)
+#: ../C/xvidcap.xml:603(title)
 msgid "Volatile Settings"
 msgstr "Flüchtige Einstellungen"
 
-#: ../C/xvidcap.xml:576(para)
+#: ../C/xvidcap.xml:604(para)
 msgid ""
 "Note that <application>xvidcap</application> does not save changed "
 "preferences automatically. You can modify settings, exit "
@@ -795,19 +827,19 @@ msgstr ""
 "Er wird Ihre Einstellungen in eine Datei mit dem Namen <filename>.xvidcaprc</"
 "filename> in Ihrem Home-Verzeichnis speichern."
 
-#: ../C/xvidcap.xml:593(phrase)
+#: ../C/xvidcap.xml:621(phrase)
 msgid "Multi-Frame Menuitem"
 msgstr "Menüpunkt Film-Aufnahme"
 
-#: ../C/xvidcap.xml:599(para)
+#: ../C/xvidcap.xml:627(para)
 msgid "select multi-frame capture mode"
 msgstr "wählt die Film-Aufnahme"
 
-#: ../C/xvidcap.xml:603(title)
+#: ../C/xvidcap.xml:631(title)
 msgid "Parallel Settings for Capture Modes"
 msgstr "Parallele Einstellungen für unterschiedliche Arten der Aufnahme."
 
-#: ../C/xvidcap.xml:604(para)
+#: ../C/xvidcap.xml:632(para)
 msgid ""
 "Keep in mind that you can have distinct settings for multi-frame capture and "
 "single-frame capture modes configured and stored in parallel. Choosing this "
@@ -819,23 +851,23 @@ msgstr ""
 "Durch die Auswahl diese Menüpunktes können Sie zwischen den beiden "
 "Aufnahmearten und ihren Einstellungen wechseln."
 
-#: ../C/xvidcap.xml:619(phrase)
+#: ../C/xvidcap.xml:647(phrase)
 msgid "Single-Frame Menuitem"
 msgstr "Menüpunkt Einzelbild-Aufnahme"
 
-#: ../C/xvidcap.xml:625(para)
+#: ../C/xvidcap.xml:653(para)
 msgid "select single-frame capture mode"
 msgstr "wählt die Einzelbild-Aufnahme"
 
-#: ../C/xvidcap.xml:637(phrase)
+#: ../C/xvidcap.xml:665(phrase)
 msgid "Autocontinue Menuitem"
 msgstr "Menüpunkt automatische Aufnahmefortsetzung"
 
-#: ../C/xvidcap.xml:643(para)
+#: ../C/xvidcap.xml:671(para)
 msgid "toggle autocontinue feature on/off"
 msgstr "schaltet diese Funktionalität an oder aus"
 
-#: ../C/xvidcap.xml:646(para)
+#: ../C/xvidcap.xml:674(para)
 msgid ""
 "This is selectable only in multi-frame capture mode and only if the filename "
 "is mutable. Refer to <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-"
@@ -847,15 +879,15 @@ msgstr ""
 "<ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue"
 "\">Aufnahmefortsetzungseinstellungen</ulink>."
 
-#: ../C/xvidcap.xml:661(phrase)
+#: ../C/xvidcap.xml:689(phrase)
 msgid "Make Video Menuitem"
 msgstr "Menüpunkt Video erstellen"
 
-#: ../C/xvidcap.xml:667(para)
+#: ../C/xvidcap.xml:695(para)
 msgid "execute encoding command set in preferences"
 msgstr "führt das in den Einstellungen konfigurierte Kodier-Programm aus"
 
-#: ../C/xvidcap.xml:670(para)
+#: ../C/xvidcap.xml:698(para)
 msgid ""
 "In multi-frame capture mode this is not at all needed and not set by "
 "default. It can, however, be set to allow executing a custom transcoding "
@@ -876,15 +908,15 @@ msgstr ""
 "<ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-cmd\">Befehle</ulink> "
 "im Einstellungen Dialog liefert hierzu weitere Informationen."
 
-#: ../C/xvidcap.xml:688(phrase)
+#: ../C/xvidcap.xml:716(phrase)
 msgid "Animate/Play Menuitem"
 msgstr "Menüpunkt Animieren/Abspielen"
 
-#: ../C/xvidcap.xml:694(para)
+#: ../C/xvidcap.xml:722(para)
 msgid "execute playback command set in preferences"
 msgstr "führt den in den Einstellungen eingerichteten Wiedergabe-Befehl aus"
 
-#: ../C/xvidcap.xml:697(para)
+#: ../C/xvidcap.xml:725(para)
 msgid ""
 "In multi-frame capture mode this is <application>mplayer</application> and "
 "<application>animate</application> (part of ImageMagick) by default. Refer "
@@ -897,35 +929,35 @@ msgstr ""
 "url=\"ghelp:xvidcap?xvidcap-prefs-cmd\">Befehle</ulink> im Einstellungen "
 "Dialog liefert hierzu weitere Informationen."
 
-#: ../C/xvidcap.xml:712(phrase)
+#: ../C/xvidcap.xml:740(phrase)
 msgid "Help Menuitem"
 msgstr "Menüpunkt Hilfe"
 
-#: ../C/xvidcap.xml:718(para)
+#: ../C/xvidcap.xml:746(para)
 msgid "pop up online help"
 msgstr "zeigt die Online Hilfe an"
 
-#: ../C/xvidcap.xml:730(phrase)
+#: ../C/xvidcap.xml:758(phrase)
 msgid "About Menuitem"
 msgstr "Menüpunkt Info"
 
-#: ../C/xvidcap.xml:736(para)
+#: ../C/xvidcap.xml:764(para)
 msgid "pop up <application>xvidcap's</application> about dialog"
 msgstr "zeigt <application>xvidcaps</application> Info Dialog an"
 
-#: ../C/xvidcap.xml:748(phrase)
+#: ../C/xvidcap.xml:776(phrase)
 msgid "Quit Menuitem"
 msgstr "Menüpunkt Beenden"
 
-#: ../C/xvidcap.xml:754(para)
+#: ../C/xvidcap.xml:782(para)
 msgid "exit <application>xvidcap</application>"
 msgstr "beendet <application>xvidcap</application>"
 
-#: ../C/xvidcap.xml:767(title)
+#: ../C/xvidcap.xml:795(title)
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: ../C/xvidcap.xml:769(para)
+#: ../C/xvidcap.xml:797(para)
 msgid ""
 "You can start the Preferences dialog either by right-clicking on the main "
 "control's filename display and selecting <quote>Preferences</quote> or "
@@ -936,12 +968,12 @@ msgstr ""
 "<quote>Einstellungen</quote> oder die Tastenkombination CTRL-P aufrufen. Der "
 "Dialog selbst ist in vier Reiter unterteilt."
 
-#: ../C/xvidcap.xml:776(title) ../C/xvidcap.xml:784(title)
-#: ../C/xvidcap.xml:790(phrase)
+#: ../C/xvidcap.xml:804(title) ../C/xvidcap.xml:812(title)
+#: ../C/xvidcap.xml:818(phrase)
 msgid "General Preferences"
 msgstr "Allgemeine Einstellungen"
 
-#: ../C/xvidcap.xml:778(para)
+#: ../C/xvidcap.xml:806(para)
 msgid ""
 "The first tab of the preferences dialog contains miscellaneous settings "
 "around general behaviour of <application>xvidcap</application>."
@@ -949,11 +981,11 @@ msgstr ""
 "Der erste Reiter des Einstellungen Dialogs enthält diverse Einstellungen "
 "rund um das allgemeine Verhalten von <application>xvidcap</application>."
 
-#: ../C/xvidcap.xml:797(title)
+#: ../C/xvidcap.xml:825(title)
 msgid "the general settings are:"
 msgstr "Die allgemeinen Einstellungen sind:"
 
-#: ../C/xvidcap.xml:809(para)
+#: ../C/xvidcap.xml:837(para)
 msgid ""
 "This setting governs which capture mode is used by <application>xvidcap</"
 "application> by default, i. e. if no other settings give "
@@ -964,54 +996,43 @@ msgstr ""
 "Einstellung <application>xvidcap</application> einen Hinweis bzgl. der "
 "gewünschten Art der Aufnahme gibt."
 
-#: ../C/xvidcap.xml:817(para)
+#: ../C/xvidcap.xml:845(para)
 msgid "Capture Mouse Pointer"
 msgstr "Mauszeiger aufnehmen"
 
-#: ../C/xvidcap.xml:822(para)
-msgid ""
-"Check this to capture mouse pointer position. Once checked, you can select "
-"whether you want to capture a black or a white mouse pointer. This is "
-"required because <application>xvidcap</application> does not have a way of "
-"capturing the real, current mouse pointer, only its position. Therefore "
-"<application>xvidcap</application> generates a dummy mouse pointer in the "
-"captured movie."
-msgstr ""
-"Machen Sie hier einen Haken, wenn die Position des Mauszeigers aufgenommen "
-"werden soll. Danach können Sie noch wählen, ob der Mauszeiger in schwarz "
-"oder weiss aufgenommen werden soll. Dies ist nötig, weil "
-"<application>xvidcap</application> keine Möglichkeit hat, das Aussehen des "
-"echten, aktuellen Mauszeigers zu bestimmen. Es kann nur seine Position "
-"erkennen. Daher erzeugt <application>xvidcap</application> selbst den "
-"Mauszeiger im Ausgabe-Video."
+#: ../C/xvidcap.xml:850(para)
+msgid "Check this to capture the mouse pointer."
+msgstr "Machen Sie hier einen Haken, um den Mauszeiger aufzunehmen."
 
-#: ../C/xvidcap.xml:830(title)
+#: ../C/xvidcap.xml:854(title)
 msgid "Custom Mouse Pointer Shapes"
 msgstr "Spezielle Formen des Mauszeigers"
 
-#: ../C/xvidcap.xml:831(para)
+#: ../C/xvidcap.xml:855(para)
 msgid ""
-"For above mentioned reasons, <application>xvidcap</application> cannot "
-"capture the shape of you mouse pointer. If, therefore, the application "
-"you're capturing changes the shape of your mouse pointer to a specific shape "
-"you will loose that in the captured movie. If the logic of the captured "
-"content heavily relies on this you will want to ensure you either have other "
-"means of showing the mouse pointer shape or elaborate on it in your spoken "
-"comments."
+"Without the XFixes extension to X11, there is no way for "
+"<application>xvidcap</application> to capture the real, current mouse "
+"pointer, only its position. If the extension is not available both on the "
+"machine where <application>xvidcap</application> was built and where it is "
+"run, <application>xvidcap</application> generates a dummy mouse pointer in "
+"the captured movie. In this case you will find a radiobutton next to this "
+"checkbox which allows you to select whether the dummy pointer should be "
+"white or black."
 msgstr ""
-"Aus oben genannten Gründen kann <application>xvidcap</application> nicht die "
-"Form Ihres Mauszeigers aufnehmen. Wenn die Applikation, die Sie aufnehmen "
-"möchten, die Form des Mauszeigers verändert, werden Sie diese Form im "
-"aufgenommenen Video verlieren. Falls die Logik des aufgenommenen Inhalts "
-"stark von diesen Änderungen abhängt, sollte Sie sicherstellen, dass Sie "
-"andere Möglichkeiten haben, die Form des Mauszeigers zu zeigen, oder in "
-"Ihrem gesprochenen Kommentar darauf eingehen."
+"Ohne die XFixes Erweiterung für X11 gibt es für <application>xvidcap</"
+"application> keine Möglichkeit, die Form des tatsächlichen, aktuellen "
+"Mauszeigers festzustellen, sondern nur dessen Position. Wenn die Erweiterung "
+"nicht sowohl während der Übersetzung als auch zur Laufzeit verfügbar war und "
+"ist, erzeugt <application>xvidcap</application> einen generischen Mauszeiger "
+"im aufgenommenen Film. In dem Fall finden Sie einen Auswahlknopf neben "
+"diesem Haken, der es Ihnen ermöglicht, zwischen einem weissen und einem "
+"schwarzen Mauszeiger auszuwählen."
 
-#: ../C/xvidcap.xml:845(para)
+#: ../C/xvidcap.xml:868(para)
 msgid "Save Capture Geometry"
 msgstr "Position des Aufnahmebereich speichern"
 
-#: ../C/xvidcap.xml:850(para)
+#: ../C/xvidcap.xml:873(para)
 msgid ""
 "Check this if you want to store size and position of the currently selected "
 "area to capture along with other preferences on selecting <quote>Save "
@@ -1022,11 +1043,11 @@ msgstr ""
 "abspeichern möchten sobald Sie <quote>Einstellungen Speichern</quote> aus "
 "dem Hauptmenü auswählen."
 
-#: ../C/xvidcap.xml:859(para)
+#: ../C/xvidcap.xml:882(para)
 msgid "Use Shared Memory"
 msgstr "Shared Memory verwenden"
 
-#: ../C/xvidcap.xml:864(para)
+#: ../C/xvidcap.xml:887(para)
 msgid ""
 "Check this if capturing frames should make use of X11's shared memory "
 "extension."
@@ -1034,11 +1055,11 @@ msgstr ""
 "Machen Sie hier einen Haken, wenn die Aufnahme die X11 Erweiterung "
 "<quote>Shared Memory</quote> verwenden soll."
 
-#: ../C/xvidcap.xml:869(title)
+#: ../C/xvidcap.xml:892(title)
 msgid "Shared Memory X11 Access"
 msgstr "<quote>Shared Memory</quote> Zugriff für X11"
 
-#: ../C/xvidcap.xml:870(para)
+#: ../C/xvidcap.xml:893(para)
 msgid ""
 "Use of shared memory is enabled by default if the machine where "
 "<application>xvidcap</application> was built supported shared memory access "
@@ -1053,11 +1074,61 @@ msgstr ""
 "und Client nicht auf dem gleichen Rechner laufen, z. B. auf einem X Terminal "
 "Thin Client."
 
-#: ../C/xvidcap.xml:882(para)
+#: ../C/xvidcap.xml:905(para)
+msgid "Manually Set XDamage"
+msgstr "XDamage Manuell Setzen"
+
+#: ../C/xvidcap.xml:910(para)
+msgid ""
+"Check this if you want to override the decision <application>xvidcap</"
+"application> makes about whether or not to use the XDamage extension to "
+"speed up screen capture. This extension allows <application>xvidcap</"
+"application> to be notified about the portions of the screen that have "
+"changed between individual frames, so it does not need to fetch the complete "
+"area to capture for every frame. <application>xvidcap</application> will "
+"default to using XDamage if it was available at build-time, if it is "
+"available at runtime, and if the window manager used is not compiz or beryl. "
+"If you are using beryl and still want to use the XDamage extension, check "
+"this control to enable the radiobuttons to the right and choose \"enabled\"."
+msgstr ""
+"Ein Haken hier ermöglicht es, sich über die Entscheidung, die "
+"<application>xvidcap</application> hinsichtlich der Verwendung der XDamage "
+"Erweiterung zur Beschleunigung der Aufnahme gefällt hat, hinwegzusetzen. Die "
+"Erweiterung erlaut es <application>xvidcap</application>, über die Teile des "
+"Bildschirms, die sich zwischen zwei Einzelbildern verändert haben, "
+"informiert zu werden. Dann muss nicht für jedes Einzelbild der gesamte "
+"Aufnahmebereich erfasst werden. <application>xvidcap</application> wird "
+"standardmässig XDamage verwenden, wenn es bei der Übersetzung verfügbar war, "
+"zur Laufzeit verfügbar ist und der verwendete Fenster-Manager nicht compiz "
+"oder beryl ist. Wenn Sie beryl verwenden und dennoch die XDamage Erweiterung "
+"verwenden möchten, machen Sie hier einen Haken, um die Auswahlknöpfe rechts "
+"zu aktivieren und \"aktiviert\" auszuwählen."
+
+#: ../C/xvidcap.xml:922(title)
+msgid "XDamage and compiz or beryl"
+msgstr "XDamage und compiz oder beryl"
+
+#: ../C/xvidcap.xml:923(para)
+msgid ""
+"Due to the advanced visual effects possible with compiz, beryl and the "
+"likes, the notifications received by <application>xvidcap</application> "
+"through XDamage may not be sufficient for determining the right screen "
+"portions to capture. You can still force <application>xvidcap</application> "
+"to use it as described above, but your mileage may vary."
+msgstr ""
+"Aufgrund der erweiterten visuellen Effekte, die mit compiz, beryl oder "
+"ähnlichen Fenster-Managern möglich sind, können die Benachrichtigungen, die "
+"<application>xvidcap</application> durch XDamage erhält u. U. nicht "
+"ausreichend sein, um die zu aktualisierenden Bildschirm-Bereiche "
+"festzustellen. Sie können <application>xvidcap</application> wie oben "
+"beschrieben zwingen, die Erweiterung zu verwenden, aber Ihre Ergebnisse "
+"können unterschiedlich ausfallen."
+
+#: ../C/xvidcap.xml:935(para)
 msgid "Autocontinue"
 msgstr "Autocontinue"
 
-#: ../C/xvidcap.xml:887(para)
+#: ../C/xvidcap.xml:940(para)
 msgid ""
 "If recording in multi-frame capture mode and using a maximum number of "
 "frames to capture or a maximum capture duration, <application>xvidcap</"
@@ -1077,11 +1148,11 @@ msgstr ""
 "\"ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name\">hochzählbaren Dateinamen</"
 "ulink> verwenden."
 
-#: ../C/xvidcap.xml:899(para)
+#: ../C/xvidcap.xml:952(para)
 msgid "Always Show Results Dialog"
 msgstr "Ergebnisdialog immer anzeigen"
 
-#: ../C/xvidcap.xml:904(para)
+#: ../C/xvidcap.xml:957(para)
 msgid ""
 "Check this to always show a dialog with an overview of capture results on "
 "stopping a capture session. The dialog will always be shown if required (e. "
@@ -1100,11 +1171,11 @@ msgstr ""
 "vorausgegangenen Aufnahme entfernt haben, können Sie die Anzeige hier wieder "
 "aktivieren."
 
-#: ../C/xvidcap.xml:917(para)
+#: ../C/xvidcap.xml:970(para)
 msgid "Rescale Output Percentage"
 msgstr "Relative Größe für Ausgabe-Verkleinerung"
 
-#: ../C/xvidcap.xml:922(para)
+#: ../C/xvidcap.xml:975(para)
 msgid ""
 "Use this to make the output video smaller than the original size of the "
 "portion of the screen captured. The percentage specified here is the size of "
@@ -1120,12 +1191,23 @@ msgstr ""
 "des ursprünglichen Bildausschnitts. Die Gesamtgröße wird also 25 Prozent des "
 "Originals betragen."
 
-#: ../C/xvidcap.xml:938(title) ../C/xvidcap.xml:946(title)
-#: ../C/xvidcap.xml:952(phrase)
+#: ../C/xvidcap.xml:984(title)
+msgid "Rescale does not work with XWD output"
+msgstr "Ausgabe-Verkleinerung funktioniert nicht mit XWD Ausgabe"
+
+#: ../C/xvidcap.xml:985(para)
+msgid ""
+"Rescaling output frames does work with all output formats and codecs other "
+"than XWD."
+msgstr ""
+"Die Ausgabe-Verkleinerung funktioniert mit allen Ausgabe-Formaten ausser XWD."
+
+#: ../C/xvidcap.xml:998(title) ../C/xvidcap.xml:1006(title)
+#: ../C/xvidcap.xml:1012(phrase)
 msgid "Single-Frame Capture Preferences"
 msgstr "Einstellungen Einzelbild-Aufnahme"
 
-#: ../C/xvidcap.xml:940(para)
+#: ../C/xvidcap.xml:1000(para)
 msgid ""
 "This tab contains the settings for single-frame capture mode. Because single-"
 "frame capture mode does not support audio capture, only video settings are "
@@ -1135,15 +1217,15 @@ msgstr ""
 "diese Art der Aufnahme keinen Ton unterstützt, werden hier nur Video "
 "Parameter angezeigt."
 
-#: ../C/xvidcap.xml:959(title)
+#: ../C/xvidcap.xml:1019(title)
 msgid "the single-frame capture mode settings are:"
 msgstr "Die möglichen Einstellungen für Einzelbild-Aufnahme sind:"
 
-#: ../C/xvidcap.xml:966(para) ../C/xvidcap.xml:1123(para)
+#: ../C/xvidcap.xml:1026(para) ../C/xvidcap.xml:1192(para)
 msgid "File Name"
 msgstr "Dateiname"
 
-#: ../C/xvidcap.xml:971(para)
+#: ../C/xvidcap.xml:1031(para)
 msgid ""
 "Enter a file name pattern here to use for saving the individual frames "
 "captured. The file name must contain a pattern that will be replaced by the "
@@ -1160,11 +1242,11 @@ msgstr ""
 "Dateiname, der diese Art von Muster enthält, wird im weiteren Verlauf "
 "<quote>hochzählbar</quote> genannt."
 
-#: ../C/xvidcap.xml:981(title)
+#: ../C/xvidcap.xml:1041(title)
 msgid "File Name Selection"
 msgstr "Dateiauswahl"
 
-#: ../C/xvidcap.xml:982(para)
+#: ../C/xvidcap.xml:1042(para)
 msgid ""
 "Instead of typing in a filename you can also click on the file selector "
 "button (<guibutton>...</guibutton>). Be sure to put a numeric pattern in the "
@@ -1176,11 +1258,11 @@ msgstr ""
 "ein Muster für die Nummer des Einzelbildes einzufügen. Im Zweifel verwenden "
 "Sie einfach <quote>%5d</quote> irgendwo im Dateinamen."
 
-#: ../C/xvidcap.xml:993(para) ../C/xvidcap.xml:1140(para)
+#: ../C/xvidcap.xml:1053(para) ../C/xvidcap.xml:1209(para)
 msgid "File Format"
 msgstr "Ausgabeformat"
 
-#: ../C/xvidcap.xml:998(para)
+#: ../C/xvidcap.xml:1058(para)
 msgid ""
 "A check in the <guilabel>auto</guilabel> checkbox makes "
 "<application>xvidcap</application> automatically select an appropriate "
@@ -1198,43 +1280,43 @@ msgstr ""
 "manuelle Auswahl eines Formats, die ggf. <application>xvidcaps</application> "
 "Entscheidung schlägt."
 
-#: ../C/xvidcap.xml:1011(para) ../C/xvidcap.xml:1176(para)
+#: ../C/xvidcap.xml:1071(para) ../C/xvidcap.xml:1245(para)
 msgid "Frames per Second"
 msgstr "Bilder pro Sekunde"
 
-#: ../C/xvidcap.xml:1016(para)
+#: ../C/xvidcap.xml:1076(para)
 msgid "The number of frames to capture per second."
 msgstr "Die Anzahl der pro Sekunde aufzunehmenden Einzelbilder"
 
-#: ../C/xvidcap.xml:1023(para) ../C/xvidcap.xml:1190(para)
+#: ../C/xvidcap.xml:1083(para) ../C/xvidcap.xml:1259(para)
 msgid "Maximum Time"
 msgstr "Dauer Maximal"
 
-#: ../C/xvidcap.xml:1028(para) ../C/xvidcap.xml:1195(para)
+#: ../C/xvidcap.xml:1088(para) ../C/xvidcap.xml:1264(para)
 msgid "Maximum time to record in seconds"
 msgstr "Maximale Aufnahmedauer in Sekunden"
 
-#: ../C/xvidcap.xml:1035(para) ../C/xvidcap.xml:1202(para)
+#: ../C/xvidcap.xml:1095(para) ../C/xvidcap.xml:1271(para)
 msgid "Maximum Frames"
 msgstr "Bilder Maximal"
 
-#: ../C/xvidcap.xml:1040(para) ../C/xvidcap.xml:1207(para)
+#: ../C/xvidcap.xml:1100(para) ../C/xvidcap.xml:1276(para)
 msgid "Maximum frames to capture"
 msgstr "Maximale Anzahl aufzunehmender Einzelbilder"
 
-#: ../C/xvidcap.xml:1047(para)
+#: ../C/xvidcap.xml:1107(para)
 msgid "Frame Start Number"
 msgstr "Startnummer Bildnummerierung"
 
-#: ../C/xvidcap.xml:1052(para)
+#: ../C/xvidcap.xml:1112(para)
 msgid "Start counting frames with this number"
 msgstr "Die Nummerierung der Einzelbilder mit dieser Nummer beginnen"
 
-#: ../C/xvidcap.xml:1059(para)
+#: ../C/xvidcap.xml:1119(para)
 msgid "Frame Number Increment"
 msgstr "Einzelbilder hochzählen um"
 
-#: ../C/xvidcap.xml:1064(para)
+#: ../C/xvidcap.xml:1124(para)
 msgid ""
 "When capturing increment the frame count by the specified number for each "
 "frame captured."
@@ -1242,11 +1324,11 @@ msgstr ""
 "Zähle bei der Aufnahme die Bildnummerierung für jedes aufgenommene Bild "
 "jeweils um die angegene Zahl hoch."
 
-#: ../C/xvidcap.xml:1069(title)
+#: ../C/xvidcap.xml:1129(title)
 msgid "Deprecated Settings"
 msgstr "Veraltete Einstellungen"
 
-#: ../C/xvidcap.xml:1070(para)
+#: ../C/xvidcap.xml:1130(para)
 msgid ""
 "Due to the limited use of <quote>Frame Start Number</quote> and <quote>Frame "
 "Number Increment</quote> those settings may go away in future versions."
@@ -1255,28 +1337,43 @@ msgstr ""
 "quote> und <quote>Einzelbilder hochzählen um</quote> könnten diese "
 "Einstellungen in zukünftigen Versionen verschwinden."
 
-#: ../C/xvidcap.xml:1080(para) ../C/xvidcap.xml:1214(para)
+#: ../C/xvidcap.xml:1140(para) ../C/xvidcap.xml:1283(para)
 msgid "Quality"
 msgstr "Qualität"
 
-#: ../C/xvidcap.xml:1085(para) ../C/xvidcap.xml:1219(para)
+#: ../C/xvidcap.xml:1145(para) ../C/xvidcap.xml:1288(para)
 msgid "Desired output quality"
 msgstr "Erwünschte Qualität des Ausgabevideos"
 
-#: ../C/xvidcap.xml:1096(title) ../C/xvidcap.xml:1103(title)
-#: ../C/xvidcap.xml:1109(phrase)
+#: ../C/xvidcap.xml:1149(title) ../C/xvidcap.xml:1292(title)
+msgid "Quality Setting changed in 1.1.5"
+msgstr "Geänderte Qualitäts-Einstellungen in 1.1.5"
+
+#: ../C/xvidcap.xml:1150(para)
+msgid ""
+"The effect of setting quality to a value below 100 % has changed in "
+"<application>xvidcap</application> 1.1.5. Be sure to test the values in your "
+"stored preferences. Quality settings do not apply to XWD output."
+msgstr ""
+"Die Wirkung eines Qualitäts-Werts unter 100 % hat sich in "
+"<application>xvidcap</application> 1.1.5 geändert. Testen Sie die Werte in "
+"Ihren gespeicherten Einstellungen. Qualitäts-Einstellungen haben keine "
+"Auswirkung auf XWD Ausgabe."
+
+#: ../C/xvidcap.xml:1165(title) ../C/xvidcap.xml:1172(title)
+#: ../C/xvidcap.xml:1178(phrase)
 msgid "Multi-Frame Capture Preferences"
 msgstr "Einstellungen Film-Aufnahme"
 
-#: ../C/xvidcap.xml:1098(para)
+#: ../C/xvidcap.xml:1167(para)
 msgid "This tab contains the settings for multi-frame capture mode."
 msgstr "Dieser Reiter enthält die Einstellungen für die Film-Aufnahme"
 
-#: ../C/xvidcap.xml:1116(title)
+#: ../C/xvidcap.xml:1185(title)
 msgid "the multi-frame capture mode video settings are:"
 msgstr "Die Einstellungen für die Film-Aufnahme sind:"
 
-#: ../C/xvidcap.xml:1128(para)
+#: ../C/xvidcap.xml:1197(para)
 msgid ""
 "Enter a file name or file name pattern here to use for saving the individual "
 "frames captured. For multi-frame capture the string supplied here only needs "
@@ -1295,7 +1392,7 @@ msgstr ""
 "soll. Anderenfalls ist ein einfacher Dateiname hier ausreichend, der auch "
 "über den Auswahldialog (<guibutton>...</guibutton>) bestimmt werden kann."
 
-#: ../C/xvidcap.xml:1145(para)
+#: ../C/xvidcap.xml:1214(para)
 msgid ""
 "A check in the <guilabel>auto</guilabel> checkbox makes "
 "<application>xvidcap</application> automatically select an appropriate "
@@ -1313,11 +1410,11 @@ msgstr ""
 "manuelle Auswahl eines Formats, die ggf. <application>xvidcaps</application> "
 "Entscheidung schlägt."
 
-#: ../C/xvidcap.xml:1158(para)
+#: ../C/xvidcap.xml:1227(para)
 msgid "Video Codec"
 msgstr "Video Codec"
 
-#: ../C/xvidcap.xml:1163(para)
+#: ../C/xvidcap.xml:1232(para)
 msgid ""
 "A check in the <guilabel>auto</guilabel> checkbox makes "
 "<application>xvidcap</application> automatically select an appropriate video "
@@ -1335,7 +1432,7 @@ msgstr ""
 "erlaubt die Auswahlliste eine manuelle Auswahl eines Codecs, die ggf. "
 "<application>xvidcaps</application> Entscheidung schlägt."
 
-#: ../C/xvidcap.xml:1181(para)
+#: ../C/xvidcap.xml:1250(para)
 msgid ""
 "The number of frames to capture per second. This control can either be a "
 "scale or a dropdown menu, if the selected codec only supports certain frame "
@@ -1345,23 +1442,45 @@ msgstr ""
 "entweder ein Schieberegler oder eine Auswahlliste sein, jenachdem welche "
 "Bildraten der ausgewählte Codec zulässt."
 
-#: ../C/xvidcap.xml:1229(title)
+#: ../C/xvidcap.xml:1293(para)
+msgid ""
+"The effect of setting quality to a value below 100 % has changed in "
+"<application>xvidcap</application> 1.1.5. Be sure to test the values in your "
+"stored preferences. In the past a quality setting of <quote>20</quote> could "
+"yield good results depending on the codec chosen. This is no longer the "
+"case. A setting of <quote>75</quote> may be acceptable to you, a value of "
+"<quote>85</quote> will typically be. A video resulting from a capture with a "
+"quality setting of <quote>90</quote> will not normally be easy to "
+"distinguish from one captured at <quote>100</quote> percent quality."
+msgstr ""
+"Die Wirkung eines Qualitäts-Werts unter 100 % hat sich in "
+"<application>xvidcap</application> 1.1.5 geändert. Testen Sie die Werte in "
+"Ihren gespeicherten Einstellungen. In der Vergangenheit konnte ein Wert für "
+"Qualität von <quote>20</quote>, in Abhängigkeit vom gewählten Codec, gute "
+"Ergebnisse erzielen. Das ist nun nicht mehr der Fall. Ein Wert von "
+"<quote>75</quote> mag akzeptable sein, <quote>85</quote> wird es "
+"üblicherweise sein. Ein Video, welches mit einem Qualitäts-Wert von "
+"<quote>90</quote> aufgenommen wurde, wird nomalerweise kaum von einem zu "
+"unterscheiden sein, welches bei <quote>100</quote> Prozent Qualität "
+"aufgenommen wurde."
+
+#: ../C/xvidcap.xml:1312(title)
 msgid "the multi-frame capture mode audio settings are:"
 msgstr "Die Ton-Einstellungen für die Film-Aufnahme sind:"
 
-#: ../C/xvidcap.xml:1236(para)
+#: ../C/xvidcap.xml:1319(para)
 msgid "Enable Audio"
 msgstr "Ton aufnehmen"
 
-#: ../C/xvidcap.xml:1241(para)
+#: ../C/xvidcap.xml:1324(para)
 msgid "Check this to capture audio along with video frames."
 msgstr "Machen Sie hier einen Haken, um mit den Bildern auch Ton aufzunehmen."
 
-#: ../C/xvidcap.xml:1248(para)
+#: ../C/xvidcap.xml:1331(para)
 msgid "Input Device"
 msgstr "Eingangs-Gerät"
 
-#: ../C/xvidcap.xml:1253(para)
+#: ../C/xvidcap.xml:1336(para)
 msgid ""
 "Type in the name of the input device to caputer audio from or select it "
 "through the file selector button (<guibutton>...</guibutton>)."
@@ -1370,11 +1489,11 @@ msgstr ""
 "aufgenommen werden soll oder wählen Sie es durch den Auswahldialog "
 "(<guibutton>...</guibutton>)."
 
-#: ../C/xvidcap.xml:1261(para)
+#: ../C/xvidcap.xml:1344(para)
 msgid "Audio Codec"
 msgstr "Audio Codec"
 
-#: ../C/xvidcap.xml:1266(para)
+#: ../C/xvidcap.xml:1349(para)
 msgid ""
 "A check in the <guilabel>auto</guilabel> checkbox makes "
 "<application>xvidcap</application> automatically select an appropriate audio "
@@ -1392,11 +1511,11 @@ msgstr ""
 "manuelle Auswahl eines Audio Codecs, die ggf. <application>xvidcaps</"
 "application> Entscheidung schlägt."
 
-#: ../C/xvidcap.xml:1279(para)
+#: ../C/xvidcap.xml:1362(para)
 msgid "Sample Rate"
 msgstr "Abtastrate"
 
-#: ../C/xvidcap.xml:1284(para)
+#: ../C/xvidcap.xml:1367(para)
 msgid ""
 "Audio sample rate. If you're using piped input audio the audio stream is "
 "resampled to the specified rate if required."
@@ -1405,11 +1524,11 @@ msgstr ""
 "Eingang verwenden, wird das Eingangssignal gemäß der hier eingestellten Rate "
 "neu abgetastet."
 
-#: ../C/xvidcap.xml:1289(title)
+#: ../C/xvidcap.xml:1372(title)
 msgid "Piped Audio Input"
 msgstr "Ton Eingang durch eine <quote>pipe</quote>"
 
-#: ../C/xvidcap.xml:1290(para)
+#: ../C/xvidcap.xml:1373(para)
 msgid ""
 "Instead of capturing audio from a real-time audio source, you can also pipe "
 "a pre-recorded audio file to <application>xvidcap</application>. This way "
@@ -1421,7 +1540,7 @@ msgstr ""
 "vorhandene Audio-Datei geben. Auf diese Art können Sie Ihre Aufnahme mit "
 "einer gegebenen Ton-Spur unterlegen. Um dies zu erreichen, tun Sie folgendes:"
 
-#: ../C/xvidcap.xml:1296(para)
+#: ../C/xvidcap.xml:1379(para)
 msgid ""
 "<application>cat</application> my.mp3 | <application>xvidcap</"
 "application><parameter>--mf</parameter><parameter>--audio yes</"
@@ -1433,7 +1552,7 @@ msgstr ""
 "parameter><parameter>--audio_in -</parameter><parameter>--file test.avi</"
 "parameter>"
 
-#: ../C/xvidcap.xml:1301(para)
+#: ../C/xvidcap.xml:1384(para)
 msgid ""
 "When you start the recording session in <application>xvidcap</application> "
 "it will sample audio from the piped file."
@@ -1441,11 +1560,11 @@ msgstr ""
 "Sobald Sie nun Ihre Aufnahmesitzung starten, wird <application>xvidcap</"
 "application> den Ton aus der angegebenen Datei aufnehmen."
 
-#: ../C/xvidcap.xml:1310(para)
+#: ../C/xvidcap.xml:1393(para)
 msgid "Bit Rate"
 msgstr "Bit Rate"
 
-#: ../C/xvidcap.xml:1315(para)
+#: ../C/xvidcap.xml:1398(para)
 msgid ""
 "Audio bit rate. If you're using piped input audio the audio stream is "
 "resampled to the specified rate if required."
@@ -1454,11 +1573,11 @@ msgstr ""
 "Eingang verwenden, wird das Eingangssignal gemäß der hier eingestellten Rate "
 "neu abgetastet."
 
-#: ../C/xvidcap.xml:1323(para)
+#: ../C/xvidcap.xml:1406(para)
 msgid "Channels"
 msgstr "Kanäle"
 
-#: ../C/xvidcap.xml:1328(para)
+#: ../C/xvidcap.xml:1411(para)
 msgid ""
 "Number of audio channels. If you're using piped input audio the audio stream "
 "is resampled to the specified number of channels if required."
@@ -1467,11 +1586,11 @@ msgstr ""
 "als Ton Eingang verwenden, wird das Eingangssignal gemäß der hier "
 "eingestellten Rate neu abgetastet."
 
-#: ../C/xvidcap.xml:1333(title)
+#: ../C/xvidcap.xml:1416(title)
 msgid "Audio Capture Quality"
 msgstr "Qualität der Ton-Aufnahme"
 
-#: ../C/xvidcap.xml:1334(para)
+#: ../C/xvidcap.xml:1417(para)
 msgid ""
 "Note that the default settings are optimized for size rather than quality. "
 "For better quality you will probably want to double sample- and bit rate and "
@@ -1482,12 +1601,12 @@ msgstr ""
 "Ton-Qualität zu erreichen, werden Sie wahrscheinlich die Abtast- und Bit "
 "Rate verdoppeln wollen, womöglich auch die Anzahl der Ton Kanäle."
 
-#: ../C/xvidcap.xml:1349(title) ../C/xvidcap.xml:1357(title)
-#: ../C/xvidcap.xml:1363(phrase)
+#: ../C/xvidcap.xml:1432(title) ../C/xvidcap.xml:1440(title)
+#: ../C/xvidcap.xml:1446(phrase)
 msgid "Command Preferences"
 msgstr "Einstellungen Befehle"
 
-#: ../C/xvidcap.xml:1351(para)
+#: ../C/xvidcap.xml:1434(para)
 msgid ""
 "This tab contains various settings regarding which commands to execute for "
 "certain actions."
@@ -1495,15 +1614,15 @@ msgstr ""
 "Dieser Reiter enthält diverse Einstellungen hinsichtlich der Befehle, die "
 "für verschiedene Tätigkeiten ausgeführt werden."
 
-#: ../C/xvidcap.xml:1370(title)
+#: ../C/xvidcap.xml:1453(title)
 msgid "possible commands to set are:"
 msgstr "Konfigurierbare Befehle sind:"
 
-#: ../C/xvidcap.xml:1377(para)
+#: ../C/xvidcap.xml:1460(para)
 msgid "Single Frame Playback Command"
 msgstr "Wiedergabe-Befehl für Einzelbild-Aufnahme"
 
-#: ../C/xvidcap.xml:1382(para)
+#: ../C/xvidcap.xml:1465(para)
 msgid ""
 "The command specified here is executed when the item <guimenuitem>Animate / "
 "Play</guimenuitem> is selected from the main menu or the play button is "
@@ -1513,11 +1632,11 @@ msgstr ""
 "Menüpunkt <guimenuitem>Animieren / Abspielen</guimenuitem> ausgewählt wird "
 "oder die Wiedergabe Schaltfläche im Ergebnisdialog angeclickt wird."
 
-#: ../C/xvidcap.xml:1388(title)
+#: ../C/xvidcap.xml:1471(title)
 msgid "Specifying Commands"
 msgstr "Befehle angeben"
 
-#: ../C/xvidcap.xml:1389(para)
+#: ../C/xvidcap.xml:1472(para)
 msgid ""
 "Any command can be configured here. It could theoretically be completely "
 "unrelated to video capture. You will always want to make sure that the "
@@ -1533,7 +1652,7 @@ msgstr ""
 "<application>xvidcap</application> auf das Beenden der aufgerufenen "
 "Anwendung wartet, bevor es selbst die Ausführung fortsetzt."
 
-#: ../C/xvidcap.xml:1397(para)
+#: ../C/xvidcap.xml:1480(para)
 msgid ""
 "<application>xvidcap</application> makes the following environment variables "
 "available to the called application:"
@@ -1541,63 +1660,63 @@ msgstr ""
 "<application>xvidcap</application> stellt die folgenden Umgebungsvariablen "
 "für die aufgerufene Anwendung zur Verfügung."
 
-#: ../C/xvidcap.xml:1406(para)
+#: ../C/xvidcap.xml:1489(para)
 msgid "XVFFRAME"
 msgstr "XVFFRAME"
 
-#: ../C/xvidcap.xml:1411(para)
+#: ../C/xvidcap.xml:1494(para)
 msgid "number of the first frame captured"
 msgstr "Nummer des ersten aufgenommenen Einzelbildes"
 
-#: ../C/xvidcap.xml:1418(para)
+#: ../C/xvidcap.xml:1501(para)
 msgid "XVLFRAME"
 msgstr "XVLFRAME"
 
-#: ../C/xvidcap.xml:1423(para)
+#: ../C/xvidcap.xml:1506(para)
 msgid "number of the last frame captured"
 msgstr "Nummer des letzten aufgenommenen Einzelbildes"
 
-#: ../C/xvidcap.xml:1430(para)
+#: ../C/xvidcap.xml:1513(para)
 msgid "XVWIDTH"
 msgstr "XVWIDTH"
 
-#: ../C/xvidcap.xml:1435(para)
+#: ../C/xvidcap.xml:1518(para)
 msgid "width of the area captured"
 msgstr "Breite des aufgenommenen Bildbereichs"
 
-#: ../C/xvidcap.xml:1442(para)
+#: ../C/xvidcap.xml:1525(para)
 msgid "XVHEIGHT"
 msgstr "XVHEIGHT"
 
-#: ../C/xvidcap.xml:1447(para)
+#: ../C/xvidcap.xml:1530(para)
 msgid "height of the area captured"
 msgstr "Höhe des aufgenommenen Bildbereichs"
 
-#: ../C/xvidcap.xml:1454(para)
+#: ../C/xvidcap.xml:1537(para)
 msgid "XVFPS"
 msgstr "XVFPS"
 
-#: ../C/xvidcap.xml:1459(para)
+#: ../C/xvidcap.xml:1542(para)
 msgid "desired (!) frame rate"
 msgstr "Erwünschte (!) Bildrate"
 
-#: ../C/xvidcap.xml:1466(para)
+#: ../C/xvidcap.xml:1549(para)
 msgid "XVTIME"
 msgstr "XVTIME"
 
-#: ../C/xvidcap.xml:1471(para)
+#: ../C/xvidcap.xml:1554(para)
 msgid "desired (!) time per frame"
 msgstr "Erwünschte Zeit pro Einzelbild"
 
-#: ../C/xvidcap.xml:1478(para)
+#: ../C/xvidcap.xml:1561(para)
 msgid "XVFILE"
 msgstr "XVFILE"
 
-#: ../C/xvidcap.xml:1483(para)
+#: ../C/xvidcap.xml:1566(para)
 msgid "file name"
 msgstr "Dateiname"
 
-#: ../C/xvidcap.xml:1491(para)
+#: ../C/xvidcap.xml:1574(para)
 msgid ""
 "The file name, however, needs special treatment for single-frame capture. "
 "Here the pattern used for <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-"
@@ -1626,11 +1745,11 @@ msgstr ""
 "xvidcap-prefs-TBL-autocontinue\">automatische Aufnahmefortsetzung</ulink> "
 "verwendet wird."
 
-#: ../C/xvidcap.xml:1508(para)
+#: ../C/xvidcap.xml:1591(para)
 msgid "Single Frame Encoding command"
 msgstr "Befehl zum Enkodieren für die Einzelbild-Aufnahme"
 
-#: ../C/xvidcap.xml:1513(para)
+#: ../C/xvidcap.xml:1596(para)
 msgid ""
 "The command here is executed when the main menu's <guimenuitem>Make Video</"
 "guimenuitem> item is selected while in single-frame capture mode."
@@ -1638,11 +1757,11 @@ msgstr ""
 "Dieser Befehl wird ausgeführt, wenn nach einer Einzelbild-Aufnahme aus dem "
 "Hautpmenü <guimenuitem>Video erstellen</guimenuitem> ausgewählt wird."
 
-#: ../C/xvidcap.xml:1521(para)
+#: ../C/xvidcap.xml:1604(para)
 msgid "Single Frame Edit Command"
 msgstr "Befehl zum Bearbeiten"
 
-#: ../C/xvidcap.xml:1526(para)
+#: ../C/xvidcap.xml:1609(para)
 msgid ""
 "The command here is executed when the main control's <guibutton>Edit Button</"
 "guibutton> is clicked while in single-frame capture mode."
@@ -1651,11 +1770,11 @@ msgstr ""
 "Bedienfenster die Schaltfläche <guibutton>Bearbeiten</guibutton> angeclickt "
 "wird."
 
-#: ../C/xvidcap.xml:1534(para)
+#: ../C/xvidcap.xml:1617(para)
 msgid "Multi Frame Playback Command"
 msgstr "Wiedergabe-Befehl für Film-Aufnahme"
 
-#: ../C/xvidcap.xml:1539(para)
+#: ../C/xvidcap.xml:1622(para)
 msgid ""
 "The command specified here is executed when the item <guimenuitem>Animate / "
 "Play</guimenuitem> is selected from the main menu or the play button is "
@@ -1665,11 +1784,11 @@ msgstr ""
 "<guimenuitem>Animieren / Abspielen</guimenuitem> ausgewählt wird oder die "
 "Wiedergabe Schaltfläche im Ergebnisdialog angeclickt wird."
 
-#: ../C/xvidcap.xml:1548(para)
+#: ../C/xvidcap.xml:1631(para)
 msgid "Multi Frame Transcoding command"
 msgstr "Befehl zum Transkodieren für Film-Aufnahme"
 
-#: ../C/xvidcap.xml:1553(para)
+#: ../C/xvidcap.xml:1636(para)
 msgid ""
 "The command here is executed when the main menu's <guimenuitem>Make Video</"
 "guimenuitem> item is selected while in multi-frame capture mode."
@@ -1677,11 +1796,11 @@ msgstr ""
 "Dieser Befehl wird ausgeführt, wenn nach einer Film-Aufnahme aus dem "
 "Hautpmenü <guimenuitem>Video erstellen</guimenuitem> ausgewählt wird."
 
-#: ../C/xvidcap.xml:1561(para)
+#: ../C/xvidcap.xml:1644(para)
 msgid "Multi Frame Edit Command"
 msgstr "Befehl zum Bearbeiten für Film-Aufnahme"
 
-#: ../C/xvidcap.xml:1566(para)
+#: ../C/xvidcap.xml:1649(para)
 msgid ""
 "The command here is executed when the main control's <guibutton>Edit Button</"
 "guibutton> is clicked while in multi-frame capture mode."
@@ -1690,11 +1809,11 @@ msgstr ""
 "Bedienfenster die Schaltfläche <guibutton>Bearbeiten</guibutton> angeclickt "
 "wird."
 
-#: ../C/xvidcap.xml:1579(title)
+#: ../C/xvidcap.xml:1662(title)
 msgid "Capture Results Dialog"
 msgstr "Aufnahme Ergebnisdialog"
 
-#: ../C/xvidcap.xml:1581(para)
+#: ../C/xvidcap.xml:1664(para)
 msgid ""
 "When you first stop a recording session, a dialog will pop up displaying the "
 "results of the capture session. This popup can be prevented from appearing "
@@ -1710,7 +1829,7 @@ msgstr ""
 "xvidcap?xvidcap-prefs-TBL-always-show-results\">Ergebnisdialog immer "
 "anzeigen</ulink> entfernt wird."
 
-#: ../C/xvidcap.xml:1588(para)
+#: ../C/xvidcap.xml:1671(para)
 msgid ""
 "The dialog itself can take one of two forms depending on whether or not you "
 "configured <application>xvidcap</application> to ask you for a target file "
@@ -1720,11 +1839,11 @@ msgstr ""
 "ob <application>xvidcap</application> so eingestellt ist, dass es erst nach "
 "der Aufnahme nach einem Dateinamen für die Ausgabe fragt."
 
-#: ../C/xvidcap.xml:1593(title)
+#: ../C/xvidcap.xml:1676(title)
 msgid "Ask User For File Name"
 msgstr "Anwender nach Dateinamen fragen"
 
-#: ../C/xvidcap.xml:1594(para)
+#: ../C/xvidcap.xml:1677(para)
 msgid ""
 "For the time being, the only way to configure <application>xvidcap</"
 "application> to ask the user to specify a file name after the capture rather "
@@ -1747,7 +1866,7 @@ msgstr ""
 "speichern, die dann später umbenannt oder verschoben werden kann. Diese "
 "Funktion funktioniert nicht mit der automatischen Aufnahmefortsetzung."
 
-#: ../C/xvidcap.xml:1606(para)
+#: ../C/xvidcap.xml:1689(para)
 msgid ""
 "If <application>xvidcap</application> is configured to ask the user for a "
 "file name, the results dialog will look like this:"
@@ -1756,11 +1875,11 @@ msgstr ""
 "Anwender nachträglich nach einem Dateinamen fragt, sieht der Ergebnisdialog "
 "wie folgt aus:"
 
-#: ../C/xvidcap.xml:1611(title) ../C/xvidcap.xml:1617(phrase)
+#: ../C/xvidcap.xml:1694(title) ../C/xvidcap.xml:1700(phrase)
 msgid "Capture Results Dialog with Ask User For File name"
 msgstr "Aufnahme Ergebnisdialog mit Anwender nach Dateinamen fragen"
 
-#: ../C/xvidcap.xml:1623(para)
+#: ../C/xvidcap.xml:1706(para)
 msgid ""
 "Besides the overview of the used settings and information about the desired "
 "and achieved frame rates, you can select name and location of the file you "
@@ -1782,19 +1901,19 @@ msgstr ""
 "letzteres die temporäre Datei nicht augenblicklich löscht. Sie könnte aber "
 "bei einer weiteren Aufnahme überschreiben werden."
 
-#: ../C/xvidcap.xml:1633(para)
+#: ../C/xvidcap.xml:1716(para)
 msgid "Normally, the results dialog will look like this:"
 msgstr "Üblicherweise sieht der Ergebnisdialog wie folgt aus:"
 
-#: ../C/xvidcap.xml:1637(title) ../C/xvidcap.xml:1643(phrase)
+#: ../C/xvidcap.xml:1720(title) ../C/xvidcap.xml:1726(phrase)
 msgid "Normal Capture Results Dialog"
 msgstr "Allgemeiner Aufnahme Ergebnisdialog"
 
-#: ../C/xvidcap.xml:1652(title)
+#: ../C/xvidcap.xml:1735(title)
 msgid "The Preferences Warning Dialog"
 msgstr "Der Dialog mit Warnungen aufgrund gewählter Einstellungen"
 
-#: ../C/xvidcap.xml:1653(para)
+#: ../C/xvidcap.xml:1736(para)
 msgid ""
 "Whenever <application>xvidcap</application> determines that the settings you "
 "have chosen will not work well, it will display those issues in a "
@@ -1808,15 +1927,15 @@ msgstr ""
 "application> nicht mit dem Parameter <parameter>--gui no</parameter> "
 "starten, wird es den folgenden Dialog anzeigen."
 
-#: ../C/xvidcap.xml:1661(title) ../C/xvidcap.xml:1667(phrase)
+#: ../C/xvidcap.xml:1744(title) ../C/xvidcap.xml:1750(phrase)
 msgid "Preferences Warning Dialog"
 msgstr "Der Dialog mit Warnungen aufgrund gewählter Einstellungen"
 
-#: ../C/xvidcap.xml:1674(title)
+#: ../C/xvidcap.xml:1757(title)
 msgid "GUI-less operation"
 msgstr "Verwendung ohne Benutzeroberfläche"
 
-#: ../C/xvidcap.xml:1675(para)
+#: ../C/xvidcap.xml:1758(para)
 msgid ""
 "When running from the command line with the <parameter>--gui no</parameter> "
 "parameter, those warnings will be displayed in plain text on the terminal. "
@@ -1828,17 +1947,17 @@ msgstr ""
 "die <quote>Details</quote> nur sehen, wenn Sie auch den Parameter "
 "<parameter>-v</parameter> angeben."
 
-#: ../C/xvidcap.xml:1683(title)
+#: ../C/xvidcap.xml:1766(title)
 msgid "There are a few situations in which such messages can be displayed:"
 msgstr ""
 "Es gibt eine Reihe von Situationen, in denen derartige Meldungen angezeigt "
 "werden können:"
 
-#: ../C/xvidcap.xml:1690(para)
+#: ../C/xvidcap.xml:1773(para)
 msgid "On start"
 msgstr "Beim Start"
 
-#: ../C/xvidcap.xml:1693(para)
+#: ../C/xvidcap.xml:1776(para)
 msgid ""
 "When <application>xvidcap</application> is started, it checks the "
 "consistency of the settings for the current capture mode and will report on "
@@ -1851,7 +1970,7 @@ msgstr ""
 "Dialog nicht einfach abbrechen können, sondern müssen Ihre Einstellungen "
 "manuell korrigieren."
 
-#: ../C/xvidcap.xml:1699(para)
+#: ../C/xvidcap.xml:1782(para)
 msgid ""
 "<application>xvidcap</application><emphasis>only</emphasis> checks on the "
 "current capture mode and will not care about inconsistencies with the "
@@ -1862,11 +1981,11 @@ msgstr ""
 "um Inkonsistenzen der jeweiligen anderen Art der Aufnahme kümmern. Daher "
 "kann es zur zweiten Situation kommen."
 
-#: ../C/xvidcap.xml:1709(para)
+#: ../C/xvidcap.xml:1792(para)
 msgid "On change of capture mode"
 msgstr "Bei Änderung der gewählten Art der Aufnahme"
 
-#: ../C/xvidcap.xml:1712(para)
+#: ../C/xvidcap.xml:1795(para)
 msgid ""
 "If you change the current capture mode through the <ulink type=\"help\" url="
 "\"ghelp:xvidcap?menu xvidcap-menu-TBL-mf\">menu</ulink><application>xvidcap</"
@@ -1881,11 +2000,11 @@ msgstr ""
 "berichten. Wenn Sie den Dialog abbrechen, werden Sie zur vorherigen Art der "
 "Aufnahme zurückkehren."
 
-#: ../C/xvidcap.xml:1724(para)
+#: ../C/xvidcap.xml:1807(para)
 msgid "When submitting changed preferences"
 msgstr "Beim Bestätigen des Einstellungen Dialogs"
 
-#: ../C/xvidcap.xml:1727(para)
+#: ../C/xvidcap.xml:1810(para)
 msgid ""
 "When you leave the preferences dialog <application>xvidcap</application> "
 "will check the settings for both capture modes. Cancelling the warning "
@@ -1896,7 +2015,7 @@ msgstr ""
 "Sie einen ggf. erscheinenden Dialog ab, kehren Sie zum Einstellungen Dialog "
 "zurück."
 
-#: ../C/xvidcap.xml:1738(para)
+#: ../C/xvidcap.xml:1821(para)
 msgid ""
 "In the Preferences Warning Dialog you will find one or more messages "
 "consisting of three rows each. The first one contains a message type or "
@@ -1913,7 +2032,7 @@ msgstr ""
 "Änderungen, die <application>xvidcap</application> ausführen wird, wenn Sie "
 "die Schaltfläche <guibutton>OK</guibutton> anclicken."
 
-#: ../C/xvidcap.xml:1746(para)
+#: ../C/xvidcap.xml:1829(para)
 msgid ""
 "Such an action might be to automatically correct the issue by chosing a "
 "plausible default, to ignore the issue if it is not severe or to quit "
@@ -1925,7 +2044,7 @@ msgstr ""
 "es nicht schwerwiegend ist, oder <application>xvidcap</application> zu "
 "beenden, wenn automatisch keine Lösung gefunden werden kann."
 
-#: ../C/xvidcap.xml:1752(para)
+#: ../C/xvidcap.xml:1835(para)
 msgid ""
 "The severity of an issue can be <quote>INFO</quote> for purely informational "
 "messages where no change is made to any settings, <quote>WARNING</quote> "
@@ -1950,3 +2069,60 @@ msgstr ""
 #: ../C/xvidcap.xml:0(None)
 msgid "translator-credits"
 msgstr "Karl H. Beckers <karl.h.beckers@gmx.net>, 2006"
+
+#~ msgid ""
+#~ "<guilabel>single-frame capture</guilabel> -- capture individual "
+#~ "screenshots to one file each."
+#~ msgstr ""
+#~ "<guilabel>Einzelbild-Aufnahme</guilabel> -- macht einzelne "
+#~ "Bildschirmfotos und speichere sie in je eine Datei."
+
+#~ msgid ""
+#~ "<guilabel>multi-frame capture</guilabel> -- capture and encode to video "
+#~ "on the fly."
+#~ msgstr ""
+#~ "<guilabel>Film-Aufnahme</guilabel> -- nimmt Bildschirm auf und kodiert "
+#~ "zur Laufzeit zu einem Video."
+
+#~ msgid ""
+#~ "<application>xvidcap</application> can be used in two distinct modes of "
+#~ "operation: <placeholder-1/>"
+#~ msgstr ""
+#~ "<application>xvidcap</application>  kann auf zwei unterschiedliche Arten "
+#~ "verwendet werden: <placeholder-1/>"
+
+#~ msgid "Full-Screen Capture"
+#~ msgstr "Vollbild-Aufnahme"
+
+#~ msgid ""
+#~ "Check this to capture mouse pointer position. Once checked, you can "
+#~ "select whether you want to capture a black or a white mouse pointer. This "
+#~ "is required because <application>xvidcap</application> does not have a "
+#~ "way of capturing the real, current mouse pointer, only its position. "
+#~ "Therefore <application>xvidcap</application> generates a dummy mouse "
+#~ "pointer in the captured movie."
+#~ msgstr ""
+#~ "Machen Sie hier einen Haken, wenn die Position des Mauszeigers "
+#~ "aufgenommen werden soll. Danach können Sie noch wählen, ob der Mauszeiger "
+#~ "in schwarz oder weiss aufgenommen werden soll. Dies ist nötig, weil "
+#~ "<application>xvidcap</application> keine Möglichkeit hat, das Aussehen "
+#~ "des echten, aktuellen Mauszeigers zu bestimmen. Es kann nur seine "
+#~ "Position erkennen. Daher erzeugt <application>xvidcap</application> "
+#~ "selbst den Mauszeiger im Ausgabe-Video."
+
+#~ msgid ""
+#~ "For above mentioned reasons, <application>xvidcap</application> cannot "
+#~ "capture the shape of you mouse pointer. If, therefore, the application "
+#~ "you're capturing changes the shape of your mouse pointer to a specific "
+#~ "shape you will loose that in the captured movie. If the logic of the "
+#~ "captured content heavily relies on this you will want to ensure you "
+#~ "either have other means of showing the mouse pointer shape or elaborate "
+#~ "on it in your spoken comments."
+#~ msgstr ""
+#~ "Aus oben genannten Gründen kann <application>xvidcap</application> nicht "
+#~ "die Form Ihres Mauszeigers aufnehmen. Wenn die Applikation, die Sie "
+#~ "aufnehmen möchten, die Form des Mauszeigers verändert, werden Sie diese "
+#~ "Form im aufgenommenen Video verlieren. Falls die Logik des aufgenommenen "
+#~ "Inhalts stark von diesen Änderungen abhängt, sollte Sie sicherstellen, "
+#~ "dass Sie andere Möglichkeiten haben, die Form des Mauszeigers zu zeigen, "
+#~ "oder in Ihrem gesprochenen Kommentar darauf eingehen."
