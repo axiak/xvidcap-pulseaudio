@@ -1,4 +1,18 @@
 
+2007-04-09  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/gnome-xvidcap.glade, po/en.po, po/es.po, 
+		po/de.po, po/it.po, doc: man/C/xvidcap.1.xml, 
+		man/C/xvidcap.1.xml.pot, man/de/xvidcap.1-de.po, 
+		man/it/xvidcap.1-it.po, 
+		xvidcap/C/figures/prefs-general.png, 
+		xvidcap/C/xvidcap.xml, xvidcap/C/xvidcap.xml.pot, 
+		xvidcap/de/xvidcap.xml-de.po, 
+		xvidcap/de/figures/prefs-general.png, 
+		xvidcap/de/xvidcap.xml, 
+		xvidcap/it/xvidcap.xml-it.po: i18n
+		and docs plus their i18n (done for C and
+		de, prepared for others)
+
 2007-04-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/gnome_frame.c: only allow resize of frame
 		through dragging when not recording, 
