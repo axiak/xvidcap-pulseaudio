@@ -72,7 +72,7 @@ install-data-local: omf install-data-local-omf
 		for i in $(xml_files) ; do \
 			if test -r $$i-$(lang).po ; then \
 				echo "translating file $$i for lang $(lang)" ; \
-				$(XML2PO) -p $$i-$(lang).po -o $$i ../C/$$i ; \
+				$(XML2PO) -a -p $$i-$(lang).po -o $$i ../C/$$i ; \
 			fi ; \
 		done ; \
 	fi ; \

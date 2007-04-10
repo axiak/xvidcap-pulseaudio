@@ -1,4 +1,20 @@
 
+2007-04-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* debian/control: added build dependencies
+	* src: capture.c, gnome_frame.c: cosmetics
+	* src/gnome-xvidcap.glade: make frame dimenstions
+		display sensitive
+	* doc: xmldocs.make, man/C/xvidcap.1, man/man.make, 
+		man/de/xvidcap.1.xml, man/de/xvidcap.1, 
+		man/it/xvidcap.1.xml, man/it/xvidcap.1, 
+		xvidcap/C/xvidcap.xml, 
+		xvidcap/de/xvidcap.xml-de.po, 
+		xvidcap/de/xvidcap.xml, 
+		xvidcap/it/xvidcap.xml-it.po, 
+		xvidcap/it/xvidcap.xml: more updates to
+		i18n and its build process (forgot -a
+		switch to xml2po in some places)
+
 2007-04-09  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/gnome-xvidcap.glade, po/en.po, po/es.po, 
 		po/de.po, po/it.po, doc: man/C/xvidcap.1.xml, 

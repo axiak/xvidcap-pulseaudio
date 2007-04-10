@@ -184,7 +184,15 @@ do_reposition_control (GtkWidget * toplevel)
 #undef DEBUGFUNCTION
 }
 
-static void
+/**
+ * \brief hides the frame dimensions display if the time scheduled for
+ *      hiding it is in the past and the widget is available
+ *
+ * This is used through g_timeout_add to schedule hiding of the frame
+ * dimensions display.
+ * @return always zero to remove the timeout function after execution
+ */
+static int
 frame_dimensions_hide ()
 {
     struct timeval curr_time;
@@ -196,6 +204,8 @@ frame_dimensions_hide ()
         GTK_IS_WIDGET (xvc_frame_dimensions_window) &&
         current_time >= frame_dimensions_hide_time)
         gtk_widget_hide (xvc_frame_dimensions_window);
+
+    return 0;
 }
 
 /**
@@ -207,6 +217,7 @@ frame_dimensions_hide ()
  * @param height new frame height
  * @param reposition_control TRUE for main control should be repositioned
  *      if frame moves, or FALSE if not
+ * @param show_dimensions should the frame dimensions display be shown or not?
  */
 void
 xvc_change_gtk_frame (int x, int y, int width, int height,
@@ -340,7 +351,8 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
 }
 
 /**
- * \todo make the frame not sensitive when capturing
+ * \brief callback to start the procedure for dragging the capture area frame
+ *      if we're not capturing and the mouse button is not pressed already
  */
 gint
 on_gtk_frame_enter_notify_event (GtkWidget * w, GdkEventCrossing * event)
@@ -348,11 +360,10 @@ on_gtk_frame_enter_notify_event (GtkWidget * w, GdkEventCrossing * event)
     gint x, y;
     GdkModifierType mt;
     GdkCursor *cursor;
-    Job *job = xvc_job_ptr();
+    Job *job = xvc_job_ptr ();
 
-    if (job->state != VC_READY) return 0;
-
-//printf("entering\n");
+    if (job->state != VC_READY)
+        return 0;
 
     if (!button_pressed) {
         gdk_window_get_pointer (w->window, &x, &y, &mt);
@@ -421,6 +432,10 @@ on_gtk_frame_enter_notify_event (GtkWidget * w, GdkEventCrossing * event)
     return 0;
 }
 
+/**
+ * \brief resets the cursor on the capture area frame so that it will never
+ *      change as for dragging during capture.
+ */
 gint
 on_gtk_frame_leave_notify_event (GtkWidget * w, GdkEventCrossing * event)
 {
@@ -431,6 +446,9 @@ on_gtk_frame_leave_notify_event (GtkWidget * w, GdkEventCrossing * event)
     return 0;
 }
 
+/**
+ * \brief handle dragging or changing mouse pointer
+ */
 gint
 on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
 {
@@ -442,7 +460,7 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
     y = (int) event->y;
     x_root = (int) event->x_root;
     y_root = (int) event->y_root;
-//printf("button_pressed %i\n", button_pressed);
+
     if (!button_pressed) {
         if (w == gtk_frame_right) {
             if (y < XVC_MIN (FRAME_EDGE_SIZE, w->allocation.height / 3)) {
@@ -582,6 +600,9 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
     return 0;
 }
 
+/**
+ * \brief track mouse pointer presses on frame
+ */
 gint
 on_gtk_frame_button_press_event (GtkWidget * w, GdkEventButton * event)
 {
@@ -589,6 +610,9 @@ on_gtk_frame_button_press_event (GtkWidget * w, GdkEventButton * event)
     return 0;
 }
 
+/**
+ * \brief track mouse pointer presses on frame
+ */
 gint
 on_gtk_frame_button_release_event (GtkWidget * w, GdkEventButton * event)
 {
@@ -672,7 +696,6 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         gtk_window_set_title (GTK_WINDOW (gtk_frame_top), "gtk_frame_top");
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_top), FALSE);
         gtk_widget_add_events (GTK_WIDGET (gtk_frame_top),
-//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
                                (GDK_POINTER_MOTION_MASK |
                                 GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
                                 | GDK_BUTTON_RELEASE_MASK));
@@ -723,7 +746,6 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         gtk_window_set_title (GTK_WINDOW (gtk_frame_left), "gtk_frame_left");
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_left), FALSE);
         gtk_widget_add_events (GTK_WIDGET (gtk_frame_left),
-//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
                                (GDK_POINTER_MOTION_MASK |
                                 GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
                                 | GDK_BUTTON_RELEASE_MASK));
@@ -773,7 +795,6 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
                               "gtk_frame_bottom");
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_bottom), FALSE);
         gtk_widget_add_events (GTK_WIDGET (gtk_frame_bottom),
-//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
                                (GDK_POINTER_MOTION_MASK |
                                 GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
                                 | GDK_BUTTON_RELEASE_MASK));
@@ -823,7 +844,6 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         gtk_window_set_title (GTK_WINDOW (gtk_frame_right), "gtk_frame_right");
         gtk_window_set_resizable (GTK_WINDOW (gtk_frame_right), FALSE);
         gtk_widget_add_events (GTK_WIDGET (gtk_frame_right),
-//            (GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
                                (GDK_POINTER_MOTION_MASK |
                                 GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK
                                 | GDK_BUTTON_RELEASE_MASK));

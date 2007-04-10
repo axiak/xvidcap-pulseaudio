@@ -1,8 +1,8 @@
-.TH xvidcap 1  "Settembre 2006" 
+.TH xvidcap 1  "April 2007" 
 .SH NAME
 XVidCap \- Registra in video porzioni di schermo X11
 .SH SYNOPSIS
-\fBxvidcap\fR [\-v] [ \-\-mf | \-\-sf ] [\-\-file \fBmodello di nome file\fR |\- ] [\-\-fps \fBfotogrammi al secondo\fR] [\-\-cap_geometry \fBgeometria\fR] [\-\-rescale \fBdimensione in percentuale\fR] [\-\-quality \fBqualit\(`a in percentuale\fR] [\-\-source x11|shm ] [\-\-time \fBdurata massima in secondi\fR] [\-\-frames \fBNumero massimo di fotogrammi\fR] [\-\-start_no \fBnumero fotogramma iniziale\fR] [\-\-continue yes|no ] [\-\-gui yes|no ] [\-\-auto] [\-\-codec \fBcodificatore video\fR] [\-\-codec\-help] [\-\-format \fBformato file di uscita\fR] [\-\-format\-help] [\-\-audio yes|no ] [\-\-aucodec \fBcodificatore audio\fR] [\-\-aucodec\-help] [\-\-audio_in \fBdispositivo di acquisizione audio\fR |\- ] [\-\-audio_bits \fBbitrate audio\fR] [\-\-audio_rate \fBcampionamento audio\fR] [\-\-audio_channels \fBcanali audio\fR]
+\fBxvidcap\fR [\-v] [ \-\-mf | \-\-sf ] [\-\-file \fBfile name pattern\fR |\- ] [\-\-fps \fBframes per second\fR] [\-\-cap_geometry \fBgeometry\fR] [\-\-rescale \fBsize percentage\fR] [\-\-quality \fBquality percentage\fR] [\-\-source x11|shm ] [\-\-time \fBmaximum duration in seconds\fR] [\-\-frames \fBmaximum frames\fR] [\-\-start_no \fBinitial frame number\fR] [\-\-continue yes|no ] [\-\-gui yes|no ] [\-\-auto] [\-\-codec \fBvideo codec\fR] [\-\-codec\-help] [\-\-format \fBoutput file format\fR] [\-\-format\-help] [\-\-audio yes|no ] [\-\-aucodec \fBaudio codec\fR] [\-\-aucodec\-help] [\-\-audio_in \fBaudio capture device\fR |\- ] [\-\-audio_bits \fBaudio bit rate\fR] [\-\-audio_rate \fBaudio sample rate\fR] [\-\-audio_channels \fBaudio channels\fR]
 .SH INTRODUZIONE
 xvidcap \(`e uno strumento che acquisisce su file il movimento presente in un'area selezionata di uno schermo X11. Pu\(`o essere usato in due diverse modalit\(`a: (1) acquisizione a \fIfotogramma singolo\fR e (2) acquisizione a \fIfotogrammi multipli\fR. In modalit\(`a di acquisizione a fotogramma singolo xvidcap cattura un numero configurabile di schermate per secondo e le salva in file distinti. Anche in modalit\(`a di acquisizione a fotogrammi multipli xvidcap cattura un numero di schermate per secondo, ma le codifica in un singolo video in tempo reale. L'acquisizione audio \(`e disponibile solo con i formati a fotogrammi multipli.
 .PP
@@ -18,35 +18,39 @@ Esegue xvidcap in modalit\(`a prolissa. Ci\(`o fornir\(`a ulteriori informazioni
 \fB\-\-mf\fR | \fB\-\-sf\fR
 xvidcap prova ad determinare autonomamente la modalit\(`a di acquisizione desiderata. Se si specifica \fB\-\-file test.avi\fR, xvidcap supporr\(`a la scelta dell'acquisizione a fotogrammi multipli. Si pu\(`o specificare espressamente la modalit\(`a di acquisizione dalla linea di comando con questa opzione. Se, per esempio, si ha una configurazione appropriata e salvata con la modalit\(`a di acquisizione a fotogrammi multipli quale modalit\(`a predefinita, l'esecuzione di \fBxvidcap \-\-sf\fR avvier\(`a xvidcap in modalit\(`a di acquisizione a fotogramma singolo con tutte le impostazioni memorizzate. La modalit\(`a predefinita \(`e l'acquisizione a fotogrammi multipli.
 .TP 
-\fB\-\-file \fImodello di nome file\fB\fR
+\fB\-\-file \fIfile name pattern\fB\fR
 Nome file o modello da usare per il salvataggio dei fotogrammi acquisiti. Un modello di nome file contiene formattazioni alla maniera di printf() (rif. \fBman printf\fR) informazioni per rendere incrementabile il nome file, ad es. \fB\-\-file out\-%02d.xwd\fR. Ci\(`o \(`e necessario per l'acquisizione a fotogramma singolo. xvidcap sostituir\(`a la prima stringa di formato printf() con il numero dei fotogrammi attualmente acquisiti. Nell'esempio dato, creer\(`a i file \fBout\-00.xwd\fR, \fBout\-01.xwd\fR, \fBout\-02.xwd\fR, ecc. Il numero del fotogramma iniziale pu\(`o essere specificato con \fB\-\-start_no\fR, vedere sopra.
 
 L'acquisizione a fotogrammi multipli non richiede un modello di file. Specificandone uno, tuttavia, come \fB\-\-file miofilmato\-%d.mpeg\fR per esempio, xvidcap sostituir\(`a la stringa di formato con il numero della sessione di registrazione attuale (iniziando sempre il conteggio da zero). Ci\(`o permetter\(`a di incrementare/decrementare manualmente tale numero, o usare la funzionalit\(`a di continuazione automatica (rif. \fB\-\-continue\fR in seguito) creando effettivamente una di serie di file video.
 .TP 
-\fB\-\-fps \fIfotogrammi al secondo\fB\fR
+\fB\-\-fps \fIframes per second\fB\fR
 Specifica il numero di fotogrammi da acquisire per ogni secondo. Questo parametro accetta valori in virgola mobile, e permette velocit\(`a di acquisizione molto basse come ad es. \fB\-\-fps 0.5\fR per registrare un fotogramma ogni 2 secondi. Ci\(`o \(`e possibile solo in modalit\(`a a fotogramma singolo. I codificatori usati per la modalit\(`a a fotogrammi multipli di solito accettano solo alcune velocit\(`a come valide. Notare che le velocit\(`a frazionali dei fotogrammi per codificatori quali MPEG1 che accettano solo frazioni molto specifiche sono disabilitate in questa versione a causa di un'inconsistenza del conteggio del tempo frazionale tra xvidcap e libavcodec. Saranno accettate solo velocit\(`a intere dei fotogrammi.
 .TP 
-\fB\-\-cap_geometry \fIgeometria\fB\fR
+\fB\-\-cap_geometry \fIgeometry\fB\fR
 Specifica la geometria per es. xterm, ad es. in questo modo: \fIlarghezza\fRx\fIaltezza\fR+\fIposizione\-x\fR+\fIposizione\-y\fR
 
 Ignora la larghezza e l'altezza predefinita del fotogramma acquisito. Usa il pulsante selettore dell'interfaccia grafica al posto di questa opzione della linea di comando per regolare la dimensione del fotogramma per una data finestra. Le dimensioni di acquisizione inferiori a 20 x 20 non funzionano correttamente con la gran parte dei codificatori per l'acquisizione a fotogrammi multipli.
 .TP 
-\fB\-\-rescale \fIdimensione in percentuale\fB\fR
-Ridimensiona l'uscita a una percentuale dell'ingresso originale. Una valore di \fB25\fR, ad es. fa s\(`i che la dimensione d'uscita sia il 25 percento dell'area d'ingresso originale.
+\fB\-\-rescale \fIsize percentage\fB\fR
+Rescale the output to a percentage of the original input. A value of \fB25\fR, e. g.
+makes the output size be 25 percent of the original input area. Rescaling does not work with XWD
+output.
 .TP 
-\fB\-\-quality \fIqualit\(`a in percentuale\fB\fR
-Specifica un valore tra \fB0\fR e \fB100\fR per definire la qualit\(`a di codifica. Il valore predefinito \(`e \fB75\fR.
+\fB\-\-quality \fIquality percentage\fB\fR
+Specify a value between \fB0\fR and \fB100\fR to define the quality encoding. The 
+default value is \fB75\fR. Note that the effect of a value below \fB100\fR has changed in version
+1.1.5.
 .TP 
 \fB\-\-source \fRx11|shm
 Abilita o disabilita l'utilizzo dell'estensione memoria condivisa di X11. Per il supporto della memoria condivisa sia client che server devono essere in esecuzione sulla stessa macchina. Se il supporto della memoria condivisa \(`e disponibile, xvidcap lo utilizzer\(`a in maniera predefinita. Se il server X e il client non sono in esecuzione sulla stessa macchina, \(`e necessario disabilitare il supporto specificando \fB\-\-source x11\fR.
 .TP 
-\fB\-\-time \fIdurata massima in secondi\fB\fR
+\fB\-\-time \fImaximum duration in seconds\fB\fR
 Specifica il tempo massimo di acquisizione, se uguale a \fB0\fR, xvidcap acquisir\(`a fino all'interruzione manuale. Per ogni altro valore, ogni sessione di registrazione si interromper\(`a automaticamente dopo il numero specificato di secondi. Questo parametro \(`e in conflitto con \fB\-\-frames\fR (vedere in seguito). Se entrambi sono specificati, xvidcap interromper\(`a l'acquisizione. Il programma accetta valori in virgola mobile, ad es. \fB2.5\fR.
 .TP 
-\fB\-\-frames \fINumero massimo di fotogrammi\fB\fR
+\fB\-\-frames \fImaximum frames\fB\fR
 Ferma l'acquisizione dopo un numero specificato di fotogrammi acquisiti. Se uguale a \fB0\fR, xvidcap acquisir\(`a fino all'interruzione manuale, rif. \fB\-\-time\fR sopra.
 .TP 
-\fB\-\-start_no \fInumero fotogramma iniziale\fB\fR
+\fB\-\-start_no \fIinitial frame number\fB\fR
 Definisce il numero iniziale che dovrebbe essere usato per la numerazione dei file. Il valore predefinito \(`e \fB0\fR. Questo parametro \(`e utilizzato solo per l'acquisizione a fotogramma singolo. La numerazione dei filmati per \fB\-\-continue\fR inizia sempre da zero.
 .TP 
 \fB\-\-continue \fRyes|no
@@ -58,13 +62,13 @@ Avvia xvidcap con o senza l'interfaccia grafica ignorando quanto contenuto nel f
 \fB\-\-auto\fR
 xvidcap supporta il rilevamento automatico dei parametri per formato di uscita, codificatore video e audio. Se ognuna di queste impostazioni viene salvata con valore fisso nelle preferenze memorizzate, \(`e possibile non tenerne conto specificando il parametro \fBauto\fR per ognuno degli argomenti di \fB\-\-format\fR, \fB\-\-codec\fR, o \fB\-\-aucodec\fR. Questo argomento \(`e una scorciatoia per il rilevamento automatico dei tre parametri.
 .TP 
-\fB\-\-codec \fIcodificatore video\fB\fR
+\fB\-\-codec \fIvideo codec\fB\fR
 Non tiene conto delle preferenze e della selezione automatica del codificatore utilizzando il codificatore video espressamente specificato.
 .TP 
 \fB\-\-codec\-help\fR
 Elenca i codificatori validi.
 .TP 
-\fB\-\-format \fIformato file di uscita\fB\fR
+\fB\-\-format \fIoutput file format\fB\fR
 Non tiene conto delle preferenze e della selezione automatica del formato utilizzando il formato espressamente specificato.
 .TP 
 \fB\-\-format\-help\fR
@@ -75,24 +79,24 @@ Le seguenti opzioni riguardano l'acquisizione audio che \(`e disponibile solo co
 \fB\-\-audio \fRyes|no
 Abilita o disabilita l'acquisizione audio utilizzando i parametri predefiniti o quelli salvati nel file delle preferenze. Se supportata, \(`e abilitata in maniera predefinita per l'acquisizione a fotogrammi multipli.
 .TP 
-\fB\-\-aucodec \fIcodificatore audio\fB\fR
+\fB\-\-aucodec \fIaudio codec\fB\fR
 Non tiene conto delle preferenze e della selezione automatica del codificatore utilizzando il codificatore audio espressamente specificato.
 .TP 
 \fB\-\-aucodec\-help\fR
 Elenca i codificatori audio validi.
 .TP 
-\fB\-\-audio_in \fIdispositivo di acquisizione audio\fB|\-\fR
+\fB\-\-audio_in \fIaudio capture device\fB|\-\fR
 Acquisizione audio da un dispositivo specificato o da stdin. Questa opzione consente il doppiaggio di un video acquisito usando un comando come il seguente. Il valore predefinito \(`e \fB/dev/dsp\fR.
 
 cat qualche.mp3 | xvidcap \-\-audio_in \-
 .TP 
-\fB\-\-audio_bits \fIbitrate audio\fB\fR
+\fB\-\-audio_bits \fIaudio bit rate\fB\fR
 Imposta il bitrate desiderato. Il valore predefinito \(`e \fB32000\fR bit. Notare che, utilizzando lo STDIN, il file d'ingresso sar\(`a ricampionato come richiesto.
 .TP 
-\fB\-\-audio_rate \fIcampionamento audio\fB\fR
+\fB\-\-audio_rate \fIaudio sample rate\fB\fR
 Imposta il campionamento desiderato. Il valore predefinito \(`e \fB22050\fR Hz. Notare che, utilizzando lo STDIN, il file d'ingresso sar\(`a ricampionato come richiesto.
 .TP 
-\fB\-\-audio_channels \fIcanali audio\fB\fR
+\fB\-\-audio_channels \fIaudio channels\fB\fR
 Imposta il numero di canali desiderato. Il valore predefinito \(`e \fB1\fR per mono. Ogni valore maggiore di \fB2\fR \(`e probabilmente utile solo in caso di ingresso da STDIN e file audio AC a 5 canali o strumenti di registrazione di alta qualit\(`a e scarsa diffusione.
 .SH AUTORI
 xvidcap \(`e stato scritto da Rasca Gmelch e Karl H. Beckers.

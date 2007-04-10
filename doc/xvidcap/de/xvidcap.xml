@@ -7,9 +7,9 @@
         Purpose of the document follows.
 -->
 <!DOCTYPE article PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.1.4p1">
-<!ENTITY manrevision "0.1">
-<!ENTITY date "September 2006">
+<!ENTITY appversion "1.1.5rc3">
+<!ENTITY manrevision "0.2">
+<!ENTITY date "April 2007">
 <!ENTITY app "xvidcap">
 <!ENTITY mf-cap "multi-frame capture">
 <!ENTITY sf-cap "single-frame capture">
@@ -18,20 +18,17 @@
     <!-- please do not change the id; for translations, change lang to -->
     <!-- appropriate code -->
     <articleinfo>
-        <title>xvidcap Handbuch V0.1</title>
+        <title>xvidcap Handbuch V0.2</title>
         <copyright>
-            <year>2006</year>
+            <year>2007</year>
             <holder>Karl H. Beckers</holder> 
-        </copyright><copyright><year>2006</year><holder>Karl H. Beckers (karl.h.beckers@gmx.net)</holder></copyright>
-
-        <!-- translators: uncomment this:
-
-        <copyright>
-        <year>2003</year>
-        <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
         </copyright>
 
-        -->
+        <copyright>
+        <year>2007</year>
+        <holder>Karl H. Beckers (German translation)</holder>
+        </copyright><copyright><year>2006</year><holder>Karl H. Beckers (karl.h.beckers@gmx.net)</holder></copyright>
+
         <publisher>
             <publishername>Karl H. Beckers</publishername>
         </publisher>
@@ -88,9 +85,17 @@
                     <para role="publisher">Karl H. Beckers</para>
                 </revdescription>
             </revision>
+            <revision>
+                <revnumber>xvidcap V0.2</revnumber>
+                <date>2007</date>
+                <revdescription>
+                    <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email></para>
+                    <para role="publisher">Karl H. Beckers</para>
+                </revdescription>
+            </revision>
 
         </revhistory>
-        <releaseinfo>Dieses Handbuch beschreibt Version 1.1.4p1 von xvidcap</releaseinfo>
+        <releaseinfo>Dieses Handbuch beschreibt Version 1.1.5rc3 von xvidcap</releaseinfo>
         <legalnotice>
             <title>Rückmeldungen</title>
             <para>Um einen Fehlerbericht abzugeben oder Verbesserungsvorschläge bezüglich <application>xvidcap</application> oder dieses Handuchs zu machen, folgen Sie bitte den Hinweisen auf <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap's SourceForge Seite</ulink>.</para>
@@ -110,14 +115,7 @@
         <title>Überblick</title>
         <para><application>xvidcap</application> ist eine Anwendung, die Bewegungen in einem ausgewählten Bereich eines X11 Bildschirms in Dateien speichert. Sie tut dies, indem Sie eine konfigurierbare Anzahl Bildschirmfotos pro Sekunde macht und sie entweder als Einzelbilder oder als Video abspeichert. Diese Art von Anwendung wird heute gemeinhin als ScreenCam oder ScreenCast Werkzeug bezeichnet. Eines der ältesten Werkzeuge dieser Art war <application>Lotus Screencam</application> und diente als Inspiration für <application>xvidcap</application>.</para>
 
-        <para><application>xvidcap</application>  kann auf zwei unterschiedliche Arten verwendet werden: <orderedlist>
-                <listitem>
-                    <para><guilabel>Einzelbild-Aufnahme</guilabel> -- macht einzelne Bildschirmfotos und speichere sie in je eine Datei.</para>
-                </listitem>
-                <listitem>
-                    <para><guilabel>Film-Aufnahme</guilabel> -- nimmt Bildschirm auf und kodiert zur Laufzeit zu einem Video.</para>
-                </listitem>
-            </orderedlist></para>    
+        <para><application>xvidcap</application> kann auf zwei unterschiedliche Arten verwendet werden: <orderedlist><listitem><para><guilabel>Einzelbild-Aufnahme</guilabel> -- Aufnahme einzelner Bildschirmfotos in jeweils eine Datei. </para></listitem><listitem><para><guilabel>Film-Aufnahme</guilabel> -- Aufnahme und Kodierung zu einer Video-Datei in Echtzeit. </para></listitem></orderedlist></para>    
 
         <tip>
             <title>Merker</title>
@@ -215,7 +213,7 @@
                                 </screenshot>
                             </entry>
                             <entry>
-                                <para>Der <guilabel>Bild-Verlust Messer</guilabel> bietet einen Anhaltspunkt darüber, wie gut Ihre Aufnahmesitzung mit der von Ihnen eingestellten Bildrate aufnehmen kann. Wenn Ihr System stark belastet ist, kann es unter Umständen nicht so viele Bilder pro Sekunde aufnehmen, wie Sie gerne hätten. Dies äussert sich durch ein Video, welches zu schnell wiedergegeben wird. <application>xvidcap</application> zeigt einen grünen Status an, wenn Sie zumindest annähernd mit der gewünschten Bildrate aufnehmen. Beim Verlust einiger Einzelbilder wird die Statusanzeige gelb. Sie wird rot bei übermässigem Bild-Verlust. Um Bild-Verlust zu reduzieren, können Sie einen kleineren Bereich Ihres Bildschirms aufnehmen, eine niedrigere Bildrate wählen, alle anderen Anwendungen beenden oder auf einer leistungsfähigeren Maschine aufnehmen. Es kann unter Umständen auch helfen, die Eingangsbilder zu <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">verkleinern</ulink>.</para>
+                                <para>Der <guilabel>Bild-Verlust Messer</guilabel> bietet einen Anhaltspunkt darüber, wie gut Ihre Aufnahmesitzung mit der von Ihnen eingestellten Bildrate aufnehmen kann. Wenn Ihr System stark belastet ist, kann es unter Umständen nicht so viele Bilder pro Sekunde aufnehmen, wie Sie gerne hätten. Dies äussert sich durch ein Video, welches zu schnell wiedergegeben wird. <application>xvidcap</application> zeigt einen grünen Status an, wenn Sie zumindest annähernd mit der gewünschten Bildrate aufnehmen. Beim Verlust einiger Einzelbilder wird die Statusanzeige gelb. Sie wird rot bei übermässigem Bild-Verlust. Um Bild-Verlust zu reduzieren, können Sie einen kleineren Bereich Ihres Bildschirms aufnehmen, eine niedrigere Bildrate wählen, alle anderen Anwendungen beenden oder auf einer leistungsfähigeren Maschine aufnehmen. Es kann unter Umständen auch helfen, die Eingangsbilder zu <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">verkleinern</ulink>. Eine weitere Möglichkeit, die Aufnahme für Ihr System leichter zu machen, ist es die XDamage Erweiterung zu verwenden. Vergleichen Sie den entsprechenden Absatz über den Reiter <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-general">Allgemeine Einstellungen</ulink> des Einstellungen Dialogs.</para>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-stop">
@@ -313,7 +311,7 @@
                                 </screenshot>			
                             </entry>
                             <entry>
-                                <para>Die <guilabel>Vorwärts</guilabel> Schaltfläche bewirkt das Gegenteil der <guibutton>Zurück Schaltfl</buibutton></para>
+                                <para>Die <guilabel>Vorwärts</guilabel> Schaltfläche bewirkt das Gegenteil der <guibutton>Zurück</guibutton> Schaltfläche, indem es die Nummer des aktuellen Einzelbildes oder Films hochzählt in Abhängigkeit von der gewählten Art der Aufnahme.</para>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-lock">
@@ -359,12 +357,13 @@
                                     </listitem>
                                     <listitem>
                                         <para>Auf den Bildschirmhintergrund clicken, um Vollbild-Aufnahme auszuwählen.</para>
-                                        <caution>
-                                            <title>Vollbild-Aufnahme</title>
-                                            <para>Bei aktuellen Anzeigegrößen besteht bei Vollbild-Aufnahme eine hohe Wahrscheinlichkeit, zu viel Last auf Ihrem System zu verursachen. Beobachten Sie den Bild-Verlust Messer und passen Sie gegebenenfalls Ihre Bildschirmauflösung an, wenn Sie unbedingt den gesamten Bildschirm aufnehmen müssen. Bedenken Sie, dass eine DVD üblicherweise Auflösungen um 720 x 486 enthält. Eine Vollbild-Aufnahme bei einer Auflösung von 1400 x 1050 wird ungefähr die vierfache Menge der Datenrate einer DVD zur Laufzeit kodiert -- nicht etwas, was Sie mit Stift und Papier berechnen.</para>
-                                        </caution>
+                                        <caution><title>Vollbild Aufnahme</title><para>Bei aktuellen Anzeigegrößen besteht bei Vollbild-Aufnahme eine hohe Wahrscheinlichkeit, zu viel Last auf Ihrem System zu verursachen. Beobachten Sie den Bild-Verlust Messer und passen Sie gegebenenfalls Ihre Bildschirmauflösung an, wenn Sie unbedingt den gesamten Bildschirm aufnehmen müssen. Bedenken Sie, dass eine DVD üblicherweise Auflösungen um 720 x 486 enthält. Eine Vollbild-Aufnahme bei einer Auflösung von 1400 x 1050 wird ungefähr die vierfache Menge der Datenrate einer DVD zur Laufzeit kodiert -- nicht etwas, was Sie mit Stift und Papier berechnen.</para> Es ist jedoch nicht nur das Kodieren einer Vollbild-Aufnahme, die Überlast auf Ihrem System erzeugen kann. Den gesamten Aufnahmebereich für jedes Einzelbild vollständig zu erfassen, ist schon für sich genommen eine erhebliche Aufgabe. Die Verwendung der XDamage Erweiterung kann die resultierenden Effekte vermeiden helfen, es könnten jedoch Seiteneffekte auftreten. Vergleichen Sie den entsprechenden Absatz zum Reiter <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-set-xdamage">Allgemeine Einstellungen</ulink> des Einstellungen Dialogs. <para/></caution>
                                     </listitem>
                                 </itemizedlist>
+        			<tip>
+            				<title>Größe durch Ziehen ändern</title>
+            				<para>Ab Version 1.1.5 können Sie die Größe des Aufnahmebereichs auch durch Ziehen an den Rändern des Rahmens ändern, wenn gerade nicht aufgenommen wird. Verwenden Sie die Funktionalität so wie Sie die Größe eines normalen Fensters ändern.</para>
+        			</tip>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-edit">
@@ -629,10 +628,10 @@
                                 <para>Mauszeiger aufnehmen</para>
                             </entry>
                             <entry>
-                                <para>Machen Sie hier einen Haken, wenn die Position des Mauszeigers aufgenommen werden soll. Danach können Sie noch wählen, ob der Mauszeiger in schwarz oder weiss aufgenommen werden soll. Dies ist nötig, weil <application>xvidcap</application> keine Möglichkeit hat, das Aussehen des echten, aktuellen Mauszeigers zu bestimmen. Es kann nur seine Position erkennen. Daher erzeugt <application>xvidcap</application> selbst den Mauszeiger im Ausgabe-Video.</para>
+                                <para>Machen Sie hier einen Haken, um den Mauszeiger aufzunehmen.</para>
                                 <caution>
                                     <title>Spezielle Formen des Mauszeigers</title>
-                                    <para>Aus oben genannten Gründen kann <application>xvidcap</application> nicht die Form Ihres Mauszeigers aufnehmen. Wenn die Applikation, die Sie aufnehmen möchten, die Form des Mauszeigers verändert, werden Sie diese Form im aufgenommenen Video verlieren. Falls die Logik des aufgenommenen Inhalts stark von diesen Änderungen abhängt, sollte Sie sicherstellen, dass Sie andere Möglichkeiten haben, die Form des Mauszeigers zu zeigen, oder in Ihrem gesprochenen Kommentar darauf eingehen.</para>
+                                    <para>Ohne die XFixes Erweiterung für X11 gibt es für <application>xvidcap</application> keine Möglichkeit, die Form des tatsächlichen, aktuellen Mauszeigers festzustellen, sondern nur dessen Position. Wenn die Erweiterung nicht sowohl während der Übersetzung als auch zur Laufzeit verfügbar war und ist, erzeugt <application>xvidcap</application> einen generischen Mauszeiger im aufgenommenen Film. In dem Fall finden Sie einen Auswahlknopf neben diesem Haken, der es Ihnen ermöglicht, zwischen einem weissen und einem schwarzen Mauszeiger auszuwählen.</para>
                                 </caution>
                             </entry>
                         </row>
@@ -653,6 +652,18 @@
                                 <caution>
                                     <title><quote>Shared Memory</quote> Zugriff für X11</title>
                                     <para>Die Verwendung von <quote>Shared Memory</quote> ist per Vorgabe eingeschaltet, wenn der Rechner, auf dem <application>xvidcap</application> erstellt wurde, diese Erweiterung unterstützte. Dies ist heutzutage üblicherweise der Fall. Sie müssen dies jedoch ausschalten, wenn X11 Server und Client nicht auf dem gleichen Rechner laufen, z. B. auf einem X Terminal Thin Client.</para>
+                                </caution>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-set-xdamage">
+                            <entry>
+                                <para>XDamage Manuell Setzen</para>
+                            </entry>
+                            <entry>
+                                <para>Ein Haken hier ermöglicht es, sich über die Entscheidung, die <application>xvidcap</application> hinsichtlich der Verwendung der XDamage Erweiterung zur Beschleunigung der Aufnahme gefällt hat, hinwegzusetzen. Die Erweiterung erlaut es <application>xvidcap</application>, über die Teile des Bildschirms, die sich zwischen zwei Einzelbildern verändert haben, informiert zu werden. Dann muss nicht für jedes Einzelbild der gesamte Aufnahmebereich erfasst werden. <application>xvidcap</application> wird standardmässig XDamage verwenden, wenn es bei der Übersetzung verfügbar war, zur Laufzeit verfügbar ist und der verwendete Fenster-Manager nicht compiz oder beryl ist. Wenn Sie beryl verwenden und dennoch die XDamage Erweiterung verwenden möchten, machen Sie hier einen Haken, um die Auswahlknöpfe rechts zu aktivieren und "aktiviert" auszuwählen.</para>
+                                <caution>
+                                    <title>XDamage und compiz oder beryl</title>
+                                    <para>Aufgrund der erweiterten visuellen Effekte, die mit compiz, beryl oder ähnlichen Fenster-Managern möglich sind, können die Benachrichtigungen, die <application>xvidcap</application> durch XDamage erhält u. U. nicht ausreichend sein, um die zu aktualisierenden Bildschirm-Bereiche festzustellen. Sie können <application>xvidcap</application> wie oben beschrieben zwingen, die Erweiterung zu verwenden, aber Ihre Ergebnisse können unterschiedlich ausfallen.</para>
                                 </caution>
                             </entry>
                         </row>
@@ -678,6 +689,10 @@
                             </entry>
                             <entry>
                                 <para>Verwenden Sie diese Einstellung, um die Bildgröße des ausgegebenen Videos kleiner zu machen als die ursprüngliche Größe des aufgenommenen Bildbereichs. Der Prozentwert, der hier angegeben werden kann, definiert die Ausgabegröße relativ zur Originalgröße. Die Angabe von <quote>25</quote> zum Beispiel, wird ein Video erzeugen mit Breite und Höhe halb so groß wie die des ursprünglichen Bildausschnitts. Die Gesamtgröße wird also 25 Prozent des Originals betragen.</para>
+                                <caution>
+                                    <title>Ausgabe-Verkleinerung funktioniert nicht mit XWD Ausgabe</title>
+                                    <para>Die Ausgabe-Verkleinerung funktioniert mit allen Ausgabe-Formaten ausser XWD.</para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>
@@ -777,6 +792,10 @@
                             </entry>
                             <entry>
                                 <para>Erwünschte Qualität des Ausgabevideos</para>
+                                <caution>
+                                    <title>Geänderte Qualitäts-Einstellungen in 1.1.5</title>
+                                    <para>Die Wirkung eines Qualitäts-Werts unter 100 % hat sich in <application>xvidcap</application> 1.1.5 geändert. Testen Sie die Werte in Ihren gespeicherten Einstellungen. Qualitäts-Einstellungen haben keine Auswirkung auf XWD Ausgabe.</para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>
@@ -860,6 +879,10 @@
                             </entry>
                             <entry>
                                 <para>Erwünschte Qualität des Ausgabevideos</para>
+                                <caution>
+                                    <title>Geänderte Qualitäts-Einstellungen in 1.1.5</title>
+                                    <para>Die Wirkung eines Qualitäts-Werts unter 100 % hat sich in <application>xvidcap</application> 1.1.5 geändert. Testen Sie die Werte in Ihren gespeicherten Einstellungen. In der Vergangenheit konnte ein Wert für Qualität von <quote>20</quote>, in Abhängigkeit vom gewählten Codec, gute Ergebnisse erzielen. Das ist nun nicht mehr der Fall. Ein Wert von <quote>75</quote> mag akzeptable sein, <quote>85</quote> wird es üblicherweise sein. Ein Video, welches mit einem Qualitäts-Wert von <quote>90</quote> aufgenommen wurde, wird nomalerweise kaum von einem zu unterscheiden sein, welches bei <quote>100</quote> Prozent Qualität aufgenommen wurde.</para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>

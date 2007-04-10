@@ -8,12 +8,6 @@
  * configured maximum number of frames or maximum capture time.
  *
  * \todo add dga and v4l again
- * \todo for placing a small image in a larger, we assume that a line in an
- *      image retrieved from X11 will always be 4-byte aligned. Find out if
- *      this is ALWAYS correct, or if there is a way for retrieving the
- *      correct value from X11
- * \todo for painting the real mouse pointer in pal8 we assume a certain form
- *      of color table which may not be present for xwd capture.
  */
 
 /*

@@ -30,7 +30,7 @@ install:
 				echo "Cannot find xml2po to create current, translated manpage. Trying to use previous translation of $$i for locale $(xv_LANG)" ; \
 			else \
 				echo "translating manpage for lang $(xv_LANG)" ; \
-				xml2po -p $$i-$(xv_LANG).po -o $$i.xml ../C/$$i.xml ; \
+				xml2po -a -p $$i-$(xv_LANG).po -o $$i.xml ../C/$$i.xml ; \
 			fi ; \
 		fi ; \
 		if test -r $$i.xml ; then \

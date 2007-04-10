@@ -7,9 +7,9 @@
         Purpose of the document follows.
 -->
 <!DOCTYPE article PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.1.4p1">
-<!ENTITY manrevision "0.1">
-<!ENTITY date "September 2006">
+<!ENTITY appversion "1.1.5rc3">
+<!ENTITY manrevision "0.2">
+<!ENTITY date "April 2007">
 <!ENTITY app "xvidcap">
 <!ENTITY mf-cap "multi-frame capture">
 <!ENTITY sf-cap "single-frame capture">
@@ -18,20 +18,17 @@
     <!-- please do not change the id; for translations, change lang to -->
     <!-- appropriate code -->
     <articleinfo>
-        <title>Manuale di xvidcap V0.1</title>
+        <title>xvidcap Manual V0.2</title>
         <copyright>
-            <year>2006</year>
+            <year>2007</year>
             <holder>Karl H. Beckers</holder> 
         </copyright>
-
-        <!-- translators: uncomment this:
 
         <copyright>
         <year>2003</year>
         <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
         </copyright>
 
-        -->
         <publisher>
             <publishername>Karl H. Beckers</publishername>
         </publisher>
@@ -88,9 +85,18 @@
                     <para role="publisher">Karl H. Beckers</para>
                 </revdescription>
             </revision>
+            <revision>
+                <revnumber>xvidcap V0.2</revnumber>
+                <date>2007</date>
+                <revdescription>
+                    <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email></para>
+                    <para role="publisher">Karl H. Beckers</para>
+                </revdescription>
+            </revision>
 
         </revhistory>
-        <releaseinfo>Questo manuale descrive la versione 1.1.4p1 di xvidcap.</releaseinfo>
+        <releaseinfo> This manual describes version 1.1.5rc3 of xvidcap.
+        </releaseinfo>
         <legalnotice>
             <title>Segnalazioni</title>
             <para>Per segnalare bug o proporre suggerimenti riguardanti l'applicazione <application>xvidcap</application> o questa guida, seguire le istruzioni reperibili sul sito di <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap, presso SF.net</ulink>.</para>
@@ -110,14 +116,21 @@
         <title>Introduzione</title>
         <para><application>xvidcap</application> è uno strumento che acquisisce su file il movimento presente in un'area selezionata di uno schermo X11. Ciò avviene tramite l'acquisizione di un numero configurabile di schermate per secondo ed il loro salvataggio, sia come schermate individualiche come video. Questo tipo di applicazione, al giorno d'oggi, è comunemente definito programma screencam o screencast. Uno dei più primi programmi del genere era <application>Lotus Screencam</application>, che è stato d'ispirazione per <application>xvidcap</application>.</para>
 
-        <para><application>xvidcap</application> può essere usato in due diverse modalità operative: <orderedlist>
+        <para>
+            <application>xvidcap</application> can be used in two distinct modes of operation:
+            <orderedlist>
                 <listitem>
-                    <para><guilabel>acquisizione a fotogramma singolo</guilabel> -- acquisisce schermate singole in file distinti.</para>
+                    <para>
+                        <guilabel>single-frame capture</guilabel> -- capture individual screenshots to one file each.
+                    </para>
                 </listitem>
                 <listitem>
-                    <para><guilabel>acquisizione a fotogrammi multipli</guilabel> -- acquisisce e codifica in video al volo.</para>
+                    <para>
+                        <guilabel>multi-frame capture</guilabel> -- capture and encode to video on the fly.
+                    </para>
                 </listitem>
-            </orderedlist></para>    
+            </orderedlist>
+        </para>    
 
         <tip>
             <title>Promemoria</title>
@@ -215,7 +228,20 @@
                                 </screenshot>
                             </entry>
                             <entry>
-                                <para>Il <guilabel>contatore dei fotogrammi scartati</guilabel> fornisce un'indicazione della bontà della sessione di acquisizione alla velocità desiderata. Se il proprio sistema viene sottoposto ad un carico eccessivo, potrebbe non essere in grado di acquisire il numero di fotogrammi desiderato. Ciò si manifesterà con un'anomala velocità di riproduzione dei video. <application>xvidcap</application> visualizza uno stato verde se è possibile acquisire o quasi alla velocità desiderata. Se ci sono fotogrammi scartati lo stato diventa giallo, o rosso se il numero di fotogrammi scartati è eccessivo. Per ridurre il numero di fotogrammi scartati, è possibile acquisire una parte di schermo più piccola, seleziona una velocità minore, chiudere quante più applicazioni che caricano eccessivamente il sistema sia possibile, o eseguire il programma sun una macchina più potente. Potrebbe, inoltre, essere di aiuto il <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">ridimensionamento</ulink> dei dati acquisiti.</para>
+                                <para>
+                                    The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well your capture session can capture at 
+                                    your desired frame rate. If your system is under heavy load, it may not be able to capture
+                                    as many frames per second as you wish. This will result in a video that plays back too quickly.
+                                    <application>xvidcap</application> displays a green status if you can or can almost capture at the desired frame rate. If
+                                    you have some frame drop the status turns to yellow, or red if there is excessive frame drop.
+                                    To reduce frame drop you can capture a smaller part of your screen, select a lower frame rate,
+                                    quit as many other applications putting stress on your system as possible, or run on a more 
+                                    powerful machine. It may also help to <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-rescale">downscale</ulink>
+                                    the captured data. Another means for making screen capture lighter on your system is to
+				    make use of the XDamage extension. See the corresponding paragraph about the 
+				    <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-general">general options tab</ulink>
+				    of the preferences dialog.
+                                </para>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-stop">
@@ -360,11 +386,34 @@
                                     <listitem>
                                         <para>fare clic sullo sfondo per selezionare l'acquisizione a schermo intero.</para>
                                         <caution>
-                                            <title>Acquisizione a schermo intero</title>
-                                            <para>Con le dimensioni attuali degli schermi, l'acquisizione a schermo intero ha un'alta probabilità di sottoporre il sistema a un elevato carico. Guardare il contatore dei fotogrammi scartati e, se possibile, regolare la risoluzione del proprio schermo se è necessaria un'acquisizione a schermo intero. Si tenga presente che la tipica risoluzione dei DVD è di 720 x 486. L'acquisizione a schermo intero a risoluzione di 1400 x 1050 significa codificare in tempo reale una quantità di dati 4 volte maggiore di quella di un DVD -- niente a che vedere con qualcosa che si può realizzare con carta e penna.</para>
+                                            <title>Full-Screen Capture</title>
+                                            <para>
+                                                With current display sizes, full-screen capture has a very high probability of
+                                                putting too much stress on your system. Watch the frame drop monitor and possibly
+                                                adjust your screen resolution if you absolutely must capture full-screen. 
+                                                Remember that DVDs typically contain resolutions of 720 x 486. Capturing full-screen 
+                                                at a resolution of 1400 x 1050 means encoding about 4 times the data rate of a DVD
+                                                in real time -- not something you will be doing with a pencil and paper.
+                                            </para>
+						It is not just the encoding of a full screen capture, though, that may put 
+						too much stress on your system. Grabbing the complete capture area from the X11 
+						display is a heavy task on its own right. Using the XDamage extension may ease
+						the effect of that, however there may be caveats. See the corresponding paragraph about the 
+						<ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-set-xdamage">general options tab</ulink>
+						of the preferences dialog.
+                                            <para>
+                                            </para>
                                         </caution>
                                     </listitem>
                                 </itemizedlist>
+        			<tip>
+            				<title>Resize By Dragging</title>
+            				<para>
+					Starting with version 1.1.5, you can also resize the area to capture by dragging on
+					the edges of the frame while not capturing. Use that feature as you would resize a
+					normal window.
+					</para>
+        			</tip>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-edit">
@@ -629,10 +678,19 @@
                                 <para>Catturare il puntatore del mouse</para>
                             </entry>
                             <entry>
-                                <para>Spuntare questa opzione per catturare la posizione del puntatore del mouse. Una volta spuntata, è possibile selezionare se catturare un puntatore bianco o nero. Ciò è richiesto perché <application>xvidcap</application> non ha modo di catturare il puntatore del mouse reale, ma solo la sua posizione. Perciò, <application>xvidcap</application> genera un falso puntatore nel filmato acquisito.</para>
+                                <para>
+                                    Check this to capture the mouse pointer.
+                                </para>
                                 <caution>
                                     <title>Forme personalizzate del puntatore del mouse</title>
-                                    <para>Per le ragioni menzionate in precedenza, <application>xvidcap</application> non può catturare la forma del puntatore del mouse. Per questo motivo, se l'applicazione oggetto di acquisizione usa una forma specifica del puntatore del mouse, la si perderà in fase di acquisizione del filmato. Se il contenuto acquisito è strettamente legato alla forma del puntatore, è bene assicurarsi di trovare altre strade per mostrare tale forma o elaborare l'argomento nel parlato.</para>
+                                    <para>
+					Without the XFixes extension to X11, there is no way for <application>xvidcap</application> to 
+                                    	capture the real, current mouse pointer, only its position. If the extension is not available both
+					on the machine where <application>xvidcap</application> was built and where it is run, 
+					<application>xvidcap</application> generates a dummy mouse pointer in the captured movie.
+					In this case you will find a radiobutton next to this checkbox which
+					allows you to select whether the dummy pointer should be white or black.
+                                    </para>
                                 </caution>
                             </entry>
                         </row>
@@ -653,6 +711,36 @@
                                 <caution>
                                     <title>Accesso con memoria condivisa a X11</title>
                                     <para>L'uso della memoria condivisa è abilitato in maniera predefinita se la macchina sulla quale <application>xvidcap</application> è stato compilato supporta l'accesso con memoria condivisa a X11, che rappresenta oggigiorno la situazione tipica. È necessario disabilitare questa funzione, comunque, se server X11 e client non sono in esecuzione sulla stessa macchina, ad es. se si usa un terminale X su thin client.</para>
+                                </caution>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-set-xdamage">
+                            <entry>
+                                <para>
+                                    Manually Set XDamage
+                                </para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    Check this if you want to override the decision <application>xvidcap</application> makes
+				    about whether or not to use the XDamage extension to speed up screen capture. This 
+				    extension allows <application>xvidcap</application> to be notified about the portions
+				    of the screen that have changed between individual frames, so it does not need to 
+				    fetch the complete area to capture for every frame. <application>xvidcap</application> will
+				    default to using XDamage if it was available at build-time, if it is available at
+				    runtime, and if the window manager used is not compiz or beryl. If you are using
+				    beryl and still want to use the XDamage extension, check this control to enable the
+				    radiobuttons to the right and choose "enabled".
+                                </para>
+                                <caution>
+                                    <title>XDamage and compiz or beryl</title>
+                                    <para>
+					Due to the advanced visual effects possible with compiz, beryl and the likes,
+					the notifications received by <application>xvidcap</application> through XDamage
+					may not be sufficient for determining the right screen portions to capture.
+					You can still force <application>xvidcap</application> to use it as described
+					above, but your mileage may vary.
+                                    </para>
                                 </caution>
                             </entry>
                         </row>
@@ -678,6 +766,13 @@
                             </entry>
                             <entry>
                                 <para>Usare questa opzione per ridurre le dimensioni del video di uscita rispetto alle dimensioni originali della porzione di schermo acquisita. La percentuale specificata qui è la dimensione dell'uscita relativa all'ingresso. Per esempio, specificando <quote>25</quote>, l'altezza e la larghezza dell'uscita saranno la metà dell'originale. Le dimensioni dell'immagine di uscita saranno il 25 percento dell'area acquisita.</para>
+                                <caution>
+                                    <title>Rescale does not work with XWD output</title>
+                                    <para>
+					Rescaling output frames does work with all output formats and codecs
+					other than XWD.
+                                    </para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>
@@ -777,6 +872,15 @@
                             </entry>
                             <entry>
                                 <para>Qualità desiderata dell'uscita</para>
+                                <caution>
+                                    <title>Quality Setting changed in 1.1.5</title>
+                                    <para>
+					The effect of setting quality to a value below 100 % has changed in
+					<application>xvidcap</application> 1.1.5. Be sure to test the values
+					in your stored preferences. Quality settings do not apply to XWD
+					output.
+                                    </para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>
@@ -860,6 +964,20 @@
                             </entry>
                             <entry>
                                 <para>Qualità desiderata dell'uscita</para>
+                                <caution>
+                                    <title>Quality Setting changed in 1.1.5</title>
+                                    <para>
+					The effect of setting quality to a value below 100 % has changed in
+					<application>xvidcap</application> 1.1.5. Be sure to test the values
+					in your stored preferences. In the past a quality setting of <quote>20</quote>
+					could yield good results depending on the codec chosen. This is no longer
+					the case. A setting of <quote>75</quote> may be acceptable to you, a
+					value of <quote>85</quote> will typically be. A video resulting from a
+					capture with a quality setting of <quote>90</quote> will not normally
+					be easy to distinguish from one captured at <quote>100</quote> percent
+					quality.
+                                    </para>
+                                </caution>
                             </entry>
                         </row>
                     </tbody>

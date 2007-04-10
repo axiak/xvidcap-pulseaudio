@@ -1,4 +1,4 @@
-.TH xvidcap 1  "September 2006" 
+.TH xvidcap 1  "April 2007" 
 .SH NAME
 XVidCap \- Record X11 screen portions to video
 .SH SYNOPSIS
@@ -81,11 +81,13 @@ most multi\-frame capture codecs.
 .TP 
 \fB\-\-rescale \fIsize percentage\fB\fR
 Rescale the output to a percentage of the original input. A value of \fB25\fR, e. g.
-makes the output size be 25 percent of the original input area.
+makes the output size be 25 percent of the original input area. Rescaling does not work with XWD
+output.
 .TP 
 \fB\-\-quality \fIquality percentage\fB\fR
 Specify a value between \fB0\fR and \fB100\fR to define the quality encoding. The 
-default value is \fB75\fR. 
+default value is \fB75\fR. Note that the effect of a value below \fB100\fR has changed in version
+1.1.5.
 .TP 
 \fB\-\-source \fRx11|shm
 Enable or disable the usage of the X11 shared memory extension. For shared 
