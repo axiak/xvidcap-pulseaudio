@@ -1,4 +1,8 @@
 
+2007-04-11  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* doc/xvidcap/it/figures/prefs-general.png: Updated
+		image for Italian documentation
+
 2007-04-11  Vincenzo Reale <smart2128@baslug.org>
 	* po/it.po, doc: man/it/xvidcap.1-it.po,
 		xvidcap/it/xvidcap.xml-it.po,
