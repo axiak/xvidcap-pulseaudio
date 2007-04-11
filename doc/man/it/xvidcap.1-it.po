@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap.1.xml\n"
-"POT-Creation-Date: 2007-04-09 19:00+0200\n"
-"PO-Revision-Date: 2006-10-13 10:38+0200\n"
+"POT-Creation-Date: 2007-04-11 15:41+0200\n"
+"PO-Revision-Date: 2007-04-10 20:54+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "1"
 
 #: ../C/xvidcap.1.xml:8(refmiscinfo)
 msgid "April 2007"
-msgstr ""
+msgstr "Aprile 2007"
 
 #: ../C/xvidcap.1.xml:11(refname)
 msgid "XVidCap"
@@ -38,55 +38,55 @@ msgstr "-v"
 
 #: ../C/xvidcap.1.xml:20(arg)
 msgid "<arg choice=\"plain\">--mf</arg>|<arg choice=\"plain\">--sf</arg>"
-msgstr ""
+msgstr "<arg choice=\"plain\">--mf</arg>|<arg choice=\"plain\">--sf</arg>"
 
 #: ../C/xvidcap.1.xml:21(arg)
 msgid ""
 "--file <replaceable>file name pattern</replaceable><arg choice=\"plain\">|-</"
 "arg>"
 msgstr ""
+"--file <replaceable>modello di nome file</replaceable><arg choice=\"plain"
+"\">|-</arg>"
 
 #: ../C/xvidcap.1.xml:22(arg) ../C/xvidcap.1.xml:137(option)
 msgid "--fps <replaceable>frames per second</replaceable>"
-msgstr ""
+msgstr "--fps <replaceable>fotogrammi al secondo</replaceable>"
 
 #: ../C/xvidcap.1.xml:24(arg) ../C/xvidcap.1.xml:152(option)
-#, fuzzy
 msgid "--cap_geometry <replaceable>geometry</replaceable>"
-msgstr "--cap_geometry <placeholder-1/>"
+msgstr "--cap_geometry <replaceable>geometria</replaceable>"
 
 #: ../C/xvidcap.1.xml:25(arg) ../C/xvidcap.1.xml:167(option)
 msgid "--rescale <replaceable>size percentage</replaceable>"
-msgstr ""
+msgstr "--rescale <replaceable>percentuale della dimensione</replaceable>"
 
 #: ../C/xvidcap.1.xml:26(arg) ../C/xvidcap.1.xml:177(option)
 msgid "--quality <replaceable>quality percentage</replaceable>"
-msgstr ""
+msgstr "--quality <replaceable>percentuale della qualità</replaceable>"
 
 #: ../C/xvidcap.1.xml:27(arg)
 msgid "--source <arg choice=\"plain\">x11|shm</arg>"
-msgstr ""
+msgstr "--source <arg choice=\"plain\">x11|shm</arg>"
 
 #: ../C/xvidcap.1.xml:29(arg) ../C/xvidcap.1.xml:198(option)
-#, fuzzy
 msgid "--time <replaceable>maximum duration in seconds</replaceable>"
-msgstr "durata massima in secondi"
+msgstr "--time <replaceable>durata massima in secondi</replaceable>"
 
 #: ../C/xvidcap.1.xml:30(arg) ../C/xvidcap.1.xml:210(option)
 msgid "--frames <replaceable>maximum frames</replaceable>"
-msgstr ""
+msgstr "--frames <replaceable>numero massimo fotogrammi</replaceable>"
 
 #: ../C/xvidcap.1.xml:31(arg) ../C/xvidcap.1.xml:219(option)
 msgid "--start_no <replaceable>initial frame number</replaceable>"
-msgstr ""
+msgstr "--start_no <replaceable>numero fotogramma iniziale</replaceable>"
 
 #: ../C/xvidcap.1.xml:33(arg)
 msgid "--continue <arg choice=\"plain\">yes|no</arg>"
-msgstr ""
+msgstr "--continue <arg choice=\"plain\">yes|no</arg>"
 
 #: ../C/xvidcap.1.xml:34(arg)
 msgid "--gui <arg choice=\"plain\">yes|no</arg>"
-msgstr ""
+msgstr "--gui <arg choice=\"plain\">yes|no</arg>"
 
 #: ../C/xvidcap.1.xml:36(arg) ../C/xvidcap.1.xml:257(option)
 msgid "--auto"
@@ -94,7 +94,7 @@ msgstr "--auto"
 
 #: ../C/xvidcap.1.xml:38(arg) ../C/xvidcap.1.xml:270(option)
 msgid "--codec <replaceable>video codec</replaceable>"
-msgstr ""
+msgstr "--codec <replaceable>codificatore video</replaceable>"
 
 #: ../C/xvidcap.1.xml:39(arg) ../C/xvidcap.1.xml:279(option)
 msgid "--codec-help"
@@ -102,7 +102,7 @@ msgstr "--codec-help"
 
 #: ../C/xvidcap.1.xml:40(arg) ../C/xvidcap.1.xml:287(option)
 msgid "--format <replaceable>output file format</replaceable>"
-msgstr ""
+msgstr "--format <replaceable>formato del file di uscita</replaceable>"
 
 #: ../C/xvidcap.1.xml:41(arg) ../C/xvidcap.1.xml:296(option)
 msgid "--format-help"
@@ -110,11 +110,11 @@ msgstr "--format-help"
 
 #: ../C/xvidcap.1.xml:43(arg)
 msgid "--audio <arg choice=\"plain\">yes|no</arg>"
-msgstr ""
+msgstr "--audio <arg choice=\"plain\">yes|no</arg>"
 
 #: ../C/xvidcap.1.xml:44(arg) ../C/xvidcap.1.xml:326(option)
 msgid "--aucodec <replaceable>audio codec</replaceable>"
-msgstr ""
+msgstr "--aucodec <replaceable>codificatore audio</replaceable>"
 
 #: ../C/xvidcap.1.xml:45(arg) ../C/xvidcap.1.xml:335(option)
 msgid "--aucodec-help"
@@ -125,19 +125,20 @@ msgid ""
 "--audio_in <replaceable>audio capture device</replaceable><arg choice=\"plain"
 "\">|-</arg>"
 msgstr ""
+"--audio_in <replaceable>dispositivo di acquisizione audio</replaceable><arg "
+"choice=\"plain\">|-</arg>"
 
 #: ../C/xvidcap.1.xml:47(arg) ../C/xvidcap.1.xml:356(option)
 msgid "--audio_bits <replaceable>audio bit rate</replaceable>"
-msgstr ""
+msgstr "--audio_bits <replaceable>bitrate audio</replaceable>"
 
 #: ../C/xvidcap.1.xml:48(arg) ../C/xvidcap.1.xml:365(option)
 msgid "--audio_rate <replaceable>audio sample rate</replaceable>"
-msgstr ""
+msgstr "--audio_rate <replaceable>campionamento audio</replaceable>"
 
 #: ../C/xvidcap.1.xml:49(arg) ../C/xvidcap.1.xml:374(option)
-#, fuzzy
 msgid "--audio_channels <replaceable>audio channels</replaceable>"
-msgstr "--audio_channels <placeholder-1/>"
+msgstr "--audio_channels <replaceable>canali audio</replaceable>"
 
 #: ../C/xvidcap.1.xml:54(title)
 msgid "Introduction"
@@ -254,7 +255,7 @@ msgstr ""
 
 #: ../C/xvidcap.1.xml:113(option)
 msgid "--file <replaceable>file name pattern</replaceable>"
-msgstr ""
+msgstr "--file <replaceable>modello di nome file</replaceable>"
 
 #: ../C/xvidcap.1.xml:115(para)
 msgid ""
@@ -348,7 +349,6 @@ msgstr ""
 "fotogrammi multipli."
 
 #: ../C/xvidcap.1.xml:169(para)
-#, fuzzy
 msgid ""
 "Rescale the output to a percentage of the original input. A value of "
 "<literal>25</literal>, e. g. makes the output size be 25 percent of the "
@@ -356,19 +356,20 @@ msgid ""
 msgstr ""
 "Ridimensiona l'uscita a una percentuale dell'ingresso originale. Una valore "
 "di <literal>25</literal>, ad es. fa sì che la dimensione d'uscita sia il 25 "
-"percento dell'area d'ingresso originale."
+"percento dell'area d'ingresso originale. Il ridimensionamento non funziona "
+"con l'uscita XWD."
 
 #: ../C/xvidcap.1.xml:179(para)
-#, fuzzy
 msgid ""
 "Specify a value between <literal>0</literal> and <literal>100</literal> to "
 "define the quality encoding. The default value is <literal>75</literal>. "
 "Note that the effect of a value below <literal>100</literal> has changed in "
 "version 1.1.5."
 msgstr ""
-"Specifica un valore tra <literal>0</literal> e <literal>100</literal> per "
+"Specificare un valore tra <literal>0</literal> e <literal>100</literal> per "
 "definire la qualità di codifica. Il valore predefinito è <literal>75</"
-"literal>."
+"literal>. Notare che l'effetto di un valore al di sotto di <literal>100</"
+"literal> è cambiato nella versione 1.1.5"
 
 #: ../C/xvidcap.1.xml:187(term)
 msgid "<option>--source </option>x11|shm"
@@ -572,6 +573,7 @@ msgstr "Elenca i codificatori audio validi."
 #: ../C/xvidcap.1.xml:343(option)
 msgid "--audio_in <replaceable>audio capture device</replaceable>|-"
 msgstr ""
+"--audio_in <replaceable>dispositivo di acquisizione audio</replaceable>|-"
 
 #: ../C/xvidcap.1.xml:345(para)
 msgid ""

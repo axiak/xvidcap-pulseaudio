@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap.xml-it\n"
-"POT-Creation-Date: 2007-04-10 19:06+0200\n"
-"PO-Revision-Date: 2006-10-23 20:05+0100\n"
+"POT-Creation-Date: 2007-04-11 15:41+0200\n"
+"PO-Revision-Date: 2007-04-10 22:30+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,22 +15,20 @@ msgstr ""
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:217(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/xvidcap-main-ctrl.png'; "
 "md5=fb6e04bae4e182bd3b31e8e974063c39"
 msgstr ""
 "@@image: 'figures/xvidcap-main-ctrl.png'; "
-"md5=d61ad3e0f69906346be4e66a70e7f0b2"
+"md5=fb6e04bae4e182bd3b31e8e974063c39"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:241(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/filename-button.png'; md5=2ad3a896d39e80e9825954c1760953f6"
 msgstr ""
-"@@image: 'figures/filename-button.png'; md5=8aad0250f9e4fa2bf4d881492251618a"
+"@@image: 'figures/filename-button.png'; md5=2ad3a896d39e80e9825954c1760953f6"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -43,11 +41,10 @@ msgstr ""
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:299(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/stop-toggle.png'; md5=2e9e545991286d196f134c944ddda4ae"
 msgstr ""
-"@@image: 'figures/stop-toggle.png'; md5=f698f6076c895346f0ba4289b19f3787"
+"@@image: 'figures/stop-toggle.png'; md5=2e9e545991286d196f134c944ddda4ae"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -91,11 +88,10 @@ msgstr ""
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:424(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/lock-toggle.png'; md5=5f9d5046048590afedcfefaae1c9fb52"
 msgstr ""
-"@@image: 'figures/lock-toggle.png'; md5=77768c90461410415481f0a22f0168bd"
+"@@image: 'figures/lock-toggle.png'; md5=5f9d5046048590afedcfefaae1c9fb52"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -116,9 +112,8 @@ msgstr ""
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:551(None)
-#, fuzzy
 msgid "@@image: 'figures/menu.png'; md5=d38670a2c359b6e233aee31497ad012d"
-msgstr "@@image: 'figures/menu.png'; md5=d19293507555b63ed72123b79a6745c1"
+msgstr "@@image: 'figures/menu.png'; md5=d38670a2c359b6e233aee31497ad012d"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -191,11 +186,10 @@ msgstr "@@image: 'figures/menu-quit.png'; md5=97770bce6e5724f83bed779264a00564"
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:813(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/prefs-general.png'; md5=055d3cf5f17670aa0f2b1e013e745548"
 msgstr ""
-"@@image: 'figures/prefs-general.png'; md5=e83682061bdd2d0dca1b96e8492aaaa4"
+"@@image: 'figures/prefs-general.png'; md5=055d3cf5f17670aa0f2b1e013e745548"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -244,14 +238,12 @@ msgstr ""
 "@@image: 'figures/xvidcap-warning.png'; md5=dbae204ebc258d14d742941f1398c939"
 
 #: ../C/xvidcap.xml:25(title)
-#, fuzzy
 msgid "xvidcap Manual V0.2"
-msgstr "Manuale di xvidcap V0.1"
+msgstr "Manuale di xvidcap V0.2"
 
 #: ../C/xvidcap.xml:27(year) ../C/xvidcap.xml:95(date)
-#, fuzzy
 msgid "2007"
-msgstr "2006"
+msgstr "2007"
 
 #: ../C/xvidcap.xml:28(holder) ../C/xvidcap.xml:37(publishername)
 #: ../C/xvidcap.xml:90(para) ../C/xvidcap.xml:99(para)
@@ -259,13 +251,12 @@ msgid "Karl H. Beckers"
 msgstr "Karl H. Beckers"
 
 #: ../C/xvidcap.xml:32(year)
-#, fuzzy
 msgid "2003"
-msgstr "2006"
+msgstr "2003"
 
 #: ../C/xvidcap.xml:33(holder)
 msgid "ME-THE-TRANSLATOR (Latin translation)"
-msgstr ""
+msgstr "Vincenzo Reale (traduzione italiana)"
 
 #: ../C/xvidcap.xml:46(firstname)
 msgid "Karl"
@@ -296,14 +287,12 @@ msgid "Karl H. Beckers <email>karl.h.beckers@gmx.net</email>"
 msgstr "Karl H. Beckers <email>karl.h.beckers@gmx.net</email>"
 
 #: ../C/xvidcap.xml:94(revnumber)
-#, fuzzy
 msgid "xvidcap V0.2"
-msgstr "xvidcap V0.1"
+msgstr "xvidcap V0.2"
 
 #: ../C/xvidcap.xml:104(releaseinfo)
-#, fuzzy
 msgid "This manual describes version 1.1.5rc3 of xvidcap."
-msgstr "Questo manuale descrive la versione 1.1.4p1 di xvidcap."
+msgstr "Questo manuale descrive la versione 1.1.5rc3 di xvidcap."
 
 #: ../C/xvidcap.xml:107(title)
 msgid "Feedback"
@@ -368,6 +357,12 @@ msgid ""
 "listitem><listitem><para><guilabel>multi-frame capture</guilabel> -- capture "
 "and encode to video on the fly. </para></listitem></orderedlist>"
 msgstr ""
+"<application>xvidcap</application> può essere utilizzato in due distinte "
+"modalità operativen: <orderedlist><listitem><para><guilabel>acquisizione a "
+"fotogramma singolo</guilabel> -- per acquisire ciascuna singola schermata in "
+"altrettanti file. </para></listitem><listitem><para><guilabel>acquisizione a "
+"fotogrammi multipli</guilabel> -- per acquisire e codificare al volo un "
+"video. </para></listitem></orderedlist>"
 
 #: ../C/xvidcap.xml:151(title)
 msgid "Mnemonic"
@@ -529,7 +524,6 @@ msgid "Frame Drop Meter"
 msgstr "Contatore dei fotogrammi scartati"
 
 #: ../C/xvidcap.xml:278(para)
-#, fuzzy
 msgid ""
 "The <guilabel>Frame Drop Meter</guilabel> provides an indication of how well "
 "your capture session can capture at your desired frame rate. If your system "
@@ -556,12 +550,16 @@ msgstr ""
 "possibile acquisire o quasi alla velocità desiderata. Se ci sono fotogrammi "
 "scartati lo stato diventa giallo, o rosso se il numero di fotogrammi "
 "scartati è eccessivo. Per ridurre il numero di fotogrammi scartati, è "
-"possibile acquisire una parte di schermo più piccola, seleziona una velocità "
-"minore, chiudere quante più applicazioni che caricano eccessivamente il "
-"sistema sia possibile, o eseguire il programma sun una macchina più potente. "
-"Potrebbe, inoltre, essere di aiuto il <ulink type=\"help\" url=\"ghelp:"
-"xvidcap?xvidcap-prefs-TBL-rescale\">ridimensionamento</ulink> dei dati "
-"acquisiti."
+"possibile acquisire una parte di schermo più piccola, selezionare una "
+"velocità minore, chiudere quante più applicazioni che caricano "
+"eccessivamente il sistema sia possibile, o eseguire il programma sun una "
+"macchina più potente. Potrebbe, inoltre, essere di aiuto il <ulink type="
+"\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-rescale\">ridimensionamento</"
+"ulink> dei dati acquisiti. Un altro modo per rendere più leggera "
+"l'acquisizione dello schermo sul proprio sistema consiste nell'utilizzo "
+"dell'estensione XDamage. Vedere il paragrafo corrispondente sulla <ulink "
+"type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-general\">scheda delle "
+"opzioni generali</ulink> della finestra delle preferenze."
 
 #: ../C/xvidcap.xml:301(phrase)
 msgid "Stop Button"
@@ -738,7 +736,6 @@ msgstr ""
 "fare clic sullo sfondo per selezionare l'acquisizione a schermo intero."
 
 #: ../C/xvidcap.xml:482(caution)
-#, fuzzy
 msgid ""
 "<title>Full-Screen Capture</title><para> With current display sizes, full-"
 "screen capture has a very high probability of putting too much stress on "
@@ -755,19 +752,26 @@ msgid ""
 "xvidcap-prefs-TBL-set-xdamage\">general options tab</ulink> of the "
 "preferences dialog. <para></para>"
 msgstr ""
-"Con le dimensioni attuali degli schermi, l'acquisizione a schermo intero ha "
-"un'alta probabilità di sottoporre il sistema a un elevato carico. Guardare "
-"il contatore dei fotogrammi scartati e, se possibile, regolare la "
-"risoluzione del proprio schermo se è necessaria un'acquisizione a schermo "
-"intero. Si tenga presente che la tipica risoluzione dei DVD è di 720 x 486. "
-"L'acquisizione a schermo intero a risoluzione di 1400 x 1050 significa "
-"codificare in tempo reale una quantità di dati 4 volte maggiore di quella di "
-"un DVD -- niente a che vedere con qualcosa che si può realizzare con carta e "
-"penna."
+"<title>Acquisizione a schermo intero</title><para>Con le dimensioni attuali "
+"dello schermo, l'acquisizione a schermo intero ha un'alta probabilità di "
+"sottoporre il sistema a un elevato carico. Guardare il contatore dei "
+"fotogrammi scartati e, se possibile, regolare la risoluzione del proprio "
+"schermo se è necessaria un'acquisizione a schermo intero. Si tenga presente "
+"che la tipica risoluzione dei DVD è di 720 x 486. L'acquisizione a schermo "
+"intero a risoluzione di 1400 x 1050 significa codificare in tempo reale una "
+"quantità di dati 4 volte maggiore di quella di un DVD -- niente a che vedere "
+"con qualcosa che si può realizzare con carta e penna. </para> Comunque, non "
+"è solo la codifica di un'acquisizione a schermo intero che può stressare il "
+"sistema. La cattura dell'intera area di acquisizione da uno schermo X11 è "
+"un'operazione di per sé pesante. L'utilizzo dell'estensione XDamage potrebbe "
+"alleviare questo effetto, anche se potrebbe generare degli avvisi. Vedere il "
+"paragrafo corrispondente sulla <ulink type=\"help\" url=\"ghelp:xvidcap?"
+"xvidcap-prefs-TBL-set-xdamage\">scheda delle opzioni generali</ulink> della "
+"finestra delle preferenze. <para></para>"
 
 #: ../C/xvidcap.xml:504(title)
 msgid "Resize By Dragging"
-msgstr ""
+msgstr "Ridimensiona trascinando"
 
 #: ../C/xvidcap.xml:505(para)
 msgid ""
@@ -775,6 +779,10 @@ msgid ""
 "dragging on the edges of the frame while not capturing. Use that feature as "
 "you would resize a normal window."
 msgstr ""
+"A partire dalla versione 1.1.5, è possibile ridimensionare l'area di "
+"acquisizione anche trascinando i bordi del fotogramma mentre non si è in "
+"fase di acquisizione. Utilizzare questa funzionalità come si ridimensiona "
+"una normale finestra."
 
 #: ../C/xvidcap.xml:520(phrase)
 msgid "Edit Button"
@@ -1029,10 +1037,8 @@ msgid "Capture Mouse Pointer"
 msgstr "Catturare il puntatore del mouse"
 
 #: ../C/xvidcap.xml:847(para)
-#, fuzzy
 msgid "Check this to capture the mouse pointer."
-msgstr ""
-"Spuntare questa opzione per acquisire l'audio insieme ai fotogrammi video."
+msgstr "Spuntare questa opzione per acquisireil puntatore del mouse."
 
 #: ../C/xvidcap.xml:851(title)
 msgid "Custom Mouse Pointer Shapes"
@@ -1049,6 +1055,14 @@ msgid ""
 "checkbox which allows you to select whether the dummy pointer should be "
 "white or black."
 msgstr ""
+"Senza l'estesione XFixes di X11, non c'è modo per <application>xvidcap</"
+"application> di acquisire l'effettivo, attuale puntatore, solo la sua "
+"posizione. Se l'estensione non è disponibile sia sulla macchina dove "
+"<application>xvidcap</application> è stato compilato sia dove è eseguito, "
+"<application>xvidcap</application> genera un puntatore del mouse fittizio "
+"nel filmato acquisito. In questo caso si troverà un pulsante di selezione "
+"accanto alla casella che consente di selezionare se il puntatore fittizio "
+"sarà bianco o nero."
 
 #: ../C/xvidcap.xml:865(para)
 msgid "Save Capture Geometry"
@@ -1097,7 +1111,7 @@ msgstr ""
 
 #: ../C/xvidcap.xml:902(para)
 msgid "Manually Set XDamage"
-msgstr ""
+msgstr "Imposta manualmente XDamage"
 
 #: ../C/xvidcap.xml:907(para)
 msgid ""
@@ -1112,10 +1126,22 @@ msgid ""
 "If you are using beryl and still want to use the XDamage extension, check "
 "this control to enable the radiobuttons to the right and choose \"enabled\"."
 msgstr ""
+"Selezionare questa opzione se si vuole scavalcare la decisione di "
+"<application>xvidcap</application> sull'uso o meno dell'estensione XDamage "
+"per velocizzare l'acquisizione dello schermo. Questa estensione permette a "
+"<application>xvidcap</application> di essere informato circa le porzioni di "
+"schermo che sono cambiate tra i singoli fotogrammi, in modo da non dover "
+"ottenere l'intera area da acquisire per ogni fotogramma. "
+"<application>xvidcap</application> cercherà di utilizzare XDamage in modo "
+"predefinito se disponibile al momento della compilazione, se è disponibile "
+"al momento dell'esecuzione, e se il gestore di finestre utilizzato non è "
+"compiz o beryl. Se si utilizza beryl e si desidera utilizzare comunque "
+"l'estensione XDamage, selezionare questo controllo per abilitare i pulsanti "
+"di selezione sulla destra e scegliere \"abilitato\"."
 
 #: ../C/xvidcap.xml:919(title)
 msgid "XDamage and compiz or beryl"
-msgstr ""
+msgstr "XDamage e compiz o beryl"
 
 #: ../C/xvidcap.xml:920(para)
 msgid ""
@@ -1125,6 +1151,12 @@ msgid ""
 "portions to capture. You can still force <application>xvidcap</application> "
 "to use it as described above, but your mileage may vary."
 msgstr ""
+"A causa dei possibili effetti visuali avanzati di compiz, beryl e affini, le "
+"notifiche ricevute da <application>xvidcap</application> tramite XDamage "
+"potrebbero non essere sufficienti per determinare la giusta posizione delle "
+"schermo da acquisire. Si può comunque forzare <application>xvidcap</"
+"application> ad utilizzarla come descritto sopra, ma la distanza potrebbe "
+"variare."
 
 #: ../C/xvidcap.xml:932(para)
 msgid "Autocontinue"
@@ -1194,13 +1226,15 @@ msgstr ""
 
 #: ../C/xvidcap.xml:981(title)
 msgid "Rescale does not work with XWD output"
-msgstr ""
+msgstr "Il ridimensionamento non funziona con l'uscita XWD"
 
 #: ../C/xvidcap.xml:982(para)
 msgid ""
 "Rescaling output frames does work with all output formats and codecs other "
 "than XWD."
 msgstr ""
+"Il ridimensionamento dei fotogrammi di uscita funziona con tutti i formati "
+"di uscita e i codificatori tranne che con XWD."
 
 #: ../C/xvidcap.xml:995(title) ../C/xvidcap.xml:1003(title)
 #: ../C/xvidcap.xml:1009(phrase)
@@ -1347,7 +1381,7 @@ msgstr "Qualità desiderata dell'uscita"
 
 #: ../C/xvidcap.xml:1146(title) ../C/xvidcap.xml:1289(title)
 msgid "Quality Setting changed in 1.1.5"
-msgstr ""
+msgstr "Impostazione della qualità cambiata nella 1.1.5"
 
 #: ../C/xvidcap.xml:1147(para)
 msgid ""
@@ -1355,6 +1389,10 @@ msgid ""
 "<application>xvidcap</application> 1.1.5. Be sure to test the values in your "
 "stored preferences. Quality settings do not apply to XWD output."
 msgstr ""
+"L'effetto dell'impostazione della qualità a un valore inferiore al 100% è "
+"cambiato in <application>xvidcap</application> 1.1.5.  Assicurarsi di "
+"provare i valori nelle preferenze memorizzate. L'impostazione di qualità non "
+"si applica all'uscita XWD."
 
 #: ../C/xvidcap.xml:1162(title) ../C/xvidcap.xml:1169(title)
 #: ../C/xvidcap.xml:1175(phrase)
@@ -1455,6 +1493,15 @@ msgid ""
 "quality setting of <quote>90</quote> will not normally be easy to "
 "distinguish from one captured at <quote>100</quote> percent quality."
 msgstr ""
+"L'effetto dell'impostazione della qualità a un valore inferiore al 100% è "
+"cambiato in <application>xvidcap</application> 1.1.5. Assicurarsi di provare "
+"i valori nelle preferenze memorizzate. Nel passato un'impostazione di "
+"qualità di <quote>20</quote> poteva ottenere buoni risultati a seconda del "
+"codificatore scelto. Non è più così. Un'impostazione di <quote>75</quote> "
+"potrebbe essere accettabile, un valore di <quote>85</quote> normalmente lo "
+"sarà. Un video risultante da un'acquisizione con un'impostazione di qualità "
+"di <quote>90</quote> non sarà normalmente facile da distinguere da uno "
+"acquisito a una qualità del <quote>100</quote> percento."
 
 #: ../C/xvidcap.xml:1309(title)
 msgid "the multi-frame capture mode audio settings are:"

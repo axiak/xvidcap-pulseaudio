@@ -1,4 +1,10 @@
 
+2007-04-11  Vincenzo Reale <smart2128@baslug.org>
+	* po/it.po, doc: man/it/xvidcap.1-it.po,
+		xvidcap/it/xvidcap.xml-it.po,
+		xvidcap/it/xvidcap.xml, man/it/xvidcap.1.xml,
+		man/it/xvidcap.1: Italian translation
+
 2007-04-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* debian/control: added build dependencies
 	* src: capture.c, gnome_frame.c: cosmetics

@@ -4,7 +4,7 @@
     <refmeta>
         <refentrytitle>xvidcap</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo>April 2007</refmiscinfo>
+        <refmiscinfo>Aprile 2007</refmiscinfo>
     </refmeta>
     <refnamediv id="name">
         <refname>XVidCap</refname>
@@ -17,35 +17,35 @@
             <arg choice="opt">-v</arg>
 
             <arg choice="opt"><arg choice="plain">--mf</arg>|<arg choice="plain">--sf</arg></arg>
-            <arg choice="opt">--file <replaceable>file name pattern</replaceable><arg choice="plain">|-</arg></arg>
-            <arg choice="opt">--fps <replaceable>frames per second</replaceable></arg>
+            <arg choice="opt">--file <replaceable>modello di nome file</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice="opt">--fps <replaceable>fotogrammi al secondo</replaceable></arg>
 
-            <arg choice="opt">--cap_geometry <replaceable>geometry</replaceable></arg>
-            <arg choice="opt">--rescale <replaceable>size percentage</replaceable></arg>
-            <arg choice="opt">--quality <replaceable>quality percentage</replaceable></arg>
+            <arg choice="opt">--cap_geometry <replaceable>geometria</replaceable></arg>
+            <arg choice="opt">--rescale <replaceable>percentuale della dimensione</replaceable></arg>
+            <arg choice="opt">--quality <replaceable>percentuale della qualità</replaceable></arg>
             <arg choice="opt">--source <arg choice="plain">x11|shm</arg></arg>
 
-            <arg choice="opt">--time <replaceable>maximum duration in seconds</replaceable></arg>
-            <arg choice="opt">--frames <replaceable>maximum frames</replaceable></arg>
-            <arg choice="opt">--start_no <replaceable>initial frame number</replaceable></arg>
+            <arg choice="opt">--time <replaceable>durata massima in secondi</replaceable></arg>
+            <arg choice="opt">--frames <replaceable>numero massimo fotogrammi</replaceable></arg>
+            <arg choice="opt">--start_no <replaceable>numero fotogramma iniziale</replaceable></arg>
 
             <arg choice="opt">--continue <arg choice="plain">yes|no</arg></arg>
             <arg choice="opt">--gui <arg choice="plain">yes|no</arg></arg>
 
             <arg choice="opt">--auto</arg>
 
-            <arg choice="opt">--codec <replaceable>video codec</replaceable></arg>
+            <arg choice="opt">--codec <replaceable>codificatore video</replaceable></arg>
             <arg choice="opt">--codec-help</arg>
-            <arg choice="opt">--format <replaceable>output file format</replaceable></arg>
+            <arg choice="opt">--format <replaceable>formato del file di uscita</replaceable></arg>
             <arg choice="opt">--format-help</arg>
 
             <arg choice="opt">--audio <arg choice="plain">yes|no</arg></arg>
-            <arg choice="opt">--aucodec <replaceable>audio codec</replaceable></arg>
+            <arg choice="opt">--aucodec <replaceable>codificatore audio</replaceable></arg>
             <arg choice="opt">--aucodec-help</arg>
-            <arg choice="opt">--audio_in <replaceable>audio capture device</replaceable><arg choice="plain">|-</arg></arg>
-            <arg choice="opt">--audio_bits <replaceable>audio bit rate</replaceable></arg>
-            <arg choice="opt">--audio_rate <replaceable>audio sample rate</replaceable></arg>
-            <arg choice="opt">--audio_channels <replaceable>audio channels</replaceable></arg>
+            <arg choice="opt">--audio_in <replaceable>dispositivo di acquisizione audio</replaceable><arg choice="plain">|-</arg></arg>
+            <arg choice="opt">--audio_bits <replaceable>bitrate audio</replaceable></arg>
+            <arg choice="opt">--audio_rate <replaceable>campionamento audio</replaceable></arg>
+            <arg choice="opt">--audio_channels <replaceable>canali audio</replaceable></arg>
         </cmdsynopsis>
     </refsynopsisdiv>
 
@@ -73,43 +73,35 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--file <replaceable>file name pattern</replaceable></option></term>
+                <term><option>--file <replaceable>modello di nome file</replaceable></option></term>
                 <listitem>
                     <para>Nome file o modello da usare per il salvataggio dei fotogrammi acquisiti. Un modello di nome file contiene formattazioni alla maniera di printf() (rif. <literal>man printf</literal>) informazioni per rendere incrementabile il nome file, ad es. <literal>--file out-%02d.xwd</literal>. Ciò è necessario per l'acquisizione a fotogramma singolo. <application>xvidcap</application> sostituirà la prima stringa di formato printf() con il numero dei fotogrammi attualmente acquisiti. Nell'esempio dato, creerà i file <filename>out-00.xwd</filename>, <filename>out-01.xwd</filename>, <filename>out-02.xwd</filename>, ecc. Il numero del fotogramma iniziale può essere specificato con <literal>--start_no</literal>, vedere sopra.</para>
                     <para>L'acquisizione a fotogrammi multipli non richiede un modello di file. Specificandone uno, tuttavia, come <literal>--file miofilmato-%d.mpeg</literal> per esempio, <application>xvidcap</application> sostituirà la stringa di formato con il numero della sessione di registrazione attuale (iniziando sempre il conteggio da zero). Ciò permetterà di incrementare/decrementare manualmente tale numero, o usare la funzionalità di continuazione automatica (rif. <literal>--continue</literal> in seguito) creando effettivamente una di serie di file video.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--fps <replaceable>frames per second</replaceable></option></term>
+                <term><option>--fps <replaceable>fotogrammi al secondo</replaceable></option></term>
                 <listitem>
                     <para>Specifica il numero di fotogrammi da acquisire per ogni secondo. Questo parametro accetta valori in virgola mobile, e permette velocità di acquisizione molto basse come ad es. <literal>--fps 0.5</literal> per registrare un fotogramma ogni 2 secondi. Ciò è possibile solo in modalità a fotogramma singolo. I codificatori usati per la modalità a fotogrammi multipli di solito accettano solo alcune velocità come valide. Notare che le velocità frazionali dei fotogrammi per codificatori quali MPEG1 che accettano solo frazioni molto specifiche sono disabilitate in questa versione a causa di un'inconsistenza del conteggio del tempo frazionale tra <application>xvidcap</application> e libavcodec. Saranno accettate solo velocità intere dei fotogrammi.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--cap_geometry <replaceable>geometry</replaceable></option></term>
+                <term><option>--cap_geometry <replaceable>geometria</replaceable></option></term>
                 <listitem>
                     <para>Specifica la geometria per es. <application>xterm</application>, ad es. in questo modo: <replaceable>larghezza</replaceable>x<replaceable>altezza</replaceable>+<replaceable>posizione-x</replaceable>+<replaceable>posizione-y</replaceable></para>
                     <para>Ignora la larghezza e l'altezza predefinita del fotogramma acquisito. Usa il pulsante selettore dell'interfaccia grafica al posto di questa opzione della linea di comando per regolare la dimensione del fotogramma per una data finestra. Le dimensioni di acquisizione inferiori a 20 x 20 non funzionano correttamente con la gran parte dei codificatori per l'acquisizione a fotogrammi multipli.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--rescale <replaceable>size percentage</replaceable></option></term>
+                <term><option>--rescale <replaceable>percentuale della dimensione</replaceable></option></term>
                 <listitem>
-                    <para>
-                        Rescale the output to a percentage of the original input. A value of <literal>25</literal>, e. g.
-                        makes the output size be 25 percent of the original input area. Rescaling does not work with XWD
-			output.
-                    </para> 
+                    <para>Ridimensiona l'uscita a una percentuale dell'ingresso originale. Una valore di <literal>25</literal>, ad es. fa sì che la dimensione d'uscita sia il 25 percento dell'area d'ingresso originale. Il ridimensionamento non funziona con l'uscita XWD.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--quality <replaceable>quality percentage</replaceable></option></term>
+                <term><option>--quality <replaceable>percentuale della qualità</replaceable></option></term>
                 <listitem>
-                    <para>
-                        Specify a value between <literal>0</literal> and <literal>100</literal> to define the quality encoding. The 
-                        default value is <literal>75</literal>. Note that the effect of a value below <literal>100</literal> has changed in version
-			1.1.5.
-                    </para> 
+                    <para>Specificare un valore tra <literal>0</literal> e <literal>100</literal> per definire la qualità di codifica. Il valore predefinito è <literal>75</literal>. Notare che l'effetto di un valore al di sotto di <literal>100</literal> è cambiato nella versione 1.1.5</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -119,19 +111,19 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--time <replaceable>maximum duration in seconds</replaceable></option></term>
+                <term><option>--time <replaceable>durata massima in secondi</replaceable></option></term>
                 <listitem>
                     <para>Specifica il tempo massimo di acquisizione, se uguale a <literal>0</literal>, <application>xvidcap</application> acquisirà fino all'interruzione manuale. Per ogni altro valore, ogni sessione di registrazione si interromperà automaticamente dopo il numero specificato di secondi. Questo parametro è in conflitto con <literal>--frames</literal> (vedere in seguito). Se entrambi sono specificati, <application>xvidcap</application> interromperà l'acquisizione. Il programma accetta valori in virgola mobile, ad es. <literal>2.5</literal>.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--frames <replaceable>maximum frames</replaceable></option></term>
+                <term><option>--frames <replaceable>numero massimo fotogrammi</replaceable></option></term>
                 <listitem>
                     <para>Ferma l'acquisizione dopo un numero specificato di fotogrammi acquisiti. Se uguale a <literal>0</literal>, xvidcap acquisirà fino all'interruzione manuale, rif. <literal>--time</literal> sopra.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--start_no <replaceable>initial frame number</replaceable></option></term>
+                <term><option>--start_no <replaceable>numero fotogramma iniziale</replaceable></option></term>
                 <listitem>
                     <para>Definisce il numero iniziale che dovrebbe essere usato per la numerazione dei file. Il valore predefinito è <literal>0</literal>. Questo parametro è utilizzato solo per l'acquisizione a fotogramma singolo. La numerazione dei filmati per <literal>--continue</literal> inizia sempre da zero.</para> 
                 </listitem>
@@ -155,7 +147,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--codec <replaceable>video codec</replaceable></option></term>
+                <term><option>--codec <replaceable>codificatore video</replaceable></option></term>
                 <listitem>
                     <para>Non tiene conto delle preferenze e della selezione automatica del codificatore utilizzando il codificatore video espressamente specificato.</para> 
                 </listitem>
@@ -167,7 +159,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--format <replaceable>output file format</replaceable></option></term>
+                <term><option>--format <replaceable>formato del file di uscita</replaceable></option></term>
                 <listitem>
                     <para>Non tiene conto delle preferenze e della selezione automatica del formato utilizzando il formato espressamente specificato.</para> 
                 </listitem>
@@ -193,7 +185,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--aucodec <replaceable>audio codec</replaceable></option></term>
+                <term><option>--aucodec <replaceable>codificatore audio</replaceable></option></term>
                 <listitem>
                     <para>Non tiene conto delle preferenze e della selezione automatica del codificatore utilizzando il codificatore audio espressamente specificato.</para> 
                 </listitem>
@@ -205,7 +197,7 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_in <replaceable>audio capture device</replaceable>|-</option></term>
+                <term><option>--audio_in <replaceable>dispositivo di acquisizione audio</replaceable>|-</option></term>
                 <listitem>
                     <para>Acquisizione audio da un dispositivo specificato o da stdin. Questa opzione consente il doppiaggio di un video acquisito usando un comando come il seguente. Il valore predefinito è <filename>/dev/dsp</filename>.</para> 
                     <para>
@@ -214,19 +206,19 @@
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_bits <replaceable>audio bit rate</replaceable></option></term>
+                <term><option>--audio_bits <replaceable>bitrate audio</replaceable></option></term>
                 <listitem>
                     <para>Imposta il bitrate desiderato. Il valore predefinito è <literal>32000</literal> bit. Notare che, utilizzando lo STDIN, il file d'ingresso sarà ricampionato come richiesto.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_rate <replaceable>audio sample rate</replaceable></option></term>
+                <term><option>--audio_rate <replaceable>campionamento audio</replaceable></option></term>
                 <listitem>
                     <para>Imposta il campionamento desiderato. Il valore predefinito è <literal>22050</literal> Hz. Notare che, utilizzando lo STDIN, il file d'ingresso sarà ricampionato come richiesto.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
-                <term><option>--audio_channels <replaceable>audio channels</replaceable></option></term>
+                <term><option>--audio_channels <replaceable>canali audio</replaceable></option></term>
                 <listitem>
                     <para>Imposta il numero di canali desiderato. Il valore predefinito è <literal>1</literal> per mono. Ogni valore maggiore di <literal>2</literal> è probabilmente utile solo in caso di ingresso da STDIN e file audio AC a 5 canali o strumenti di registrazione di alta qualità e scarsa diffusione.</para> 
                 </listitem>

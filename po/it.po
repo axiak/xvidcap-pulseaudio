@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-09 20:22+0200\n"
-"PO-Revision-Date: 2007-03-03 12:11+0100\n"
+"POT-Creation-Date: 2007-04-11 15:39+0200\n"
+"PO-Revision-Date: 2007-04-10 20:14+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -1890,13 +1890,13 @@ msgid "%s %s: video codec not found\n"
 msgstr "%s %s: codificatore video non trovato\n"
 
 #: ../src/xtoffmpeg.c:1238
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s: The picture format you are grabbing (%i) is not supported by "
 "libswscale ... aborting\n"
 msgstr ""
-"%s %s: ordinamento rgb alla profondità dell'immagine %i non supportato... "
-"interruzione\n"
+"%s %s: Il formato dell'immagine che stai catturando (%i) non è supportato da "
+"libswscale... interruzione\n"
 
 #: ../src/xtoffmpeg.c:1316 ../src/xtoffmpeg.c:1336
 #, c-format
