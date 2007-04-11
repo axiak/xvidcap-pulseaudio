@@ -56,7 +56,7 @@ install: build
 
 #	dh_movefiles --sourcedir=debian/xvidcap
 
-	rm -rf debian/xvidcap/usr/share/doc/xvidcap_1.1.5rc2
+	rm -rf debian/xvidcap/usr/share/doc/xvidcap_1.1.5rc3
 
 #	cp src/XVidcap.ad debian/xvidcap/etc/X11/app-defaults/XVidcap
 	cp debian/bts debian/xvidcap/usr/share/bug/xvidcap/control
@@ -82,7 +82,7 @@ binary-arch: build install
 	dh_fixperms -Xppm2mpeg
 	dh_installdeb
 	dh_shlibdeps
-	dh_gencontrol -- -v1.1.5rc2
+	dh_gencontrol -- -v1.1.5rc3
 	dh_md5sums
 	dh_builddeb
 
