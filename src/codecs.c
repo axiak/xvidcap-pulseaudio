@@ -606,23 +606,21 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      CODEC_FLV,
      allowed_vid_codecs_swf,
      len_allowed_vid_codecs_swf,
-     AU_CODEC_NONE,
-/*
- * this seems to be broken in libav*
- *
 #ifdef HAVE_FFMPEG_AUDIO
 #ifdef HAVE_LIBMP3LAME
-    AU_CODEC_MP3,
-    "MP2|MP3"
-#else
-    AU_CODEC_MP2,
-    "MP2"
-#endif                          // HAVE_LIBMP3LAME
-#else
-*/
+     AU_CODEC_MP3,
+     au_codecs_mp3,
+     len_au_codecs_mp3,
+#else      // HAVE_LIBMP3LAME
+     AU_CODEC_NONE,
      NULL,
      0,
-// #endif                          // HAVE_FFMPEG_AUDIO
+#endif     // HAVE_LIBMP3LAME
+#else      // HAVE_FFMPEG_AUDIO
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_FFMPEG_AUDIO
      extension_swf,
      len_extension_swf},
     {

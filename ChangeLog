@@ -1,4 +1,9 @@
 
+2007-04-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/codecs.c: reenabling audio with swf since it
+		seems to work again (playback with adobe
+		flash player)
+
 2007-04-11  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* doc/xvidcap/it/figures/prefs-general.png: Updated
 		image for Italian documentation
