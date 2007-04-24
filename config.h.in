@@ -9,6 +9,9 @@
 /* GETTEXT package name */
 #undef GETTEXT_PACKAGE
 
+/* version of libgtk+ */
+#undef GTKVERSION
+
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #undef HAVE_BIND_TEXTDOMAIN_CODESET
 

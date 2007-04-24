@@ -1435,6 +1435,67 @@ xvc_ui_create ()
         xvc_ctrl_main_window =
             glade_xml_get_widget (xml, "xvc_ctrl_main_window");
 
+#if GTKVERSION < XVC_VERSION(2, 5, 0)
+        {
+            GtkWidget *w = NULL;
+
+/*
+ *            replace the following stock ids
+ *
+gtk-media-stop gtk-stop
+gtk-media-pause gtk-go-up (funky, but it works)
+gtk-media-record gtk-convert
+gtk-media-next gtk-goto-last
+gtk-media-rewind gtk-go-back
+gtk-media-forward gtk-go-forward
+gtk-edit gtk-paste (2nd choice would be gtk-open)
+*
+*/
+            w = glade_xml_get_widget (xml, "xvc_ctrl_stop_toggle");
+            if (w)
+                gtk_button_set_image (GTK_BUTTON (w),
+                                      gtk_image_new_from_stock ("gtk-stop",
+                                                                GTK_ICON_SIZE_BUTTON));
+
+            w = glade_xml_get_widget (xml, "xvc_ctrl_pause_toggle");
+            if (w)
+                gtk_button_set_image (GTK_BUTTON (w),
+                                      gtk_image_new_from_stock ("gtk-go-up",
+                                                                GTK_ICON_SIZE_BUTTON));
+
+            w = glade_xml_get_widget (xml, "xvc_ctrl_record_toggle");
+            if (w)
+                gtk_button_set_image (GTK_BUTTON (w),
+                                      gtk_image_new_from_stock ("gtk-convert",
+                                                                GTK_ICON_SIZE_BUTTON));
+
+            w = glade_xml_get_widget (xml, "xvc_ctrl_step_button");
+            if (w)
+                gtk_button_set_image (GTK_BUTTON (w),
+                                      gtk_image_new_from_stock ("gtk-goto-last",
+                                                                GTK_ICON_SIZE_BUTTON));
+
+            w = glade_xml_get_widget (xml, "xvc_ctrl_back_button");
+            if (w)
+                gtk_button_set_image (GTK_BUTTON (w),
+                                      gtk_image_new_from_stock ("gtk-go-back",
+                                                                GTK_ICON_SIZE_BUTTON));
+
+            w = glade_xml_get_widget (xml, "xvc_ctrl_forward_button");
+            if (w)
+                gtk_button_set_image (GTK_BUTTON (w),
+                                      gtk_image_new_from_stock
+                                      ("gtk-go-forward", GTK_ICON_SIZE_BUTTON));
+
+            w = glade_xml_get_widget (xml, "xvc_ctrl_edit_button");
+            if (w)
+                gtk_button_set_image (GTK_BUTTON (w),
+                                      gtk_image_new_from_stock ("gtk-paste",
+                                                                GTK_ICON_SIZE_BUTTON));
+            w = NULL;
+        }
+#endif     // GTKVERSION
+
         xml = NULL;
         // popup window
         // load the interface

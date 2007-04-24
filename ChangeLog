@@ -1,4 +1,10 @@
 
+2007-04-24  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, config.h.in, aclocal.m4,
+		po/Makefile.in.in, src: gnome_ui.c, app_data.h:
+		add compat mode for gtk2.4 by replacing some
+		stock button images with old ones.
+
 2007-04-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/codecs.c: reenabling audio with swf since it
 		seems to work again (playback with adobe

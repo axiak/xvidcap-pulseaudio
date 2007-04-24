@@ -17,6 +17,8 @@ AM_PROG_CC_STDC
 AC_HEADER_STDC
 AC_PROG_MAKE_SET
 AC_PROG_RANLIB
+AC_PROG_AWK
+AC_PATH_PROG(BC,bc,no)
 
 AC_PATH_XTRA
 #########################################################
@@ -72,7 +74,8 @@ AM_GLIB_GNU_GETTEXT
 
 #PACKAGE CHECKS#############################################
 #########################################################
-PKG_CHECK_MODULES(PACKAGE, [gtk+-2.0 >= 2.5.0 libglade-2.0 glib-2.0 gthread-2.0])
+PKG_CHECK_MODULES(PACKAGE, [gtk+-2.0 >= 2.4.0 libglade-2.0 glib-2.0 gthread-2.0])
+_PKG_CONFIG(GTKVERSION, [modversion], [gtk+-2.0])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 #########################################################
@@ -170,7 +173,6 @@ AS_IF([test AS_VAR_GET(ac_Lib) = yes],
 		[$4])
 AS_VAR_POPDEF([ac_Lib])
 ])# AC_CHECK_LIB_STATIC
-
 #########################################################
 #########################################################
 
@@ -467,6 +469,12 @@ AH_TEMPLATE([USE_XDAMAGE], [define if Xdamage and Xfixes are usable])
 test x${ac_cv_lib_Xdamage_XDamageSubtract} = "xyes" && 
 test x${ac_cv_lib_Xfixes_XFixesGetCursorImage} = "xyes" && 
 AC_DEFINE([USE_XDAMAGE], [1])
+AH_TEMPLATE([GTKVERSION], [version of libgtk+])
+my_gtkversion_major=`echo ${pkg_cv_GTKVERSION} | ${AWK} -F "." '{print $1}'`
+my_gtkversion_minor=`echo ${pkg_cv_GTKVERSION} | ${AWK} -F "." '{print $2}'`
+my_gtkversion_patch=`echo ${pkg_cv_GTKVERSION} | ${AWK} -F "." '{print $3}'`
+my_gtkversion=`echo "${my_gtkversion_major} * (2 ^ 16) + ${my_gtkversion_minor} * (2 ^ 8) + ${my_gtkversion_patch}" | bc`
+AC_DEFINE_UNQUOTED([GTKVERSION], ${my_gtkversion})
 
 ################################################################
 ################################################################
