@@ -264,8 +264,8 @@ msgid "xvidcap V0.2"
 msgstr "xvidcap V0.2"
 
 #: ../C/xvidcap.xml:104(releaseinfo)
-msgid "This manual describes version 1.1.5rc3 of xvidcap."
-msgstr "Dieses Handbuch beschreibt Version 1.1.5rc3 von xvidcap"
+msgid "This manual describes version 1.1.5 of xvidcap."
+msgstr "Dieses Handbuch beschreibt Version 1.1.5 von xvidcap"
 
 #: ../C/xvidcap.xml:107(title)
 msgid "Feedback"

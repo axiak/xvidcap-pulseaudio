@@ -10,7 +10,7 @@
 
 <!DOCTYPE article  PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" 
 	"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY appversion "1.1.5rc3">
+  <!ENTITY appversion "1.1.5">
   <!ENTITY manrevision "0.2">
   <!ENTITY date "April 2007">
   <!ENTITY app "xvidcap">

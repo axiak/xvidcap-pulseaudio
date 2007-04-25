@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
-<refentry revision="1.1.5rc3">
+<refentry revision="1.1.5">
     <refmeta>
         <refentrytitle>xvidcap</refentrytitle>
         <manvolnum>1</manvolnum>
