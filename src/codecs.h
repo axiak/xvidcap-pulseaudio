@@ -76,6 +76,9 @@ typedef enum
     CODEC_FLV,
     CODEC_DV,
     CODEC_MPEG2,
+#ifdef HAVE_LIBTHEORA
+    CODEC_THEORA,
+#endif     // HAVE_LIBTHEORA
     CODEC_SVQ1,
 #endif     // USE_FFMPEG
     NUMCODECS
@@ -116,6 +119,9 @@ typedef enum
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
 #endif     // HAVE_LIBMP3LAME
+#ifdef HAVE_LIBVORBISENC
+    AU_CODEC_VORBIS,
+#endif     // HAVE_LIBVORBISENC
     AU_CODEC_PCM16,
 #endif     // HAVE_FFMPEG_AUDIO
     NUMAUCODECS

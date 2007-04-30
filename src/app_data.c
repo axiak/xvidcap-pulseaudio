@@ -15,6 +15,7 @@
  *
  * \todo error_exit_action should cleanup before exiting
  * \todo add validation for use_xdamage
+ * \todo add error for mono vorbis audio
  *
  */
 

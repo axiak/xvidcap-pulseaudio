@@ -75,7 +75,6 @@ AM_GLIB_GNU_GETTEXT
 #PACKAGE CHECKS#############################################
 #########################################################
 PKG_CHECK_MODULES(PACKAGE, [gtk+-2.0 >= 2.4.0 libglade-2.0 glib-2.0 gthread-2.0])
-_PKG_CONFIG(GTKVERSION, [modversion], [gtk+-2.0])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)
 #########################################################
@@ -202,8 +201,8 @@ AM_CONDITIONAL(FREEBSD,[test x`(uname -s)` = xFreeBSD])
 #########################################################
 # user options
 #########################################################
-AC_ARG_WITH(forced-embedded-ffmpeg, AC_HELP_STRING([--with-forced-embedded-ffmpeg],
-			[don't look for available ffmpeg, also links statically]),
+AC_ARG_WITH(forced-embedded-ffmpeg, AC_HELP_STRING([--without-forced-embedded-ffmpeg],
+			[try to use ffmpeg provided by the system rather than the one included (default=always use included ffmpeg)]),
 			[ac_cv_with_embedded_ffmpeg=$withval],
 			[ac_cv_with_embedded_ffmpeg=yes])
 
@@ -213,6 +212,19 @@ static_avcodec=${ac_cv_with_embedded_ffmpeg}
 # if avcodec is static, avformat and avutil are, too.
 test x$static_avcodec = xyes && static_avformat=yes
 test x$static_avcodec = xyes && static_avutil=yes
+
+AC_ARG_ENABLE(libmp3lame,AC_HELP_STRING([--enable-libmp3lame], 
+			[use libmp3lame if found (default=enabled)]),
+			[ac_cv_enable_libmp3lame=$enableval],
+			[ac_cv_enable_libmp3lame=yes])
+AC_ARG_ENABLE(libtheora,AC_HELP_STRING([--enable-libtheora], 
+			[use libtheora if found (default=disabled)]),
+			[ac_cv_enable_libtheora=$enableval],
+			[ac_cv_enable_libtheora=no])
+AC_ARG_ENABLE(libvorbis,AC_HELP_STRING([--enable-libvorbis], 
+			[use libvorbis if found (default=disabled)]),
+			[ac_cv_enable_libvorbis=$enableval],
+			[ac_cv_enable_libvorbis=no])
 #########################################################
 #########################################################
 
@@ -257,12 +269,33 @@ AC_CHECK_LIB(m,pow,,echo "libm required by ffmpeg"; static_avcodec=no; static_av
 #########################################################
 
 ################################################################
-# check for libmp3lame
+# check for libmp3lame et. al.
 ################################################################
 
-AC_CHECK_LIB(mp3lame, lame_init,,
+if test "${ac_cv_enable_libmp3lame}" = "yes"; then 
+	AC_CHECK_LIB(mp3lame, lame_init,,
 					[echo "To use mp3 audio codecs you need liblame/liblame-dev"])
+fi
 AM_CONDITIONAL(HAVE_LIBMP3LAME, test x$ac_cv_lib_mp3lame_lame_init = xyes)
+
+if test "${ac_cv_enable_libvorbis}" = "yes"; then
+	AC_CHECK_LIB(vorbisenc, vorbis_encode_init,,
+					[echo "To use the vorbis audio codec you need libvorbisenc/libvorbisenc-dev"],
+					[-lvorbis])
+fi
+AM_CONDITIONAL(HAVE_LIBVORBISENC, test x$ac_cv_lib_vorbisenc_vorbis_encode_init = xyes)
+
+if test "${ac_cv_enable_libtheora}" = "yes"; then
+	AC_CHECK_LIB(ogg, ogg_sync_init,,[echo "To use the theora video codec you also need libogg/libogg-dev"])
+	if test "x${ac_cv_lib_ogg_ogg_sync_init}" = "xno" ; then
+		echo "Please install the required libraries or deselect theora support."
+		exit 1
+	fi
+	AC_CHECK_LIB(theora, theora_encode_init,,
+					[echo "To use the theora video codec you need libtheora/libtheora-dev"],
+					[-logg])
+fi
+AM_CONDITIONAL(HAVE_LIBTHEORA, test x$ac_cv_lib_theora_theora_encode_init = xyes)
 
 ################################################################
 # check for threading libraries
@@ -303,14 +336,16 @@ dnl 	AC_CHECK_LIB_STATIC(avutil, av_rescale,,[unset ac_cv_lib_avutil_av_rescale]
 dnl 	static_avutil=$ac_my_static_avutil_save
 dnl fi
 
-test x$ac_cv_lib_mp3lame_lame_init = xyes && ac_my_ffmpeg_cfg_lame_switch="--enable-libmp3lame"
+test x$ac_cv_lib_mp3lame_lame_init = xyes && ac_my_ffmpeg_cfg_lib_switch="--enable-libmp3lame"
+test x$ac_cv_lib_vorbisenc_vorbis_encode_init = xyes && ac_my_ffmpeg_cfg_lib_switch="${ac_my_ffmpeg_cfg_lib_switch} --enable-libvorbis"
+test x$ac_cv_lib_theora_theora_encode_init = xyes && ac_my_ffmpeg_cfg_lib_switch="${ac_my_ffmpeg_cfg_lib_switch} --enable-libogg --enable-libtheora"
 
 # if cache empty (not tested or failed) and want static avcodec (then it failed) ...
 if ( `test \( \( x${ac_cv_lib_avutil_av_rescale+set} = x \) -a \( x$static_avutil = xyes \) \)` ) ; then
 	# build embedded ffmpeg
 	echo "${MAKE-make}-ing prerequisite ffmpeg libraries" && \
 	( cd ./ffmpeg/ && \
-	./configure --cc=${CC} --enable-gpl ${ac_my_ffmpeg_cfg_lame_switch} --enable-pthreads --enable-swscaler --disable-ffserver --disable-ffplay && \
+	./configure --cc=${CC} --enable-gpl ${ac_my_ffmpeg_cfg_lib_switch} --enable-pthreads --enable-swscaler --disable-ffserver --disable-ffplay && \
 	ln -s libavcodec/avcodec.h ./ && \
 	ln -s libavcodec/dsputil.h ./ && \
 	ln -s libavformat/avformat.h ./ && \
@@ -469,12 +504,6 @@ AH_TEMPLATE([USE_XDAMAGE], [define if Xdamage and Xfixes are usable])
 test x${ac_cv_lib_Xdamage_XDamageSubtract} = "xyes" && 
 test x${ac_cv_lib_Xfixes_XFixesGetCursorImage} = "xyes" && 
 AC_DEFINE([USE_XDAMAGE], [1])
-AH_TEMPLATE([GTKVERSION], [version of libgtk+])
-my_gtkversion_major=`echo ${pkg_cv_GTKVERSION} | ${AWK} -F "." '{print $1}'`
-my_gtkversion_minor=`echo ${pkg_cv_GTKVERSION} | ${AWK} -F "." '{print $2}'`
-my_gtkversion_patch=`echo ${pkg_cv_GTKVERSION} | ${AWK} -F "." '{print $3}'`
-my_gtkversion=`echo "${my_gtkversion_major} * (2 ^ 16) + ${my_gtkversion_minor} * (2 ^ 8) + ${my_gtkversion_patch}" | bc`
-AC_DEFINE_UNQUOTED([GTKVERSION], ${my_gtkversion})
 
 ################################################################
 ################################################################

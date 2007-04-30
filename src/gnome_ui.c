@@ -1435,7 +1435,8 @@ xvc_ui_create ()
         xvc_ctrl_main_window =
             glade_xml_get_widget (xml, "xvc_ctrl_main_window");
 
-#if GTKVERSION < XVC_VERSION(2, 5, 0)
+#if GTK_CHECK_VERSION(2, 5, 0)
+#else
         {
             GtkWidget *w = NULL;
 
@@ -1494,7 +1495,7 @@ gtk-edit gtk-paste (2nd choice would be gtk-open)
                                                                 GTK_ICON_SIZE_BUTTON));
             w = NULL;
         }
-#endif     // GTKVERSION
+#endif     // GTK_CHECK_VERSION
 
         xml = NULL;
         // popup window

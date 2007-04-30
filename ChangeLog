@@ -1,4 +1,15 @@
 
+2007-04-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, config.h.in, src: codecs.c, codecs.h, 
+		gnome_ui.c, app_data.c, app_data.h: basic
+		support for theora and vorbis in avi. See
+		./configure --help. Also makes mp3 support 
+		configurable
+	* configure.in, src/app_data.h, src/gnome_ui.c:
+		remove GTKVERSION and XVC_VERSION again in
+		favor of GTK_CHECK_VERSION (thanks to Christian
+		Marillat for pointing that out)
+
 2007-04-25  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* Changelog, debian/changelog, debian/rules, 
 		configure.in, src/gnome-xvidcap.glade, 

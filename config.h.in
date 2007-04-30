@@ -9,9 +9,6 @@
 /* GETTEXT package name */
 #undef GETTEXT_PACKAGE
 
-/* version of libgtk+ */
-#undef GTKVERSION
-
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #undef HAVE_BIND_TEXTDOMAIN_CODESET
 
@@ -66,11 +63,20 @@
 /* Define to 1 if you have the `mp3lame' library (-lmp3lame). */
 #undef HAVE_LIBMP3LAME
 
+/* Define to 1 if you have the `ogg' library (-logg). */
+#undef HAVE_LIBOGG
+
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #undef HAVE_LIBPTHREAD
 
 /* Define to 1 if you have the `swscale' library (-lswscale). */
 #undef HAVE_LIBSWSCALE
+
+/* Define to 1 if you have the `theora' library (-ltheora). */
+#undef HAVE_LIBTHEORA
+
+/* Define to 1 if you have the `vorbisenc' library (-lvorbisenc). */
+#undef HAVE_LIBVORBISENC
 
 /* Define to 1 if you have the `Xdamage' library (-lXdamage). */
 #undef HAVE_LIBXDAMAGE

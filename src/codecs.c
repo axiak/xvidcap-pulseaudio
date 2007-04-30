@@ -220,6 +220,18 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      0,
      mpeg1_fps,
      len_mpeg1_fps},
+#ifdef HAVE_LIBTHEORA
+    {
+     "THEORA",
+     N_("Ogg Theora"),
+     CODEC_ID_THEORA,
+     {24, 1},
+     mpeg4_range,                      /* this is actually MPEG4 ... dunno if
+                                        * this is the same here */
+     len_mpeg4_range,
+     NULL,
+     0},
+#endif     // HAVE_LIBTHEORA
     {
      "SVQ1",
      N_("Soerensen VQ 1"),
@@ -253,6 +265,12 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
        N_("MPEG2 Layer 3"),
        CODEC_ID_MP3}
 #endif     // HAVE_LIBMP3LAME
+#ifdef HAVE_LIBVORBISENC
+    , {
+       "VORBIS",
+       N_("Ogg Vorbis"),
+       CODEC_ID_VORBIS}
+#endif     // HAVE_LIBVORBISENC
     , {
        "PCM16",
        N_("PCM"),
@@ -348,6 +366,9 @@ static const XVC_CodecID allowed_vid_codecs_avi[] = {
     CODEC_MPEG4,
     CODEC_MSDIV2,
     CODEC_MPEG2,
+#ifdef HAVE_LIBTHEORA
+    CODEC_THEORA,
+#endif     // HAVE_LIBTHEORA
     CODEC_DV
 };
 
@@ -399,6 +420,9 @@ static const XVC_AuCodecID allowed_au_codecs_avi[] = {
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
 #endif     // HAVE_LIBMP3LAME
+#ifdef HAVE_LIBVORBISENC
+    AU_CODEC_VORBIS,
+#endif    // HAVE_LIBVORBISENC
     AU_CODEC_PCM16
 };
 
