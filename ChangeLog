@@ -1,6 +1,9 @@
 
 2007-04-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, config.h.in, src: codecs.c, codecs.h, 
+		gnome_options.c: remove --enable-libvorbis
+		again to use ffmpeg's internal vorbis encoder
+	* configure.in, config.h.in, src: codecs.c, codecs.h, 
 		gnome_ui.c, app_data.c, app_data.h: basic
 		support for theora and vorbis in avi. See
 		./configure --help. Also makes mp3 support 

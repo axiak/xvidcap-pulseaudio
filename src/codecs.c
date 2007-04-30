@@ -265,12 +265,10 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
        N_("MPEG2 Layer 3"),
        CODEC_ID_MP3}
 #endif     // HAVE_LIBMP3LAME
-#ifdef HAVE_LIBVORBISENC
     , {
        "VORBIS",
        N_("Ogg Vorbis"),
        CODEC_ID_VORBIS}
-#endif     // HAVE_LIBVORBISENC
     , {
        "PCM16",
        N_("PCM"),
@@ -420,9 +418,7 @@ static const XVC_AuCodecID allowed_au_codecs_avi[] = {
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
 #endif     // HAVE_LIBMP3LAME
-#ifdef HAVE_LIBVORBISENC
     AU_CODEC_VORBIS,
-#endif    // HAVE_LIBVORBISENC
     AU_CODEC_PCM16
 };
 

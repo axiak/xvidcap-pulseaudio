@@ -1384,9 +1384,9 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
                                             (int *) xvc_formats[mf_t_format].
                                             allowed_vid_codecs,
                                             (auto_is_active
-                                             || mf_t_codec >=
+/*                                             || mf_t_codec >=
                                              xvc_formats[mf_t_format].
-                                             num_allowed_vid_codecs ?
+                                             num_allowed_vid_codecs */ ?
                                              xvc_formats[mf_t_format].
                                              def_vid_codec : mf_t_codec));
             if (found >= 0)
@@ -1452,11 +1452,11 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
                                             num_allowed_au_codecs,
                                             (int *) xvc_formats[mf_t_format].
                                             allowed_au_codecs, (auto_is_active
-                                                                || mf_t_au_codec
+/*                                                                || mf_t_au_codec
                                                                 >=
                                                                 xvc_formats
                                                                 [mf_t_format].
-                                                                num_allowed_au_codecs
+                                                                num_allowed_au_codecs */
                                                                 ?
                                                                 xvc_formats
                                                                 [mf_t_format].

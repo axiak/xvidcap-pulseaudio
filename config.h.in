@@ -75,9 +75,6 @@
 /* Define to 1 if you have the `theora' library (-ltheora). */
 #undef HAVE_LIBTHEORA
 
-/* Define to 1 if you have the `vorbisenc' library (-lvorbisenc). */
-#undef HAVE_LIBVORBISENC
-
 /* Define to 1 if you have the `Xdamage' library (-lXdamage). */
 #undef HAVE_LIBXDAMAGE
 
