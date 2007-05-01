@@ -1409,14 +1409,6 @@
                                     Number of audio channels. If you're using piped input audio the audio stream
                                     is resampled to the specified number of channels if required.
                                 </para>
-                                <caution>
-                                    <title>Audio Capture Quality</title>
-                                    <para>
-                                        Note that the default settings are optimized for size rather
-                                        than quality. For better quality you will probably want to double
-                                        sample- and bit rate and potentially the number of channels, too.
-                                    </para>
-                                </caution>
                             </entry>
                         </row>
                     </tbody>

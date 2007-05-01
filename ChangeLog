@@ -3,6 +3,13 @@
 	* src: app_data.c, app_data.h, gnome_options.c:
 		add error msg for mono vorbis audio as ffmpeg
 		only supports stereo atm.
+	* src/app_data.c, doc/xvidcap/C/xvidcap.xml, 
+		doc/xvidcap/C/xvidcap.xml.pot, 
+		doc/xvidcap/de/xvidcap.xml-de.po, 
+		doc/xvidcap/it/xvidcap.xml-it.po, 
+		po/en.po, po/es.po, po/de.po, po/it.po:
+		change audio defaults to 44.1KHz/64Kb/2ch
+		and remove tip to manually do so from docs
 	
 2007-04-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, config.h.in, src: codecs.c, codecs.h, 

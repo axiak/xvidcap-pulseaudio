@@ -368,9 +368,9 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
 #ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
     lapp->multi_frame.audioWanted = 1;
-    lapp->multi_frame.sndrate = 22050;
-    lapp->multi_frame.sndsize = 32000;
-    lapp->multi_frame.sndchannels = 1;
+    lapp->multi_frame.sndrate = 44100;
+    lapp->multi_frame.sndsize = 64000;
+    lapp->multi_frame.sndchannels = 2;
 #endif     // HAVE_FFMPEG_AUDIO
     lapp->multi_frame.file = "test-%04d.mpeg";
 
@@ -946,7 +946,6 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
      * \todo implement some sanity checks if possible<br>
      * - int sndrate;                      // sound sample rate<br>
      * - int sndsize;                      // bits to sample for audio capture<br>
-     * - int sndchannels;                  // number of channels to record audio to<br>
      */
 
     // start: sndchannels
