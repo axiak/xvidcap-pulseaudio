@@ -1,4 +1,9 @@
 
+2007-05-01  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: app_data.c, app_data.h, gnome_options.c:
+		add error msg for mono vorbis audio as ffmpeg
+		only supports stereo atm.
+	
 2007-04-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, config.h.in, src: codecs.c, codecs.h, 
 		gnome_options.c: remove --enable-libvorbis

@@ -267,7 +267,7 @@ typedef struct _XVC_Error
 
 #ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
-#define NUMERRORS              41      // two are removed from original 43
+#define NUMERRORS              43
 #else      // HAVE_FFMPEG_AUDIO
 #define NUMERRORS              36
 #endif     // HAVE_FFMPEG_AUDIO

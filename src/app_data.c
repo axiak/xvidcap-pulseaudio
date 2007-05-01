@@ -15,7 +15,6 @@
  *
  * \todo error_exit_action should cleanup before exiting
  * \todo add validation for use_xdamage
- * \todo add error for mono vorbis audio
  *
  */
 
@@ -950,6 +949,26 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
      * - int sndchannels;                  // number of channels to record audio to<br>
      */
 
+    // start: sndchannels
+#ifdef USE_FFMPEG
+#ifdef HAVE_FFMPEG_AUDIO
+    // only check audio settings if audio capture is enabled
+    if (target->audioWanted == 1) {
+        if (target->au_targetCodec == AU_CODEC_VORBIS
+            && target->sndchannels != 2) {
+            errors =
+                errorlist_append ((lapp->current_mode == 0) ? 38 : 39, errors,
+                                  lapp);
+            if (!errors) {
+                *rc = -1;
+                return NULL;
+            }
+        }
+    }
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
+    // end: sndchannels
+
     /**
      * \todo can there be a meaningful check to validate the following?<br>
      * - char *play_cmd;                   // command for animate function<br>
@@ -1244,8 +1263,26 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
          * \todo implement some sanity checks if possible<br>
          * - int sndrate;                      // sound sample rate<br>
          * - int sndsize;                      // bits to sample for audio capture<br>
-         * - int sndchannels;                  // number of channels to record audio to<br>
          */
+        // start: sndchannels
+#ifdef USE_FFMPEG
+#ifdef HAVE_FFMPEG_AUDIO
+        // only check audio settings if audio capture is enabled
+        if (non_target->audioWanted == 1) {
+            if (non_target->au_targetCodec == AU_CODEC_VORBIS
+                && non_target->sndchannels != 2) {
+                errors =
+                    errorlist_append ((lapp->current_mode == 1) ? 38 : 39,
+                                      errors, lapp);
+                if (!errors) {
+                    *rc = -1;
+                    return NULL;
+                }
+            }
+        }
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
+        // end: sndchannels
 
         /**
          * \todo can there be a meaningful check to validate the following?<br>
@@ -1714,6 +1751,33 @@ error_37_action (XVC_ErrorListItem * err)
 #undef DEBUGFUNCTION
 }
 
+#ifdef USE_FFMPEG
+#ifdef HAVE_FFMPEG_AUDIO
+static void
+error_38_action (XVC_ErrorListItem * err)
+{
+#define DEBUGFUNCTION "error_38_action()"
+    XVC_CapTypeOptions *target = NULL;
+
+#ifdef DEBUG
+    printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+
+    if (err->app->current_mode == 0)
+        target = &(err->app->single_frame);
+    else
+        target = &(err->app->multi_frame);
+
+    target->sndchannels = 2;
+
+#ifdef DEBUG
+    printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
+#endif     // DEBUG
+#undef DEBUGFUNCTION
+}
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
+
 static void
 error_40_action (XVC_ErrorListItem * err)
 {
@@ -2106,8 +2170,28 @@ const XVC_Error xvc_errors[NUMERRORS] = {
      error_37_action,
      N_("Set rescale percentage to '100'")
      },
-    // xvc_errors[i++] = thirtyeight;
-    // xvc_errors[i++] = thirtynine;
+#ifdef USE_FFMPEG
+#ifdef HAVE_FFMPEG_AUDIO
+    {
+     38,
+     XVC_ERR_WARN,
+     N_("Vorbis needs stereo audio"),
+     N_
+     ("You selected mono vorbis audio output for single-frame capture, but this version of xvidcap can only encode stereo vorbis audio streams."),
+     error_38_action,
+     N_("Set number of audio channels to '2'")
+     },
+    {
+     39,
+     XVC_ERR_WARN,
+     N_("Vorbis needs stereo audio"),
+     N_
+     ("You selected mono vorbis audio output for multi-frame capture, but this version of xvidcap can only encode stereo vorbis audio streams."),
+     error_38_action,
+     N_("Set number of audio channels to '2'")
+     },
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // USE_FFMPEG
     {
      40,
      XVC_ERR_WARN,
