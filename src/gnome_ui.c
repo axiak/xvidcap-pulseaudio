@@ -699,6 +699,18 @@ stop_recording_gui_stuff ()
 
     GtkChangeLabel (jobp->pic_no);
 
+    if (app->flags & FLG_TO_TRAY) {
+        gtk_widget_destroy (GTK_WIDGET(tray_frame_mon));
+        tray_frame_mon = NULL;
+        gtk_widget_destroy (GTK_WIDGET (tray_icon));
+        tray_icon = NULL;
+        gtk_widget_destroy (GTK_WIDGET (tray_icon_menu));
+        tray_icon_menu = NULL;
+        gtk_window_set_skip_taskbar_hint (GTK_WINDOW (xvc_ctrl_main_window),
+                                          FALSE);
+        gtk_window_deiconify (GTK_WINDOW (xvc_ctrl_main_window));
+    }
+
     if ((strlen (target->file) < 1 ||
          (app->flags & FLG_ALWAYS_SHOW_RESULTS) > 0) &&
         (app->flags & FLG_AUTO_CONTINUE) == 0) {
@@ -898,15 +910,6 @@ stop_recording_gui_stuff ()
         // FIXME: realize move in a way that gives me real error codes
     }
 
-    if (app->flags & FLG_TO_TRAY) {
-        gtk_widget_destroy (GTK_WIDGET (tray_icon));
-        tray_icon = NULL;
-        gtk_widget_destroy (GTK_WIDGET (tray_icon_menu));
-        tray_icon_menu = NULL;
-        gtk_window_set_skip_taskbar_hint (GTK_WINDOW (xvc_ctrl_main_window),
-                                          FALSE);
-        gtk_window_deiconify (GTK_WINDOW (xvc_ctrl_main_window));
-    }
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -979,7 +982,9 @@ start_recording_gui_stuff ()
         target = &(app->single_frame);
 
     if (app->flags & FLG_TO_TRAY) {
-        GtkWidget *ebox = NULL, *image = NULL, *hbox = NULL, *pause_cb;
+        GtkWidget *ebox = NULL, *hbox = NULL, *pause_cb;
+//        GtkWidget *image = NULL;
+//        GdkBitmap *bm = NULL;
 
         gtk_window_set_skip_taskbar_hint (GTK_WINDOW (xvc_ctrl_main_window),
                                           TRUE);
@@ -996,10 +1001,11 @@ start_recording_gui_stuff ()
         g_assert (tray_frame_mon);
         gtk_container_add (GTK_CONTAINER (hbox), tray_frame_mon);
 
-        image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_RECORD,
-                                          GTK_ICON_SIZE_SMALL_TOOLBAR);
-        g_assert (image);
-        gtk_container_add (GTK_CONTAINER (hbox), image);
+//        image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_RECORD,
+//                                          GTK_ICON_SIZE_SMALL_TOOLBAR);
+        
+//        g_assert (image);
+//        gtk_container_add (GTK_CONTAINER (hbox), image);
         gtk_container_add (GTK_CONTAINER (ebox), hbox);
         gtk_container_add (GTK_CONTAINER (tray_icon), ebox);
         gtk_widget_show_all (tray_icon);
@@ -2026,7 +2032,7 @@ xvc_frame_monitor ()
     if (xvc_led_time != 0 && last_led_time == xvc_led_time)
         return TRUE;
 
-    if (app->flags & FLG_TO_TRAY) {
+    if (app->flags & FLG_TO_TRAY && tray_frame_mon) {
         w = tray_frame_mon;
         g_return_val_if_fail (w != NULL, FALSE);
     } else {

@@ -365,7 +365,7 @@ on_gtk_frame_enter_notify_event (GtkWidget * w, GdkEventCrossing * event)
     GdkCursor *cursor;
     Job *job = xvc_job_ptr ();
 
-    if (job->state != VC_READY)
+    if ((job->state & VC_STOP) == 0)
         return 0;
 
     if (!button_pressed) {
@@ -444,7 +444,10 @@ on_gtk_frame_leave_notify_event (GtkWidget * w, GdkEventCrossing * event)
 {
     if (!button_pressed) {
         frame_drag_cursor = GDK_X_CURSOR;
+        gdk_window_set_cursor (GTK_WIDGET (gtk_frame_top)->window, NULL);
+        gdk_window_set_cursor (GTK_WIDGET (gtk_frame_bottom)->window, NULL);
         gdk_window_set_cursor (GTK_WIDGET (gtk_frame_right)->window, NULL);
+        gdk_window_set_cursor (GTK_WIDGET (gtk_frame_left)->window, NULL);
     }
     return 0;
 }
@@ -458,7 +461,11 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
     gint x, y, x_root, y_root;
     GdkCursor *cursor;
     XVC_AppData *app = xvc_appdata_ptr ();
+    Job *job = xvc_job_ptr();
 
+    if ((job->state & VC_STOP) == 0)
+        return 0;
+    
     x = (int) event->x;
     y = (int) event->y;
     x_root = (int) event->x_root;
