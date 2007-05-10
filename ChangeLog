@@ -5,6 +5,8 @@
 		gnome-xvidcap.glade: initial version of
 		"minimize to tray" (rfe # 1520188), fix
 		for bug # 1711808 and bug # 1709369
+	* src: eggtrayicon.c, eggtrayicon.h: forgot to
+		add for previous commit
 
 2007-05-02  Vincenzo Reale <smart2128@baslug.org>
 	* po/it.po: updated Italian translation
