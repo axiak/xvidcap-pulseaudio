@@ -2329,11 +2329,11 @@ on_xvc_ctrl_stop_toggle_toggled (GtkToggleToolButton * button,
 #define DEBUGFUNCTION "on_xvc_ctrl_stop_toggle_toggled()"
     Job *jobp = xvc_job_ptr ();
 
-//#ifdef DEBUG
+#ifdef DEBUG
     printf ("%s %s: stopp button toggled (%i)\n", DEBUGFILE, DEBUGFUNCTION,
             gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON
                                                (button)));
-//#endif     // DEBUG
+#endif     // DEBUG
 
     if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button))) {
         if (recording_thread_running)
@@ -2392,11 +2392,11 @@ on_xvc_ctrl_pause_toggle_toggled (GtkToggleToolButton * button,
     xml = glade_get_widget_tree (GTK_WIDGET (xvc_ctrl_main_window));
     g_assert (xml);
 
-//#ifdef DEBUG
+#ifdef DEBUG
     printf ("%s %s: is paused? (%d)\n", DEBUGFILE, DEBUGFUNCTION,
             gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON
                                                (button)));
-//#endif
+#endif
 
     if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button))) {
         gettimeofday (&curr_time, NULL);
@@ -2411,7 +2411,6 @@ on_xvc_ctrl_pause_toggle_toggled (GtkToggleToolButton * button,
             if (stop_timer_id)
                 g_source_remove (stop_timer_id);
         }
-        printf ("activating pause\n");
         xvc_job_merge_and_remove_state (VC_PAUSE, VC_STOP);
 
         // GUI stuff
@@ -3116,7 +3115,6 @@ on_xvc_ti_stop_selected (GtkMenuItem * menuitem, gpointer user_data)
     button = glade_xml_get_widget (xml, "xvc_ctrl_stop_toggle");
     g_assert (button);
 
-    printf ("setting stop button to true next.\n");
     gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (button), TRUE);
 }
 
