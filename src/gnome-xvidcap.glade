@@ -316,7 +316,7 @@
       <signal name="activate" handler="on_xvc_ctrl_m1_mitem_save_preferences_activate" last_modification_time="Wed, 08 Mar 2006 16:05:08 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image1">
+	<widget class="GtkImage" id="image2">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-floppy</property>
 	  <property name="icon_size">1</property>
@@ -340,7 +340,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">Multi Frame Capture</property>
       <property name="use_underline">True</property>
-      <property name="active">False</property>
+      <property name="active">True</property>
       <signal name="activate" handler="on_xvc_ctrl_m1_mitem_mf_capture_activate" last_modification_time="Wed, 08 Mar 2006 16:05:08 GMT"/>
     </widget>
   </child>
@@ -378,9 +378,10 @@
       <property name="label" translatable="yes">_Make Video</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_xvc_ctrl_m1_mitem_make_activate" last_modification_time="Wed, 08 Mar 2006 16:05:08 GMT"/>
+      <accelerator key="m" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2">
+	<widget class="GtkImage" id="image3">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-execute</property>
 	  <property name="icon_size">1</property>
@@ -399,6 +400,7 @@
       <property name="label" translatable="yes">_Animate / Play</property>
       <property name="use_underline">True</property>
       <signal name="activate" handler="on_xvc_ctrl_m1_mitem_animate_activate" last_modification_time="Wed, 08 Mar 2006 16:05:08 GMT"/>
+      <accelerator key="a" modifiers="GDK_MOD1_MASK" signal="activate"/>
     </widget>
   </child>
 
@@ -557,7 +559,7 @@
 		    <widget class="GtkTable" id="xvc_pref_nb_tab_general_frame_table">
 		      <property name="border_width">4</property>
 		      <property name="visible">True</property>
-		      <property name="n_rows">8</property>
+		      <property name="n_rows">9</property>
 		      <property name="n_columns">3</property>
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">4</property>
@@ -777,8 +779,8 @@ Xserver and client need to be running on the same machine.</property>
 			<packing>
 			  <property name="left_attach">0</property>
 			  <property name="right_attach">1</property>
-			  <property name="top_attach">7</property>
-			  <property name="bottom_attach">8</property>
+			  <property name="top_attach">8</property>
+			  <property name="bottom_attach">9</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -798,8 +800,8 @@ Xserver and client need to be running on the same machine.</property>
 			<packing>
 			  <property name="left_attach">1</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">7</property>
-			  <property name="bottom_attach">8</property>
+			  <property name="top_attach">8</property>
+			  <property name="bottom_attach">9</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options">fill</property>
 			</packing>
@@ -824,6 +826,28 @@ Otherwise only show it if required for asking the user for a filename.</property
 			  <property name="right_attach">1</property>
 			  <property name="top_attach">6</property>
 			  <property name="bottom_attach">7</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckButton" id="xvc_pref_minimize_to_tray">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="label" translatable="yes">Minimize to System Tray</property>
+			  <property name="use_underline">True</property>
+			  <property name="relief">GTK_RELIEF_NORMAL</property>
+			  <property name="focus_on_click">True</property>
+			  <property name="active">False</property>
+			  <property name="inconsistent">False</property>
+			  <property name="draw_indicator">True</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">0</property>
+			  <property name="right_attach">1</property>
+			  <property name="top_attach">7</property>
+			  <property name="bottom_attach">8</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4396,6 +4420,29 @@ Frame Rate:&lt;/b&gt;</property>
 	  </child>
 	</widget>
       </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="xvc_ti_menu">
+
+  <child>
+    <widget class="GtkCheckMenuItem" id="xvc_ti_pause">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">_Pause</property>
+      <property name="use_underline">True</property>
+      <property name="active">False</property>
+      <signal name="activate" handler="on_xvc_ti_pause_selected" last_modification_time="Thu, 10 May 2007 14:48:30 GMT"/>
+      <accelerator key="p" modifiers="GDK_MOD1_MASK" signal="activate"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkImageMenuItem" id="xvc_ti_stopp">
+      <property name="visible">True</property>
+      <property name="label">gtk-media-stop</property>
+      <property name="use_stock">True</property>
+      <signal name="activate" handler="on_xvc_ti_stop_selected" last_modification_time="Thu, 10 May 2007 14:48:30 GMT"/>
     </widget>
   </child>
 </widget>

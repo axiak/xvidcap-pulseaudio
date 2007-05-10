@@ -71,6 +71,7 @@
 #include "gnome_ui.h"
 #include "gnome_frame.h"
 #include "xvidcap-intl.h"
+#include "eggtrayicon.h"
 
 /*
  * globals
@@ -166,6 +167,10 @@ static XVC_ErrorListItem *errors_after_cli = NULL;
  * a rare case, however
  */
 static int OK_attempts = 0;
+
+static GtkWidget *tray_icon = NULL, *tray_frame_mon = NULL;
+static gboolean tray_icon_button_down = FALSE;
+static GtkWidget *tray_icon_menu = NULL;
 
 /*
  * HELPER FUNCTIONS ...
@@ -740,7 +745,9 @@ stop_recording_gui_stuff ()
         w = glade_xml_get_widget (xml, "xvc_result_dialog_audio_codec_label");
         g_assert (w);
         gtk_label_set_text (GTK_LABEL (w),
-                            xvc_audio_codecs[jobp->au_targetCodec].name);
+                            ((jobp->flags & FLG_REC_SOUND) ?
+                             xvc_audio_codecs[jobp->au_targetCodec].name :
+                             _("NONE")));
 
         // set fps
         w = glade_xml_get_widget (xml, "xvc_result_dialog_fps_label");
@@ -890,6 +897,16 @@ stop_recording_gui_stuff ()
 
         // FIXME: realize move in a way that gives me real error codes
     }
+
+    if (app->flags & FLG_TO_TRAY) {
+        gtk_widget_destroy (GTK_WIDGET (tray_icon));
+        tray_icon = NULL;
+        gtk_widget_destroy (GTK_WIDGET (tray_icon_menu));
+        tray_icon_menu = NULL;
+        gtk_window_set_skip_taskbar_hint (GTK_WINDOW (xvc_ctrl_main_window),
+                                          FALSE);
+        gtk_window_deiconify (GTK_WINDOW (xvc_ctrl_main_window));
+    }
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -911,6 +928,28 @@ timer_stop_recording ()
     xvc_capture_stop_signal (FALSE);
     return FALSE;
 #undef DEBUGFUNCTION
+}
+
+static gboolean
+on_tray_icon_button_press_event (GtkWidget * widget,
+                                 GdkEvent * event, gpointer user_data)
+{
+    GdkEventButton *bevent = NULL;
+
+    g_assert (widget);
+    g_assert (event);
+    bevent = (GdkEventButton *) event;
+
+    if (bevent->button == (guint) 3) {
+        g_assert (tray_icon_menu);
+
+        gtk_menu_popup (GTK_MENU (tray_icon_menu), NULL, NULL,
+                        NULL, widget, bevent->button, bevent->time);
+        // Tell calling code that we have handled this event; the buck
+        // stops here.
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /**
@@ -939,6 +978,51 @@ start_recording_gui_stuff ()
 #endif     // USE_FFMPEG
         target = &(app->single_frame);
 
+    if (app->flags & FLG_TO_TRAY) {
+        GtkWidget *ebox = NULL, *image = NULL, *hbox = NULL, *pause_cb;
+
+        gtk_window_set_skip_taskbar_hint (GTK_WINDOW (xvc_ctrl_main_window),
+                                          TRUE);
+
+        tray_icon = GTK_WIDGET (egg_tray_icon_new ("xvc_tray_icon"));
+        g_assert (tray_icon);
+        ebox = gtk_event_box_new ();
+        g_assert (ebox);
+        hbox = gtk_hbox_new (FALSE, 2);
+        g_assert (hbox);
+        tray_frame_mon = NULL;
+        tray_frame_mon = glade_create_led_meter ("tray_frame_mon", NULL,
+                                                 NULL, 0, 0);
+        g_assert (tray_frame_mon);
+        gtk_container_add (GTK_CONTAINER (hbox), tray_frame_mon);
+
+        image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_RECORD,
+                                          GTK_ICON_SIZE_SMALL_TOOLBAR);
+        g_assert (image);
+        gtk_container_add (GTK_CONTAINER (hbox), image);
+        gtk_container_add (GTK_CONTAINER (ebox), hbox);
+        gtk_container_add (GTK_CONTAINER (tray_icon), ebox);
+        gtk_widget_show_all (tray_icon);
+
+        g_signal_connect (G_OBJECT (ebox), "button_press_event",
+                          G_CALLBACK (on_tray_icon_button_press_event), NULL);
+
+        // load the interface
+        xml = glade_xml_new (XVC_GLADE_FILE, "xvc_ti_menu", NULL);
+        g_assert (xml);
+
+        // connect the signals in the interface
+        glade_xml_signal_autoconnect (xml);
+        // store the toplevel widget for further reference
+        tray_icon_menu = glade_xml_get_widget (xml, "xvc_ti_menu");
+        if (jobp->state & VC_PAUSE) {
+            pause_cb = glade_xml_get_widget (xml, "xvc_ti_pause");
+            gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pause_cb),
+                                            TRUE);
+        }
+
+        gtk_window_iconify (GTK_WINDOW (xvc_ctrl_main_window));
+    }
     xml = glade_get_widget_tree (GTK_WIDGET (xvc_ctrl_main_window));
     g_assert (xml);
 
@@ -1866,6 +1950,8 @@ xvc_capture_stop ()
         rc = stop_recording_gui_stuff (job);
         gdk_flush ();
         gdk_threads_leave ();
+    } else {
+        gtk_main_quit ();
     }
 
     return FALSE;
@@ -1925,6 +2011,7 @@ xvc_frame_monitor ()
 #define DEBUGFUNCTION "xvc_frame_monitor()"
 
     Job *job = xvc_job_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
     int percent = 0, diff = 0;
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
@@ -1939,10 +2026,15 @@ xvc_frame_monitor ()
     if (xvc_led_time != 0 && last_led_time == xvc_led_time)
         return TRUE;
 
-    xml = glade_get_widget_tree (xvc_ctrl_main_window);
-    g_return_val_if_fail (xml != NULL, FALSE);
-    w = glade_xml_get_widget (xml, "xvc_ctrl_led_meter");
-    g_return_val_if_fail (w != NULL, FALSE);
+    if (app->flags & FLG_TO_TRAY) {
+        w = tray_frame_mon;
+        g_return_val_if_fail (w != NULL, FALSE);
+    } else {
+        xml = glade_get_widget_tree (xvc_ctrl_main_window);
+        g_return_val_if_fail (xml != NULL, FALSE);
+        w = glade_xml_get_widget (xml, "xvc_ctrl_led_meter");
+        g_return_val_if_fail (w != NULL, FALSE);
+    }
 
     if (!ret) {
         xvc_led_time = last_led_time = 0;
@@ -2235,10 +2327,13 @@ on_xvc_ctrl_stop_toggle_toggled (GtkToggleToolButton * button,
                                  gpointer user_data)
 {
 #define DEBUGFUNCTION "on_xvc_ctrl_stop_toggle_toggled()"
+    Job *jobp = xvc_job_ptr ();
 
-#ifdef DEBUG
-    printf ("%s %s: stopp button toggled\n", DEBUGFILE, DEBUGFUNCTION);
-#endif     // DEBUG
+//#ifdef DEBUG
+    printf ("%s %s: stopp button toggled (%i)\n", DEBUGFILE, DEBUGFUNCTION,
+            gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON
+                                               (button)));
+//#endif     // DEBUG
 
     if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button))) {
         if (recording_thread_running)
@@ -2297,11 +2392,11 @@ on_xvc_ctrl_pause_toggle_toggled (GtkToggleToolButton * button,
     xml = glade_get_widget_tree (GTK_WIDGET (xvc_ctrl_main_window));
     g_assert (xml);
 
-#ifdef DEBUG
-    printf ("%s %s: button active? (%d)\n", DEBUGFILE, DEBUGFUNCTION, (int)
+//#ifdef DEBUG
+    printf ("%s %s: is paused? (%d)\n", DEBUGFILE, DEBUGFUNCTION,
             gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON
                                                (button)));
-#endif
+//#endif
 
     if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button))) {
         gettimeofday (&curr_time, NULL);
@@ -2316,7 +2411,7 @@ on_xvc_ctrl_pause_toggle_toggled (GtkToggleToolButton * button,
             if (stop_timer_id)
                 g_source_remove (stop_timer_id);
         }
-
+        printf ("activating pause\n");
         xvc_job_merge_and_remove_state (VC_PAUSE, VC_STOP);
 
         // GUI stuff
@@ -3008,6 +3103,37 @@ on_xvc_ctrl_m1_mitem_about_activate (GtkMenuItem * menuitem, gpointer user_data)
     g_assert (xml);
     // connect the signals in the interface
     glade_xml_signal_autoconnect (xml);
+}
+
+void
+on_xvc_ti_stop_selected (GtkMenuItem * menuitem, gpointer user_data)
+{
+    GtkWidget *button = NULL;
+    GladeXML *xml = NULL;
+
+    xml = glade_get_widget_tree (xvc_ctrl_main_window);
+    g_assert (xml);
+    button = glade_xml_get_widget (xml, "xvc_ctrl_stop_toggle");
+    g_assert (button);
+
+    printf ("setting stop button to true next.\n");
+    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (button), TRUE);
+}
+
+void
+on_xvc_ti_pause_selected (GtkMenuItem * menuitem, gpointer user_data)
+{
+    GtkWidget *button = NULL;
+    GladeXML *xml = NULL;
+
+    xml = glade_get_widget_tree (xvc_ctrl_main_window);
+    g_assert (xml);
+    button = glade_xml_get_widget (xml, "xvc_ctrl_pause_toggle");
+    g_assert (button);
+
+    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (button),
+                                       gtk_check_menu_item_get_active
+                                       (GTK_CHECK_MENU_ITEM (menuitem)));
 }
 
 #endif     // DOXYGEN_SHOULD_SKIP_THIS

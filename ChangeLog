@@ -1,4 +1,14 @@
 
+2007-05-10  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_ui.c, app_data.h, gnome_frame.c, 
+		gnome_options.c, Makefile.am, options.c, 
+		gnome-xvidcap.glade: initial version of
+		"minimize to tray" (rfe # 1520188), fix
+		for bug # 1711808 and bug # 1709369
+
+2007-05-02  Vincenzo Reale <smart2128@baslug.org>
+	* po/it.po: updated Italian translation
+
 2007-05-01  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: app_data.c, app_data.h, gnome_options.c:
 		add error msg for mono vorbis audio as ffmpeg

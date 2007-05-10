@@ -945,10 +945,6 @@
                             </entry>
                             <entry>
                                 <para>Numero di canali audio. Se si sta usando un ingresso audio rediretto con una pipe, il flusso audio è ricampionato al numero di canali se richiesto.</para>
-                                <caution>
-                                    <title>Qualità dell'acquisizione audio</title>
-                                    <para>Notare che le impostazioni predefinite sono ottimizzate per la dimensione piuttosto che per la qualità. Per una migliore qualità si potrebbe voler raddoppiare il campionamento, il bitrate e, potenzialmente, anche il numero di canali.</para>
-                                </caution>
                             </entry>
                         </row>
                     </tbody>

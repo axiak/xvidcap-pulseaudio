@@ -71,6 +71,7 @@ static GtkWidget *xvc_frame_dimensions_window;
 static gboolean button_pressed = FALSE;
 static gint frame_drag_cursor = GDK_X_CURSOR;
 static long frame_dimensions_hide_time = 0;
+static GdkDisplay *gdpy;
 
 /**
  * \brief gets the Display to capture from
@@ -94,7 +95,8 @@ xvc_frame_get_capture_display ()
         xvc_dpy = GDK_DRAWABLE_XDISPLAY (GTK_WIDGET (gtk_frame_top)->window);
     } else {
         if (!xvc_dpy)
-            xvc_dpy = XOpenDisplay (NULL);
+            gdpy = gdk_display_get_default ();
+        xvc_dpy = gdk_x11_display_get_xdisplay (gdpy);
     }
     g_assert (xvc_dpy);
     return xvc_dpy;
@@ -111,7 +113,8 @@ xvc_frame_drop_capture_display ()
     XVC_AppData *app = xvc_appdata_ptr ();
 
     if (app->flags & FLG_NOGUI && xvc_dpy) {
-        XCloseDisplay (xvc_dpy);
+        gdk_display_close (gdpy);
+        gdpy = NULL;
         xvc_dpy = NULL;
     }
 #undef DEBUGFUNCTION

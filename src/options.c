@@ -127,6 +127,10 @@ xvc_write_options_file ()
     fprintf (fp,
              _("# rescale the captured area to n percent of the original\n"));
     fprintf (fp, "rescale: %i\n", (app->rescale));
+    fprintf (fp,
+             _("# minimize the main control to the system tray while recording\n"));
+    fprintf (fp, "minimize_to_tray: %i\n", 
+            ((app->flags & FLG_TO_TRAY) ? 1 : 0));
 
     fprintf (fp, _("\n#options for single-frame capture ...\n"));
     fprintf (fp,
@@ -478,6 +482,17 @@ xvc_read_options_file ()
                 } else if (strcasecmp (token, "rescale") == 0) {
                     if (value)
                         app->rescale = atoi (value);
+                } else if (strcasecmp (token, "minimize_to_tray") == 0) {
+                    if (atoi (value) == 1)
+                        app->flags |= FLG_TO_TRAY;
+                    else if (atoi (value) == 0)
+                        app->flags &= ~FLG_TO_TRAY;
+                    else {
+                        app->flags &= ~FLG_TO_TRAY;
+                        fprintf (stderr,
+                                 _
+                                 ("reading unsupported minimize_to_tray value from options file\nresetting to not minimizing to tray.\n"));
+                    }
 
                     // now single-frame capture options
                 } else if (strcasecmp (token, "sf_file") == 0) {

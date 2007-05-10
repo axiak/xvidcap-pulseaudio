@@ -945,10 +945,6 @@
                             </entry>
                             <entry>
                                 <para>Die zu verwendende Anzahl von Ton Kanälen. Wenn Sie eine <quote>pipe</quote> als Ton Eingang verwenden, wird das Eingangssignal gemäß der hier eingestellten Rate neu abgetastet.</para>
-                                <caution>
-                                    <title>Qualität der Ton-Aufnahme</title>
-                                    <para>Bedenken Sie, dass die Vorgabe-Einstellungen eher in Richtung Größe der Ausgabedatei optimiert sind als in Richtung Ton-Qualität. Um eine bessere Ton-Qualität zu erreichen, werden Sie wahrscheinlich die Abtast- und Bit Rate verdoppeln wollen, womöglich auch die Anzahl der Ton Kanäle.</para>
-                                </caution>
                             </entry>
                         </row>
                     </tbody>

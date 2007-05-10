@@ -279,6 +279,17 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
         lapp->flags &= ~FLG_ALWAYS_SHOW_RESULTS;
     }
 
+    // minimize to system tray
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_minimize_to_tray");
+    g_assert (w);
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
+        lapp->flags |= FLG_TO_TRAY;
+    } else {
+        lapp->flags &= ~FLG_TO_TRAY;
+    }
+
     // rescale
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_rescale_hscale");
@@ -1186,6 +1197,15 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_always_show_results_checkbutton");
     if ((pref_app.flags & FLG_ALWAYS_SHOW_RESULTS) != 0) {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+    } else {
+        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+    }
+
+    // minimize to system tray
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_minimize_to_tray");
+    if ((pref_app.flags & FLG_TO_TRAY) != 0) {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
     } else {
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);

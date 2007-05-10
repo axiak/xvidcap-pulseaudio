@@ -87,7 +87,9 @@ enum XVC_Flags
     FLG_USE_XFIXES = 1024,
 /** \brief should we capture screen updates as deltas using Xdamage
  * extension */
-    FLG_USE_XDAMAGE = 2048
+    FLG_USE_XDAMAGE = 2048,
+/** \brief minimize xvidcap to the system tray while recording */
+    FLG_TO_TRAY = 4096
 };
 
 #ifdef HAVE_SHMAT

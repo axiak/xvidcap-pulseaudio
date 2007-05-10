@@ -51,7 +51,10 @@ xvidcap_SOURCES = \
     job.h \
     xv_error_item.c \
     xv_error_item.h \
-    xvidcap-intl.h
+    xvidcap-intl.h \
+        eggtrayicon.h \
+        eggtrayicon.c
+
 
 
 xvidcap_LDADD = $(PACKAGE_LIBS)
