@@ -545,11 +545,23 @@ stop_recording_nongui_stuff ()
     struct timeval curr_time;
     long stop_time = 0;
     XVC_AppData *app = xvc_appdata_ptr ();
+    Job *job = xvc_job_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering with thread running %i\n",
             DEBUGFILE, DEBUGFUNCTION, recording_thread_running);
 #endif     // DEBUG
+
+    if (pause_time) {
+        stop_time = pause_time;
+    } else {
+        gettimeofday (&curr_time, NULL);
+        stop_time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
+        time_captured += (stop_time - start_time);
+    }
+
+    if (stop_timer_id)
+        g_source_remove (stop_timer_id);
 
     state = VC_STOP;
     if (app->flags & FLG_AUTO_CONTINUE) {
@@ -563,14 +575,6 @@ stop_recording_nongui_stuff ()
         printf ("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
     }
-
-    gettimeofday (&curr_time, NULL);
-    stop_time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
-    time_captured += (stop_time - start_time);
-
-    if (stop_timer_id)
-        g_source_remove (stop_timer_id);
-
 #ifdef USE_XDAMAGE
     if (app->flags & FLG_USE_XDAMAGE)
         gdk_window_remove_filter (NULL,
@@ -2440,9 +2444,10 @@ on_xvc_ctrl_pause_toggle_toggled (GtkToggleToolButton * button,
             g_assert (w);
             gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
         } else {
-            xvc_job_set_state (VC_STOP);
+            xvc_job_merge_state (VC_STOP);
         }
 
+        pause_time = 0;
         gettimeofday (&curr_time, NULL);
         start_time = curr_time.tv_sec * 1000 + curr_time.tv_usec / 1000;
         // restart timer handling only if max_time is configured
