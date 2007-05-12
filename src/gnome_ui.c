@@ -3,9 +3,6 @@
  *
  * This file contains the main control UI for xvidcap
  * \todo rename the global variables pthread* to xvc_pthread*
- * \todo smth.'s wrong with measuring capture times here. The results
- *      dialog seems to regard the total capture time without substracting
- *      pauses.
  */
 
 /* Copyright (C) 2003-07 Karl H. Beckers, Frankfurt
@@ -168,8 +165,13 @@ static XVC_ErrorListItem *errors_after_cli = NULL;
  */
 static int OK_attempts = 0;
 
-static GtkWidget *tray_icon = NULL, *tray_frame_mon = NULL;
-static gboolean tray_icon_button_down = FALSE;
+/** \brief eggtrayicon for minimizing xvidcap to the system tray */
+static GtkWidget *tray_icon = NULL;
+
+/** \brief frame drop monitor for inclusion in the system tray */
+static GtkWidget *tray_frame_mon = NULL;
+
+/** \brief popup menu for the system tray icon */
 static GtkWidget *tray_icon_menu = NULL;
 
 /*
@@ -493,8 +495,8 @@ do_record_thread ()
     recording_thread_running = TRUE;
 
     if (!(job->flags & FLG_NOGUI)) {
-        xvc_idle_add (xvc_change_filename_display, (void *) NULL, TRUE);
-        xvc_idle_add (xvc_frame_monitor, (void *) NULL, TRUE);
+        xvc_idle_add (xvc_change_filename_display, (void *) NULL);
+        xvc_idle_add (xvc_frame_monitor, (void *) NULL);
     }
 
     while ((job->state & VC_READY) == 0) {
@@ -534,13 +536,8 @@ do_record_thread ()
 /**
  * \brief implements those actions required for stopping a capture session
  *      that are not GUI related
- *
- * @return always FALSE
- * \todo the return value is present because this was originally called as
- *      an idle function. Since this is no longer the case, this should be
- *      removed.
  */
-gboolean
+static void
 stop_recording_nongui_stuff ()
 {
 #define DEBUGFUNCTION "stop_recording_nongui_stuff()"
@@ -585,7 +582,6 @@ stop_recording_nongui_stuff ()
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    return FALSE;
 #undef DEBUGFUNCTION
 }
 
@@ -601,13 +597,8 @@ do_results_help ()
 /**
  * \brief implements the GUI related actions involved when stopping a
  *      capture session.
- *
- * @return always FALSE
- * \todo the return value is present because this was originally called as
- *      an idle function. Since this is no longer the case, this should be
- *      removed.
  */
-static gboolean
+static void
 stop_recording_gui_stuff ()
 {
 #define DEBUGFUNCTION "stop_recording_gui_stuff()"
@@ -700,7 +691,7 @@ stop_recording_gui_stuff ()
     GtkChangeLabel (jobp->pic_no);
 
     if (app->flags & FLG_TO_TRAY) {
-        gtk_widget_destroy (GTK_WIDGET(tray_frame_mon));
+        gtk_widget_destroy (GTK_WIDGET (tray_frame_mon));
         tray_frame_mon = NULL;
         gtk_widget_destroy (GTK_WIDGET (tray_icon));
         tray_icon = NULL;
@@ -909,12 +900,10 @@ stop_recording_gui_stuff ()
 
         // FIXME: realize move in a way that gives me real error codes
     }
-
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    return FALSE;
 #undef DEBUGFUNCTION
 }
 
@@ -958,13 +947,8 @@ on_tray_icon_button_press_event (GtkWidget * widget,
 /**
  * \brief implements the GUI related actions involved in starting a
  *      capture session
- *
- * @return always FALSE
- * \todo the return value is present because this was originally called as
- *      an idle function. Since this is no longer the case, this should be
- *      removed.
  */
-gboolean
+static void
 start_recording_gui_stuff ()
 {
 #define DEBUGFUNCTION "start_recording_gui_stuff()"
@@ -983,6 +967,7 @@ start_recording_gui_stuff ()
 
     if (app->flags & FLG_TO_TRAY) {
         GtkWidget *ebox = NULL, *hbox = NULL, *pause_cb;
+
 //        GtkWidget *image = NULL;
 //        GdkBitmap *bm = NULL;
 
@@ -1003,7 +988,6 @@ start_recording_gui_stuff ()
 
 //        image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_RECORD,
 //                                          GTK_ICON_SIZE_SMALL_TOOLBAR);
-        
 //        g_assert (image);
 //        gtk_container_add (GTK_CONTAINER (hbox), image);
         gtk_container_add (GTK_CONTAINER (ebox), hbox);
@@ -1098,21 +1082,14 @@ start_recording_gui_stuff ()
         g_assert (w);
         gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
     }
-
-    return FALSE;
 #undef DEBUGFUNCTION
 }
 
 /**
  * \brief implements those actions involved in starting a capture session
  *      that are not GUI related
- *
- * @return always FALSE
- * \todo the return value is present because this was originally called as
- *      an idle function. Since this is no longer the case, this should be
- *      removed.
  */
-gboolean
+static void
 start_recording_nongui_stuff ()
 {
 #define DEBUGFUNCTION "start_recording_nongui_stuff()"
@@ -1205,7 +1182,6 @@ start_recording_nongui_stuff ()
                         (void *) do_record_thread, (void *) job);
 
     }
-    return FALSE;
 #undef DEBUGFUNCTION
 }
 
@@ -1841,16 +1817,11 @@ xvc_ui_run ()
  *
  * @param func a pointer to a function to queue
  * @param data a pointer to an argument to that function
- * @param queue_events if FALSE the function will not be queued if there
- *      currently are events in the queue
- * \todo the queue_events bit is not required anymore ... remove it
  */
 void
-xvc_idle_add (void *func, void *data, Boolean queue_events)
+xvc_idle_add (void *func, void *data)
 {
-    if (queue_events || !gdk_events_pending ()) {
-        g_idle_add (func, data);
-    }
+    g_idle_add (func, data);
 }
 
 /**
@@ -1942,18 +1913,17 @@ xvc_capture_stop ()
 {
 #define DEBUGFUNCTION "xvc_capture_stop()"
     Job *job = xvc_job_ptr ();
-    gboolean rc;
 
 #ifdef DEBUG
     printf ("%s %s: stopping\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
-    rc = stop_recording_nongui_stuff (job);
+    stop_recording_nongui_stuff (job);
 #ifdef DEBUG
     printf ("%s %s: done stopping non-gui stuff\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
     if (!(job->flags & FLG_NOGUI)) {
         gdk_threads_enter ();
-        rc = stop_recording_gui_stuff (job);
+        stop_recording_gui_stuff (job);
         gdk_flush ();
         gdk_threads_leave ();
     } else {
@@ -1972,16 +1942,15 @@ xvc_capture_start ()
 {
 #define DEBUGFUNCTION "xvc_capture_start()"
     Job *job = xvc_job_ptr ();
-    gboolean rc;
 
-    rc = start_recording_nongui_stuff (job);
+    start_recording_nongui_stuff (job);
     if (!(job->flags & FLG_NOGUI))
-        rc = start_recording_gui_stuff (job);
+        start_recording_gui_stuff (job);
 
 #undef DEBUGFUNCTION
 }
 
-/**
+/*
  * \brief changes the frame around the area to capture by calling the
  *      implementing function xvc_change_gtk_frame
  *
@@ -1989,7 +1958,7 @@ xvc_capture_start ()
  * \todo sice nobody outside this file is calling it, it needs to be neither
  *      global nor in the "API" functions. Prolly don't need this wrapper at
  *      all .... remove
- */
+ *
 void
 xvc_frame_change (int x, int y, int width, int height,
                   Boolean reposition_control, Boolean show_dimensions)
@@ -1999,6 +1968,7 @@ xvc_frame_change (int x, int y, int width, int height,
                           show_dimensions);
 #undef DEBUGFUNCTION
 }
+ */
 
 /**
  * \brief updates the widget monitoring the current frame rate based on
@@ -2333,7 +2303,6 @@ on_xvc_ctrl_stop_toggle_toggled (GtkToggleToolButton * button,
                                  gpointer user_data)
 {
 #define DEBUGFUNCTION "on_xvc_ctrl_stop_toggle_toggled()"
-    Job *jobp = xvc_job_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: stopp button toggled (%i)\n", DEBUGFILE, DEBUGFUNCTION,
@@ -2470,6 +2439,8 @@ on_xvc_ctrl_pause_toggle_toggled (GtkToggleToolButton * button,
             w = glade_xml_get_widget (xml, "xvc_ctrl_edit_button");
             g_assert (w);
             gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
+        } else {
+            xvc_job_set_state (VC_STOP);
         }
 
         gettimeofday (&curr_time, NULL);
@@ -2729,8 +2700,8 @@ on_xvc_ctrl_lock_toggle_toggled (GtkToggleToolButton *
         if (y < 0)
             y = 0;
         frame_rectangle = xvc_get_capture_area ();
-        xvc_frame_change (x, y, frame_rectangle->width,
-                          frame_rectangle->height, FALSE, TRUE);
+        xvc_change_gtk_frame (x, y, frame_rectangle->width,
+                              frame_rectangle->height, FALSE, TRUE);
     } else {
         xvc_set_frame_locked (0);
         gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (togglebutton), tooltips,
@@ -2835,7 +2806,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                         height = event.xbutton.y - y_down + 1;
                         y = y_down;
                     }
-                    xvc_frame_change (x, y, width, height, FALSE, TRUE);
+                    xvc_change_gtk_frame (x, y, width, height, FALSE, TRUE);
                     // the previous call changes the frame edges, which are
                     // gtk windows. we need to call the gtk main loop for
                     // them to be drawn properly within this callback
@@ -2846,7 +2817,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
             }
         }
 //        if (width > 0)                 // remove old frame
-//            xvc_frame_change(x, y, width, height, FALSE, TRUE);
+//            xvc_change_gtk_frame (x, y, width, height, FALSE, TRUE);
 
         XUngrabPointer (display, CurrentTime);  // Done with pointer
 

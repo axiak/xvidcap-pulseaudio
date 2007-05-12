@@ -1265,11 +1265,13 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     qscale = (100.0 - quality + 1.0) / 3.3;
     st->codec->global_quality = st->quality = FF_QP2LAMBDA * qscale;
     // 0.0 = default qscale
-    if (qscale > 0) st->codec->qmin = st->codec->qmax = qscale;
+    if (qscale > 0)
+        st->codec->qmin = st->codec->qmax = qscale;
 
 #ifdef DEBUG
-    printf ("%s %s: Leaving with %i streams in oc, bitrate %i, and qscale %i\n", DEBUGFILE,
-            DEBUGFUNCTION, oc->nb_streams, st->codec->bit_rate, qscale);
+    printf ("%s %s: Leaving with %i streams in oc, bitrate %i, and qscale %i\n",
+            DEBUGFILE, DEBUGFUNCTION, oc->nb_streams, st->codec->bit_rate,
+            qscale);
 #endif     // DEBUG
 
     return st;

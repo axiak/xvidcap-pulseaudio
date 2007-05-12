@@ -128,9 +128,10 @@ xvc_write_options_file ()
              _("# rescale the captured area to n percent of the original\n"));
     fprintf (fp, "rescale: %i\n", (app->rescale));
     fprintf (fp,
-             _("# minimize the main control to the system tray while recording\n"));
-    fprintf (fp, "minimize_to_tray: %i\n", 
-            ((app->flags & FLG_TO_TRAY) ? 1 : 0));
+             _
+             ("# minimize the main control to the system tray while recording\n"));
+    fprintf (fp, "minimize_to_tray: %i\n",
+             ((app->flags & FLG_TO_TRAY) ? 1 : 0));
 
     fprintf (fp, _("\n#options for single-frame capture ...\n"));
     fprintf (fp,

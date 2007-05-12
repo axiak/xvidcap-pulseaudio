@@ -239,37 +239,37 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     int wwidth, wheight;
 
 #ifdef USE_FFMPEG
-        //
-        // make sure we have even width and height for ffmpeg
-        //
-        if (app->current_mode > 0) {
-            Boolean changed = FALSE;
+    //
+    // make sure we have even width and height for ffmpeg
+    //
+    if (app->current_mode > 0) {
+        Boolean changed = FALSE;
 
-            if ((width % 2) > 0) {
-                width--;
-                changed = TRUE;
-            }
-            if ((height % 2) > 0) {
-                height--;
-                changed = TRUE;
-            }
-            if (width < 10) {
-                width = 10;
-                changed = TRUE;
-            }
-            if (height < 10) {
-                height = 10;
-                changed = TRUE;
-            }
+        if ((width % 2) > 0) {
+            width--;
+            changed = TRUE;
+        }
+        if ((height % 2) > 0) {
+            height--;
+            changed = TRUE;
+        }
+        if (width < 10) {
+            width = 10;
+            changed = TRUE;
+        }
+        if (height < 10) {
+            height = 10;
+            changed = TRUE;
+        }
 
-            if (changed) {
-                if (app->flags & FLG_RUN_VERBOSE) {
-                    printf
-                        ("Modified Selection geometry: %dx%d+%d+%d\n",
-                         width, height, x, y);
-                }
+        if (changed) {
+            if (app->flags & FLG_RUN_VERBOSE) {
+                printf
+                    ("Modified Selection geometry: %dx%d+%d+%d\n",
+                     width, height, x, y);
             }
         }
+    }
 #endif     // USE_FFMPEG
 
     // we have to adjust it to viewable areas
@@ -495,11 +495,11 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
     gint x, y, x_root, y_root;
     GdkCursor *cursor;
     XVC_AppData *app = xvc_appdata_ptr ();
-    Job *job = xvc_job_ptr();
+    Job *job = xvc_job_ptr ();
 
     if ((job->state & VC_STOP) == 0)
         return 0;
-    
+
     x = (int) event->x;
     y = (int) event->y;
     x_root = (int) event->x_root;
@@ -701,37 +701,37 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
 #endif
 
 #ifdef USE_FFMPEG
-        //
-        // make sure we have even width and height for ffmpeg
-        //
-        if (app->current_mode > 0) {
-            Boolean changed = FALSE;
+    //
+    // make sure we have even width and height for ffmpeg
+    //
+    if (app->current_mode > 0) {
+        Boolean changed = FALSE;
 
-            if ((pwidth % 2) > 0) {
-                pwidth--;
-                changed = TRUE;
-            }
-            if ((pheight % 2) > 0) {
-                pheight--;
-                changed = TRUE;
-            }
-            if (pwidth < 10) {
-                pwidth = 10;
-                changed = TRUE;
-            }
-            if (pheight < 10) {
-                pheight = 10;
-                changed = TRUE;
-            }
+        if ((pwidth % 2) > 0) {
+            pwidth--;
+            changed = TRUE;
+        }
+        if ((pheight % 2) > 0) {
+            pheight--;
+            changed = TRUE;
+        }
+        if (pwidth < 10) {
+            pwidth = 10;
+            changed = TRUE;
+        }
+        if (pheight < 10) {
+            pheight = 10;
+            changed = TRUE;
+        }
 
-            if (changed) {
-                if (app->flags & FLG_RUN_VERBOSE) {
-                    printf
-                        ("Modified Selection geometry: %dx%d+%d+%d\n",
-                         pwidth, pheight, x, y);
-                }
+        if (changed) {
+            if (app->flags & FLG_RUN_VERBOSE) {
+                printf
+                    ("Modified Selection geometry: %dx%d+%d+%d\n",
+                     pwidth, pheight, x, y);
             }
         }
+    }
 #endif     // USE_FFMPEG
 
     // we have to adjust it to viewable areas

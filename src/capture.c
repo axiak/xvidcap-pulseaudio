@@ -1341,7 +1341,7 @@ commonCapture (enum captureFunctions capfunc)
         // set the sensitive stuff for the control panel if we don't
         // autocontinue
         if ((orig_state & VC_CONTINUE) == 0)
-            xvc_idle_add (xvc_capture_stop, job, TRUE);
+            xvc_idle_add (xvc_capture_stop, job);
 
         // clean up the save routines in xtoXXX.c
         if (job->clean)

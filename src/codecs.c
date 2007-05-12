@@ -3,10 +3,7 @@
  *
  * This file contains all data types and functions related to video and audio
  * codecs and file formats.
- *
- * \todo reenable audio for swf if libav* supports it
  */
-
 /*
  * Copyright (C) 2004-07 Karl, Frankfurt
  *
