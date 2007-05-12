@@ -1267,10 +1267,10 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     // 0.0 = default qscale
     if (qscale > 0) st->codec->qmin = st->codec->qmax = qscale;
 
-//#ifdef DEBUG
+#ifdef DEBUG
     printf ("%s %s: Leaving with %i streams in oc, bitrate %i, and qscale %i\n", DEBUGFILE,
             DEBUGFUNCTION, oc->nb_streams, st->codec->bit_rate, qscale);
-//#endif     // DEBUG
+#endif     // DEBUG
 
     return st;
 #undef DEBUGFUNCTION
