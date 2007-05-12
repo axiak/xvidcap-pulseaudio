@@ -238,6 +238,40 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     char buf[64];
     int wwidth, wheight;
 
+#ifdef USE_FFMPEG
+        //
+        // make sure we have even width and height for ffmpeg
+        //
+        if (app->current_mode > 0) {
+            Boolean changed = FALSE;
+
+            if ((width % 2) > 0) {
+                width--;
+                changed = TRUE;
+            }
+            if ((height % 2) > 0) {
+                height--;
+                changed = TRUE;
+            }
+            if (width < 10) {
+                width = 10;
+                changed = TRUE;
+            }
+            if (height < 10) {
+                height = 10;
+                changed = TRUE;
+            }
+
+            if (changed) {
+                if (app->flags & FLG_RUN_VERBOSE) {
+                    printf
+                        ("Modified Selection geometry: %dx%d+%d+%d\n",
+                         width, height, x, y);
+                }
+            }
+        }
+#endif     // USE_FFMPEG
+
     // we have to adjust it to viewable areas
     dpy = xvc_frame_get_capture_display ();
     max_width = WidthOfScreen (DefaultScreenOfDisplay (dpy));
@@ -658,12 +692,73 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     int flags = app->flags;
     XRectangle *x_rect = xvc_get_capture_area ();
     GladeXML *xml = NULL;
+    int max_width, max_height;
+    Display *dpy;
 
 #ifdef DEBUG
     printf ("%s %s: x %d y %d width %d height %d\n", DEBUGFILE,
             DEBUGFUNCTION, px, py, pwidth, pheight);
 #endif
 
+#ifdef USE_FFMPEG
+        //
+        // make sure we have even width and height for ffmpeg
+        //
+        if (app->current_mode > 0) {
+            Boolean changed = FALSE;
+
+            if ((pwidth % 2) > 0) {
+                pwidth--;
+                changed = TRUE;
+            }
+            if ((pheight % 2) > 0) {
+                pheight--;
+                changed = TRUE;
+            }
+            if (pwidth < 10) {
+                pwidth = 10;
+                changed = TRUE;
+            }
+            if (pheight < 10) {
+                pheight = 10;
+                changed = TRUE;
+            }
+
+            if (changed) {
+                if (app->flags & FLG_RUN_VERBOSE) {
+                    printf
+                        ("Modified Selection geometry: %dx%d+%d+%d\n",
+                         pwidth, pheight, x, y);
+                }
+            }
+        }
+#endif     // USE_FFMPEG
+
+    // we have to adjust it to viewable areas
+    dpy = xvc_frame_get_capture_display ();
+    max_width = WidthOfScreen (DefaultScreenOfDisplay (dpy));
+    max_height = HeightOfScreen (DefaultScreenOfDisplay (dpy));
+
+#ifdef DEBUG
+    printf ("%s %s: screen = %dx%d selection=%dx%d\n", DEBUGFILE,
+            DEBUGFUNCTION, max_width, max_height, pwidth, pheight);
+#endif
+
+    if (x < 0)
+        x = 0;
+    if (pwidth > max_width)
+        pwidth = max_width;
+    if (x + pwidth > max_width)
+        x = max_width - pwidth;
+
+    if (y < 0)
+        y = 0;
+    if (pheight > max_height)
+        pheight = max_height;
+    if (y + pheight > max_height)
+        y = max_height - pheight;
+
+    // now for the real work
     if (!(flags & FLG_NOGUI)) {
         g_assert (toplevel);
 

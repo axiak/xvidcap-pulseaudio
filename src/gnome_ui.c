@@ -2887,40 +2887,6 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
         app->area->x = x;
         app->area->y = y;
 
-#ifdef USE_FFMPEG
-        //
-        // make sure we have even width and height for ffmpeg
-        //
-        if (app->current_mode > 0) {
-            Boolean changed = FALSE;
-
-            if ((app->area->width % 2) > 0) {
-                app->area->width--;
-                changed = TRUE;
-            }
-            if ((app->area->height % 2) > 0) {
-                app->area->height--;
-                changed = TRUE;
-            }
-            if (app->area->width < 10) {
-                app->area->width = 10;
-                changed = TRUE;
-            }
-            if (app->area->height < 10) {
-                app->area->height = 10;
-                changed = TRUE;
-            }
-
-            if (changed) {
-                if (app->flags & FLG_RUN_VERBOSE) {
-                    printf
-                        ("Modified Selection geometry: %dx%d+%d+%d\n",
-                         app->area->width, app->area->height, x, y);
-                }
-            }
-        }
-#endif     // USE_FFMPEG
-
         xvc_change_gtk_frame (x, y, app->area->width,
                               app->area->height, xvc_is_frame_locked (), FALSE);
 
