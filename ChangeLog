@@ -1,4 +1,10 @@
 
+2007-05-12  lon  <lon83129@126.com>
+	* po/zh_CN.po: Chinese l10n
+
+2007-05-12  Alexander Kraev  <alexander.kraev@gmail.com>
+	* po/ru.po: Initial bits of Russian l10n
+
 2007-05-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, gnome_frame.c: fix for 
 		bug # 1713971

@@ -1,0 +1,2504 @@
+# translation of xvidcap.po to LONCHINA
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# lon <lon83129@126.com>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: xvidcap\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-14 18:27+0200\n"
+"PO-Revision-Date: 2007-05-14 10:30+0800\n"
+"Last-Translator: lon <lon83129@126.com>\n"
+"Language-Team: LONCHINA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: ../src/app_data.c:378
+msgid "xterm -e \"echo none specified; echo hit enter to dismiss; read\""
+msgstr ""
+
+#: ../src/app_data.c:381
+msgid ""
+"xterm -e \"echo not needed for multi-frame capture; echo hit enter to "
+"dismiss; read\""
+msgstr ""
+
+#: ../src/app_data.c:517 ../src/app_data.c:1344
+#, c-format
+msgid ""
+"%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... "
+"correcting, but smth's wrong\n"
+msgstr ""
+"%s %s: 抓取模式不是单帧(%i)但是我们没有获得ffmpeg......修正，不过还是有一些错"
+"误.\n"
+
+#: ../src/app_data.c:1849
+msgid "No V4L available"
+msgstr "没有V4L设备"
+
+#: ../src/app_data.c:1851
+msgid ""
+"Video for Linux is selected as the capture source but V4L is not available "
+"with this binary."
+msgstr "选择了Linux视频抓取源，但是目前的二进制系统V4L不可用。"
+
+#: ../src/app_data.c:1853
+msgid "Set capture source to 'x11'"
+msgstr "设置抓取源到X11"
+
+#: ../src/app_data.c:1858
+msgid "V4L device inaccessible"
+msgstr "V4L设备找不到"
+
+#: ../src/app_data.c:1859
+msgid "Can't open the specified Video for Linux device."
+msgstr "打不开指定的Linux视频设备."
+
+#: ../src/app_data.c:1861 ../src/app_data.c:1869 ../src/app_data.c:1920
+#: ../src/app_data.c:1929 ../src/app_data.c:2080
+msgid "Quit"
+msgstr "退出"
+
+#: ../src/app_data.c:1866
+msgid "V4L can't capture"
+msgstr "V4L无法抓取"
+
+#: ../src/app_data.c:1867
+msgid "The specified Video for Linux device can't capture to memory."
+msgstr "这说明Linux视频设备不能被抓取在内存中"
+
+#: ../src/app_data.c:1874
+msgid "Capture size exceeds V4L limits"
+msgstr "抓取尺寸超过V4L限制"
+
+#: ../src/app_data.c:1876
+msgid ""
+"The specified capture size exceeds the limits for Video for Linux capture."
+msgstr "这说明抓取的尺寸超过Linux视频的极限."
+
+#: ../src/app_data.c:1878
+msgid "Increase or decrease the capture area to conform to V4L's limits"
+msgstr "增加或减少抓取区域范围以适应V4L限制"
+
+#: ../src/app_data.c:1883
+msgid "Capture area outside screen"
+msgstr "抓取区域超过屏幕边界"
+
+#: ../src/app_data.c:1884
+msgid "The specified capture area reaches beyond the visible screen."
+msgstr "这说明抓取的区域范围超过了可见的显示部分."
+
+#: ../src/app_data.c:1886
+msgid "Clip capture size to visible screen"
+msgstr "修改抓取尺寸到可见范围"
+
+#: ../src/app_data.c:1891
+msgid "Invalid Mouse Capture Option"
+msgstr "无效的鼠标抓取设置"
+
+#: ../src/app_data.c:1893
+msgid ""
+"The specified value for the mouse capture option is not one of the valid "
+"values (0 = no capture, 1 = white mouse pointer, 2 = black mouse pointer)."
+msgstr ""
+"这说明指定的鼠标抓取设置没有一项为有效值( 0 =不抓取, 1 =白色鼠标指针, 2 =黑色"
+"鼠标指针 )."
+
+#: ../src/app_data.c:1895
+msgid "Set Mouse Capture Option to '1' for a white mouse pointer"
+msgstr "鼠标抓取设置为 '1' 是白色鼠标指针"
+
+#: ../src/app_data.c:1900
+msgid "Invalid Capture Source"
+msgstr "无效的抓取来源"
+
+#: ../src/app_data.c:1901
+msgid "An unsupported capture source was selected."
+msgstr "选择了一个不被支持的抓取源。"
+
+#: ../src/app_data.c:1903
+msgid "Reset capture source to fail-safe 'x11'"
+msgstr "重置抓取来源到 fail-safe'x11'"
+
+#: ../src/app_data.c:1908
+msgid "Invalid default capture mode"
+msgstr "无效的默认抓取模式"
+
+#: ../src/app_data.c:1910
+msgid ""
+"The default capture mode specified is neither \"single-frame\" nor \"mult-"
+"frame\"."
+msgstr "默认抓取模式既不是“单帧”，也不是“多帧”。"
+
+#: ../src/app_data.c:1912
+msgid "Reset default capture mode to \"single-frame\""
+msgstr "重置抓取模式为“单帧”"
+
+#: ../src/app_data.c:1925
+msgid "File name is NULL"
+msgstr "文件名无效"
+
+#: ../src/app_data.c:1927
+msgid ""
+"The filename string variable used for multi-frame capture is a null pointer. "
+"This should never be possible at this stage."
+msgstr "多帧抓取文件名的设置变量是无效指示.在这个平台下应是不合理的."
+
+#: ../src/app_data.c:1934
+msgid "File name empty"
+msgstr "文件名为空"
+
+#: ../src/app_data.c:1935
+msgid "You selected single-frame capture without specifying a filename."
+msgstr "你选择的单帧抓取输出没有指定一个文件名。"
+
+#: ../src/app_data.c:1938
+msgid ""
+"Set the filename used for single-frame capture to a default value based on "
+"the current capture mode and target"
+msgstr "设单帧抓取文件名为默认值，基于当前抓取模式和定制下。"
+
+#: ../src/app_data.c:1943
+msgid "File format Auto-detection with empty file name"
+msgstr "此格式的文件自动检测时文件名为空"
+
+#: ../src/app_data.c:1945
+msgid ""
+"You want to be asked for a filename to save your video to after recording "
+"and also want to auto-detect the file type based on filename. That won't "
+"work."
+msgstr ""
+"你需要声明一个文件名来保存你录制之后的视频，同时自动检测此文件名的类型，然后"
+"再工作。"
+
+#: ../src/app_data.c:1948
+msgid ""
+"Set the filename used for multi-frame capture to a default value based on "
+"the current capture mode and target"
+msgstr "设多帧抓取文件名为默认值，基于当前抓取模式和对象下。"
+
+#: ../src/app_data.c:1953 ../src/app_data.c:1963
+msgid "File name empty, ask user"
+msgstr "文件名为空，询问用户"
+
+#: ../src/app_data.c:1955
+msgid ""
+"You specified an empty filename for multi-frame capture. Since you have "
+"configured a fixed output file-format xvidcap can ask you for a filename to "
+"use after recording. We'll need to disable the autocontinue function you "
+"selected, though."
+msgstr ""
+"在多帧抓取中你指定了一个空文件名。尽管自从你设置了一个固定输出的格式， "
+"xvidcap 会在录制完成以后询问你要一个文件名，但我们还是要终止你所选的自动继续"
+"功能。"
+
+#: ../src/app_data.c:1958
+msgid ""
+"Enable \"ask user for filename\" mode for multi-frame capture and disable "
+"autocontinue"
+msgstr "能使用“询问用户”模式在多帧抓取和终止自动继续"
+
+#: ../src/app_data.c:1965
+msgid ""
+"You specified an empty filename for multi-frame capture. Since you have "
+"configured a fixed output file-format xvidcap can ask you for a filename to "
+"use after each recording."
+msgstr ""
+"在多帧抓取中你指定了一个空文件名。自从你设置了一个固定输出的格式， xvidcap 会"
+"在每次录制完成以后询问你要一个文件名。"
+
+#: ../src/app_data.c:1967
+msgid "Ignore, everything is set up alright"
+msgstr "忽略， 向上正确设置"
+
+#: ../src/app_data.c:1972 ../src/app_data.c:1981
+msgid "Invalid file format"
+msgstr "无效文件格式"
+
+#: ../src/app_data.c:1974
+msgid ""
+"You selected an unknown or invalid file format for single-frame capture. "
+"Check the --format-help option."
+msgstr "在单帧抓取中你选择了未知的或无效的文件格式。请检查－－格式帮助选项。"
+
+#: ../src/app_data.c:1976
+msgid "Reset to default format for single-frame capture (XWD)"
+msgstr "重置单帧抓取的默认格式(XWD)"
+
+#: ../src/app_data.c:1983
+msgid ""
+"You selected an unknown or invalid file format for multi-frame capture. "
+"Check the --format-help option."
+msgstr "在多帧抓取中你选择了未知的或无效的文件格式。请检查－－格式帮助选项。"
+
+#: ../src/app_data.c:1985
+msgid "Reset to default format for multi-frame caputre (MPEG4)"
+msgstr "重置多帧抓取的默认格式(MPEG4)"
+
+#: ../src/app_data.c:1990
+msgid "Single-Frame Capture with Multi-Frame File Format"
+msgstr "单帧抓取使用多帧文件格式"
+
+#: ../src/app_data.c:1992
+msgid ""
+"You selected single-frame capture mode but specified a target file format "
+"which is used for multi-frame capture."
+msgstr "你选择了单帧抓取模式同时指定的文件格式用于多帧抓取。"
+
+#: ../src/app_data.c:1994
+msgid "Reset file format to default for single-frame capture"
+msgstr "在单帧抓取中重置文件格式为默认值"
+
+#: ../src/app_data.c:2000
+msgid "Multi-Frame Capture with Single-Frame File Format"
+msgstr "多帧抓取使用单帧文件格式"
+
+#: ../src/app_data.c:2002
+msgid ""
+"You selected multi-frame capture mode but specified a target file format "
+"which is used for single-frame capture."
+msgstr "你选择了多帧抓取模式同时指定的文件格式用于单帧抓取。"
+
+#: ../src/app_data.c:2004
+msgid "Reset file format to default for multi-frame capture"
+msgstr "在多帧抓取中重置文件格式为默认值"
+
+#: ../src/app_data.c:2010
+msgid "Single-Frame Capture with invalid target codec"
+msgstr "单帧抓取对象编码无效"
+
+#: ../src/app_data.c:2012
+msgid ""
+"You selected single-frame capture mode and specified a target codec not "
+"valid with the file format."
+msgstr "你选择了单帧抓取模式同时指定的对象编码不被此文件格式支持。"
+
+#: ../src/app_data.c:2015
+msgid ""
+"Ignore because single-frame capture types always have a well-defined codec"
+msgstr "忽略，因为单帧抓取类型始终有一个明确的编码"
+
+#: ../src/app_data.c:2020 ../src/app_data.c:2029
+msgid "File Format auto-detection may conflict with explicit codec"
+msgstr "文件格式的自动检测可能与明确的编码冲突"
+
+#: ../src/app_data.c:2022
+msgid ""
+"For single-frame capture you requested auto-detection of the output file "
+"format and explicitly specified a target codec. Your codec selection may not "
+"be valid for the file format eventually detected, in which case it will be "
+"overridden by the format's default codec."
+msgstr ""
+"在单帧抓取中你要求自动检测输出文件格式同时明确指定了对象编码。你选择的编码可"
+"能不是此文件格式的有效编码，在每个事例中它将无效直到此格式的默认编码。"
+
+#: ../src/app_data.c:2024 ../src/app_data.c:2033 ../src/app_data.c:2060
+msgid "Ignore"
+msgstr "忽略"
+
+#: ../src/app_data.c:2031
+msgid ""
+"For multi-frame capture you requested auto-detection of the output file "
+"format and explicitly specified a target codec. Your codec selection may not "
+"be valid for the file format eventually detected, in which case it will be "
+"overridden by the format's default codec."
+msgstr ""
+"在多帧抓取中你要求自动检测输出文件格式同时明确指定了对象编码。你选择的编码可"
+"能不是此文件格式的有效编码，在每个事例中它将无效直到此格式的默认编码。"
+
+#: ../src/app_data.c:2039
+msgid "Multi-Frame Capture with invalid codec"
+msgstr "多帧抓取编码无效"
+
+#: ../src/app_data.c:2041
+msgid ""
+"You selected multi-frame capture mode and specified a target codec not valid "
+"with the file format."
+msgstr "你选择了多帧抓取模式同时指定的对象编码不被此文件格式支持。"
+
+#: ../src/app_data.c:2043
+msgid "Reset multi-frame target codec to default for file format"
+msgstr "重置多帧抓取对象文件格式的编码为默认值"
+
+#: ../src/app_data.c:2056
+msgid "File Format auto-detection may conflict with explicit audio codec"
+msgstr "文件格式的自动检测可能与明确的音频编码冲突"
+
+#: ../src/app_data.c:2058
+msgid ""
+"For multi-frame capture you requested auto-detection of the output file "
+"format and explicitly specified a target audio codec. Your audio codec "
+"selection may not be valid for the file format eventually detected, in which "
+"case it will be overridden by the format's default audio codec."
+msgstr ""
+"在多帧抓取中你要求自动检测输出文件格式同时明确指定了音频对象编码。你选择的音"
+"频编码可能不是此文件格式的有效编码，在每个事例中它将无效直到此格式的默认音频"
+"编码。"
+
+#: ../src/app_data.c:2065
+msgid "Multi-Frame Capture with invalid audio codec"
+msgstr "多帧抓取中的音频编码无效"
+
+#: ../src/app_data.c:2067
+msgid ""
+"You selected multi-frame capture mode and specified a target audio codec not "
+"valid with the file format."
+msgstr "你选择了多帧抓取模式同时指定的音频对象编码不被此文件格式支持。"
+
+#: ../src/app_data.c:2069
+msgid "Reset multi-frame target audio codec to default for file format"
+msgstr "重置多帧抓取中音频对象文件格式的编码为默认值"
+
+#: ../src/app_data.c:2076
+msgid "Invalid frame-rate for selected codec"
+msgstr "选择编码的帧速率无效"
+
+#: ../src/app_data.c:2078
+msgid ""
+"You selected multi-frame capture mode but the requested frame-rate is not "
+"valid for the selected codec. This would result in the video playing back "
+"too slowly or quickly."
+msgstr "你选择了多帧抓取，但是你指定的帧速率没有大于零。"
+
+#: ../src/app_data.c:2085
+msgid "Requested Frame Rate <= zero"
+msgstr "要求帧速率小于等于零"
+
+#: ../src/app_data.c:2087
+msgid ""
+"You selected single-frame capture but the frame rate you requested is not "
+"greater than zero."
+msgstr "你选择了单帧抓取，但是你指定的帧速率没有大于零。"
+
+#: ../src/app_data.c:2089
+msgid "Set frame rate to '1'"
+msgstr "设帧速率为“1”"
+
+#: ../src/app_data.c:2094 ../src/app_data.c:2103
+msgid "Requested Maximum Capture Time < zero"
+msgstr "要求最大抓取时间小于零"
+
+#: ../src/app_data.c:2096
+msgid ""
+"For single-frame capture you specified a maximum capture time which is less "
+"than zero seconds."
+msgstr "在单帧抓取中你指定的最大抓取时间小于零秒。"
+
+#: ../src/app_data.c:2098
+msgid "Set the maximum capture time for single-frame capture to unlimited"
+msgstr "在单帧抓取中设置最大抓取时间为无限大"
+
+#: ../src/app_data.c:2105
+msgid ""
+"For multi-frame capture you specified a maximum capture time which is less "
+"than zero seconds."
+msgstr "在多帧抓取中你指定的最大抓取时间小于零秒。"
+
+#: ../src/app_data.c:2107
+msgid "Set the maximum capture time for multi-frame capture to unlimited"
+msgstr "在多帧抓取中设置最大抓取时间为无限大"
+
+#: ../src/app_data.c:2112 ../src/app_data.c:2121
+msgid "Requested Maximum Frames < zero"
+msgstr "要求最大帧数小于零"
+
+#: ../src/app_data.c:2114
+msgid ""
+"For single-frame capture you specified a maximum number of frames which is "
+"less than zero."
+msgstr "在单帧抓取中你指定的最大帧数小于零。"
+
+#: ../src/app_data.c:2116
+msgid "Set maximum number of frames to unlimited for single-frame capture"
+msgstr "在单帧抓取中设置最大帧数为无限大"
+
+#: ../src/app_data.c:2123
+msgid ""
+"For multi-frame capture you specified a maximum number of frames which is "
+"less than zero."
+msgstr "在多帧抓取中你指定的最大帧数小于零。"
+
+#: ../src/app_data.c:2125
+msgid "Set maximum number of frames to unlimited for multi-frame capture"
+msgstr "在多帧抓取中设置最大帧数为无限大"
+
+#: ../src/app_data.c:2130 ../src/app_data.c:2139
+msgid "Requested Start Number < zero"
+msgstr "要求启始编号小于零"
+
+#: ../src/app_data.c:2132
+msgid ""
+"For single-frame capture you specified a start number for frame numbering "
+"which is less than zero."
+msgstr "在单帧抓取中你指定的启始记录帧编号小于零。"
+
+#: ../src/app_data.c:2134
+msgid "Set start number for frame numbering of single-frame capture to '0'"
+msgstr "在单帧抓取中设置启始记录帧编号为“0”"
+
+#: ../src/app_data.c:2141
+msgid ""
+"For multi-frame capture you specified a start number for frame numbering "
+"which is less than zero."
+msgstr "在多帧抓取中你指定的启始记录帧编号小于零。"
+
+#: ../src/app_data.c:2143
+msgid "Set start number for frame numbering of multi-frame capture to '0'"
+msgstr "在多帧抓取中设置启始记录帧编号为“0”"
+
+#: ../src/app_data.c:2148
+msgid "Requested Frame Increment <= zero"
+msgstr "要求增加帧<=0"
+
+#: ../src/app_data.c:2150
+msgid ""
+"For single-frame capture you specified an increment for frame numbering "
+"which is not greater than zero."
+msgstr "在单帧抓取中你指定的增加帧编号没有大于零。"
+
+#: ../src/app_data.c:2152
+msgid "Set increment for frame numbering of single-frame capture to '1'"
+msgstr "在单帧抓取中设置增加帧编号为“1”。"
+
+#: ../src/app_data.c:2157
+msgid "Requested Frame Increment <> one"
+msgstr "要求增加帧<>1"
+
+#: ../src/app_data.c:2159
+msgid ""
+"For multi-frame capture you specified an increment for frame numbering which "
+"is not exactly one."
+msgstr "在多帧抓取中你指定的增加帧编号没有一个正确。"
+
+#: ../src/app_data.c:2161
+msgid "Set increment for frame numbering of multi-frame capture to '1'"
+msgstr "在多帧抓取中设置增加帧编号为“1”。"
+
+#: ../src/app_data.c:2166
+msgid "Requested invalid Rescale Percentage"
+msgstr "重置百分比请求无效"
+
+#: ../src/app_data.c:2168
+msgid ""
+"You requested rescaling of the input area to a relative size but did not "
+"specify a valid percentage. Valid values are between 1 and 100 "
+msgstr ""
+"你要求改变输入区域的相对大小，但时没有规定一个有效的百分数。有效值从1到100。"
+
+#: ../src/app_data.c:2170
+msgid "Set rescale percentage to '100'"
+msgstr "重置百分比为“100”"
+
+#: ../src/app_data.c:2177 ../src/app_data.c:2186
+msgid "Vorbis needs stereo audio"
+msgstr ""
+
+#: ../src/app_data.c:2179
+msgid ""
+"You selected mono vorbis audio output for single-frame capture, but this "
+"version of xvidcap can only encode stereo vorbis audio streams."
+msgstr ""
+
+#: ../src/app_data.c:2181 ../src/app_data.c:2190
+msgid "Set number of audio channels to '2'"
+msgstr ""
+
+#: ../src/app_data.c:2188
+msgid ""
+"You selected mono vorbis audio output for multi-frame capture, but this "
+"version of xvidcap can only encode stereo vorbis audio streams."
+msgstr ""
+
+#: ../src/app_data.c:2197 ../src/app_data.c:2206
+msgid "Quality value not a valid percentage"
+msgstr "品质值不是有效的百分数"
+
+#: ../src/app_data.c:2199
+msgid ""
+"For single-frame capture the value for recording quality is not a percentage "
+"between 1 and 100."
+msgstr "在单帧抓取中记录品质的值不是1到100的百分数。"
+
+#: ../src/app_data.c:2201 ../src/app_data.c:2210
+msgid "Set recording quality to '75'"
+msgstr "设置记录品质为“75”"
+
+#: ../src/app_data.c:2208
+msgid ""
+"For multi-frame capture the value for recording quality is not a percentage "
+"between 1 and 100."
+msgstr "在多帧抓取中记录品质的值不是1到100的百分数。"
+
+#: ../src/app_data.c:2216 ../src/app_data.c:2225
+msgid "Audio Capture not supported by File Format"
+msgstr "音频抓取的文件格式不被支持"
+
+#: ../src/app_data.c:2218
+msgid "You selected audio capture but single-frame captures do not support it."
+msgstr "你选择音频抓取，但时在单帧抓取中不支持它。"
+
+#: ../src/app_data.c:2220
+msgid "Disable audio capture for single-frame capture"
+msgstr "在单帧抓取中禁止音频抓取"
+
+#: ../src/app_data.c:2227
+msgid ""
+"For multi-frame capture you selected audio support but picked a file format "
+"without support for audio."
+msgstr "在多帧抓取中你选择了音频支持，但是没有选择支持的音频文件格式。"
+
+#: ../src/app_data.c:2229
+msgid "Disable audio capture for multi-frame capture"
+msgstr "在多帧抓取中禁止音频抓取"
+
+#: ../src/app_data.c:2407
+msgid "FATAL ERROR"
+msgstr "致命性错误"
+
+#: ../src/app_data.c:2410
+msgid "ERROR"
+msgstr "错误"
+
+#: ../src/app_data.c:2413
+msgid "WARNING"
+msgstr "警告"
+
+#: ../src/app_data.c:2416
+msgid "INFO"
+msgstr "提示"
+
+#: ../src/app_data.c:2419
+msgid "UNKNOWN"
+msgstr "未知"
+
+#: ../src/app_data.c:2429
+#, c-format
+msgid "CODE %i:"
+msgstr "代码%i:"
+
+#: ../src/app_data.c:2448
+#, c-format
+msgid "DESC:"
+msgstr "代码:"
+
+#: ../src/app_data.c:2490
+#, c-format
+msgid "ACTION:"
+msgstr "动作:"
+
+#: ../src/codecs.c:100 ../src/codecs.c:251 ../src/codecs.c:463
+#: ../src/gnome_ui.c:757
+msgid "NONE"
+msgstr ""
+
+#: ../src/codecs.c:110
+msgid "Portable Graymap"
+msgstr ""
+
+#: ../src/codecs.c:119
+msgid "Portable Pixmap"
+msgstr ""
+
+#: ../src/codecs.c:128
+msgid "Portable Network Graphics"
+msgstr ""
+
+#: ../src/codecs.c:137 ../src/codecs.c:524
+msgid "Joint Picture Expert Group"
+msgstr ""
+
+#: ../src/codecs.c:146
+msgid "MPEG 1"
+msgstr ""
+
+#: ../src/codecs.c:155
+msgid "MJPEG"
+msgstr ""
+
+#: ../src/codecs.c:165
+msgid "MPEG 4 (DIVX)"
+msgstr ""
+
+#: ../src/codecs.c:174
+msgid "Microsoft DIVX 2"
+msgstr ""
+
+#: ../src/codecs.c:184
+msgid "Microsoft DIVX 3"
+msgstr ""
+
+#: ../src/codecs.c:194
+#, fuzzy
+msgid "Flash Video"
+msgstr "Flash视频"
+
+#: ../src/codecs.c:204
+#, fuzzy
+msgid "DV Video"
+msgstr "DV视频"
+
+#: ../src/codecs.c:213
+#, fuzzy
+msgid "MPEG2 Video"
+msgstr "MPEG2视频"
+
+#: ../src/codecs.c:223
+msgid "Ogg Theora"
+msgstr ""
+
+#: ../src/codecs.c:234
+msgid "Soerensen VQ 1"
+msgstr ""
+
+#: ../src/codecs.c:257
+msgid "MPEG2"
+msgstr ""
+
+#: ../src/codecs.c:262
+msgid "MPEG2 Layer 3"
+msgstr ""
+
+#: ../src/codecs.c:267
+msgid "Ogg Vorbis"
+msgstr ""
+
+#: ../src/codecs.c:271
+msgid "PCM"
+msgstr ""
+
+#: ../src/codecs.c:475
+msgid "X11 Window Dump"
+msgstr ""
+
+#: ../src/codecs.c:488
+msgid "Portable Graymap File"
+msgstr ""
+
+#: ../src/codecs.c:500
+msgid "Portable Anymap File"
+msgstr ""
+
+#: ../src/codecs.c:512
+msgid "Portable Network Graphics File"
+msgstr ""
+
+#: ../src/codecs.c:536
+msgid "Microsoft Audio Video Interleaved File"
+msgstr ""
+
+#: ../src/codecs.c:558
+msgid "General AVI file (DIVX default)"
+msgstr ""
+
+#: ../src/codecs.c:580
+msgid "Microsoft Advanced Streaming Format"
+msgstr ""
+
+#: ../src/codecs.c:597
+msgid "Macromedia Flash Video Stream"
+msgstr ""
+
+#: ../src/codecs.c:621
+msgid "Macromedia Shockwave Flash File"
+msgstr ""
+
+#: ../src/codecs.c:645
+#, fuzzy
+msgid "DV Video Format"
+msgstr "DV视频格式"
+
+#: ../src/codecs.c:663
+#, fuzzy
+msgid "MPEG1 System Format"
+msgstr "MPEG1 系统格式"
+
+#: ../src/codecs.c:681
+#, fuzzy
+msgid "MPEG2 PS Format"
+msgstr "MPEG2 PS 格式"
+
+#: ../src/codecs.c:699
+#, fuzzy
+msgid "Quicktime Format"
+msgstr "Quicktime 格式"
+
+#: ../src/gnome_ui.c:1325 ../src/gnome_ui.c:1326
+msgid "Move cursor back one frame"
+msgstr "移动光标到任一帧后面"
+
+#: ../src/gnome_ui.c:1335 ../src/gnome_ui.c:1336
+msgid "Move cursor to next frame"
+msgstr "移动光标到下一帧"
+
+#: ../src/gnome_ui.c:1343 ../src/gnome_ui.c:1345
+msgid ""
+"Left Click: Reset frame counter and filename\n"
+"Right Click: Popup Menu"
+msgstr ""
+"左击：重置抓取帧和文件名\n"
+"右击：弹出菜单"
+
+#: ../src/gnome_ui.c:1350 ../src/gnome_ui.c:1351
+msgid "Edit current individual frame"
+msgstr "编辑当前单独帧"
+
+#: ../src/gnome_ui.c:1356 ../src/gnome_ui.c:1357
+msgid "Capture single frame"
+msgstr "抓取单一帧"
+
+#: ../src/gnome_ui.c:1381 ../src/gnome_ui.c:1382
+msgid "Move cursor to previous movie"
+msgstr "移动计算尺到上一影片"
+
+#: ../src/gnome_ui.c:1384 ../src/gnome_ui.c:1385
+msgid "Move cursor to next movie"
+msgstr "移动光标到下一影片"
+
+#: ../src/gnome_ui.c:1389 ../src/gnome_ui.c:1391
+msgid ""
+"Left Click: Reset movie counter to zero\n"
+"Right Click: Popup Menu"
+msgstr ""
+"左击：影片计数清零\n"
+"右击：弹出菜单"
+
+#: ../src/gnome_ui.c:1396 ../src/gnome_ui.c:1397
+msgid "Edit current movie"
+msgstr "编辑当前影片"
+
+#: ../src/gnome_ui.c:2689 ../src/gnome_ui.c:2690
+#: ../src/gnome-xvidcap.glade.h:47
+msgid "Detach selection frame"
+msgstr "分离区域选择框"
+
+#: ../src/gnome_ui.c:2713 ../src/gnome_ui.c:2714
+msgid "Attach selection frame"
+msgstr "合并区域选择框"
+
+#: ../src/gnome_options.c:1559
+msgid "C_apture"
+msgstr "抓取(_C)"
+
+#: ../src/job.c:104
+#, c-format
+msgid "Insufficient permission to access sound input from %s\n"
+msgstr "不能够访问声音输入%s\n"
+
+#: ../src/job.c:106 ../src/job.c:112
+#, c-format
+msgid "Sound disabled!\n"
+msgstr "声音失效！\n"
+
+#: ../src/job.c:111
+#, c-format
+msgid "Error accessing sound input from %s\n"
+msgstr "访问声音输入错误%s\n"
+
+#: ../src/main.c:84
+#, c-format
+msgid ""
+"Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+msgstr ""
+"使用: %s, 版本 %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+
+#: ../src/main.c:87
+#, c-format
+msgid ""
+"[--fps #.#]      frames per second (float) or a fraction string like "
+"\"30000/1001\"\n"
+msgstr ""
+
+#: ../src/main.c:88
+#, c-format
+msgid "[--verbose #]    verbose level, '-v' is --verbose 1\n"
+msgstr ""
+
+#: ../src/main.c:89
+#, c-format
+msgid "[--time #.#]     time to record in seconds (float)\n"
+msgstr ""
+
+#: ../src/main.c:90
+#, c-format
+msgid "[--frames #]     frames to record, don't use it with --time\n"
+msgstr ""
+
+#: ../src/main.c:92
+#, c-format
+msgid "[--continue [yes|no]] autocontinue after maximum frames/time\n"
+msgstr ""
+
+#: ../src/main.c:94
+#, c-format
+msgid ""
+"[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"
+msgstr ""
+
+#: ../src/main.c:96
+#, c-format
+msgid "[--window <hex-window-id>] a hexadecimal window id (ref. xwininfo)\n"
+msgstr ""
+
+#: ../src/main.c:98
+#, c-format
+msgid ""
+"[--rescale #]    relative output size in percent compared to input (1-100)\n"
+msgstr ""
+
+#: ../src/main.c:99
+#, c-format
+msgid "[--quality #]    recording quality (1-100)\n"
+msgstr ""
+
+#: ../src/main.c:100
+#, c-format
+msgid "[--start_no #]   start number for the file names\n"
+msgstr ""
+
+#: ../src/main.c:102
+#, c-format
+msgid "[--source <src>] select input source: x11, shm\n"
+msgstr ""
+
+#: ../src/main.c:104
+#, c-format
+msgid "[--file <file>]  file pattern, e.g. out%%03d.xwd\n"
+msgstr ""
+
+#: ../src/main.c:105
+#, c-format
+msgid "[--gui [yes|no]] turn on/off gui\n"
+msgstr ""
+
+#: ../src/main.c:108
+#, c-format
+msgid "[--sf|--mf]      request single-frame or multi-frame capture mode\n"
+msgstr ""
+
+#: ../src/main.c:112
+#, c-format
+msgid ""
+"[--auto]         cause auto-detection of output format, video-, and audio "
+"codec\n"
+msgstr ""
+
+#: ../src/main.c:114
+#, c-format
+msgid "[--codec <codec>] specify codec to use for multi-frame capture\n"
+msgstr ""
+
+#: ../src/main.c:116
+#, c-format
+msgid "[--codec-help]   list available codecs for multi-frame capture\n"
+msgstr ""
+
+#: ../src/main.c:118
+#, c-format
+msgid ""
+"[--format <format>] specify file format to override the extension in the "
+"filename\n"
+msgstr ""
+
+#: ../src/main.c:119
+#, c-format
+msgid "[--format-help]  list available file formats\n"
+msgstr ""
+
+#: ../src/main.c:123
+#, c-format
+msgid ""
+"[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"
+msgstr ""
+
+#: ../src/main.c:125
+#, c-format
+msgid "[--aucodec-help] list available audio codecs for multi-frame capture\n"
+msgstr ""
+
+#: ../src/main.c:126
+#, c-format
+msgid "[--audio [yes|no]] turn on/off audio capture\n"
+msgstr ""
+
+#: ../src/main.c:129
+#, c-format
+msgid "[--audio_in <src>] specify audio input device or '-' for pipe input\n"
+msgstr ""
+
+#: ../src/main.c:130
+#, c-format
+msgid "[--audio_rate #] sample rate for audio capture\n"
+msgstr ""
+
+#: ../src/main.c:131
+#, c-format
+msgid "[--audio_bits #] bit rate for audio capture\n"
+msgstr ""
+
+#: ../src/main.c:132
+#, c-format
+msgid "[--audio_channels #] number of audio channels\n"
+msgstr ""
+
+#: ../src/main.c:135
+#, c-format
+msgid "Supported output formats:\n"
+msgstr "支持的输出格式：\n"
+
+#: ../src/main.c:185
+#, c-format
+msgid "%s %s: can't do GUI pre-initialization ... aborting\n"
+msgstr "%s %s: 不能做GUI初始化 ... 异常退出\n"
+
+#: ../src/main.c:313
+#, c-format
+msgid "Only 'x11' is supported as a capture source with this binary.\n"
+msgstr "目前的二进制系统只有 'x11'支持的抓取源\n"
+
+#: ../src/main.c:366 ../src/main.c:376 ../src/main.c:386 ../src/main.c:396
+#: ../src/main.c:406 ../src/main.c:614 ../src/main.c:649
+#, c-format
+msgid "Audio support not present in this binary.\n"
+msgstr "目前的二进制系统不支持音频。\n"
+
+#: ../src/main.c:471 ../src/main.c:565 ../src/main.c:626
+#, c-format
+msgid "%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+msgstr "%s, 版本 %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+
+#: ../src/main.c:475 ../src/main.c:501
+#, c-format
+msgid "Available codecs for single-frame capture: "
+msgstr "单帧抓取支持的编码："
+
+#: ../src/main.c:488
+#, c-format
+msgid "Available codecs for multi-frame capture: "
+msgstr "多帧抓取支持的编码："
+
+#: ../src/main.c:517
+#, c-format
+msgid "Specify 'auto' to use the file format's default codec.\n"
+msgstr "选择自动去使用此文件格式的默认编码。\n"
+
+#: ../src/main.c:543
+#, c-format
+msgid "Specified file format '%s' not supported with this binary."
+msgstr "指定的文件格式 '%s' 目前的二进制的数字系统不支持。"
+
+#: ../src/main.c:547
+#, c-format
+msgid "Resetting to file format auto-detection.\n"
+msgstr "重置文件格式为自动检测。\n"
+
+#: ../src/main.c:552
+#, c-format
+msgid "Unknown file format '%s' specified.\n"
+msgstr "未知的文件格式 '%s' 被指定。\n"
+
+#: ../src/main.c:567
+#, c-format
+msgid "Available file formats: "
+msgstr "有效的文件格式："
+
+#: ../src/main.c:584
+#, c-format
+msgid "Specify 'auto' to force file format auto-detection.\n"
+msgstr "选择自动强制文件格式为自动检测。\n"
+
+#: ../src/main.c:629
+#, c-format
+msgid "Available audio codecs for multi-frame capture: "
+msgstr "多帧抓取模式下的有效音频编码："
+
+#: ../src/main.c:644
+#, c-format
+msgid "Specify 'auto' to use the file format's default audio codec.\n"
+msgstr "选择自动去使用此文件格式的默认音频编码。\n"
+
+#: ../src/main.c:865 ../src/gnome-xvidcap.glade.h:130
+msgid "black"
+msgstr "黑色"
+
+#: ../src/main.c:868 ../src/gnome-xvidcap.glade.h:137
+msgid "white"
+msgstr "白色"
+
+#: ../src/main.c:871
+msgid "none"
+msgstr "没有"
+
+#: ../src/main.c:874
+#, c-format
+msgid "Current settings:\n"
+msgstr "当前设置:\n"
+
+#: ../src/main.c:875
+#, c-format
+msgid " flags = %d\n"
+msgstr "标志= %d\n"
+
+#: ../src/main.c:877
+#, c-format
+msgid " capture mode = %s\n"
+msgstr "抓取方式= %s\n"
+
+#: ../src/main.c:878
+msgid "single-frame"
+msgstr "单帧"
+
+#: ../src/main.c:878
+msgid "multi-frame"
+msgstr "多帧"
+
+#: ../src/main.c:880
+#, c-format
+msgid " position = %ix%i"
+msgstr "位置= %ix%i"
+
+#: ../src/main.c:884
+#, c-format
+msgid " rescale output to = %i\n"
+msgstr "重新调节输出文件= %i\n"
+
+#: ../src/main.c:885
+#, c-format
+msgid " frames per second = %.2f\n"
+msgstr "每秒帧数= %.2f\n"
+
+#: ../src/main.c:887
+#, c-format
+msgid " file pattern = %s\n"
+msgstr "文件图案 = %s\n"
+
+#: ../src/main.c:888
+#, c-format
+msgid " file format = %s\n"
+msgstr "文件= %s\n"
+
+#: ../src/main.c:891
+#, c-format
+msgid " video encoding = %s\n"
+msgstr "视频编码= %s\n"
+
+#: ../src/main.c:895
+#, c-format
+msgid " audio codec = %s\n"
+msgstr "音频编码= %s\n"
+
+#: ../src/main.c:900
+#, c-format
+msgid " verbose level = %d\n"
+msgstr "详细标准= %d\n"
+
+#: ../src/main.c:901
+#, c-format
+msgid " frame start no = %d\n"
+msgstr "帧开始于= %d\n"
+
+#: ../src/main.c:902
+#, c-format
+msgid " frames to store = %d\n"
+msgstr "帧被保存= %d\n"
+
+#: ../src/main.c:903
+#, c-format
+msgid " time to capture = %i sec\n"
+msgstr "抓取时间= %i 秒\n"
+
+#: ../src/main.c:904
+#, c-format
+msgid " autocontinue = %s\n"
+msgstr "自动继续= %s\n"
+
+#: ../src/main.c:906
+#, c-format
+msgid " input source = %s (%d)\n"
+msgstr "输入源= %s (%d)\n"
+
+#: ../src/main.c:908
+#, c-format
+msgid " capture pointer = %s\n"
+msgstr "抓取指针= %s\n"
+
+#: ../src/main.c:910
+#, c-format
+msgid " capture audio = %s\n"
+msgstr "获取音频= %s\n"
+
+#: ../src/main.c:912
+#, c-format
+msgid " - input = %s\n"
+msgstr "－输入= %s\n"
+
+#: ../src/main.c:913
+#, c-format
+msgid " - sample rate = %i\n"
+msgstr "－取样速率= %i\n"
+
+#: ../src/main.c:914
+#, c-format
+msgid " - bit rate = %i\n"
+msgstr "－比特率= %i\n"
+
+#: ../src/main.c:915
+#, c-format
+msgid " - channels = %i\n"
+msgstr "－通道= %i\n"
+
+#: ../src/main.c:917
+#, c-format
+msgid " animate command = %s\n"
+msgstr "激活命令= %s\n"
+
+#: ../src/main.c:918
+#, c-format
+msgid " make video command= %s\n"
+msgstr "生成视频命令= %s\n"
+
+#: ../src/main.c:919
+#, c-format
+msgid " edit frame command= %s\n"
+msgstr "编辑帧命令= %s\n"
+
+#: ../src/main.c:964
+#, c-format
+msgid ""
+"%s %s: Unrecoverable error while validating options, please contact the "
+"xvidcap project.\n"
+msgstr "%s %s: 确认选项时发生不可恢复错误，请联系 xvidcap 设计者\n"
+
+#: ../src/main.c:973
+#, c-format
+msgid "%s %s: can't create GUI ... aborting\n"
+msgstr "%s %s: 不能创建GUI ... 异常退出\n"
+
+#: ../src/main.c:979
+#, c-format
+msgid "%s %s: can't create selection Frame ... aborting\n"
+msgstr "%s %s: 不能创建选择的帧 ... 异常退出\n"
+
+#: ../src/main.c:984
+#, c-format
+msgid "%s %s: can't initialize GUI ... aborting\n"
+msgstr "%s %s: 不能初始化GUI ... 异常退出\n"
+
+#: ../src/options.c:70
+#, c-format
+msgid ""
+"#\n"
+"# xvidcap configuration file\n"
+"\n"
+msgstr ""
+"#\n"
+"# xvidcap 配置文件\n"
+"# 中文化：李红昆 <lon83129@126.com>\n"
+"# 译者注：如果你对 xvidcap 有了相当的了解才可以在此更改设置，一般用户建议在"
+"GUI下操作。若发现中文化有误请及时与我联系！\n"
+"# 使用方法：中文部分是对注释的解释（并保留原英文注释），非注释部分的英文部分"
+"为设置的参数（前面不加＃号的行），通常1为是，0为否。\n"
+"\n"
+"\n"
+"\n"
+
+#. general options
+#: ../src/options.c:73
+#, c-format
+msgid "#general options ...\n"
+msgstr ""
+"#一般设置 ...\n"
+"#general options ...\n"
+
+#: ../src/options.c:76
+#, c-format
+msgid ""
+"# default capture mode (0 = single-frame, 1 = multi-frame\n"
+"default_mode: %i\n"
+msgstr ""
+"# 默认抓取模式 (0 = 单帧, 1 = 多帧\n"
+"# default capture mode (0 = single-frame, 1 = multi-frame\n"
+"default_mode: %i\n"
+
+#: ../src/options.c:82
+#, c-format
+msgid ""
+"# capture source\n"
+"source: %s\n"
+msgstr ""
+"# 抓取来源\n"
+"# capture source\n"
+"source: %s\n"
+
+#: ../src/options.c:85
+#, c-format
+msgid "# take screenshots using the XDamage extension for efficiency.\n"
+msgstr ""
+"#抓取屏幕使用XDamage扩展提高效率。\n"
+"# take screenshots using the XDamage extension for efficiency.\n"
+
+#: ../src/options.c:88
+#, c-format
+msgid ""
+"# this does not work well for 3D compositing window managers like compiz or "
+"beryl.\n"
+msgstr ""
+"#这是不能工作在3D窗口管理程序下的，象compiz 或者 beryl。\n"
+"# this does not work well for 3D compositing window managers like compiz or "
+"beryl.\n"
+
+#: ../src/options.c:91
+#, c-format
+msgid ""
+"# therefore xvidcap disables this by default for those window managers.\n"
+msgstr ""
+"#因此xvidcap会被那些默认的窗口管理程序关闭。\n"
+"# therefore xvidcap disables this by default for those window managers.\n"
+
+#: ../src/options.c:94
+#, c-format
+msgid ""
+"# set this to \"-1\" for auto-detection, \"0\" for disabled, or \"1\" for "
+"enabled.\n"
+msgstr ""
+"#设置 \"-1\"为自动检测， \"0\"为关闭， \"1\"为开启\n"
+"# set this to \"-1\" for auto-detection, \"0\" for disabled, or \"1\" for "
+"enabled.\n"
+
+#: ../src/options.c:96
+#, c-format
+msgid ""
+"# hide GUI\n"
+"nogui: %d\n"
+msgstr ""
+"# 隐藏 GUI\n"
+"# hide GUI\n"
+"nogui: %d\n"
+
+#: ../src/options.c:99
+#, c-format
+msgid ""
+"# device to grab audio from\n"
+"audio_in: %s\n"
+msgstr ""
+"# 获得音频的设备\n"
+"# device to grab audio from\n"
+"audio_in: %s\n"
+
+#: ../src/options.c:104
+#, c-format
+msgid ""
+"# what kind of mouse pointer should be recorded? 0 = none, 1 = white, 2 = "
+"black\n"
+msgstr ""
+"# 将抓取什么类型的鼠标指针? 0 = 没有, 1 = 白色, 2 = 黑色\n"
+"# what kind of mouse pointer should be recorded? 0 = none, 1 = white, 2 = "
+"black\n"
+
+#: ../src/options.c:108
+#, c-format
+msgid ""
+"# should cap_geometry be saved to prefs?\n"
+"save_geometry: %d\n"
+msgstr ""
+"# 将抓取区域的几何形状参数保存到设置中?\n"
+"# should cap_geometry be saved to prefs?\n"
+"save_geometry: %d\n"
+
+#: ../src/options.c:111
+#, c-format
+msgid "# area to capture as in --capture_geometry\n"
+msgstr ""
+"# 抓取区域同--抓取几何形状\n"
+"# area to capture as in --capture_geometry\n"
+
+#: ../src/options.c:119
+#, c-format
+msgid ""
+"# show time rather than frame count\n"
+"show_time: %d\n"
+msgstr ""
+"# 精确显示时间除按帧计数时\n"
+"# show time rather than frame count\n"
+"show_time: %d\n"
+
+#: ../src/options.c:121
+#, c-format
+msgid ""
+"# toggle autocontinue (0/1) \n"
+"auto_continue: %i\n"
+msgstr ""
+"# 切换自动继续 (0/1) \n"
+"# toggle autocontinue (0/1) \n"
+"auto_continue: %i\n"
+
+#: ../src/options.c:125
+#, c-format
+msgid ""
+"# always show results dialog (0/1) \n"
+"always_show_results: %i\n"
+msgstr ""
+"# 总是显示结果对话 (0/1) \n"
+"# always show results dialog (0/1) \n"
+"always_show_results: %i\n"
+
+#: ../src/options.c:128
+#, c-format
+msgid "# rescale the captured area to n percent of the original\n"
+msgstr ""
+"# 改变抓取区域大小为原始区域的精确百分比\n"
+"# rescale the captured area to n percent of the original\n"
+
+#: ../src/options.c:132
+#, c-format
+msgid "# minimize the main control to the system tray while recording\n"
+msgstr ""
+
+#: ../src/options.c:136
+#, c-format
+msgid ""
+"\n"
+"#options for single-frame capture ...\n"
+msgstr ""
+"\n"
+"#单帧抓取设置 ...\n"
+"#options for single-frame capture ...\n"
+
+#: ../src/options.c:139 ../src/options.c:241
+#, c-format
+msgid ""
+"# file pattern\n"
+"# this defines the filetype to write via the extension provided\n"
+msgstr ""
+"# 文件类型\n"
+"# file pattern\n"
+"# 在这里通过文件扩展名来定义文件类型\n"
+"# this defines the filetype to write via the extension provided\n"
+
+#: ../src/options.c:140 ../src/options.c:242
+#, c-format
+msgid "# valid extensions are: "
+msgstr ""
+"# 有效的扩展名: \n"
+"# valid extensions are: "
+
+#: ../src/options.c:165 ../src/options.c:256
+#, c-format
+msgid "# file format - use AUTO to select format through file extension\n"
+msgstr ""
+"# 文件格式－使用自动会根据文件扩展名去选择格式\n"
+"# file format - use AUTO to select format through file extension\n"
+
+#: ../src/options.c:166 ../src/options.c:186 ../src/options.c:257
+#: ../src/options.c:268 ../src/options.c:279
+#, c-format
+msgid "# Otherwise specify one of the following: "
+msgstr ""
+"# 要不然在下面列表中选一：\n"
+"# Otherwise specify one of the following: "
+
+#: ../src/options.c:185 ../src/options.c:267
+#, c-format
+msgid "# video codec used by ffmpeg - use AUTO to auto-detect codec\n"
+msgstr ""
+"# 用于ffmpeg的视频编码－用于自动检测格式\n"
+"# video codec used by ffmpeg - use AUTO to auto-detect codec\n"
+
+#: ../src/options.c:203
+#, c-format
+msgid ""
+"# audio codec (for future use)\n"
+"sf_au_codec: %s\n"
+msgstr ""
+"# 音频编码（将来实现）\n"
+"# audio codec (for future use)\n"
+"sf_au_codec: %s\n"
+
+#: ../src/options.c:207 ../src/options.c:292
+#, c-format
+msgid ""
+"# frames per second\n"
+"# put as normal decimal number or a fraction like \"30000/10001\"\n"
+msgstr ""
+"#每一秒的帧数\n"
+"# frames per second\n"
+"#估计标准的十进制数字或一部分类似于\"30000/10001\"\n"
+"# put as normal decimal number or a fraction like \"30000/10001\"\n"
+
+#: ../src/options.c:208
+#, c-format
+msgid "sf_fps: %i/%i\n"
+msgstr ""
+
+#: ../src/options.c:210
+#, c-format
+msgid ""
+"# max time (0 = unlimited)\n"
+"sf_max_time: %i\n"
+msgstr ""
+"# 最大时间(0 = 无限制)\n"
+"# max time (0 = unlimited)\n"
+"sf_max_time: %i\n"
+
+#: ../src/options.c:212
+#, c-format
+msgid ""
+"# max frames (0 = unlimited)\n"
+"sf_max_frames: %d\n"
+msgstr ""
+"# 最大帧数 ( 0 = 无限制)\n"
+"# max frames (0 = unlimited)\n"
+"sf_max_frames: %d\n"
+
+#: ../src/options.c:214
+#, c-format
+msgid "# number to start counting individual frames from\n"
+msgstr ""
+"# 从那一帧数开始计数\n"
+"# number to start counting individual frames from\n"
+
+#: ../src/options.c:216
+#, c-format
+msgid ""
+"# quality (JPEG/MPEG)\n"
+"sf_quality: %d\n"
+msgstr ""
+"# 品质 (JPEG/MPEG)\n"
+"# quality (JPEG/MPEG)\n"
+"sf_quality: %d\n"
+
+#: ../src/options.c:219
+#, c-format
+msgid ""
+"# toggle audio capture (0/1) (for future use)\n"
+"sf_audio: 0\n"
+msgstr ""
+"# 抓取音频的开关 (0/1) (将来实现)\n"
+"# toggle audio capture (0/1) (for future use)\n"
+"sf_audio: 0\n"
+
+#: ../src/options.c:222
+#, c-format
+msgid ""
+"# sample rate for audio capture (for future use)\n"
+"sf_audio_rate: 0\n"
+msgstr ""
+"# 抓取音频的抽样率 (将来实现)\n"
+"# sample rate for audio capture (for future use)\n"
+"sf_audio_rate: 0\n"
+
+#: ../src/options.c:225
+#, c-format
+msgid ""
+"# bit rate for audio capture (for future use)\n"
+"sf_audio_bits: 0\n"
+msgstr ""
+"# 抓取音频的位速率 (将来实现)\n"
+"# bit rate for audio capture (for future use)\n"
+"sf_audio_bits: 0\n"
+
+#: ../src/options.c:228
+#, c-format
+msgid "# number of channels to use in audio capture (for future use)\n"
+msgstr ""
+"# 多少通道数用于音频的抓取 (将来实现)\n"
+"# number of channels to use in audio capture (for future use)\n"
+
+#: ../src/options.c:230 ../src/options.c:315
+#, c-format
+msgid "# command to display captured frames as animation\n"
+msgstr ""
+"# 显示抓取帧生成的动画的命令\n"
+"# command to display captured frames as animation\n"
+
+#: ../src/options.c:232
+#, c-format
+msgid "# command to edit current frame\n"
+msgstr ""
+"# 编辑当前帧的命令\n"
+"# command to edit current frame\n"
+
+#: ../src/options.c:234
+#, c-format
+msgid "# command to encode captured frames\n"
+msgstr ""
+"# 改当前帧编码的命令\n"
+"# command to encode captured frames\n"
+
+#: ../src/options.c:238
+#, c-format
+msgid ""
+"\n"
+"#options for multi-frame capture ...\n"
+msgstr ""
+"\n"
+"#多帧抓取设置 ...\n"
+"#options for multi-frame capture ...\n"
+
+#: ../src/options.c:278
+#, c-format
+msgid "# audio codec used by ffmpeg - use AUTO to auto-detect audio codec\n"
+msgstr ""
+"# 用于ffmpeg的音频编码 - 用于自动检测音频格式\n"
+"# audio codec used by ffmpeg - use AUTO to auto-detect audio codec\n"
+
+#: ../src/options.c:293
+#, c-format
+msgid "mf_fps: %i/%i\n"
+msgstr ""
+
+#: ../src/options.c:295
+#, c-format
+msgid ""
+"# max time (0 = unlimited)\n"
+"mf_max_time: %i\n"
+msgstr ""
+"#  最大时间(0 = 无限制)\n"
+"# max time (0 = unlimited)\n"
+"mf_max_time: %i\n"
+
+#: ../src/options.c:297
+#, c-format
+msgid ""
+"# max frames (0 = unlimited)\n"
+"mf_max_frames: %d\n"
+msgstr ""
+"# 最大帧数(0 = 无限制)\n"
+"# max frames (0 = unlimited)\n"
+"mf_max_frames: %d\n"
+
+#: ../src/options.c:301
+#, c-format
+msgid "# number to start counting individual frames from (for future use)\n"
+msgstr ""
+"# 从那一帧数开始计数 (将来实现)\n"
+"# number to start counting individual frames from (for future use)\n"
+
+#: ../src/options.c:303
+#, c-format
+msgid ""
+"# quality (JPEG/MPEG)\n"
+"mf_quality: %d\n"
+msgstr ""
+"#品质 (JPEG/MPEG)\n"
+"mf_quality: %d\n"
+
+#: ../src/options.c:306
+#, c-format
+msgid ""
+"# toggle audio capture (0/1)\n"
+"mf_audio: %i\n"
+msgstr ""
+"# 抓取音频的开关 (0/1)\n"
+"# toggle audio capture (0/1)\n"
+"mf_audio: %i\n"
+
+#: ../src/options.c:308
+#, c-format
+msgid ""
+"# sample rate for audio capture\n"
+"mf_audio_rate: %i\n"
+msgstr ""
+"# 抓取音频的抽样率\n"
+"# sample rate for audio capture\n"
+"mf_audio_rate: %i\n"
+
+#: ../src/options.c:310
+#, c-format
+msgid ""
+"# bit rate for audio capture\n"
+"mf_audio_bits: %i\n"
+msgstr ""
+"# 抓取音频的位速率 \n"
+"# bit rate for audio capture\n"
+"mf_audio_bits: %i\n"
+
+#: ../src/options.c:312
+#, c-format
+msgid "# number of channels to use in audio capture\n"
+msgstr ""
+"# 多少通道数用于音频的抓取\n"
+"# number of channels to use in audio capture\n"
+
+#: ../src/options.c:317
+#, c-format
+msgid "# command to edit current movie\n"
+msgstr ""
+"# 编辑当前抓取影片的命令\n"
+"# command to edit current movie\n"
+
+#: ../src/options.c:320
+#, c-format
+msgid "# command to encode captured frames (subject to change)\n"
+msgstr ""
+"# 改抓取帧编码的命令 (标题被改变)\n"
+"# command to encode captured frames (subject to change)\n"
+
+#: ../src/options.c:423
+#, c-format
+msgid ""
+"reading unsupported GUI preferences from options file\n"
+"resetting to GUI not hidden\n"
+msgstr ""
+"从配置文件中读出不正确的GUI设置\n"
+"重置GUI不隐藏\n"
+
+#: ../src/options.c:443
+#, c-format
+msgid ""
+"reading unsupported save_geometry preferences from options file\n"
+"resetting to capture geometry not saved\n"
+msgstr ""
+"读出不支持的“保存几何形状”参数，来自于配置文件\n"
+"重置抓取形状不保存。\n"
+
+#: ../src/options.c:459
+#, c-format
+msgid ""
+"reading unsupported show_time value from options file\n"
+"resetting to display frame counter\n"
+msgstr ""
+"读出不支持的“显示时间”的值，来自于配置文件\n"
+"重置显示帧计数器。\n"
+
+#: ../src/options.c:470
+#, c-format
+msgid ""
+"reading unsupported auto_continue value from options file\n"
+"resetting to autocontinue enabled.\n"
+msgstr ""
+"读出不支持的“自动继续”的值，来自于配置文件\n"
+"重置“自动继续”为开启。\n"
+
+#: ../src/options.c:481
+#, c-format
+msgid ""
+"reading unsupported always_show_results value from options file\n"
+"resetting to always show results.\n"
+msgstr ""
+"读出不支持的“总是显示结果”的值，来自于配置文件\n"
+"重置“总是显示结果”。\n"
+
+#: ../src/options.c:495
+#, fuzzy, c-format
+msgid ""
+"reading unsupported minimize_to_tray value from options file\n"
+"resetting to not minimizing to tray.\n"
+msgstr ""
+"读出不支持的“自动继续”的值，来自于配置文件\n"
+"重置“自动继续”为开启。\n"
+
+#: ../src/options.c:586
+#, c-format
+msgid ""
+"reading unsupported target from options file\n"
+"resetting to target auto-detection\n"
+msgstr ""
+"读出不支持的对象，来自于配置文件\n"
+"重置目标为自动检测\n"
+
+#: ../src/options.c:603
+#, c-format
+msgid ""
+"reading unsupported target codec (%i) from options file\n"
+"resetting to codec auto-detection\n"
+msgstr ""
+"读出不支持的编码对象(%i)来自于配置文件\n"
+"重置编码为自动检测\n"
+
+#: ../src/options.c:622
+#, c-format
+msgid ""
+"reading unsupported target audio codec (%i) from options file\n"
+"resetting to audio codec auto-detection\n"
+msgstr ""
+"读出不支持的音频对象编码(%i)来自于配置文件\n"
+"重置音频编码为自动检测\n"
+
+#: ../src/options.c:657
+#, c-format
+msgid "Invalid parameter 'audio: %s' in preferences file\n"
+msgstr "无效的音频参数: %s' 在配置文件中\n"
+
+#: ../src/options.c:661
+#, c-format
+msgid "Disabling audio capture unless overridden by command line\n"
+msgstr "禁止抓取音频除非排除无效的命令行\n"
+
+#: ../src/xtoffmpeg.c:330
+#, c-format
+msgid "%s %s: error opening input file %s: %i\n"
+msgstr "%s %s: 错误在打开输入文件 %s: %i\n"
+
+#: ../src/xtoffmpeg.c:337
+#, c-format
+msgid "%s %s: Could not alloc input stream ... aborting\n"
+msgstr "%s %s: 不能分配输入流 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:347
+#, c-format
+msgid "%s %s: could not find codec parameters\n"
+msgstr "%s %s:没有发现编码器参数\n"
+
+#: ../src/xtoffmpeg.c:369
+#, c-format
+msgid "%s %s: could not allocate audio output codec context\n"
+msgstr "%s %s: 不能分配音频输出编码的上下文\n"
+
+#: ../src/xtoffmpeg.c:389
+#, c-format
+msgid "%s %s: Could not alloc stream ... aborting\n"
+msgstr "%s %s: 不能分配数据流 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:399
+#, c-format
+msgid "%s %s: Could not alloc stream\n"
+msgstr "%s %s: 不能分配数据流\n"
+
+#: ../src/xtoffmpeg.c:411
+#, c-format
+msgid "%s %s: Can't initialize fifo for audio recording\n"
+msgstr "%s %s: 不能为音频记录初始化先进先出（ fifo）\n"
+
+#: ../src/xtoffmpeg.c:449 ../src/xtoffmpeg.c:468
+#, c-format
+msgid "%s %s: Can't resample. Aborting.\n"
+msgstr "%s %s: 不能再取样，异常退出。\n"
+
+#: ../src/xtoffmpeg.c:485
+#, c-format
+msgid "%s %s: Error while opening codec for output stream\n"
+msgstr "%s %s: 当打开输出流编码器时错误\n"
+
+#: ../src/xtoffmpeg.c:497
+#, c-format
+msgid "%s %s: Unsupported codec (id=%d) for input stream\n"
+msgstr "%s %s: 不支持的编码在 (id=%d) 输入流\n"
+
+#: ../src/xtoffmpeg.c:507
+#, c-format
+msgid "%s %s: Error while opening codec for input stream\n"
+msgstr "%s %s: 当打开输入流编码器时错误\n"
+
+#: ../src/xtoffmpeg.c:593
+#, c-format
+msgid "%s %s: Error while writing audio frame\n"
+msgstr "%s %s: 记录音频帧错误\n"
+
+#: ../src/xtoffmpeg.c:602
+#, c-format
+msgid "%s %s: Couldn't unlock mutex lock for writing audio frame\n"
+msgstr "%s %s: 不能解开记录音频帧互斥锁\n"
+
+#: ../src/xtoffmpeg.c:784
+#, c-format
+msgid "%s %s: error reading audio packet\n"
+msgstr "%s %s: 读取音频包错误\n"
+
+#: ../src/xtoffmpeg.c:807
+#, c-format
+msgid "%s %s: couldn't decode captured audio packet\n"
+msgstr "%s %s: 不能解码抓取的音频包\n"
+
+#: ../src/xtoffmpeg.c:818
+#, c-format
+msgid "%s %s: no audio frame\n"
+msgstr "%s %s: 无音频帧\n"
+
+#: ../src/xtoffmpeg.c:850
+#, c-format
+msgid "error reading audio packet\n"
+msgstr "读取音频信息错误\n"
+
+#: ../src/xtoffmpeg.c:853
+#, c-format
+msgid "%s %s: dropping audio frame %f %f\n"
+msgstr "%s %s: 遗失音频帧 %f %f\n"
+
+#: ../src/xtoffmpeg.c:926
+#, c-format
+msgid "%s %s: Error while writing video frame\n"
+msgstr "%s %s: 记录视频帧时错误\n"
+
+#: ../src/xtoffmpeg.c:1164
+#, c-format
+msgid "%s %s: Could not alloc output stream\n"
+msgstr "%s %s: 不能分配输出流\n"
+
+#: ../src/xtoffmpeg.c:1180
+#, c-format
+msgid "%s %s: video codec not found\n"
+msgstr "%s %s: 视频编码没有发现\n"
+
+#: ../src/xtoffmpeg.c:1238
+#, c-format
+msgid ""
+"%s %s: The picture format you are grabbing (%i) is not supported by "
+"libswscale ... aborting\n"
+msgstr "%s %s: 你抓取的图像格式 (%i) 不被libswscale支持 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1318 ../src/xtoffmpeg.c:1338
+#, c-format
+msgid "%s %s: rgb ordering at image depth %i not supported ... aborting\n"
+msgstr "%s %s: 在图像深度RGB调整时 %i 不被支持 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1359 ../src/xtoffmpeg.c:1366
+#, c-format
+msgid "%s %s: image depth %i not supported ... aborting\n"
+msgstr "%s %s: 图像深度 %i 不被支持 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1458
+#, c-format
+msgid "%s %s: Couldn't determin output format ... aborting\n"
+msgstr "%s %s:不能决定输出格式 ...  异常退出\n"
+
+#: ../src/xtoffmpeg.c:1478
+#, c-format
+msgid "%s %s: Error allocating memory for format context ... aborting\n"
+msgstr "%s %s: 分配格式化范围的内存错误 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1490
+#, c-format
+msgid "%s %s: Error allocating private data for format context ... aborting\n"
+msgstr "%s %s: 分配格式化范围的专用数据错误 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1520
+#, c-format
+msgid "%s %s: Invalid encoding parameters ... aborting\n"
+msgstr "%s %s: 无效的编码参数 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1526
+#, c-format
+msgid "%s %s: could not open video codec\n"
+msgstr "%s %s: 不能打开视频编码器\n"
+
+#: ../src/xtoffmpeg.c:1592
+#, c-format
+msgid "%s %s: Could not allocate buffer for output frame! ... aborting\n"
+msgstr "%s %s: 不能为输出帧分配缓冲区! ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1611
+#, c-format
+msgid ""
+"%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"
+msgstr "%s %s: 不能为编码帧分配缓冲区(输出缓冲区)! ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1640 ../src/xtoffmpeg.c:1688
+#, c-format
+msgid "%s %s: Could not open '%s' ... aborting\n"
+msgstr "%s %s: 不能打开 '%s' ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1649 ../src/xtoffmpeg.c:1697
+#, c-format
+msgid ""
+"%s %s: Could not write header for output file (incorrect codec "
+"paramters ?) ... aborting\n"
+msgstr "%s %s: 输出文件不能写入磁盘(不正确的编码参数?) ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1727
+#, c-format
+msgid ""
+"%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
+"i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
+msgstr ""
+
+#: ../src/xtoffmpeg.c:1749
+#, c-format
+msgid "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"
+msgstr "%s %s: 错误的帧编码 : 通道 %p, 输出缓冲 %p, 尺寸 %i, 帧 %p\n"
+
+#: ../src/xtoffmpeg.c:1759
+#, c-format
+msgid "mutex lock for writing video frame failed ... aborting\n"
+msgstr "记录视频帧互斥锁失败 ... 异常退出\n"
+
+#: ../src/xtoffmpeg.c:1783
+#, c-format
+msgid "couldn't release the mutex for writing video frame ... aborting\n"
+msgstr "记录视频帧时不能释放互斥 ... 异常退出\n"
+
+#: ../src/xv_error_item.c:142 ../src/xv_error_item.c:264
+#, c-format
+msgid ""
+"FATAL\n"
+"ERROR (%i):"
+msgstr ""
+"致命\n"
+"错误(%i):"
+
+#: ../src/xv_error_item.c:145 ../src/xv_error_item.c:270
+#, c-format
+msgid "ERROR (%i):"
+msgstr "错误 (%i):"
+
+#: ../src/xv_error_item.c:148 ../src/xv_error_item.c:276
+#, c-format
+msgid "WARNING (%i):"
+msgstr "警告(%i):"
+
+#: ../src/xv_error_item.c:151 ../src/xv_error_item.c:282
+#, c-format
+msgid "INFO (%i):"
+msgstr "提示(%i):"
+
+#: ../src/xv_error_item.c:154
+#, c-format
+msgid "???? (%i):"
+msgstr "未知(%i):"
+
+#: ../src/xv_error_item.c:189
+msgid "Details:"
+msgstr "详细资料:"
+
+#: ../src/xv_error_item.c:215
+msgid "Action:"
+msgstr "动作:"
+
+#: ../src/gnome-xvidcap.glade.h:1
+msgid "(select)"
+msgstr "(选择)"
+
+#: ../src/gnome-xvidcap.glade.h:2
+msgid "25 seconds"
+msgstr "25 秒"
+
+#: ../src/gnome-xvidcap.glade.h:3
+msgid ""
+"<b>Achieved \n"
+"Frame Rate:</b>"
+msgstr ""
+"<b>完成 \n"
+"帧速率:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:5
+msgid "<b>Audio Codec:</b>"
+msgstr "<b>声音编码:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:6
+msgid "<b>Audio Settings</b>"
+msgstr "<b>音频设置</b>"
+
+#: ../src/gnome-xvidcap.glade.h:7
+msgid ""
+"<b>Capture\n"
+"Success Ratio:</b>"
+msgstr ""
+"<b>抓取\n"
+"结果比例:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:9
+msgid ""
+"<b>Captured \n"
+"Frames:</b>"
+msgstr ""
+"<b>抓取 \n"
+"帧:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:11
+msgid ""
+"<b>Desired \n"
+"Frame Rate:</b>"
+msgstr ""
+"<b>要求 \n"
+"帧速率:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:13
+msgid "<b>Height:</b>"
+msgstr "<b>高度:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:14
+msgid "<b>Miscellaneous Settings</b>"
+msgstr "<b>各方面设置</b>"
+
+#: ../src/gnome-xvidcap.glade.h:15
+msgid "<b>Multi-Frame Capture Commands</b>"
+msgstr "<b>多帧抓取命令</b>"
+
+#: ../src/gnome-xvidcap.glade.h:16
+msgid "<b>Single-Frame Capture Commands</b>"
+msgstr "<b>单帧抓取命令</b>"
+
+#: ../src/gnome-xvidcap.glade.h:17
+msgid ""
+"<b>Video \n"
+"Length:</b>"
+msgstr ""
+"<b>视频 \n"
+"长度:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:19
+msgid "<b>Video Codec:</b>"
+msgstr "<b>视频编码:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:20
+msgid "<b>Video Format:</b>"
+msgstr "<b>视频格式:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:21
+msgid "<b>Video Settings</b>"
+msgstr "<b>视频设置</b>"
+
+#: ../src/gnome-xvidcap.glade.h:22
+msgid "<b>Width:</b>"
+msgstr "<b>宽度:</b>"
+
+#: ../src/gnome-xvidcap.glade.h:23
+msgid ""
+"Always show the result dialog after capture.\n"
+"Otherwise only show it if required for asking the user for a filename."
+msgstr ""
+"总在显示结果对话在抓取完成之后\n"
+"否则只显示它在询问用户文件名时。"
+
+#: ../src/gnome-xvidcap.glade.h:25
+msgid "Alyway Show Result Dialog"
+msgstr "总是显示结果对话"
+
+#: ../src/gnome-xvidcap.glade.h:26
+msgid ""
+"Audio \n"
+"Codec:"
+msgstr ""
+"音频\n"
+"编码:"
+
+#: ../src/gnome-xvidcap.glade.h:28
+msgid "Auto_continue"
+msgstr "自动继续(_C)"
+
+#: ../src/gnome-xvidcap.glade.h:29
+msgid "Autocontinue (y/n)"
+msgstr "自动继续（开/关）"
+
+#: ../src/gnome-xvidcap.glade.h:30
+msgid "Bit Rate:"
+msgstr "位速率:"
+
+#: ../src/gnome-xvidcap.glade.h:31
+msgid "C_ommands"
+msgstr "命令(_C)"
+
+#: ../src/gnome-xvidcap.glade.h:32
+msgid "Capture Results"
+msgstr "抓取结果"
+
+#: ../src/gnome-xvidcap.glade.h:33
+msgid "Capture _Mouse Pointer:"
+msgstr "抓取鼠标指针(_M)"
+
+#: ../src/gnome-xvidcap.glade.h:34
+msgid "Capture the Mouse Pointer as a black arrow."
+msgstr "抓取鼠标指针为黑色箭头。"
+
+#: ../src/gnome-xvidcap.glade.h:35
+msgid "Capture the Mouse Pointer as a white arrow."
+msgstr "抓取鼠标指针为白色箭头。"
+
+#: ../src/gnome-xvidcap.glade.h:36
+msgid "Channels"
+msgstr "通道"
+
+#: ../src/gnome-xvidcap.glade.h:37
+msgid ""
+"Check here for auto-detection of the default audio codec based on the file "
+"format."
+msgstr "点击这自动检测此文件格式的默认音频编码。"
+
+#: ../src/gnome-xvidcap.glade.h:38
+msgid ""
+"Check here for auto-detection of the default codec based on the file format."
+msgstr "点击这自动检测此文件格式的默认编码。"
+
+#: ../src/gnome-xvidcap.glade.h:39
+msgid "Check here for auto-detection of the file format based on the filename."
+msgstr "点击这自动检测此文件名的默认格式。"
+
+#: ../src/gnome-xvidcap.glade.h:40
+msgid "Click to open a file selector."
+msgstr "打开文件选项."
+
+#: ../src/gnome-xvidcap.glade.h:41
+msgid "Click to test the edit command."
+msgstr "点击测试编辑命令。"
+
+#: ../src/gnome-xvidcap.glade.h:42
+msgid "Click to test the encoding command."
+msgstr "点击这测试编码命令。"
+
+#: ../src/gnome-xvidcap.glade.h:43
+msgid "Click to test the playback command."
+msgstr "点击这测试回放命令."
+
+#: ../src/gnome-xvidcap.glade.h:44
+msgid "Click to test the transcode command."
+msgstr "点击测试译码命令。"
+
+#: ../src/gnome-xvidcap.glade.h:45
+msgid ""
+"Clicking \"OK\" applies all the default actions suggested by the error "
+"messages."
+msgstr "点击确定，默认发送所有错误信息。"
+
+#: ../src/gnome-xvidcap.glade.h:46
+msgid "Default Capture Mode:"
+msgstr "默认抓取模式:"
+
+#: ../src/gnome-xvidcap.glade.h:48
+msgid ""
+"Don't save the video. Note: the temporary file will not be deleted but may "
+"be overwritten on next capture."
+msgstr "不要保存视频。注意：临时文件没有被删，将会覆盖下一个抓取。"
+
+#: ../src/gnome-xvidcap.glade.h:49
+msgid "Edit Command:"
+msgstr "辑编命令:"
+
+#: ../src/gnome-xvidcap.glade.h:50
+msgid ""
+"Enable \n"
+"_Audio"
+msgstr ""
+"允许\n"
+"音频"
+
+#: ../src/gnome-xvidcap.glade.h:52
+msgid "Enable Capturing of Mouse Pointer Movement."
+msgstr "允许抓取鼠标指针动作。"
+
+#: ../src/gnome-xvidcap.glade.h:53
+msgid "Enable the autocontinue feature for Multi-Frame Capture."
+msgstr "能够自动继续在多帧抓取时."
+
+#: ../src/gnome-xvidcap.glade.h:54
+msgid "Encoding Command:"
+msgstr "编码命令:"
+
+#: ../src/gnome-xvidcap.glade.h:55
+msgid "Enter a target filename or pattern here."
+msgstr "在这填上对象文件名或样式（译者注：后辍名在这里很重要！）"
+
+#: ../src/gnome-xvidcap.glade.h:56
+msgid "Enter an  audio device name here."
+msgstr "在这填入音频设备名."
+
+#: ../src/gnome-xvidcap.glade.h:57
+msgid "Enter the command to be executed for editing the current frame."
+msgstr "输入命令执行编辑当前帧。"
+
+#: ../src/gnome-xvidcap.glade.h:58
+msgid "Enter the command to be executed for editing the recorded video."
+msgstr "按回车辑编记录的视频."
+
+#: ../src/gnome-xvidcap.glade.h:59
+msgid ""
+"Enter the command to be executed for encoding the recorded individual frames."
+msgstr "输入命令执行当前帧的编码。"
+
+#: ../src/gnome-xvidcap.glade.h:60
+msgid "Enter the command to be executed for playing back the recorded video."
+msgstr "输入命令执行回放记录视频。"
+
+#: ../src/gnome-xvidcap.glade.h:61
+msgid "Enter the command to be executed for transcoding the recorded video."
+msgstr "输入命令执行对录制视频的译码。"
+
+#: ../src/gnome-xvidcap.glade.h:62
+msgid "File Format:"
+msgstr "文件格式:"
+
+#: ../src/gnome-xvidcap.glade.h:63
+msgid "File Name:"
+msgstr "文件名:"
+
+#: ../src/gnome-xvidcap.glade.h:64
+msgid ""
+"Frame Number \n"
+"Increment:"
+msgstr ""
+"增加\n"
+"帧数:"
+
+#: ../src/gnome-xvidcap.glade.h:66
+msgid ""
+"Frame Start \n"
+"Number:"
+msgstr ""
+"帧启\n"
+"始于: "
+
+#: ../src/gnome-xvidcap.glade.h:68
+msgid ""
+"Frames per \n"
+"Second:"
+msgstr ""
+"每秒\n"
+"帧数:"
+
+#: ../src/gnome-xvidcap.glade.h:70
+msgid "G_eneral"
+msgstr "一般(_E)"
+
+#: ../src/gnome-xvidcap.glade.h:71
+msgid "Increment the counter for frame numbering by the number provided."
+msgstr "以数字为单位增加帧记录数。"
+
+#: ../src/gnome-xvidcap.glade.h:72
+msgid ""
+"Input \n"
+"Device:"
+msgstr ""
+"输入\n"
+"设备:"
+
+#: ../src/gnome-xvidcap.glade.h:74
+msgid "M_ulti-Frame"
+msgstr "多帧(_U)"
+
+#: ../src/gnome-xvidcap.glade.h:75
+msgid "Manually Set XDamage"
+msgstr "手动设置XDamage"
+
+#: ../src/gnome-xvidcap.glade.h:76
+msgid ""
+"Maximum \n"
+"Frames:"
+msgstr ""
+"最大\n"
+"帧数:"
+
+#: ../src/gnome-xvidcap.glade.h:78
+msgid ""
+"Maximum \n"
+"Time:"
+msgstr ""
+"最大\n"
+"时间:"
+
+#: ../src/gnome-xvidcap.glade.h:80
+msgid "Minimize to System Tray"
+msgstr ""
+
+#: ../src/gnome-xvidcap.glade.h:81
+msgid "Multi Frame Capture"
+msgstr "抓取多帧"
+
+#: ../src/gnome-xvidcap.glade.h:82
+msgid "Multi-Frame"
+msgstr "多帧"
+
+#: ../src/gnome-xvidcap.glade.h:83
+msgid "Open the preferences dialog to revisit your settings"
+msgstr "打开参数设置对话重新设置"
+
+#: ../src/gnome-xvidcap.glade.h:84
+msgid "Pause recording"
+msgstr "暂停录制"
+
+#: ../src/gnome-xvidcap.glade.h:85
+msgid "Play the video just captured"
+msgstr "播放抓取视频"
+
+#: ../src/gnome-xvidcap.glade.h:86
+msgid "Playback Command:"
+msgstr "回放命令:"
+
+#: ../src/gnome-xvidcap.glade.h:87
+msgid "Preferences"
+msgstr "参数设置"
+
+#: ../src/gnome-xvidcap.glade.h:88
+msgid "Preferences Warning!"
+msgstr "参数设置警告！"
+
+#: ../src/gnome-xvidcap.glade.h:89
+msgid "Quality:"
+msgstr "品质:"
+
+#: ../src/gnome-xvidcap.glade.h:90
+msgid "Rasca, Karl H. Beckers"
+msgstr ""
+
+#: ../src/gnome-xvidcap.glade.h:91
+msgid "Rescale Output Percentage:"
+msgstr "输出比例:"
+
+#: ../src/gnome-xvidcap.glade.h:92
+msgid "S_ingle-Frame"
+msgstr "单帧(_I)"
+
+#: ../src/gnome-xvidcap.glade.h:93
+msgid ""
+"Sample \n"
+"Rate:"
+msgstr ""
+"取样\n"
+"速率:"
+
+#: ../src/gnome-xvidcap.glade.h:95
+msgid "Save Capture _Geometry"
+msgstr "保存抓取几何形状(_G)"
+
+#: ../src/gnome-xvidcap.glade.h:96
+msgid "Save size and position of the Capture Area to the preferences file."
+msgstr "保存抓取区域的大小和位置参数。"
+
+#: ../src/gnome-xvidcap.glade.h:97
+msgid "Save video to filename specified above."
+msgstr "保存视频到指定文件名."
+
+#: ../src/gnome-xvidcap.glade.h:98
+msgid "Select a filename to save the video as."
+msgstr "选择一个文件名来保存这段视频."
+
+#: ../src/gnome-xvidcap.glade.h:99
+msgid "Select rectangular area to capture"
+msgstr "选择矩形抓取区域"
+
+#: ../src/gnome-xvidcap.glade.h:100
+msgid "Set the audio capture bit rate."
+msgstr "设置抓取音频的位速率。"
+
+#: ../src/gnome-xvidcap.glade.h:101
+msgid "Set the audio capture sample rate."
+msgstr "设置抓取音频的抽样率。"
+
+#: ../src/gnome-xvidcap.glade.h:102
+msgid ""
+"Set the maximum number of frames to record. \n"
+"A value of zero makes a capture session run until stopped interactively."
+msgstr ""
+"设置帧记录的最大数。\n"
+"从零开始计算从记录开始到停止对话。"
+
+#: ../src/gnome-xvidcap.glade.h:104
+msgid ""
+"Set the maximum time to record in number of seconds. \n"
+"A value of zero makes a capture session run until stopped interactively."
+msgstr ""
+"设置记录的最大秒数。\n"
+"从零开始计算从记录开始到停止对话。"
+
+#: ../src/gnome-xvidcap.glade.h:106
+msgid "Show this dialog next time"
+msgstr "下次显示此对话"
+
+#: ../src/gnome-xvidcap.glade.h:107
+msgid "Single Frame Capture"
+msgstr "抓取单帧"
+
+#: ../src/gnome-xvidcap.glade.h:108
+msgid "Single-Frame"
+msgstr "单帧"
+
+#: ../src/gnome-xvidcap.glade.h:109
+msgid "Start numbering captured frames at the number provided."
+msgstr "从那一编号开始抓取帧的录制。"
+
+#: ../src/gnome-xvidcap.glade.h:110
+msgid "Start recording"
+msgstr "开始录制"
+
+#: ../src/gnome-xvidcap.glade.h:111
+msgid "Stop recording"
+msgstr "停止录制"
+
+#: ../src/gnome-xvidcap.glade.h:112
+msgid "Toggle audio capture on/off."
+msgstr "音频抓取开关."
+
+#: ../src/gnome-xvidcap.glade.h:113
+msgid "Transcoding Command:"
+msgstr "译码命令:"
+
+#: ../src/gnome-xvidcap.glade.h:114
+msgid ""
+"Uncheck this to only show this dialog when required to ask for a target "
+"filename. This setting can also be changed from the preferences dialog."
+msgstr ""
+"不勾选时只会在询问对象文件名时出现此对话。这个选项同样也可以在参数设置对话中"
+"设置。"
+
+#: ../src/gnome-xvidcap.glade.h:115
+msgid ""
+"Use Multi-Frame Capture as default, i.e. if nothing else is explicitly "
+"specified."
+msgstr "默认使用多帧录制，也就是说不用明确指定。"
+
+#: ../src/gnome-xvidcap.glade.h:116
+msgid ""
+"Use Shared Memory access to X11. \n"
+"Xserver and client need to be running on the same machine."
+msgstr ""
+"通过共享内存访问X11\n"
+"X服务和客户机需要运行相同的机器。"
+
+#: ../src/gnome-xvidcap.glade.h:118
+msgid ""
+"Use Single-Frame Capture as default, i.e. if nothing else is explicitly "
+"specified."
+msgstr "默认使用单帧录制，也就是说不用明确指定。"
+
+#: ../src/gnome-xvidcap.glade.h:119
+msgid "Use _Shared Memory"
+msgstr "使用共享内存(_S)"
+
+#: ../src/gnome-xvidcap.glade.h:120
+msgid "Video Codec:"
+msgstr "视频编码："
+
+#: ../src/gnome-xvidcap.glade.h:121
+msgid "XVidCap"
+msgstr ""
+
+#: ../src/gnome-xvidcap.glade.h:122
+msgid ""
+"Your input bears a number of inconsistencies!\n"
+"Please review the list below and click \"OK\" to accept the suggested\n"
+"actions or \"Cancel\" to return to the Preferences dialog."
+msgstr ""
+"你的输入产生一个错误代码！\n"
+"请复审下表内容并点击确定接受建议\n"
+"或者点取消返回到参数设置对话中。"
+
+#: ../src/gnome-xvidcap.glade.h:125
+msgid "_Animate / Play"
+msgstr "激活/播放(_A)"
+
+#: ../src/gnome-xvidcap.glade.h:126
+msgid "_Make Video"
+msgstr "生成视频(_M)"
+
+#: ../src/gnome-xvidcap.glade.h:127
+msgid "_Pause"
+msgstr ""
+
+#: ../src/gnome-xvidcap.glade.h:128
+msgid "_Save Preferences"
+msgstr "保存参数设置(_S)"
+
+#: ../src/gnome-xvidcap.glade.h:129
+msgid "auto"
+msgstr "自动"
+
+#: ../src/gnome-xvidcap.glade.h:131
+msgid "disabled"
+msgstr "关闭"
+
+#: ../src/gnome-xvidcap.glade.h:132
+msgid "enabled"
+msgstr "开启"
+
+#. TRANSLATORS: Replace this string with your names, one name per line.
+#: ../src/gnome-xvidcap.glade.h:134
+msgid "translator-credits"
+msgstr "李红昆"
+
+#: ../src/gnome-xvidcap.glade.h:135
+msgid "try"
+msgstr "测试"
+
+#: ../src/gnome-xvidcap.glade.h:136
+msgid "website"
+msgstr "lon83129@126.com"
