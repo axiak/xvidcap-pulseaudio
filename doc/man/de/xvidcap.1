@@ -35,7 +35,7 @@ Diese Option \(:uberschreibt die Standard\-Einstellung f\(:ur Breite und H\(:ohe
 \(:Andert die Gr\(:osse des ausgegebenen Films relativ zur Eingangsgr\(:osse des Aufnahmebereichs. Ein Wert von bspw. \fB25\fR erzeugt ein Video, dessen Bilder eine Gr\(:osse von 25 Prozent der Originalgr\(:osse haben. Die Aufnahme\-Verkleinerung funktioniert nicht mit XWD Ausgabe.
 .TP 
 \fB\-\-quality \fIProzentuelle Qualit\(:at\fB\fR
-Geben Sie einen Wert zwischen \fB0\fR und \fB100\fR an f\(:ur die Qualit\(:at der Kodierung. Der Vorgabewert liegt bei \fB75\fR. Bedenken Sie, dass sich die Auswirkungen von Werten unter \fB100\fR mit Version 1.1.5 ge\(:andert haben.
+Geben Sie einen Wert zwischen \fB0\fR und \fB100\fR an f\(:ur die Qualit\(:at der Kodierung. Der Vorgabewert liegt bei \fB90\fR. Bedenken Sie, dass sich die Auswirkungen von Werten unter \fB100\fR mit Version 1.1.5 ge\(:andert haben.
 .TP 
 \fB\-\-source\fR x11|shm
 Schaltet die Verwendung der X11 "shared memory" Erweiterung an oder aus. Wenn die Erweiterung unterst\(:utzt wird, verwendet xvidcap sie per Vorgabe. Daf\(:ur m\(:ussen X Server und Client jedoch auf dem gleichen Rechner laufen. Ist dies nicht der Fall, m\(:ussen Sie die Verwendung ausschalten, etwa per \fB\-\-source x11\fR.
@@ -87,13 +87,13 @@ W\(:ahlt als Ton\-Eingang entweder das angegebene Ger\(:at oder STDIN. Letzteres
 cat irgendein.mp3 | xvidcap \-\-audio_in \-
 .TP 
 \fB\-\-audio_bits \fITon Bit\-Rate\fB\fR
-Setzt die gew\(:unschte Bit Rate. Der Vorgabewert ist \fB32000\fR Bit. Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert.
+Setzt die gew\(:unschte Bit Rate. Der Vorgabewert ist \fB64000\fR Bit. Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert.
 .TP 
 \fB\-\-audio_rate \fITon Abtastrate\fB\fR
-Setzt die gew\(:unschte Abtastrate. Der Vorgabewert ist \fB22050\fR Hz. Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert.
+Setzt die gew\(:unschte Abtastrate. Der Vorgabewert ist \fB44100\fR Hz. Bei der Verwendung von STDIN als Ton\-Eingang wird die Quelle ggf. konvertiert.
 .TP 
 \fB\-\-audio_channels \fITon Kan\(:ale\fB\fR
-Setzt die gew\(:unschte Anzahl von Ton Kan\(:alen. Der Vorgabewert ist \fB1\fR f\(:ur mono. Jeglicher Wert \(:uber \fB2\fR ist wahrscheinlich nur bei STDIN als Ton\-Quelle und einer 5\-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme\-Ausstattung sinnvoll.
+Setzt die gew\(:unschte Anzahl von Ton Kan\(:alen. Der Vorgabewert ist \fB2\fR f\(:ur stereo. Jeglicher Wert \(:uber \fB2\fR ist wahrscheinlich nur bei STDIN als Ton\-Quelle und einer 5\-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme\-Ausstattung sinnvoll.
 .SH AUTOREN
 xvidcap wurde entwickelt von Rasca Gmelch und Karl H. Beckers.
 .PP

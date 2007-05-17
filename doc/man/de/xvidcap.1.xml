@@ -101,7 +101,7 @@
             <varlistentry>
                 <term><option>--quality <replaceable>Prozentuelle Qualität</replaceable></option></term>
                 <listitem>
-                    <para>Geben Sie einen Wert zwischen <literal>0</literal> und <literal>100</literal> an für die Qualität der Kodierung. Der Vorgabewert liegt bei <literal>75</literal>. Bedenken Sie, dass sich die Auswirkungen von Werten unter <literal>100</literal> mit Version 1.1.5 geändert haben.</para> 
+                    <para>Geben Sie einen Wert zwischen <literal>0</literal> und <literal>100</literal> an für die Qualität der Kodierung. Der Vorgabewert liegt bei <literal>90</literal>. Bedenken Sie, dass sich die Auswirkungen von Werten unter <literal>100</literal> mit Version 1.1.5 geändert haben.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -208,19 +208,19 @@
             <varlistentry>
                 <term><option>--audio_bits <replaceable>Ton Bit-Rate</replaceable></option></term>
                 <listitem>
-                    <para>Setzt die gewünschte Bit Rate. Der Vorgabewert ist <literal>32000</literal> Bit. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert.</para> 
+                    <para>Setzt die gewünschte Bit Rate. Der Vorgabewert ist <literal>64000</literal> Bit. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term><option>--audio_rate <replaceable>Ton Abtastrate</replaceable></option></term>
                 <listitem>
-                    <para>Setzt die gewünschte Abtastrate. Der Vorgabewert ist <literal>22050</literal> Hz. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert.</para> 
+                    <para>Setzt die gewünschte Abtastrate. Der Vorgabewert ist <literal>44100</literal> Hz. Bei der Verwendung von STDIN als Ton-Eingang wird die Quelle ggf. konvertiert.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term><option>--audio_channels <replaceable>Ton Kanäle</replaceable></option></term>
                 <listitem>
-                    <para>Setzt die gewünschte Anzahl von Ton Kanälen. Der Vorgabewert ist <literal>1</literal> für mono. Jeglicher Wert über <literal>2</literal> ist wahrscheinlich nur bei STDIN als Ton-Quelle und einer 5-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme-Ausstattung sinnvoll.</para> 
+                    <para>Setzt die gewünschte Anzahl von Ton Kanälen. Der Vorgabewert ist <literal>2</literal> für stereo. Jeglicher Wert über <literal>2</literal> ist wahrscheinlich nur bei STDIN als Ton-Quelle und einer 5-Kanal AC Audio Datei oder sehr guter und seltener Aufnahme-Ausstattung sinnvoll.</para> 
                 </listitem>
             </varlistentry>
         </variablelist>

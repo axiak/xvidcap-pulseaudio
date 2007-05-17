@@ -12,6 +12,11 @@
 		updated l10n
 	* po: ru.po, es.po, de.po, it.po, zh_CN.po: 
 		updated l10n
+	* doc: man/C/xvidcap.1, man/de/xvidcap.1.xml, 
+		man/de/xvidcap.1, man/it/xvidcap.1.xml, 
+		man/it/xvidcap.1, xvidcap/de/xvidcap.xml, 
+		xvidcap/it/xvidcap.xml: updated
+		generated docs
 
 2007-05-12  lon  <lon83129@126.com>
 	* po/zh_CN.po: Chinese l10n

@@ -35,7 +35,9 @@ Ignora la larghezza e l'altezza predefinita del fotogramma acquisito. Usa il pul
 Ridimensiona l'uscita a una percentuale dell'ingresso originale. Una valore di \fB25\fR, ad es. fa s\(`i che la dimensione d'uscita sia il 25 percento dell'area d'ingresso originale. Il ridimensionamento non funziona con l'uscita XWD.
 .TP 
 \fB\-\-quality \fIpercentuale della qualit\(`a\fB\fR
-Specificare un valore tra \fB0\fR e \fB100\fR per definire la qualit\(`a di codifica. Il valore predefinito \(`e \fB75\fR. Notare che l'effetto di un valore al di sotto di \fB100\fR \(`e cambiato nella versione 1.1.5
+Specify a value between \fB0\fR and \fB100\fR to define the quality encoding. The 
+default value is \fB90\fR. Note that the effect of a value below \fB100\fR has changed in version
+1.1.5.
 .TP 
 \fB\-\-source \fRx11|shm
 Abilita o disabilita l'utilizzo dell'estensione memoria condivisa di X11. Per il supporto della memoria condivisa sia client che server devono essere in esecuzione sulla stessa macchina. Se il supporto della memoria condivisa \(`e disponibile, xvidcap lo utilizzer\(`a in maniera predefinita. Se il server X e il client non sono in esecuzione sulla stessa macchina, \(`e necessario disabilitare il supporto specificando \fB\-\-source x11\fR.
@@ -87,13 +89,17 @@ Acquisizione audio da un dispositivo specificato o da stdin. Questa opzione cons
 cat qualche.mp3 | xvidcap \-\-audio_in \-
 .TP 
 \fB\-\-audio_bits \fIbitrate audio\fB\fR
-Imposta il bitrate desiderato. Il valore predefinito \(`e \fB32000\fR bit. Notare che, utilizzando lo STDIN, il file d'ingresso sar\(`a ricampionato come richiesto.
+Set the desired bit rate. The default is \fB64000\fR bit. Note that when using
+STDIN input the input file will be resampled as needed.
 .TP 
 \fB\-\-audio_rate \fIcampionamento audio\fB\fR
-Imposta il campionamento desiderato. Il valore predefinito \(`e \fB22050\fR Hz. Notare che, utilizzando lo STDIN, il file d'ingresso sar\(`a ricampionato come richiesto.
+Set the desired sample rate. The default is \fB44100\fR Hz. Note that when using
+STDIN input the input file will be resampled as needed.
 .TP 
 \fB\-\-audio_channels \fIcanali audio\fB\fR
-Imposta il numero di canali desiderato. Il valore predefinito \(`e \fB1\fR per mono. Ogni valore maggiore di \fB2\fR \(`e probabilmente utile solo in caso di ingresso da STDIN e file audio AC a 5 canali o strumenti di registrazione di alta qualit\(`a e scarsa diffusione.
+Set the desired number of channels. The default is \fB2\fR for stereo. Any value
+above \fB2\fR is probably only useful with STDIN input and a 5\-channel AC audio
+input file or very good and rare recording equipment.
 .SH AUTORI
 xvidcap \(`e stato scritto da Rasca Gmelch e Karl H. Beckers.
 .PP

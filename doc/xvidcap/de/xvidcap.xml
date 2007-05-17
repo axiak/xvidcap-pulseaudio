@@ -669,7 +669,7 @@
                         </row>
                         <row id="xvidcap-prefs-TBL-autocontinue">
                             <entry>
-                                <para>Autocontinue</para>
+                                <para>Automatische Aufnahmefortsetzung</para>
                             </entry>
                             <entry>
                                 <para>Bei der Film-Aufnahme und der Verwendung einer maximalen Anzahl von Einzelbildern oder einer maximalen Aufnahmedauer, kann <application>xvidcap</application> die Aufnahme automatisch fortsetzen, wenn das eingestellte Maximum erreicht ist. Dies kann dann in der Praxis eine Serie von Filmen erzeugen, die entsprechend der eingestellten Maximallängen unterteilt sind. Um diese Funktion zu verwenden, müssen Sie einen <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name">hochzählbaren Dateinamen</ulink> verwenden.</para>
@@ -681,6 +681,14 @@
                             </entry>
                             <entry>
                                 <para>Mit einem Haken hier wird der Dialog, der beim beenden einer Aufnhamesitzung einen Überblick über das Ergebnis liefert, immer angezeigt. Der Dialog wird normalerweise angezeigt, wenn er nötig ist, z. B. um einen Dateinamen für die Ausgabedatei zu erfragen. Diese Option hier sorgt dafür, dass er auch dann immer angezeigt wird, wenn er genau genommen nicht nötig wäre. Per Vorgabe wird der Ergebnisdialog immer angezeigt. Wenn Sie jedoch den Haken bei <quote>Diesen Dialog beim nächsten mal wieder anzeigen</quote> bei einer vorausgegangenen Aufnahme entfernt haben, können Sie die Anzeige hier wieder aktivieren.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-minimize-to-tray">
+                            <entry>
+                                <para>Verwende Benachrichtigungsfeld</para>
+                            </entry>
+                            <entry>
+                                <para>Wenn Sie diese Einstellung wählen, versteckt <application>xvidcap</application> das Bedienfenster während der Aufnahme im Benachrichtigungsfeld. In diesem Fall wird dort der Bild-Verlust Messer angezeigt. Ein Rechts-Klick darauf ermöglicht es, die Aufnahme zu unterbrechen oder zu stoppen. Nach dem Stoppen erscheint das Bedienfenster wieder.</para>
                             </entry>
                         </row>
                         <row id="xvidcap-prefs-TBL-rescale">
