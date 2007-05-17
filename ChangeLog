@@ -1,6 +1,17 @@
 
 2007-05-17  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* po: en.po, de.po: updated l10n
+	* doc/man: C/xvidcap.1.xml, C/xvidcap.1.xml.pot, 
+		de/xvidcap.1-de.po, it/xvidcap.1-it.po:
+		updated l10n
+	* doc/xvidcap: C/figures/prefs-general.png, 
+		C/xvidcap.xml, C/xvidcap.xml.pot, 
+		de/xvidcap.xml-de.po, 
+		de/figures/prefs-general.png, 
+		it/xvidcap.xml-it.po, po/en.po:
+		updated l10n
+	* po: ru.po, es.po, de.po, it.po, zh_CN.po: 
+		updated l10n
 
 2007-05-12  lon  <lon83129@126.com>
 	* po/zh_CN.po: Chinese l10n

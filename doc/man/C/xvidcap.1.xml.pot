@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2007-04-25 10:49+0200\n"
+"POT-Creation-Date: 2007-05-17 23:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,320 +9,320 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../C/xvidcap.1.xml:6(refentrytitle) ../C/xvidcap.1.xml:17(command) 
+#: xvidcap.1.xml:6(refentrytitle) xvidcap.1.xml:17(command) 
 msgid "xvidcap"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:7(manvolnum) 
+#: xvidcap.1.xml:7(manvolnum) 
 msgid "1"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:8(refmiscinfo) 
+#: xvidcap.1.xml:8(refmiscinfo) 
 msgid "April 2007"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:11(refname) 
+#: xvidcap.1.xml:11(refname) 
 msgid "XVidCap"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:12(refpurpose) 
+#: xvidcap.1.xml:12(refpurpose) 
 msgid "Record X11 screen portions to video"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:18(arg) ../C/xvidcap.1.xml:85(option) 
+#: xvidcap.1.xml:18(arg) xvidcap.1.xml:85(option) 
 msgid "-v"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:20(arg) 
+#: xvidcap.1.xml:20(arg) 
 msgid "<arg choice=\"plain\">--mf</arg>|<arg choice=\"plain\">--sf</arg>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:21(arg) 
+#: xvidcap.1.xml:21(arg) 
 msgid "--file <replaceable>file name pattern</replaceable><arg choice=\"plain\">|-</arg>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:22(arg) ../C/xvidcap.1.xml:137(option) 
+#: xvidcap.1.xml:22(arg) xvidcap.1.xml:137(option) 
 msgid "--fps <replaceable>frames per second</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:24(arg) ../C/xvidcap.1.xml:152(option) 
+#: xvidcap.1.xml:24(arg) xvidcap.1.xml:152(option) 
 msgid "--cap_geometry <replaceable>geometry</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:25(arg) ../C/xvidcap.1.xml:167(option) 
+#: xvidcap.1.xml:25(arg) xvidcap.1.xml:167(option) 
 msgid "--rescale <replaceable>size percentage</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:26(arg) ../C/xvidcap.1.xml:177(option) 
+#: xvidcap.1.xml:26(arg) xvidcap.1.xml:177(option) 
 msgid "--quality <replaceable>quality percentage</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:27(arg) 
+#: xvidcap.1.xml:27(arg) 
 msgid "--source <arg choice=\"plain\">x11|shm</arg>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:29(arg) ../C/xvidcap.1.xml:198(option) 
+#: xvidcap.1.xml:29(arg) xvidcap.1.xml:198(option) 
 msgid "--time <replaceable>maximum duration in seconds</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:30(arg) ../C/xvidcap.1.xml:210(option) 
+#: xvidcap.1.xml:30(arg) xvidcap.1.xml:210(option) 
 msgid "--frames <replaceable>maximum frames</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:31(arg) ../C/xvidcap.1.xml:219(option) 
+#: xvidcap.1.xml:31(arg) xvidcap.1.xml:219(option) 
 msgid "--start_no <replaceable>initial frame number</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:33(arg) 
+#: xvidcap.1.xml:33(arg) 
 msgid "--continue <arg choice=\"plain\">yes|no</arg>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:34(arg) 
+#: xvidcap.1.xml:34(arg) 
 msgid "--gui <arg choice=\"plain\">yes|no</arg>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:36(arg) ../C/xvidcap.1.xml:257(option) 
+#: xvidcap.1.xml:36(arg) xvidcap.1.xml:257(option) 
 msgid "--auto"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:38(arg) ../C/xvidcap.1.xml:270(option) 
+#: xvidcap.1.xml:38(arg) xvidcap.1.xml:270(option) 
 msgid "--codec <replaceable>video codec</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:39(arg) ../C/xvidcap.1.xml:279(option) 
+#: xvidcap.1.xml:39(arg) xvidcap.1.xml:279(option) 
 msgid "--codec-help"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:40(arg) ../C/xvidcap.1.xml:287(option) 
+#: xvidcap.1.xml:40(arg) xvidcap.1.xml:287(option) 
 msgid "--format <replaceable>output file format</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:41(arg) ../C/xvidcap.1.xml:296(option) 
+#: xvidcap.1.xml:41(arg) xvidcap.1.xml:296(option) 
 msgid "--format-help"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:43(arg) 
+#: xvidcap.1.xml:43(arg) 
 msgid "--audio <arg choice=\"plain\">yes|no</arg>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:44(arg) ../C/xvidcap.1.xml:326(option) 
+#: xvidcap.1.xml:44(arg) xvidcap.1.xml:326(option) 
 msgid "--aucodec <replaceable>audio codec</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:45(arg) ../C/xvidcap.1.xml:335(option) 
+#: xvidcap.1.xml:45(arg) xvidcap.1.xml:335(option) 
 msgid "--aucodec-help"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:46(arg) 
+#: xvidcap.1.xml:46(arg) 
 msgid "--audio_in <replaceable>audio capture device</replaceable><arg choice=\"plain\">|-</arg>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:47(arg) ../C/xvidcap.1.xml:356(option) 
+#: xvidcap.1.xml:47(arg) xvidcap.1.xml:356(option) 
 msgid "--audio_bits <replaceable>audio bit rate</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:48(arg) ../C/xvidcap.1.xml:365(option) 
+#: xvidcap.1.xml:48(arg) xvidcap.1.xml:365(option) 
 msgid "--audio_rate <replaceable>audio sample rate</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:49(arg) ../C/xvidcap.1.xml:374(option) 
+#: xvidcap.1.xml:49(arg) xvidcap.1.xml:374(option) 
 msgid "--audio_channels <replaceable>audio channels</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:54(title) 
+#: xvidcap.1.xml:54(title) 
 msgid "Introduction"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:55(para) 
+#: xvidcap.1.xml:55(para) 
 msgid "<application>xvidcap</application> is a tool that captures movement on a selected area of an X11 screen to files. It can operate in two distinct modes: (1) <emphasis>single-frame</emphasis> capture or (2) <emphasis>multi-frame</emphasis> capture. In single-frame capture mode <application>xvidcap</application> takes a configurable number of screenshots per second and saves them to individual files. In multi-frame capture mode <application>xvidcap</application> also takes a number of screenshots per second, but encodes them to a single video in real time. Audio capture is only available with multi-frame formats."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:64(para) 
+#: xvidcap.1.xml:64(para) 
 msgid "Recording in single-frame capture mode may be more convenient if you wish to preprocess the images before encoding, or if you need other video codecs <application>xvidcap</application> does not support. Individual images can later be encoded with tools like ffmpeg, mencoder, or transcode."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:70(para) 
+#: xvidcap.1.xml:70(para) 
 msgid "For help, feature requests, or bug-reports please turn to <ulink url=\"//www.sourceforge.net/projects/xvidcap/\">http://www.sourceforge.net/projects/xvidcap/</ulink>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:76(title) 
+#: xvidcap.1.xml:76(title) 
 msgid "Options"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:78(para) 
+#: xvidcap.1.xml:78(para) 
 msgid "This program follows the usual GNU command line syntax, with long options starting with two dashes (<literal>--</literal>). A summary of options is included below."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:87(para) 
+#: xvidcap.1.xml:87(para) 
 msgid "Runs <application>xvidcap</application> in verbose mode. This will provide more information about user settings, input and output codecs, performance and so forth. Messages like <quote>\"missing XX milli secs ..\"</quote> while capturing mean you are missing frames due to lack of ressources (dropped frames). This results in a video that will play back too quickly. Note though, that verbose mode slows down <application>xvidcap</application> and may actually be <emphasis>causing</emphasis> frame drops. Try running without verbose mode and watch the frame drop monitor."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:99(term) 
+#: xvidcap.1.xml:99(term) 
 msgid "<option>--mf</option> | <option>--sf</option>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:101(para) 
+#: xvidcap.1.xml:101(para) 
 msgid "<application>xvidcap</application> tries to be smart about what capture mode you want. If you specify <literal>--file test.avi</literal><application>xvidcap</application> will assume you want multi-frame capture. You can explicitly specify capture mode on the command line with this switch. If, for example, you have your settings properly configured and saved with multi-frame capture as the default mode, calling <literal>xvidcap --sf</literal> will start <application>xvidcap</application> in single-frame capture mode with all stored settings. The default is multi-frame capture."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:113(option) 
+#: xvidcap.1.xml:113(option) 
 msgid "--file <replaceable>file name pattern</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:115(para) 
+#: xvidcap.1.xml:115(para) 
 msgid "File name or pattern to use for saving the captured frames. A file name pattern contains printf()-like formatting (ref. <literal>man printf</literal>) information to make the file name incrementable, e.g. <literal>--file out-%02d.xwd</literal>. This is necessary for single-frame capture. <application>xvidcap</application> will replace the first printf() format string with the number of the frame currently captured. Thus, in the example given, it will write to files <filename>out-00.xwd</filename>, <filename>out-01.xwd</filename>, <filename>out-02.xwd</filename>, etc. The frame number to start with can be specified with <literal>--start_no</literal>, see above."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:126(para) 
+#: xvidcap.1.xml:126(para) 
 msgid "Multi-frame capture does not need a file pattern. If you specify one nonetheless like <literal>--file mymovie-%d.mpeg</literal> for example, <application>xvidcap</application> will replace the format string with the number of the current recording session (always starting the count from zero). This will enable you to manually in-/decrement that number, or use the autocontinue feature (ref. <literal>--continue</literal> below) effectively creating a series of video files."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:139(para) 
+#: xvidcap.1.xml:139(para) 
 msgid "Specifies the number of frames to be captured per second. This parameter accepts floating point values, which allows for very low capture rates like e.g. <literal>--fps 0.5</literal> to record one frame every 2 seconds. This is only possible in single-frame mode. Codecs used for multi-frame modes usually only accept certain frame rates as valid. Note that fractional frame rates for codecs like MPEG1 which only accept very specific fractions are disabled in this version due to an inconsistency with fractional timing between <application>xvidcap</application> and libavcodec. Only integer frames rates will be accepted here."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:154(para) 
+#: xvidcap.1.xml:154(para) 
 msgid "Specify the geometry as for e. g. <application>xterm</application>, i. e. like this: <replaceable>width</replaceable>x<replaceable>height</replaceable>+<replaceable>x-position</replaceable>+<replaceable>y-position</replaceable>"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:158(para) 
+#: xvidcap.1.xml:158(para) 
 msgid "This overrides the default width and height of the capture frame. Use the picker button of the GUI rather than this command line option to adjust the frame size to a given window. Capture sizes below 20 x 20 don't seem to work well with most multi-frame capture codecs."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:169(para) 
+#: xvidcap.1.xml:169(para) 
 msgid "Rescale the output to a percentage of the original input. A value of <literal>25</literal>, e. g. makes the output size be 25 percent of the original input area. Rescaling does not work with XWD output."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:179(para) 
-msgid "Specify a value between <literal>0</literal> and <literal>100</literal> to define the quality encoding. The default value is <literal>75</literal>. Note that the effect of a value below <literal>100</literal> has changed in version 1.1.5."
+#: xvidcap.1.xml:179(para) 
+msgid "Specify a value between <literal>0</literal> and <literal>100</literal> to define the quality encoding. The default value is <literal>90</literal>. Note that the effect of a value below <literal>100</literal> has changed in version 1.1.5."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:187(term) 
+#: xvidcap.1.xml:187(term) 
 msgid "<option>--source </option>x11|shm"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:189(para) 
+#: xvidcap.1.xml:189(para) 
 msgid "Enable or disable the usage of the X11 shared memory extension. For shared memory support both client and server have to run on the same host. If shared memory support is available, <application>xvidcap</application> will use it by default. If your X server and client do not run on the same machine, you need to disable it by passing <literal>--source x11</literal>."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:200(para) 
+#: xvidcap.1.xml:200(para) 
 msgid "Specifies the maximum time to capture, a value of <literal>0</literal> will cause <application>xvidcap</application> to capture until stopped interactively. For any other value any recording session will stop automatically after the specified number of seconds. This parameter conflicts with <literal>--frames</literal> (see below). If both are given <application>xvidcap</application> will stop capturing when either applies. The program accepts floating point values, e.g. <literal>2.5</literal>."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:212(para) 
+#: xvidcap.1.xml:212(para) 
 msgid "Stops capturing after the specified number of frames are captured. If <literal>0</literal> xvidcap will capture until stopped interactively, ref. <literal>--time</literal> above."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:221(para) 
+#: xvidcap.1.xml:221(para) 
 msgid "Defines the start number which should be used for numbering files. The default value is <literal>0</literal>.This parameter is used for single-frame capture only. The numbering of movie files for <literal>--continue</literal> always starts at zero."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:229(term) 
+#: xvidcap.1.xml:229(term) 
 msgid "<option>--continue </option>yes|no"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:231(para) 
+#: xvidcap.1.xml:231(para) 
 msgid "When multi-frame capture is selected, maximum recording time or frames are specified, and the output filename is incrementable (see <literal>--file</literal> below), <application>xvidcap</application> can automatically continue to capture to a new file when one exceeds the maximum recording time or number of frames. This will change the behaviour of <literal>--time</literal> and <literal>--frames</literal> because recording will not stop at the specified limits, but rather start a new video file. The feature is esp. useful if you want to automatically split your recording into chunks of e. g. five minutes. If no argument <literal>--continue</literal> is given, <application>xvidcap</application> defaults to <literal>no</literal>. Because single-frame capture needs an incrementable filename to count the individual frames, this feature is disabled for single-frame capture."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:246(term) 
+#: xvidcap.1.xml:246(term) 
 msgid "<option>--gui </option>yes|no"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:248(para) 
+#: xvidcap.1.xml:248(para) 
 msgid "Start <application>xvidcap</application> with or without control GUI overriding what's in the preferences file. Running without GUI will automatically start a single capture session. It can be stopped by either specifying one of <literal>--time</literal> or <literal>--frames</literal>, or by hitting CTRL-C."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:259(para) 
+#: xvidcap.1.xml:259(para) 
 msgid "<application>xvidcap</application> supports automatic detection of parameters for output format, video- and audio codec. If any of those settings are saved as fixed values in the stored preferences, they can be overriden by specifying the parameter <literal>auto</literal> to any of the arguments <literal>--format</literal>, <literal>--codec</literal>, or <literal>--aucodec</literal>. This argument is a shorthand for setting all three to automatic detection."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:272(para) 
+#: xvidcap.1.xml:272(para) 
 msgid "Override preferences and automatic codec selection with the explicitly specified codec."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:281(para) 
+#: xvidcap.1.xml:281(para) 
 msgid "List valid codecs."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:289(para) 
+#: xvidcap.1.xml:289(para) 
 msgid "Override preferences and automatic format selection with the explicitly specified file format."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:298(para) 
+#: xvidcap.1.xml:298(para) 
 msgid "List valid file formats."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:306(title) 
+#: xvidcap.1.xml:306(title) 
 msgid "Audio Options"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:308(para) 
+#: xvidcap.1.xml:308(para) 
 msgid "The following options relate to audio capture which is available with multi-frame output formats only. There audio streams can either be captured from a compatible audio device (e.g. <filename>/dev/dsp</filename>) or from STDIN (ref. <literal>--audio_in</literal> below)."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:317(term) 
+#: xvidcap.1.xml:317(term) 
 msgid "<option>--audio </option>yes|no"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:319(para) 
+#: xvidcap.1.xml:319(para) 
 msgid "Enable or disable audio capture using default parameters or those saved to the preferences file. If supported this is enabled by default for multi-frame capture."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:328(para) 
+#: xvidcap.1.xml:328(para) 
 msgid "Override preferences and automatic codec selection with the explicitly specified audio codec."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:337(para) 
+#: xvidcap.1.xml:337(para) 
 msgid "List valid audio codecs."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:343(option) 
+#: xvidcap.1.xml:343(option) 
 msgid "--audio_in <replaceable>audio capture device</replaceable>|-"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:345(para) 
+#: xvidcap.1.xml:345(para) 
 msgid "Capture audio from the specified device or from stdin. The latter allows for dubbing a captured video using a command line like the following. The default is <filename>/dev/dsp</filename>."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:351(command) 
+#: xvidcap.1.xml:351(command) 
 msgid "cat some.mp3 | xvidcap --audio_in -"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:358(para) 
-msgid "Set the desired bit rate. The default is <literal>32000</literal> bit. Note that when using STDIN input the input file will be resampled as needed."
+#: xvidcap.1.xml:358(para) 
+msgid "Set the desired bit rate. The default is <literal>64000</literal> bit. Note that when using STDIN input the input file will be resampled as needed."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:367(para) 
-msgid "Set the desired sample rate. The default is <literal>22050</literal> Hz. Note that when using STDIN input the input file will be resampled as needed."
+#: xvidcap.1.xml:367(para) 
+msgid "Set the desired sample rate. The default is <literal>44100</literal> Hz. Note that when using STDIN input the input file will be resampled as needed."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:376(para) 
-msgid "Set the desired number of channels. The default is <literal>1</literal> for mono. Any value above <literal>2</literal> is probably only useful with STDIN input and a 5-channel AC audio input file or very good and rare recording equipment."
+#: xvidcap.1.xml:376(para) 
+msgid "Set the desired number of channels. The default is <literal>2</literal> for stereo. Any value above <literal>2</literal> is probably only useful with STDIN input and a 5-channel AC audio input file or very good and rare recording equipment."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:386(title) 
+#: xvidcap.1.xml:386(title) 
 msgid "Authors"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:387(para) 
+#: xvidcap.1.xml:387(para) 
 msgid "<application>xvidcap</application> was written by Rasca Gmelch and Karl H. Beckers."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:390(para) 
+#: xvidcap.1.xml:390(para) 
 msgid "This manual page was written by Karl H. Beckers <email>karl.h.beckers@gmx.net</email> for the <application>xvidcap</application> project."
 msgstr ""
 
-#: ../C/xvidcap.1.xml:394(para) 
+#: xvidcap.1.xml:394(para) 
 msgid "This translation was done by TRANSLATOR-CREDITS HERE!!!"
 msgstr ""
 
-#: ../C/xvidcap.1.xml:397(para) 
+#: xvidcap.1.xml:397(para) 
 msgid "Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.1 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts and no Back-Cover Texts."
 msgstr ""
 
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2.
-#: ../C/xvidcap.1.xml:0(None) 
+#: xvidcap.1.xml:0(None) 
 msgid "translator-credits"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-17 18:19+0200\n"
+"POT-Creation-Date: 2007-05-17 23:14+0200\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: German\n"
@@ -696,7 +696,7 @@ msgid ""
 "You selected mono vorbis audio output for single-frame capture, but this "
 "version of xvidcap can only encode stereo vorbis audio streams."
 msgstr ""
-"Sie haben mono Ton-Ausgabe mit Vorbis Audio Codec für Einzelbildaufnahme "
+"Sie haben mono Ton-Ausgabe mit Vorbis Audio Codec für Einzelbild-Aufnahme "
 "eingestellt, aber diese Version von xvidcap kann nur Stereo Audio Streams "
 "mit Vorbis kodieren."
 
@@ -2285,7 +2285,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:28
 msgid "Auto_continue"
-msgstr "Auto_continue"
+msgstr "Automatis_che Aufnahmefortsetzung"
 
 #: ../src/gnome-xvidcap.glade.h:29
 msgid "Autocontinue (y/n)"

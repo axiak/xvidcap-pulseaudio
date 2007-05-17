@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2007-05-01 18:34+0200\n"
+"POT-Creation-Date: 2007-05-17 18:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,42 +150,42 @@ msgstr ""
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: xvidcap.xml:813(None) 
-msgid "@@image: 'figures/prefs-general.png'; md5=055d3cf5f17670aa0f2b1e013e745548"
+msgid "@@image: 'figures/prefs-general.png'; md5=9610e08e1e7e5afb690826d304d8b033"
 msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: xvidcap.xml:1007(None) 
+#: xvidcap.xml:1024(None) 
 msgid "@@image: 'figures/prefs-sf.png'; md5=790652174e153ab45c997992bd0fcc19"
 msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: xvidcap.xml:1173(None) 
+#: xvidcap.xml:1190(None) 
 msgid "@@image: 'figures/prefs-mf.png'; md5=105b394b2691be6a183b404c99949869"
 msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: xvidcap.xml:1433(None) 
+#: xvidcap.xml:1450(None) 
 msgid "@@image: 'figures/prefs-commands.png'; md5=a80e8aef0f3dc2adef95aaffa3e2c081"
 msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: xvidcap.xml:1687(None) 
+#: xvidcap.xml:1704(None) 
 msgid "@@image: 'figures/results-dialog-ask.png'; md5=1c2a7587450d593a79555efc3cd233e7"
 msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: xvidcap.xml:1713(None) 
+#: xvidcap.xml:1730(None) 
 msgid "@@image: 'figures/results-dialog.png'; md5=413abc56484e9b12b74391db78c030b5"
 msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: xvidcap.xml:1737(None) 
+#: xvidcap.xml:1754(None) 
 msgid "@@image: 'figures/xvidcap-warning.png'; md5=dbae204ebc258d14d742941f1398c939"
 msgstr ""
 
@@ -710,458 +710,466 @@ msgid "Check this to always show a dialog with an overview of capture results on
 msgstr ""
 
 #: xvidcap.xml:967(para) 
-msgid "Rescale Output Percentage"
+msgid "Minimize to System Tray"
 msgstr ""
 
 #: xvidcap.xml:972(para) 
+msgid "Check this to make <application>xvidcap</application> minimize to the system tray on starting a recording session. In that case the main control panel will hide and the frame drop monitor will apear in the system tray. A right-click on it will allow you to pause or stop the recording session. On stopping the main control window will be displayed again."
+msgstr ""
+
+#: xvidcap.xml:984(para) 
+msgid "Rescale Output Percentage"
+msgstr ""
+
+#: xvidcap.xml:989(para) 
 msgid "Use this to make the output video smaller than the original size of the portion of the screen captured. The percentage specified here is the size of the output relative to the input. For example, specifying <quote>25</quote> will make the output width and height half the original each. Thus the image size of the output will be 25 percent of the captured area."
 msgstr ""
 
-#: xvidcap.xml:981(title) 
+#: xvidcap.xml:998(title) 
 msgid "Rescale does not work with XWD output"
 msgstr ""
 
-#: xvidcap.xml:982(para) 
+#: xvidcap.xml:999(para) 
 msgid "Rescaling output frames does work with all output formats and codecs other than XWD."
 msgstr ""
 
-#: xvidcap.xml:995(title) xvidcap.xml:1003(title) xvidcap.xml:1009(phrase) 
+#: xvidcap.xml:1012(title) xvidcap.xml:1020(title) xvidcap.xml:1026(phrase) 
 msgid "Single-Frame Capture Preferences"
 msgstr ""
 
-#: xvidcap.xml:997(para) 
+#: xvidcap.xml:1014(para) 
 msgid "This tab contains the settings for single-frame capture mode. Because single-frame capture mode does not support audio capture, only video settings are configurable here."
 msgstr ""
 
-#: xvidcap.xml:1016(title) 
+#: xvidcap.xml:1033(title) 
 msgid "the single-frame capture mode settings are:"
 msgstr ""
 
-#: xvidcap.xml:1023(para) xvidcap.xml:1189(para) 
+#: xvidcap.xml:1040(para) xvidcap.xml:1206(para) 
 msgid "File Name"
 msgstr ""
 
-#: xvidcap.xml:1028(para) 
+#: xvidcap.xml:1045(para) 
 msgid "Enter a file name pattern here to use for saving the individual frames captured. The file name must contain a pattern that will be replaced by the actual frame count for each individual file. The patterns used here are those understood by <ulink type=\"help\" url=\"man:fprintf\">fprintf</ulink>. A file name containing this kind of pattern will henceforth be called a <quote>mutable</quote> file name."
 msgstr ""
 
-#: xvidcap.xml:1038(title) 
+#: xvidcap.xml:1055(title) 
 msgid "File Name Selection"
 msgstr ""
 
-#: xvidcap.xml:1039(para) 
+#: xvidcap.xml:1056(para) 
 msgid "Instead of typing in a filename you can also click on the file selector button (<guibutton>...</guibutton>). Be sure to put a numeric pattern in the file name afterwards, though. If in doubt use <quote>%5d</quote> somewhere in your file name."
 msgstr ""
 
-#: xvidcap.xml:1050(para) xvidcap.xml:1206(para) 
+#: xvidcap.xml:1067(para) xvidcap.xml:1223(para) 
 msgid "File Format"
 msgstr ""
 
-#: xvidcap.xml:1055(para) 
+#: xvidcap.xml:1072(para) 
 msgid "A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application> automatically select an appropriate output format based on the filename specified. For example, if you specify <quote>test-%4d.png</quote> the output format will be <quote>Portable Network Graphics File (png)</quote>. If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown menu allows for manually selecting a format, possibly overriding <application>xvidcap's</application> decision."
 msgstr ""
 
-#: xvidcap.xml:1068(para) xvidcap.xml:1242(para) 
+#: xvidcap.xml:1085(para) xvidcap.xml:1259(para) 
 msgid "Frames per Second"
 msgstr ""
 
-#: xvidcap.xml:1073(para) 
+#: xvidcap.xml:1090(para) 
 msgid "The number of frames to capture per second."
 msgstr ""
 
-#: xvidcap.xml:1080(para) xvidcap.xml:1256(para) 
+#: xvidcap.xml:1097(para) xvidcap.xml:1273(para) 
 msgid "Maximum Time"
 msgstr ""
 
-#: xvidcap.xml:1085(para) xvidcap.xml:1261(para) 
+#: xvidcap.xml:1102(para) xvidcap.xml:1278(para) 
 msgid "Maximum time to record in seconds"
 msgstr ""
 
-#: xvidcap.xml:1092(para) xvidcap.xml:1268(para) 
+#: xvidcap.xml:1109(para) xvidcap.xml:1285(para) 
 msgid "Maximum Frames"
 msgstr ""
 
-#: xvidcap.xml:1097(para) xvidcap.xml:1273(para) 
+#: xvidcap.xml:1114(para) xvidcap.xml:1290(para) 
 msgid "Maximum frames to capture"
 msgstr ""
 
-#: xvidcap.xml:1104(para) 
+#: xvidcap.xml:1121(para) 
 msgid "Frame Start Number"
 msgstr ""
 
-#: xvidcap.xml:1109(para) 
+#: xvidcap.xml:1126(para) 
 msgid "Start counting frames with this number"
 msgstr ""
 
-#: xvidcap.xml:1116(para) 
+#: xvidcap.xml:1133(para) 
 msgid "Frame Number Increment"
 msgstr ""
 
-#: xvidcap.xml:1121(para) 
+#: xvidcap.xml:1138(para) 
 msgid "When capturing increment the frame count by the specified number for each frame captured."
 msgstr ""
 
-#: xvidcap.xml:1126(title) 
+#: xvidcap.xml:1143(title) 
 msgid "Deprecated Settings"
 msgstr ""
 
-#: xvidcap.xml:1127(para) 
+#: xvidcap.xml:1144(para) 
 msgid "Due to the limited use of <quote>Frame Start Number</quote> and <quote>Frame Number Increment</quote> those settings may go away in future versions."
 msgstr ""
 
-#: xvidcap.xml:1137(para) xvidcap.xml:1280(para) 
+#: xvidcap.xml:1154(para) xvidcap.xml:1297(para) 
 msgid "Quality"
 msgstr ""
 
-#: xvidcap.xml:1142(para) xvidcap.xml:1285(para) 
+#: xvidcap.xml:1159(para) xvidcap.xml:1302(para) 
 msgid "Desired output quality"
 msgstr ""
 
-#: xvidcap.xml:1146(title) xvidcap.xml:1289(title) 
+#: xvidcap.xml:1163(title) xvidcap.xml:1306(title) 
 msgid "Quality Setting changed in 1.1.5"
 msgstr ""
 
-#: xvidcap.xml:1147(para) 
+#: xvidcap.xml:1164(para) 
 msgid "The effect of setting quality to a value below 100 % has changed in <application>xvidcap</application> 1.1.5. Be sure to test the values in your stored preferences. Quality settings do not apply to XWD output."
 msgstr ""
 
-#: xvidcap.xml:1162(title) xvidcap.xml:1169(title) xvidcap.xml:1175(phrase) 
+#: xvidcap.xml:1179(title) xvidcap.xml:1186(title) xvidcap.xml:1192(phrase) 
 msgid "Multi-Frame Capture Preferences"
 msgstr ""
 
-#: xvidcap.xml:1164(para) 
+#: xvidcap.xml:1181(para) 
 msgid "This tab contains the settings for multi-frame capture mode."
 msgstr ""
 
-#: xvidcap.xml:1182(title) 
+#: xvidcap.xml:1199(title) 
 msgid "the multi-frame capture mode video settings are:"
 msgstr ""
 
-#: xvidcap.xml:1194(para) 
+#: xvidcap.xml:1211(para) 
 msgid "Enter a file name or file name pattern here to use for saving the individual frames captured. For multi-frame capture the string supplied here only needs to be a <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name\">mutable filename</ulink> if the <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue\">autocontinue feature</ulink> is to be used. Otherwise a simple filename is sufficient here, which may also be selected through the file selector button (<guibutton>...</guibutton>)."
 msgstr ""
 
-#: xvidcap.xml:1211(para) 
+#: xvidcap.xml:1228(para) 
 msgid "A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application> automatically select an appropriate output format based on the filename specified. For example, if you specify <quote>test.avi</quote> the output format will be <quote>Microsoft Audio Video Interleaved File (avi)</quote>. If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown menu allows for manually selecting a format, possibly overriding <application>xvidcap's</application> decision."
 msgstr ""
 
-#: xvidcap.xml:1224(para) 
+#: xvidcap.xml:1241(para) 
 msgid "Video Codec"
 msgstr ""
 
-#: xvidcap.xml:1229(para) 
+#: xvidcap.xml:1246(para) 
 msgid "A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application> automatically select an appropriate video codec for the output format selected. For example, if <quote>Microsoft Audio Video Interleaved File (avi)</quote> is selected the video codec will be <quote>Microsoft DIVX 2</quote>. If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown menu allows for manually selecting a codec, possibly overriding <application>xvidcap's</application> decision."
 msgstr ""
 
-#: xvidcap.xml:1247(para) 
+#: xvidcap.xml:1264(para) 
 msgid "The number of frames to capture per second. This control can either be a scale or a dropdown menu, if the selected codec only supports certain frame rates."
 msgstr ""
 
-#: xvidcap.xml:1290(para) 
+#: xvidcap.xml:1307(para) 
 msgid "The effect of setting quality to a value below 100 % has changed in <application>xvidcap</application> 1.1.5. Be sure to test the values in your stored preferences. In the past a quality setting of <quote>20</quote> could yield good results depending on the codec chosen. This is no longer the case. A setting of <quote>75</quote> may be acceptable to you, a value of <quote>85</quote> will typically be. A video resulting from a capture with a quality setting of <quote>90</quote> will not normally be easy to distinguish from one captured at <quote>100</quote> percent quality."
 msgstr ""
 
-#: xvidcap.xml:1309(title) 
+#: xvidcap.xml:1326(title) 
 msgid "the multi-frame capture mode audio settings are:"
 msgstr ""
 
-#: xvidcap.xml:1316(para) 
+#: xvidcap.xml:1333(para) 
 msgid "Enable Audio"
 msgstr ""
 
-#: xvidcap.xml:1321(para) 
+#: xvidcap.xml:1338(para) 
 msgid "Check this to capture audio along with video frames."
 msgstr ""
 
-#: xvidcap.xml:1328(para) 
+#: xvidcap.xml:1345(para) 
 msgid "Input Device"
 msgstr ""
 
-#: xvidcap.xml:1333(para) 
+#: xvidcap.xml:1350(para) 
 msgid "Type in the name of the input device to caputer audio from or select it through the file selector button (<guibutton>...</guibutton>)."
 msgstr ""
 
-#: xvidcap.xml:1341(para) 
+#: xvidcap.xml:1358(para) 
 msgid "Audio Codec"
 msgstr ""
 
-#: xvidcap.xml:1346(para) 
+#: xvidcap.xml:1363(para) 
 msgid "A check in the <guilabel>auto</guilabel> checkbox makes <application>xvidcap</application> automatically select an appropriate audio codec for the video output format selected. For example, if <quote>Microsoft Audio Video Interleaved File (avi)</quote> is selected the audio codec will be <quote>MPEG2</quote>. If the <guilabel>auto</guilabel> checkbox is unchecked, the dropdown menu allows for manually selecting a codec, possibly overriding <application>xvidcap's</application> decision."
 msgstr ""
 
-#: xvidcap.xml:1359(para) 
+#: xvidcap.xml:1376(para) 
 msgid "Sample Rate"
 msgstr ""
 
-#: xvidcap.xml:1364(para) 
+#: xvidcap.xml:1381(para) 
 msgid "Audio sample rate. If you're using piped input audio the audio stream is resampled to the specified rate if required."
 msgstr ""
 
-#: xvidcap.xml:1369(title) 
+#: xvidcap.xml:1386(title) 
 msgid "Piped Audio Input"
 msgstr ""
 
-#: xvidcap.xml:1370(para) 
+#: xvidcap.xml:1387(para) 
 msgid "Instead of capturing audio from a real-time audio source, you can also pipe a pre-recorded audio file to <application>xvidcap</application>. This way you can effectively dub your recording with a given audio track. To do this you need to:"
 msgstr ""
 
-#: xvidcap.xml:1376(para) 
+#: xvidcap.xml:1393(para) 
 msgid "<application>cat</application> my.mp3 | <application>xvidcap</application><parameter>--mf</parameter><parameter>--audio yes</parameter><parameter>--audio_in -</parameter><parameter>--file test.avi</parameter>"
 msgstr ""
 
-#: xvidcap.xml:1381(para) 
+#: xvidcap.xml:1398(para) 
 msgid "When you start the recording session in <application>xvidcap</application> it will sample audio from the piped file."
 msgstr ""
 
-#: xvidcap.xml:1390(para) 
+#: xvidcap.xml:1407(para) 
 msgid "Bit Rate"
 msgstr ""
 
-#: xvidcap.xml:1395(para) 
+#: xvidcap.xml:1412(para) 
 msgid "Audio bit rate. If you're using piped input audio the audio stream is resampled to the specified rate if required."
 msgstr ""
 
-#: xvidcap.xml:1403(para) 
+#: xvidcap.xml:1420(para) 
 msgid "Channels"
 msgstr ""
 
-#: xvidcap.xml:1408(para) 
+#: xvidcap.xml:1425(para) 
 msgid "Number of audio channels. If you're using piped input audio the audio stream is resampled to the specified number of channels if required."
 msgstr ""
 
-#: xvidcap.xml:1421(title) xvidcap.xml:1429(title) xvidcap.xml:1435(phrase) 
+#: xvidcap.xml:1438(title) xvidcap.xml:1446(title) xvidcap.xml:1452(phrase) 
 msgid "Command Preferences"
 msgstr ""
 
-#: xvidcap.xml:1423(para) 
+#: xvidcap.xml:1440(para) 
 msgid "This tab contains various settings regarding which commands to execute for certain actions."
 msgstr ""
 
-#: xvidcap.xml:1442(title) 
+#: xvidcap.xml:1459(title) 
 msgid "possible commands to set are:"
 msgstr ""
 
-#: xvidcap.xml:1449(para) 
+#: xvidcap.xml:1466(para) 
 msgid "Single Frame Playback Command"
 msgstr ""
 
-#: xvidcap.xml:1454(para) 
+#: xvidcap.xml:1471(para) 
 msgid "The command specified here is executed when the item <guimenuitem>Animate / Play</guimenuitem> is selected from the main menu or the play button is pressed on the capture results dialog while in single-frame capture mode."
 msgstr ""
 
-#: xvidcap.xml:1460(title) 
+#: xvidcap.xml:1477(title) 
 msgid "Specifying Commands"
 msgstr ""
 
-#: xvidcap.xml:1461(para) 
+#: xvidcap.xml:1478(para) 
 msgid "Any command can be configured here. It could theoretically be completely unrelated to video capture. You will always want to make sure that the called application is in your path and that you end your command line with the <application>&amp;</application> to avoid that <application>xvidcap</application> waits for the called application to finish before continuing itself."
 msgstr ""
 
-#: xvidcap.xml:1469(para) 
+#: xvidcap.xml:1486(para) 
 msgid "<application>xvidcap</application> makes the following environment variables available to the called application:"
 msgstr ""
 
-#: xvidcap.xml:1478(para) 
+#: xvidcap.xml:1495(para) 
 msgid "XVFFRAME"
 msgstr ""
 
-#: xvidcap.xml:1483(para) 
+#: xvidcap.xml:1500(para) 
 msgid "number of the first frame captured"
 msgstr ""
 
-#: xvidcap.xml:1490(para) 
+#: xvidcap.xml:1507(para) 
 msgid "XVLFRAME"
 msgstr ""
 
-#: xvidcap.xml:1495(para) 
+#: xvidcap.xml:1512(para) 
 msgid "number of the last frame captured"
 msgstr ""
 
-#: xvidcap.xml:1502(para) 
+#: xvidcap.xml:1519(para) 
 msgid "XVWIDTH"
 msgstr ""
 
-#: xvidcap.xml:1507(para) 
+#: xvidcap.xml:1524(para) 
 msgid "width of the area captured"
 msgstr ""
 
-#: xvidcap.xml:1514(para) 
+#: xvidcap.xml:1531(para) 
 msgid "XVHEIGHT"
 msgstr ""
 
-#: xvidcap.xml:1519(para) 
+#: xvidcap.xml:1536(para) 
 msgid "height of the area captured"
 msgstr ""
 
-#: xvidcap.xml:1526(para) 
+#: xvidcap.xml:1543(para) 
 msgid "XVFPS"
 msgstr ""
 
-#: xvidcap.xml:1531(para) 
+#: xvidcap.xml:1548(para) 
 msgid "desired (!) frame rate"
 msgstr ""
 
-#: xvidcap.xml:1538(para) 
+#: xvidcap.xml:1555(para) 
 msgid "XVTIME"
 msgstr ""
 
-#: xvidcap.xml:1543(para) 
+#: xvidcap.xml:1560(para) 
 msgid "desired (!) time per frame"
 msgstr ""
 
-#: xvidcap.xml:1550(para) 
+#: xvidcap.xml:1567(para) 
 msgid "XVFILE"
 msgstr ""
 
-#: xvidcap.xml:1555(para) 
+#: xvidcap.xml:1572(para) 
 msgid "file name"
 msgstr ""
 
-#: xvidcap.xml:1563(para) 
+#: xvidcap.xml:1580(para) 
 msgid "The file name, however, needs special treatment for single-frame capture. Here the pattern used for <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-sf-TBL-file-name\">mutable file names</ulink> is sent literally as specified for the Single Frame Encoding Command further down only. For the Single Frame Playback Command the pattern is converted to wildcards, i. e. <quote>test-%4d.png</quote> becomes <quote>test-????.png</quote>. For the Single Frame Edit Command the pattern is replaced with the number of the current frame, i. e. <quote>test-%4d.png</quote> becomes <quote>test-0001.png</quote>. For all Multi Frame commands the latter is used where if the filename is mutable and the number used is the index number of the most recently recorded video as with the <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue\">autocontinue feature</ulink>."
 msgstr ""
 
-#: xvidcap.xml:1580(para) 
+#: xvidcap.xml:1597(para) 
 msgid "Single Frame Encoding command"
 msgstr ""
 
-#: xvidcap.xml:1585(para) 
+#: xvidcap.xml:1602(para) 
 msgid "The command here is executed when the main menu's <guimenuitem>Make Video</guimenuitem> item is selected while in single-frame capture mode."
 msgstr ""
 
-#: xvidcap.xml:1593(para) 
+#: xvidcap.xml:1610(para) 
 msgid "Single Frame Edit Command"
 msgstr ""
 
-#: xvidcap.xml:1598(para) 
+#: xvidcap.xml:1615(para) 
 msgid "The command here is executed when the main control's <guibutton>Edit Button</guibutton> is clicked while in single-frame capture mode."
 msgstr ""
 
-#: xvidcap.xml:1606(para) 
+#: xvidcap.xml:1623(para) 
 msgid "Multi Frame Playback Command"
 msgstr ""
 
-#: xvidcap.xml:1611(para) 
+#: xvidcap.xml:1628(para) 
 msgid "The command specified here is executed when the item <guimenuitem>Animate / Play</guimenuitem> is selected from the main menu or the play button is pressed on the capture results dialog while in multi-frame capture mode."
 msgstr ""
 
-#: xvidcap.xml:1620(para) 
+#: xvidcap.xml:1637(para) 
 msgid "Multi Frame Transcoding command"
 msgstr ""
 
-#: xvidcap.xml:1625(para) 
+#: xvidcap.xml:1642(para) 
 msgid "The command here is executed when the main menu's <guimenuitem>Make Video</guimenuitem> item is selected while in multi-frame capture mode."
 msgstr ""
 
-#: xvidcap.xml:1633(para) 
+#: xvidcap.xml:1650(para) 
 msgid "Multi Frame Edit Command"
 msgstr ""
 
-#: xvidcap.xml:1638(para) 
+#: xvidcap.xml:1655(para) 
 msgid "The command here is executed when the main control's <guibutton>Edit Button</guibutton> is clicked while in multi-frame capture mode."
 msgstr ""
 
-#: xvidcap.xml:1651(title) 
+#: xvidcap.xml:1668(title) 
 msgid "Capture Results Dialog"
 msgstr ""
 
-#: xvidcap.xml:1653(para) 
+#: xvidcap.xml:1670(para) 
 msgid "When you first stop a recording session, a dialog will pop up displaying the results of the capture session. This popup can be prevented from appearing again by unchecking the <guibutton>Show Next Time</guibutton> checkbox or <ulink type=\"help\" url=\"ghelp:xvidcap?xvidcap-prefs-TBL-always-show-results\">this button</ulink> in the preferences dialog."
 msgstr ""
 
-#: xvidcap.xml:1660(para) 
+#: xvidcap.xml:1677(para) 
 msgid "The dialog itself can take one of two forms depending on whether or not you configured <application>xvidcap</application> to ask you for a target file name after the capture."
 msgstr ""
 
-#: xvidcap.xml:1665(title) 
+#: xvidcap.xml:1682(title) 
 msgid "Ask User For File Name"
 msgstr ""
 
-#: xvidcap.xml:1666(para) 
+#: xvidcap.xml:1683(para) 
 msgid "For the time being, the only way to configure <application>xvidcap</application> to ask the user to specify a file name after the capture rather than providing one up-front it by providing an empty file name either through the command line using <parameter>--file \"\"</parameter> or in the preferences dialog. This requires manually specifying an output file format. In this configuration <application>xvidcap</application> will store the video in a temporary file in your home directory which can lateron be renamed / moved to the desired destination. This is not compatible with autocontinue."
 msgstr ""
 
-#: xvidcap.xml:1678(para) 
+#: xvidcap.xml:1695(para) 
 msgid "If <application>xvidcap</application> is configured to ask the user for a file name, the results dialog will look like this:"
 msgstr ""
 
-#: xvidcap.xml:1683(title) xvidcap.xml:1689(phrase) 
+#: xvidcap.xml:1700(title) xvidcap.xml:1706(phrase) 
 msgid "Capture Results Dialog with Ask User For File name"
 msgstr ""
 
-#: xvidcap.xml:1695(para) 
+#: xvidcap.xml:1712(para) 
 msgid "Besides the overview of the used settings and information about the desired and achieved frame rates, you can select name and location of the file you want the video to be stored in through clicking <guibutton>Save As</guibutton>. Once a file has been selected, the label next to the button will display the absolute file name. You can also choose to preview the video through <guibutton>Play</guibutton> or abandon it through <guibutton>Delete</guibutton>. Note that the latter does not immediately delete the temporary file, though."
 msgstr ""
 
-#: xvidcap.xml:1705(para) 
+#: xvidcap.xml:1722(para) 
 msgid "Normally, the results dialog will look like this:"
 msgstr ""
 
-#: xvidcap.xml:1709(title) xvidcap.xml:1715(phrase) 
+#: xvidcap.xml:1726(title) xvidcap.xml:1732(phrase) 
 msgid "Normal Capture Results Dialog"
 msgstr ""
 
-#: xvidcap.xml:1724(title) 
+#: xvidcap.xml:1741(title) 
 msgid "The Preferences Warning Dialog"
 msgstr ""
 
-#: xvidcap.xml:1725(para) 
+#: xvidcap.xml:1742(para) 
 msgid "Whenever <application>xvidcap</application> determines that the settings you have chosen will not work well, it will display those issues in a standardized format. Unless you run <application>xvidcap</application> with the <parameter>--gui no</parameter> parameter, it will pop up the following dialog:"
 msgstr ""
 
-#: xvidcap.xml:1733(title) xvidcap.xml:1739(phrase) 
+#: xvidcap.xml:1750(title) xvidcap.xml:1756(phrase) 
 msgid "Preferences Warning Dialog"
 msgstr ""
 
-#: xvidcap.xml:1746(title) 
+#: xvidcap.xml:1763(title) 
 msgid "GUI-less operation"
 msgstr ""
 
-#: xvidcap.xml:1747(para) 
+#: xvidcap.xml:1764(para) 
 msgid "When running from the command line with the <parameter>--gui no</parameter> parameter, those warnings will be displayed in plain text on the terminal. You will not be seeing the <quote>Details</quote> section unless you also specified <parameter>-v</parameter>."
 msgstr ""
 
-#: xvidcap.xml:1755(title) 
+#: xvidcap.xml:1772(title) 
 msgid "There are a few situations in which such messages can be displayed:"
 msgstr ""
 
-#: xvidcap.xml:1762(para) 
+#: xvidcap.xml:1779(para) 
 msgid "On start"
 msgstr ""
 
-#: xvidcap.xml:1765(para) 
+#: xvidcap.xml:1782(para) 
 msgid "When <application>xvidcap</application> is started, it checks the consistency of the settings for the current capture mode and will report on issues it finds there. You will not be able to cancel out of this dialog, but have to revisit your preferences."
 msgstr ""
 
-#: xvidcap.xml:1771(para) 
+#: xvidcap.xml:1788(para) 
 msgid "<application>xvidcap</application><emphasis>only</emphasis> checks on the current capture mode and will not care about inconsistencies with the respective other mode. Therefore, there is the second situation."
 msgstr ""
 
-#: xvidcap.xml:1781(para) 
+#: xvidcap.xml:1798(para) 
 msgid "On change of capture mode"
 msgstr ""
 
-#: xvidcap.xml:1784(para) 
+#: xvidcap.xml:1801(para) 
 msgid "If you change the current capture mode through the <ulink type=\"help\" url=\"ghelp:xvidcap?menu xvidcap-menu-TBL-mf\">menu</ulink><application>xvidcap</application> will check the consistency of the settings for the new capture mode and will report on issues it finds there. If you cancel the warning dialog, you will return to your previous capture mode selection."
 msgstr ""
 
-#: xvidcap.xml:1796(para) 
+#: xvidcap.xml:1813(para) 
 msgid "When submitting changed preferences"
 msgstr ""
 
-#: xvidcap.xml:1799(para) 
+#: xvidcap.xml:1816(para) 
 msgid "When you leave the preferences dialog <application>xvidcap</application> will check the settings for both capture modes. Cancelling the warning dialog will take you back to the preferences dialog."
 msgstr ""
 
-#: xvidcap.xml:1810(para) 
+#: xvidcap.xml:1827(para) 
 msgid "In the Preferences Warning Dialog you will find one or more messages consisting of three rows each. The first one contains a message type or severity, a unique numeric ID and a short name for the error. The second row gives a more detailed description, and the third one tells about the action <application>xvidcap</application> is going to take if you chose to click <guibutton>OK</guibutton>."
 msgstr ""
 
-#: xvidcap.xml:1818(para) 
+#: xvidcap.xml:1835(para) 
 msgid "Such an action might be to automatically correct the issue by chosing a plausible default, to ignore the issue if it is not severe or to quit <application>xvidcap</application> if no solution can automatically be determined."
 msgstr ""
 
-#: xvidcap.xml:1824(para) 
+#: xvidcap.xml:1841(para) 
 msgid "The severity of an issue can be <quote>INFO</quote> for purely informational messages where no change is made to any settings, <quote>WARNING</quote> where a minor change to current settings is suggested, <quote>ERROR</quote> where a major change to current settings is required, or <quote>FATAL ERROR</quote>. A fatal error is always an error where the suggested action is to quit <application>xvidcap</application>. You will not see issues of severity <quote>INFO</quote> unless you run <application>xvidcap</application> in verbose mode."
 msgstr ""
 

@@ -178,7 +178,7 @@
                 <listitem>
                     <para>
                         Specify a value between <literal>0</literal> and <literal>100</literal> to define the quality encoding. The 
-                        default value is <literal>75</literal>. Note that the effect of a value below <literal>100</literal> has changed in version
+                        default value is <literal>90</literal>. Note that the effect of a value below <literal>100</literal> has changed in version
 			1.1.5.
                     </para> 
                 </listitem>
@@ -356,7 +356,7 @@
                 <term><option>--audio_bits <replaceable>audio bit rate</replaceable></option></term>
                 <listitem>
                     <para>
-                        Set the desired bit rate. The default is <literal>32000</literal> bit. Note that when using
+                        Set the desired bit rate. The default is <literal>64000</literal> bit. Note that when using
                         STDIN input the input file will be resampled as needed.
                     </para> 
                 </listitem>
@@ -365,7 +365,7 @@
                 <term><option>--audio_rate <replaceable>audio sample rate</replaceable></option></term>
                 <listitem>
                     <para>
-                        Set the desired sample rate. The default is <literal>22050</literal> Hz. Note that when using
+                        Set the desired sample rate. The default is <literal>44100</literal> Hz. Note that when using
                         STDIN input the input file will be resampled as needed.
                     </para> 
                 </listitem>
@@ -374,7 +374,7 @@
                 <term><option>--audio_channels <replaceable>audio channels</replaceable></option></term>
                 <listitem>
                     <para>
-                        Set the desired number of channels. The default is <literal>1</literal> for mono. Any value
+                        Set the desired number of channels. The default is <literal>2</literal> for stereo. Any value
                         above <literal>2</literal> is probably only useful with STDIN input and a 5-channel AC audio
                         input file or very good and rare recording equipment.
                     </para> 

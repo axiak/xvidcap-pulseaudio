@@ -962,6 +962,23 @@
                                 </para>
                             </entry>
                         </row>
+                        <row id="xvidcap-prefs-TBL-minimize-to-tray">
+                            <entry>
+                                <para>
+                                    Minimize to System Tray
+                                </para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    Check this to make <application>&app;</application> minimize to the
+				    system tray on starting a recording session. In that case the main
+				    control panel will hide and the frame drop monitor will apear in the
+				    system tray. A right-click on it will allow you to pause or stop the
+				    recording session. On stopping the main control window will be
+				    displayed again.
+                                </para>
+                            </entry>
+                        </row>
                         <row id="xvidcap-prefs-TBL-rescale">
                             <entry>
                                 <para>
