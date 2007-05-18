@@ -4433,7 +4433,6 @@ Frame Rate:&lt;/b&gt;</property>
       <property name="use_underline">True</property>
       <property name="active">False</property>
       <signal name="activate" handler="on_xvc_ti_pause_selected" last_modification_time="Thu, 10 May 2007 14:48:30 GMT"/>
-      <accelerator key="p" modifiers="GDK_MOD1_MASK" signal="activate"/>
     </widget>
   </child>
 
