@@ -1,10 +1,10 @@
 # translation of xvidcap.xml-it.po to Italian
-# Vincenzo Reale <smart2128@baslug.org>, 2006.
+# Vincenzo Reale <smart2128@baslug.org>, 2006, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap.xml-it\n"
-"POT-Creation-Date: 2007-05-17 18:49+0200\n"
-"PO-Revision-Date: 2007-04-10 22:30+0100\n"
+"POT-Creation-Date: 2007-05-18 09:42+0200\n"
+"PO-Revision-Date: 2007-05-18 07:22+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -186,11 +186,10 @@ msgstr "@@image: 'figures/menu-quit.png'; md5=97770bce6e5724f83bed779264a00564"
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:813(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/prefs-general.png'; md5=9610e08e1e7e5afb690826d304d8b033"
 msgstr ""
-"@@image: 'figures/prefs-general.png'; md5=055d3cf5f17670aa0f2b1e013e745548"
+"@@image: 'figures/prefs-general.png'; md5=9610e08e1e7e5afb690826d304d8b033"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -1208,7 +1207,7 @@ msgstr ""
 
 #: ../C/xvidcap.xml:967(para)
 msgid "Minimize to System Tray"
-msgstr ""
+msgstr "Minimizza nel vassoio di sistema"
 
 #: ../C/xvidcap.xml:972(para)
 msgid ""
@@ -1218,6 +1217,13 @@ msgid ""
 "click on it will allow you to pause or stop the recording session. On "
 "stopping the main control window will be displayed again."
 msgstr ""
+"Selezionare questa opzione per minimizzare <application>xvidcap</"
+"application> nel vassoio di sistema all'avvio di una sessione di "
+"registrazione. In tal caso, il pannello di controllo principale sarà "
+"nascosto e il monitor dei fotogrammi scartati apparirà nel vassoio di "
+"sistema. Un clic destro su di esso permetterà di mettere in pausa o fermare "
+"la sessione di registrazione. Se si ferma la registrazione la finestra "
+"principale sarà visualizzata nuovamente."
 
 #: ../C/xvidcap.xml:984(para)
 msgid "Rescale Output Percentage"

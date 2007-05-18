@@ -1,4 +1,15 @@
 
+2007-05-18  Vincenzo Reale <smart2128@baslug.org>
+	* doc: man/it/xvidcap.1-it.po, 
+		man/it/xvidcap.1.xml, man/it/xvidcap.1, 
+		xvidcap/it/xvidcap.xml-it.po, 
+		xvidcap/it/xvidcap.xml: updated
+		Italian l10n for docs
+	* po/it.po: updated l10n
+
+2007-05-18  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/gnome_ui.c: removing unneeded variable
+
 2007-05-17  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* po: en.po, de.po: updated l10n
 	* doc/man: C/xvidcap.1.xml, C/xvidcap.1.xml.pot, 

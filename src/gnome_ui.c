@@ -545,7 +545,6 @@ stop_recording_nongui_stuff ()
     struct timeval curr_time;
     long stop_time = 0;
     XVC_AppData *app = xvc_appdata_ptr ();
-    Job *job = xvc_job_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering with thread running %i\n",

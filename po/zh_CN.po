@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-17 23:14+0200\n"
+"POT-Creation-Date: 2007-05-18 09:41+0200\n"
 "PO-Revision-Date: 2007-05-14 10:30+0800\n"
 "Last-Translator: lon <lon83129@126.com>\n"
 "Language-Team: LONCHINA\n"
@@ -590,7 +590,7 @@ msgid "ACTION:"
 msgstr "动作:"
 
 #: ../src/codecs.c:100 ../src/codecs.c:251 ../src/codecs.c:463
-#: ../src/gnome_ui.c:757
+#: ../src/gnome_ui.c:756
 msgid "NONE"
 msgstr ""
 
@@ -725,15 +725,15 @@ msgstr "MPEG2 PS 格式"
 msgid "Quicktime Format"
 msgstr "Quicktime 格式"
 
-#: ../src/gnome_ui.c:1325 ../src/gnome_ui.c:1326
+#: ../src/gnome_ui.c:1324 ../src/gnome_ui.c:1325
 msgid "Move cursor back one frame"
 msgstr "移动光标到任一帧后面"
 
-#: ../src/gnome_ui.c:1335 ../src/gnome_ui.c:1336
+#: ../src/gnome_ui.c:1334 ../src/gnome_ui.c:1335
 msgid "Move cursor to next frame"
 msgstr "移动光标到下一帧"
 
-#: ../src/gnome_ui.c:1343 ../src/gnome_ui.c:1345
+#: ../src/gnome_ui.c:1342 ../src/gnome_ui.c:1344
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -741,23 +741,23 @@ msgstr ""
 "左击：重置抓取帧和文件名\n"
 "右击：弹出菜单"
 
-#: ../src/gnome_ui.c:1350 ../src/gnome_ui.c:1351
+#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
 msgid "Edit current individual frame"
 msgstr "编辑当前单独帧"
 
-#: ../src/gnome_ui.c:1356 ../src/gnome_ui.c:1357
+#: ../src/gnome_ui.c:1355 ../src/gnome_ui.c:1356
 msgid "Capture single frame"
 msgstr "抓取单一帧"
 
-#: ../src/gnome_ui.c:1381 ../src/gnome_ui.c:1382
+#: ../src/gnome_ui.c:1380 ../src/gnome_ui.c:1381
 msgid "Move cursor to previous movie"
 msgstr "移动计算尺到上一影片"
 
-#: ../src/gnome_ui.c:1384 ../src/gnome_ui.c:1385
+#: ../src/gnome_ui.c:1383 ../src/gnome_ui.c:1384
 msgid "Move cursor to next movie"
 msgstr "移动光标到下一影片"
 
-#: ../src/gnome_ui.c:1389 ../src/gnome_ui.c:1391
+#: ../src/gnome_ui.c:1388 ../src/gnome_ui.c:1390
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -765,16 +765,16 @@ msgstr ""
 "左击：影片计数清零\n"
 "右击：弹出菜单"
 
-#: ../src/gnome_ui.c:1396 ../src/gnome_ui.c:1397
+#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
 msgid "Edit current movie"
 msgstr "编辑当前影片"
 
-#: ../src/gnome_ui.c:2689 ../src/gnome_ui.c:2690
+#: ../src/gnome_ui.c:2688 ../src/gnome_ui.c:2689
 #: ../src/gnome-xvidcap.glade.h:47
 msgid "Detach selection frame"
 msgstr "分离区域选择框"
 
-#: ../src/gnome_ui.c:2713 ../src/gnome_ui.c:2714
+#: ../src/gnome_ui.c:2712 ../src/gnome_ui.c:2713
 msgid "Attach selection frame"
 msgstr "合并区域选择框"
 

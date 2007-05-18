@@ -101,11 +101,7 @@
             <varlistentry>
                 <term><option>--quality <replaceable>percentuale della qualità</replaceable></option></term>
                 <listitem>
-                    <para>
-                        Specify a value between <literal>0</literal> and <literal>100</literal> to define the quality encoding. The 
-                        default value is <literal>90</literal>. Note that the effect of a value below <literal>100</literal> has changed in version
-			1.1.5.
-                    </para> 
+                    <para>Specificare un valore tra <literal>0</literal> e <literal>100</literal> per definire la qualità di codifica. Il valore predefinito è <literal>90</literal>. Notare che l'effetto di un valore al di sotto di <literal>100</literal> è cambiato nella versione 1.1.5.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
@@ -212,29 +208,19 @@
             <varlistentry>
                 <term><option>--audio_bits <replaceable>bitrate audio</replaceable></option></term>
                 <listitem>
-                    <para>
-                        Set the desired bit rate. The default is <literal>64000</literal> bit. Note that when using
-                        STDIN input the input file will be resampled as needed.
-                    </para> 
+                    <para>Imposta il bitrate desiderato. Il valore predefinito è <literal>64000</literal> bit. Notare che, utilizzando lo STDIN, il file d'ingresso sarà ricampionato come richiesto.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term><option>--audio_rate <replaceable>campionamento audio</replaceable></option></term>
                 <listitem>
-                    <para>
-                        Set the desired sample rate. The default is <literal>44100</literal> Hz. Note that when using
-                        STDIN input the input file will be resampled as needed.
-                    </para> 
+                    <para>Imposta il campionamento desiderato. Il valore predefinito è <literal>44100</literal> Hz. Notare che, utilizzando lo STDIN, il file d'ingresso sarà ricampionato come richiesto.</para> 
                 </listitem>
             </varlistentry>
             <varlistentry>
                 <term><option>--audio_channels <replaceable>canali audio</replaceable></option></term>
                 <listitem>
-                    <para>
-                        Set the desired number of channels. The default is <literal>2</literal> for stereo. Any value
-                        above <literal>2</literal> is probably only useful with STDIN input and a 5-channel AC audio
-                        input file or very good and rare recording equipment.
-                    </para> 
+                    <para>Imposta il numero di canali desiderato. Il valore predefinito è <literal>2</literal> per stereo. Ogni valore maggiore di <literal>2</literal> è probabilmente utile solo in caso di ingresso da STDIN e file audio AC a 5 canali o strumenti di registrazione di alta qualità e scarsa diffusione.</para> 
                 </listitem>
             </varlistentry>
         </variablelist>

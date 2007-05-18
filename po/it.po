@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-17 23:14+0200\n"
-"PO-Revision-Date: 2007-05-02 07:10+0200\n"
+"POT-Creation-Date: 2007-05-18 09:41+0200\n"
+"PO-Revision-Date: 2007-05-18 07:12+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -716,7 +716,7 @@ msgid "ACTION:"
 msgstr "AZIONE:"
 
 #: ../src/codecs.c:100 ../src/codecs.c:251 ../src/codecs.c:463
-#: ../src/gnome_ui.c:757
+#: ../src/gnome_ui.c:756
 msgid "NONE"
 msgstr "NESSUNA"
 
@@ -844,15 +844,15 @@ msgstr "Formato MPEG2 PS"
 msgid "Quicktime Format"
 msgstr "Formato Quicktime"
 
-#: ../src/gnome_ui.c:1325 ../src/gnome_ui.c:1326
+#: ../src/gnome_ui.c:1324 ../src/gnome_ui.c:1325
 msgid "Move cursor back one frame"
 msgstr "Sposta il cursore indietro di un fotogramma"
 
-#: ../src/gnome_ui.c:1335 ../src/gnome_ui.c:1336
+#: ../src/gnome_ui.c:1334 ../src/gnome_ui.c:1335
 msgid "Move cursor to next frame"
 msgstr "Sposta il cursore al fotogramma successivo"
 
-#: ../src/gnome_ui.c:1343 ../src/gnome_ui.c:1345
+#: ../src/gnome_ui.c:1342 ../src/gnome_ui.c:1344
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -860,23 +860,23 @@ msgstr ""
 "Tasto sinistro: Ripristina contatore dei fotogrammi e nome file\n"
 "Tasto destro: Menu a comparsa"
 
-#: ../src/gnome_ui.c:1350 ../src/gnome_ui.c:1351
+#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
 msgid "Edit current individual frame"
 msgstr "Modifica il singolo fotogramma attuale"
 
-#: ../src/gnome_ui.c:1356 ../src/gnome_ui.c:1357
+#: ../src/gnome_ui.c:1355 ../src/gnome_ui.c:1356
 msgid "Capture single frame"
 msgstr "Acquisisci fotogramma singolo"
 
-#: ../src/gnome_ui.c:1381 ../src/gnome_ui.c:1382
+#: ../src/gnome_ui.c:1380 ../src/gnome_ui.c:1381
 msgid "Move cursor to previous movie"
 msgstr "Sposta il cursore al precedente filmato"
 
-#: ../src/gnome_ui.c:1384 ../src/gnome_ui.c:1385
+#: ../src/gnome_ui.c:1383 ../src/gnome_ui.c:1384
 msgid "Move cursor to next movie"
 msgstr "Sposta il cursore al prossimo filmato"
 
-#: ../src/gnome_ui.c:1389 ../src/gnome_ui.c:1391
+#: ../src/gnome_ui.c:1388 ../src/gnome_ui.c:1390
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -884,16 +884,16 @@ msgstr ""
 "Tasto sinistro: Ripristina contatore del filmato a zero\n"
 "Tasto destro: Menu a comparsa"
 
-#: ../src/gnome_ui.c:1396 ../src/gnome_ui.c:1397
+#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
 msgid "Edit current movie"
 msgstr "Modifica il filmato attuale"
 
-#: ../src/gnome_ui.c:2689 ../src/gnome_ui.c:2690
+#: ../src/gnome_ui.c:2688 ../src/gnome_ui.c:2689
 #: ../src/gnome-xvidcap.glade.h:47
 msgid "Detach selection frame"
 msgstr "Sgancia l'area di selezione"
 
-#: ../src/gnome_ui.c:2713 ../src/gnome_ui.c:2714
+#: ../src/gnome_ui.c:2712 ../src/gnome_ui.c:2713
 msgid "Attach selection frame"
 msgstr "Aggancia l'area di selezione"
 
@@ -1484,6 +1484,8 @@ msgstr "# ridimensiona l'area di acquisizione al n percento dell'originale\n"
 #, c-format
 msgid "# minimize the main control to the system tray while recording\n"
 msgstr ""
+"# minimizza la finestra principale nel vassoio di sistema mentre si "
+"registra\n"
 
 #: ../src/options.c:136
 #, c-format
@@ -1779,13 +1781,14 @@ msgstr ""
 "ripristino la visualizzazione dei risultati.\n"
 
 #: ../src/options.c:495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "reading unsupported minimize_to_tray value from options file\n"
 "resetting to not minimizing to tray.\n"
 msgstr ""
-"lettura di un valore di auto_continue non supportato dal file delle opzioni\n"
-"ripristino la funzione di continuazione automatica.\n"
+"lettura di un valore di minimize_to_tray non supportato dal file delle "
+"opzioni\n"
+"ripristino a non minimizzare nel vassoio.\n"
 
 #: ../src/options.c:586
 #, c-format
@@ -2423,7 +2426,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:80
 msgid "Minimize to System Tray"
-msgstr ""
+msgstr "Minimizza nel vassoio di sistema"
 
 #: ../src/gnome-xvidcap.glade.h:81
 msgid "Multi Frame Capture"
@@ -2624,7 +2627,7 @@ msgstr "_Crea video"
 
 #: ../src/gnome-xvidcap.glade.h:127
 msgid "_Pause"
-msgstr ""
+msgstr "_Pausa"
 
 #: ../src/gnome-xvidcap.glade.h:128
 msgid "_Save Preferences"

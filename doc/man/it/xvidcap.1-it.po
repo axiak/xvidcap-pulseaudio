@@ -1,10 +1,10 @@
-# translation of xvidcap.1.xml.po to Italian
-# Vincenzo Reale <smart2128@baslug.org>, 2006.
+# translation of xvidcap.1-it.po to Italian
+# Vincenzo Reale <smart2128@baslug.org>, 2006, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: xvidcap.1.xml\n"
-"POT-Creation-Date: 2007-05-17 23:13+0200\n"
-"PO-Revision-Date: 2007-04-10 20:54+0100\n"
+"Project-Id-Version: xvidcap.1-it\n"
+"POT-Creation-Date: 2007-05-18 09:43+0200\n"
+"PO-Revision-Date: 2007-05-18 07:17+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -360,7 +360,6 @@ msgstr ""
 "con l'uscita XWD."
 
 #: ../C/xvidcap.1.xml:179(para)
-#, fuzzy
 msgid ""
 "Specify a value between <literal>0</literal> and <literal>100</literal> to "
 "define the quality encoding. The default value is <literal>90</literal>. "
@@ -368,9 +367,9 @@ msgid ""
 "version 1.1.5."
 msgstr ""
 "Specificare un valore tra <literal>0</literal> e <literal>100</literal> per "
-"definire la qualità di codifica. Il valore predefinito è <literal>75</"
+"definire la qualità di codifica. Il valore predefinito è <literal>90</"
 "literal>. Notare che l'effetto di un valore al di sotto di <literal>100</"
-"literal> è cambiato nella versione 1.1.5"
+"literal> è cambiato nella versione 1.1.5."
 
 #: ../C/xvidcap.1.xml:187(term)
 msgid "<option>--source </option>x11|shm"
@@ -591,35 +590,32 @@ msgid "cat some.mp3 | xvidcap --audio_in -"
 msgstr "cat qualche.mp3 | xvidcap --audio_in -"
 
 #: ../C/xvidcap.1.xml:358(para)
-#, fuzzy
 msgid ""
 "Set the desired bit rate. The default is <literal>64000</literal> bit. Note "
 "that when using STDIN input the input file will be resampled as needed."
 msgstr ""
-"Imposta il bitrate desiderato. Il valore predefinito è <literal>32000</"
+"Imposta il bitrate desiderato. Il valore predefinito è <literal>64000</"
 "literal> bit. Notare che, utilizzando lo STDIN, il file d'ingresso sarà "
 "ricampionato come richiesto."
 
 #: ../C/xvidcap.1.xml:367(para)
-#, fuzzy
 msgid ""
 "Set the desired sample rate. The default is <literal>44100</literal> Hz. "
 "Note that when using STDIN input the input file will be resampled as needed."
 msgstr ""
-"Imposta il campionamento desiderato. Il valore predefinito è <literal>22050</"
+"Imposta il campionamento desiderato. Il valore predefinito è <literal>44100</"
 "literal> Hz. Notare che, utilizzando lo STDIN, il file d'ingresso sarà "
 "ricampionato come richiesto."
 
 #: ../C/xvidcap.1.xml:376(para)
-#, fuzzy
 msgid ""
 "Set the desired number of channels. The default is <literal>2</literal> for "
 "stereo. Any value above <literal>2</literal> is probably only useful with "
 "STDIN input and a 5-channel AC audio input file or very good and rare "
 "recording equipment."
 msgstr ""
-"Imposta il numero di canali desiderato. Il valore predefinito è <literal>1</"
-"literal> per mono. Ogni valore maggiore di <literal>2</literal> è "
+"Imposta il numero di canali desiderato. Il valore predefinito è <literal>2</"
+"literal> per stereo. Ogni valore maggiore di <literal>2</literal> è "
 "probabilmente utile solo in caso di ingresso da STDIN e file audio AC a 5 "
 "canali o strumenti di registrazione di alta qualità e scarsa diffusione."
 
@@ -665,124 +661,3 @@ msgstr ""
 #: ../C/xvidcap.1.xml:0(None)
 msgid "translator-credits"
 msgstr "Vincenzo Reale <smart2128@baslug.org> (italiano)"
-
-#, fuzzy
-#~ msgid "September 2007"
-#~ msgstr "Settembre 2006"
-
-#~ msgid "--mf"
-#~ msgstr "--mf"
-
-#~ msgid "--sf"
-#~ msgstr "--sf"
-
-#~ msgid "<placeholder-1/>|<placeholder-2/>"
-#~ msgstr "<placeholder-1/>|<placeholder-2/>"
-
-#~ msgid "file name pattern"
-#~ msgstr "modello di nome file"
-
-#~ msgid "|-"
-#~ msgstr "|-"
-
-#~ msgid "--file <placeholder-1/><placeholder-2/>"
-#~ msgstr "--file <placeholder-1/><placeholder-2/>"
-
-#~ msgid "frames per second"
-#~ msgstr "fotogrammi al secondo"
-
-#~ msgid "--fps <placeholder-1/>"
-#~ msgstr "--fps <placeholder-1/>"
-
-#~ msgid "geometry"
-#~ msgstr "geometria"
-
-#~ msgid "size percentage"
-#~ msgstr "dimensione in percentuale"
-
-#~ msgid "--rescale <placeholder-1/>"
-#~ msgstr "--rescale <placeholder-1/>"
-
-#~ msgid "quality percentage"
-#~ msgstr "qualità in percentuale"
-
-#~ msgid "--quality <placeholder-1/>"
-#~ msgstr "--quality <placeholder-1/>"
-
-#~ msgid "x11|shm"
-#~ msgstr "x11|shm"
-
-#~ msgid "--source <placeholder-1/>"
-#~ msgstr "--source <placeholder-1/>"
-
-#~ msgid "--time <placeholder-1/>"
-#~ msgstr "--time <placeholder-1/>"
-
-#~ msgid "maximum frames"
-#~ msgstr "Numero massimo di fotogrammi"
-
-#~ msgid "--frames <placeholder-1/>"
-#~ msgstr "--frames <placeholder-1/>"
-
-#~ msgid "initial frame number"
-#~ msgstr "numero fotogramma iniziale"
-
-#~ msgid "--start_no <placeholder-1/>"
-#~ msgstr "--start_no <placeholder-1/>"
-
-#~ msgid "yes|no"
-#~ msgstr "yes|no"
-
-#~ msgid "--continue <placeholder-1/>"
-#~ msgstr "--continue <placeholder-1/>"
-
-#~ msgid "--gui <placeholder-1/>"
-#~ msgstr "--gui <placeholder-1/>"
-
-#~ msgid "video codec"
-#~ msgstr "codificatore video"
-
-#~ msgid "--codec <placeholder-1/>"
-#~ msgstr "--codec <placeholder-1/>"
-
-#~ msgid "output file format"
-#~ msgstr "formato file di uscita"
-
-#~ msgid "--format <placeholder-1/>"
-#~ msgstr "--format <placeholder-1/>"
-
-#~ msgid "--audio <placeholder-1/>"
-#~ msgstr "--audio <placeholder-1/>"
-
-#~ msgid "audio codec"
-#~ msgstr "codificatore audio"
-
-#~ msgid "--aucodec <placeholder-1/>"
-#~ msgstr "--aucodec <placeholder-1/>"
-
-#~ msgid "audio capture device"
-#~ msgstr "dispositivo di acquisizione audio"
-
-#~ msgid "--audio_in <placeholder-1/><placeholder-2/>"
-#~ msgstr "--audio_in <placeholder-1/><placeholder-2/>"
-
-#~ msgid "audio bit rate"
-#~ msgstr "bitrate audio"
-
-#~ msgid "--audio_bits <placeholder-1/>"
-#~ msgstr "--audio_bits <placeholder-1/>"
-
-#~ msgid "audio sample rate"
-#~ msgstr "campionamento audio"
-
-#~ msgid "--audio_rate <placeholder-1/>"
-#~ msgstr "--audio_rate <placeholder-1/>"
-
-#~ msgid "audio channels"
-#~ msgstr "canali audio"
-
-#~ msgid "--file <placeholder-1/>"
-#~ msgstr "--file <placeholder-1/>"
-
-#~ msgid "--audio_in <placeholder-1/>|-"
-#~ msgstr "--audio_in <placeholder-1/>|-"
