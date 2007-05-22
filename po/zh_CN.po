@@ -1,16 +1,17 @@
-# translation of xvidcap.po to LONCHINA
+# translation of zh_CN.po to Chinese Simplified
+# translation of zh_CN.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # lon <lon83129@126.com>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: xvidcap\n"
+"Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-18 09:41+0200\n"
-"PO-Revision-Date: 2007-05-14 10:30+0800\n"
+"POT-Creation-Date: 2007-05-22 19:32+0200\n"
+"PO-Revision-Date: 2007-05-21 14:06+0800\n"
 "Last-Translator: lon <lon83129@126.com>\n"
-"Language-Team: LONCHINA\n"
+"Language-Team: Chinese Simplified <xvidcap-l10n@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,13 +19,15 @@ msgstr ""
 
 #: ../src/app_data.c:378
 msgid "xterm -e \"echo none specified; echo hit enter to dismiss; read\""
-msgstr ""
+msgstr "xterm -e \"echo none specified; echo hit enter to dismiss; read\""
 
 #: ../src/app_data.c:381
 msgid ""
 "xterm -e \"echo not needed for multi-frame capture; echo hit enter to "
 "dismiss; read\""
 msgstr ""
+"xterm -e \"echo not needed for multi-frame capture; echo hit enter to "
+"dismiss; read\""
 
 #: ../src/app_data.c:517 ../src/app_data.c:1344
 #, c-format
@@ -494,23 +497,27 @@ msgstr "重置百分比为“100”"
 
 #: ../src/app_data.c:2177 ../src/app_data.c:2186
 msgid "Vorbis needs stereo audio"
-msgstr ""
+msgstr "Vorbis必需立体声"
 
 #: ../src/app_data.c:2179
 msgid ""
 "You selected mono vorbis audio output for single-frame capture, but this "
 "version of xvidcap can only encode stereo vorbis audio streams."
 msgstr ""
+"在单帧抓取中你选择了单vorbis音频，但是这个版本的xvidcap只支持立体vorbis音频"
+"流。"
 
 #: ../src/app_data.c:2181 ../src/app_data.c:2190
 msgid "Set number of audio channels to '2'"
-msgstr ""
+msgstr "设置音频通道为'2'"
 
 #: ../src/app_data.c:2188
 msgid ""
 "You selected mono vorbis audio output for multi-frame capture, but this "
 "version of xvidcap can only encode stereo vorbis audio streams."
 msgstr ""
+"在多帧抓取中你选择了单vorbis音频，但是这个版本的xvidcap只支持立体vorbis音频"
+"流。"
 
 #: ../src/app_data.c:2197 ../src/app_data.c:2206
 msgid "Quality value not a valid percentage"
@@ -590,150 +597,143 @@ msgid "ACTION:"
 msgstr "动作:"
 
 #: ../src/codecs.c:100 ../src/codecs.c:251 ../src/codecs.c:463
-#: ../src/gnome_ui.c:756
+#: ../src/gnome_ui.c:771
 msgid "NONE"
-msgstr ""
+msgstr "NONE"
 
 #: ../src/codecs.c:110
 msgid "Portable Graymap"
-msgstr ""
+msgstr "Portable Graymap"
 
 #: ../src/codecs.c:119
 msgid "Portable Pixmap"
-msgstr ""
+msgstr "Portable Pixmap"
 
 #: ../src/codecs.c:128
 msgid "Portable Network Graphics"
-msgstr ""
+msgstr "Portable Network Graphics"
 
 #: ../src/codecs.c:137 ../src/codecs.c:524
 msgid "Joint Picture Expert Group"
-msgstr ""
+msgstr "Joint Picture Expert Group"
 
 #: ../src/codecs.c:146
 msgid "MPEG 1"
-msgstr ""
+msgstr "MPEG 1"
 
 #: ../src/codecs.c:155
 msgid "MJPEG"
-msgstr ""
+msgstr "MJPEG"
 
 #: ../src/codecs.c:165
 msgid "MPEG 4 (DIVX)"
-msgstr ""
+msgstr "MPEG 4 (DIVX)"
 
 #: ../src/codecs.c:174
 msgid "Microsoft DIVX 2"
-msgstr ""
+msgstr "Microsoft DIVX 2"
 
 #: ../src/codecs.c:184
 msgid "Microsoft DIVX 3"
-msgstr ""
+msgstr "Microsoft DIVX 3"
 
 #: ../src/codecs.c:194
-#, fuzzy
 msgid "Flash Video"
-msgstr "Flash视频"
+msgstr "Flash Video"
 
 #: ../src/codecs.c:204
-#, fuzzy
 msgid "DV Video"
-msgstr "DV视频"
+msgstr "DV Video"
 
 #: ../src/codecs.c:213
-#, fuzzy
 msgid "MPEG2 Video"
-msgstr "MPEG2视频"
+msgstr "MPEG2 Video"
 
 #: ../src/codecs.c:223
 msgid "Ogg Theora"
-msgstr ""
+msgstr "Ogg Theora"
 
 #: ../src/codecs.c:234
 msgid "Soerensen VQ 1"
-msgstr ""
+msgstr "Soerensen VQ 1"
 
 #: ../src/codecs.c:257
 msgid "MPEG2"
-msgstr ""
+msgstr "MPEG2"
 
 #: ../src/codecs.c:262
 msgid "MPEG2 Layer 3"
-msgstr ""
+msgstr "MPEG2 Layer 3"
 
 #: ../src/codecs.c:267
 msgid "Ogg Vorbis"
-msgstr ""
+msgstr "Ogg Vorbis"
 
 #: ../src/codecs.c:271
 msgid "PCM"
-msgstr ""
+msgstr "PCM"
 
 #: ../src/codecs.c:475
 msgid "X11 Window Dump"
-msgstr ""
+msgstr "X11 Window Dump"
 
 #: ../src/codecs.c:488
 msgid "Portable Graymap File"
-msgstr ""
+msgstr "Portable Graymap File"
 
 #: ../src/codecs.c:500
 msgid "Portable Anymap File"
-msgstr ""
+msgstr "Portable Anymap File"
 
 #: ../src/codecs.c:512
 msgid "Portable Network Graphics File"
-msgstr ""
+msgstr "Portable Network Graphics File"
 
 #: ../src/codecs.c:536
 msgid "Microsoft Audio Video Interleaved File"
-msgstr ""
+msgstr "Microsoft Audio Video Interleaved File"
 
 #: ../src/codecs.c:558
 msgid "General AVI file (DIVX default)"
-msgstr ""
+msgstr "General AVI file (DIVX default)"
 
 #: ../src/codecs.c:580
 msgid "Microsoft Advanced Streaming Format"
-msgstr ""
+msgstr "Microsoft Advanced Streaming Format"
 
 #: ../src/codecs.c:597
 msgid "Macromedia Flash Video Stream"
-msgstr ""
+msgstr "Macromedia Flash Video Stream"
 
 #: ../src/codecs.c:621
 msgid "Macromedia Shockwave Flash File"
-msgstr ""
+msgstr "Macromedia Shockwave Flash File"
 
 #: ../src/codecs.c:645
-#, fuzzy
 msgid "DV Video Format"
-msgstr "DV视频格式"
+msgstr "DV Video Format"
 
 #: ../src/codecs.c:663
-#, fuzzy
 msgid "MPEG1 System Format"
-msgstr "MPEG1 系统格式"
+msgstr "MPEG1 System Format"
 
 #: ../src/codecs.c:681
-#, fuzzy
 msgid "MPEG2 PS Format"
-msgstr "MPEG2 PS 格式"
+msgstr "MPEG2 PS Format"
 
 #: ../src/codecs.c:699
-#, fuzzy
 msgid "Quicktime Format"
-msgstr "Quicktime 格式"
+msgstr "Quicktime Format"
 
-#: ../src/gnome_ui.c:1324 ../src/gnome_ui.c:1325
+#: ../src/gnome_ui.c:1339 ../src/gnome_ui.c:1340
 msgid "Move cursor back one frame"
 msgstr "移动光标到任一帧后面"
 
-#: ../src/gnome_ui.c:1334 ../src/gnome_ui.c:1335
+#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
 msgid "Move cursor to next frame"
 msgstr "移动光标到下一帧"
 
-#: ../src/gnome_ui.c:1342 ../src/gnome_ui.c:1344
+#: ../src/gnome_ui.c:1357 ../src/gnome_ui.c:1359
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -741,23 +741,23 @@ msgstr ""
 "左击：重置抓取帧和文件名\n"
 "右击：弹出菜单"
 
-#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
+#: ../src/gnome_ui.c:1364 ../src/gnome_ui.c:1365
 msgid "Edit current individual frame"
 msgstr "编辑当前单独帧"
 
-#: ../src/gnome_ui.c:1355 ../src/gnome_ui.c:1356
+#: ../src/gnome_ui.c:1370 ../src/gnome_ui.c:1371
 msgid "Capture single frame"
 msgstr "抓取单一帧"
 
-#: ../src/gnome_ui.c:1380 ../src/gnome_ui.c:1381
+#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
 msgid "Move cursor to previous movie"
 msgstr "移动计算尺到上一影片"
 
-#: ../src/gnome_ui.c:1383 ../src/gnome_ui.c:1384
+#: ../src/gnome_ui.c:1398 ../src/gnome_ui.c:1399
 msgid "Move cursor to next movie"
 msgstr "移动光标到下一影片"
 
-#: ../src/gnome_ui.c:1388 ../src/gnome_ui.c:1390
+#: ../src/gnome_ui.c:1403 ../src/gnome_ui.c:1405
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -765,16 +765,16 @@ msgstr ""
 "左击：影片计数清零\n"
 "右击：弹出菜单"
 
-#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
+#: ../src/gnome_ui.c:1410 ../src/gnome_ui.c:1411
 msgid "Edit current movie"
 msgstr "编辑当前影片"
 
-#: ../src/gnome_ui.c:2688 ../src/gnome_ui.c:2689
+#: ../src/gnome_ui.c:2724 ../src/gnome_ui.c:2725
 #: ../src/gnome-xvidcap.glade.h:47
 msgid "Detach selection frame"
 msgstr "分离区域选择框"
 
-#: ../src/gnome_ui.c:2712 ../src/gnome_ui.c:2713
+#: ../src/gnome_ui.c:2748 ../src/gnome_ui.c:2749
 msgid "Attach selection frame"
 msgstr "合并区域选择框"
 
@@ -810,73 +810,77 @@ msgid ""
 "[--fps #.#]      frames per second (float) or a fraction string like "
 "\"30000/1001\"\n"
 msgstr ""
+"[--fps #.#]      frames per second (float) or a fraction string like "
+"\"30000/1001\"\n"
 
 #: ../src/main.c:88
 #, c-format
 msgid "[--verbose #]    verbose level, '-v' is --verbose 1\n"
-msgstr ""
+msgstr "[--verbose #]    verbose level, '-v' is --verbose 1\n"
 
 #: ../src/main.c:89
 #, c-format
 msgid "[--time #.#]     time to record in seconds (float)\n"
-msgstr ""
+msgstr "[--time #.#]     time to record in seconds (float)\n"
 
 #: ../src/main.c:90
 #, c-format
 msgid "[--frames #]     frames to record, don't use it with --time\n"
-msgstr ""
+msgstr "[--frames #]     frames to record, don't use it with --time\n"
 
 #: ../src/main.c:92
 #, c-format
 msgid "[--continue [yes|no]] autocontinue after maximum frames/time\n"
-msgstr ""
+msgstr "[--continue [yes|no]] autocontinue after maximum frames/time\n"
 
 #: ../src/main.c:94
 #, c-format
 msgid ""
 "[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"
 msgstr ""
+"[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"
 
 #: ../src/main.c:96
 #, c-format
 msgid "[--window <hex-window-id>] a hexadecimal window id (ref. xwininfo)\n"
-msgstr ""
+msgstr "[--window <hex-window-id>] a hexadecimal window id (ref. xwininfo)\n"
 
 #: ../src/main.c:98
 #, c-format
 msgid ""
 "[--rescale #]    relative output size in percent compared to input (1-100)\n"
 msgstr ""
+"[--rescale #]    relative output size in percent compared to input (1-100)\n"
 
 #: ../src/main.c:99
 #, c-format
 msgid "[--quality #]    recording quality (1-100)\n"
-msgstr ""
+msgstr "[--quality #]    recording quality (1-100)\n"
 
 #: ../src/main.c:100
 #, c-format
 msgid "[--start_no #]   start number for the file names\n"
-msgstr ""
+msgstr "[--start_no #]   start number for the file names\n"
 
 #: ../src/main.c:102
 #, c-format
 msgid "[--source <src>] select input source: x11, shm\n"
-msgstr ""
+msgstr "[--source <src>] select input source: x11, shm\n"
 
 #: ../src/main.c:104
 #, c-format
 msgid "[--file <file>]  file pattern, e.g. out%%03d.xwd\n"
-msgstr ""
+msgstr "[--file <file>]  file pattern, e.g. out%%03d.xwd\n"
 
 #: ../src/main.c:105
 #, c-format
 msgid "[--gui [yes|no]] turn on/off gui\n"
-msgstr ""
+msgstr "[--gui [yes|no]] turn on/off gui\n"
 
 #: ../src/main.c:108
 #, c-format
 msgid "[--sf|--mf]      request single-frame or multi-frame capture mode\n"
-msgstr ""
+msgstr "[--sf|--mf]      request single-frame or multi-frame capture mode\n"
 
 #: ../src/main.c:112
 #, c-format
@@ -884,16 +888,18 @@ msgid ""
 "[--auto]         cause auto-detection of output format, video-, and audio "
 "codec\n"
 msgstr ""
+"[--auto]         cause auto-detection of output format, video-, and audio "
+"codec\n"
 
 #: ../src/main.c:114
 #, c-format
 msgid "[--codec <codec>] specify codec to use for multi-frame capture\n"
-msgstr ""
+msgstr "[--codec <codec>] specify codec to use for multi-frame capture\n"
 
 #: ../src/main.c:116
 #, c-format
 msgid "[--codec-help]   list available codecs for multi-frame capture\n"
-msgstr ""
+msgstr "[--codec-help]   list available codecs for multi-frame capture\n"
 
 #: ../src/main.c:118
 #, c-format
@@ -901,47 +907,50 @@ msgid ""
 "[--format <format>] specify file format to override the extension in the "
 "filename\n"
 msgstr ""
+"[--format <format>] specify file format to override the extension in the "
+"filename\n"
 
 #: ../src/main.c:119
 #, c-format
 msgid "[--format-help]  list available file formats\n"
-msgstr ""
+msgstr "[--format-help]  list available file formats\n"
 
 #: ../src/main.c:123
 #, c-format
 msgid ""
 "[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"
 msgstr ""
+"[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"
 
 #: ../src/main.c:125
 #, c-format
 msgid "[--aucodec-help] list available audio codecs for multi-frame capture\n"
-msgstr ""
+msgstr "[--aucodec-help] list available audio codecs for multi-frame capture\n"
 
 #: ../src/main.c:126
 #, c-format
 msgid "[--audio [yes|no]] turn on/off audio capture\n"
-msgstr ""
+msgstr "[--audio [yes|no]] turn on/off audio capture\n"
 
 #: ../src/main.c:129
 #, c-format
 msgid "[--audio_in <src>] specify audio input device or '-' for pipe input\n"
-msgstr ""
+msgstr "[--audio_in <src>] specify audio input device or '-' for pipe input\n"
 
 #: ../src/main.c:130
 #, c-format
 msgid "[--audio_rate #] sample rate for audio capture\n"
-msgstr ""
+msgstr "[--audio_rate #] sample rate for audio capture\n"
 
 #: ../src/main.c:131
 #, c-format
 msgid "[--audio_bits #] bit rate for audio capture\n"
-msgstr ""
+msgstr "[--audio_bits #] bit rate for audio capture\n"
 
 #: ../src/main.c:132
 #, c-format
 msgid "[--audio_channels #] number of audio channels\n"
-msgstr ""
+msgstr "[--audio_channels #] number of audio channels\n"
 
 #: ../src/main.c:135
 #, c-format
@@ -1072,12 +1081,12 @@ msgstr "每秒帧数= %.2f\n"
 #: ../src/main.c:887
 #, c-format
 msgid " file pattern = %s\n"
-msgstr "文件图案 = %s\n"
+msgstr "文件类型 = %s\n"
 
 #: ../src/main.c:888
 #, c-format
 msgid " file format = %s\n"
-msgstr "文件= %s\n"
+msgstr "文件格式= %s\n"
 
 #: ../src/main.c:891
 #, c-format
@@ -1355,6 +1364,8 @@ msgstr ""
 #, c-format
 msgid "# minimize the main control to the system tray while recording\n"
 msgstr ""
+"#当录制时主窗口最小化到系统托盘\n"
+"# minimize the main control to the system tray while recording\n"
 
 #: ../src/options.c:136
 #, c-format
@@ -1430,7 +1441,7 @@ msgstr ""
 #: ../src/options.c:208
 #, c-format
 msgid "sf_fps: %i/%i\n"
-msgstr ""
+msgstr "sf_fps: %i/%i\n"
 
 #: ../src/options.c:210
 #, c-format
@@ -1547,7 +1558,7 @@ msgstr ""
 #: ../src/options.c:293
 #, c-format
 msgid "mf_fps: %i/%i\n"
-msgstr ""
+msgstr "mf_fps: %i/%i\n"
 
 #: ../src/options.c:295
 #, c-format
@@ -1682,7 +1693,7 @@ msgstr ""
 "重置“总是显示结果”。\n"
 
 #: ../src/options.c:495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "reading unsupported minimize_to_tray value from options file\n"
 "resetting to not minimizing to tray.\n"
@@ -1903,6 +1914,8 @@ msgid ""
 "%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
 "i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
 msgstr ""
+"%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
+"i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
 
 #: ../src/xtoffmpeg.c:1749
 #, c-format
@@ -2177,7 +2190,7 @@ msgstr "编码命令:"
 
 #: ../src/gnome-xvidcap.glade.h:55
 msgid "Enter a target filename or pattern here."
-msgstr "在这填上对象文件名或样式（译者注：后辍名在这里很重要！）"
+msgstr "在这填上对象文件名或类型。"
 
 #: ../src/gnome-xvidcap.glade.h:56
 msgid "Enter an  audio device name here."
@@ -2278,7 +2291,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:80
 msgid "Minimize to System Tray"
-msgstr ""
+msgstr "最小化到系统托盘"
 
 #: ../src/gnome-xvidcap.glade.h:81
 msgid "Multi Frame Capture"
@@ -2318,7 +2331,7 @@ msgstr "品质:"
 
 #: ../src/gnome-xvidcap.glade.h:90
 msgid "Rasca, Karl H. Beckers"
-msgstr ""
+msgstr "Rasca, Karl H. Beckers"
 
 #: ../src/gnome-xvidcap.glade.h:91
 msgid "Rescale Output Percentage:"
@@ -2450,7 +2463,7 @@ msgstr "视频编码："
 
 #: ../src/gnome-xvidcap.glade.h:121
 msgid "XVidCap"
-msgstr ""
+msgstr "XVidCap"
 
 #: ../src/gnome-xvidcap.glade.h:122
 msgid ""
@@ -2472,7 +2485,7 @@ msgstr "生成视频(_M)"
 
 #: ../src/gnome-xvidcap.glade.h:127
 msgid "_Pause"
-msgstr ""
+msgstr "暂停(_P)"
 
 #: ../src/gnome-xvidcap.glade.h:128
 msgid "_Save Preferences"

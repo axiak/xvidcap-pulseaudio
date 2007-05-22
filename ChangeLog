@@ -1,4 +1,11 @@
 
+2007-05-22  lon  <lon83129@126.com>
+	* po/zh_CN.po: updated l10n
+
+2007-05-22  Vincenzo Reale <smart2128@baslug.org>
+	* doc/xvidcap/it/figures/prefs-general.png:
+		updated for current version
+
 2007-05-18  Vincenzo Reale <smart2128@baslug.org>
 	* doc: man/it/xvidcap.1-it.po, 
 		man/it/xvidcap.1.xml, man/it/xvidcap.1, 
