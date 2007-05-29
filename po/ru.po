@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the Xvidcap package.
 # <>, 2007.
 # , fuzzy
-#  <>, 2007.
+# <>, 2007.
 # 
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-22 19:37+0200\n"
-"PO-Revision-Date: 2007-05-22 01:59+0400\n"
+"POT-Creation-Date: 2007-05-29 20:52+0200\n"
+"PO-Revision-Date: 2007-05-26 21:59+0400\n"
 "Last-Translator: Alexander Kraev <alexander.kraev@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -680,7 +680,7 @@ msgid "ACTION:"
 msgstr "Действие:"
 
 #: ../src/codecs.c:100 ../src/codecs.c:251 ../src/codecs.c:463
-#: ../src/gnome_ui.c:771
+#: ../src/gnome_ui.c:756
 msgid "NONE"
 msgstr "NONE"
 
@@ -808,15 +808,15 @@ msgstr "MPEG2 PS Format"
 msgid "Quicktime Format"
 msgstr "Формат Quicktime"
 
-#: ../src/gnome_ui.c:1339 ../src/gnome_ui.c:1340
+#: ../src/gnome_ui.c:1324 ../src/gnome_ui.c:1325
 msgid "Move cursor back one frame"
 msgstr "Перейти к предыдущему кадру"
 
-#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
+#: ../src/gnome_ui.c:1334 ../src/gnome_ui.c:1335
 msgid "Move cursor to next frame"
 msgstr "Перейти к следующему кадру"
 
-#: ../src/gnome_ui.c:1357 ../src/gnome_ui.c:1359
+#: ../src/gnome_ui.c:1342 ../src/gnome_ui.c:1344
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -824,23 +824,23 @@ msgstr ""
 "Левая клавиша мыши: обнулить счетчик кадров и имя файла\n"
 "Правая клавиша мыши: всплывающие меню"
 
-#: ../src/gnome_ui.c:1364 ../src/gnome_ui.c:1365
+#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
 msgid "Edit current individual frame"
 msgstr "Редактировать текущий кадр"
 
-#: ../src/gnome_ui.c:1370 ../src/gnome_ui.c:1371
+#: ../src/gnome_ui.c:1355 ../src/gnome_ui.c:1356
 msgid "Capture single frame"
 msgstr "Захват одного кадра"
 
-#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
+#: ../src/gnome_ui.c:1380 ../src/gnome_ui.c:1381
 msgid "Move cursor to previous movie"
 msgstr "Перейти к предыдущему видео"
 
-#: ../src/gnome_ui.c:1398 ../src/gnome_ui.c:1399
+#: ../src/gnome_ui.c:1383 ../src/gnome_ui.c:1384
 msgid "Move cursor to next movie"
 msgstr "Перейти к следующему видео"
 
-#: ../src/gnome_ui.c:1403 ../src/gnome_ui.c:1405
+#: ../src/gnome_ui.c:1388 ../src/gnome_ui.c:1390
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -848,16 +848,16 @@ msgstr ""
 "Левая клавиша мыши: обнулить счетчик видео\n"
 "Правая клавиша мыши: всплывающие меню"
 
-#: ../src/gnome_ui.c:1410 ../src/gnome_ui.c:1411
+#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
 msgid "Edit current movie"
 msgstr "Редактировать текущее видео"
 
-#: ../src/gnome_ui.c:2724 ../src/gnome_ui.c:2725
+#: ../src/gnome_ui.c:2688 ../src/gnome_ui.c:2689
 #: ../src/gnome-xvidcap.glade.h:47
 msgid "Detach selection frame"
 msgstr "Отсоединить область для захвата"
 
-#: ../src/gnome_ui.c:2748 ../src/gnome_ui.c:2749
+#: ../src/gnome_ui.c:2712 ../src/gnome_ui.c:2713
 msgid "Attach selection frame"
 msgstr "Присоединить область для захвата"
 
@@ -1609,7 +1609,7 @@ msgstr "# audio codec used by ffmpeg - use AUTO to auto-detect audio codec\n"
 #: ../src/options.c:293
 #, c-format
 msgid "mf_fps: %i/%i\n"
-msgstr ""
+msgstr "mf_fps: %i/%i\n"
 
 #: ../src/options.c:295
 #, c-format
@@ -1617,6 +1617,8 @@ msgid ""
 "# max time (0 = unlimited)\n"
 "mf_max_time: %i\n"
 msgstr ""
+"# максимальное время (0 = без ограничений)\n"
+"mf_max_time: %i\n"
 
 #: ../src/options.c:297
 #, c-format
@@ -1624,11 +1626,14 @@ msgid ""
 "# max frames (0 = unlimited)\n"
 "mf_max_frames: %d\n"
 msgstr ""
+"# максимальное количество кадров (0 = без ограничений)\n"
+"mf_max_frames: %d\n"
 
 #: ../src/options.c:301
 #, c-format
 msgid "# number to start counting individual frames from (for future use)\n"
 msgstr ""
+"# начальное значение отсчета отдельных кадров (для будущего использования)\n"
 
 #: ../src/options.c:303
 #, c-format
@@ -1636,6 +1641,8 @@ msgid ""
 "# quality (JPEG/MPEG)\n"
 "mf_quality: %d\n"
 msgstr ""
+"# качество (JPEG/MPEG)\n"
+"mf_quality: %d\n"
 
 #: ../src/options.c:306
 #, c-format
@@ -1643,6 +1650,8 @@ msgid ""
 "# toggle audio capture (0/1)\n"
 "mf_audio: %i\n"
 msgstr ""
+"# включить аудиозапись (0/1)\n"
+"mf_audio: %i\n"
 
 #: ../src/options.c:308
 #, c-format
@@ -1650,6 +1659,8 @@ msgid ""
 "# sample rate for audio capture\n"
 "mf_audio_rate: %i\n"
 msgstr ""
+"# частота дискретизации для аудиозаписи\n"
+"mf_audio_rate: %i\n"
 
 #: ../src/options.c:310
 #, c-format
@@ -1657,21 +1668,23 @@ msgid ""
 "# bit rate for audio capture\n"
 "mf_audio_bits: %i\n"
 msgstr ""
+"# битрейт для аудиозаписи\n"
+"mf_audio_bits: %i\n"
 
 #: ../src/options.c:312
 #, c-format
 msgid "# number of channels to use in audio capture\n"
-msgstr ""
+msgstr "# количество каналов для использования в аудиозаписи\n"
 
 #: ../src/options.c:317
 #, c-format
 msgid "# command to edit current movie\n"
-msgstr ""
+msgstr "# команда для редактирования видео\n"
 
 #: ../src/options.c:320
 #, c-format
 msgid "# command to encode captured frames (subject to change)\n"
-msgstr ""
+msgstr "# команда кодирования записанных кадров (тема для изменений)\n"
 
 #: ../src/options.c:423
 #, c-format
@@ -1679,6 +1692,8 @@ msgid ""
 "reading unsupported GUI preferences from options file\n"
 "resetting to GUI not hidden\n"
 msgstr ""
+"чтение не поддерживаемых параметров интерфейса из файла настроек\n"
+"восстановление к режиму показа графического интерфейса\n"
 
 #: ../src/options.c:443
 #, c-format
@@ -1686,6 +1701,8 @@ msgid ""
 "reading unsupported save_geometry preferences from options file\n"
 "resetting to capture geometry not saved\n"
 msgstr ""
+"чтение не поддерживаемых параметров save_geometry из файла настроек\n"
+"восстановление геометрии записи не сохранено\n"
 
 #: ../src/options.c:459
 #, c-format
@@ -1693,6 +1710,8 @@ msgid ""
 "reading unsupported show_time value from options file\n"
 "resetting to display frame counter\n"
 msgstr ""
+"чтение не поддерживаемого параметра show_time из файла настроек\n"
+"восстановление счетчика кадров на дисплее\n"
 
 #: ../src/options.c:470
 #, c-format
@@ -1700,6 +1719,8 @@ msgid ""
 "reading unsupported auto_continue value from options file\n"
 "resetting to autocontinue enabled.\n"
 msgstr ""
+"чтение не поддерживаемого значения auto_continue из файла настроек\n"
+"восстановление к режиму включенного автоматическому продолжение\n"
 
 #: ../src/options.c:481
 #, c-format
@@ -1707,13 +1728,17 @@ msgid ""
 "reading unsupported always_show_results value from options file\n"
 "resetting to always show results.\n"
 msgstr ""
+"чтение не поддерживаемого параметра always_show_results из файла настроек\n"
+"восстановление к всегда отображать результаты\n"
 
 #: ../src/options.c:495
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "reading unsupported minimize_to_tray value from options file\n"
 "resetting to not minimizing to tray.\n"
 msgstr ""
+"чтение не поддерживаемого значения auto_continue из файла настроек\n"
+"восстановление к режиму включенного автоматическому продолжение\n"
 
 #: ../src/options.c:586
 #, c-format
@@ -1721,6 +1746,8 @@ msgid ""
 "reading unsupported target from options file\n"
 "resetting to target auto-detection\n"
 msgstr ""
+"чтение не поддерживаемой цели из файла настроек\n"
+"восстановление к автоматическому определению цели\n"
 
 #: ../src/options.c:603
 #, c-format
@@ -1728,6 +1755,8 @@ msgid ""
 "reading unsupported target codec (%i) from options file\n"
 "resetting to codec auto-detection\n"
 msgstr ""
+"чтение не поддерживаемого кодека (%i) из файла настроек\n"
+"восстановление к автоматическому определению кодека\n"
 
 #: ../src/options.c:622
 #, c-format
@@ -1735,121 +1764,126 @@ msgid ""
 "reading unsupported target audio codec (%i) from options file\n"
 "resetting to audio codec auto-detection\n"
 msgstr ""
+"чтение не поддерживаемого аудио кодека (%i) из файла настроек\n"
+"восстановление к режиму автоматического определения аудио кодека\n"
 
 #: ../src/options.c:657
 #, c-format
 msgid "Invalid parameter 'audio: %s' in preferences file\n"
-msgstr ""
+msgstr "Некорректный параметр 'аудио: %s' в файле настроек\n"
 
 #: ../src/options.c:661
 #, c-format
 msgid "Disabling audio capture unless overridden by command line\n"
-msgstr ""
+msgstr "Отключить аудиозапись до переопределения командной строкой\n"
 
 #: ../src/xtoffmpeg.c:330
 #, c-format
 msgid "%s %s: error opening input file %s: %i\n"
-msgstr ""
+msgstr "%s %s: ошибка открытия файла %s: %i\n"
 
 #: ../src/xtoffmpeg.c:337
 #, c-format
 msgid "%s %s: Could not alloc input stream ... aborting\n"
 msgstr ""
+"%s %s: Не возможно разместить входящий поток ... завершение программы\n"
 
 #: ../src/xtoffmpeg.c:347
 #, c-format
 msgid "%s %s: could not find codec parameters\n"
-msgstr ""
+msgstr "%s %s: не возможно найти параметры кодека\n"
 
 #: ../src/xtoffmpeg.c:369
 #, c-format
 msgid "%s %s: could not allocate audio output codec context\n"
-msgstr ""
+msgstr "%s %s: не возможно разместить контекста кодека аудио выхода\n"
 
 #: ../src/xtoffmpeg.c:389
 #, c-format
 msgid "%s %s: Could not alloc stream ... aborting\n"
-msgstr ""
+msgstr "%s %s: Не возможно разместить поток ... завершение программы\n"
 
 #: ../src/xtoffmpeg.c:399
 #, c-format
 msgid "%s %s: Could not alloc stream\n"
-msgstr ""
+msgstr "%s %s: Не возможно разместить поток\n"
 
 #: ../src/xtoffmpeg.c:411
 #, c-format
 msgid "%s %s: Can't initialize fifo for audio recording\n"
-msgstr ""
+msgstr "%s %s: Не возможно инициализировать FIFO для аудиозаписи \n"
 
 #: ../src/xtoffmpeg.c:449 ../src/xtoffmpeg.c:468
 #, c-format
 msgid "%s %s: Can't resample. Aborting.\n"
-msgstr ""
+msgstr "%s %s: Не возможно дискретизировать. Завершение.\n"
 
 #: ../src/xtoffmpeg.c:485
 #, c-format
 msgid "%s %s: Error while opening codec for output stream\n"
-msgstr ""
+msgstr "%s %s: Ошибка открытия кодека для выходящего потока\n"
 
 #: ../src/xtoffmpeg.c:497
 #, c-format
 msgid "%s %s: Unsupported codec (id=%d) for input stream\n"
-msgstr ""
+msgstr "%s %s: Не поддерживаемый кодек (id=%d) для входящего потока\n"
 
 #: ../src/xtoffmpeg.c:507
 #, c-format
 msgid "%s %s: Error while opening codec for input stream\n"
-msgstr ""
+msgstr "%s %s: Ошибка открытия кодека для входящего потока\n"
 
 #: ../src/xtoffmpeg.c:593
 #, c-format
 msgid "%s %s: Error while writing audio frame\n"
-msgstr ""
+msgstr "%s %s: Ошибка записи аудио кадра\n"
 
 #: ../src/xtoffmpeg.c:602
 #, c-format
 msgid "%s %s: Couldn't unlock mutex lock for writing audio frame\n"
 msgstr ""
+"%s %s: Не получилось разблокировать блокировку семафора для записи аудио "
+"кадра \n"
 
 #: ../src/xtoffmpeg.c:784
 #, c-format
 msgid "%s %s: error reading audio packet\n"
-msgstr ""
+msgstr "%s %s: ошибка чтения аудио пакета\n"
 
 #: ../src/xtoffmpeg.c:807
 #, c-format
 msgid "%s %s: couldn't decode captured audio packet\n"
-msgstr ""
+msgstr "%s %s: не получилось декодировать записанные аудио пакеты\n"
 
 #: ../src/xtoffmpeg.c:818
 #, c-format
 msgid "%s %s: no audio frame\n"
-msgstr ""
+msgstr "%s %s: нет аудио кадра\n"
 
 #: ../src/xtoffmpeg.c:850
 #, c-format
 msgid "error reading audio packet\n"
-msgstr ""
+msgstr "ошибка чтения аудио пакета\n"
 
 #: ../src/xtoffmpeg.c:853
 #, c-format
 msgid "%s %s: dropping audio frame %f %f\n"
-msgstr ""
+msgstr "%s %s: прерывистый аудио кадр %f %f\n"
 
 #: ../src/xtoffmpeg.c:926
 #, c-format
 msgid "%s %s: Error while writing video frame\n"
-msgstr ""
+msgstr "%s %s: Ошибка записи видел кадра\n"
 
 #: ../src/xtoffmpeg.c:1164
 #, c-format
 msgid "%s %s: Could not alloc output stream\n"
-msgstr ""
+msgstr "%s %s: Не получилось разместить выходящий поток\n"
 
 #: ../src/xtoffmpeg.c:1180
 #, c-format
 msgid "%s %s: video codec not found\n"
-msgstr ""
+msgstr "%s %s: видео кодек не найден\n"
 
 #: ../src/xtoffmpeg.c:1238
 #, c-format
@@ -1857,57 +1891,66 @@ msgid ""
 "%s %s: The picture format you are grabbing (%i) is not supported by "
 "libswscale ... aborting\n"
 msgstr ""
+"%s %s: Формат изображения, который вы записываете (%i) не поддерживается "
+"libswscale ... завершение\n"
 
 #: ../src/xtoffmpeg.c:1318 ../src/xtoffmpeg.c:1338
 #, c-format
 msgid "%s %s: rgb ordering at image depth %i not supported ... aborting\n"
 msgstr ""
+"%s %s: размещение RGB в качестве изображения %i не поддерживается ... "
+"завершение\n"
 
 #: ../src/xtoffmpeg.c:1359 ../src/xtoffmpeg.c:1366
 #, c-format
 msgid "%s %s: image depth %i not supported ... aborting\n"
-msgstr ""
+msgstr "%s %s: глубина изображение %i не поддерживается ... завершение\n"
 
 #: ../src/xtoffmpeg.c:1458
 #, c-format
 msgid "%s %s: Couldn't determin output format ... aborting\n"
-msgstr ""
+msgstr "%s %s: Не получилось определить выходной формат ... заверщение\n"
 
 #: ../src/xtoffmpeg.c:1478
 #, c-format
 msgid "%s %s: Error allocating memory for format context ... aborting\n"
-msgstr ""
+msgstr "%s %s: Ошибка размещения памяти для формата контекста ... завершение\n"
 
 #: ../src/xtoffmpeg.c:1490
 #, c-format
 msgid "%s %s: Error allocating private data for format context ... aborting\n"
 msgstr ""
+"%s %s: Ошибка размещение приватных данных для формата контекста ... "
+"завершение\n"
 
 #: ../src/xtoffmpeg.c:1520
 #, c-format
 msgid "%s %s: Invalid encoding parameters ... aborting\n"
-msgstr ""
+msgstr "%s %s: Некорректные параметры кодирования ... завершение\n"
 
 #: ../src/xtoffmpeg.c:1526
 #, c-format
 msgid "%s %s: could not open video codec\n"
-msgstr ""
+msgstr "%s %s: не получилось открыть видео кодек\n"
 
 #: ../src/xtoffmpeg.c:1592
 #, c-format
 msgid "%s %s: Could not allocate buffer for output frame! ... aborting\n"
 msgstr ""
+"%s %s: Не получилось выделить буфер для выходящего кадра! ... завершение\n"
 
 #: ../src/xtoffmpeg.c:1611
 #, c-format
 msgid ""
 "%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"
 msgstr ""
+"%s %s: Не получилось выделить буфер для кодирования кадра (outbuf)! ... "
+"завершение\n"
 
 #: ../src/xtoffmpeg.c:1640 ../src/xtoffmpeg.c:1688
 #, c-format
 msgid "%s %s: Could not open '%s' ... aborting\n"
-msgstr ""
+msgstr "%s %s: Не получилось открыть '%s' ... завершение\n"
 
 #: ../src/xtoffmpeg.c:1649 ../src/xtoffmpeg.c:1697
 #, c-format
@@ -1915,6 +1958,8 @@ msgid ""
 "%s %s: Could not write header for output file (incorrect codec "
 "paramters ?) ... aborting\n"
 msgstr ""
+"%s %s: Не получилось записать заголовок для выходящего файла (возможно "
+"некорректные параметры?) ... завершение\n"
 
 #: ../src/xtoffmpeg.c:1727
 #, c-format
@@ -1922,21 +1967,27 @@ msgid ""
 "%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
 "i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
 msgstr ""
+"%s %s: ошибка конвертирования или дискретизирования кадра: context %p, "
+"iwidth %i, iheight %i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
 
 #: ../src/xtoffmpeg.c:1749
 #, c-format
 msgid "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"
-msgstr ""
+msgstr "%s %s: ошибка кодирования кадра: c %p, outbuf %p, размер %i, кадр %p\n"
 
 #: ../src/xtoffmpeg.c:1759
 #, c-format
 msgid "mutex lock for writing video frame failed ... aborting\n"
 msgstr ""
+"закрытие семафора для записываемого видео кадра прошло неудачно ... "
+"завершение\n"
 
 #: ../src/xtoffmpeg.c:1783
 #, c-format
 msgid "couldn't release the mutex for writing video frame ... aborting\n"
 msgstr ""
+"не получилось освободить семафор для записываемого видео кадра ... "
+"завершение\n"
 
 #: ../src/xv_error_item.c:142 ../src/xv_error_item.c:264
 #, c-format
@@ -1960,12 +2011,12 @@ msgstr "Предупреждение (%i):"
 #: ../src/xv_error_item.c:151 ../src/xv_error_item.c:282
 #, c-format
 msgid "INFO (%i):"
-msgstr ""
+msgstr "Информация (%i):"
 
 #: ../src/xv_error_item.c:154
 #, c-format
 msgid "???? (%i):"
-msgstr ""
+msgstr "???? (%i):"
 
 #: ../src/xv_error_item.c:189
 msgid "Details:"
@@ -2109,11 +2160,11 @@ msgstr "Захватывать курсор мыши"
 
 #: ../src/gnome-xvidcap.glade.h:34
 msgid "Capture the Mouse Pointer as a black arrow."
-msgstr ""
+msgstr "Запись указателя мыши в режиме черного курсора."
 
 #: ../src/gnome-xvidcap.glade.h:35
 msgid "Capture the Mouse Pointer as a white arrow."
-msgstr ""
+msgstr "Запись указателя мыши в режиме белого курсора."
 
 #: ../src/gnome-xvidcap.glade.h:36
 msgid "Channels"
@@ -2209,7 +2260,7 @@ msgstr "Введите имя файла или шаблон."
 
 #: ../src/gnome-xvidcap.glade.h:56
 msgid "Enter an  audio device name here."
-msgstr ""
+msgstr "Введите здесь имя аудио устройства."
 
 #: ../src/gnome-xvidcap.glade.h:57
 msgid "Enter the command to be executed for editing the current frame."
@@ -2316,7 +2367,7 @@ msgstr "Серийный"
 
 #: ../src/gnome-xvidcap.glade.h:83
 msgid "Open the preferences dialog to revisit your settings"
-msgstr ""
+msgstr "Откройте окно параметров для проверки ваших настроек"
 
 #: ../src/gnome-xvidcap.glade.h:84
 msgid "Pause recording"
@@ -2432,7 +2483,7 @@ msgstr "Остановить запись"
 
 #: ../src/gnome-xvidcap.glade.h:112
 msgid "Toggle audio capture on/off."
-msgstr ""
+msgstr "Включить или выключить аудиозапись."
 
 #: ../src/gnome-xvidcap.glade.h:113
 msgid "Transcoding Command:"

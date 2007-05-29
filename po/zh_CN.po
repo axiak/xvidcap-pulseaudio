@@ -1,4 +1,4 @@
-# translation of zh_CN.po to Chinese Simplified
+# translation of zh_CN.po to LONCHINA
 # translation of zh_CN.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-22 19:32+0200\n"
-"PO-Revision-Date: 2007-05-21 14:06+0800\n"
+"POT-Creation-Date: 2007-05-29 20:52+0200\n"
+"PO-Revision-Date: 2007-05-27 22:58+0800\n"
 "Last-Translator: lon <lon83129@126.com>\n"
 "Language-Team: Chinese Simplified <xvidcap-l10n@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -597,7 +597,7 @@ msgid "ACTION:"
 msgstr "动作:"
 
 #: ../src/codecs.c:100 ../src/codecs.c:251 ../src/codecs.c:463
-#: ../src/gnome_ui.c:771
+#: ../src/gnome_ui.c:756
 msgid "NONE"
 msgstr "NONE"
 
@@ -725,15 +725,15 @@ msgstr "MPEG2 PS Format"
 msgid "Quicktime Format"
 msgstr "Quicktime Format"
 
-#: ../src/gnome_ui.c:1339 ../src/gnome_ui.c:1340
+#: ../src/gnome_ui.c:1324 ../src/gnome_ui.c:1325
 msgid "Move cursor back one frame"
 msgstr "移动光标到任一帧后面"
 
-#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
+#: ../src/gnome_ui.c:1334 ../src/gnome_ui.c:1335
 msgid "Move cursor to next frame"
 msgstr "移动光标到下一帧"
 
-#: ../src/gnome_ui.c:1357 ../src/gnome_ui.c:1359
+#: ../src/gnome_ui.c:1342 ../src/gnome_ui.c:1344
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -741,23 +741,23 @@ msgstr ""
 "左击：重置抓取帧和文件名\n"
 "右击：弹出菜单"
 
-#: ../src/gnome_ui.c:1364 ../src/gnome_ui.c:1365
+#: ../src/gnome_ui.c:1349 ../src/gnome_ui.c:1350
 msgid "Edit current individual frame"
 msgstr "编辑当前单独帧"
 
-#: ../src/gnome_ui.c:1370 ../src/gnome_ui.c:1371
+#: ../src/gnome_ui.c:1355 ../src/gnome_ui.c:1356
 msgid "Capture single frame"
 msgstr "抓取单一帧"
 
-#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
+#: ../src/gnome_ui.c:1380 ../src/gnome_ui.c:1381
 msgid "Move cursor to previous movie"
 msgstr "移动计算尺到上一影片"
 
-#: ../src/gnome_ui.c:1398 ../src/gnome_ui.c:1399
+#: ../src/gnome_ui.c:1383 ../src/gnome_ui.c:1384
 msgid "Move cursor to next movie"
 msgstr "移动光标到下一影片"
 
-#: ../src/gnome_ui.c:1403 ../src/gnome_ui.c:1405
+#: ../src/gnome_ui.c:1388 ../src/gnome_ui.c:1390
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -765,16 +765,16 @@ msgstr ""
 "左击：影片计数清零\n"
 "右击：弹出菜单"
 
-#: ../src/gnome_ui.c:1410 ../src/gnome_ui.c:1411
+#: ../src/gnome_ui.c:1395 ../src/gnome_ui.c:1396
 msgid "Edit current movie"
 msgstr "编辑当前影片"
 
-#: ../src/gnome_ui.c:2724 ../src/gnome_ui.c:2725
+#: ../src/gnome_ui.c:2688 ../src/gnome_ui.c:2689
 #: ../src/gnome-xvidcap.glade.h:47
 msgid "Detach selection frame"
 msgstr "分离区域选择框"
 
-#: ../src/gnome_ui.c:2748 ../src/gnome_ui.c:2749
+#: ../src/gnome_ui.c:2712 ../src/gnome_ui.c:2713
 msgid "Attach selection frame"
 msgstr "合并区域选择框"
 
@@ -802,155 +802,146 @@ msgstr "访问声音输入错误%s\n"
 msgid ""
 "Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
 msgstr ""
-"使用: %s, 版本 %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+"Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
 
 #: ../src/main.c:87
 #, c-format
 msgid ""
 "[--fps #.#]      frames per second (float) or a fraction string like "
 "\"30000/1001\"\n"
-msgstr ""
-"[--fps #.#]      frames per second (float) or a fraction string like "
-"\"30000/1001\"\n"
+msgstr "[--fps #.#]      每秒帧数(浮动)或分数串,象 \"30000/1001\"\n"
 
 #: ../src/main.c:88
 #, c-format
 msgid "[--verbose #]    verbose level, '-v' is --verbose 1\n"
-msgstr "[--verbose #]    verbose level, '-v' is --verbose 1\n"
+msgstr "[--verbose #]    详细级别, '-v' 为 --verbose 1\n"
 
 #: ../src/main.c:89
 #, c-format
 msgid "[--time #.#]     time to record in seconds (float)\n"
-msgstr "[--time #.#]     time to record in seconds (float)\n"
+msgstr "[--time #.#]     记录时间按秒计算(浮动)\n"
 
 #: ../src/main.c:90
 #, c-format
 msgid "[--frames #]     frames to record, don't use it with --time\n"
-msgstr "[--frames #]     frames to record, don't use it with --time\n"
+msgstr "[--frames #]     按帧记录, 不要与 \"--time\" 同用\n"
 
 #: ../src/main.c:92
 #, c-format
 msgid "[--continue [yes|no]] autocontinue after maximum frames/time\n"
-msgstr "[--continue [yes|no]] autocontinue after maximum frames/time\n"
+msgstr "[--continue [yes|no]] 在最大帧/时间后自动继续\n"
 
 #: ../src/main.c:94
 #, c-format
 msgid ""
 "[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"
-msgstr ""
-"[--cap_geometry #x#[+#+#]] size of the capture window (WIDTHxHEIGHT+X+Y)\n"
+msgstr "[--cap_geometry #x#[+#+#]] 抓取窗口的大小和位置 (宽x高+X坐标+Y坐标)\n"
 
 #: ../src/main.c:96
 #, c-format
 msgid "[--window <hex-window-id>] a hexadecimal window id (ref. xwininfo)\n"
-msgstr "[--window <hex-window-id>] a hexadecimal window id (ref. xwininfo)\n"
+msgstr "[--window <hex-window-id>] 一个十六进制的窗口ID (参考 xwininfo)\n"
 
 #: ../src/main.c:98
 #, c-format
 msgid ""
 "[--rescale #]    relative output size in percent compared to input (1-100)\n"
-msgstr ""
-"[--rescale #]    relative output size in percent compared to input (1-100)\n"
+msgstr "[--rescale #]    关于输出大小相对输入大小的百分比 (1-100)\n"
 
 #: ../src/main.c:99
 #, c-format
 msgid "[--quality #]    recording quality (1-100)\n"
-msgstr "[--quality #]    recording quality (1-100)\n"
+msgstr "[--quality #]    记录的品质 (1-100)\n"
 
 #: ../src/main.c:100
 #, c-format
 msgid "[--start_no #]   start number for the file names\n"
-msgstr "[--start_no #]   start number for the file names\n"
+msgstr "[--start_no #]   此文件名帧开始的数字\n"
 
 #: ../src/main.c:102
 #, c-format
 msgid "[--source <src>] select input source: x11, shm\n"
-msgstr "[--source <src>] select input source: x11, shm\n"
+msgstr "[--source <src>] 选择输入源为: x11, shm\n"
 
 #: ../src/main.c:104
 #, c-format
 msgid "[--file <file>]  file pattern, e.g. out%%03d.xwd\n"
-msgstr "[--file <file>]  file pattern, e.g. out%%03d.xwd\n"
+msgstr "[--file <file>]  文件式样, 例如 out%%03d.xwd\n"
 
 #: ../src/main.c:105
 #, c-format
 msgid "[--gui [yes|no]] turn on/off gui\n"
-msgstr "[--gui [yes|no]] turn on/off gui\n"
+msgstr "[--gui [yes|no]] 使用图形前端 开/关\n"
 
 #: ../src/main.c:108
 #, c-format
 msgid "[--sf|--mf]      request single-frame or multi-frame capture mode\n"
-msgstr "[--sf|--mf]      request single-frame or multi-frame capture mode\n"
+msgstr "[--sf|--mf]      请求单帧或多帧抓取模式\n"
 
 #: ../src/main.c:112
 #, c-format
 msgid ""
 "[--auto]         cause auto-detection of output format, video-, and audio "
 "codec\n"
-msgstr ""
-"[--auto]         cause auto-detection of output format, video-, and audio "
-"codec\n"
+msgstr "[--auto]         自动检测输出格式,决定音频和视频编码\n"
 
 #: ../src/main.c:114
 #, c-format
 msgid "[--codec <codec>] specify codec to use for multi-frame capture\n"
-msgstr "[--codec <codec>] specify codec to use for multi-frame capture\n"
+msgstr "[--codec <codec>] 指定多帧抓取中使用的编码\n"
 
 #: ../src/main.c:116
 #, c-format
 msgid "[--codec-help]   list available codecs for multi-frame capture\n"
-msgstr "[--codec-help]   list available codecs for multi-frame capture\n"
+msgstr "[--codec-help]   列出多帧抓取中可用的编码\n"
 
 #: ../src/main.c:118
 #, c-format
 msgid ""
 "[--format <format>] specify file format to override the extension in the "
 "filename\n"
-msgstr ""
-"[--format <format>] specify file format to override the extension in the "
-"filename\n"
+msgstr "[--format <format>] 指定文件格式而无视文件的扩展名\n"
 
 #: ../src/main.c:119
 #, c-format
 msgid "[--format-help]  list available file formats\n"
-msgstr "[--format-help]  list available file formats\n"
+msgstr "[--format-help]  列出可用的文件格式\n"
 
 #: ../src/main.c:123
 #, c-format
 msgid ""
 "[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"
-msgstr ""
-"[--aucodec <codec>] specify audio codec to use for multi-frame capture\n"
+msgstr "[--aucodec <codec>] 指定多帧抓取中使用的音频编码\n"
 
 #: ../src/main.c:125
 #, c-format
 msgid "[--aucodec-help] list available audio codecs for multi-frame capture\n"
-msgstr "[--aucodec-help] list available audio codecs for multi-frame capture\n"
+msgstr "[--aucodec-help] 列出多帧抓取中可用的音频编码\n"
 
 #: ../src/main.c:126
 #, c-format
 msgid "[--audio [yes|no]] turn on/off audio capture\n"
-msgstr "[--audio [yes|no]] turn on/off audio capture\n"
+msgstr "[--audio [yes|no]] 打开/关闭音频抓取\n"
 
 #: ../src/main.c:129
 #, c-format
 msgid "[--audio_in <src>] specify audio input device or '-' for pipe input\n"
-msgstr "[--audio_in <src>] specify audio input device or '-' for pipe input\n"
+msgstr "[--audio_in <src>] 指定音频输入设备或 '-' 管道输入\n"
 
 #: ../src/main.c:130
 #, c-format
 msgid "[--audio_rate #] sample rate for audio capture\n"
-msgstr "[--audio_rate #] sample rate for audio capture\n"
+msgstr "[--audio_rate #] 音频抓取的取样速率\n"
 
 #: ../src/main.c:131
 #, c-format
 msgid "[--audio_bits #] bit rate for audio capture\n"
-msgstr "[--audio_bits #] bit rate for audio capture\n"
+msgstr "[--audio_bits #] 音频抓取的位速率\n"
 
 #: ../src/main.c:132
 #, c-format
 msgid "[--audio_channels #] number of audio channels\n"
-msgstr "[--audio_channels #] number of audio channels\n"
+msgstr "[--audio_channels #] 音频通道的个数\n"
 
 #: ../src/main.c:135
 #, c-format
@@ -1071,7 +1062,7 @@ msgstr "位置= %ix%i"
 #: ../src/main.c:884
 #, c-format
 msgid " rescale output to = %i\n"
-msgstr "重新调节输出文件= %i\n"
+msgstr "重新调节输出= %i\n"
 
 #: ../src/main.c:885
 #, c-format
@@ -1081,7 +1072,7 @@ msgstr "每秒帧数= %.2f\n"
 #: ../src/main.c:887
 #, c-format
 msgid " file pattern = %s\n"
-msgstr "文件类型 = %s\n"
+msgstr "文件式样 = %s\n"
 
 #: ../src/main.c:888
 #, c-format
@@ -1101,7 +1092,7 @@ msgstr "音频编码= %s\n"
 #: ../src/main.c:900
 #, c-format
 msgid " verbose level = %d\n"
-msgstr "详细标准= %d\n"
+msgstr "详细级别= %d\n"
 
 #: ../src/main.c:901
 #, c-format
@@ -1312,7 +1303,7 @@ msgid ""
 "# should cap_geometry be saved to prefs?\n"
 "save_geometry: %d\n"
 msgstr ""
-"# 将抓取区域的几何形状参数保存到设置中?\n"
+"# 将抓取区域的位置参数保存到设置中?\n"
 "# should cap_geometry be saved to prefs?\n"
 "save_geometry: %d\n"
 
@@ -1320,7 +1311,7 @@ msgstr ""
 #, c-format
 msgid "# area to capture as in --capture_geometry\n"
 msgstr ""
-"# 抓取区域同--抓取几何形状\n"
+"# 抓取区域参数在--抓取位置\n"
 "# area to capture as in --capture_geometry\n"
 
 #: ../src/options.c:119
@@ -1383,7 +1374,7 @@ msgid ""
 "# file pattern\n"
 "# this defines the filetype to write via the extension provided\n"
 msgstr ""
-"# 文件类型\n"
+"# 文件式样\n"
 "# file pattern\n"
 "# 在这里通过文件扩展名来定义文件类型\n"
 "# this defines the filetype to write via the extension provided\n"
@@ -1662,7 +1653,7 @@ msgid ""
 "reading unsupported save_geometry preferences from options file\n"
 "resetting to capture geometry not saved\n"
 msgstr ""
-"读出不支持的“保存几何形状”参数，来自于配置文件\n"
+"读出不支持的“位置”参数，来自于配置文件\n"
 "重置抓取形状不保存。\n"
 
 #: ../src/options.c:459
@@ -2190,7 +2181,7 @@ msgstr "编码命令:"
 
 #: ../src/gnome-xvidcap.glade.h:55
 msgid "Enter a target filename or pattern here."
-msgstr "在这填上对象文件名或类型。"
+msgstr "在这填上对象文件名或式样。"
 
 #: ../src/gnome-xvidcap.glade.h:56
 msgid "Enter an  audio device name here."
@@ -2351,7 +2342,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:95
 msgid "Save Capture _Geometry"
-msgstr "保存抓取几何形状(_G)"
+msgstr "保存抓取位置(_G)"
 
 #: ../src/gnome-xvidcap.glade.h:96
 msgid "Save size and position of the Capture Area to the preferences file."
