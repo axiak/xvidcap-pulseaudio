@@ -18,6 +18,8 @@
 		avoid that the main menu has both sf
 		and mf radio menu items selected on
 		startup
+	* debian/control: adding libogg/dev and
+		libtheora/dev to dependencies
 
 2007-05-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* version bump
