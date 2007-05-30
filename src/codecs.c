@@ -385,7 +385,7 @@ static const XVC_CodecID allowed_vid_codecs_swf[] = { CODEC_FLV, CODEC_MJPEG };
 #define len_allowed_vid_codecs_swf (sizeof(allowed_vid_codecs_swf) / \
     sizeof(XVC_CodecID))
 
-static const XVC_CodecID allowed_vid_codecs_dv[] = { CODEC_DV };
+static const XVC_CodecID allowed_vid_codecs_dv[] = { CODEC_DV, CODEC_MJPEG };
 
 #define len_allowed_vid_codecs_dv (sizeof(allowed_vid_codecs_dv) / \
     sizeof(XVC_CodecID))

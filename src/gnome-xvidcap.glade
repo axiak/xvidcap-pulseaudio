@@ -316,7 +316,7 @@
       <signal name="activate" handler="on_xvc_ctrl_m1_mitem_save_preferences_activate" last_modification_time="Wed, 08 Mar 2006 16:05:08 GMT"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image2">
+	<widget class="GtkImage" id="image3">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-floppy</property>
 	  <property name="icon_size">1</property>
@@ -340,7 +340,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">Multi Frame Capture</property>
       <property name="use_underline">True</property>
-      <property name="active">True</property>
+      <property name="active">False</property>
       <signal name="activate" handler="on_xvc_ctrl_m1_mitem_mf_capture_activate" last_modification_time="Wed, 08 Mar 2006 16:05:08 GMT"/>
     </widget>
   </child>
@@ -350,7 +350,7 @@
       <property name="visible">True</property>
       <property name="label" translatable="yes">Single Frame Capture</property>
       <property name="use_underline">True</property>
-      <property name="active">True</property>
+      <property name="active">False</property>
       <property name="group">xvc_ctrl_m1_mitem_mf_capture</property>
       <signal name="activate" handler="on_xvc_ctrl_m1_mitem_sf_capture_activate" last_modification_time="Wed, 08 Mar 2006 16:05:08 GMT"/>
     </widget>
@@ -381,7 +381,7 @@
       <accelerator key="m" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
       <child internal-child="image">
-	<widget class="GtkImage" id="image3">
+	<widget class="GtkImage" id="image4">
 	  <property name="visible">True</property>
 	  <property name="stock">gtk-execute</property>
 	  <property name="icon_size">1</property>
@@ -3436,7 +3436,7 @@ actions or &quot;Cancel&quot; to return to the Preferences dialog.</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">XVidCap</property>
   <property name="copyright" translatable="yes">Rasca, Karl H. Beckers</property>
-  <property name="comments">1.1.5</property>
+  <property name="comments">1.1.6</property>
   <property name="wrap_license">False</property>
   <property name="website">http://xvidcap.sourceforge.net</property>
   <property name="website_label" translatable="yes">website</property>

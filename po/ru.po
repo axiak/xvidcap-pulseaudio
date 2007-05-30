@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-29 20:52+0200\n"
-"PO-Revision-Date: 2007-05-26 21:59+0400\n"
+"POT-Creation-Date: 2007-05-29 22:24+0200\n"
+"PO-Revision-Date: 2007-05-30 00:13+0400\n"
 "Last-Translator: Alexander Kraev <alexander.kraev@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -578,24 +578,27 @@ msgstr "Установить масштаб процентов в '100'"
 
 #: ../src/app_data.c:2177 ../src/app_data.c:2186
 msgid "Vorbis needs stereo audio"
-msgstr ""
+msgstr "Vorbis требует стерео аудио"
 
 #: ../src/app_data.c:2179
 msgid ""
 "You selected mono vorbis audio output for single-frame capture, but this "
 "version of xvidcap can only encode stereo vorbis audio streams."
 msgstr ""
+"Вы выбрали аудио формата vorbis моно для покадровой записи, но этаверсия "
+"xvidcap может кодировать только аудио потоки в формате vorbis стерео."
 
 #: ../src/app_data.c:2181 ../src/app_data.c:2190
-#, fuzzy
 msgid "Set number of audio channels to '2'"
-msgstr "[--audio_channels #] количество аудио каналов\n"
+msgstr "Установить количество аудио каналов в '2'"
 
 #: ../src/app_data.c:2188
 msgid ""
 "You selected mono vorbis audio output for multi-frame capture, but this "
 "version of xvidcap can only encode stereo vorbis audio streams."
 msgstr ""
+"Вы выбрали аудио формата vorbis моно для серийной записи, но этаверсия "
+"xvidcap может кодировать только аудио потоки в формате vorbis стерео."
 
 #: ../src/app_data.c:2197 ../src/app_data.c:2206
 msgid "Quality value not a valid percentage"
@@ -734,7 +737,7 @@ msgstr "MPEG2 Video"
 
 #: ../src/codecs.c:223
 msgid "Ogg Theora"
-msgstr ""
+msgstr "Ogg Theora"
 
 #: ../src/codecs.c:234
 msgid "Soerensen VQ 1"
@@ -750,7 +753,7 @@ msgstr "MPEG2 Layer 3"
 
 #: ../src/codecs.c:267
 msgid "Ogg Vorbis"
-msgstr ""
+msgstr "Ogg Vorbis"
 
 #: ../src/codecs.c:271
 msgid "PCM"
@@ -1445,7 +1448,7 @@ msgstr "# изменить масштаб области захвата в n п�
 #: ../src/options.c:132
 #, c-format
 msgid "# minimize the main control to the system tray while recording\n"
-msgstr ""
+msgstr "# убрать панель управления в системный лоток во время записи\n"
 
 #: ../src/options.c:136
 #, c-format
@@ -1732,12 +1735,12 @@ msgstr ""
 "восстановление к всегда отображать результаты\n"
 
 #: ../src/options.c:495
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "reading unsupported minimize_to_tray value from options file\n"
 "resetting to not minimizing to tray.\n"
 msgstr ""
-"чтение не поддерживаемого значения auto_continue из файла настроек\n"
+"чтение не поддерживаемого значения minimize_to_tray из файла настроек\n"
 "восстановление к режиму включенного автоматическому продолжение\n"
 
 #: ../src/options.c:586
@@ -2355,7 +2358,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:80
 msgid "Minimize to System Tray"
-msgstr ""
+msgstr "Свернуть в системный лоток"
 
 #: ../src/gnome-xvidcap.glade.h:81
 msgid "Multi Frame Capture"
@@ -2554,7 +2557,7 @@ msgstr "_Мультиплицировать кадры"
 
 #: ../src/gnome-xvidcap.glade.h:127
 msgid "_Pause"
-msgstr ""
+msgstr "_Пауза"
 
 #: ../src/gnome-xvidcap.glade.h:128
 msgid "_Save Preferences"

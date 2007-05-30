@@ -194,6 +194,9 @@
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #undef TIME_WITH_SYS_TIME
 
+/* define if libdbus-1 and libdbus-glib-1 are usable */
+#undef USE_DBUS
+
 /* define if libavcodec is usable */
 #undef USE_FFMPEG
 
