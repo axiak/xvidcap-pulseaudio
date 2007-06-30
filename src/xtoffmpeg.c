@@ -58,7 +58,7 @@
 // ffmpeg stuff
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
-#include <ffmpeg/dsputil.h>
+//#include <ffmpeg/dsputil.h>
 #include <ffmpeg/swscale.h>
 #include <ffmpeg/rgb2rgb.h>
 #include <ffmpeg/fifo.h>

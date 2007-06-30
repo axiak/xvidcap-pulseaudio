@@ -1,15 +1,16 @@
-# translation of zh_CN.po to LONCHINA
+# translation of zh_CN.po to Chinese Simplified
 # translation of zh_CN.po to
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # lon <lon83129@126.com>, 2007.
+# lonchina <lon83129@126.com>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-29 22:24+0200\n"
-"PO-Revision-Date: 2007-05-27 22:58+0800\n"
+"POT-Creation-Date: 2007-06-30 16:56+0200\n"
+"PO-Revision-Date: 2007-06-26 00:36+0800\n"
 "Last-Translator: lon <lon83129@126.com>\n"
 "Language-Team: Chinese Simplified <xvidcap-l10n@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -430,27 +431,27 @@ msgstr "在多帧抓取中设置最大帧数为无限大"
 
 #: ../src/app_data.c:2130 ../src/app_data.c:2139
 msgid "Requested Start Number < zero"
-msgstr "要求启始编号小于零"
+msgstr "要求起始编号小于零"
 
 #: ../src/app_data.c:2132
 msgid ""
 "For single-frame capture you specified a start number for frame numbering "
 "which is less than zero."
-msgstr "在单帧抓取中你指定的启始记录帧编号小于零。"
+msgstr "在单帧抓取中你指定的起始记录帧编号小于零。"
 
 #: ../src/app_data.c:2134
 msgid "Set start number for frame numbering of single-frame capture to '0'"
-msgstr "在单帧抓取中设置启始记录帧编号为“0”"
+msgstr "在单帧抓取中设置起始记录帧编号为“0”"
 
 #: ../src/app_data.c:2141
 msgid ""
 "For multi-frame capture you specified a start number for frame numbering "
 "which is less than zero."
-msgstr "在多帧抓取中你指定的启始记录帧编号小于零。"
+msgstr "在多帧抓取中你指定的起始记录帧编号小于零。"
 
 #: ../src/app_data.c:2143
 msgid "Set start number for frame numbering of multi-frame capture to '0'"
-msgstr "在多帧抓取中设置启始记录帧编号为“0”"
+msgstr "在多帧抓取中设置起始记录帧编号为“0”"
 
 #: ../src/app_data.c:2148
 msgid "Requested Frame Increment <= zero"
@@ -809,7 +810,7 @@ msgstr ""
 msgid ""
 "[--fps #.#]      frames per second (float) or a fraction string like "
 "\"30000/1001\"\n"
-msgstr "[--fps #.#]      每秒帧数(浮动)或分数串,象 \"30000/1001\"\n"
+msgstr "[--fps #.#]      每秒帧数(浮点)或分数串,象 \"30000/1001\"\n"
 
 #: ../src/main.c:88
 #, c-format
@@ -819,7 +820,7 @@ msgstr "[--verbose #]    详细级别, '-v' 为 --verbose 1\n"
 #: ../src/main.c:89
 #, c-format
 msgid "[--time #.#]     time to record in seconds (float)\n"
-msgstr "[--time #.#]     记录时间按秒计算(浮动)\n"
+msgstr "[--time #.#]     记录时间按秒计算(浮点)\n"
 
 #: ../src/main.c:90
 #, c-format
@@ -956,7 +957,7 @@ msgstr "%s %s: 不能做GUI初始化 ... 异常退出\n"
 #: ../src/main.c:313
 #, c-format
 msgid "Only 'x11' is supported as a capture source with this binary.\n"
-msgstr "目前的二进制系统只有 'x11'支持的抓取源\n"
+msgstr "目前的二进制系统只支持 'x11'的抓取源\n"
 
 #: ../src/main.c:366 ../src/main.c:376 ../src/main.c:386 ../src/main.c:396
 #: ../src/main.c:406 ../src/main.c:614 ../src/main.c:649
@@ -967,7 +968,7 @@ msgstr "目前的二进制系统不支持音频。\n"
 #: ../src/main.c:471 ../src/main.c:565 ../src/main.c:626
 #, c-format
 msgid "%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
-msgstr "%s, 版本 %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+msgstr "%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
 
 #: ../src/main.c:475 ../src/main.c:501
 #, c-format
@@ -1487,7 +1488,7 @@ msgid ""
 "# sample rate for audio capture (for future use)\n"
 "sf_audio_rate: 0\n"
 msgstr ""
-"# 抓取音频的抽样率 (将来实现)\n"
+"# 抓取音频的取样速率 (将来实现)\n"
 "# sample rate for audio capture (for future use)\n"
 "sf_audio_rate: 0\n"
 
@@ -1603,7 +1604,7 @@ msgid ""
 "# sample rate for audio capture\n"
 "mf_audio_rate: %i\n"
 msgstr ""
-"# 抓取音频的抽样率\n"
+"# 抓取音频的取样速率\n"
 "# sample rate for audio capture\n"
 "mf_audio_rate: %i\n"
 
@@ -2229,7 +2230,7 @@ msgid ""
 "Frame Start \n"
 "Number:"
 msgstr ""
-"帧启\n"
+"帧起\n"
 "始于: "
 
 #: ../src/gnome-xvidcap.glade.h:68
@@ -2366,7 +2367,7 @@ msgstr "设置抓取音频的位速率。"
 
 #: ../src/gnome-xvidcap.glade.h:101
 msgid "Set the audio capture sample rate."
-msgstr "设置抓取音频的抽样率。"
+msgstr "设置抓取音频的取样速率。"
 
 #: ../src/gnome-xvidcap.glade.h:102
 msgid ""

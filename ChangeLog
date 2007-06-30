@@ -1,4 +1,14 @@
 
+2007-06-30  Samuli Suominen  <drac@gentoo.org>
+	* src/xtoffmpeg.c: remove include of dsputil.h
+
+2007-06-30  lon  <lon83129@126.com>
+	* po/zh_CN.po: updated Chinese l10n
+
+2007-06-30  Treviño  <trevi55@gmail.com>
+	* debian: control, rules: enable libtheora and
+		require imagemagick
+
 2007-05-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* debian/changelog, debian/rules, Doxyfile, 
 		configure.in, src/codecs.c, config.h.in, 
