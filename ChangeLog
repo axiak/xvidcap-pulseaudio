@@ -1,4 +1,11 @@
 
+2007-06-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* ffmpeg: ffmpeg version bump to current
+		version (preliminary tests look good,
+		needs more testing). Also fixed svn
+		externals to always pull well-defined
+		version of libswscale.
+
 2007-06-30  Samuli Suominen  <drac@gentoo.org>
 	* src/xtoffmpeg.c: remove include of dsputil.h
 
