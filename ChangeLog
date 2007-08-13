@@ -1,4 +1,8 @@
 
+2007-08-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/gnome_ui.c: fix for bug 1757339 (gtk+ 
+		2.4 compat issue)
+
 2007-06-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* ffmpeg: ffmpeg version bump to current
 		version (preliminary tests look good,
