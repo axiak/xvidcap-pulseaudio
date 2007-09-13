@@ -69,6 +69,8 @@ static GtkWidget *gtk_frame_top,
     *gtk_frame_left, *gtk_frame_right, *gtk_frame_bottom, *gtk_frame_center;
 static GtkWidget *xvc_frame_dimensions_window;
 static gboolean button_pressed = FALSE;
+static int button_press_rel_x = 0;
+static int button_press_rel_y = 0;
 static gint frame_drag_cursor = GDK_X_CURSOR;
 static long frame_dimensions_hide_time = 0;
 static GdkDisplay *gdpy;
@@ -492,7 +494,7 @@ on_gtk_frame_leave_notify_event (GtkWidget * w, GdkEventCrossing * event)
 gint
 on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
 {
-    gint x, y, x_root, y_root;
+    gint x, y, x_root, y_root, twidth, theight;
     GdkCursor *cursor;
     XVC_AppData *app = xvc_appdata_ptr ();
     Job *job = xvc_job_ptr ();
@@ -504,6 +506,9 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
     y = (int) event->y;
     x_root = (int) event->x_root;
     y_root = (int) event->y_root;
+
+//    printf("xr: %i - off: %i --- x: %i -- width: %i\n", x_root, button_press_rel_x, app->area->x, app->area->width);
+//    printf("yr: %i - off: %i --- y: %i\n", y_root, button_press_rel_y, app->area->y);
 
     if (!button_pressed) {
         if (w == gtk_frame_right) {
@@ -567,78 +572,139 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
         }
     } else {
         if (frame_drag_cursor == GDK_TOP_RIGHT_CORNER) {
+            x_root = x_root - button_press_rel_x;
+            y_root = y_root + button_press_rel_y;
+
             if (x_root < (app->area->x + 20))
                 x_root = app->area->x + 20;
             if (y_root > (app->area->y + app->area->height - 20))
                 y_root = app->area->y + app->area->height - 20;
+            twidth = x_root - app->area->x;
+            if ((twidth % 2) > 0) {
+                twidth--;
+                x_root--;
+            }
+            theight = app->area->height - y_root + app->area->y;
+            if ((theight % 2) > 0) {
+                theight--;
+                y_root++;
+            }
 
             xvc_change_gtk_frame (app->area->x, y_root,
-                                  abs (x_root - app->area->x),
-                                  abs (y_root -
-                                       (app->area->y + app->area->height)),
-                                  FALSE, TRUE);
+                                  twidth, theight, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_BOTTOM_RIGHT_CORNER) {
+            x_root = x_root - button_press_rel_x;
+            y_root = y_root - button_press_rel_y;
+
             if (x_root < (app->area->x + 20))
                 x_root = app->area->x + 20;
             if (y_root < (app->area->y + 20))
                 y_root = app->area->y + 20;
+            twidth = x_root - app->area->x;
+            if ((twidth % 2) > 0) {
+                twidth--;
+                x_root--;
+            }
+            theight = y_root - app->area->y;
+            if ((theight % 2) > 0) {
+                theight--;
+                y_root--;
+            }
 
             xvc_change_gtk_frame (app->area->x, app->area->y,
-                                  abs (x_root - app->area->x),
-                                  abs (y_root - app->area->y), FALSE, TRUE);
+                                  twidth, theight, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_RIGHT_SIDE) {
+            x_root = x_root - button_press_rel_x;
+
             if (x_root < (app->area->x + 20))
                 x_root = app->area->x + 20;
+            twidth = x_root - app->area->x;
+            if ((twidth % 2) > 0) {
+                twidth--;
+                x_root--;
+            }
 
             xvc_change_gtk_frame (app->area->x, app->area->y,
-                                  abs (x_root - app->area->x),
-                                  app->area->height, FALSE, TRUE);
+                                  twidth, app->area->height, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_TOP_SIDE) {
+            y_root = y_root + button_press_rel_y;
+
             if (y_root > (app->area->y + app->area->height - 20))
                 y_root = app->area->y + app->area->height - 20;
+            theight = app->area->height - y_root + app->area->y;
+            if ((theight % 2) > 0) {
+                theight--;
+                y_root++;
+            }
 
             xvc_change_gtk_frame (app->area->x, y_root,
-                                  app->area->width,
-                                  abs (y_root -
-                                       (app->area->y + app->area->height)),
-                                  FALSE, TRUE);
+                                  app->area->width, theight, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_TOP_LEFT_CORNER) {
+            x_root = x_root + button_press_rel_x;
+            y_root = y_root + button_press_rel_y;
+
             if (x_root > (app->area->x + app->area->width - 20))
                 x_root = app->area->x + app->area->width - 20;
             if (y_root > (app->area->y + app->area->height - 20))
                 y_root = app->area->y + app->area->height - 20;
+            twidth = app->area->width - x_root + app->area->x;
+            if ((twidth % 2) > 0) {
+                twidth--;
+                x_root++;
+            }
+            theight = app->area->height - y_root + app->area->y;
+            if ((theight % 2) > 0) {
+                theight--;
+                y_root++;
+            }
 
-            xvc_change_gtk_frame (x_root, y_root,
-                                  abs (x_root -
-                                       (app->area->x + app->area->width)),
-                                  abs (y_root -
-                                       (app->area->y + app->area->height)),
-                                  FALSE, TRUE);
+            xvc_change_gtk_frame (x_root, y_root, twidth, theight, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_LEFT_SIDE) {
+            x_root = x_root + button_press_rel_x;
             if (x_root > (app->area->x + app->area->width - 20))
                 x_root = app->area->x + app->area->width - 20;
+            twidth = app->area->width - (x_root - app->area->x);
+            if ((twidth % 2) > 0) {
+                x_root++;
+                twidth--;
+            }
 
             xvc_change_gtk_frame (x_root, app->area->y,
-                                  abs (x_root -
-                                       (app->area->x + app->area->width)),
-                                  app->area->height, FALSE, TRUE);
+                                  twidth, app->area->height, FALSE, TRUE);
         } else if (frame_drag_cursor == GDK_BOTTOM_LEFT_CORNER) {
+            x_root = x_root + button_press_rel_x;
+            y_root = y_root - button_press_rel_y;
+
             if (x_root > (app->area->x + app->area->width - 20))
                 x_root = app->area->x + app->area->width - 20;
             if (y_root < (app->area->y + 20))
                 y_root = app->area->y + 20;
+            twidth = app->area->width - x_root + app->area->x;
+            if ((twidth % 2) > 0) {
+                twidth--;
+                x_root++;
+            }
+            theight = y_root - app->area->y;
+            if ((theight % 2) > 0) {
+                theight--;
+                y_root--;
+            }
 
             xvc_change_gtk_frame (x_root, app->area->y,
-                                  abs (x_root -
-                                       (app->area->x + app->area->width)),
-                                  abs (y_root - app->area->y), FALSE, TRUE);
+                                  twidth, theight, FALSE, TRUE);
         } else {                       // GDK_BOTTOM_SIDE
+            y_root = y_root - button_press_rel_y;
+
             if (y_root < (app->area->y + 20))
                 y_root = app->area->y + 20;
+            theight = y_root - app->area->y;
+            if ((theight % 2) > 0) {
+                theight--;
+                y_root--;
+            }
 
             xvc_change_gtk_frame (app->area->x, app->area->y,
-                                  app->area->width,
-                                  abs (y_root - app->area->y), FALSE, TRUE);
+                                  app->area->width, theight, FALSE, TRUE);
         }
     }
     return 0;
@@ -650,7 +716,35 @@ on_gtk_frame_motion_notify_event (GtkWidget * w, GdkEventMotion * event)
 gint
 on_gtk_frame_button_press_event (GtkWidget * w, GdkEventButton * event)
 {
+    XVC_AppData *app = xvc_appdata_ptr ();
+
     button_pressed = TRUE;
+    if (w == gtk_frame_right) {
+        button_press_rel_x = event->x + 1;
+        button_press_rel_y = 0;
+    } else if (w == gtk_frame_top) {
+        if (event->x < FRAME_WIDTH) {
+            button_press_rel_x = FRAME_WIDTH - event->x - 1;
+        } else if (event->x > app->area->width + FRAME_WIDTH) {
+            button_press_rel_x = event->x - app->area->width - FRAME_WIDTH;
+        } else {
+            button_press_rel_x = 0;
+        }
+        button_press_rel_y = FRAME_WIDTH - event->y - 1;
+    } else if (w == gtk_frame_bottom) {
+        if (event->x < FRAME_WIDTH) {
+            button_press_rel_x = FRAME_WIDTH - event->x - 1;
+        } else if (event->x > app->area->width + FRAME_WIDTH) {
+            button_press_rel_x = event->x - app->area->width - FRAME_WIDTH;
+        } else {
+            button_press_rel_x = 0;
+        }
+        button_press_rel_y = event->y + 1;
+    } else {
+        button_press_rel_x = FRAME_WIDTH - event->x - 1;
+        button_press_rel_y = 0;
+    }
+//    printf("x %i y %i\n", button_press_rel_x, button_press_rel_y);
     return 0;
 }
 
