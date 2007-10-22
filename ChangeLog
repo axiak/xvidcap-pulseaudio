@@ -1,4 +1,15 @@
 
+2007-10-22  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/app_data.c: reimplemented passing of
+		environment variables to spawned 
+		processes (e. g. animate/play) to
+		make it work independant of the shell
+
+2007-09-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/gnome_frame.c: fixed bug where resizing
+		the capture frame on one side would
+		change the other end, too.
+
 2007-08-25  lon  <lon83129@126.com>
 	* po/zh_CN.po: updated l10n
 

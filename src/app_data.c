@@ -2541,6 +2541,7 @@ xvc_command_execute (char *command, int flag, int number, char *file,
     char buf[BUFLENGTH];
     char *myfile = NULL;
     char *shell = NULL;
+    int k;
 
 #ifdef DEBUG
     printf ("%s %s: Entering with flag '%i'\n", DEBUGFILE, DEBUGFUNCTION, flag);
@@ -2597,22 +2598,48 @@ xvc_command_execute (char *command, int flag, int number, char *file,
         break;
     }
 
-    shell = getenv ("SHELL");
-    if (shell) {
-        snprintf (buf, BUFLENGTH,
-                  "%s -c 'XVFFRAME=\"%i\" XVLFRAME=\"%i\" XVWIDTH=\"%i\" XVHEIGHT=\"%i\" XVFPS=\"%f\" XVTIME=\"%f\" XVFILE=\"%s\" ; %s'",
-                  shell, fframe, lframe, width, height,
-                  ((float) fps.num / (float) fps.den),
-                  (float) 1000 / ((float) fps.num / (float) fps.den), myfile,
-                  command);
-    } else {
-        snprintf (buf, BUFLENGTH,
-                  "XVFFRAME=\"%i\" XVLFRAME=\"%i\" XVWIDTH=\"%i\" XVHEIGHT=\"%i\" XVFPS=\"%f\" XVTIME=\"%f\" XVFILE=\"%s\" ; %s",
-                  fframe, lframe, width, height,
-                  ((float) fps.num / (float) fps.den),
-                  (float) 1000 / ((float) fps.num / (float) fps.den), myfile,
-                  command);
+    // add the required environment variables to xvidcap's environment
+    // so the shell spawned inherits them
+    for (k = 0; k < 7; k++) {
+        char *ev = NULL;
+
+        switch (k) {
+        case 0:
+            snprintf (buf, BUFLENGTH, "%i", fframe);
+            setenv ("XVFFRAME", buf, 1);
+            break;
+        case 1:
+            snprintf (buf, BUFLENGTH, "%i", lframe);
+            setenv ("XVLFRAME", buf, 1);
+            break;
+        case 2:
+            snprintf (buf, BUFLENGTH, "%i", width);
+            setenv ("XVWIDTH", buf, 1);
+            break;
+        case 3:
+            snprintf (buf, BUFLENGTH, "%i", height);
+            setenv ("XVHEIGHT", buf, 1);
+            break;
+        case 4:
+            snprintf (buf, BUFLENGTH,
+                      "%f", ((float) fps.num / (float) fps.den));
+            setenv ("XVFPS", buf, 1);
+            break;
+        case 5:
+            snprintf (buf, BUFLENGTH,
+                      "%f",
+                      ((float) 1000 / ((float) fps.num / (float) fps.den)));
+            setenv ("XVTIME", buf, 1);
+            break;
+        case 6:
+            snprintf (buf, BUFLENGTH, "%s", myfile);
+            setenv ("XVFILE", buf, 1);
+            break;
+        }
     }
+
+    snprintf (buf, BUFLENGTH, "%s", command);
+
 #ifdef DEBUG
     printf ("%s %s: calling: '%s'\n", DEBUGFILE, DEBUGFUNCTION, buf);
 #endif     // DEBUG
