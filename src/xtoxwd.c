@@ -152,7 +152,7 @@ xvc_xwd_save_frame (FILE * fp, XImage * image)
         XWindowAttributes win_attr = app->win_attr;
 
 #ifdef DEBUG
-        printf ("Preparing XWD header ... win_attr.x = %i\n", job->win_attr.x);
+        printf ("Preparing XWD header ... win_attr.x = %i\n", app->win_attr.x);
 #endif
         file_name_len = strlen (file) + 1;
         head.header_size = (CARD32) (sizeof (head) + file_name_len);
@@ -196,6 +196,6 @@ xvc_xwd_save_frame (FILE * fp, XImage * image)
 
 #ifdef DEBUG
     printf ("XImageToXWD() header size = %d visual=%d\n",
-            sizeof (XWDFileHeader), job->win_attr.visual->class);
+            sizeof (XWDFileHeader), app->win_attr.visual->class);
 #endif
 }

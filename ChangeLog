@@ -4,6 +4,10 @@
 		environment variables to spawned 
 		processes (e. g. animate/play) to
 		make it work independant of the shell
+	* src: colors.h, app_data.c, xtoxwd.c, 
+		gnome_options.c: some fixes for 
+		compiling with DEBUG=1
+	* src: gnome_ui.c, gnome_ui.h: code cleanup
 
 2007-09-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/gnome_frame.c: fixed bug where resizing

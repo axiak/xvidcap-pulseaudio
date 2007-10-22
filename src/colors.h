@@ -23,6 +23,10 @@
 #ifndef __COLORS_H__
 #define __COLORS_H__
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif     // HAVE_CONFIG_H
+
 /**
  * \brief struct to contain various color properties, like masks, depths,
  *      shifts etc.

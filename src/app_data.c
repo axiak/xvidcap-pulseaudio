@@ -2540,7 +2540,6 @@ xvc_command_execute (char *command, int flag, int number, char *file,
 #define BUFLENGTH ((PATH_MAX * 5) + 1)
     char buf[BUFLENGTH];
     char *myfile = NULL;
-    char *shell = NULL;
     int k;
 
 #ifdef DEBUG
@@ -2601,8 +2600,6 @@ xvc_command_execute (char *command, int flag, int number, char *file,
     // add the required environment variables to xvidcap's environment
     // so the shell spawned inherits them
     for (k = 0; k < 7; k++) {
-        char *ev = NULL;
-
         switch (k) {
         case 0:
             snprintf (buf, BUFLENGTH, "%i", fframe);

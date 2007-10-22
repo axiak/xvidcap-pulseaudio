@@ -489,7 +489,7 @@ do_record_thread ()
 
 #ifdef DEBUG
     printf ("%s %s: Entering with state = %i and tid = %i\n", DEBUGFILE,
-            DEBUGFUNCTION, job->state, recording_thread);
+            DEBUGFUNCTION, job->state, (int) recording_thread);
 #endif     // DEBUG
 
     recording_thread_running = TRUE;
@@ -1523,59 +1523,49 @@ gtk-edit gtk-paste (2nd choice would be gtk-open)
 */
             w = glade_xml_get_widget (xml, "xvc_ctrl_stop_toggle");
             if (w) {
-		gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w),
-			NULL);
-		gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), 
-			"gtk-stop");
-	    }
+                gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w), NULL);
+                gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), "gtk-stop");
+            }
 
             w = glade_xml_get_widget (xml, "xvc_ctrl_pause_toggle");
             if (w) {
-		gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w),
-			NULL);
-		gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), 
-			"gtk-go-up");
-	    }
+                gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w), NULL);
+                gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), "gtk-go-up");
+            }
 
             w = glade_xml_get_widget (xml, "xvc_ctrl_record_toggle");
             if (w) {
-		gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w),
-			NULL);
-		gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), 
-			"gtk-convert");
-	    }
+                gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w), NULL);
+                gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w),
+                                              "gtk-convert");
+            }
 
             w = glade_xml_get_widget (xml, "xvc_ctrl_step_button");
             if (w) {
-		gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w),
-			NULL);
-		gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), 
-			"gtk-goto-last");
-	    }
+                gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w), NULL);
+                gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w),
+                                              "gtk-goto-last");
+            }
 
             w = glade_xml_get_widget (xml, "xvc_ctrl_back_button");
             if (w) {
-		gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w),
-			NULL);
-		gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), 
-			"gtk-go-back");
-	    }
+                gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w), NULL);
+                gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w),
+                                              "gtk-go-back");
+            }
 
             w = glade_xml_get_widget (xml, "xvc_ctrl_forward_button");
             if (w) {
-		gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w),
-			NULL);
-		gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), 
-			"gtk-go-forward");
-	    }
+                gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w), NULL);
+                gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w),
+                                              "gtk-go-forward");
+            }
 
             w = glade_xml_get_widget (xml, "xvc_ctrl_edit_button");
             if (w) {
-		gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w),
-			NULL);
-		gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), 
-			"gtk-paste");
-	    }
+                gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w), NULL);
+                gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (w), "gtk-paste");
+            }
 
             w = NULL;
         }
@@ -1583,13 +1573,14 @@ gtk-edit gtk-paste (2nd choice would be gtk-open)
 
 #if GTK_CHECK_VERSION(2, 6, 0)
 #else
-	{
-	    GtkWidget *w = NULL;
+        {
+            GtkWidget *w = NULL;
 
             w = glade_xml_get_widget (xml, "xvc_ctrl_m1_mitem_about");
-            if (w) gtk_widget_hide(w);
-	}
-#endif	   // GKT_CHECK_VERSION
+            if (w)
+                gtk_widget_hide (w);
+        }
+#endif     // GKT_CHECK_VERSION
 
         xml = NULL;
         // popup window
@@ -3064,7 +3055,7 @@ on_xvc_about_main_window_close (GtkAboutDialog * window, gpointer user_data)
 {
     gtk_widget_destroy (GTK_WIDGET (window));
 }
-#endif // GTK_CHECK_VERSION
+#endif     // GTK_CHECK_VERSION
 
 void
 on_xvc_ctrl_m1_mitem_about_activate (GtkMenuItem * menuitem, gpointer user_data)

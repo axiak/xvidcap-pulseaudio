@@ -478,8 +478,9 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
             exit (1);
         }
 #ifdef DEBUG
-        printf ("%s %s: read fps: %i\n", DEBUGFILE, DEBUGFUNCTION,
-                lapp->multi_frame.fps);
+        printf ("%s %s: read fps: %f\n", DEBUGFILE, DEBUGFUNCTION,
+                ((float) lapp->multi_frame.fps.num /
+                 (float) lapp->multi_frame.fps.den));
 #endif     // DEBUG
     }
 
@@ -2081,7 +2082,7 @@ on_xvc_pref_mf_format_combobox_changed (GtkComboBox * combobox,
     g_assert (w);
     if (w != GTK_WIDGET (combobox)) {
 #ifdef DEBUG
-        printf ("%s %s: change combobox %p %p %i\n", DEBUGFILE, DEBUGFUNCTION,
+        printf ("%s %s: change combobox %p %p\n", DEBUGFILE, DEBUGFUNCTION,
                 w, combobox);
 #endif     // DEBUG
         combobox = GTK_COMBO_BOX (w);
@@ -2835,7 +2836,7 @@ on_xvc_pref_sf_filename_select_button_clicked (GtkButton * button,
 {
 #define DEBUGFUNCTION "on_xvc_pref_sf_filename_select_button_clicked()"
     int result = 0;
-    char *got_file_name;
+    char *got_file_name = NULL;
 
     GladeXML *xml = NULL;
     GtkWidget *w = NULL, *dialog = NULL;
@@ -2886,7 +2887,7 @@ on_xvc_pref_mf_filename_select_button_clicked (GtkButton * button,
 {
 #define DEBUGFUNCTION "on_xvc_pref_mf_filename_select_button_clicked()"
     int result = 0;
-    char *got_file_name;
+    char *got_file_name = NULL;
 
     GladeXML *xml = NULL;
     GtkWidget *w = NULL, *dialog = NULL;
@@ -2937,7 +2938,7 @@ on_xvc_pref_mf_audio_input_device_select_button_clicked (GtkButton * button,
 {
 #define DEBUGFUNCTION "on_xvc_pref_mf_audio_input_device_select_button_clicked()"
     int result = 0;
-    char *got_file_name;
+    char *got_file_name = NULL;
 
     GladeXML *xml = NULL;
     GtkWidget *w = NULL, *dialog = NULL;
