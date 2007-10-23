@@ -1,75 +1,90 @@
 ## Process this file with automake to produce Makefile.in
 
-# Dbus service file
-servicedir = ${datadir}/dbus-1/services
-service_in_files = net.jarre_de_the.Xvidcap.service.in
-service_DATA = $(service_in_files:.service.in=.service)
+gladedir = $(datadir)/xvidcap/glade
+glade_DATA = gnome-xvidcap.glade \
+	pixmaps/xvidcap_logo.png
 
-# Rule to make the service file with bindir expanded
-$(service_DATA): $(service_in_files) Makefile
-	@sed -e "s|@bindir@|$(bindir)|" $<> $@
+INCLUDES = \
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
+	$(PACKAGE_CFLAGS)
 
-doc_SUBDIRS = doc
-SUBDIRS = $(doc_SUBDIRS) \
-    src \
-    po \
-    debian
+AM_CFLAGS =\
+	 -Wall\
+	 -g
+#	 -DDBUS_SERVICE_DIR=\""$(datadir)/dbus-1/service"\"
+#	 -DDEBUG -DDEBUG2
 
-pkgdata_DATA = xvidcap.desktop \
-	xvidcap.png \
-    ppm2mpeg.sh
+bin_PROGRAMS = xvidcap
 
-xvidcapdocdir = ${datadir}/doc/xvidcap
-xvidcapdoc_DATA = \
-	README\
-	COPYING\
-	AUTHORS\
-	ChangeLog
+xvidcap_SOURCES = \
+    app_data.c \
+    app_data.h \
+    capture.c \
+    capture.h \
+    codecs.c \
+	codecs.h \
+    colors.c \
+    colors.h \
+    frame.c \
+    frame.h \
+    gnome_frame.c \
+    gnome_frame.h \
+    gnome_ui.c \
+    gnome_ui.h \
+    gnome_warning.c \
+    gnome_warning.h \
+    gnome_options.c \
+    gnome_options.h \
+    led_meter.c \
+    led_meter.h \
+    control.h \
+	main.c \
+    options.c \
+    xtoffmpeg.c \
+    xtoffmpeg.h \
+    xtoxwd.c \
+    xtoxwd.h \
+    job.c \
+    job.h \
+    xv_error_item.c \
+    xv_error_item.h \
+    xvidcap-intl.h \
+        eggtrayicon.h \
+        eggtrayicon.c \
+	dbus-server-object.h \
+	dbus-server-object.c
 
-EXTRA_DIST = $(xvidcapdoc_DATA) \
-    autogen.sh \
-    intltool-extract.in \
-    intltool-merge.in \
-    intltool-update.in \
-    xvidcap.png \
-    xvidcap.desktop \
-    ppm2mpeg.sh \
-    TODO.tasks \
-    INSTALL
 
 
-# Copy all the spec files. Of cource, only one is actually used.
-dist-hook:
-	for specfile in *.spec; do \
-		if test -f $$specfile; then \
-			cp -p $$specfile $(distdir); \
-		fi \
-	done; \
-    mkdir $(distdir)/ffmpeg ; \
-    ( cd $(top_srcdir)/ffmpeg/ && tar cf - . | ( cd ../$(distdir)/ffmpeg && tar xf - ) ) ; \
-    rm -rf `find $(distdir) -name CVS` ; \
-    rm -rf `find $(distdir) -name .svn` ; \
-    ( cd $(distdir)/ffmpeg/ && $(MAKE) distclean ) || ( echo "FAILED TO DISTCLEAN FFMPEG" && exit ) ; \
-    ( test -f $(distdir)/ffmpeg/config.log && rm $(distdir)/ffmpeg/config.log ) || echo "no ffmpeg config.log"
+xvidcap_LDADD = $(PACKAGE_LIBS)
 
-install-exec-hook:
-	mkdir $(DESTDIR)$(datadir)/pixmaps ; \
-	cp $(top_srcdir)/xvidcap.png $(DESTDIR)$(datadir)/pixmaps/ ; \
-	mkdir $(DESTDIR)$(datadir)/applications ; \
-	cp $(top_srcdir)/xvidcap.desktop $(DESTDIR)$(datadir)/applications/
+if SOLARIS
+xvidcap_LDFLAGS = 
+xvidcap_LDADD += -lXext -lX11 
+else
+xvidcap_LDFLAGS = -export-dynamic
+endif
 
-install-data-hook:
-	chmod 755 $(DESTDIR)$(datadir)/xvidcap/ppm2mpeg.sh
+EXTRA_DIST = $(glade_DATA)
 
-uninstall-hook:
-	rm $(DESTDIR)$(datadir)/pixmaps/xvidcap.png ; \
-	rm $(DESTDIR)$(datadir)/applications/xvidcap.desktop ; \
-	rm -r $(DESTDIR)$(datadir)/doc/xvidcap ; \
-	rm -r $(DESTDIR)$(datadir)/xvidcap
+if USE_DBUS
 
-install-doc: 
-	cd doc && $(MAKE) $(AM_MAKEFLAGS) install-doc
+BUILT_SOURCES = xvidcap-dbus-glue.h xvidcap-client-bindings.h
+# We don't want to install this header
+noinst_HEADERS = $(BUILT_SOURCES)
 
-uninstall-doc: 
-	cd doc && $(MAKE) $(AM_MAKEFLAGS) uninstall-doc
+# Correctly clean the generated headers, but keep the xml description
+CLEANFILES = $(BUILT_SOURCES)
+
+#Rule to generate the binding headers
+xvidcap-dbus-glue.h:  xvidcap-dbus.xml
+	dbus-binding-tool --prefix=xvc_server --mode=glib-server $<> $@
+
+xvidcap-client-bindings.h:  xvidcap-dbus.xml
+	dbus-binding-tool --prefix=xvc_server --mode=glib-client $<> $@
+
+EXTRA_DIST += xvidcap-dbus.xml
+endif
 

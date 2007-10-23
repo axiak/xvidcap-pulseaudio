@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define DEBUGFILE "dbus-server-object.c"
 
@@ -8,8 +10,8 @@
 
 #include <dbus/dbus-glib-bindings.h>
 
-//#include "dbus-server-object.h"
-#include "xvidcap-server-bindings.h"
+#include "dbus-server-object.h"
+#include "xvidcap-dbus-glue.h"
 
 static void xvc_server_object_class_init(XvcServerObjectClass *klass);
 static void xvc_server_object_init(XvcServerObject *server);
@@ -57,7 +59,7 @@ xvc_server_object_class_init(XvcServerObjectClass *klass)
 
 	/* &dbus_glib__object_info is provided in the server-bindings.h file */
 	/* OBJECT_TYPE_SERVER is the GType of your server object */
-	dbus_g_object_type_install_info (xvc_server_object_get_type(), &dbus_glib_server_object_object_info);
+	dbus_g_object_type_install_info (xvc_server_object_get_type(), &dbus_glib_xvc_server_object_info);
 }
 
 
@@ -71,7 +73,7 @@ xvc_server_object_init(XvcServerObject *server)
 
 	/* Register DBUS path */
 	dbus_g_connection_register_g_object (klass->connection,
-			"/net/jarre-de-the/Xvidcap",
+			"/net/jarre_de_the/Xvidcap",
 			G_OBJECT (server));
 
 	/* Register the service name, the constant here are defined in dbus-glib-bindings.h */
@@ -81,7 +83,7 @@ xvc_server_object_init(XvcServerObject *server)
 			DBUS_INTERFACE_DBUS);
 
 	if(!org_freedesktop_DBus_request_name (driver_proxy,
-			"net.jarre-de-the.Xvidcap",
+			"net.jarre_de_the.Xvidcap",
 			0, &request_ret,    /* See tutorial for more infos about these */
 			&error))
 	{
@@ -92,19 +94,20 @@ xvc_server_object_init(XvcServerObject *server)
 }
 
 
-GObject *
+XvcServerObject *
 xvc_server_object_new ()
 {
-    return G_OBJECT (g_object_new (xvc_server_object_get_type (), NULL));
+    return XVC_SERVER_OBJECT (g_object_new (xvc_server_object_get_type (), NULL));
 }
 
 
 // dbus_glib_marshal_server_object_BOOLEAN__STRING_POINTER_POINTER,
 gboolean
-xvc_server_echo_string (XvcServerObject *server, gchar *original, gchar **echo, GError **error)
+xvc_dbus_echo_string (XvcServerObject *server, gchar *original, gchar **echo, GError **error)
 {
 	gboolean problem = FALSE;
 
+system("touch /tmp/out.txt");
 	*echo = g_strdup (original);
 
 	if (problem)

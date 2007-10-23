@@ -30,6 +30,9 @@
 #endif
 #include <X11/Intrinsic.h>
 #include "codecs.h"
+#ifdef USE_DBUS
+#include "dbus-server-object.h"
+#endif // USE_DBUS
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #define XVC_MAX(a,b) ((a)>(b)? (a):(b))
@@ -211,6 +214,11 @@ typedef struct
     int default_mode;
     /** \brief the current capture mode, values as with default_mode */
     int current_mode;
+
+#ifdef USE_DBUS
+    XvcServerObject *xso;
+#endif // USE_DBUS
+
     /** \brief options for single-frame capture mode */
     XVC_CapTypeOptions single_frame;
     /** \brief options for multi-frame capture mode */

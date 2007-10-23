@@ -5,6 +5,11 @@
 		dbus-server-object.h, Makefile.am, 
 		xvidcap-infos.xml: prototype for
 		dbus support
+	* Makefile.am, src: dbus-server-object.c, 
+		xvidcap-dbus.xml, dbus-server-object.h, 
+		xvidcap-dbus-client.c, app_data.c, 
+		app_data.h, Makefile.am, xvidcap-infos.xml:
+		dbus prototype works, now
 
 2007-10-22  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/app_data.c: reimplemented passing of

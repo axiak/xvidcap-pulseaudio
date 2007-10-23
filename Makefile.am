@@ -2,7 +2,7 @@
 
 # Dbus service file
 servicedir = ${datadir}/dbus-1/services
-service_in_files = net.jarre-de-the.Xvidcap.service.in
+service_in_files = net.jarre_de_the.Xvidcap.service.in
 service_DATA = $(service_in_files:.service.in=.service)
 
 # Rule to make the service file with bindir expanded
