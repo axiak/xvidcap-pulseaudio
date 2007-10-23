@@ -483,6 +483,8 @@ AM_CONDITIONAL(HAVE_REALLOC, test x$ac_cv_func_realloc_0_nonnull = xyes)
 
 AM_CONDITIONAL(HAVE_FFMPEG_AUDIO,[test x${ac_my_have_ffmpeg_audio} = x1])
 
+AM_CONDITIONAL(USE_DBUS,[test x${ac_my_dbus_usable} = "xyes"])
+
 ################################################################
 ################################################################
 

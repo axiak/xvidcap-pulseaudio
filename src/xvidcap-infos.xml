@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<node name="/net/jarre-de-the/Xvidcap">
+	<interface name="net.jarre-de-the.Xvidcap">
+		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="xvc_server"/>
+		<method name="EchoString">
+			<arg type="s" name="original" direction="in" />
+			<arg type="s" name="echo" direction="out" />
+		</method>
+		<!-- Add more methods/signals if you want -->
+	</interface>
+</node>
+

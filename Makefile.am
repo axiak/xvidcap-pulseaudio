@@ -1,5 +1,13 @@
 ## Process this file with automake to produce Makefile.in
-## Created by Anjuta
+
+# Dbus service file
+servicedir = ${datadir}/dbus-1/services
+service_in_files = net.jarre-de-the.Xvidcap.service.in
+service_DATA = $(service_in_files:.service.in=.service)
+
+# Rule to make the service file with bindir expanded
+$(service_DATA): $(service_in_files) Makefile
+	@sed -e "s|@bindir@|$(bindir)|" $<> $@
 
 doc_SUBDIRS = doc
 SUBDIRS = $(doc_SUBDIRS) \
