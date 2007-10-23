@@ -201,7 +201,7 @@ xvc_appdata_init (XVC_AppData * lapp)
 
 #ifdef USE_DBUS
     lapp->xso = NULL;
-#endif // USE_DBUS
+#endif     // USE_DBUS
 
     xvc_captypeoptions_init (&(lapp->single_frame));
 #ifdef USE_FFMPEG
@@ -350,8 +350,8 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
 #endif     // USE_FFMPEG
 
 #ifdef USE_DBUS
-    lapp->xso = xvc_server_object_new();
-#endif // USE_DBUS
+    lapp->xso = xvc_server_object_new ();
+#endif     // USE_DBUS
 
     // initialzie options specific to either single- or multi-frame capture
     lapp->single_frame.quality = lapp->multi_frame.quality = 90;
@@ -464,7 +464,7 @@ xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
 
 #ifdef USE_DBUS
     tapp->xso = sapp->xso;
-#endif // USE_DBUS
+#endif     // USE_DBUS
 
     tapp->default_mode = sapp->default_mode;
     tapp->current_mode = sapp->current_mode;

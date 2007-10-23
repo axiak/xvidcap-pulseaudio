@@ -61,7 +61,9 @@
 #include <sys/shm.h>
 #include <X11/extensions/XShm.h>
 #include <X11/extensions/shmstr.h>
+#ifndef SOLARIS
 #include <X11/extensions/extutil.h>
+#endif     // SOLARIS
 
 #endif     // HAVE_SHMAT
 #ifdef HasDGA
