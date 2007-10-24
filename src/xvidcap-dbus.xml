@@ -8,6 +8,12 @@
 			<arg type="s" name="echo" direction="out" />
 		</method>
 		<!-- Add more methods/signals if you want -->
+		<method name="Stop">
+		</method>
+		<method name="Start">
+		</method>
+		<method name="Pause">
+		</method>
 	</interface>
 </node>
 
