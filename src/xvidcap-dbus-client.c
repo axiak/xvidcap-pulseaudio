@@ -1,6 +1,7 @@
 #include <getopt.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <strings.h>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
@@ -25,8 +26,6 @@ enum ACTION_TYPES
 void
 usage (char *prog)
 {
-    int n, m;
-
     printf
 //        (_
          ("Usage: %s, ver %s, (c) khb (c) 2003,04,05,06\n"

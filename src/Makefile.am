@@ -56,8 +56,6 @@ xvidcap_SOURCES = \
 	dbus-server-object.h \
 	dbus-server-object.c
 
-
-
 xvidcap_LDADD = $(PACKAGE_LIBS)
 
 if SOLARIS
@@ -70,6 +68,17 @@ endif
 EXTRA_DIST = $(glade_DATA)
 
 if USE_DBUS
+bin_PROGRAMS += xvidcap-dbus-client
+
+xvidcap_dbus_client_SOURCES = xvidcap-dbus-client.c
+
+xvidcap_dbus_client_LDADD = $(PACKAGE_LIBS)
+
+if SOLARIS
+xvidcap_dbus_client_LDFLAGS =
+else
+xvidcap_dbus_client_LDFLAGS = -export-dynamic
+endif
 
 BUILT_SOURCES = xvidcap-dbus-glue.h xvidcap-client-bindings.h
 # We don't want to install this header

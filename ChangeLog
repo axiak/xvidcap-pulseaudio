@@ -4,6 +4,9 @@
 		dbus-server-object.h, xvidcap-dbus-client.c:
 		added start, stop, pause remote functions
 		to dbus server.
+	* src: xvidcap-dbus-client.c, Makefile.am:
+		integrate xvidcap-dbus-client in normal
+		build
 
 2007-10-23  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* net.jarre_de_the.Xvidcap.service.in, Makefile.am,
