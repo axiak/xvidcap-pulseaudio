@@ -1,4 +1,18 @@
 
+2007-10-25  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* configure.in, Makefile.am, src: 
+		dbus-server-object.c, xvidcap-dbus.xml,
+		dbus-server-object.h, gnome_ui.c,
+		xvidcap-dbus-client.c, Makefile.am:
+		make dbus activation work (make sure
+		you can write your video file)
+	* src: xtoffmpeg.c, capture.c, job.c: code
+		cleanup and additional debug output
+	* depcomp, INSTALL, COPYING, missing, aclocal.m4,
+		install-sh: new autotools version
+	* doc/xvidcap/de/figures/xvidcap-warning.png:
+		added image to svn
+
 2007-10-24  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: dbus-server-object.c, xvidcap-dbus.xml,
 		dbus-server-object.h, xvidcap-dbus-client.c:

@@ -81,6 +81,9 @@ extern GtkWidget *xvc_warn_main_window;
 /** \brief make the main control panel globally available */
 GtkWidget *xvc_ctrl_main_window = NULL;
 
+/** \brief popup menu for the system tray icon */
+GtkWidget *xvc_tray_icon_menu = NULL;
+
 /**
  * \brief make the main control panel's menu globally available
  *
@@ -170,9 +173,6 @@ static GtkWidget *tray_icon = NULL;
 
 /** \brief frame drop monitor for inclusion in the system tray */
 static GtkWidget *tray_frame_mon = NULL;
-
-/** \brief popup menu for the system tray icon */
-static GtkWidget *tray_icon_menu = NULL;
 
 /*
  * HELPER FUNCTIONS ...
@@ -303,6 +303,8 @@ warning_submit ()
     }
     // reset attempts so warnings will be shown again next time ...
     OK_attempts = 0;
+
+    // when starting, we are ready for remote commands via dbus after this
 
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -698,8 +700,8 @@ stop_recording_gui_stuff ()
         tray_frame_mon = NULL;
         gtk_widget_destroy (GTK_WIDGET (tray_icon));
         tray_icon = NULL;
-        gtk_widget_destroy (GTK_WIDGET (tray_icon_menu));
-        tray_icon_menu = NULL;
+        gtk_widget_destroy (GTK_WIDGET (xvc_tray_icon_menu));
+        xvc_tray_icon_menu = NULL;
         gtk_window_set_skip_taskbar_hint (GTK_WINDOW (xvc_ctrl_main_window),
                                           FALSE);
         gtk_window_deiconify (GTK_WINDOW (xvc_ctrl_main_window));
@@ -936,9 +938,9 @@ on_tray_icon_button_press_event (GtkWidget * widget,
     bevent = (GdkEventButton *) event;
 
     if (bevent->button == (guint) 3) {
-        g_assert (tray_icon_menu);
+        g_assert (xvc_tray_icon_menu);
 
-        gtk_menu_popup (GTK_MENU (tray_icon_menu), NULL, NULL,
+        gtk_menu_popup (GTK_MENU (xvc_tray_icon_menu), NULL, NULL,
                         NULL, widget, bevent->button, bevent->time);
         // Tell calling code that we have handled this event; the buck
         // stops here.
@@ -1007,7 +1009,7 @@ start_recording_gui_stuff ()
         // connect the signals in the interface
         glade_xml_signal_autoconnect (xml);
         // store the toplevel widget for further reference
-        tray_icon_menu = glade_xml_get_widget (xml, "xvc_ti_menu");
+        xvc_tray_icon_menu = glade_xml_get_widget (xml, "xvc_ti_menu");
         if (jobp->state & VC_PAUSE) {
             pause_cb = glade_xml_get_widget (xml, "xvc_ti_pause");
             gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (pause_cb),

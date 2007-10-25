@@ -689,6 +689,10 @@ getOutputFile ()
         sprintf (file, job->file, job->pic_no);
     }
 
+#ifdef DEBUG
+    printf ("%s %s: Trying to open file %s\n", DEBUGFILE, DEBUGFUNCTION, file);
+#endif     // DEBUG
+
     fp = fopen (file, "wb");
     if (!fp) {
         perror (file);
@@ -1080,11 +1084,15 @@ commonCapture (enum captureFunctions capfunc)
             (app->current_mode > 0 && job->state & VC_START)) {
 
 #ifdef DEBUG
-            printf ("%s %s: opening file for captured frame(s)\n",
-                    DEBUGFILE, DEBUGFUNCTION);
+            printf ("%s %s: opening file for captured frame(s) ... state %i\n",
+                    DEBUGFILE, DEBUGFUNCTION, job->state);
 #endif     // DEBUG
 
             fp = getOutputFile ();
+#ifdef DEBUG
+            printf ("%s %s: got this file pointer %p\n",
+                    DEBUGFILE, DEBUGFUNCTION, fp);
+#endif     // DEBUG
             if (!fp)
                 return FALSE;
         }

@@ -11,11 +11,15 @@
 
 #include <dbus/dbus-glib-bindings.h>
 #include <gtk/gtktoggletoolbutton.h>
+#include <gtk/gtk.h>
 
 #include "dbus-server-object.h"
 #include "xvidcap-dbus-glue.h"
+#include "app_data.h"
+#include "control.h"
 
 extern GtkWidget *xvc_ctrl_main_window;
+extern GtkWidget *xvc_tray_icon_menu;
 
 static void xvc_server_object_class_init (XvcServerObjectClass * klass);
 static void xvc_server_object_init (XvcServerObject * server);
@@ -99,88 +103,88 @@ xvc_server_object_new ()
         XVC_SERVER_OBJECT (g_object_new (xvc_server_object_get_type (), NULL));
 }
 
-// dbus_glib_marshal_server_object_BOOLEAN__STRING_POINTER_POINTER,
-gboolean
-xvc_dbus_echo_string (XvcServerObject * server, gchar * original, gchar ** echo,
-                      GError ** error)
-{
-    gboolean problem = FALSE;
-
-    system ("touch /tmp/out.txt");
-    *echo = g_strdup (original);
-
-    if (problem) {
-        /* We have an error, set the gerror */
-        g_set_error (error, g_quark_from_static_string ("echo"),
-                     0xdeadbeef, "Some random problem occured, you're screwed");
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
 // dbus_glib_marshal_xvc_server_BOOLEAN__POINTER,
 gboolean
-xvc_dbus_stop (XvcServerObject * server, GError ** error) {
+xvc_dbus_stop (XvcServerObject * server, GError ** error)
+{
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
- //   gboolean active = FALSE;
+
+    //   gboolean active = FALSE;
 
     // get the filename button widget
     xml = glade_get_widget_tree (xvc_ctrl_main_window);
     g_assert (xml);
     w = glade_xml_get_widget (xml, "xvc_ctrl_stop_toggle");
     g_assert (w);
-	
-//	active = !gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w));
-    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), 
-	TRUE);
-//	active);
 
-	return TRUE;
+//  active = !gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w));
+    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), TRUE);
+//  active);
+
+    return TRUE;
 
 }
 
-// dbus_glib_marshal_xvc_server_BOOLEAN__POINTER,
-gboolean
-xvc_dbus_start (XvcServerObject * server, GError ** error) {
+static gboolean
+dbus_capture_start ()
+{
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
-    //gboolean active = FALSE;
 
     // get the filename button widget
     xml = glade_get_widget_tree (xvc_ctrl_main_window);
     g_assert (xml);
     w = glade_xml_get_widget (xml, "xvc_ctrl_record_toggle");
     g_assert (w);
-	
-	//active = !gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w));
-    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), 
-	TRUE);
-//	active);
 
-	return TRUE;
+    //active = !gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w));
+    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), TRUE);
+
+    return FALSE;
+}
+
+// dbus_glib_marshal_xvc_server_BOOLEAN__POINTER,
+gboolean
+xvc_dbus_start (XvcServerObject * server, GError ** error)
+{
+
+    xvc_idle_add (dbus_capture_start, (void *) NULL);
+
+    return TRUE;
 
 }
 
 // dbus_glib_marshal_xvc_server_BOOLEAN__POINTER,
 gboolean
-xvc_dbus_pause (XvcServerObject * server, GError ** error) {
+xvc_dbus_pause (XvcServerObject * server, GError ** error)
+{
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
     gboolean active = FALSE;
 
-    // get the filename button widget
-    xml = glade_get_widget_tree (xvc_ctrl_main_window);
-    g_assert (xml);
-    w = glade_xml_get_widget (xml, "xvc_ctrl_pause_toggle");
-    g_assert (w);
-	
-	active = !gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(w));
-    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), 
-	active);
+    if (xvc_tray_icon_menu != NULL) {
+        // get the widget for the pause menu item in the tray icon
+        xml = glade_get_widget_tree (xvc_tray_icon_menu);
+        g_assert (xml);
+        w = glade_xml_get_widget (xml, "xvc_ti_pause");
+        g_assert (w);
 
-	return TRUE;
+        active = !gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (w));
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), active);
+    } else {
+
+        // get the pause button widget
+        xml = glade_get_widget_tree (xvc_ctrl_main_window);
+        g_assert (xml);
+        w = glade_xml_get_widget (xml, "xvc_ctrl_pause_toggle");
+        g_assert (w);
+
+        active = !gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (w));
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), active);
+
+    }
+
+    return TRUE;
 
 }
-

@@ -3,11 +3,6 @@
 <node name="/net/jarre_de_the/Xvidcap">
 	<interface name="net.jarre_de_the.Xvidcap">
 		<annotation name="org.freedesktop.DBus.GLib.CSymbol" value="xvc_dbus"/>
-		<method name="EchoString">
-			<arg type="s" name="original" direction="in" />
-			<arg type="s" name="echo" direction="out" />
-		</method>
-		<!-- Add more methods/signals if you want -->
 		<method name="Stop">
 		</method>
 		<method name="Start">

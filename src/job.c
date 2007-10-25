@@ -501,12 +501,15 @@ job_state_change_signals_thread (int orig_state, int new_state)
 void
 xvc_job_set_state (int state)
 {
+#define DEBUGFUNCTION "xvc_job_set_state()"
     int orig_state = job->state;
 
+    printf ("%s %s: setting state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
     pthread_mutex_lock (&recording_mutex);
     job->state = state;
     job_state_change_signals_thread (orig_state, job->state);
     pthread_mutex_unlock (&recording_mutex);
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -517,12 +520,16 @@ xvc_job_set_state (int state)
 void
 xvc_job_merge_state (int state)
 {
+#define DEBUGFUNCTION "xvc_job_merge_state()"
     int orig_state = job->state;
 
+    printf ("%s %s: merging state %i with present %i\n", DEBUGFILE,
+            DEBUGFUNCTION, state, job->state);
     pthread_mutex_lock (&recording_mutex);
     job->state |= state;
     job_state_change_signals_thread (orig_state, job->state);
     pthread_mutex_unlock (&recording_mutex);
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -533,12 +540,15 @@ xvc_job_merge_state (int state)
 void
 xvc_job_remove_state (int state)
 {
+#define DEBUGFUNCTION "xvc_job_remove_state()"
     int orig_state = job->state;
 
+    printf ("%s %s: removing state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
     pthread_mutex_lock (&recording_mutex);
     job->state &= ~(state);
     job_state_change_signals_thread (orig_state, job->state);
     pthread_mutex_unlock (&recording_mutex);
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -550,13 +560,17 @@ xvc_job_remove_state (int state)
 void
 xvc_job_merge_and_remove_state (int merge_state, int remove_state)
 {
+#define DEBUGFUNCTION "xvc_job_merge_and_remove_state()"
     int orig_state = job->state;
 
+    printf ("%s %s: merging state %i with %i removing %i\n", DEBUGFILE,
+            DEBUGFUNCTION, job->state, merge_state, remove_state);
     pthread_mutex_lock (&recording_mutex);
     job->state |= merge_state;
     job->state &= ~(remove_state);
     job_state_change_signals_thread (orig_state, job->state);
     pthread_mutex_unlock (&recording_mutex);
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -567,12 +581,16 @@ xvc_job_merge_and_remove_state (int merge_state, int remove_state)
 void
 xvc_job_keep_state (int state)
 {
+#define DEBUGFUNCTION "xvc_job_keep_state()"
     int orig_state = job->state;
 
+    printf ("%s %s: keeping %i of state %i\n", DEBUGFILE, DEBUGFUNCTION, state,
+            job->state);
     pthread_mutex_lock (&recording_mutex);
     job->state &= state;
     job_state_change_signals_thread (orig_state, job->state);
     pthread_mutex_unlock (&recording_mutex);
+#undef DEBUGFUNCTION
 }
 
 /**
@@ -585,13 +603,17 @@ xvc_job_keep_state (int state)
 void
 xvc_job_keep_and_merge_state (int keep_state, int merge_state)
 {
+#define DEBUGFUNCTION "xvc_job_keep_and_merge_state()"
     int orig_state = job->state;
 
+    printf ("%s %s: keeping %i of state %i and merge with %i\n", DEBUGFILE,
+            DEBUGFUNCTION, keep_state, job->state, merge_state);
     pthread_mutex_lock (&recording_mutex);
     job->state &= keep_state;
     job->state |= merge_state;
     job_state_change_signals_thread (orig_state, job->state);
     pthread_mutex_unlock (&recording_mutex);
+#undef DEBUGFUNCTION
 }
 
 #ifdef USE_XDAMAGE

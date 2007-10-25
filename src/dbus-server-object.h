@@ -28,8 +28,6 @@ extern "C"
     XvcServerObject *xvc_server_object_new ();
     GType xvc_server_object_get_type ();
 
-    gboolean xvc_dbus_echo_string (XvcServerObject * server, gchar * original,
-                                   gchar ** echo, GError ** error);
     gboolean xvc_dbus_stop (XvcServerObject * server, GError ** error);
     gboolean xvc_dbus_start (XvcServerObject * server, GError ** error);
     gboolean xvc_dbus_pause (XvcServerObject * server, GError ** error);

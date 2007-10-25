@@ -1388,7 +1388,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
     XVC_AppData *app = xvc_appdata_ptr ();
 
     /* size of the encoded frame to write to file */
-    int out_size;
+    int out_size = -1;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
