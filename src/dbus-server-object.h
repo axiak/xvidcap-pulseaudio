@@ -11,7 +11,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif     /* __cplusplus */
+#endif     // __cplusplus
 
 /* Standard GObject class structures, etc */
     typedef struct
@@ -25,6 +25,9 @@ extern "C"
         GObject parent_instance;
     } XvcServerObject;
 
+/*
+ * function declarations
+ */
     XvcServerObject *xvc_server_object_new ();
     GType xvc_server_object_get_type ();
 
@@ -32,10 +35,13 @@ extern "C"
     gboolean xvc_dbus_start (XvcServerObject * server, GError ** error);
     gboolean xvc_dbus_pause (XvcServerObject * server, GError ** error);
 
+/*
+ * macros
+ */
 #define XVC_SERVER_OBJECT_GET_CLASS(object)  (G_TYPE_INSTANCE_GET_CLASS ((object), xvc_server_object_get_type(), XvcServerObjectClass))
 #define XVC_SERVER_OBJECT(object)            (G_TYPE_CHECK_INSTANCE_CAST ((object), xvc_server_object_get_type(), XvcServerObject))
 
 #ifdef __cplusplus
 }
-#endif     /* __cplusplus */
+#endif     // __cplusplus
 #endif     // __DBUS_SERVER_OBJECT__

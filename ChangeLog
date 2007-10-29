@@ -1,4 +1,9 @@
 
+2007-10-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: dbus-server-object.c, dbus-server-object.h,
+		xvidcap-dbus-client.c: added doxygen
+		comments
+
 2007-10-25  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* configure.in, Makefile.am, src: 
 		dbus-server-object.c, xvidcap-dbus.xml,
