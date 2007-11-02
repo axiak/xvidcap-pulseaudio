@@ -922,8 +922,16 @@ gboolean
 timer_stop_recording ()
 {
 #define DEBUGFUNCTION "timer_stop_recording()"
-    xvc_capture_stop_signal (FALSE);
-    return FALSE;
+    Job *jobp = xvc_job_ptr ();
+
+    if ((jobp->flags & FLG_AUTO_CONTINUE) != 0) {
+        xvc_job_merge_and_remove_state ((VC_STOP | VC_CONTINUE), 
+                (VC_START | VC_REC));
+        return TRUE;
+    } else {
+        xvc_job_set_state (VC_STOP);
+        return FALSE;
+    }        
 #undef DEBUGFUNCTION
 }
 

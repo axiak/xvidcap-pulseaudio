@@ -13,8 +13,8 @@ INCLUDES = \
 AM_CFLAGS =\
 	 -Wall\
 	 -g \
-	 -DDEBUG -DDEBUG2
-#	 -DDBUS_SERVICE_DIR=\""$(datadir)/dbus-1/service"\"
+	 -DDBUS_SERVICE_DIR=\""$(datadir)/dbus-1/service"\"
+#	 -DDEBUG -DDEBUG2
 
 bin_PROGRAMS = xvidcap
 

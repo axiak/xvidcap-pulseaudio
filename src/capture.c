@@ -1067,7 +1067,7 @@ commonCapture (enum captureFunctions capfunc)
             // autocontinue on we're setting a flag to let the cleanup
             // code know we need
             // to restart again afterwards
-            if (app->flags & FLG_AUTO_CONTINUE) {
+            if (job->flags & FLG_AUTO_CONTINUE) {
                 xvc_job_merge_state (VC_CONTINUE);
             }
 
@@ -1098,6 +1098,15 @@ commonCapture (enum captureFunctions capfunc)
         }
         // if this is the first frame for the current job ...
         if (job->state & VC_START) {
+
+            // the next bit is true if we have configured max_frames and we're
+            // reaching the limit with this captured frame
+            // this should not at all be possible with this, the first frame
+            if (target->frames && ((job->pic_no - target->start_no) >
+                               target->frames - 1)) {
+                xvc_job_set_state (VC_STOP);
+                return 0;
+            }
 
 #ifdef DEBUG
             printf ("%s %s: create data structure for image\n", DEBUGFILE,
@@ -1352,7 +1361,7 @@ commonCapture (enum captureFunctions capfunc)
         // autocontinue
         if ((orig_state & VC_CONTINUE) == 0)
             xvc_idle_add (xvc_capture_stop, job);
-
+            
         // clean up the save routines in xtoXXX.c
         if (job->clean)
             (*job->clean) ();
@@ -1376,7 +1385,8 @@ commonCapture (enum captureFunctions capfunc)
             // prepare autocontinue
             job->movie_no += 1;
             job->pic_no = target->start_no;
-            xvc_job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
+            xvc_job_merge_and_remove_state ((VC_START | VC_REC), 
+                    VC_STOP);
 
             return time;
         }

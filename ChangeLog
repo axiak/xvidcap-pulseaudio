@@ -1,4 +1,11 @@
 
+2007-11-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_ui.c, capture.c, job.c, Makefile.am: 
+		fix --continue with --time and one
+		condition where starting recording with
+		current frame == max frame would cause
+		a crash
+
 2007-10-29  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: dbus-server-object.c, dbus-server-object.h,
 		xvidcap-dbus-client.c: added doxygen
