@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.1.6\n"
-"POT-Creation-Date: 2007-05-17 23:12+0200\n"
+"Project-Id-Version: 1.1.7\n"
+"POT-Creation-Date: 2007-11-04 23:28+0100\n"
 "PO-Revision-Date: 2007-05-17 23:09+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: DE <xvidcap-l10n@lists.sourceforge.net>\n"
@@ -18,8 +18,8 @@ msgid "1"
 msgstr "1"
 
 #: ../C/xvidcap.1.xml:8(refmiscinfo)
-msgid "April 2007"
-msgstr "April 2007"
+msgid "November 2007"
+msgstr "November 2007"
 
 #: ../C/xvidcap.1.xml:11(refname)
 msgid "XVidCap"
@@ -656,123 +656,3 @@ msgstr ""
 #: ../C/xvidcap.1.xml:0(None)
 msgid "translator-credits"
 msgstr "Karl H. Beckers <karl.h.beckers@gmx.net>, 2006, 2007"
-
-#~ msgid "September 2007"
-#~ msgstr "April 2007"
-
-#~ msgid "--mf"
-#~ msgstr "--mf"
-
-#~ msgid "--sf"
-#~ msgstr "--sf"
-
-#~ msgid "<placeholder-1/>|<placeholder-2/>"
-#~ msgstr "<placeholder-1/>|<placeholder-2/>"
-
-#~ msgid "file name pattern"
-#~ msgstr "Dateinamensmuster"
-
-#~ msgid "|-"
-#~ msgstr "|-"
-
-#~ msgid "--file<placeholder-1/><placeholder-2/>"
-#~ msgstr "--file<placeholder-1/><placeholder-2/>"
-
-#~ msgid "frames per second"
-#~ msgstr "Frames pro Sekunde"
-
-#~ msgid "--fps<placeholder-1/>"
-#~ msgstr "--fps<placeholder-1/>"
-
-#~ msgid "geometry"
-#~ msgstr "Aufnahmebereich"
-
-#~ msgid "size percentage"
-#~ msgstr "prozentuale Größe"
-
-#~ msgid "--rescale<placeholder-1/>"
-#~ msgstr "--rescale<placeholder-1/>"
-
-#~ msgid "quality percentage"
-#~ msgstr "prozentuale Qualität"
-
-#~ msgid "--quality<placeholder-1/>"
-#~ msgstr "--quality<placeholder-1/>"
-
-#~ msgid "x11|shm"
-#~ msgstr "x11|shm"
-
-#~ msgid "--source<placeholder-1/>"
-#~ msgstr "--source<placeholder-1/>"
-
-#~ msgid "--time<placeholder-1/>"
-#~ msgstr "--time<placeholder-1/>"
-
-#~ msgid "maximum frames"
-#~ msgstr "maximale Anzahl Frames"
-
-#~ msgid "--frames<placeholder-1/>"
-#~ msgstr "--frames<placeholder-1/>"
-
-#~ msgid "initial frame number"
-#~ msgstr "Anfang der Frame-Nummerierung"
-
-#~ msgid "--start_no<placeholder-1/>"
-#~ msgstr "--start_no<placeholder-1/>"
-
-#~ msgid "yes|no"
-#~ msgstr "yes|no"
-
-#~ msgid "--continue<placeholder-1/>"
-#~ msgstr "--continue<placeholder-1/>"
-
-#~ msgid "--gui<placeholder-1/>"
-#~ msgstr "--gui<placeholder-1/>"
-
-#~ msgid "video codec"
-#~ msgstr "Video Codec"
-
-#~ msgid "--codec<placeholder-1/>"
-#~ msgstr "--codec<placeholder-1/>"
-
-#~ msgid "output file format"
-#~ msgstr "Ausgabe-Dateiformat"
-
-#~ msgid "--format<placeholder-1/>"
-#~ msgstr "--format<placeholder-1/>"
-
-#~ msgid "--audio<placeholder-1/>"
-#~ msgstr "--audio<placeholder-1/>"
-
-#~ msgid "audio codec"
-#~ msgstr "Ton Codec"
-
-#~ msgid "--aucodec<placeholder-1/>"
-#~ msgstr "--aucodec<placeholder-1/>"
-
-#~ msgid "audio capture device"
-#~ msgstr "Ton-Aufnahmegerät"
-
-#~ msgid "--audio_in<placeholder-1/><placeholder-2/>"
-#~ msgstr "--audio_in<placeholder-1/><placeholder-2/>"
-
-#~ msgid "audio bit rate"
-#~ msgstr "Ton Bit Rate"
-
-#~ msgid "--audio_bits<placeholder-1/>"
-#~ msgstr "--audio_bits<placeholder-1/>"
-
-#~ msgid "audio sample rate"
-#~ msgstr "Ton Abtastrate"
-
-#~ msgid "--audio_rate<placeholder-1/>"
-#~ msgstr "--audio_rate<placeholder-1/>"
-
-#~ msgid "audio channels"
-#~ msgstr "Ton Kanäle"
-
-#~ msgid "--file <placeholder-1/>"
-#~ msgstr "--file <placeholder-1/>"
-
-#~ msgid "--audio_in<placeholder-1/>|-"
-#~ msgstr "--audio_in<placeholder-1/>|-"

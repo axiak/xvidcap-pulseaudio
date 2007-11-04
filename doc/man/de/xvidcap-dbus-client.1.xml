@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<refentry revision="1.1.7">
+    <refmeta>
+        <refentrytitle>xvidcap-dbus-client</refentrytitle>
+        <manvolnum>1</manvolnum>
+        <refmiscinfo>November 2007</refmiscinfo>
+    </refmeta>
+    <refnamediv id="name">
+        <refname>XVidCap D-BUS Client</refname>
+        <refpurpose>Fernsteuerung für XVidCap</refpurpose>
+    </refnamediv>
+    <!-- body begins here -->
+    <refsynopsisdiv id="synopsis">
+        <cmdsynopsis>
+            <command>xvidcap-dbus-client</command>    
+            <arg choice="opt">--action <arg choice="plain">start|stop|pause</arg></arg>
+        </cmdsynopsis>
+    </refsynopsisdiv>
+
+
+    <refsect1 id="intro"><title>Beschreibung</title>
+        <para><application>xvidcap-dbus-client</application> ist ein Werkzeug zum Steuern einer xvidcap Aufnahme von außerhalb xvidcap selbst. Der wesentliche Verwendungszweck ist die Steuerung von der Kommandozeile aus oder im Zusammenhang mit Tastatur-Kürzeln.</para>
+        <para>Zur Kommunikation zwischen Prozessen wird hier D-BUS verwendet. Falls xvidcap noch nicht läuft, wenn dieses Programm verwendet wird, um eine Aktion auszulösen, wird xvidcap durch D-BUS gestartet. Für weitere Hilfe, Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink></para>
+    </refsect1>
+
+    <refsect1 id="options"><title>Optionen</title>
+
+        <para>Dieses Program folgt der gängigen GNU Befehlszeilen-Syntax bei der lange Optionen mit zwei Bindestrichen (<literal>--</literal>) beginnen. Folgende Optionen sind möglich:</para> 
+        <variablelist remap="IP">
+            <varlistentry>
+                <term><option>--action </option>start|stop|pause</term>
+                <listitem>
+                    <para>Hiermit wird der Befehl an xvidcap gesendet, eine Aufnahme entweder zu starten oder zu stoppen, oder eine Pause einzulegen, bzw. diese zu beenden. Falls xvidcap nicht läuft, wird es gestartet.</para> 
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsect1>
+        
+    <refsect1 id="author"><title>Autoren</title>
+        <para><application>xvidcap-dbus-client</application> wurde entwickelt von Karl H. Beckers.</para>
+        <para>Diese manpage wurde von Karl H. Beckers <email>karl.h.beckers@gmx.net</email> für das <application>xvidcap</application> Project geschrieben.</para>
+        <para>Karl H. Beckers </para>
+        <para>Die Genehmigung dieses Dokument zu kopieren, verteilen und/oder zu verändern wird erteilt im Rahmen der GNU Free Documentation License Version 1.1 oder jeglicher späterer Version, die durch die Free Software Foundation herausgegeben wurde; ohne unveränderliche Abschnitte, Voder- oder Rückseiten Texte.</para> 
+    </refsect1>
+</refentry>

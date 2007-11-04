@@ -1,0 +1,35 @@
+.TH xvidcap\-dbus\-client 1  "November 2007" 
+.SH NAME
+XVidCap D\-BUS Client \- Remote Control Utility for XVidCap
+.SH SYNOPSIS
+\fBxvidcap\-dbus\-client\fR [\-\-action start|stop|pause ]
+.SH INTRODUCTION
+xvidcap\-dbus\-client is a small utility to allow for manipulating an
+xvidcap capture session from outside xvidcap. Its main purpose is to be used from the command
+line or key bindings.
+.PP
+For inter process communication this utility uses D\-BUS. If xvidcap is not running when this
+program is invoked to trigger an action, xvidcap is started through D\-BUS activation. 
+For help, feature requests, or bug\-reports please turn to 
+http://www.sourceforge.net/projects/xvidcap/
+.SH OPTIONS
+This program follows the usual GNU command line syntax, 
+with long options starting with two dashes (\fB\-\-\fR). 
+A summary of options is included below.
+.TP 
+\fB\-\-action \fRstart|stop|pause
+This sends a command to xvidcap to either start or stop a capturing session or
+to pause or resume one. If xvidcap is not running it will be started.
+.SH AUTHORS
+xvidcap\-dbus\-client was written by Karl H. Beckers.
+.PP
+This manual page was written by Karl H. Beckers karl.h.beckers@gmx.net for 
+the xvidcap project.
+.PP
+This translation was done by TRANSLATOR\-CREDITS HERE!!!
+.PP
+Permission is granted to copy, distribute and/or modify this document under 
+the terms of the GNU Free Documentation 
+License, Version 1.1 or any later version published by the Free 
+Software Foundation; with no Invariant Sections, no Front\-Cover 
+Texts and no Back\-Cover Texts.

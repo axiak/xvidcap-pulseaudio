@@ -3,6 +3,18 @@
 	* src/xvidcap-dbus-client.c, src/main.c, 
 		po: en.po, de.po, POTFILES.in:
 		updated i18n
+	* doc/man: C/xvidcap-dbus-client.1.xml, 
+		C/xvidcap-dbus-client.1, 
+		C/xvidcap-dbus-client.1.xml.pot, 
+		C/Makefile.am, C/xvidcap.1.xml, C/xvidcap.1, 
+		C/xvidcap.1.xml.pot, de/xvidcap.1-de.po, 
+		de/xvidcap-dbus-client.1.xml, 
+		de/xvidcap-dbus-client.1, 
+		de/xvidcap-dbus-client.1-de.po, 
+		de/Makefile.am, de/xvidcap.1.xml, 
+		de/xvidcap.1: added xvidcap-dbus-client
+		manpage and updated xvidcap manpage
+		for 1.1.7
 
 2007-11-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, capture.c, job.c, Makefile.am: 
