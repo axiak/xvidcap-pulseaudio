@@ -81,7 +81,7 @@ usage (char *prog)
 
     printf
         (_
-         ("Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
+         ("Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"),
          prog, VERSION);
     printf (_
             ("[--fps #.#]      frames per second (float) or a fraction string like \"30000/1001\"\n"));
@@ -468,7 +468,7 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
 
                     printf
                         (_
-                         ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
+                         ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"),
                          _argv[0], VERSION);
 
 #ifdef USE_FFMPEG
@@ -562,7 +562,7 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
 
                     printf
                         (_
-                         ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
+                         ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"),
                          _argv[0], VERSION);
                     printf (_("Available file formats: "));
 
@@ -623,7 +623,7 @@ parse_cli_options (XVC_CapTypeOptions * tmp_capture_options, int argc,
 
                     printf
                         (_
-                         ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"),
+                         ("%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"),
                          _argv[0], VERSION);
                     printf (_
                             ("Available audio codecs for multi-frame capture: "));

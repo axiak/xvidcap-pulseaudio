@@ -1,4 +1,9 @@
 
+2007-11-04  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xvidcap-dbus-client.c, src/main.c, 
+		po: en.po, de.po, POTFILES.in:
+		updated i18n
+
 2007-11-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, capture.c, job.c, Makefile.am: 
 		fix --continue with --time and one

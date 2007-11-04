@@ -57,7 +57,7 @@ enum ACTION_TYPES
 void
 usage (char *prog)
 {
-    printf (_("Usage: %s, ver %s, (c) khb (c) 2003,04,05,06\n"), prog, VERSION);
+    printf (_("Usage: %s, ver %s, khb (c) 2003-07\n"), prog, VERSION);
     printf
         (_
          ("[--action #]      action to perform (\"start\"|\"stop\"|\"pause\")\n"));

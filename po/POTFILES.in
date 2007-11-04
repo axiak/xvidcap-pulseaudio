@@ -2,11 +2,13 @@
 
 src/app_data.c
 src/codecs.c
-src/gnome_ui.c
+src/eggtrayicon.c
 src/gnome_options.c
+src/gnome_ui.c
 src/job.c
 src/main.c
 src/options.c
 src/xtoffmpeg.c
 src/xv_error_item.c
+src/xvidcap-dbus-client.c
 src/gnome-xvidcap.glade
