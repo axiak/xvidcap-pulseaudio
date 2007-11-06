@@ -77,6 +77,8 @@
 #include "video.h"
 #endif     // HasVideo4Linux
 
+#include <errno.h>
+
 #include "capture.h"
 #include "job.h"
 #include "app_data.h"
@@ -85,6 +87,9 @@
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern int xvc_led_time;
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
+
+/** \brief make error numbers accessible */
+extern int errno;
 
 #ifdef HAVE_LIBXFIXES
 /** \brief we need to get color information for processing the real mouse
@@ -694,10 +699,6 @@ getOutputFile ()
 #endif     // DEBUG
 
     fp = fopen (file, "wb");
-    if (!fp) {
-        perror (file);
-        job->state = VC_STOP;
-    }
 
     return fp;
 #undef DEBUGFUNCTION
@@ -986,6 +987,7 @@ checkCaptureDuration (long time, long time1)
             printf
                 ("missing %ld milli secs (%d needed per frame), pic no %d\n",
                  time, job->time_per_frame, job->pic_no);
+        time = 0;
     }
 
     return time;
@@ -1005,7 +1007,7 @@ commonCapture (enum captureFunctions capfunc)
 #define DEBUGFUNCTION "commonCapture()"
     static XImage *image = NULL;
     static FILE *fp = NULL; // file handle to write the frame to
-    long time, time1;   /* for measuring the duration of a frame capture */
+    long time = 0, time1;   /* for measuring the duration of a frame capture */
     struct timeval curr_time;   /* for measuring the duration of a frame
                                  * capture */
     static int shm_opcode = 0, shm_event_base = 0, shm_error_base = 0;
@@ -1014,6 +1016,7 @@ commonCapture (enum captureFunctions capfunc)
     XVC_AppData *app = xvc_appdata_ptr ();
     XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
+    int full_cleanup = TRUE;
 
 #ifdef USE_XDAMAGE
     XserverRegion damaged_region;
@@ -1093,8 +1096,13 @@ commonCapture (enum captureFunctions capfunc)
             printf ("%s %s: got this file pointer %p\n",
                     DEBUGFILE, DEBUGFUNCTION, fp);
 #endif     // DEBUG
-            if (!fp)
-                return FALSE;
+            if (!fp) {
+                // we react on errno when cleaning up
+                job->capture_returned_errno = errno;
+                if (app->current_mode > 0 || job->pic_no == target->start_no)
+                    full_cleanup = FALSE;
+                goto CLEAN_CAPTURE;
+            }
         }
         // if this is the first frame for the current job ...
         if (job->state & VC_START) {
@@ -1103,11 +1111,10 @@ commonCapture (enum captureFunctions capfunc)
             // reaching the limit with this captured frame
             // this should not at all be possible with this, the first frame
             if (target->frames && ((job->pic_no - target->start_no) >
-                               target->frames - 1)) {
-                xvc_job_set_state (VC_STOP);
-                return 0;
+                                   target->frames - 1)) {
+                full_cleanup = FALSE;
+                goto CLEAN_CAPTURE;
             }
-
 #ifdef DEBUG
             printf ("%s %s: create data structure for image\n", DEBUGFILE,
                     DEBUGFUNCTION);
@@ -1339,32 +1346,34 @@ commonCapture (enum captureFunctions capfunc)
         time = 0;
         orig_state = job->state;       // store state here, esp. VC_CONTINUE
 
-        if (image) {
-            XDestroyImage (image);
-            image = NULL;
-        }
-        if (capfunc == SHM)
-            XShmDetach (app->dpy, &shminfo);
+        if (full_cleanup) {
+            if (image) {
+                XDestroyImage (image);
+                image = NULL;
+            }
+            if (capfunc == SHM)
+                XShmDetach (app->dpy, &shminfo);
 
 #ifdef USE_XDAMAGE
-        if (app->flags & FLG_USE_XDAMAGE) {
-            if (capfunc == SHM)
-                XShmDetach (app->dpy, &dmg_shminfo);
-            if (dmg_image)
-                XDestroyImage (dmg_image);
-        }
+            if (app->flags & FLG_USE_XDAMAGE) {
+                if (capfunc == SHM)
+                    XShmDetach (app->dpy, &dmg_shminfo);
+                if (dmg_image)
+                    XDestroyImage (dmg_image);
+            }
 #endif     // USE_XDAMAGE
 
+            // clean up the save routines in xtoXXX.c
+            if (job->clean)
+                (*job->clean) ();
+        }
         xvc_job_set_state (VC_STOP);
 
         // set the sensitive stuff for the control panel if we don't
         // autocontinue
         if ((orig_state & VC_CONTINUE) == 0)
             xvc_idle_add (xvc_capture_stop, job);
-            
-        // clean up the save routines in xtoXXX.c
-        if (job->clean)
-            (*job->clean) ();
+
         // if we're recording to a movie, we must close the file now
         if (app->current_mode > 0)
             if (fp)
@@ -1374,7 +1383,7 @@ commonCapture (enum captureFunctions capfunc)
         if ((orig_state & VC_CONTINUE) == 0) {
             // after this we're ready to start recording again
             xvc_job_merge_state (VC_READY);
-        } else {
+        } else if (job->capture_returned_errno == 0) {
 
 #ifdef DEBUG
             printf
@@ -1385,8 +1394,7 @@ commonCapture (enum captureFunctions capfunc)
             // prepare autocontinue
             job->movie_no += 1;
             job->pic_no = target->start_no;
-            xvc_job_merge_and_remove_state ((VC_START | VC_REC), 
-                    VC_STOP);
+            xvc_job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
 
             return time;
         }

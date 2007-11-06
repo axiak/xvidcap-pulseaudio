@@ -55,6 +55,7 @@
 #include <glade/glade.h>
 #include <pthread.h>
 #include <signal.h>
+#include <errno.h>
 
 #include "led_meter.h"
 #include "job.h"
@@ -77,6 +78,9 @@
 extern GtkWidget *xvc_pref_main_window;
 extern GtkWidget *xvc_warn_main_window;
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
+
+/** \brief make error numbers accessible */
+extern int errno;
 
 /** \brief make the main control panel globally available */
 GtkWidget *xvc_ctrl_main_window = NULL;
@@ -547,6 +551,7 @@ stop_recording_nongui_stuff ()
     struct timeval curr_time;
     long stop_time = 0;
     XVC_AppData *app = xvc_appdata_ptr ();
+    Job *jobp = xvc_job_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering with thread running %i\n",
@@ -565,7 +570,7 @@ stop_recording_nongui_stuff ()
         g_source_remove (stop_timer_id);
 
     state = VC_STOP;
-    if (app->flags & FLG_AUTO_CONTINUE) {
+    if (app->flags & FLG_AUTO_CONTINUE && jobp->capture_returned_errno == 0) {
         state |= VC_CONTINUE;
     }
     xvc_job_set_state (state);
@@ -583,6 +588,21 @@ stop_recording_nongui_stuff ()
                                   NULL);
 #endif     // USE_XDAMAGE
 
+    if ((jobp->flags & FLG_NOGUI) != 0 && jobp->capture_returned_errno != 0) {
+        GtkWidget *dialog = NULL;
+        char file[PATH_MAX + 1];
+
+        if (app->current_mode > 0) {
+            sprintf (file, jobp->file, jobp->movie_no);
+        } else {
+            sprintf (file, jobp->file, jobp->pic_no);
+        }
+
+        fprintf (stderr, "Error Capturing\nFile used: %s\nError: %s\n",
+                 file, strerror (jobp->capture_returned_errno));
+
+        jobp->capture_returned_errno = 0;
+    }
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -707,9 +727,33 @@ stop_recording_gui_stuff ()
         gtk_window_deiconify (GTK_WINDOW (xvc_ctrl_main_window));
     }
 
-    if ((strlen (target->file) < 1 ||
-         (app->flags & FLG_ALWAYS_SHOW_RESULTS) > 0) &&
-        (app->flags & FLG_AUTO_CONTINUE) == 0) {
+    if (jobp->capture_returned_errno != 0) {
+        GtkWidget *dialog = NULL;
+        char file[PATH_MAX + 1];
+
+        if (app->current_mode > 0) {
+            sprintf (file, jobp->file, jobp->movie_no);
+        } else {
+            sprintf (file, jobp->file, jobp->pic_no);
+        }
+
+        dialog = gtk_message_dialog_new (GTK_WINDOW (xvc_warn_main_window),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_ERROR,
+                                         GTK_BUTTONS_CLOSE,
+                                         _("Error Capturing"));
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                  _("File used: %s\nError: %s"),
+                                                  file,
+                                                  g_strerror (jobp->
+                                                              capture_returned_errno));
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
+
+        jobp->capture_returned_errno = 0;
+    } else if ((strlen (target->file) < 1 ||
+                (app->flags & FLG_ALWAYS_SHOW_RESULTS) > 0) &&
+               (app->flags & FLG_AUTO_CONTINUE) == 0) {
         int result = 0;
         float fps_ratio = 0;
         char buf[100];
@@ -925,13 +969,13 @@ timer_stop_recording ()
     Job *jobp = xvc_job_ptr ();
 
     if ((jobp->flags & FLG_AUTO_CONTINUE) != 0) {
-        xvc_job_merge_and_remove_state ((VC_STOP | VC_CONTINUE), 
-                (VC_START | VC_REC));
+        xvc_job_merge_and_remove_state ((VC_STOP | VC_CONTINUE),
+                                        (VC_START | VC_REC));
         return TRUE;
     } else {
         xvc_job_set_state (VC_STOP);
         return FALSE;
-    }        
+    }
 #undef DEBUGFUNCTION
 }
 

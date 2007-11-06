@@ -137,6 +137,8 @@ typedef struct _Job
     XserverRegion dmg_region;
 #endif     // USE_XDAMAGE
 
+    /** \brief the last capture session returned this errno */
+    int capture_returned_errno;
 } Job;
 
 void xvc_job_free ();

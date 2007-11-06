@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-04 19:03+0100\n"
+"POT-Creation-Date: 2007-11-06 18:53+0100\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: English\n"
@@ -771,7 +771,7 @@ msgstr "ACTION:"
 # the following are long codec names
 #
 #: ../src/codecs.c:100 ../src/codecs.c:251 ../src/codecs.c:463
-#: ../src/gnome_ui.c:758
+#: ../src/gnome_ui.c:802
 msgid "NONE"
 msgstr "NONE"
 
@@ -917,15 +917,28 @@ msgstr "The orientation of the tray."
 msgid "C_apture"
 msgstr "C_apture"
 
-#: ../src/gnome_ui.c:1334 ../src/gnome_ui.c:1335
+#: ../src/gnome_ui.c:744
+msgid "Error Capturing"
+msgstr "Error Capturing"
+
+#: ../src/gnome_ui.c:746
+#, c-format
+msgid ""
+"File used: %s\n"
+"Error: %s"
+msgstr ""
+"File used: %s\n"
+"Error: %s"
+
+#: ../src/gnome_ui.c:1378 ../src/gnome_ui.c:1379
 msgid "Move cursor back one frame"
 msgstr "Move cursor back one frame"
 
-#: ../src/gnome_ui.c:1344 ../src/gnome_ui.c:1345
+#: ../src/gnome_ui.c:1388 ../src/gnome_ui.c:1389
 msgid "Move cursor to next frame"
 msgstr "Move cursor to next frame"
 
-#: ../src/gnome_ui.c:1352 ../src/gnome_ui.c:1354
+#: ../src/gnome_ui.c:1396 ../src/gnome_ui.c:1398
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -933,23 +946,23 @@ msgstr ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
 
-#: ../src/gnome_ui.c:1359 ../src/gnome_ui.c:1360
+#: ../src/gnome_ui.c:1403 ../src/gnome_ui.c:1404
 msgid "Edit current individual frame"
 msgstr "Edit current individual frame"
 
-#: ../src/gnome_ui.c:1365 ../src/gnome_ui.c:1366
+#: ../src/gnome_ui.c:1409 ../src/gnome_ui.c:1410
 msgid "Capture single frame"
 msgstr "Capture single frame"
 
-#: ../src/gnome_ui.c:1390 ../src/gnome_ui.c:1391
+#: ../src/gnome_ui.c:1434 ../src/gnome_ui.c:1435
 msgid "Move cursor to previous movie"
 msgstr "Move cursor to previous movie"
 
-#: ../src/gnome_ui.c:1393 ../src/gnome_ui.c:1394
+#: ../src/gnome_ui.c:1437 ../src/gnome_ui.c:1438
 msgid "Move cursor to next movie"
 msgstr "Move cursor to next movie"
 
-#: ../src/gnome_ui.c:1398 ../src/gnome_ui.c:1400
+#: ../src/gnome_ui.c:1442 ../src/gnome_ui.c:1444
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -957,30 +970,30 @@ msgstr ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
 
-#: ../src/gnome_ui.c:1405 ../src/gnome_ui.c:1406
+#: ../src/gnome_ui.c:1449 ../src/gnome_ui.c:1450
 msgid "Edit current movie"
 msgstr "Edit current movie"
 
-#: ../src/gnome_ui.c:2714 ../src/gnome_ui.c:2715
+#: ../src/gnome_ui.c:2758 ../src/gnome_ui.c:2759
 #: ../src/gnome-xvidcap.glade.h:47
 msgid "Detach selection frame"
 msgstr "Detach selection frame"
 
-#: ../src/gnome_ui.c:2738 ../src/gnome_ui.c:2739
+#: ../src/gnome_ui.c:2782 ../src/gnome_ui.c:2783
 msgid "Attach selection frame"
 msgstr "Attach selection frame"
 
-#: ../src/job.c:104
+#: ../src/job.c:105
 #, c-format
 msgid "Insufficient permission to access sound input from %s\n"
 msgstr "Insufficient permission to access sound input from %s\n"
 
-#: ../src/job.c:106 ../src/job.c:112
+#: ../src/job.c:107 ../src/job.c:113
 #, c-format
 msgid "Sound disabled!\n"
 msgstr "Sound disabled!\n"
 
-#: ../src/job.c:111
+#: ../src/job.c:112
 #, c-format
 msgid "Error accessing sound input from %s\n"
 msgstr "Error accessing sound input from %s\n"

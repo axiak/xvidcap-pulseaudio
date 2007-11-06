@@ -47,6 +47,7 @@
 #include <pthread.h>
 #include <limits.h>                    // PATH_MAX
 #include <X11/Intrinsic.h>
+#include <errno.h>
 
 #include "job.h"
 #include "capture.h"
@@ -169,6 +170,8 @@ job_new ()
     job->dmg_region = XFixesCreateRegion (app->dpy, NULL, 0);
 #endif     // USE_XDAMAGE
 
+    job->capture_returned_errno = 0;
+
     return (job);
 #undef DEBUGFUNCTION
 }
@@ -239,11 +242,12 @@ xvc_job_set_from_app_data (XVC_AppData * app)
     else
 #endif     // USE_FFMPEG
         cto = &(app->single_frame);
+
     // various manual settings
     // need to have the flags set to smth. before other functions try to
     // do: flags |= or smth.
     job->flags = app->flags;
-    if (app->current_mode == 0 || xvc_is_filename_mutable(cto->file))
+    if (app->current_mode == 0 || xvc_is_filename_mutable (cto->file))
         job->flags &= ~(FLG_AUTO_CONTINUE);
 
     job->time_per_frame = (int) (1000 /
@@ -473,6 +477,9 @@ xvc_job_dump ()
     printf ("ncolors = %i\n", job->ncolors);
     printf ("color_table = %p\n", job->color_table);
     printf ("colors = %p\n", job->colors);
+
+    printf ("capture returned error: %s\n",
+            strerror (job->capture_returned_errno));
 #undef DEBUGFUNCTION
 }
 
@@ -508,7 +515,7 @@ xvc_job_set_state (int state)
 
 #ifdef DEBUG
     printf ("%s %s: setting state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
-#endif // DEBUG
+#endif     // DEBUG
     pthread_mutex_lock (&recording_mutex);
     job->state = state;
     job_state_change_signals_thread (orig_state, job->state);
@@ -530,7 +537,7 @@ xvc_job_merge_state (int state)
 #ifdef DEBUG
     printf ("%s %s: merging state %i with present %i\n", DEBUGFILE,
             DEBUGFUNCTION, state, job->state);
-#endif // DEBUG
+#endif     // DEBUG
     pthread_mutex_lock (&recording_mutex);
     job->state |= state;
     job_state_change_signals_thread (orig_state, job->state);
@@ -551,7 +558,7 @@ xvc_job_remove_state (int state)
 
 #ifdef DEBUG
     printf ("%s %s: removing state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
-#endif // DEBUG
+#endif     // DEBUG
     pthread_mutex_lock (&recording_mutex);
     job->state &= ~(state);
     job_state_change_signals_thread (orig_state, job->state);
@@ -574,7 +581,7 @@ xvc_job_merge_and_remove_state (int merge_state, int remove_state)
 #ifdef DEBUG
     printf ("%s %s: merging state %i with %i removing %i\n", DEBUGFILE,
             DEBUGFUNCTION, job->state, merge_state, remove_state);
-#endif // DEBUG
+#endif     // DEBUG
     pthread_mutex_lock (&recording_mutex);
     job->state |= merge_state;
     job->state &= ~(remove_state);
@@ -597,7 +604,7 @@ xvc_job_keep_state (int state)
 #ifdef DEBUG
     printf ("%s %s: keeping %i of state %i\n", DEBUGFILE, DEBUGFUNCTION, state,
             job->state);
-#endif // DEBUG
+#endif     // DEBUG
     pthread_mutex_lock (&recording_mutex);
     job->state &= state;
     job_state_change_signals_thread (orig_state, job->state);
@@ -621,7 +628,7 @@ xvc_job_keep_and_merge_state (int keep_state, int merge_state)
 #ifdef DEBUG
     printf ("%s %s: keeping %i of state %i and merge with %i\n", DEBUGFILE,
             DEBUGFUNCTION, keep_state, job->state, merge_state);
-#endif // DEBUG
+#endif     // DEBUG
     pthread_mutex_lock (&recording_mutex);
     job->state &= keep_state;
     job->state |= merge_state;
