@@ -4,6 +4,11 @@
 		for very small capture areas where
 		4 threads would exceed ffmpeg's 
 		internal maximum
+	* src: xtoffmpeg.c, gnome_ui.c, capture.c, job.c:
+		fixes to state changes during capture
+		to make sure no external state changes
+		can occur while we're reacting on a
+		given state
 
 2007-11-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* po/en.po, po/de.po, src: gnome_ui.c, capture.c, 

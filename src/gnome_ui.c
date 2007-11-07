@@ -521,6 +521,7 @@ do_record_thread ()
             printf ("%s %s: unpaused\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
         }
+
         pause = job->capture ();
 
         if (pause > 0)
@@ -1210,8 +1211,10 @@ start_recording_nongui_stuff ()
                 if (ret) {
                     //XSelectInput (app->dpy, children[i], StructureNotifyMask);
 //                  if (!attribs.override_redirect /* && attribs.depth==root_attr.depth */ ) {
+                    gdk_error_trap_push ();
                     XDamageCreate (app->dpy, children[i],
                                    XDamageReportRawRectangles);
+                    gdk_error_trap_pop ();
 //                  }
                 }
             }

@@ -271,6 +271,8 @@ static pthread_mutex_t mp = PTHREAD_MUTEX_INITIALIZER;
  *      capture. This is the thread's id */
 static pthread_t tid = 0;
 
+static int audio_thread_running = FALSE;
+
 /** \brief store current audio_pts for a/v sync */
 static double audio_pts;
 
@@ -725,6 +727,7 @@ cleanup_thread_when_stopped ()
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
+    audio_thread_running = FALSE;
     pthread_exit (&ret);
 #undef DEBUGFUNCTION
 }
@@ -748,6 +751,7 @@ capture_audio_thread (Job * job)
     static short *samples = NULL;
     AVPacket pkt;
 
+    audio_thread_running = TRUE;
     signal (SIGUSR1, cleanup_thread_when_stopped);
 
     while (TRUE) {
@@ -876,6 +880,7 @@ capture_audio_thread (Job * job)
         usleep (sleep);
     }                                  // end while(TRUE) loop
     ret = 1;
+    audio_thread_running = FALSE;
     pthread_exit (&ret);
 #undef DEBUGFUNCTION
 }
@@ -1810,6 +1815,13 @@ xvc_ffmpeg_clean ()
         {
             int tret;
 
+	    // wait till audio thread is actually running, or else
+	    // the signal might kill xvidcap. we also cannot just
+	    // drop sending the signal, because the audio thread
+	    // might just be starting
+	    while (!audio_thread_running) {
+		usleep(10);
+	    }
             tret = pthread_kill (tid, SIGUSR1);
 
             pthread_join (tid, NULL);

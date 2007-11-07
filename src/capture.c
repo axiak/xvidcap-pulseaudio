@@ -91,6 +91,9 @@ extern int xvc_led_time;
 /** \brief make error numbers accessible */
 extern int errno;
 
+extern pthread_mutex_t state_mutex;
+
+
 #ifdef HAVE_LIBXFIXES
 /** \brief we need to get color information for processing the real mouse
  *      pointer. */
@@ -1044,6 +1047,11 @@ commonCapture (enum captureFunctions capfunc)
 #endif     // USE_FFMPEG
         target = &(app->single_frame);
 
+
+    // we really cannot have external state changes 
+    // while we're reacting on state
+    pthread_mutex_lock (&state_mutex);
+
     // wait for next iteration if pausing
     if (job->state & VC_REC) {         // if recording ...
 
@@ -1071,7 +1079,8 @@ commonCapture (enum captureFunctions capfunc)
             // code know we need
             // to restart again afterwards
             if (job->flags & FLG_AUTO_CONTINUE) {
-                xvc_job_merge_state (VC_CONTINUE);
+		job->state |= VC_CONTINUE;
+//                xvc_job_merge_state (VC_CONTINUE);
             }
 
             goto CLEAN_CAPTURE;
@@ -1184,7 +1193,8 @@ commonCapture (enum captureFunctions capfunc)
                 }
                 // call the necessary XtoXYZ function to process the image
                 (*job->save) (fp, image);
-                xvc_job_remove_state (VC_START);
+		job->state &= ~(VC_START);
+//                xvc_job_remove_state (VC_START);
             } else
                 printf ("%s %s: could not acquire pixmap!\n", DEBUGFILE,
                         DEBUGFUNCTION);
@@ -1323,7 +1333,8 @@ commonCapture (enum captureFunctions capfunc)
         // this might be a single step. If so, remove the state flag so we
         // don't keep single stepping
         if (job->state & VC_STEP) {
-            xvc_job_remove_state (VC_STEP);
+	    job->state &= ~(VC_STEP);
+//            xvc_job_remove_state (VC_STEP);
             // the time is the pause between this and the next snapshot
             // for step mode this makes no sense and could be 0. Setting
             // it to 50 is just to give the led meter the chance to flash
@@ -1367,7 +1378,8 @@ commonCapture (enum captureFunctions capfunc)
             if (job->clean)
                 (*job->clean) ();
         }
-        xvc_job_set_state (VC_STOP);
+	job->state = VC_STOP;
+//        xvc_job_set_state (VC_STOP);
 
         // set the sensitive stuff for the control panel if we don't
         // autocontinue
@@ -1382,7 +1394,8 @@ commonCapture (enum captureFunctions capfunc)
 
         if ((orig_state & VC_CONTINUE) == 0) {
             // after this we're ready to start recording again
-            xvc_job_merge_state (VC_READY);
+	    job->state |= VC_READY;
+//            xvc_job_merge_state (VC_READY);
         } else if (job->capture_returned_errno == 0) {
 
 #ifdef DEBUG
@@ -1394,7 +1407,9 @@ commonCapture (enum captureFunctions capfunc)
             // prepare autocontinue
             job->movie_no += 1;
             job->pic_no = target->start_no;
-            xvc_job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
+	    job->state |= (VC_START | VC_REC);
+	    job->state &= ~(VC_STOP);
+//            xvc_job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
 
             return time;
         }
@@ -1404,6 +1419,7 @@ commonCapture (enum captureFunctions capfunc)
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
+    pthread_mutex_unlock (&state_mutex);
     return time;
 
 #undef DEBUGFUNCTION

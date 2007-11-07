@@ -75,6 +75,8 @@ static Job *job;
 
 static void job_set_capture (void);
 
+pthread_mutex_t state_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 #ifdef HAVE_FFMPEG_AUDIO
 /**
  * \brief set and check some parameters for the sound device
@@ -516,10 +518,10 @@ xvc_job_set_state (int state)
 #ifdef DEBUG
     printf ("%s %s: setting state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
 #endif     // DEBUG
-    pthread_mutex_lock (&recording_mutex);
+    pthread_mutex_lock (&state_mutex);
     job->state = state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&recording_mutex);
+    pthread_mutex_unlock (&state_mutex);
 #undef DEBUGFUNCTION
 }
 
@@ -538,10 +540,10 @@ xvc_job_merge_state (int state)
     printf ("%s %s: merging state %i with present %i\n", DEBUGFILE,
             DEBUGFUNCTION, state, job->state);
 #endif     // DEBUG
-    pthread_mutex_lock (&recording_mutex);
+    pthread_mutex_lock (&state_mutex);
     job->state |= state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&recording_mutex);
+    pthread_mutex_unlock (&state_mutex);
 #undef DEBUGFUNCTION
 }
 
@@ -559,10 +561,10 @@ xvc_job_remove_state (int state)
 #ifdef DEBUG
     printf ("%s %s: removing state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
 #endif     // DEBUG
-    pthread_mutex_lock (&recording_mutex);
+    pthread_mutex_lock (&state_mutex);
     job->state &= ~(state);
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&recording_mutex);
+    pthread_mutex_unlock (&state_mutex);
 #undef DEBUGFUNCTION
 }
 
@@ -582,11 +584,11 @@ xvc_job_merge_and_remove_state (int merge_state, int remove_state)
     printf ("%s %s: merging state %i with %i removing %i\n", DEBUGFILE,
             DEBUGFUNCTION, job->state, merge_state, remove_state);
 #endif     // DEBUG
-    pthread_mutex_lock (&recording_mutex);
+    pthread_mutex_lock (&state_mutex);
     job->state |= merge_state;
     job->state &= ~(remove_state);
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&recording_mutex);
+    pthread_mutex_unlock (&state_mutex);
 #undef DEBUGFUNCTION
 }
 
@@ -605,10 +607,10 @@ xvc_job_keep_state (int state)
     printf ("%s %s: keeping %i of state %i\n", DEBUGFILE, DEBUGFUNCTION, state,
             job->state);
 #endif     // DEBUG
-    pthread_mutex_lock (&recording_mutex);
+    pthread_mutex_lock (&state_mutex);
     job->state &= state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&recording_mutex);
+    pthread_mutex_unlock (&state_mutex);
 #undef DEBUGFUNCTION
 }
 
@@ -629,11 +631,11 @@ xvc_job_keep_and_merge_state (int keep_state, int merge_state)
     printf ("%s %s: keeping %i of state %i and merge with %i\n", DEBUGFILE,
             DEBUGFUNCTION, keep_state, job->state, merge_state);
 #endif     // DEBUG
-    pthread_mutex_lock (&recording_mutex);
+    pthread_mutex_lock (&state_mutex);
     job->state &= keep_state;
     job->state |= merge_state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&recording_mutex);
+    pthread_mutex_unlock (&state_mutex);
 #undef DEBUGFUNCTION
 }
 
