@@ -139,6 +139,9 @@ typedef struct _Job
 
     /** \brief the last capture session returned this errno */
     int capture_returned_errno;
+
+    int frame_moved_x;
+    int frame_moved_y;
 } Job;
 
 void xvc_job_free ();

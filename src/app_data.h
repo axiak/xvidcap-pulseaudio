@@ -215,6 +215,27 @@ typedef struct
     /** \brief the current capture mode, values as with default_mode */
     int current_mode;
 
+    // various mutexes for thread synchonization
+    /** \brief mutex for pausing/unpausing the recording session
+     *		by waiting for the recording_condition_unpaused */
+    pthread_mutex_t recording_paused_mutex;
+    /** \brief condition for pausing/unpausing a recording effectively */
+    pthread_cond_t recording_condition_unpaused;
+    /** \brief mutex for synchronizing state or frame changes with
+     *		capturing of individual frames */
+    pthread_mutex_t capturing_mutex;
+    /** \brief is the recording thread running?
+     *
+     * \todo find out if there's a way to tell that from the tread directly
+     */
+    int recording_thread_running;
+
+#ifdef USE_XDAMAGE
+    /** \brief mutex for the Xdamage support. It governs write access to the
+     *      damaged region storage */
+    pthread_mutex_t damage_regions_mutex;
+#endif     // USE_XDAMAGE
+
 #ifdef USE_DBUS
     XvcServerObject *xso;
 #endif     // USE_DBUS
@@ -306,7 +327,7 @@ typedef struct _XVC_ErrorListItem
 /*
  * Functions from app_data.c
  */
-void xvc_appdata_free ();
+void xvc_appdata_free (XVC_AppData * lapp);
 XVC_AppData *xvc_appdata_ptr (void);
 void xvc_appdata_init (XVC_AppData * lapp);
 void xvc_appdata_set_defaults (XVC_AppData * lapp);
