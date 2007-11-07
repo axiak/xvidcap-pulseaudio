@@ -1169,11 +1169,6 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     st->codec->codec_id = codec_id;
     st->codec->codec_type = CODEC_TYPE_VIDEO;
 
-    // mt init
-    if (codec_id == CODEC_ID_MPEG4 || codec_id == CODEC_ID_MPEG1VIDEO ||
-        codec_id == CODEC_ID_MPEG2VIDEO) {
-        avcodec_thread_init (st->codec, 4);
-    }
     // find the video encoder
     codec = avcodec_find_encoder (st->codec->codec_id);
     if (!codec) {
@@ -1203,6 +1198,15 @@ add_video_stream (AVFormatContext * oc, XImage * image,
         st->codec->width = image->width;
         st->codec->height = image->height;
     }
+
+    // mt init
+    if (codec_id == CODEC_ID_MPEG4 || codec_id == CODEC_ID_MPEG1VIDEO ||
+        codec_id == CODEC_ID_MPEG2VIDEO) {
+	// the max threads is taken from ffmpeg's mpegvideo.c
+        avcodec_thread_init (st->codec, XVC_MIN(4, 
+		(st->codec->height + 15)/16));
+    }
+
     // time base: this is the fundamental unit of time (in seconds) in
     // terms of which frame timestamps are represented. for fixed-fps
     // content, timebase should be 1/framerate and timestamp increments
