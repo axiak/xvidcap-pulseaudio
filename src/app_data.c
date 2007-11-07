@@ -111,10 +111,17 @@ appdata_new ()
  * \brief frees the global XVC_AppData struct
  */
 void
-xvc_appdata_free ()
+xvc_appdata_free (XVC_AppData * lapp)
 {
 #define DEBUGFUNCTION "xvc_appdata_free()"
     if (app) {
+        pthread_mutex_destroy (&(lapp->recording_paused_mutex));
+        pthread_cond_destroy (&(lapp->recording_condition_unpaused));
+        pthread_mutex_destroy (&(lapp->capturing_mutex));
+#ifdef USE_XDAMAGE
+        pthread_mutex_destroy (&(lapp->damage_regions_mutex));
+#endif     // USE_XDAMAGE
+
         free (app);
     }
 #undef DEBUGFUNCTION
@@ -197,6 +204,14 @@ xvc_appdata_init (XVC_AppData * lapp)
     lapp->area = NULL;
 #ifdef USE_XDAMAGE
     lapp->dmg_event_base = 0;
+#endif     // USE_XDAMAGE
+
+    pthread_mutex_init (&(lapp->recording_paused_mutex), NULL);
+    pthread_cond_init (&(lapp->recording_condition_unpaused), NULL);
+    pthread_mutex_init (&(lapp->capturing_mutex), NULL);
+    lapp->recording_thread_running = FALSE;
+#ifdef USE_XDAMAGE
+    pthread_mutex_init (&(lapp->damage_regions_mutex), NULL);
 #endif     // USE_XDAMAGE
 
 #ifdef USE_DBUS
@@ -465,6 +480,14 @@ xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
 #ifdef USE_DBUS
     tapp->xso = sapp->xso;
 #endif     // USE_DBUS
+
+    tapp->recording_paused_mutex = sapp->recording_paused_mutex;
+    tapp->recording_condition_unpaused = sapp->recording_condition_unpaused;
+    tapp->capturing_mutex = sapp->capturing_mutex;
+    tapp->recording_thread_running = sapp->recording_thread_running;
+#ifdef USE_XDAMAGE
+    tapp->damage_regions_mutex = sapp->damage_regions_mutex;
+#endif     // USE_XDAMAGE
 
     tapp->default_mode = sapp->default_mode;
     tapp->current_mode = sapp->current_mode;

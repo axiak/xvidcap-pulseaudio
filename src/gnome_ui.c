@@ -105,30 +105,11 @@ GtkWidget *xvc_ctrl_m1 = NULL;
  */
 int xvc_led_time = 0;
 
-// those are for recording video in thread
-/** \brief mutex for the recording, state changes and pausing/unpausing */
-pthread_mutex_t recording_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-/** \brief condition for pausing/unpausing a recording effectively */
-pthread_cond_t recording_condition_unpaused;
-
 /** \brief the recording thread */
 static pthread_t recording_thread;
 
 /** \brief attributes of the recording thread */
 static pthread_attr_t recording_thread_attr;
-
-#ifdef USE_XDAMAGE
-/** \brief mutex for the Xdamage support. It governs write access to the
- *      damaged region storage */
-pthread_mutex_t damage_regions_mutex = PTHREAD_MUTEX_INITIALIZER;
-#endif     // USE_XDAMAGE
-
-/** \brief is the recording thread running?
- *
- * \todo find out if there's a way to tell that from the tread directly
- */
-static Boolean recording_thread_running = FALSE;
 
 /** \brief make the results dialog globally available to callbacks here */
 static GtkWidget *xvc_result_dialog = NULL;
@@ -427,7 +408,7 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
     static XserverRegion region = None, clip_region = None;
     Job *job = xvc_job_ptr ();
 
-    if (!recording_thread_running || job == NULL ||
+    if (!app->recording_thread_running || job == NULL ||
         (job->flags & FLG_USE_XDAMAGE) == 0) {
         if (region != None) {
             XFixesDestroyRegion (app->dpy, region);
@@ -471,11 +452,11 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
         XFixesTranslateRegion (app->dpy, region, e->geometry.x, e->geometry.y);
         XFixesIntersectRegion (app->dpy, clip_region, region, clip_region);
 
-        pthread_mutex_lock (&damage_regions_mutex);
+        pthread_mutex_lock (&(app->damage_regions_mutex));
         XFixesUnionRegion (app->dpy, job->dmg_region, job->dmg_region,
                            clip_region);
         XDamageSubtract (app->dpy, e->damage, region, None);
-        pthread_mutex_unlock (&damage_regions_mutex);
+        pthread_mutex_unlock (&(app->damage_regions_mutex));
     }
 
     return GDK_FILTER_CONTINUE;
@@ -490,15 +471,20 @@ void
 do_record_thread ()
 {
 #define DEBUGFUNCTION "do_record_thread()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     Job *job = xvc_job_ptr ();
     long pause = 1000;
 
 #ifdef DEBUG
     printf ("%s %s: Entering with state = %i and tid = %i\n", DEBUGFILE,
-            DEBUGFUNCTION, job->state, (int) recording_thread);
+            DEBUGFUNCTION, job->state, job->recording_thread);
 #endif     // DEBUG
 
-    recording_thread_running = TRUE;
+    app->recording_thread_running = TRUE;
+
+    // if the frame was moved before this, ignore
+    job->frame_moved_x = 0;
+    job->frame_moved_y = 0;
 
     if (!(job->flags & FLG_NOGUI)) {
         xvc_idle_add (xvc_change_filename_display, (void *) NULL);
@@ -514,9 +500,10 @@ do_record_thread ()
             // make the led monitor stop for pausing
             xvc_led_time = 0;
 
-            pthread_mutex_lock (&recording_mutex);
-            pthread_cond_wait (&recording_condition_unpaused, &recording_mutex);
-            pthread_mutex_unlock (&recording_mutex);
+            pthread_mutex_lock (&(app->recording_paused_mutex));
+            pthread_cond_wait (&(app->recording_condition_unpaused), 
+			&(app->recording_paused_mutex));
+            pthread_mutex_unlock (&(app->recording_paused_mutex));
 #ifdef DEBUG
             printf ("%s %s: unpaused\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -535,7 +522,7 @@ do_record_thread ()
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    recording_thread_running = FALSE;
+    app->recording_thread_running = FALSE;
     pthread_exit (NULL);
 #undef DEBUGFUNCTION
 }
@@ -556,7 +543,7 @@ stop_recording_nongui_stuff ()
 
 #ifdef DEBUG
     printf ("%s %s: Entering with thread running %i\n",
-            DEBUGFILE, DEBUGFUNCTION, recording_thread_running);
+            DEBUGFILE, DEBUGFUNCTION, app->recording_thread_running);
 #endif     // DEBUG
 
     if (pause_time) {
@@ -576,7 +563,7 @@ stop_recording_nongui_stuff ()
     }
     xvc_job_set_state (state);
 
-    if (recording_thread_running) {
+    if (app->recording_thread_running) {
         pthread_join (recording_thread, NULL);
 #ifdef DEBUG
         printf ("%s %s: joined thread\n", DEBUGFILE, DEBUGFUNCTION);
@@ -590,7 +577,6 @@ stop_recording_nongui_stuff ()
 #endif     // USE_XDAMAGE
 
     if ((jobp->flags & FLG_NOGUI) != 0 && jobp->capture_returned_errno != 0) {
-        GtkWidget *dialog = NULL;
         char file[PATH_MAX + 1];
 
         if (app->current_mode > 0) {
@@ -1151,11 +1137,12 @@ static void
 start_recording_nongui_stuff ()
 {
 #define DEBUGFUNCTION "start_recording_nongui_stuff()"
-    if (!recording_thread_running) {
+    XVC_AppData *app = xvc_appdata_ptr ();
+
+    if (!app->recording_thread_running) {
         struct timeval curr_time;
         Job *job = xvc_job_ptr ();
         XVC_CapTypeOptions *target = NULL;
-        XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef USE_FFMPEG
         if (app->current_mode > 0)
@@ -1232,9 +1219,6 @@ start_recording_nongui_stuff ()
         }
 #endif     // USE_XDAMAGE
         // initialize recording thread
-        pthread_mutex_init (&recording_mutex, NULL);
-        pthread_cond_init (&recording_condition_unpaused, NULL);
-
         pthread_attr_init (&recording_thread_attr);
         pthread_attr_setdetachstate (&recording_thread_attr,
                                      PTHREAD_CREATE_JOINABLE);
@@ -1915,8 +1899,9 @@ xvc_change_filename_display ()
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
+    XVC_AppData *app = xvc_appdata_ptr ();
     Job *job = xvc_job_ptr ();
-    Boolean ret = recording_thread_running;
+    int ret = app->recording_thread_running;
 
     if (!ret) {
         last_pic_no = 0;
@@ -1948,6 +1933,7 @@ xvc_capture_stop_signal (Boolean wait)
 {
 #define DEBUGFUNCTION "xvc_capture_stop_signal()"
     int status = -1;
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: Entering, should we wait? %i\n",
@@ -1956,7 +1942,7 @@ xvc_capture_stop_signal (Boolean wait)
 
     xvc_job_set_state (VC_STOP);
 
-    if (recording_thread_running) {
+    if (app->recording_thread_running) {
 #ifdef DEBUG
         printf ("%s %s: stop pressed while recording\n",
                 DEBUGFILE, DEBUGFUNCTION);
@@ -1970,7 +1956,7 @@ xvc_capture_stop_signal (Boolean wait)
     }
 
     if (wait) {
-        while (recording_thread_running) {
+        while (app->recording_thread_running) {
             usleep (100);
         }
     }
@@ -2031,10 +2017,7 @@ xvc_capture_start ()
  *      implementing function xvc_change_gtk_frame
  *
  * @see xvc_change_gtk_frame
- * \todo sice nobody outside this file is calling it, it needs to be neither
- *      global nor in the "API" functions. Prolly don't need this wrapper at
- *      all .... remove
- *
+ */
 void
 xvc_frame_change (int x, int y, int width, int height,
                   Boolean reposition_control, Boolean show_dimensions)
@@ -2044,7 +2027,7 @@ xvc_frame_change (int x, int y, int width, int height,
                           show_dimensions);
 #undef DEBUGFUNCTION
 }
- */
+
 
 /**
  * \brief updates the widget monitoring the current frame rate based on
@@ -2067,7 +2050,7 @@ xvc_frame_monitor ()
     int percent = 0, diff = 0;
     GladeXML *xml = NULL;
     GtkWidget *w = NULL;
-    int ret = recording_thread_running;
+    int ret = app->recording_thread_running;
 
 #ifdef DEBUG
     printf ("%s %s: Entering with time = %i\n", DEBUGFILE, DEBUGFUNCTION,
@@ -2379,6 +2362,7 @@ on_xvc_ctrl_stop_toggle_toggled (GtkToggleToolButton * button,
                                  gpointer user_data)
 {
 #define DEBUGFUNCTION "on_xvc_ctrl_stop_toggle_toggled()"
+    XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef DEBUG
     printf ("%s %s: stopp button toggled (%i)\n", DEBUGFILE, DEBUGFUNCTION,
@@ -2387,7 +2371,7 @@ on_xvc_ctrl_stop_toggle_toggled (GtkToggleToolButton * button,
 #endif     // DEBUG
 
     if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (button))) {
-        if (recording_thread_running)
+        if (app->recording_thread_running)
             xvc_capture_stop_signal (FALSE);
         else {
             GladeXML *xml = NULL;

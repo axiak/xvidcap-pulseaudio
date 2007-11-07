@@ -62,20 +62,9 @@
 # include "xtoffmpeg.h"
 #endif     // USE_FFMPEG
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-extern pthread_mutex_t recording_mutex;
-extern pthread_cond_t recording_condition_unpaused;
-#endif     // DOXYGEN_SHOULD_SKIP_THIS
-
-#ifdef USE_XDAMAGE
-extern pthread_mutex_t damage_regions_mutex;
-#endif     // USE_XDAMAGE
-
 static Job *job;
 
 static void job_set_capture (void);
-
-pthread_mutex_t state_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 #ifdef HAVE_FFMPEG_AUDIO
 /**
@@ -173,6 +162,8 @@ job_new ()
 #endif     // USE_XDAMAGE
 
     job->capture_returned_errno = 0;
+    job->frame_moved_x = 0;
+    job->frame_moved_y = 0;
 
     return (job);
 #undef DEBUGFUNCTION
@@ -495,12 +486,14 @@ xvc_job_dump ()
 void
 job_state_change_signals_thread (int orig_state, int new_state)
 {
+    XVC_AppData *app = xvc_appdata_ptr ();
+
     if (((orig_state & VC_PAUSE) > 0 && (new_state & VC_PAUSE) == 0) ||
         ((orig_state & VC_STOP) == 0 && (new_state & VC_STOP) > 0) ||
         ((orig_state & VC_STEP) == 0 && (new_state & VC_STEP) > 0)
         ) {
         // signal potentially paused thread
-        pthread_cond_broadcast (&recording_condition_unpaused);
+        pthread_cond_broadcast (&(app->recording_condition_unpaused));
     }
 }
 
@@ -513,15 +506,16 @@ void
 xvc_job_set_state (int state)
 {
 #define DEBUGFUNCTION "xvc_job_set_state()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     int orig_state = job->state;
 
 #ifdef DEBUG
     printf ("%s %s: setting state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
 #endif     // DEBUG
-    pthread_mutex_lock (&state_mutex);
+    pthread_mutex_lock (&(app->capturing_mutex));
     job->state = state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&state_mutex);
+    pthread_mutex_unlock (&(app->capturing_mutex));
 #undef DEBUGFUNCTION
 }
 
@@ -534,16 +528,17 @@ void
 xvc_job_merge_state (int state)
 {
 #define DEBUGFUNCTION "xvc_job_merge_state()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     int orig_state = job->state;
 
 #ifdef DEBUG
     printf ("%s %s: merging state %i with present %i\n", DEBUGFILE,
             DEBUGFUNCTION, state, job->state);
 #endif     // DEBUG
-    pthread_mutex_lock (&state_mutex);
+    pthread_mutex_lock (&(app->capturing_mutex));
     job->state |= state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&state_mutex);
+    pthread_mutex_unlock (&(app->capturing_mutex));
 #undef DEBUGFUNCTION
 }
 
@@ -556,15 +551,16 @@ void
 xvc_job_remove_state (int state)
 {
 #define DEBUGFUNCTION "xvc_job_remove_state()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     int orig_state = job->state;
 
 #ifdef DEBUG
     printf ("%s %s: removing state %i\n", DEBUGFILE, DEBUGFUNCTION, state);
 #endif     // DEBUG
-    pthread_mutex_lock (&state_mutex);
+    pthread_mutex_lock (&(app->capturing_mutex));
     job->state &= ~(state);
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&state_mutex);
+    pthread_mutex_unlock (&(app->capturing_mutex));
 #undef DEBUGFUNCTION
 }
 
@@ -578,17 +574,18 @@ void
 xvc_job_merge_and_remove_state (int merge_state, int remove_state)
 {
 #define DEBUGFUNCTION "xvc_job_merge_and_remove_state()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     int orig_state = job->state;
 
 #ifdef DEBUG
     printf ("%s %s: merging state %i with %i removing %i\n", DEBUGFILE,
             DEBUGFUNCTION, job->state, merge_state, remove_state);
 #endif     // DEBUG
-    pthread_mutex_lock (&state_mutex);
+    pthread_mutex_lock (&(app->capturing_mutex));
     job->state |= merge_state;
     job->state &= ~(remove_state);
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&state_mutex);
+    pthread_mutex_unlock (&(app->capturing_mutex));
 #undef DEBUGFUNCTION
 }
 
@@ -601,16 +598,17 @@ void
 xvc_job_keep_state (int state)
 {
 #define DEBUGFUNCTION "xvc_job_keep_state()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     int orig_state = job->state;
 
 #ifdef DEBUG
     printf ("%s %s: keeping %i of state %i\n", DEBUGFILE, DEBUGFUNCTION, state,
             job->state);
 #endif     // DEBUG
-    pthread_mutex_lock (&state_mutex);
+    pthread_mutex_lock (&(app->capturing_mutex));
     job->state &= state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&state_mutex);
+    pthread_mutex_unlock (&(app->capturing_mutex));
 #undef DEBUGFUNCTION
 }
 
@@ -625,17 +623,18 @@ void
 xvc_job_keep_and_merge_state (int keep_state, int merge_state)
 {
 #define DEBUGFUNCTION "xvc_job_keep_and_merge_state()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     int orig_state = job->state;
 
 #ifdef DEBUG
     printf ("%s %s: keeping %i of state %i and merge with %i\n", DEBUGFILE,
             DEBUGFUNCTION, keep_state, job->state, merge_state);
 #endif     // DEBUG
-    pthread_mutex_lock (&state_mutex);
+    pthread_mutex_lock (&(app->capturing_mutex));
     job->state &= keep_state;
     job->state |= merge_state;
     job_state_change_signals_thread (orig_state, job->state);
-    pthread_mutex_unlock (&state_mutex);
+    pthread_mutex_unlock (&(app->capturing_mutex));
 #undef DEBUGFUNCTION
 }
 
@@ -646,11 +645,11 @@ xvc_get_damage_region ()
     XserverRegion region, dmg_region;
     XVC_AppData *app = xvc_appdata_ptr ();
 
-    pthread_mutex_lock (&damage_regions_mutex);
+    pthread_mutex_lock (&(app->damage_regions_mutex));
     region = XFixesCreateRegion (app->dpy, 0, 0);
     dmg_region = job->dmg_region;
     job->dmg_region = region;
-    pthread_mutex_unlock (&damage_regions_mutex);
+    pthread_mutex_unlock (&(app->damage_regions_mutex));
     return dmg_region;
 }
 #endif     // USE_XDAMAGE

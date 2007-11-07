@@ -62,10 +62,6 @@ typedef void (*sighandler_t) (int);
 static XVC_AppData *app;
 static Window capture_window = None;
 
-#ifdef USE_XDAMAGE
-extern pthread_mutex_t damage_regions_mutex;
-#endif     // USE_XDAMAGE
-
 /*
  * HELPER FUNCTIONS
  */
@@ -173,10 +169,6 @@ init (XVC_CapTypeOptions * ctos, int *argc, char *argv[])
     // because this is UI independant and would need to be here even with Qt
     XInitThreads ();
 
-#if USE_XDAMAGE
-    pthread_mutex_init (&damage_regions_mutex, NULL);
-#endif     // USE_XDAMAGE
-
     // this is a hook for a GUI to do some pre-init functions ...
     // possibly to set some fallback options read from a rc file or
     // Xdefaults
@@ -223,6 +215,8 @@ cleanup ()
 
     xvc_frame_drop_capture_display ();
 
+    if (app)
+	xvc_appdata_free (app);
 #ifdef USE_FFMPEG
     av_free_static ();
 #endif

@@ -46,6 +46,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -90,9 +91,6 @@ extern int xvc_led_time;
 
 /** \brief make error numbers accessible */
 extern int errno;
-
-extern pthread_mutex_t state_mutex;
-
 
 #ifdef HAVE_LIBXFIXES
 /** \brief we need to get color information for processing the real mouse
@@ -1020,6 +1018,7 @@ commonCapture (enum captureFunctions capfunc)
     XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
     int full_cleanup = TRUE;
+    int frame_moved = FALSE;
 
 #ifdef USE_XDAMAGE
     XserverRegion damaged_region;
@@ -1047,10 +1046,19 @@ commonCapture (enum captureFunctions capfunc)
 #endif     // USE_FFMPEG
         target = &(app->single_frame);
 
+    // if the frame has moved during capture, move it here
+    if (job->frame_moved_x != 0 || job->frame_moved_y != 0) {
+	xvc_frame_change (app->area->x + job->frame_moved_x,
+		app->area->y + job->frame_moved_y,
+		app->area->width, app->area->height,
+                FALSE, FALSE);
+	frame_moved = TRUE;
+	job-> frame_moved_x = job->frame_moved_y = 0;
+    }
 
     // we really cannot have external state changes 
     // while we're reacting on state
-    pthread_mutex_lock (&state_mutex);
+    pthread_mutex_lock (&(app->capturing_mutex));
 
     // wait for next iteration if pausing
     if (job->state & VC_REC) {         // if recording ...
@@ -1080,7 +1088,6 @@ commonCapture (enum captureFunctions capfunc)
             // to restart again afterwards
             if (job->flags & FLG_AUTO_CONTINUE) {
 		job->state |= VC_CONTINUE;
-//                xvc_job_merge_state (VC_CONTINUE);
             }
 
             goto CLEAN_CAPTURE;
@@ -1191,13 +1198,17 @@ commonCapture (enum captureFunctions capfunc)
                 if (app->mouseWanted > 0) {
                     pointer_area = paintMousePointer (image);
                 }
+	        // we can allow state or frame changes after this
+                pthread_mutex_unlock (&(app->capturing_mutex));
                 // call the necessary XtoXYZ function to process the image
                 (*job->save) (fp, image);
 		job->state &= ~(VC_START);
-//                xvc_job_remove_state (VC_START);
-            } else
+            } else {
+	        // we can allow state or frame changes after this
+                pthread_mutex_unlock (&(app->capturing_mutex));
                 printf ("%s %s: could not acquire pixmap!\n", DEBUGFILE,
                         DEBUGFUNCTION);
+	    }
         } else {
             // we're recording and not in the first frame ....
             // so we just read new data into the present image structure
@@ -1206,7 +1217,7 @@ commonCapture (enum captureFunctions capfunc)
                     DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 #ifdef USE_XDAMAGE
-            if (app->flags & FLG_USE_XDAMAGE) {
+            if (app->flags & FLG_USE_XDAMAGE && !frame_moved) {
                 int num_dmg_rects, rcount;
                 XRectangle *dmg_rects;
 
@@ -1280,6 +1291,18 @@ commonCapture (enum captureFunctions capfunc)
                 }
                 XFixesDestroyRegion (app->dpy, damaged_region);
             } else {
+		if (app->flags & FLG_USE_XDAMAGE) {
+		    // we're here, if we actually want Xdamage, but aren't
+		    // using it for the current image (e. g. because the
+		    // frame was moved
+
+                    // get the damaged region
+                    // stuff damaged between starting the damage poll thread 
+                    // and this we can safely discard the damage because we'll
+		    // be capturing a full frame next
+                    damaged_region = xvc_get_damage_region ();
+                    XFixesDestroyRegion (app->dpy, damaged_region);
+		}
 #endif     // USE_XDAMAGE
                 switch (capfunc) {
 #ifdef HAVE_SHMAT
@@ -1299,6 +1322,9 @@ commonCapture (enum captureFunctions capfunc)
             if (app->mouseWanted > 0) {
                 pointer_area = paintMousePointer (image);
             }
+	    // we can allow state or frame changes after this
+            pthread_mutex_unlock (&(app->capturing_mutex));
+
             // call the necessary XtoXYZ function to process the image
             (*job->save) (fp, image);
         }
@@ -1334,7 +1360,6 @@ commonCapture (enum captureFunctions capfunc)
         // don't keep single stepping
         if (job->state & VC_STEP) {
 	    job->state &= ~(VC_STEP);
-//            xvc_job_remove_state (VC_STEP);
             // the time is the pause between this and the next snapshot
             // for step mode this makes no sense and could be 0. Setting
             // it to 50 is just to give the led meter the chance to flash
@@ -1356,6 +1381,12 @@ commonCapture (enum captureFunctions capfunc)
 
         time = 0;
         orig_state = job->state;       // store state here, esp. VC_CONTINUE
+	job->state = VC_STOP;
+    	// we've handled frame moves for this image
+    	job->frame_moved_x = 0;
+    	job->frame_moved_y = 0;
+	// we can allow state or frame changes after this
+        pthread_mutex_unlock (&(app->capturing_mutex));
 
         if (full_cleanup) {
             if (image) {
@@ -1378,8 +1409,6 @@ commonCapture (enum captureFunctions capfunc)
             if (job->clean)
                 (*job->clean) ();
         }
-	job->state = VC_STOP;
-//        xvc_job_set_state (VC_STOP);
 
         // set the sensitive stuff for the control panel if we don't
         // autocontinue
@@ -1395,7 +1424,6 @@ commonCapture (enum captureFunctions capfunc)
         if ((orig_state & VC_CONTINUE) == 0) {
             // after this we're ready to start recording again
 	    job->state |= VC_READY;
-//            xvc_job_merge_state (VC_READY);
         } else if (job->capture_returned_errno == 0) {
 
 #ifdef DEBUG
@@ -1409,7 +1437,6 @@ commonCapture (enum captureFunctions capfunc)
             job->pic_no = target->start_no;
 	    job->state |= (VC_START | VC_REC);
 	    job->state &= ~(VC_STOP);
-//            xvc_job_merge_and_remove_state ((VC_START | VC_REC), VC_STOP);
 
             return time;
         }
@@ -1419,9 +1446,7 @@ commonCapture (enum captureFunctions capfunc)
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
 
-    pthread_mutex_unlock (&state_mutex);
     return time;
-
 #undef DEBUGFUNCTION
 }
 

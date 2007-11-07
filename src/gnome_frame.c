@@ -43,6 +43,7 @@
 #include <glade/glade.h>
 #include <stdlib.h>
 #include <sys/time.h>                  // for timeval struct and related
+#include <pthread.h>
 
 #include "app_data.h"
 #include "job.h"
@@ -374,6 +375,7 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
 #define DEBUGFUNCTION "on_gtk_frame_configure_event()"
     gint x, y, pwidth, pheight;
     XVC_AppData *app = xvc_appdata_ptr ();
+    Job *job = xvc_job_ptr ();
 
     if (xvc_is_frame_locked ()) {
         x = ((GdkEventConfigure *) e)->x;
@@ -382,8 +384,19 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
         pheight = ((GdkEventConfigure *) e)->height;
 
         y += pheight + FRAME_OFFSET + FRAME_WIDTH;
-        xvc_change_gtk_frame (x, y, app->area->width, app->area->height,
+
+	// don't move the frame in the middle of capturing
+ 	// let the capture thread take care of that
+	if (!app->recording_thread_running) {
+            xvc_change_gtk_frame (x, y, app->area->width, app->area->height,
                               FALSE, FALSE);
+	} else {
+	    // tell the capture job we moved the frame
+	    // if we're not capturing yet, the capture thread will reset this first
+	    // on startup
+	    job->frame_moved_x = x - app->area->x;
+	    job->frame_moved_y = y - app->area->y;
+	}
     }
     return FALSE;
 #undef DEBUGFUNCTION

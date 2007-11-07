@@ -9,6 +9,18 @@
 		to make sure no external state changes
 		can occur while we're reacting on a
 		given state
+	* src: control.h, xtoffmpeg.c, gnome_ui.c, 
+		capture.c, app_data.c, job.c, app_data.h, 
+		gnome_frame.c, job.h, main.c: add the 
+		mutexes to the XVC_AppData struct to
+		avoid their being global and make sure
+		movement of the capture area during a
+		capture can only take place with the
+		right timing so as not to capture the
+		frame while it is moved. Also we need
+		to caputre full frames (no Xdamage)
+		when the capture area is moved during
+		capture.
 
 2007-11-06  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* po/en.po, po/de.po, src: gnome_ui.c, capture.c, 

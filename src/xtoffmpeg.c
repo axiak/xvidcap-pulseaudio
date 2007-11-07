@@ -217,27 +217,7 @@ typedef struct AVInputStream
                      * discontinuity */
 } AVInputStream;
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-/**
- * \brief external variables for thread synchronization. This is the
- *      global mutex lock for recording (changing state and such).
- *
- * This is needed for pausing audio capture when the recording thread is
- * paused.
- */
-extern pthread_mutex_t recording_mutex;
-
-/**
- * \brief external variables for thread synchronization. This is the
- *      paused condition.
- *
- * This is needed for pausing audio capture when the recording thread is
- * paused.
- */
-extern pthread_cond_t recording_condition_unpaused;
-#endif     // DOXYGEN_SHOULD_SKIP_THIS
-
-// FIXME: check if this all needs to be global
+// FIXME: check if this all needs to be static global
 /** \brief audio codec */
 static AVCodec *au_codec = NULL;
 
@@ -742,6 +722,7 @@ static void
 capture_audio_thread (Job * job)
 {
 #define DEBUGFUNCTION "capture_audio_thread()"
+    XVC_AppData *app = xvc_appdata_ptr ();
     unsigned long start, stop, start_s, stop_s;
     struct timeval thr_curr_time;
     long sleep;
@@ -761,9 +742,10 @@ capture_audio_thread (Job * job)
         start = thr_curr_time.tv_usec;
 
         if ((job->state & VC_PAUSE) && !(job->state & VC_STEP)) {
-            pthread_mutex_lock (&recording_mutex);
-            pthread_cond_wait (&recording_condition_unpaused, &recording_mutex);
-            pthread_mutex_unlock (&recording_mutex);
+            pthread_mutex_lock (&(app->recording_paused_mutex));
+            pthread_cond_wait (&(app->recording_condition_unpaused), 
+			&(app->recording_paused_mutex));
+            pthread_mutex_unlock (&(app->recording_paused_mutex));
         } else if (job->state == VC_REC) {
 
             audio_pts = (double)
