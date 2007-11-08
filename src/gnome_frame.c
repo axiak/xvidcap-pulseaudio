@@ -230,7 +230,6 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
                       Boolean reposition_control, Boolean show_dimensions)
 {
 #define DEBUGFUNCTION "xvc_change_gtk_frame()"
-    int max_width, max_height;
     extern GtkWidget *xvc_ctrl_main_window;
     Display *dpy;
     XRectangle *x_rect = xvc_get_capture_area ();
@@ -276,10 +275,6 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
 #endif     // USE_FFMPEG
 
     // we have to adjust it to viewable areas
-    dpy = xvc_frame_get_capture_display ();
-    max_width = WidthOfScreen (DefaultScreenOfDisplay (dpy));
-    max_height = HeightOfScreen (DefaultScreenOfDisplay (dpy));
-
 #ifdef DEBUG
     printf ("%s %s: screen = %dx%d selection=%dx%d\n", DEBUGFILE,
             DEBUGFUNCTION, max_width, max_height, width, height);
@@ -287,17 +282,17 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
 
     if (x < 0)
         x = 0;
-    if (width > max_width)
-        width = max_width;
-    if (x + width > max_width)
-        x = max_width - width;
+    if (width > app->max_width)
+        width = app->max_width;
+    if (x + width > app->max_width)
+        x = app->max_width - width;
 
     if (y < 0)
         y = 0;
-    if (height > max_height)
-        height = max_height;
-    if (y + height > max_height)
-        y = max_height - height;
+    if (height > app->max_height)
+        height = app->max_height;
+    if (y + height > app->max_height)
+        y = app->max_height - height;
 
     if ((app->flags & FLG_NOGUI) == 0) {
         // move the frame if not running without GUI
@@ -385,18 +380,16 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
 
         y += pheight + FRAME_OFFSET + FRAME_WIDTH;
 
-	// don't move the frame in the middle of capturing
- 	// let the capture thread take care of that
-	if (!app->recording_thread_running) {
+        // don't move the frame in the middle of capturing
+        // let the capture thread take care of that
+        if (!app->recording_thread_running) {
             xvc_change_gtk_frame (x, y, app->area->width, app->area->height,
-                              FALSE, FALSE);
-	} else {
-	    // tell the capture job we moved the frame
-	    // if we're not capturing yet, the capture thread will reset this first
-	    // on startup
-	    job->frame_moved_x = x - app->area->x;
-	    job->frame_moved_y = y - app->area->y;
-	}
+                                  FALSE, FALSE);
+        } else {
+            // tell the capture job we moved the frame
+            job->frame_moved_x = x - app->area->x;
+            job->frame_moved_y = y - app->area->y;
+        }
     }
     return FALSE;
 #undef DEBUGFUNCTION
@@ -842,9 +835,8 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
 #endif     // USE_FFMPEG
 
     // we have to adjust it to viewable areas
-    dpy = xvc_frame_get_capture_display ();
-    max_width = WidthOfScreen (DefaultScreenOfDisplay (dpy));
-    max_height = HeightOfScreen (DefaultScreenOfDisplay (dpy));
+    max_width = WidthOfScreen (DefaultScreenOfDisplay (app->dpy));
+    max_height = HeightOfScreen (DefaultScreenOfDisplay (app->dpy));
 
 #ifdef DEBUG
     printf ("%s %s: screen = %dx%d selection=%dx%d\n", DEBUGFILE,

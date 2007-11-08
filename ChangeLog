@@ -1,4 +1,13 @@
 
+2007-11-08  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: frame.h, gnome_ui.c, capture.c, app_data.c, 
+		app_data.h, gnome_frame.c, frame.c:
+		optimize X11 roundtrips by obtaining
+		required X11 info up front and storing
+		it in XVC_AppData. Also fix a BadMatch
+		with stopping when using XDamage and
+		the notification area 
+
 2007-11-07  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c: fix ffmpeg multi-threading
 		for very small capture areas where

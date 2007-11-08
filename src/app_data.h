@@ -199,6 +199,17 @@ typedef struct
      *      we need it
      */
     Display *dpy;
+    /** \brief the default root window */
+    Window root_window;
+    /** \brief pointer to the default screen */
+    Screen *default_screen;
+    /** \brief default screen number */
+    int default_screen_num;
+    /** \brief maximum width of the default screen */
+    int max_width;
+    /** \brief maximum height of the default screen */
+    int max_height;
+
     /** \brief the area to capture */
     XRectangle *area;
 #ifdef USE_XDAMAGE

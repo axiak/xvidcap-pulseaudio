@@ -27,7 +27,8 @@
 XRectangle *xvc_get_capture_area (void);
 int xvc_is_frame_locked (void);
 void xvc_set_frame_locked (int);
-void xvc_get_window_attributes (Window win, XWindowAttributes * wa);
+void xvc_get_window_attributes (Display * dpy, Window win,
+                                XWindowAttributes * wa);
 
 // the following are implementation dependent and actually implemented
 // in gnome_frame.c

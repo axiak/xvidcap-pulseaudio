@@ -427,10 +427,20 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
         clip_region = XFixesCreateRegion (app->dpy, 0, 0);
 
     if (xev->type == MapNotify) {
-        // XSelectInput (app->dpy, xev->xcreatewindow.window, StructureNotifyMask);
+//      XWindowAttributes attribs;
+//      Status ret;
+//
+//      gdk_error_trap_push ();
+//      ret = XGetWindowAttributes (app->dpy, 
+//                xev->xcreatewindow.window, &attribs);
+//      gdk_error_trap_pop ();
+//
+//        XSelectInput (app->dpy, xev->xcreatewindow.window, StructureNotifyMask);
 //      if (!attribs.override_redirect /* && attribs.depth==pdata->specs.depth */) {
+        gdk_error_trap_push ();
         XDamageCreate (app->dpy, xev->xcreatewindow.window,
                        XDamageReportRawRectangles);
+        gdk_error_trap_pop ();
 //      }
     } else if (xev->type == app->dmg_event_base) {
         XRectangle rect = {
@@ -501,8 +511,8 @@ do_record_thread ()
             xvc_led_time = 0;
 
             pthread_mutex_lock (&(app->recording_paused_mutex));
-            pthread_cond_wait (&(app->recording_condition_unpaused), 
-			&(app->recording_paused_mutex));
+            pthread_cond_wait (&(app->recording_condition_unpaused),
+                               &(app->recording_paused_mutex));
             pthread_mutex_unlock (&(app->recording_paused_mutex));
 #ifdef DEBUG
             printf ("%s %s: unpaused\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1178,32 +1188,30 @@ start_recording_nongui_stuff ()
             XWindowAttributes root_attrs;
             unsigned int nchildren, i;
 
-            root = DefaultRootWindow (app->dpy);
-            XGetWindowAttributes (app->dpy, root, &root_attrs);
-            XSelectInput (app->dpy, root, StructureNotifyMask);
-            XDamageCreate (app->dpy, DefaultRootWindow (app->dpy),
+            XGetWindowAttributes (app->dpy, app->root_window, &root_attrs);
+            XSelectInput (app->dpy, app->root_window, StructureNotifyMask);
+            XDamageCreate (app->dpy, app->root_window,
                            XDamageReportRawRectangles);
-            XQueryTree (app->dpy,
-                        DefaultRootWindow (app->dpy),
+            XQueryTree (app->dpy, app->root_window,
                         &root_return, &parent_return, &children, &nchildren);
 
             for (i = 0; i < nchildren; i++) {
-                XWindowAttributes attribs;
-                Status ret;
-
-                gdk_error_trap_push ();
-                ret = XGetWindowAttributes (app->dpy, children[i], &attribs);
-                gdk_error_trap_pop ();
-
-                if (ret) {
-                    //XSelectInput (app->dpy, children[i], StructureNotifyMask);
+//                XWindowAttributes attribs;
+//                Status ret;
+//
+//                gdk_error_trap_push ();
+//                ret = XGetWindowAttributes (app->dpy, children[i], &attribs);
+//                gdk_error_trap_pop ();
+//
+//                if (ret) {
+//                    XSelectInput (app->dpy, children[i], StructureNotifyMask);
 //                  if (!attribs.override_redirect /* && attribs.depth==root_attr.depth */ ) {
-                    gdk_error_trap_push ();
-                    XDamageCreate (app->dpy, children[i],
-                                   XDamageReportRawRectangles);
-                    gdk_error_trap_pop ();
+                gdk_error_trap_push ();
+                XDamageCreate (app->dpy, children[i],
+                               XDamageReportRawRectangles);
+                gdk_error_trap_pop ();
 //                  }
-                }
+//                }
             }
             XSync (app->dpy, False);
             XFree (children);
@@ -1664,12 +1672,10 @@ xvc_frame_create (Window win)
     }
 
     if (win == None) {
-        Window root = DefaultRootWindow (app->dpy);
-
         // display and window attributes seem to be set correctly only if
         // retrieved after the UI was mapped
         gtk_init_add ((GtkFunction) xvc_appdata_set_window_attributes,
-                      (void *) root);
+                      (void *) app->root_window);
 
         if (app->area->width == 0)
             app->area->width = 10;
@@ -1679,16 +1685,15 @@ xvc_frame_create (Window win)
         xvc_create_gtk_frame (xvc_ctrl_main_window, app->area->width,
                               app->area->height, app->area->x, app->area->y);
     } else {
-        Display *display = app->dpy;
         int x, y;
         Window temp = None;
-        Window root = DefaultRootWindow (display);
 
         // display and window attributes seem to be set correctly only if
         // retrieved after the UI was mapped
         gtk_init_add ((GtkFunction) xvc_appdata_set_window_attributes,
                       (void *) win);
-        XTranslateCoordinates (display, win, root, 0, 0, &x, &y, &temp);
+        XTranslateCoordinates (app->dpy, win, app->root_window,
+                               0, 0, &x, &y, &temp);
 
         app->area->x = x;
         app->area->y = y;
@@ -2027,7 +2032,6 @@ xvc_frame_change (int x, int y, int width, int height,
                           show_dimensions);
 #undef DEBUGFUNCTION
 }
-
 
 /**
  * \brief updates the widget monitoring the current frame rate based on
@@ -2781,7 +2785,6 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
     XVC_AppData *app = xvc_appdata_ptr ();
 
     if (gtk_toggle_tool_button_get_active (togglebutton)) {
-        Display *display = xvc_frame_get_capture_display ();
         Cursor cursor;
         Window root = None, target_win = None, temp = None;
         XEvent event;
@@ -2799,26 +2802,25 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
 #endif     // USE_FFMPEG
             target = &(app->single_frame);
 
-        g_assert (display);
+        g_assert (app->dpy);
 
-        root = DefaultRootWindow (display);
-        cursor = XCreateFontCursor (display, XC_crosshair);
+        cursor = XCreateFontCursor (app->dpy, XC_crosshair);
 
-        gcv.background = XBlackPixel (display, XDefaultScreen (display));
-        gcv.foreground = XWhitePixel (display, XDefaultScreen (display));
+        gcv.background = XBlackPixel (app->dpy, app->default_screen_num);
+        gcv.foreground = XWhitePixel (app->dpy, app->default_screen_num);
         gcv.function = GXinvert;
         gcv.plane_mask = gcv.background ^ gcv.foreground;
         gcv.subwindow_mode = IncludeInferiors;
-        gc = XCreateGC (display, root,
+        gc = XCreateGC (app->dpy, app->root_window,
                         GCBackground | GCForeground | GCFunction |
                         GCPlaneMask | GCSubwindowMode, &gcv);
 
         // grab the mouse
         //
-        if (XGrabPointer (display, root, False,
+        if (XGrabPointer (app->dpy, app->root_window, False,
                           PointerMotionMask | ButtonPressMask |
                           ButtonReleaseMask, GrabModeSync,
-                          GrabModeAsync, root, cursor, CurrentTime)
+                          GrabModeAsync, app->root_window, cursor, CurrentTime)
             != GrabSuccess) {
             fprintf (stderr, "%s %s: Can't grab mouse!\n", DEBUGFILE,
                      DEBUGFUNCTION);
@@ -2828,9 +2830,9 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
 
         while (buttons < 2) {
             // allow pointer events
-            XAllowEvents (display, SyncPointer, CurrentTime);
+            XAllowEvents (app->dpy, SyncPointer, CurrentTime);
             // search in the queue for button events
-            XWindowEvent (display, root,
+            XWindowEvent (app->dpy, app->root_window,
                           PointerMotionMask | ButtonPressMask |
                           ButtonReleaseMask, &event);
             switch (event.type) {
@@ -2840,7 +2842,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                 target_win = event.xbutton.subwindow;   // window selected
                 //
                 if (target_win == None) {
-                    target_win = root;
+                    target_win = app->root_window;
                 }
                 buttons++;
                 break;
@@ -2867,6 +2869,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                         height = event.xbutton.y - y_down + 1;
                         y = y_down;
                     }
+
                     xvc_change_gtk_frame (x, y, width, height, FALSE, TRUE);
                     // the previous call changes the frame edges, which are
                     // gtk windows. we need to call the gtk main loop for
@@ -2877,13 +2880,11 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                 break;
             }
         }
-//        if (width > 0)                 // remove old frame
-//            xvc_change_gtk_frame (x, y, width, height, FALSE, TRUE);
 
-        XUngrabPointer (display, CurrentTime);  // Done with pointer
+        XUngrabPointer (app->dpy, CurrentTime); // Done with pointer
 
-        XFreeCursor (display, cursor);
-        XFreeGC (display, gc);
+        XFreeCursor (app->dpy, cursor);
+        XFreeGC (app->dpy, gc);
 
         if ((x_down != x_up) && (y_down != y_up)) {
             // an individual frame was selected
@@ -2905,13 +2906,13 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
             app->area->width = width;
             app->area->height = height;
         } else {
-            if (target_win != root) {
+            if (target_win != app->root_window) {
                 // get the real window
-                target_win = XmuClientWindow (display, target_win);
+                target_win = XmuClientWindow (app->dpy, target_win);
             }
             xvc_appdata_set_window_attributes (target_win);
-            XTranslateCoordinates (display, target_win, root, 0, 0, &x, &y,
-                                   &temp);
+            XTranslateCoordinates (app->dpy, target_win, app->root_window, 0, 0,
+                                   &x, &y, &temp);
             app->area->width = app->win_attr.width;
             app->area->height = app->win_attr.height;
         }

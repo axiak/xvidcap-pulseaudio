@@ -80,7 +80,7 @@
 static XVC_ErrorListItem *errorlist_append (int code, XVC_ErrorListItem * err,
                                             XVC_AppData * app);
 static void error_write_action_msg (int code);
-static void appdata_set_display ();
+static void appdata_set_display (XVC_AppData * app);
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 /**
@@ -236,7 +236,7 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
 #define DEBUGFUNCTION "xvc_appdata_set_defaults"
     // initialize general options
     // we need the display first
-    lapp->dpy = xvc_frame_get_capture_display ();
+    appdata_set_display (lapp);
 
     // flags related settings
     lapp->flags = FLG_ALWAYS_SHOW_RESULTS;
@@ -244,30 +244,30 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
 #ifdef HAVE_LIBXFIXES
     {
         int a, b;
-        Display *dpy = xvc_frame_get_capture_display ();
 
-        if (XFixesQueryExtension (dpy, &a, &b))
+        if (XFixesQueryExtension (lapp->dpy, &a, &b))
             lapp->flags |= FLG_USE_XFIXES;
 
 #ifdef USE_XDAMAGE
         a = 2;
         b = 0;
         if (lapp->use_xdamage != 0 &&
-            XFixesQueryVersion (dpy, &a, &b) && a >= 2) {
-            if (XDamageQueryExtension (dpy, &(lapp->dmg_event_base), &b)) {
+            XFixesQueryVersion (lapp->dpy, &a, &b) && a >= 2) {
+            if (XDamageQueryExtension (lapp->dpy, &(lapp->dmg_event_base), &b)) {
                 Window *wm_child = NULL;
                 Atom nwm_atom, utf8_string, wm_name_atom, rt;
                 unsigned long nbytes, nitems;
                 char *wm_name_str = NULL;
                 int fmt;
 
-                utf8_string = XInternAtom (dpy, "UTF8_STRING", False);
+                utf8_string = XInternAtom (lapp->dpy, "UTF8_STRING", False);
 
-                nwm_atom = XInternAtom (dpy, "_NET_SUPPORTING_WM_CHECK", True);
-                wm_name_atom = XInternAtom (dpy, "_NET_WM_NAME", True);
+                nwm_atom =
+                    XInternAtom (lapp->dpy, "_NET_SUPPORTING_WM_CHECK", True);
+                wm_name_atom = XInternAtom (lapp->dpy, "_NET_WM_NAME", True);
 
                 if (nwm_atom != None && wm_name_atom != None) {
-                    if (XGetWindowProperty (dpy, DefaultRootWindow (dpy),
+                    if (XGetWindowProperty (lapp->dpy, lapp->root_window,
                                             nwm_atom, 0, 100,
                                             False, XA_WINDOW,
                                             &rt, &fmt, &nitems, &nbytes,
@@ -279,11 +279,11 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
                                  DEBUGFILE, DEBUGFUNCTION);
                     }
                     if ((wm_child == NULL) ||
-                        (XGetWindowProperty (dpy, *wm_child, wm_name_atom, 0,
-                                             100, False, utf8_string, &rt, &fmt,
-                                             &nitems, &nbytes,
-                                             (unsigned char **) ((void *)
-                                                                 &wm_name_str))
+                        (XGetWindowProperty
+                         (lapp->dpy, *wm_child, wm_name_atom, 0, 100, False,
+                          utf8_string, &rt, &fmt, &nitems, &nbytes,
+                          (unsigned char **) ((void *)
+                                              &wm_name_str))
                          != Success)) {
                         fprintf (stderr,
                                  "%s %s: Warning!!!\nYour window manager appears to be non-compliant!\n",
@@ -311,14 +311,13 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
 #ifdef HasDGA
     {
         int dgy_evb, dga_errb;
-        Display *dpy = xvc_frame_get_capture_display ();
 
-        if (!XF86DGAQueryExtension (dpy, &dga_evb, &dga_errb))
+        if (!XF86DGAQueryExtension (lapp->dpy, &dga_evb, &dga_errb))
             app->flags &= ~FLG_USE_DGA;
         else {
             int flag = 0;
 
-            XF86DGAQueryDirectVideo (dpy, XDefaultScreen (dpy), &flag);
+            XF86DGAQueryDirectVideo (lapp->dpy, lapp->default_screen, &flag);
             if ((flag & XF86DGADirectPresent) == 0) {
                 app->flags &= ~FLG_USE_DGA;
                 if (app->verbose) {
@@ -330,7 +329,7 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     }
 #endif     // HasDGA
 #ifdef HAVE_SHMAT
-    if (!XShmQueryExtension (xvc_frame_get_capture_display ()))
+    if (!XShmQueryExtension (lapp->dpy))
         app->flags &= ~FLG_USE_SHM;
 #endif     // HAVE_SHMAT
 
@@ -355,7 +354,7 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
     lapp->area->width = 192;
     lapp->area->height = 144;
     lapp->area->x = lapp->area->y = -1;
-    xvc_get_window_attributes (None, &(lapp->win_attr));
+    xvc_get_window_attributes (lapp->dpy, lapp->root_window, &(lapp->win_attr));
 
     // default mode of capture
 #ifdef USE_FFMPEG
@@ -463,6 +462,12 @@ xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
     tapp->rescale = sapp->rescale;
     tapp->mouseWanted = sapp->mouseWanted;
     tapp->dpy = sapp->dpy;
+    tapp->root_window = sapp->root_window;
+    tapp->default_screen = sapp->default_screen;
+    tapp->default_screen_num = sapp->default_screen_num;
+    tapp->max_width = sapp->max_width;
+    tapp->max_height = sapp->max_height;
+
     tapp->win_attr = sapp->win_attr;
     tapp->area = sapp->area;
 #ifdef USE_XDAMAGE
@@ -564,12 +569,8 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
         lapp->flags |= FLG_RUN_VERBOSE;
 
     // start: capture size
-    dpy = xvc_frame_get_capture_display ();
-    max_width = WidthOfScreen (DefaultScreenOfDisplay (dpy));
-    max_height = HeightOfScreen (DefaultScreenOfDisplay (dpy));
-
-    if ((lapp->area->width + lapp->area->x) > max_width ||
-        (lapp->area->height + lapp->area->y) > max_height) {
+    if ((lapp->area->width + lapp->area->x) > lapp->max_width ||
+        (lapp->area->height + lapp->area->y) > lapp->max_height) {
         errors = errorlist_append (6, errors, lapp);
         if (!errors) {
             *rc = -1;
@@ -2746,26 +2747,33 @@ xvc_get_number_of_fraction_digits_from_float_string (const char *input)
  * \brief gets the current display and store it in the XVC_AppData struct
  */
 static void
-appdata_set_display ()
+appdata_set_display (XVC_AppData * lapp)
 {
 #define DEBUGFUNCTION "appdata_set_display()"
 #ifdef DEBUG
     printf ("%s %s: Entering with dpy %p\n", DEBUGFILE, DEBUGFUNCTION,
-            app->dpy);
+            lapp->dpy);
 #endif     // DEBUG
 
-    app->dpy = NULL;
-    app->dpy = xvc_frame_get_capture_display ();
-    if (!app->dpy) {
+    lapp->dpy = NULL;
+    lapp->dpy = xvc_frame_get_capture_display ();
+    if (!lapp->dpy) {
         char msg[256];
 
         snprintf (msg, 256, "%s %s: Can't get display to capture from!\n",
                   DEBUGFILE, DEBUGFUNCTION);
         perror (msg);
+        return;
     }
+    lapp->root_window = DefaultRootWindow (lapp->dpy);
+    lapp->default_screen = XDefaultScreenOfDisplay (lapp->dpy);
+    lapp->default_screen_num = XDefaultScreen (lapp->dpy);
+    lapp->max_width = WidthOfScreen (lapp->default_screen);
+    lapp->max_height = HeightOfScreen (lapp->default_screen);
+
 #ifdef DEBUG
     printf ("%s %s: Leaving with dpy %p (%s)\n", DEBUGFILE, DEBUGFUNCTION,
-            app->dpy, DisplayString (app->dpy));
+            lapp->dpy, DisplayString (lapp->dpy));
 #endif     // DEBUG
 #undef DEBUGFUNCTION
 }
@@ -2780,7 +2788,6 @@ void
 xvc_appdata_set_window_attributes (Window win)
 {
 #define DEBUGFUNCTION "xvc_appdata_set_window_attributes()"
-    appdata_set_display ();
-    xvc_get_window_attributes (win, &(app->win_attr));
+    xvc_get_window_attributes (app->dpy, win, &(app->win_attr));
 #undef DEBUGFUNCTION
 }

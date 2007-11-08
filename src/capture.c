@@ -114,17 +114,16 @@ static void
 getCurrentPointer (int *x, int *y)
 {
 #define DEBUGFUNCTION "getCurrentPointer()"
-    Window mrootwindow, childwindow;
+    Window childwindow;
     int dummy;
     XVC_AppData *app = xvc_appdata_ptr ();
 
-    mrootwindow = DefaultRootWindow (app->dpy);
-
-    if (!XQueryPointer (app->dpy, mrootwindow, &mrootwindow, &childwindow,
-                        x, y, &dummy, &dummy, (unsigned int *) &dummy)) {
+    if (!XQueryPointer (app->dpy, app->root_window, &(app->root_window),
+                        &childwindow, x, y, &dummy, &dummy,
+                        (unsigned int *) &dummy)) {
         fprintf (stderr,
                  "%s %s: couldn't find mouse pointer for disp: %p , rootwindow: %p\n",
-                 DEBUGFILE, DEBUGFUNCTION, app->dpy, &mrootwindow);
+                 DEBUGFILE, DEBUGFUNCTION, app->dpy, &(app->root_window));
         *x = -1;
         *y = -1;
     }
@@ -725,8 +724,7 @@ captureFrameToImage (Display * dpy, XImage * image)
 #endif     // DEBUG
 
     // get the image here
-    if (XGetZPixmapToXImage (dpy,
-                             RootWindow (dpy, DefaultScreen (dpy)),
+    if (XGetZPixmapToXImage (dpy, app->root_window,
                              image, app->area->x, app->area->y)) {
         // paint the mouse pointer into the captured image if necessary
         ret = 1;
@@ -769,7 +767,7 @@ createImage (Display * dpy, int width, int height)
  * need XInitImage
  */
 
-    image = XGetImage (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+    image = XGetImage (dpy, app->root_window,
                        app->area->x, app->area->y,
                        app->area->width, app->area->height, AllPlanes, ZPixmap);
     g_assert (image);
@@ -800,7 +798,7 @@ captureFrameCreatingImage (Display * dpy)
 #endif     // DEBUG
 
     // get the image here
-    image = XGetImage (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+    image = XGetImage (dpy, app->root_window,
                        app->area->x, app->area->y,
                        app->area->width, app->area->height, AllPlanes, ZPixmap);
     if (!image) {
@@ -839,7 +837,7 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
 
     // get the image here
     if (XShmGetImage (dpy,
-                      RootWindow (dpy, DefaultScreen (dpy)),
+                      app->root_window,
                       image, app->area->x, app->area->y, AllPlanes)) {
         // paint the mouse pointer into the captured image if necessary
         ret = 1;
@@ -1048,14 +1046,13 @@ commonCapture (enum captureFunctions capfunc)
 
     // if the frame has moved during capture, move it here
     if (job->frame_moved_x != 0 || job->frame_moved_y != 0) {
-	xvc_frame_change (app->area->x + job->frame_moved_x,
-		app->area->y + job->frame_moved_y,
-		app->area->width, app->area->height,
-                FALSE, FALSE);
-	frame_moved = TRUE;
-	job-> frame_moved_x = job->frame_moved_y = 0;
+        xvc_frame_change (app->area->x + job->frame_moved_x,
+                          app->area->y + job->frame_moved_y,
+                          app->area->width, app->area->height, FALSE, FALSE);
+        frame_moved = TRUE;
+        job->frame_moved_x = job->frame_moved_y = 0;
+        XSync (app->dpy, False);
     }
-
     // we really cannot have external state changes 
     // while we're reacting on state
     pthread_mutex_lock (&(app->capturing_mutex));
@@ -1087,7 +1084,7 @@ commonCapture (enum captureFunctions capfunc)
             // code know we need
             // to restart again afterwards
             if (job->flags & FLG_AUTO_CONTINUE) {
-		job->state |= VC_CONTINUE;
+                job->state |= VC_CONTINUE;
             }
 
             goto CLEAN_CAPTURE;
@@ -1198,17 +1195,17 @@ commonCapture (enum captureFunctions capfunc)
                 if (app->mouseWanted > 0) {
                     pointer_area = paintMousePointer (image);
                 }
-	        // we can allow state or frame changes after this
+                // we can allow state or frame changes after this
                 pthread_mutex_unlock (&(app->capturing_mutex));
                 // call the necessary XtoXYZ function to process the image
                 (*job->save) (fp, image);
-		job->state &= ~(VC_START);
+                job->state &= ~(VC_START);
             } else {
-	        // we can allow state or frame changes after this
+                // we can allow state or frame changes after this
                 pthread_mutex_unlock (&(app->capturing_mutex));
                 printf ("%s %s: could not acquire pixmap!\n", DEBUGFILE,
                         DEBUGFUNCTION);
-	    }
+            }
         } else {
             // we're recording and not in the first frame ....
             // so we just read new data into the present image structure
@@ -1234,7 +1231,6 @@ commonCapture (enum captureFunctions capfunc)
                 dmg_rects = XFixesFetchRegion (app->dpy, damaged_region,
                                                &num_dmg_rects);
 
-//            if (num_dmg_rects > 0) XSync(app->dpy, False);
                 for (rcount = 0; rcount < num_dmg_rects; rcount++) {
                     int bpl;
 
@@ -1242,8 +1238,7 @@ commonCapture (enum captureFunctions capfunc)
 #ifdef HAVE_SHMAT
                     case SHM:
                         XGetZPixmapSHM (app->dpy,
-                                        RootWindow (app->dpy,
-                                                    DefaultScreen (app->dpy)),
+                                        app->root_window,
                                         &dmg_shminfo, shm_opcode,
                                         dmg_image->data, dmg_rects[rcount].x,
                                         dmg_rects[rcount].y,
@@ -1254,8 +1249,7 @@ commonCapture (enum captureFunctions capfunc)
                     case X11:
                     default:
                         XGetZPixmap (app->dpy,
-                                     RootWindow (app->dpy,
-                                                 DefaultScreen (app->dpy)),
+                                     app->root_window,
                                      dmg_image->data, dmg_rects[rcount].x,
                                      dmg_rects[rcount].y,
                                      dmg_rects[rcount].width,
@@ -1291,18 +1285,18 @@ commonCapture (enum captureFunctions capfunc)
                 }
                 XFixesDestroyRegion (app->dpy, damaged_region);
             } else {
-		if (app->flags & FLG_USE_XDAMAGE) {
-		    // we're here, if we actually want Xdamage, but aren't
-		    // using it for the current image (e. g. because the
-		    // frame was moved
+                if (app->flags & FLG_USE_XDAMAGE) {
+                    // we're here, if we actually want Xdamage, but aren't
+                    // using it for the current image (e. g. because the
+                    // frame was moved
 
                     // get the damaged region
                     // stuff damaged between starting the damage poll thread 
                     // and this we can safely discard the damage because we'll
-		    // be capturing a full frame next
+                    // be capturing a full frame next
                     damaged_region = xvc_get_damage_region ();
                     XFixesDestroyRegion (app->dpy, damaged_region);
-		}
+                }
 #endif     // USE_XDAMAGE
                 switch (capfunc) {
 #ifdef HAVE_SHMAT
@@ -1322,7 +1316,7 @@ commonCapture (enum captureFunctions capfunc)
             if (app->mouseWanted > 0) {
                 pointer_area = paintMousePointer (image);
             }
-	    // we can allow state or frame changes after this
+            // we can allow state or frame changes after this
             pthread_mutex_unlock (&(app->capturing_mutex));
 
             // call the necessary XtoXYZ function to process the image
@@ -1359,7 +1353,7 @@ commonCapture (enum captureFunctions capfunc)
         // this might be a single step. If so, remove the state flag so we
         // don't keep single stepping
         if (job->state & VC_STEP) {
-	    job->state &= ~(VC_STEP);
+            job->state &= ~(VC_STEP);
             // the time is the pause between this and the next snapshot
             // for step mode this makes no sense and could be 0. Setting
             // it to 50 is just to give the led meter the chance to flash
@@ -1381,11 +1375,8 @@ commonCapture (enum captureFunctions capfunc)
 
         time = 0;
         orig_state = job->state;       // store state here, esp. VC_CONTINUE
-	job->state = VC_STOP;
-    	// we've handled frame moves for this image
-    	job->frame_moved_x = 0;
-    	job->frame_moved_y = 0;
-	// we can allow state or frame changes after this
+        job->state = VC_STOP;
+        // we can allow state or frame changes after this
         pthread_mutex_unlock (&(app->capturing_mutex));
 
         if (full_cleanup) {
@@ -1409,7 +1400,6 @@ commonCapture (enum captureFunctions capfunc)
             if (job->clean)
                 (*job->clean) ();
         }
-
         // set the sensitive stuff for the control panel if we don't
         // autocontinue
         if ((orig_state & VC_CONTINUE) == 0)
@@ -1423,7 +1413,7 @@ commonCapture (enum captureFunctions capfunc)
 
         if ((orig_state & VC_CONTINUE) == 0) {
             // after this we're ready to start recording again
-	    job->state |= VC_READY;
+            job->state |= VC_READY;
         } else if (job->capture_returned_errno == 0) {
 
 #ifdef DEBUG
@@ -1435,8 +1425,8 @@ commonCapture (enum captureFunctions capfunc)
             // prepare autocontinue
             job->movie_no += 1;
             job->pic_no = target->start_no;
-	    job->state |= (VC_START | VC_REC);
-	    job->state &= ~(VC_STOP);
+            job->state |= (VC_START | VC_REC);
+            job->state &= ~(VC_STOP);
 
             return time;
         }

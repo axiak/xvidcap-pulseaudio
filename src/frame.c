@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <X11/Intrinsic.h>
 #include "frame.h"
+#include "app_data.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define DEBUGFILE "frame.c"
@@ -83,17 +84,14 @@ xvc_set_frame_locked (int lock)
  * @param wa return pointer to the XWindowAttributes struct to write to
  */
 void
-xvc_get_window_attributes (Window win, XWindowAttributes * wa)
+xvc_get_window_attributes (Display * dpy, Window win, XWindowAttributes * wa)
 {
 #define DEBUGFUNCTION "xvc_get_window_attributes()"
-
-    Display *display = xvc_frame_get_capture_display ();
-
     if (win == None) {
-        win = DefaultRootWindow (display);
+        win = DefaultRootWindow (dpy);
     }
 
-    if (!XGetWindowAttributes (display, win, wa)) {
+    if (!XGetWindowAttributes (dpy, win, wa)) {
         char msg[256];
 
         snprintf (msg, 256, "%s %s: Can't get window attributes!\n",
