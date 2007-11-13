@@ -269,6 +269,8 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
                 printf
                     ("Modified Selection geometry: %dx%d+%d+%d\n",
                      width, height, x, y);
+                if (reposition_control)
+                    printf ("Need to reposition the maincontrol\n");
             }
         }
     }
@@ -296,21 +298,31 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
 
     if ((app->flags & FLG_NOGUI) == 0) {
         // move the frame if not running without GUI
-        gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_top),
-                                     (width + 2 * FRAME_WIDTH), FRAME_WIDTH);
-        gtk_window_move (GTK_WINDOW (gtk_frame_top), (x - FRAME_WIDTH),
-                         (y - FRAME_WIDTH));
-        gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_left),
-                                     FRAME_WIDTH, height);
-        gtk_window_move (GTK_WINDOW (gtk_frame_left), (x - FRAME_WIDTH), y);
-        gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_bottom),
-                                     (width + 2 * FRAME_WIDTH), FRAME_WIDTH);
-        gtk_window_move (GTK_WINDOW (gtk_frame_bottom), (x - FRAME_WIDTH),
-                         (y + height));
-        gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_right),
-                                     FRAME_WIDTH, height);
-        gtk_window_move (GTK_WINDOW (gtk_frame_right), (x + width), y);
-
+        if (width != app->area->width) {
+            gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_top),
+                                         (width + 2 * FRAME_WIDTH),
+                                         FRAME_WIDTH);
+            gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_bottom),
+                                         (width + 2 * FRAME_WIDTH),
+                                         FRAME_WIDTH);
+        }
+        if (height != app->area->height) {
+            gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_left),
+                                         FRAME_WIDTH, height);
+            gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_right),
+                                         FRAME_WIDTH, height);
+        }
+        if (x != app->area->x || y != app->area->y) {
+            gtk_window_move (GTK_WINDOW (gtk_frame_top), (x - FRAME_WIDTH),
+                             (y - FRAME_WIDTH));
+            gtk_window_move (GTK_WINDOW (gtk_frame_left), (x - FRAME_WIDTH), y);
+        }
+        if (x != app->area->x || y != app->area->y || width != app->area->width
+            || height != app->area->height) {
+            gtk_window_move (GTK_WINDOW (gtk_frame_bottom), (x - FRAME_WIDTH),
+                             (y + height));
+            gtk_window_move (GTK_WINDOW (gtk_frame_right), (x + width), y);
+        }
 #ifdef HasVideo4Linux
         // if we have a v4l blind, move it, too
         if (gtk_frame_center != NULL)

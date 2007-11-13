@@ -427,21 +427,22 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
         clip_region = XFixesCreateRegion (app->dpy, 0, 0);
 
     if (xev->type == MapNotify) {
-//      XWindowAttributes attribs;
-//      Status ret;
-//
-//      gdk_error_trap_push ();
-//      ret = XGetWindowAttributes (app->dpy, 
-//                xev->xcreatewindow.window, &attribs);
-//      gdk_error_trap_pop ();
-//
-//        XSelectInput (app->dpy, xev->xcreatewindow.window, StructureNotifyMask);
-//      if (!attribs.override_redirect /* && attribs.depth==pdata->specs.depth */) {
+        XWindowAttributes attribs;
+        Status ret;
+
         gdk_error_trap_push ();
-        XDamageCreate (app->dpy, xev->xcreatewindow.window,
-                       XDamageReportRawRectangles);
+        ret = XGetWindowAttributes (app->dpy,
+                                    xev->xcreatewindow.window, &attribs);
         gdk_error_trap_pop ();
-//      }
+
+//        XSelectInput (app->dpy, xev->xcreatewindow.window, StructureNotifyMask);
+        if (!attribs.
+            override_redirect /* && attribs.depth==pdata->specs.depth */ ) {
+            gdk_error_trap_push ();
+            XDamageCreate (app->dpy, xev->xcreatewindow.window,
+                           XDamageReportRawRectangles);
+            gdk_error_trap_pop ();
+        }
     } else if (xev->type == app->dmg_event_base) {
         XRectangle rect = {
             XVC_MAX (e->area.x - 10, 0),
@@ -1196,22 +1197,24 @@ start_recording_nongui_stuff ()
                         &root_return, &parent_return, &children, &nchildren);
 
             for (i = 0; i < nchildren; i++) {
-//                XWindowAttributes attribs;
-//                Status ret;
-//
-//                gdk_error_trap_push ();
-//                ret = XGetWindowAttributes (app->dpy, children[i], &attribs);
-//                gdk_error_trap_pop ();
-//
-//                if (ret) {
-//                    XSelectInput (app->dpy, children[i], StructureNotifyMask);
-//                  if (!attribs.override_redirect /* && attribs.depth==root_attr.depth */ ) {
+                XWindowAttributes attribs;
+                Status ret;
+
                 gdk_error_trap_push ();
-                XDamageCreate (app->dpy, children[i],
-                               XDamageReportRawRectangles);
+                ret = XGetWindowAttributes (app->dpy, children[i], &attribs);
                 gdk_error_trap_pop ();
-//                  }
-//                }
+
+                if (ret) {
+//                    XSelectInput (app->dpy, children[i], StructureNotifyMask);
+                    if (!attribs.
+                        override_redirect
+                        /* && attribs.depth==root_attr.depth */ ) {
+                        gdk_error_trap_push ();
+                        XDamageCreate (app->dpy, children[i],
+                                       XDamageReportRawRectangles);
+                        gdk_error_trap_pop ();
+                    }
+                }
             }
             XSync (app->dpy, False);
             XFree (children);
@@ -2869,7 +2872,6 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                         height = event.xbutton.y - y_down + 1;
                         y = y_down;
                     }
-
                     xvc_change_gtk_frame (x, y, width, height, FALSE, TRUE);
                     // the previous call changes the frame edges, which are
                     // gtk windows. we need to call the gtk main loop for
@@ -2888,23 +2890,21 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
 
         if ((x_down != x_up) && (y_down != y_up)) {
             // an individual frame was selected
-            if (x_up < x_down) {
-                width = x_down - x_up + 2;
+            if (x_down > x_up) {
+                width = x_down - x_up + 1;
                 x = x_up;
             } else {
-                width = x_up - x_down + 2;
+                width = x_up - x_down + 1;
                 x = x_down;
             }
-            if (y_up < y_down) {
-                height = y_down - y_up + 2;
+            if (y_down > y_up) {
+                height = y_down - y_up + 1;
                 y = y_up;
             } else {
-                height = y_up - y_down + 2;
+                height = y_up - y_down + 1;
                 y = y_down;
             }
             xvc_appdata_set_window_attributes (target_win);
-            app->area->width = width;
-            app->area->height = height;
         } else {
             if (target_win != app->root_window) {
                 // get the real window
@@ -2913,15 +2913,12 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
             xvc_appdata_set_window_attributes (target_win);
             XTranslateCoordinates (app->dpy, target_win, app->root_window, 0, 0,
                                    &x, &y, &temp);
-            app->area->width = app->win_attr.width;
-            app->area->height = app->win_attr.height;
+            width = app->win_attr.width;
+            height = app->win_attr.height;
         }
 
-        app->area->x = x;
-        app->area->y = y;
-
-        xvc_change_gtk_frame (x, y, app->area->width,
-                              app->area->height, xvc_is_frame_locked (), FALSE);
+        xvc_change_gtk_frame (x, y, width,
+                              height, xvc_is_frame_locked (), FALSE);
 
         // update colors and colormap
         xvc_job_set_colors ();

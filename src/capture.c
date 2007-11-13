@@ -719,9 +719,27 @@ captureFrameToImage (Display * dpy, XImage * image)
     int ret = 0;
     XVC_AppData *app = xvc_appdata_ptr ();
 
+#ifdef USE_XDAMAGE
+    XserverRegion damaged_region;
+#endif     // USE_XDAMAGE
+
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
+
+#ifdef USE_XDAMAGE
+    // if we use Xdamage and are still capturing a complete frame (which is
+    // what we're doing here, then we can discard the regions damaged up to
+    // now
+    if (app->flags & FLG_USE_XDAMAGE) {
+        // get the damage up to now
+        damaged_region = xvc_get_damage_region ();
+        // lock the display to avoid other damage from occuring
+        XLockDisplay (app->dpy);
+        // sync the display to apply all pending changes
+        XSync (app->dpy, False);
+    }
+#endif     // USE_XDAMAGE
 
     // get the image here
     if (XGetZPixmapToXImage (dpy, app->root_window,
@@ -729,6 +747,16 @@ captureFrameToImage (Display * dpy, XImage * image)
         // paint the mouse pointer into the captured image if necessary
         ret = 1;
     }
+
+#ifdef USE_XDAMAGE
+    if (app->flags & FLG_USE_XDAMAGE) {
+        // unlock the display again
+        XUnlockDisplay (app->dpy);
+    }
+    // and discard the damage
+    XFixesDestroyRegion (app->dpy, damaged_region);
+#endif     // USE_XDAMAGE
+
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -831,9 +859,27 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
     int ret = 0;
     XVC_AppData *app = xvc_appdata_ptr ();
 
+#ifdef USE_XDAMAGE
+    XserverRegion damaged_region;
+#endif     // USE_XDAMAGE
+
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
+
+#ifdef USE_XDAMAGE
+    // if we use Xdamage and are still capturing a complete frame (which is
+    // what we're doing here, then we can discard the regions damaged up to
+    // now
+    if (app->flags & FLG_USE_XDAMAGE) {
+        // get the damage up to now
+        damaged_region = xvc_get_damage_region ();
+        // lock the display to avoid other damage from occuring
+        XLockDisplay (app->dpy);
+        // sync the display to apply all pending changes
+        XSync (app->dpy, False);
+    }
+#endif     // USE_XDAMAGE
 
     // get the image here
     if (XShmGetImage (dpy,
@@ -842,6 +888,16 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
         // paint the mouse pointer into the captured image if necessary
         ret = 1;
     }
+
+#ifdef USE_XDAMAGE
+    if (app->flags & FLG_USE_XDAMAGE) {
+        // unlock the display again
+        XUnlockDisplay (app->dpy);
+    }
+    // and discard the damage
+    XFixesDestroyRegion (app->dpy, damaged_region);
+#endif     // USE_XDAMAGE
+
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -1051,6 +1107,9 @@ commonCapture (enum captureFunctions capfunc)
                           app->area->width, app->area->height, FALSE, FALSE);
         frame_moved = TRUE;
         job->frame_moved_x = job->frame_moved_y = 0;
+        // make sure the frame is actually moved before continuing with the
+        // capture to avoid capturing the frame (this is not a guarantee with
+        // compositing window managers, though)
         XSync (app->dpy, False);
     }
     // we really cannot have external state changes 
@@ -1149,12 +1208,7 @@ commonCapture (enum captureFunctions capfunc)
 
 #ifdef USE_XDAMAGE
             if (app->flags & FLG_USE_XDAMAGE) {
-                // get the damaged region
-                // stuff damaged between starting the damage poll thread and
-                // this (capture of the first frame) ... we can safely discard
-                // the damage
-                damaged_region = xvc_get_damage_region ();
-                XFixesDestroyRegion (app->dpy, damaged_region);
+                // create some utility regions
                 region = XFixesCreateRegion (app->dpy, 0, 0);
                 clip_region = XFixesCreateRegion (app->dpy, 0, 0);
             }
@@ -1218,7 +1272,17 @@ commonCapture (enum captureFunctions capfunc)
                 int num_dmg_rects, rcount;
                 XRectangle *dmg_rects;
 
+                // first get the consolidated region where stuff was damaged
+                // since the last frame
                 damaged_region = xvc_get_damage_region ();
+                // then lock the display so we capture a consitent state
+                // I would prefer to retrieve the damaged region within the
+                // lock, but that doesn't seem to work well
+                XLockDisplay (app->dpy);
+                // sync the display
+                XSync (app->dpy, False);
+                // add the last position of the mouse pointer to the damaged
+                // region
                 if (app->mouseWanted > 0) {
                     XFixesSetRegion (app->dpy, region, &(pointer_area), 1);
                     XFixesSetRegion (app->dpy, clip_region, app->area, 1);
@@ -1228,12 +1292,16 @@ commonCapture (enum captureFunctions capfunc)
                     XFixesUnionRegion (app->dpy, damaged_region, damaged_region,
                                        region);
                 }
+                // get individual rectangles from the damaged region
                 dmg_rects = XFixesFetchRegion (app->dpy, damaged_region,
                                                &num_dmg_rects);
 
+                // then iterate across them and capture the content of the
+                // rectangles
                 for (rcount = 0; rcount < num_dmg_rects; rcount++) {
                     int bpl;
 
+                    // either x11 or shm source
                     switch (capfunc) {
 #ifdef HAVE_SHMAT
                     case SHM:
@@ -1269,6 +1337,8 @@ commonCapture (enum captureFunctions capfunc)
                          4 : dmg_rects[rcount].width *
                          (image->bits_per_pixel >> 3)
                         );
+                    // update the content of the damaged areas in the frame
+                    // to encode
                     placeImageInImage (dmg_image->data,
                                        dmg_rects[rcount].x - app->area->x,
                                        dmg_rects[rcount].y - app->area->y,
@@ -1280,23 +1350,14 @@ commonCapture (enum captureFunctions capfunc)
                                        image->height,
                                        image->bits_per_pixel >> 3);
                 }
+                // now we can release the lock on the display again
+                XUnlockDisplay (app->dpy);
+                // and cleanup stuff
                 if (num_dmg_rects > 0) {
                     XFree (dmg_rects);
                 }
                 XFixesDestroyRegion (app->dpy, damaged_region);
             } else {
-                if (app->flags & FLG_USE_XDAMAGE) {
-                    // we're here, if we actually want Xdamage, but aren't
-                    // using it for the current image (e. g. because the
-                    // frame was moved
-
-                    // get the damaged region
-                    // stuff damaged between starting the damage poll thread 
-                    // and this we can safely discard the damage because we'll
-                    // be capturing a full frame next
-                    damaged_region = xvc_get_damage_region ();
-                    XFixesDestroyRegion (app->dpy, damaged_region);
-                }
 #endif     // USE_XDAMAGE
                 switch (capfunc) {
 #ifdef HAVE_SHMAT
@@ -1313,6 +1374,8 @@ commonCapture (enum captureFunctions capfunc)
             }
 #endif     // USE_XDAMAGE
 
+            /** \todo: wouldn't it be cleaner to do that inside the display 
+             *      lock? Would that help at all, though? */
             if (app->mouseWanted > 0) {
                 pointer_area = paintMousePointer (image);
             }
