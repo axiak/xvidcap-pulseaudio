@@ -405,39 +405,35 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
     XVC_AppData *app = xvc_appdata_ptr ();
     XEvent *xev = (XEvent *) xevent;
     XDamageNotifyEvent *e = (XDamageNotifyEvent *) (xevent);
-    static XserverRegion region = None, clip_region = None;
+    static XserverRegion region = None;
     Job *job = xvc_job_ptr ();
 
+    // the following bits are purely for perormance reasons
     if (!app->recording_thread_running || job == NULL ||
         (job->flags & FLG_USE_XDAMAGE) == 0) {
         if (region != None) {
             XFixesDestroyRegion (app->dpy, region);
             region = None;
         }
-        if (clip_region != None) {
-            XFixesDestroyRegion (app->dpy, clip_region);
-            clip_region = None;
-        }
         return GDK_FILTER_CONTINUE;
     }
 
     if (region == None)
         region = XFixesCreateRegion (app->dpy, 0, 0);
-    if (clip_region == None)
-        clip_region = XFixesCreateRegion (app->dpy, 0, 0);
 
     if (xev->type == MapNotify) {
         XWindowAttributes attribs;
+        XWindowAttributes root_attrs;
         Status ret;
 
         gdk_error_trap_push ();
+        XGetWindowAttributes (app->dpy, app->root_window, &root_attrs);
         ret = XGetWindowAttributes (app->dpy,
                                     xev->xcreatewindow.window, &attribs);
         gdk_error_trap_pop ();
 
 //        XSelectInput (app->dpy, xev->xcreatewindow.window, StructureNotifyMask);
-        if (!attribs.
-            override_redirect /* && attribs.depth==pdata->specs.depth */ ) {
+        if (!attribs.override_redirect && attribs.depth == root_attrs.depth) {
             gdk_error_trap_push ();
             XDamageCreate (app->dpy, xev->xcreatewindow.window,
                            XDamageReportRawRectangles);
@@ -450,24 +446,45 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
             e->area.width + 20,
             e->area.height + 20
         };
-        XRectangle clip_rect = {
-            app->area->x,
-            app->area->y,
-            app->area->width,
-            app->area->height
-        };
-        XFixesSetRegion (app->dpy, region, &rect, 1);
-        XFixesSetRegion (app->dpy, clip_region, &clip_rect, 1);
+
+        // clip the damaged rectangle
+        if (rect.x < app->area->x && (rect.x + rect.width) > app->area->x) {
+            rect.width -= (app->area->x - rect.x);
+            rect.x = app->area->x;
+        }
+        if ((rect.x + rect.width) > (app->area->x + app->area->width)) {
+            rect.width = (app->area->x + app->area->width) - rect.x;
+        }
+        if (rect.y < app->area->y && (rect.y + rect.height) > app->area->y) {
+            rect.height -= (app->area->y - rect.y);
+            rect.y = app->area->y;
+        }
+        if ((rect.y + rect.height) > (app->area->y + app->area->height)) {
+            rect.height = (app->area->y + app->area->height) - rect.y;
+        }
+        if ((rect.x + rect.width) < app->area->x ||
+            rect.x > (app->area->x + app->area->width) ||
+            (rect.y + rect.height) < app->area->y ||
+            rect.y > (app->area->y + app->area->height)) {
+            rect.x = rect.width = rect.y = rect.height = 0;
+        }
+        // set the region required by XDamageSubtract unclipped
+        XFixesSetRegion (app->dpy, region, &(e->area), 1);
 
         // Offset the region with the windows' position
         XFixesTranslateRegion (app->dpy, region, e->geometry.x, e->geometry.y);
-        XFixesIntersectRegion (app->dpy, clip_region, region, clip_region);
 
+        // remember the damage done
         pthread_mutex_lock (&(app->damage_regions_mutex));
-        XFixesUnionRegion (app->dpy, job->dmg_region, job->dmg_region,
-                           clip_region);
-        XDamageSubtract (app->dpy, e->damage, region, None);
+        XUnionRectWithRegion (&rect, job->dmg_region, job->dmg_region);
         pthread_mutex_unlock (&(app->damage_regions_mutex));
+
+        // subtract the damage
+        // this will not work on a locked display, so we need to synchronize
+        // this with the capture thread
+        pthread_mutex_lock (&(app->display_lock_mutex));
+        XDamageSubtract (app->dpy, e->damage, region, None);
+        pthread_mutex_unlock (&(app->display_lock_mutex));
     }
 
     return GDK_FILTER_CONTINUE;
@@ -1208,11 +1225,11 @@ start_recording_nongui_stuff ()
 //                    XSelectInput (app->dpy, children[i], StructureNotifyMask);
                     if (!attribs.
                         override_redirect
-                        /* && attribs.depth==root_attr.depth */ ) {
-                        gdk_error_trap_push ();
+                        && attribs.depth == root_attrs.depth) {
+//                        gdk_error_trap_push ();
                         XDamageCreate (app->dpy, children[i],
                                        XDamageReportRawRectangles);
-                        gdk_error_trap_pop ();
+//                        gdk_error_trap_pop ();
                     }
                 }
             }

@@ -32,8 +32,9 @@
 #include "colors.h"
 
 #ifdef USE_XDAMAGE
-#include <X11/extensions/Xfixes.h>
-#include <X11/extensions/Xdamage.h>
+#include <X11/Xutil.h>
+//#include <X11/extensions/Xfixes.h>
+//#include <X11/extensions/Xdamage.h>
 #endif     // USE_XDAMAGE
 
 #ifdef HAVE_CONFIG_H
@@ -134,7 +135,8 @@ typedef struct _Job
     ColorInfo *c_info;
 
 #ifdef USE_XDAMAGE
-    XserverRegion dmg_region;
+//    XserverRegion dmg_region;
+    Region dmg_region;
 #endif     // USE_XDAMAGE
 
     /** \brief the last capture session returned this errno */
@@ -159,6 +161,7 @@ void xvc_job_keep_state (int state);
 void xvc_job_keep_and_merge_state (int merge_state, int remove_state);
 
 #ifdef USE_XDAMAGE
-XserverRegion xvc_get_damage_region ();
+//XserverRegion xvc_get_damage_region ();
+Region xvc_get_damage_region ();
 #endif     // USE_XDAMAGE
 #endif     // __JOB_H__

@@ -114,15 +114,17 @@ void
 xvc_appdata_free (XVC_AppData * lapp)
 {
 #define DEBUGFUNCTION "xvc_appdata_free()"
-    if (app) {
+    if (app != NULL) {
         pthread_mutex_destroy (&(lapp->recording_paused_mutex));
         pthread_cond_destroy (&(lapp->recording_condition_unpaused));
         pthread_mutex_destroy (&(lapp->capturing_mutex));
+        pthread_mutex_destroy (&(lapp->display_lock_mutex));
 #ifdef USE_XDAMAGE
         pthread_mutex_destroy (&(lapp->damage_regions_mutex));
 #endif     // USE_XDAMAGE
 
         free (app);
+        app = NULL;
     }
 #undef DEBUGFUNCTION
 }
@@ -137,7 +139,7 @@ XVC_AppData *
 xvc_appdata_ptr (void)
 {
 #define DEBUGFUNCTION "xvc_appdata_ptr()"
-    if (!app) {
+    if (app == NULL) {
         appdata_new ();
         xvc_appdata_init (app);
     }
@@ -209,6 +211,7 @@ xvc_appdata_init (XVC_AppData * lapp)
     pthread_mutex_init (&(lapp->recording_paused_mutex), NULL);
     pthread_cond_init (&(lapp->recording_condition_unpaused), NULL);
     pthread_mutex_init (&(lapp->capturing_mutex), NULL);
+    pthread_mutex_init (&(lapp->display_lock_mutex), NULL);
     lapp->recording_thread_running = FALSE;
 #ifdef USE_XDAMAGE
     pthread_mutex_init (&(lapp->damage_regions_mutex), NULL);
@@ -297,7 +300,8 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
                                                !strcmp (wm_name_str, "compiz")
                                                || !strncmp (wm_name_str,
                                                             "beryl", 5))) {
-                    lapp->dmg_event_base = 0;
+                    lapp->flags &= ~(FLG_USE_XDAMAGE);
+//                    lapp->dmg_event_base = 0;
                 } else {
                     lapp->flags |= FLG_USE_XDAMAGE;
                 }
@@ -489,6 +493,7 @@ xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
     tapp->recording_paused_mutex = sapp->recording_paused_mutex;
     tapp->recording_condition_unpaused = sapp->recording_condition_unpaused;
     tapp->capturing_mutex = sapp->capturing_mutex;
+    tapp->display_lock_mutex = sapp->display_lock_mutex;
     tapp->recording_thread_running = sapp->recording_thread_running;
 #ifdef USE_XDAMAGE
     tapp->damage_regions_mutex = sapp->damage_regions_mutex;

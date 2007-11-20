@@ -235,6 +235,8 @@ typedef struct
     /** \brief mutex for synchronizing state or frame changes with
      *		capturing of individual frames */
     pthread_mutex_t capturing_mutex;
+    /** \brief mutex for synchronizing access to display */
+    pthread_mutex_t display_lock_mutex;
     /** \brief is the recording thread running?
      *
      * \todo find out if there's a way to tell that from the tread directly

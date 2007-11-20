@@ -57,6 +57,10 @@
 #ifdef HAVE_LIBXFIXES
 #include <X11/extensions/Xfixes.h>
 #endif     // HAVE_LIBXFIXES
+#ifdef USE_XDAMAGE
+#include <X11/Xregion.h>
+#include <X11/Xutil.h>
+#endif     // USE_XDAMAGE
 #ifdef HAVE_SHMAT
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -109,7 +113,7 @@ static unsigned char bottom[65536];
     the next frame to find it. This is only required in the context
     of Xdamage */
 static XRectangle pointer_area;
-#endif // USE_XDAMAGE
+#endif     // USE_XDAMAGE
 
 /**
  * \brief function to find out where the mouse pointer is
@@ -147,7 +151,8 @@ getCurrentPointer (int *x, int *y)
  * @return a pointer to an XFixesCursorImage for the current pointer
  */
 static XFixesCursorImage *
-getCurrentPointerImage (){
+getCurrentPointerImage ()
+{
     XVC_AppData *app = xvc_appdata_ptr ();
     XFixesCursorImage *x_cursor = NULL;
 
@@ -155,7 +160,7 @@ getCurrentPointerImage (){
 
     return x_cursor;
 }
-#endif // HAVE_LIBXFIXES
+#endif     // HAVE_LIBXFIXES
 
 /**
  * Mouse painting helper function that applies an 'and' and 'or' mask pair to
@@ -216,8 +221,9 @@ count_one_bits (long bits)
  *      frame.
  */
 static XRectangle
-paintMousePointer (XImage * image, XFixesCursorImage * my_x_cursor, int x, int y)
-#else // USE_XDAMAGE
+paintMousePointer (XImage * image, XFixesCursorImage * my_x_cursor, int x,
+                   int y)
+#else      // USE_XDAMAGE
 #ifdef HAVE_LIBXFIXES
 /**
  * \brief Paints a mouse pointer in an X11 image.
@@ -231,8 +237,9 @@ paintMousePointer (XImage * image, XFixesCursorImage * my_x_cursor, int x, int y
  * @param y the y position of the pointer. Only needed if !FLG_USE_XFIXES.
  */
 static void
-paintMousePointer (XImage * image, XFixesCursorImage * my_x_cursor, int x, int y)
-#else //HAVE_LIBXFIXES
+paintMousePointer (XImage * image, XFixesCursorImage * my_x_cursor, int x,
+                   int y)
+#else      //HAVE_LIBXFIXES
 /**
  * \brief Paints a mouse pointer in an X11 image.
  *      This is the version for use without xfixes or xdamage
@@ -243,8 +250,8 @@ paintMousePointer (XImage * image, XFixesCursorImage * my_x_cursor, int x, int y
  */
 static void
 paintMousePointer (XImage * image, int x, int y)
-#endif // HAVE_LIBXFIXES
-#endif // USE_XDAMAGE
+#endif     // HAVE_LIBXFIXES
+#endif     // USE_XDAMAGE
 {
 #define DEBUGFUNCTION "paintMousePointer()"
     /* 16x20x1bpp bitmap for the black channel of the mouse pointer */
@@ -271,13 +278,25 @@ paintMousePointer (XImage * image, int x, int y)
 #ifdef HAVE_LIBXFIXES
     unsigned char topp, botp;
     unsigned long applied;
-//    XFixesCursorImage *my_x_cursor = NULL;
+    XFixesCursorImage *x_cursor = NULL;
 #endif     // HAVE_LIBXFIXES
 
+    // only paint a mouse pointer into the dummy frame if the position of
+    // the mouse is within the rectangle defined by the capture frame
+
 #ifdef HAVE_LIBXFIXES
-    // retrieve cusor dimensions from my_x_cursor, if available
     if (app->flags & FLG_USE_XFIXES) {
-        if (!my_x_cursor) return;
+#ifdef USE_XDAMAGE
+        // if we use xfixes, we want a cursor image
+        if (!my_x_cursor) {
+            pArea.x = pArea.y = pArea.width, pArea.height = 0;
+            return pArea;
+        }
+#else      // USE_XDAMAGE
+        if (!my_x_cursor)
+            return;
+#endif     // USE_XDAMAGE
+        // set cursor dimensions from cursor image
         cursor_width = my_x_cursor->width;
         cursor_height = my_x_cursor->height;
         y = my_x_cursor->y - my_x_cursor->yhot;
@@ -536,15 +555,18 @@ paintMousePointer (XImage * image, int x, int y)
 
             im_data += image->bytes_per_line;
         }
+
+        // return the are covered by the mouse pointer
+        pArea.x = x;
+        pArea.y = y;
+        pArea.width = cursor_width;
+        pArea.height = cursor_height;
+    } else {
+        // otherwise return an empty area
+        pArea.x = pArea.y = pArea.width = pArea.height = 0;
     }
 
-    pArea.x = x;
-    pArea.y = y;
-    pArea.width = cursor_width;
-    pArea.height = cursor_height;
-
     return pArea;
-
 #undef DEBUGFUNCTION
 }
 
@@ -780,7 +802,7 @@ captureFrameToImage (Display * dpy, XImage * image)
     XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef USE_XDAMAGE
-    XserverRegion damaged_region = None;
+    Region damaged_region = NULL;
 #endif     // USE_XDAMAGE
 
 #ifdef DEBUG
@@ -793,11 +815,8 @@ captureFrameToImage (Display * dpy, XImage * image)
     // now
     if (app->flags & FLG_USE_XDAMAGE) {
         // get the damage up to now
+        // we're assuming we're on a locked and synched display
         damaged_region = xvc_get_damage_region ();
-        // lock the display to avoid other damage from occuring
-        XLockDisplay (app->dpy);
-        // sync the display to apply all pending changes
-        XSync (app->dpy, False);
     }
 #endif     // USE_XDAMAGE
 
@@ -807,14 +826,11 @@ captureFrameToImage (Display * dpy, XImage * image)
         // paint the mouse pointer into the captured image if necessary
         ret = 1;
     }
-
 #ifdef USE_XDAMAGE
     if (app->flags & FLG_USE_XDAMAGE) {
-        // unlock the display again
-        XUnlockDisplay (app->dpy);
+        // and discard the damage
+        XDestroyRegion (damaged_region);
     }
-    // and discard the damage
-    XFixesDestroyRegion (app->dpy, damaged_region);
 #endif     // USE_XDAMAGE
 
 #ifdef DEBUG
@@ -920,7 +936,7 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
     XVC_AppData *app = xvc_appdata_ptr ();
 
 #ifdef USE_XDAMAGE
-    XserverRegion damaged_region = None;
+    Region damaged_region = NULL;
 #endif     // USE_XDAMAGE
 
 #ifdef DEBUG
@@ -931,17 +947,10 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
     // if we use Xdamage and are still capturing a complete frame (which is
     // what we're doing here, then we can discard the regions damaged up to
     // now
-    // we also need to get the mouse pointer position consistent
-    // with the data captured. That's important if using Xdamage
-    // because the next frame needs the correct mouse pointer
-    // location to fix damage done by moving the mouse pointer
     if (app->flags & FLG_USE_XDAMAGE) {
         // get the damage up to now
+        // we're assuming we're on a locked and synched display
         damaged_region = xvc_get_damage_region ();
-        // lock the display to avoid other damage from occuring
-        XLockDisplay (app->dpy);
-        // sync the display to apply all pending changes
-        XSync (app->dpy, False);
     }
 #endif     // USE_XDAMAGE
 
@@ -952,14 +961,11 @@ captureFrameToImageSHM (Display * dpy, XImage * image)
         // paint the mouse pointer into the captured image if necessary
         ret = 1;
     }
-
 #ifdef USE_XDAMAGE
     if (app->flags & FLG_USE_XDAMAGE) {
-        // unlock the display again
-        XUnlockDisplay (app->dpy);
+        // discard the damage
+        XDestroyRegion (damaged_region);
     }
-    // and discard the damage
-    XFixesDestroyRegion (app->dpy, damaged_region);
 #endif     // USE_XDAMAGE
 
 #ifdef DEBUG
@@ -1131,6 +1137,8 @@ commonCapture (enum captureFunctions capfunc)
                                  * capture */
     static int shm_opcode = 0, shm_event_base = 0, shm_error_base = 0;
 
+//    static XRectangle pointer_area;
+
     XVC_AppData *app = xvc_appdata_ptr ();
     XVC_CapTypeOptions *target;
     Job *job = xvc_job_ptr ();
@@ -1139,18 +1147,17 @@ commonCapture (enum captureFunctions capfunc)
     int pointer_x = 0, pointer_y = 0;
 
 #ifdef HAVE_LIBXFIXES
-    XFixesCursorImage * x_cursor = NULL;
-#endif // HAVE_LIBXFIXES
+    XFixesCursorImage *x_cursor = NULL;
+#endif     // HAVE_LIBXFIXES
 
 #ifdef USE_XDAMAGE
-    XserverRegion damaged_region;
+    Region damaged_region;
     static XImage *dmg_image = NULL;
-    static XserverRegion region = None, clip_region = None;
 
 #ifdef HAVE_SHMAT
     static XShmSegmentInfo dmg_shminfo;
 #endif     // HAVE_SHMAT
-#endif // USE_XDAMAGE
+#endif     // USE_XDAMAGE
 
 #ifdef HAVE_SHMAT
     static XShmSegmentInfo shminfo;
@@ -1183,8 +1190,9 @@ commonCapture (enum captureFunctions capfunc)
         int px = 0, py = 0;
         int x = app->area->x, y = app->area->y;
         int width = app->area->width, height = app->area->height;
-        getCurrentPointer( &px, &py);
-        
+
+        getCurrentPointer (&px, &py);
+
         if (px > (app->area->x + ((app->area->width * 9) / 10))) {
             x = px - ((app->area->width * 9) / 10);
             frame_moved = TRUE;
@@ -1202,7 +1210,7 @@ commonCapture (enum captureFunctions capfunc)
 
         if (frame_moved) {
             xvc_frame_change (x, y, width, height, FALSE, FALSE);
-            XSync(app->dpy, False);
+            XSync (app->dpy, False);
         }
     } */
     // we really cannot have external state changes 
@@ -1255,7 +1263,7 @@ commonCapture (enum captureFunctions capfunc)
             printf ("%s %s: opening file for captured frame(s) ... state %i\n",
                     DEBUGFILE, DEBUGFUNCTION, job->state);
 #endif     // DEBUG
-            
+
             fp = getOutputFile ();
 #ifdef DEBUG
             printf ("%s %s: got this file pointer %p\n",
@@ -1304,7 +1312,7 @@ commonCapture (enum captureFunctions capfunc)
             }
 #endif     // HAVE_LIBXFIXES
 
-#ifdef USE_XDAMAGE
+#ifdef USE_XDAMAGE_NONE
             if (app->flags & FLG_USE_XDAMAGE) {
                 // create some utility regions
                 region = XFixesCreateRegion (app->dpy, 0, 0);
@@ -1312,10 +1320,10 @@ commonCapture (enum captureFunctions capfunc)
             }
 #endif     // USE_XDAMAGE
 
-            if (app->mouseWanted > 0) {
-                // lock the display for consistency
-                XLockDisplay(app->dpy);
-            }
+            // lock the display for consistency
+            pthread_mutex_lock (&(app->display_lock_mutex));
+            XLockDisplay (app->dpy);
+
             // capture the start frame with whatever function applicable
             switch (capfunc) {
 #ifdef HAVE_SHMAT
@@ -1346,16 +1354,16 @@ commonCapture (enum captureFunctions capfunc)
             }
 
             if (app->mouseWanted > 0) {
-#ifdef HAVE_LIBXFIXES
+#ifdef HAVE_LIBXFIXES_NONE
                 if (app->flags & FLG_USE_XFIXES)
-                    x_cursor = getCurrentPointerImage();
+                    x_cursor = getCurrentPointerImage ();
                 else
-#endif // HAVE_LIBXFIXES
-                getCurrentPointer(&pointer_x, &pointer_y);
-            
-                // now, we have captured all we need and can unlock the display
-                XUnlockDisplay(app->dpy);
+#endif     // HAVE_LIBXFIXES
+                    getCurrentPointer (&pointer_x, &pointer_y);
             }
+            // now, we have captured all we need and can unlock the display
+            XUnlockDisplay (app->dpy);
+            pthread_mutex_unlock (&(app->display_lock_mutex));
 
             // need to determine c_info from image FIRST
             if (!(job->c_info))
@@ -1366,20 +1374,21 @@ commonCapture (enum captureFunctions capfunc)
                 if (app->mouseWanted > 0) {
 #ifdef USE_XDAMAGE
                     if (app->flags & FLG_USE_XFIXES)
-                        pointer_area = paintMousePointer (image, x_cursor, 0, 0);
-                    else 
-                        pointer_area = paintMousePointer (image, NULL, 
-                            pointer_x, pointer_y);
-#else // USE_XDAMAGE
+                        pointer_area =
+                            paintMousePointer (image, x_cursor, 0, 0);
+                    else
+                        pointer_area = paintMousePointer (image, NULL,
+                                                          pointer_x, pointer_y);
+#else      // USE_XDAMAGE
 #ifdef HAVE_LIBXFIXES
                     if (app->flags & FLG_USE_XFIXES)
                         paintMousePointer (image, x_cursor, 0, 0);
                     else
                         paintMousePointer (image, NULL, pointer_x, pointer_y);
-#else // HAVE_LIBXFIXES
+#else      // HAVE_LIBXFIXES
                     paintMousePointer (image, pointer_x, pointer_y);
-#endif // HAVE_LIBXFIXES
-#endif // USE_XDAMAGE
+#endif     // HAVE_LIBXFIXES
+#endif     // USE_XDAMAGE
                 }
                 // we can allow state or frame changes after this
                 pthread_mutex_unlock (&(app->capturing_mutex));
@@ -1402,36 +1411,70 @@ commonCapture (enum captureFunctions capfunc)
 #ifdef USE_XDAMAGE
             if (app->flags & FLG_USE_XDAMAGE && !frame_moved) {
                 int num_dmg_rects, rcount;
-                XRectangle *dmg_rects;
+                Box *dmg_rects;
 
-                // first get the consolidated region where stuff was damaged
-                // since the last frame
-                damaged_region = xvc_get_damage_region ();
                 // then lock the display so we capture a consitent state
-                // I would prefer to retrieve the damaged region within the
-                // lock, but that doesn't seem to work well
+                pthread_mutex_lock (&(app->display_lock_mutex));
                 XLockDisplay (app->dpy);
                 // sync the display
                 XSync (app->dpy, False);
+                // first get the consolidated region where stuff was damaged
+                // since the last frame
+                damaged_region = xvc_get_damage_region ();
                 // add the last position of the mouse pointer to the damaged
                 // region
                 if (app->mouseWanted > 0) {
-                    XFixesSetRegion (app->dpy, region, &(pointer_area), 1);
-                    XFixesSetRegion (app->dpy, clip_region, app->area, 1);
+                    // clip pointer_area to capture area
+                    // this needs to be done here, because the captuer area
+                    // might have been moved since the last frame
+                    if (pointer_area.x < app->area->x &&
+                        (pointer_area.x + pointer_area.width) > app->area->x) {
+                        pointer_area.width -= (app->area->x - pointer_area.x);
+                        pointer_area.x = app->area->x;
+                    }
+                    if ((pointer_area.x + pointer_area.width) >
+                        (app->area->x + app->area->width)) {
+                        pointer_area.width =
+                            (app->area->x + app->area->width) - pointer_area.x;
+                    }
+                    if (pointer_area.y < app->area->y &&
+                        (pointer_area.y + pointer_area.height) > app->area->y) {
+                        pointer_area.height -= (app->area->y - pointer_area.y);
+                        pointer_area.y = app->area->y;
+                    }
+                    if ((pointer_area.y + pointer_area.height) >
+                        (app->area->y + app->area->height)) {
+                        pointer_area.height =
+                            (app->area->y + app->area->height) - pointer_area.y;
+                    }
+                    if (!
+                        ((pointer_area.x + pointer_area.width) < app->area->x
+                         || pointer_area.x > (app->area->x + app->area->width)
+                         || (pointer_area.y + pointer_area.height) <
+                         app->area->y
+                         || pointer_area.y >
+                         (app->area->y + app->area->height))) {
+                        XUnionRectWithRegion (&(pointer_area), damaged_region,
+                                              damaged_region);
+                    }
 
-                    XFixesIntersectRegion (app->dpy, region, region,
-                                           clip_region);
-                    XFixesUnionRegion (app->dpy, damaged_region, damaged_region,
-                                       region);
                 }
                 // get individual rectangles from the damaged region
-                dmg_rects = XFixesFetchRegion (app->dpy, damaged_region,
-                                               &num_dmg_rects);
+                dmg_rects = damaged_region->rects;
+                num_dmg_rects = damaged_region->numRects;
 
                 // then iterate across them and capture the content of the
                 // rectangles
                 for (rcount = 0; rcount < num_dmg_rects; rcount++) {
                     int bpl;
+                    int x =
+                        XVC_MIN (dmg_rects[rcount].x1, dmg_rects[rcount].x2);
+                    int y =
+                        XVC_MIN (dmg_rects[rcount].y1, dmg_rects[rcount].y2);
+                    int width =
+                        abs (dmg_rects[rcount].x1 - dmg_rects[rcount].x2);
+                    int height =
+                        abs (dmg_rects[rcount].y1 - dmg_rects[rcount].y2);
 
                     // either x11 or shm source
                     switch (capfunc) {
@@ -1440,20 +1483,14 @@ commonCapture (enum captureFunctions capfunc)
                         XGetZPixmapSHM (app->dpy,
                                         app->root_window,
                                         &dmg_shminfo, shm_opcode,
-                                        dmg_image->data, dmg_rects[rcount].x,
-                                        dmg_rects[rcount].y,
-                                        dmg_rects[rcount].width,
-                                        dmg_rects[rcount].height);
+                                        dmg_image->data, x, y, width, height);
                         break;
 #endif     // HAVE_SHMAT
                     case X11:
                     default:
                         XGetZPixmap (app->dpy,
                                      app->root_window,
-                                     dmg_image->data, dmg_rects[rcount].x,
-                                     dmg_rects[rcount].y,
-                                     dmg_rects[rcount].width,
-                                     dmg_rects[rcount].height);
+                                     dmg_image->data, x, y, width, height);
                     }
                     /* the following assumes lines in images retrieved from
                      * X11 will always be aligned to 4-byte boundaries. You
@@ -1461,22 +1498,17 @@ commonCapture (enum captureFunctions capfunc)
                      * member of an XImage. However, for performance reasons,
                      * we do not always retrieve a complete XImage. */
                     bpl =
-                        ((dmg_rects[rcount].width *
-                          (image->bits_per_pixel >> 3)) % 4 >
-                         0
-                         ? ((dmg_rects[rcount].width *
-                             (image->bits_per_pixel >> 3)) / 4) * 4 +
-                         4 : dmg_rects[rcount].width *
-                         (image->bits_per_pixel >> 3)
-                        );
+                        ((width * (image->bits_per_pixel >> 3)) % 4 > 0 ?
+                         ((width * (image->bits_per_pixel >> 3)) / 4) * 4 + 4 :
+                         width * (image->bits_per_pixel >> 3));
                     // update the content of the damaged areas in the frame
                     // to encode
                     placeImageInImage (dmg_image->data,
-                                       dmg_rects[rcount].x - app->area->x,
-                                       dmg_rects[rcount].y - app->area->y,
-                                       dmg_rects[rcount].width,
+                                       x - app->area->x,
+                                       y - app->area->y,
+                                       width,
                                        bpl,
-                                       dmg_rects[rcount].height, image->data,
+                                       height, image->data,
                                        image->width,
                                        image->bytes_per_line,
                                        image->height,
@@ -1487,29 +1519,30 @@ commonCapture (enum captureFunctions capfunc)
                 // for minimizing locking
                 if (app->mouseWanted > 0) {
                     if (app->flags & FLG_USE_XFIXES)
-                        x_cursor = getCurrentPointerImage();
+                        x_cursor = getCurrentPointerImage ();
                     else
-                        getCurrentPointer(&pointer_x, &pointer_y);
+                        getCurrentPointer (&pointer_x, &pointer_y);
                 }
                 // now we can release the lock on the display again
                 XUnlockDisplay (app->dpy);
+                pthread_mutex_unlock (&(app->display_lock_mutex));
+
                 // paint the mouse pointer here, outside the lock
+#ifdef HAVE_LIBXFIXES
                 if (app->flags & FLG_USE_XFIXES)
                     pointer_area = paintMousePointer (image, x_cursor, 0, 0);
                 else
-                    pointer_area = paintMousePointer (image, NULL, pointer_x, 
-                        pointer_y);
-                // and cleanup stuff
-                if (num_dmg_rects > 0) {
-                    XFree (dmg_rects);
-                }
-                XFixesDestroyRegion (app->dpy, damaged_region);
+#endif     // HAVE_LIBXFIXES
+                    pointer_area = paintMousePointer (image, NULL, pointer_x,
+                                                      pointer_y);
+                XDestroyRegion (damaged_region);
             } else {
 #endif     // USE_XDAMAGE
 
-                if (app->mouseWanted > 0) {
-                    XLockDisplay(app->dpy);
-                }
+                // lock the display for consistency
+                pthread_mutex_lock (&(app->display_lock_mutex));
+                XLockDisplay (app->dpy);
+
                 switch (capfunc) {
 #ifdef HAVE_SHMAT
                 case SHM:
@@ -1520,35 +1553,37 @@ commonCapture (enum captureFunctions capfunc)
                 default:
                     captureFrameToImage (app->dpy, image);
                 }
-
                 if (app->mouseWanted > 0) {
 #ifdef HAVE_LIBXFIXES
                     if (app->flags & FLG_USE_XFIXES)
-                        x_cursor = getCurrentPointerImage();
+                        x_cursor = getCurrentPointerImage ();
                     else
-#endif // HAVE_LIBXFIXES
-                    getCurrentPointer(&pointer_x, &pointer_y);
+#endif     // HAVE_LIBXFIXES
+                        getCurrentPointer (&pointer_x, &pointer_y);
+                }
+                // unlock display again
+                XUnlockDisplay (app->dpy);
+                pthread_mutex_unlock (&(app->display_lock_mutex));
 
-                    XUnlockDisplay(app->dpy);
-
+                if (app->mouseWanted > 0) {
 #ifdef USE_XDAMAGE
                     if (app->flags & FLG_USE_XFIXES)
-                        pointer_area = paintMousePointer (image, x_cursor, 0, 0);
+                        pointer_area =
+                            paintMousePointer (image, x_cursor, 0, 0);
                     else
-                        pointer_area = paintMousePointer (image, NULL, 
-                            pointer_x, pointer_y);
-#else // USE_XDAMAGE
+                        pointer_area = paintMousePointer (image, NULL,
+                                                          pointer_x, pointer_y);
+#else      // USE_XDAMAGE
 #ifdef HAVE_LIBXFIXES
                     if (app->flags & FLG_USE_XFIXES)
                         paintMousePointer (image, x_cursor, 0, 0);
                     else
                         paintMousePointer (image, NULL, pointer_x, pointer_y);
-#else // HAVE_LIBXFIXES
+#else      // HAVE_LIBXFIXES
                     paintMousePointer (image, pointer_x, pointer_y);
-#endif // HAVE_LIBXFIXES
-#endif // USE_XDAMAGE
+#endif     // HAVE_LIBXFIXES
+#endif     // USE_XDAMAGE
                 }
-
 #if USE_XDAMAGE
             }
 #endif     // USE_XDAMAGE

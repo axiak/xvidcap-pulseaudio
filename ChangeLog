@@ -1,4 +1,11 @@
 
+2007-11-20  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_ui.c, capture.c, app_data.c, 
+		job.c, app_data.h, job.h: make 
+		capturing more correct, avoid some
+		more potential deadlocks through
+		tighter thread synchronization
+
 2007-11-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, capture.c, gnome_frame.c:
 		some fixes, improvements, optimizations

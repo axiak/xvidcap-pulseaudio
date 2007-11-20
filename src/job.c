@@ -62,7 +62,7 @@
 # include "xtoffmpeg.h"
 #endif     // USE_FFMPEG
 
-static Job *job;
+static Job *job = NULL;
 
 static void job_set_capture (void);
 
@@ -158,7 +158,8 @@ job_new ()
     job->c_info = NULL;
 
 #ifdef USE_XDAMAGE
-    job->dmg_region = XFixesCreateRegion (app->dpy, NULL, 0);
+    job->dmg_region = XCreateRegion ();
+//    job->dmg_region = XFixesCreateRegion (app->dpy, NULL, 0);
 #endif     // USE_XDAMAGE
 
     job->capture_returned_errno = 0;
@@ -178,18 +179,20 @@ xvc_job_free ()
 #define DEBUGFUNCTION "xvc_job_free()"
     XVC_AppData *app = xvc_appdata_ptr ();
 
-    if (job) {
+    if (job != NULL) {
         if (job->color_table)
             free (job->color_table);
 
 #ifdef USE_XDAMAGE
-        XFixesDestroyRegion (app->dpy, job->dmg_region);
+        XDestroyRegion (job->dmg_region);
+//        XFixesDestroyRegion (app->dpy, job->dmg_region);
 #endif     // USE_XDAMAGE
 
         if (job->c_info)
             free (job->c_info);
 
         free (job);
+        job = NULL;
     }
 #undef DEBUGFUNCTION
 }
@@ -368,7 +371,7 @@ Job *
 xvc_job_ptr (void)
 {
 #define DEBUGFUNCTION "xvc_job_ptr()"
-    if (!job)
+    if (job == NULL)
         job_new ();
     return (job);
 #undef DEBUGFUNCTION
@@ -639,14 +642,17 @@ xvc_job_keep_and_merge_state (int keep_state, int merge_state)
 }
 
 #ifdef USE_XDAMAGE
-XserverRegion
+//XserverRegion
+Region
 xvc_get_damage_region ()
 {
-    XserverRegion region, dmg_region;
+    //XserverRegion region, dmg_region;
+    Region region, dmg_region;
     XVC_AppData *app = xvc_appdata_ptr ();
 
     pthread_mutex_lock (&(app->damage_regions_mutex));
-    region = XFixesCreateRegion (app->dpy, 0, 0);
+    //region = XFixesCreateRegion (app->dpy, 0, 0);
+    region = XCreateRegion ();
     dmg_region = job->dmg_region;
     job->dmg_region = region;
     pthread_mutex_unlock (&(app->damage_regions_mutex));
