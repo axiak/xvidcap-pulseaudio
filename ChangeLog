@@ -1,4 +1,7 @@
 
+2007-11-23  dAniel hAhler  <daniel@thequod.de>
+	* po/de.po: bugfix for missing echo's
+
 2007-11-20  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, capture.c, app_data.c, 
 		job.c, app_data.h, job.h: make 
