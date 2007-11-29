@@ -94,7 +94,7 @@ xvc_frame_get_capture_display ()
 #define DEBUGFUNCTION "xvc_frame_get_capure_display()"
     XVC_AppData *app = xvc_appdata_ptr ();
 
-    if (!(app->flags & FLG_NOGUI) && gtk_frame_top) {
+    if (!(app->flags & FLG_NOGUI) && !(app->flags & FLG_NOFRAME) && gtk_frame_top) {
         xvc_dpy = GDK_DRAWABLE_XDISPLAY (GTK_WIDGET (gtk_frame_top)->window);
     } else {
         if (!xvc_dpy)
@@ -115,7 +115,7 @@ xvc_frame_drop_capture_display ()
 #define DEBUGFUNCTION "xvc_frame_drop_capture_display()"
     XVC_AppData *app = xvc_appdata_ptr ();
 
-    if (app->flags & FLG_NOGUI && xvc_dpy) {
+    if ((app->flags & FLG_NOGUI || app->flags & FLG_NOFRAME) && xvc_dpy) {
         gdk_display_close (gdpy);
         gdpy = NULL;
         xvc_dpy = NULL;
@@ -296,7 +296,7 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     if (y + height > app->max_height)
         y = app->max_height - height;
 
-    if ((app->flags & FLG_NOGUI) == 0) {
+    if ((app->flags & FLG_NOGUI) == 0 && (app->flags & FLG_NOFRAME) == 0) {
         // move the frame if not running without GUI
         if (width != app->area->width) {
             gtk_widget_set_size_request (GTK_WIDGET (gtk_frame_top),
@@ -384,7 +384,7 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
     XVC_AppData *app = xvc_appdata_ptr ();
     Job *job = xvc_job_ptr ();
 
-    if (xvc_is_frame_locked ()) {
+    if ((app->flags & FLG_LOCK_FOLLOWS_MOUSE) == 0 && xvc_is_frame_locked ()) {
         x = ((GdkEventConfigure *) e)->x;
         y = ((GdkEventConfigure *) e)->y;
         pwidth = ((GdkEventConfigure *) e)->width;
@@ -402,7 +402,7 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
             job->frame_moved_x = x - app->area->x;
             job->frame_moved_y = y - app->area->y;
         }
-    }
+    } 
     return FALSE;
 #undef DEBUGFUNCTION
 }
@@ -847,27 +847,27 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
 #endif     // USE_FFMPEG
 
     // we have to adjust it to viewable areas
-    max_width = WidthOfScreen (DefaultScreenOfDisplay (app->dpy));
-    max_height = HeightOfScreen (DefaultScreenOfDisplay (app->dpy));
+//    max_width = WidthOfScreen (DefaultScreenOfDisplay (app->dpy));
+//    max_height = HeightOfScreen (DefaultScreenOfDisplay (app->dpy));
 
 #ifdef DEBUG
     printf ("%s %s: screen = %dx%d selection=%dx%d\n", DEBUGFILE,
-            DEBUGFUNCTION, max_width, max_height, pwidth, pheight);
+            DEBUGFUNCTION, app->max_width, app->max_height, pwidth, pheight);
 #endif
 
     if (x < 0)
         x = 0;
-    if (pwidth > max_width)
-        pwidth = max_width;
-    if (x + pwidth > max_width)
-        x = max_width - pwidth;
+    if (pwidth > app->max_width)
+        pwidth = app->max_width;
+    if (x + pwidth > app->max_width)
+        x = app->max_width - pwidth;
 
     if (y < 0)
         y = 0;
-    if (pheight > max_height)
-        pheight = max_height;
-    if (y + pheight > max_height)
-        y = max_height - pheight;
+    if (pheight > app->max_height)
+        pheight = app->max_height;
+    if (y + pheight > app->max_height)
+        y = app->max_height - pheight;
 
     // now for the real work
     if (!(flags & FLG_NOGUI)) {
@@ -901,7 +901,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     x_rect->y = y;
 
     // create frame
-    if (!(flags & FLG_NOGUI)) {
+    if (!(flags & FLG_NOGUI) && !(flags & FLG_NOFRAME)) {
 
         // top of frame
         gtk_frame_top = gtk_window_new (GTK_WINDOW_POPUP);
@@ -1135,12 +1135,6 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
             // XtPopup(blind, XtGrabNone);
         }
 #endif     // HasVideo4Linux
-        // connect event-handler to configure event of gtk control window
-        // to redraw the selection frame if the control is moved and the
-        // frame is locked
-        g_signal_connect (G_OBJECT (toplevel), "configure-event",
-                          G_CALLBACK (on_gtk_frame_configure_event), NULL);
-
         g_signal_connect (G_OBJECT (gtk_frame_top), "enter_notify_event",
                           G_CALLBACK (on_gtk_frame_enter_notify_event), NULL);
         g_signal_connect (G_OBJECT (gtk_frame_left), "enter_notify_event",
@@ -1187,6 +1181,13 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
                           G_CALLBACK (on_gtk_frame_button_release_event), NULL);
 
     }
+        // connect event-handler to configure event of gtk control window
+        // to redraw the selection frame if the control is moved and the
+        // frame is locked
+        // this is also required with FLG_NOFRAME
+        g_signal_connect (G_OBJECT (toplevel), "configure-event",
+                          G_CALLBACK (on_gtk_frame_configure_event), NULL);
+
     xvc_set_frame_locked (1);
 
     if (!(flags & FLG_NOGUI) && (px >= 0 || py >= 0))
@@ -1203,13 +1204,29 @@ xvc_destroy_gtk_frame ()
 {
 #define DEBUGFUNCTION "xvc_destroy_gtk_frame()"
 
-    gtk_widget_destroy (gtk_frame_bottom);
-    gtk_widget_destroy (gtk_frame_right);
-    gtk_widget_destroy (gtk_frame_left);
-    gtk_widget_destroy (gtk_frame_top);
-    gtk_widget_destroy (xvc_frame_dimensions_window);
+    if (gtk_frame_bottom) {
+        gtk_widget_destroy (gtk_frame_bottom);
+        gtk_frame_bottom = NULL;
+    }
+    if (gtk_frame_right) {
+        gtk_widget_destroy (gtk_frame_right);
+        gtk_frame_right = NULL;
+    }
+    if (gtk_frame_left) {
+        gtk_widget_destroy (gtk_frame_left);
+        gtk_frame_left = NULL;
+    }
+    if (gtk_frame_top) {
+        gtk_widget_destroy (gtk_frame_top);
+        gtk_frame_top = NULL;
+    }
+    if (xvc_frame_dimensions_window) {
+        gtk_widget_destroy (xvc_frame_dimensions_window);
+        xvc_frame_dimensions_window = NULL;
+    }
     if (gtk_frame_center) {
         gtk_widget_destroy (gtk_frame_center);
+        gtk_frame_center = NULL;
     }
 #undef DEBUGFUNCTION
 }

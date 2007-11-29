@@ -92,7 +92,14 @@ enum XVC_Flags
  * extension */
     FLG_USE_XDAMAGE = 2048,
 /** \brief minimize xvidcap to the system tray while recording */
-    FLG_TO_TRAY = 4096
+    FLG_TO_TRAY = 4096,
+/** 
+ * \brief this will make the frame follow the mouse when the lock is locked
+ *      rather than have it follow the main control window
+ */
+    FLG_LOCK_FOLLOWS_MOUSE = 8192,
+/** \brief run without frame around the capture area */
+    FLG_NOFRAME = 16384
 };
 
 #ifdef HAVE_SHMAT
@@ -235,8 +242,6 @@ typedef struct
     /** \brief mutex for synchronizing state or frame changes with
      *		capturing of individual frames */
     pthread_mutex_t capturing_mutex;
-    /** \brief mutex for synchronizing access to display */
-    pthread_mutex_t display_lock_mutex;
     /** \brief is the recording thread running?
      *
      * \todo find out if there's a way to tell that from the tread directly

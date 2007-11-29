@@ -211,6 +211,28 @@ read_app_data_from_pref_gui (XVC_AppData * lapp)
         lapp->mouseWanted = 0;
     }
 
+    // capture area follows mouse pointer
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_follow_mouse_checkbutton");
+    g_assert (w);
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
+        lapp->flags |= FLG_LOCK_FOLLOWS_MOUSE;
+    } else {
+        lapp->flags &= ~FLG_LOCK_FOLLOWS_MOUSE;
+    }
+
+    // hide frame around capture area
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_hide_frame_checkbutton");
+    g_assert (w);
+
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w))) {
+        lapp->flags |= FLG_NOFRAME;
+    } else {
+        lapp->flags &= ~FLG_NOFRAME;
+    }
+
     // save geometry
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_save_geometry_checkbutton");
@@ -1120,6 +1142,29 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
         }
     }
+
+    // capture area follows mouse pointer
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_follow_mouse_checkbutton");
+    if (w != NULL) {
+        if ((pref_app.flags & FLG_LOCK_FOLLOWS_MOUSE) != 0) {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        } else {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+        }
+    }
+
+    // hide frame around capture area
+    w = NULL;
+    w = glade_xml_get_widget (xml, "xvc_pref_hide_frame_checkbutton");
+    if (w != NULL) {
+        if ((pref_app.flags & FLG_NOFRAME) != 0) {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+        } else {
+            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
+        }
+    }
+
     // shared memory
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_shared_mem_checkbutton");

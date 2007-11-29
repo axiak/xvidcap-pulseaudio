@@ -88,6 +88,7 @@
 #include "job.h"
 #include "app_data.h"
 #include "control.h"
+#include "frame.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern int xvc_led_time;
@@ -1175,6 +1176,12 @@ commonCapture (enum captureFunctions capfunc)
 #endif     // USE_FFMPEG
         target = &(app->single_frame);
 
+
+    // we really cannot have external state changes 
+    // while we're reacting on state
+    // frame moves, too, are evil
+    pthread_mutex_lock (&(app->capturing_mutex));
+
     // if the frame has moved during capture, move it here
     if (job->frame_moved_x != 0 || job->frame_moved_y != 0) {
         xvc_frame_change (app->area->x + job->frame_moved_x,
@@ -1186,7 +1193,8 @@ commonCapture (enum captureFunctions capfunc)
         // capture to avoid capturing the frame (this is not a guarantee with
         // compositing window managers, though)
         XSync (app->dpy, False);
-    } /* else {
+    } else if ((app->flags & FLG_LOCK_FOLLOWS_MOUSE) != 0 && 
+        xvc_is_frame_locked()) {
         int px = 0, py = 0;
         int x = app->area->x, y = app->area->y;
         int width = app->area->width, height = app->area->height;
@@ -1212,10 +1220,7 @@ commonCapture (enum captureFunctions capfunc)
             xvc_frame_change (x, y, width, height, FALSE, FALSE);
             XSync (app->dpy, False);
         }
-    } */
-    // we really cannot have external state changes 
-    // while we're reacting on state
-    pthread_mutex_lock (&(app->capturing_mutex));
+    }
 
     // wait for next iteration if pausing
     if (job->state & VC_REC) {         // if recording ...
@@ -1321,7 +1326,6 @@ commonCapture (enum captureFunctions capfunc)
 #endif     // USE_XDAMAGE
 
             // lock the display for consistency
-            pthread_mutex_lock (&(app->display_lock_mutex));
             XLockDisplay (app->dpy);
 
             // capture the start frame with whatever function applicable
@@ -1363,7 +1367,6 @@ commonCapture (enum captureFunctions capfunc)
             }
             // now, we have captured all we need and can unlock the display
             XUnlockDisplay (app->dpy);
-            pthread_mutex_unlock (&(app->display_lock_mutex));
 
             // need to determine c_info from image FIRST
             if (!(job->c_info))
@@ -1414,7 +1417,6 @@ commonCapture (enum captureFunctions capfunc)
                 Box *dmg_rects;
 
                 // then lock the display so we capture a consitent state
-                pthread_mutex_lock (&(app->display_lock_mutex));
                 XLockDisplay (app->dpy);
                 // sync the display
                 XSync (app->dpy, False);
@@ -1525,7 +1527,6 @@ commonCapture (enum captureFunctions capfunc)
                 }
                 // now we can release the lock on the display again
                 XUnlockDisplay (app->dpy);
-                pthread_mutex_unlock (&(app->display_lock_mutex));
 
                 // paint the mouse pointer here, outside the lock
 #ifdef HAVE_LIBXFIXES
@@ -1540,7 +1541,6 @@ commonCapture (enum captureFunctions capfunc)
 #endif     // USE_XDAMAGE
 
                 // lock the display for consistency
-                pthread_mutex_lock (&(app->display_lock_mutex));
                 XLockDisplay (app->dpy);
 
                 switch (capfunc) {
@@ -1563,7 +1563,6 @@ commonCapture (enum captureFunctions capfunc)
                 }
                 // unlock display again
                 XUnlockDisplay (app->dpy);
-                pthread_mutex_unlock (&(app->display_lock_mutex));
 
                 if (app->mouseWanted > 0) {
 #ifdef USE_XDAMAGE

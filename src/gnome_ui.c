@@ -434,20 +434,42 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
 
 //        XSelectInput (app->dpy, xev->xcreatewindow.window, StructureNotifyMask);
         if (!attribs.override_redirect && attribs.depth == root_attrs.depth) {
-            gdk_error_trap_push ();
+//            gdk_error_trap_push ();
             XDamageCreate (app->dpy, xev->xcreatewindow.window,
                            XDamageReportRawRectangles);
-            gdk_error_trap_pop ();
+//            gdk_error_trap_pop ();
         }
     } else if (xev->type == app->dmg_event_base) {
         XRectangle rect = {
+            e->area.x, e->area.y, e->area.width, e->area.height
+
+/*
             XVC_MAX (e->area.x - 10, 0),
             XVC_MAX (e->area.y - 10, 0),
             e->area.width + 20,
             e->area.height + 20
+*/
         };
 
+        // set the region required by XDamageSubtract unclipped
+        XFixesSetRegion (app->dpy, region, &(e->area), 1);
+
+        // Offset the region with the windows' position
+        XFixesTranslateRegion (app->dpy, region, e->geometry.x, e->geometry.y);
+
+        // subtract the damage
+        // this will not work on a locked display, so we need to synchronize
+        // this with the capture thread
+        pthread_mutex_lock (&(app->capturing_mutex));
+        XDamageSubtract (app->dpy, e->damage, region, None);
+        XSync(app->dpy, False);
+
         // clip the damaged rectangle
+        // need to do that in the lock or otherwise an event triggered before
+        // the caputre of a moved frame may queue up and add to regions after
+        // the full capture. And then the area of the event may be outside the
+        // new capture area and anyway, we don't need this anymore because
+        // we've captured this change in the full frame captured
         if (rect.x < app->area->x && (rect.x + rect.width) > app->area->x) {
             rect.width -= (app->area->x - rect.x);
             rect.x = app->area->x;
@@ -462,29 +484,19 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
         if ((rect.y + rect.height) > (app->area->y + app->area->height)) {
             rect.height = (app->area->y + app->area->height) - rect.y;
         }
+
         if ((rect.x + rect.width) < app->area->x ||
             rect.x > (app->area->x + app->area->width) ||
             (rect.y + rect.height) < app->area->y ||
             rect.y > (app->area->y + app->area->height)) {
             rect.x = rect.width = rect.y = rect.height = 0;
+        } else {
+            // remember the damage done
+            pthread_mutex_lock (&(app->damage_regions_mutex));
+            XUnionRectWithRegion (&rect, job->dmg_region, job->dmg_region);
+            pthread_mutex_unlock (&(app->damage_regions_mutex));
         }
-        // set the region required by XDamageSubtract unclipped
-        XFixesSetRegion (app->dpy, region, &(e->area), 1);
-
-        // Offset the region with the windows' position
-        XFixesTranslateRegion (app->dpy, region, e->geometry.x, e->geometry.y);
-
-        // remember the damage done
-        pthread_mutex_lock (&(app->damage_regions_mutex));
-        XUnionRectWithRegion (&rect, job->dmg_region, job->dmg_region);
-        pthread_mutex_unlock (&(app->damage_regions_mutex));
-
-        // subtract the damage
-        // this will not work on a locked display, so we need to synchronize
-        // this with the capture thread
-        pthread_mutex_lock (&(app->display_lock_mutex));
-        XDamageSubtract (app->dpy, e->damage, region, None);
-        pthread_mutex_unlock (&(app->display_lock_mutex));
+        pthread_mutex_unlock (&(app->capturing_mutex));
     }
 
     return GDK_FILTER_CONTINUE;
@@ -1225,7 +1237,7 @@ start_recording_nongui_stuff ()
 //                    XSelectInput (app->dpy, children[i], StructureNotifyMask);
                     if (!attribs.
                         override_redirect
-                        && attribs.depth == root_attrs.depth) {
+                        && attribs.depth == root_attrs.depth) { 
 //                        gdk_error_trap_push ();
                         XDamageCreate (app->dpy, children[i],
                                        XDamageReportRawRectangles);
@@ -1330,7 +1342,15 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     menuxml = glade_get_widget_tree (xvc_ctrl_m1);
     g_assert (menuxml);
 
+    // destroy or create a frame
+    
+
     // various GUI initialization things
+    xvc_destroy_gtk_frame();
+    if (!(app->flags & FLG_NOGUI) && !(app->flags & FLG_NOFRAME)) {
+        xvc_create_gtk_frame(xvc_ctrl_main_window, app->area->width,
+            app->area->height, app->area->x, app->area->y);
+    }
 
     //
     // first: the autocontinue menu item
@@ -1498,6 +1518,18 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     }
 #endif     // USE_FFMPEG
 
+    //
+    // show frame check button
+    //
+    w = NULL;
+    w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_show_frame");
+    g_return_if_fail (w != NULL);
+    if (!(app->flags & FLG_NOFRAME)) {
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
+    } else {
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), FALSE);
+    }
+    
 #undef DEBUGFUNCTION
 }
 
@@ -2246,6 +2278,28 @@ on_xvc_ctrl_m1_mitem_autocontinue_activate (GtkMenuItem * menuitem,
     } else {
         jobp->flags &= ~FLG_AUTO_CONTINUE;
         app->flags &= ~FLG_AUTO_CONTINUE;
+    }
+#undef DEBUGFUNCTION
+}
+
+void
+on_xvc_ctrl_m1_show_frame_activate (GtkMenuItem * menuitem,
+                                            gpointer user_data)
+{
+#define DEBUGFUNCTION "on_xvc_ctrl_m1_show_frame_activate()"
+    Job *jobp = xvc_job_ptr ();
+    XVC_AppData *app = xvc_appdata_ptr ();
+    
+    if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem)) &&
+            (app->flags & FLG_NOFRAME)) {
+        app->flags &= ~FLG_NOFRAME;
+        jobp->flags &= ~FLG_NOFRAME;
+        xvc_create_gtk_frame(xvc_ctrl_main_window, app->area->width,
+            app->area->height, app->area->x, app->area->y);
+    } else if (!(app->flags & FLG_NOFRAME)) {
+        jobp->flags |= FLG_NOFRAME;
+        app->flags |= FLG_NOFRAME;
+        xvc_destroy_gtk_frame();
     }
 #undef DEBUGFUNCTION
 }

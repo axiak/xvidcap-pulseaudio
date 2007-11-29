@@ -1,4 +1,12 @@
 
+2007-11-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_ui.c, capture.c, app_data.c, 
+		app_data.h, gnome_frame.c, gnome_options.c, 
+		options.c, gnome-xvidcap.glade: Add
+		functionality for following the mouse
+		pointer when capturing and hiding 
+		the frame.
+
 2007-11-23  dAniel hAhler  <daniel@thequod.de>
 	* po/de.po: bugfix for missing echo's
 
