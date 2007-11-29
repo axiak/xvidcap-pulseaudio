@@ -1343,17 +1343,23 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     g_assert (menuxml);
 
     // destroy or create a frame
-    
-
-    // various GUI initialization things
-    xvc_destroy_gtk_frame();
-    if (!(app->flags & FLG_NOGUI) && !(app->flags & FLG_NOFRAME)) {
-        xvc_create_gtk_frame(xvc_ctrl_main_window, app->area->width,
-            app->area->height, app->area->x, app->area->y);
+    // and set show frame check button
+    //
+    w = NULL;
+    w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_show_frame");
+    g_return_if_fail (w != NULL);
+    if (!(app->flags & FLG_NOFRAME)) {
+        // destroy a frame if present
+        xvc_destroy_gtk_frame();
+        // the callback creates the frame
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
+    } else {
+        // the callback destroys the frame
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), FALSE);
     }
 
     //
-    // first: the autocontinue menu item
+    // the autocontinue menu item
     //
     // make autocontinue menuitem invisible if no ffmpeg
 #ifndef USE_FFMPEG
@@ -1517,18 +1523,6 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
     }
 #endif     // USE_FFMPEG
-
-    //
-    // show frame check button
-    //
-    w = NULL;
-    w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_show_frame");
-    g_return_if_fail (w != NULL);
-    if (!(app->flags & FLG_NOFRAME)) {
-        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
-    } else {
-        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), FALSE);
-    }
     
 #undef DEBUGFUNCTION
 }
@@ -2290,13 +2284,12 @@ on_xvc_ctrl_m1_show_frame_activate (GtkMenuItem * menuitem,
     Job *jobp = xvc_job_ptr ();
     XVC_AppData *app = xvc_appdata_ptr ();
     
-    if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem)) &&
-            (app->flags & FLG_NOFRAME)) {
+    if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem))) {
         app->flags &= ~FLG_NOFRAME;
         jobp->flags &= ~FLG_NOFRAME;
         xvc_create_gtk_frame(xvc_ctrl_main_window, app->area->width,
             app->area->height, app->area->x, app->area->y);
-    } else if (!(app->flags & FLG_NOFRAME)) {
+    } else {
         jobp->flags |= FLG_NOFRAME;
         app->flags |= FLG_NOFRAME;
         xvc_destroy_gtk_frame();
