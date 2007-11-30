@@ -50,6 +50,7 @@
 #include <limits.h>                    // PATH_MAX
 #include <ctype.h>
 #include <pthread.h>
+#include <signal.h>
 
 #ifdef HAVE_LIBXFIXES
 #include <X11/X.h>
@@ -902,6 +903,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
                 *rc = -1;
                 return NULL;
             }
+            
         }
     } else if (lapp->current_mode == 0 && !XVC_FPS_GT_ZERO (target->fps)) {
         errors = errorlist_append (28, errors, lapp);
@@ -1445,7 +1447,7 @@ xvc_appdata_merge_captypeoptions (XVC_CapTypeOptions * cto, XVC_AppData * lapp)
 static void
 error_exit_action (XVC_ErrorListItem * err)
 {
-    exit (1);
+    raise(SIGINT);
 }
 
 /**
@@ -2291,9 +2293,11 @@ errorlist_append (int code, XVC_ErrorListItem * err, XVC_AppData * app)
     XVC_ErrorListItem *new_err, *iterator = NULL, *last = NULL;
     int i, a = -1;
 
-    for (i = 0; xvc_errors[i].code > 0; i++) {
-        if (xvc_errors[i].code == code)
+    for (i = 0; /*xvc_errors[i].code > 0 */ i < NUMERRORS; i++) {
+        if (xvc_errors[i].code == code) {
             a = i;
+            break;
+        }
     }
 
     // could not find error to add to list
@@ -2437,9 +2441,19 @@ xvc_error_write_msg (int code, int print_action_or_not)
 {
     char *type = NULL;
     char scratch[50], buf[5000];
-    const XVC_Error *err = &(xvc_errors[code]);
-    int i, inc, pre = 10, len = 80;
+    const XVC_Error *err;
+    int a = 0, i, inc, pre = 10, len = 80;
 
+    // first we must find the right array element for the error
+    for (i = 0; /*xvc_errors[i].code > 0 */ i < NUMERRORS; i++) {
+        if (xvc_errors[i].code == code) {
+            a = i;
+            break;
+        }
+    }
+    if (a == 0) return;
+    err = &(xvc_errors[a]);
+    
     switch (err->type) {
     case 1:
         type = _("FATAL ERROR");

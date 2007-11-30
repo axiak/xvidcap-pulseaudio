@@ -8,6 +8,8 @@
 		the frame.
 	* src: codecs.c, codecs.h: add format for 
 		direct VOB creation
+	* src/app_data.c: fixed array arithmetic for
+		error printing in nongui mode
 
 2007-11-23  dAniel hAhler  <daniel@thequod.de>
 	* po/de.po: bugfix for missing echo's
