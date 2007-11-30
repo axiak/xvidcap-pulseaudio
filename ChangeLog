@@ -6,6 +6,8 @@
 		functionality for following the mouse
 		pointer when capturing and hiding 
 		the frame.
+	* src: codecs.c, codecs.h: add format for 
+		direct VOB creation
 
 2007-11-23  dAniel hAhler  <daniel@thequod.de>
 	* po/de.po: bugfix for missing echo's

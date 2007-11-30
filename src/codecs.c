@@ -267,6 +267,10 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
        N_("Ogg Vorbis"),
        CODEC_ID_VORBIS}
     , {
+       "AC3",
+       N_("Dolby Digital AC-3"),
+       CODEC_ID_AC3}
+    , {
        "PCM16",
        N_("PCM"),
        CODEC_ID_PCM_S16LE}
@@ -330,6 +334,10 @@ static const char *extension_m1v[] = { "m1v", "vcd" };
 static const char *extension_m2v[] = { "m2v", "svcd" };
 
 #define len_extension_m2v (sizeof(extension_m2v) / sizeof(char*))
+
+static const char *extension_dvd[] = { "vob", "dvd" };
+
+#define len_extension_dvd (sizeof(extension_dvd) / sizeof(char*))
 
 static const char *extension_mov[] = { "mov", "qt" };
 
@@ -451,6 +459,12 @@ static const XVC_AuCodecID au_codecs_mp2[] = { AU_CODEC_MP2 };
 
 #define len_au_codecs_mp2 (sizeof(au_codecs_mp2) / \
     sizeof(XVC_AuCodecID))
+
+static const XVC_AuCodecID au_codecs_ac3[] = { AU_CODEC_AC3 };
+
+#define len_au_codecs_ac3 (sizeof(au_codecs_ac3) / \
+    sizeof(XVC_AuCodecID))
+
 #endif     // HAVE_FFMPEG_AUDIO
 #endif     // USE_FFMPEG
 
@@ -660,7 +674,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      len_extension_dv},
     {
      "mpeg",
-     N_("MPEG1 System Format"),
+     N_("MPEG1 System Format (VCD)"),
      "mpeg",
      CODEC_MPEG1,
      allowed_vid_codecs_mpeg1,
@@ -678,7 +692,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      len_extension_m1v},
     {
      "mpeg2",
-     N_("MPEG2 PS Format"),
+     N_("MPEG2 PS Format (SVCD)"),
      "svcd",
      CODEC_MPEG2,
      allowed_vid_codecs_mpeg2,
@@ -694,6 +708,24 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
 #endif     // HAVE_FFMPEG_AUDIO
      extension_m2v,
      len_extension_m2v},
+    {
+     "vob",
+     N_("MPEG2 PS format (DVD VOB)"),
+     "dvd",
+     CODEC_MPEG2,
+     allowed_vid_codecs_mpeg2,
+     len_allowed_vid_codecs_mpeg2,
+#ifdef HAVE_FFMPEG_AUDIO
+     AU_CODEC_AC3,
+     au_codecs_ac3,
+     len_au_codecs_ac3,
+#else
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_FFMPEG_AUDIO
+     extension_dvd,
+     len_extension_dvd},
     {
      "mov",
      N_("Quicktime Format"),

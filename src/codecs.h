@@ -120,6 +120,7 @@ typedef enum
     AU_CODEC_MP3,
 #endif     // HAVE_LIBMP3LAME
     AU_CODEC_VORBIS,
+    AU_CODEC_AC3,
     AU_CODEC_PCM16,
 #endif     // HAVE_FFMPEG_AUDIO
     NUMAUCODECS
@@ -157,6 +158,7 @@ typedef enum
     CAP_DV,
     CAP_MPG,
     CAP_SVCD,
+    CAP_DVD,
     CAP_MOV,
 #endif     // USE_FFMPEG
     NUMCAPS
