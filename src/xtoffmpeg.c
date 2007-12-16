@@ -743,8 +743,8 @@ capture_audio_thread (Job * job)
 
         if ((job->state & VC_PAUSE) && !(job->state & VC_STEP)) {
             pthread_mutex_lock (&(app->recording_paused_mutex));
-            pthread_cond_wait (&(app->recording_condition_unpaused), 
-			&(app->recording_paused_mutex));
+            pthread_cond_wait (&(app->recording_condition_unpaused),
+                               &(app->recording_paused_mutex));
             pthread_mutex_unlock (&(app->recording_paused_mutex));
         } else if (job->state == VC_REC) {
 
@@ -1170,14 +1170,14 @@ add_video_stream (AVFormatContext * oc, XImage * image,
         int n;
         double r;
 
-        r = sqrt (100 / app->rescale);
+        r = sqrt ((double) app->rescale / 100.0);
 
-        n = image->width / r;
+        n = image->width * r;
         if (n % 2 > 0)
             n--;
         st->codec->width = n;
 
-        n = image->height / r;
+        n = image->height * r;
         if (n % 2 > 0)
             n--;
         st->codec->height = n;
@@ -1189,11 +1189,11 @@ add_video_stream (AVFormatContext * oc, XImage * image,
     // mt init
     if (codec_id == CODEC_ID_MPEG4 || codec_id == CODEC_ID_MPEG1VIDEO ||
         codec_id == CODEC_ID_MPEG2VIDEO) {
-	// the max threads is taken from ffmpeg's mpegvideo.c
-        avcodec_thread_init (st->codec, XVC_MIN(4, 
-		(st->codec->height + 15)/16));
+        // the max threads is taken from ffmpeg's mpegvideo.c
+        avcodec_thread_init (st->codec, XVC_MIN (4,
+                                                 (st->codec->height +
+                                                  15) / 16));
     }
-
     // time base: this is the fundamental unit of time (in seconds) in
     // terms of which frame timestamps are represented. for fixed-fps
     // content, timebase should be 1/framerate and timestamp increments
@@ -1797,13 +1797,13 @@ xvc_ffmpeg_clean ()
         {
             int tret;
 
-	    // wait till audio thread is actually running, or else
-	    // the signal might kill xvidcap. we also cannot just
-	    // drop sending the signal, because the audio thread
-	    // might just be starting
-	    while (!audio_thread_running) {
-		usleep(10);
-	    }
+            // wait till audio thread is actually running, or else
+            // the signal might kill xvidcap. we also cannot just
+            // drop sending the signal, because the audio thread
+            // might just be starting
+            while (!audio_thread_running) {
+                usleep (10);
+            }
             tret = pthread_kill (tid, SIGUSR1);
 
             pthread_join (tid, NULL);

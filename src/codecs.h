@@ -73,7 +73,9 @@ typedef enum
     CODEC_MPEG4,
     CODEC_MSDIV2,
     CODEC_MSDIV3,
+    CODEC_FFV1,
     CODEC_FLV,
+    CODEC_FLASHSV,
     CODEC_DV,
     CODEC_MPEG2,
 #ifdef HAVE_LIBTHEORA

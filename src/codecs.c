@@ -190,6 +190,15 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      NULL,
      0},
     {
+     "FFV1",
+     N_("FFmpeg Video 1"),
+     CODEC_ID_FFV1,
+     {24, 1},
+     one_to_hundred_range,
+     len_one_to_hundred_range,
+     NULL,
+     0},
+    {
      "FLASH_VIDEO",
      N_("Flash Video"),
      CODEC_ID_FLV1,
@@ -197,6 +206,15 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      mpeg4_range,                      /* this is actually MPEG4 ... dunno if
                                         * this is the same here */
      len_mpeg4_range,
+     NULL,
+     0},
+    {
+     "FLASH_SV",
+     N_("Flash Screen Video"),
+     CODEC_ID_FLASHSV,
+     {24, 1},
+     one_to_hundred_range,
+     len_one_to_hundred_range,
      NULL,
      0},
     {
@@ -372,7 +390,8 @@ static const XVC_CodecID allowed_vid_codecs_avi[] = {
 #ifdef HAVE_LIBTHEORA
     CODEC_THEORA,
 #endif     // HAVE_LIBTHEORA
-    CODEC_DV
+    CODEC_DV,
+    CODEC_FFV1
 };
 
 #define len_allowed_vid_codecs_avi (sizeof(allowed_vid_codecs_avi) / \
@@ -383,7 +402,8 @@ static const XVC_CodecID allowed_vid_codecs_asf[] = { CODEC_MSDIV3 };
 #define len_allowed_vid_codecs_asf (sizeof(allowed_vid_codecs_asf) / \
     sizeof(XVC_CodecID))
 
-static const XVC_CodecID allowed_vid_codecs_flv[] = { CODEC_FLV };
+static const XVC_CodecID allowed_vid_codecs_flv[] =
+    { CODEC_FLV, CODEC_FLASHSV };
 
 #define len_allowed_vid_codecs_flv (sizeof(allowed_vid_codecs_flv) / \
     sizeof(XVC_CodecID))

@@ -1,4 +1,17 @@
 
+2007-12-16  Benjamin Larsson  <banan@ludd.ltu.se>
+	* src: codecs.c, codecs.h: added codecs
+		"Flash Screen Video" and "FFmpeg
+		Video 1" for lossless screen
+		captures
+
+2007-12-16  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c: fix flawed capture size
+		calculation with rescale
+	* src/gnome_ui.c: fix flawed UI behaviour
+		around hiding and showing frame
+	* src/Makefile.am: fix build without dbus
+ 
 2007-11-30  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_ui.c, capture.c, app_data.c, 
 		app_data.h, gnome_frame.c, gnome_options.c, 

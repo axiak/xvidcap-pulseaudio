@@ -52,9 +52,7 @@ xvidcap_SOURCES = \
     xv_error_item.h \
     xvidcap-intl.h \
         eggtrayicon.h \
-        eggtrayicon.c \
-	dbus-server-object.h \
-	dbus-server-object.c
+        eggtrayicon.c
 
 xvidcap_LDADD = $(PACKAGE_LIBS)
 
@@ -68,6 +66,10 @@ endif
 EXTRA_DIST = $(glade_DATA)
 
 if USE_DBUS
+xvidcap_SOURCES += \
+	dbus-server-object.h \
+	dbus-server-object.c
+
 bin_PROGRAMS += xvidcap-dbus-client
 
 xvidcap_dbus_client_SOURCES = xvidcap-dbus-client.c

@@ -442,7 +442,6 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
     } else if (xev->type == app->dmg_event_base) {
         XRectangle rect = {
             e->area.x, e->area.y, e->area.width, e->area.height
-
 /*
             XVC_MAX (e->area.x - 10, 0),
             XVC_MAX (e->area.y - 10, 0),
@@ -462,7 +461,7 @@ xvc_xdamage_event_filter (GdkXEvent * xevent, GdkEvent * event, void *user_data)
         // this with the capture thread
         pthread_mutex_lock (&(app->capturing_mutex));
         XDamageSubtract (app->dpy, e->damage, region, None);
-        XSync(app->dpy, False);
+        XSync (app->dpy, False);
 
         // clip the damaged rectangle
         // need to do that in the lock or otherwise an event triggered before
@@ -1237,7 +1236,7 @@ start_recording_nongui_stuff ()
 //                    XSelectInput (app->dpy, children[i], StructureNotifyMask);
                     if (!attribs.
                         override_redirect
-                        && attribs.depth == root_attrs.depth) { 
+                        && attribs.depth == root_attrs.depth) {
 //                        gdk_error_trap_push ();
                         XDamageCreate (app->dpy, children[i],
                                        XDamageReportRawRectangles);
@@ -1348,10 +1347,8 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     w = NULL;
     w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_show_frame");
     g_return_if_fail (w != NULL);
+
     if (!(app->flags & FLG_NOFRAME)) {
-        // destroy a frame if present
-        xvc_destroy_gtk_frame();
-        // the callback creates the frame
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
     } else {
         // the callback destroys the frame
@@ -1523,7 +1520,7 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
     }
 #endif     // USE_FFMPEG
-    
+
 #undef DEBUGFUNCTION
 }
 
@@ -1580,6 +1577,7 @@ xvc_ui_create ()
 #define DEBUGFUNCTION "xvc_ui_create()"
     GladeXML *xml = NULL;
     XVC_AppData *app = xvc_appdata_ptr ();
+    GtkWidget *w = NULL;
 
 #ifdef DEBUG
     printf ("%s %s: Entering\n", DEBUGFILE, DEBUGFUNCTION);
@@ -1595,6 +1593,7 @@ xvc_ui_create ()
 
         // connect the signals in the interface
         glade_xml_signal_autoconnect (xml);
+
         // store the toplevel widget for further reference
         xvc_ctrl_main_window =
             glade_xml_get_widget (xml, "xvc_ctrl_main_window");
@@ -1684,9 +1683,23 @@ gtk-edit gtk-paste (2nd choice would be gtk-open)
 
         g_assert (xml);
 
+        xvc_ctrl_m1 = glade_xml_get_widget (xml, "xvc_ctrl_m1");
+
+        // this needs to go here to avoid double frame when done later
+        // should trigger any callback here
+        w = NULL;
+        w = glade_xml_get_widget (xml, "xvc_ctrl_m1_show_frame");
+        g_assert (w);
+
+        if (!(app->flags & FLG_NOFRAME)) {
+            gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
+        } else {
+            gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), FALSE);
+        }
+
         // connect the signals in the interface
         glade_xml_signal_autoconnect (xml);
-        xvc_ctrl_m1 = glade_xml_get_widget (xml, "xvc_ctrl_m1");
+
     }
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
@@ -2277,22 +2290,21 @@ on_xvc_ctrl_m1_mitem_autocontinue_activate (GtkMenuItem * menuitem,
 }
 
 void
-on_xvc_ctrl_m1_show_frame_activate (GtkMenuItem * menuitem,
-                                            gpointer user_data)
+on_xvc_ctrl_m1_show_frame_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
 #define DEBUGFUNCTION "on_xvc_ctrl_m1_show_frame_activate()"
     Job *jobp = xvc_job_ptr ();
     XVC_AppData *app = xvc_appdata_ptr ();
-    
+
     if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem))) {
         app->flags &= ~FLG_NOFRAME;
         jobp->flags &= ~FLG_NOFRAME;
-        xvc_create_gtk_frame(xvc_ctrl_main_window, app->area->width,
-            app->area->height, app->area->x, app->area->y);
+        xvc_create_gtk_frame (xvc_ctrl_main_window, app->area->width,
+                              app->area->height, app->area->x, app->area->y);
     } else {
         jobp->flags |= FLG_NOFRAME;
         app->flags |= FLG_NOFRAME;
-        xvc_destroy_gtk_frame();
+        xvc_destroy_gtk_frame ();
     }
 #undef DEBUGFUNCTION
 }
