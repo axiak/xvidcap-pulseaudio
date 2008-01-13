@@ -5,7 +5,7 @@
     <refmeta>
         <refentrytitle>xvidcap</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo>November 2007</refmiscinfo>
+        <refmiscinfo>January 2008</refmiscinfo>
     </refmeta>
     <refnamediv id='name'>
         <refname>XVidCap</refname>
@@ -68,8 +68,7 @@
             or transcode.
         </para>
         <para>
-            For help, feature requests, or bug-reports please turn to 
-            <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink>
+            For help, feature requests, or bug-reports please turn to http://www.sourceforge.net/projects/xvidcap/
         </para>
     </refsect1>
 

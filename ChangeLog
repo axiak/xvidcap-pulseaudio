@@ -2,6 +2,20 @@
 2008-01-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* Makefile.am, Changelog: added EXTRA_DIST
 		net.jarre_de_the.Xvidcap.service.in
+	* doc/man/it/xvidcap-dbus-client.1-it.po,
+		src/options.c, po/en.po, po/ru.po, 
+		po/es.po, po/de.po, po/it.po, 
+		po/zh_CN.po, doc/man: 
+		C/xvidcap-dbus-client.1.xml, 
+		C/xvidcap-dbus-client.1.xml.pot, 
+		C/xvidcap.1.xml, C/xvidcap.1.xml.pot, 
+		de/xvidcap.1-de.po, 
+		de/xvidcap-dbus-client.1.xml, 
+		de/xvidcap-dbus-client.1, 
+		de/xvidcap-dbus-client.1-de.po, 
+		de/xvidcap.1.xml, de/xvidcap.1, 
+		it/xvidcap.1-it.po: Preparing
+		l10n for 1.1.7
 
 2007-12-16  Benjamin Larsson  <banan@ludd.ltu.se>
 	* src: codecs.c, codecs.h: added codecs

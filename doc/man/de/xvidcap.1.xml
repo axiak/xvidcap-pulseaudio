@@ -4,7 +4,7 @@
     <refmeta>
         <refentrytitle>xvidcap</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo>November 2007</refmiscinfo>
+        <refmiscinfo>Januar 2008</refmiscinfo>
     </refmeta>
     <refnamediv id="name">
         <refname>XVidCap</refname>
@@ -53,7 +53,7 @@
     <refsect1 id="intro"><title>Beschreibung</title>
         <para><application>xvidcap</application> ist ein Werkzeug, welches Bewegungen in einem ausgewählten Bereich einer X11 Anzeige speichert. Es kann auf zwei unterschiedliche Arten arbeiten: (1) <emphasis>Einzelbild-Aufnahme</emphasis> (single-frame capture) oder (2) <emphasis>Film-Aufnahme</emphasis> (multi-frame capture). Bei der Einzelbild-Aufnahme macht <application>xvidcap</application> eine konfigurierbare Anzahl von Bildschirmfotos pro Sekunde und speichert sie als einzelne Bild-Dateien. Bei der Film-Aufnahme macht <application>xvidcap</application> ebenfalls eine Anzahl von Bildschirmfotos pro Sekunde, kodiert sie aber zur Laufzeit zu einem Film und speichert diesen in einer einzelnen Video-Datei. Ton-Aufnahme ist bei Einzelbild-Aufnahme nicht möglich.</para>
         <para>Die Einzelbild-Aufnahme kann unter Umständen geeigneter sein, wenn die Bilder vor dem Kodieren bearbeitet werden sollen oder wenn Video Codecs benötigt werden, die <application>xvidcap</application> nicht unterstützt. Die einzelnen Bilder können später mit Werzeugen wie ffmpeg, mendocer oder transcode zu einem Film kodiert werden.</para>
-        <para>Für weitere Hilfe, Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink></para>
+        <para>Für weitere Hilfe, Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an http://www.sourceforge.net/projects/xvidcap/</para>
     </refsect1>
 
     <refsect1 id="options"><title>Optionen</title>

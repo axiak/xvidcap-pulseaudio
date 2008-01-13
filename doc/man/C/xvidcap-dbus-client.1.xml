@@ -5,7 +5,7 @@
     <refmeta>
         <refentrytitle>xvidcap-dbus-client</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo>November 2007</refmiscinfo>
+        <refmiscinfo>January 2008</refmiscinfo>
     </refmeta>
     <refnamediv id='name'>
         <refname>XVidCap D-BUS Client</refname>
@@ -29,8 +29,7 @@
         <para>
 	    For inter process communication this utility uses D-BUS. If xvidcap is not running when this
 	    program is invoked to trigger an action, xvidcap is started through D-BUS activation. 
-            For help, feature requests, or bug-reports please turn to 
-            <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink>
+            For help, feature requests, or bug-reports please turn to http://www.sourceforge.net/projects/xvidcap/
         </para>
     </refsect1>
 

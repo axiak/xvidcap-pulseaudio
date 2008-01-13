@@ -73,7 +73,7 @@ xvc_write_options_file ()
     fprintf (fp, _("#general options ...\n"));
     fprintf (fp,
              _
-             ("# default capture mode (0 = single-frame, 1 = multi-frame\n"));
+             ("# default capture mode (0 = single-frame, 1 = multi-frame)\n"));
     fprintf (fp, "default_mode: %i\n",
 #ifdef USE_FFMPEG
              app->default_mode);

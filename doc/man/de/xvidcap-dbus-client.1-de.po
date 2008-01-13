@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.1.7\n"
-"POT-Creation-Date: 2007-11-04 23:35+0100\n"
+"POT-Creation-Date: 2008-01-13 22:36+0100\n"
 "PO-Revision-Date: 2007-11-04 23:03+0100\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: DE <xvidcap-l10n@lists.sourceforge.net>\n"
@@ -19,8 +19,8 @@ msgid "1"
 msgstr "1"
 
 #: ../C/xvidcap-dbus-client.1.xml:8(refmiscinfo)
-msgid "November 2007"
-msgstr "November 2007"
+msgid "January 2008"
+msgstr "Januar 2008"
 
 #: ../C/xvidcap-dbus-client.1.xml:11(refname)
 msgid "XVidCap D-BUS Client"
@@ -50,25 +50,24 @@ msgstr ""
 "Zusammenhang mit Tastatur-Kürzeln."
 
 #: ../C/xvidcap-dbus-client.1.xml:29(para)
+#, fuzzy
 msgid ""
 "For inter process communication this utility uses D-BUS. If xvidcap is not "
 "running when this program is invoked to trigger an action, xvidcap is "
 "started through D-BUS activation. For help, feature requests, or bug-reports "
-"please turn to <ulink url=\"//www.sourceforge.net/projects/xvidcap/\">http://"
-"www.sourceforge.net/projects/xvidcap/</ulink>"
+"please turn to http://www.sourceforge.net/projects/xvidcap/"
 msgstr ""
 "Zur Kommunikation zwischen Prozessen wird hier D-BUS verwendet. Falls "
 "xvidcap noch nicht läuft, wenn dieses Programm verwendet wird, um eine "
 "Aktion auszulösen, wird xvidcap durch D-BUS gestartet. Für weitere Hilfe, "
-"Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an <ulink "
-"url=\"//www.sourceforge.net/projects/xvidcap/\">http://www.sourceforge.net/"
-"projects/xvidcap/</ulink>"
+"Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an "
+"http://www.sourceforge.net/projects/xvidcap/"
 
-#: ../C/xvidcap-dbus-client.1.xml:37(title)
+#: ../C/xvidcap-dbus-client.1.xml:36(title)
 msgid "Options"
 msgstr "Optionen"
 
-#: ../C/xvidcap-dbus-client.1.xml:39(para)
+#: ../C/xvidcap-dbus-client.1.xml:38(para)
 msgid ""
 "This program follows the usual GNU command line syntax, with long options "
 "starting with two dashes (<literal>--</literal>). A summary of options is "
@@ -78,11 +77,11 @@ msgstr ""
 "Optionen mit zwei Bindestrichen (<literal>--</literal>) beginnen. Folgende "
 "Optionen sind möglich:"
 
-#: ../C/xvidcap-dbus-client.1.xml:46(term)
+#: ../C/xvidcap-dbus-client.1.xml:45(term)
 msgid "<option>--action </option>start|stop|pause"
 msgstr "<option>--action </option>start|stop|pause"
 
-#: ../C/xvidcap-dbus-client.1.xml:48(para)
+#: ../C/xvidcap-dbus-client.1.xml:47(para)
 msgid ""
 "This sends a command to xvidcap to either start or stop a capturing session "
 "or to pause or resume one. If xvidcap is not running it will be started."
@@ -91,11 +90,11 @@ msgstr ""
 "starten oder zu stoppen, oder eine Pause einzulegen, bzw. diese zu beenden. "
 "Falls xvidcap nicht läuft, wird es gestartet."
 
-#: ../C/xvidcap-dbus-client.1.xml:57(title)
+#: ../C/xvidcap-dbus-client.1.xml:56(title)
 msgid "Authors"
 msgstr "Autoren"
 
-#: ../C/xvidcap-dbus-client.1.xml:58(para)
+#: ../C/xvidcap-dbus-client.1.xml:57(para)
 msgid ""
 "<application>xvidcap-dbus-client</application> was written by Karl H. "
 "Beckers."
@@ -103,7 +102,7 @@ msgstr ""
 "<application>xvidcap-dbus-client</application> wurde entwickelt von Karl H. "
 "Beckers."
 
-#: ../C/xvidcap-dbus-client.1.xml:61(para)
+#: ../C/xvidcap-dbus-client.1.xml:60(para)
 msgid ""
 "This manual page was written by Karl H. Beckers <email>karl.h.beckers@gmx."
 "net</email> for the <application>xvidcap</application> project."
@@ -111,11 +110,11 @@ msgstr ""
 "Diese manpage wurde von Karl H. Beckers <email>karl.h.beckers@gmx.net</"
 "email> für das <application>xvidcap</application> Project geschrieben."
 
-#: ../C/xvidcap-dbus-client.1.xml:65(para)
+#: ../C/xvidcap-dbus-client.1.xml:64(para)
 msgid "This translation was done by TRANSLATOR-CREDITS HERE!!!"
 msgstr "Karl H. Beckers <karl.h.beckers@gmx.net>"
 
-#: ../C/xvidcap-dbus-client.1.xml:68(para)
+#: ../C/xvidcap-dbus-client.1.xml:67(para)
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the GNU Free Documentation License, Version 1.1 or any later "
@@ -132,6 +131,9 @@ msgstr ""
 #: ../C/xvidcap-dbus-client.1.xml:0(None)
 msgid "translator-credits"
 msgstr "Karl H. Beckers <karl.h.beckers@gmx.net>, 2006, 2007"
+
+#~ msgid "November 2007"
+#~ msgstr "November 2007"
 
 #~ msgid "xvidcap"
 #~ msgstr "xvidcap"

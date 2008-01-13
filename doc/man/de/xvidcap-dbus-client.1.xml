@@ -4,7 +4,7 @@
     <refmeta>
         <refentrytitle>xvidcap-dbus-client</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo>November 2007</refmiscinfo>
+        <refmiscinfo>Januar 2008</refmiscinfo>
     </refmeta>
     <refnamediv id="name">
         <refname>XVidCap D-BUS Client</refname>
@@ -21,7 +21,11 @@
 
     <refsect1 id="intro"><title>Beschreibung</title>
         <para><application>xvidcap-dbus-client</application> ist ein Werkzeug zum Steuern einer xvidcap Aufnahme von außerhalb xvidcap selbst. Der wesentliche Verwendungszweck ist die Steuerung von der Kommandozeile aus oder im Zusammenhang mit Tastatur-Kürzeln.</para>
-        <para>Zur Kommunikation zwischen Prozessen wird hier D-BUS verwendet. Falls xvidcap noch nicht läuft, wenn dieses Programm verwendet wird, um eine Aktion auszulösen, wird xvidcap durch D-BUS gestartet. Für weitere Hilfe, Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink></para>
+        <para>
+	    For inter process communication this utility uses D-BUS. If xvidcap is not running when this
+	    program is invoked to trigger an action, xvidcap is started through D-BUS activation. 
+            For help, feature requests, or bug-reports please turn to http://www.sourceforge.net/projects/xvidcap/
+        </para>
     </refsect1>
 
     <refsect1 id="options"><title>Optionen</title>
