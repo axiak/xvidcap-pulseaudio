@@ -16,6 +16,25 @@
 		de/xvidcap.1.xml, de/xvidcap.1, 
 		it/xvidcap.1-it.po: Preparing
 		l10n for 1.1.7
+	* docs/xvidcap: C/figures/menu-mf.png, 
+		C/figures/menu.png, 
+		C/figures/menu-cont.png, 
+		C/figures/menu-sf.png, 
+		C/figures/menu-about.png, 
+		C/figures/menu-save-prefs.png, 
+		C/figures/prefs-commands.png, 
+		C/figures/prefs-mf.png, 
+		C/figures/menu-animate.png, 
+		C/figures/menu-prefs.png, 
+		C/figures/menu-make-video.png, 
+		C/figures/menu-quit.png, 
+		C/figures/prefs-sf.png, 
+		C/figures/prefs-general.png, 
+		C/figures/menu-help.png, 
+		C/xvidcap.xml, C/xvidcap.xml.pot, 
+		de/xvidcap.xml-de.po, de/xvidcap.xml, 
+		it/xvidcap.xml-it.po: Preparing
+		l10n of manual for 1.1.7
 
 2007-12-16  Benjamin Larsson  <banan@ludd.ltu.se>
 	* src: codecs.c, codecs.h: added codecs

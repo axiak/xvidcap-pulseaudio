@@ -11,7 +11,7 @@
 <!DOCTYPE article  PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" 
 	"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY appversion "1.1.6">
-  <!ENTITY manrevision "0.2">
+  <!ENTITY manrevision "0.3">
   <!ENTITY date "April 2007">
   <!ENTITY app "xvidcap">
   <!ENTITY mf-cap "multi-frame capture">
@@ -24,7 +24,7 @@
     <articleinfo>
         <title>&app; Manual V&manrevision;</title>
         <copyright>
-            <year>2007</year>
+            <year>2008</year>
             <holder>Karl H. Beckers</holder> 
         </copyright>
 
@@ -48,32 +48,6 @@
                 <surname>Beckers</surname>
                 <email>karl.h.beckers@gmx.net</email>
             </author>
-            <!--
-            <othercredit role="reviewer">
-            <firstname>Baris</firstname>
-            <surname>Cicek provided information from earlier revisions of the gedit application.</surname>
-            <contrib>Acknowledgements</contrib>
-            </othercredit>
-            <othercredit role="reviewer">
-            <firstname>Ajit</firstname>
-            <surname>George provided information about plugins.</surname>
-            <contrib>Acknowledgements</contrib>
-            </othercredit>
-            -->
-
-
-            <!-- This is appropriate place for other contributors: translators,
-            maintainers,  etc. Commented out by default.
-            <othercredit role="translator">
-            <firstname>Latin</firstname>
-            <surname>Translator 1</surname>
-            <affiliation>
-            <orgname>Latin Translation Team</orgname>
-            <address> <email>translator@gnome.org</email> </address>
-            </affiliation>
-            <contrib>Latin translation</contrib>
-            </othercredit>
-            -->
         </authorgroup>
 
         <!-- According to GNU FDL, revision history is mandatory if you are -->
@@ -91,8 +65,17 @@
                 </revdescription>
             </revision>
             <revision>
-                <revnumber>&app; V&manrevision;</revnumber>
+                <revnumber>&app; V0.2</revnumber>
                 <date>2007</date>
+                <revdescription>
+                    <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email>
+                    </para>
+                    <para role="publisher">Karl H. Beckers</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>&app; V&manrevision;</revnumber>
+                <date>2008</date>
                 <revdescription>
                     <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email>
                     </para>
@@ -432,7 +415,10 @@
                                 <para>
                                     The <guilabel>Frame Selection Lock</guilabel> makes the capture selection move with the
                                     main control if selected. If deselected, the capture selection will stay where it is when
-                                    the main control moves.
+                                    the main control moves. If, in the
+				    <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">preferences dialog</ulink>, you 
+				    have checked "Capture Area Follows Mouse" the capture selection follows the mouse pointer
+				    instead.
                                 </para>
                             </entry>
                         </row>
@@ -676,6 +662,41 @@
                                 </para>
                             </entry>
                         </row>
+                        <row id="xvidcap-menu-TBL-show-frame">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-show-frame.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Show Frame</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>
+                                    show frame around capture area (yes/no)
+                                </para>
+                                <para>
+				    If this is unchecked, the frame around the area to capture is hidden.
+                                </para>
+                                <tip>
+                                    <title>Hiding frame around the area to capture</title>
+                                    <para>
+					This is esp. helpful, if you are running a compositing window manager
+					like compiz and use effects which make the capture frame lag behind
+					the movement of the area to capture (e. g. wobbly windows). In such
+					a case the lagging frame parts may move inside the area to capture
+					ending up visible in the finished video.
+				    </para>
+				    <para>
+					The cleaner solution, however, is to disable the effect for windows
+					of class "Xvidcap". That makes hiding the frame unnecessary.
+                                    </para>
+                                </tip>
+                            </entry>
+                        </row>
                         <row id="xvidcap-menu-TBL-make-video">
                             <entry>
                                 <screenshot>
@@ -871,6 +892,34 @@
                                     Check this if you want to store size and position of the currently 
                                     selected area to capture along with other preferences on selecting
                                     <quote>Save Preferences</quote> from the main menu.
+                                </para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-frame-follows-mouse">
+                            <entry>
+                                <para>
+                                    Capture Area Follows Mouse
+                                </para>
+                            </entry>
+                            <entry>
+                                <para>
+                                    Check this if you want a locked frame to follow the mousepointer's
+				    movement rather than that of the main control windows.
+                                </para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-hide-frame">
+                            <entry>
+                                <para>
+                                    Hide Frame
+                                </para>
+                            </entry>
+                            <entry>
+                                <para>
+				    Check this if you want the frame around the area to capture to be
+				    hidden. See the <ulink type="help" url="ghelp:xvidcap?xvidcap-menu-TBL-show-frame">Show Frame</ulink>
+				    menu item for more information, but notice that this works the other 
+				    way around, i. e. a check hides the frame.
                                 </para>
                             </entry>
                         </row>

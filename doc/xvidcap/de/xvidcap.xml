@@ -8,7 +8,7 @@
 -->
 <!DOCTYPE article PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY appversion "1.1.6">
-<!ENTITY manrevision "0.2">
+<!ENTITY manrevision "0.3">
 <!ENTITY date "April 2007">
 <!ENTITY app "xvidcap">
 <!ENTITY mf-cap "multi-frame capture">
@@ -18,9 +18,9 @@
     <!-- please do not change the id; for translations, change lang to -->
     <!-- appropriate code -->
     <articleinfo>
-        <title>xvidcap Handbuch V0.2</title>
+        <title>xvidcap Handbuch V0.3</title>
         <copyright>
-            <year>2007</year>
+            <year>2008</year>
             <holder>Karl H. Beckers</holder> 
         </copyright>
 
@@ -44,32 +44,6 @@
                 <surname>Beckers</surname>
                 <email>karl.h.beckers@gmx.net</email>
             </author>
-            <!--
-            <othercredit role="reviewer">
-            <firstname>Baris</firstname>
-            <surname>Cicek provided information from earlier revisions of the gedit application.</surname>
-            <contrib>Acknowledgements</contrib>
-            </othercredit>
-            <othercredit role="reviewer">
-            <firstname>Ajit</firstname>
-            <surname>George provided information about plugins.</surname>
-            <contrib>Acknowledgements</contrib>
-            </othercredit>
-            -->
-
-
-            <!-- This is appropriate place for other contributors: translators,
-            maintainers,  etc. Commented out by default.
-            <othercredit role="translator">
-            <firstname>Latin</firstname>
-            <surname>Translator 1</surname>
-            <affiliation>
-            <orgname>Latin Translation Team</orgname>
-            <address> <email>translator@gnome.org</email> </address>
-            </affiliation>
-            <contrib>Latin translation</contrib>
-            </othercredit>
-            -->
         </authorgroup>
 
         <!-- According to GNU FDL, revision history is mandatory if you are -->
@@ -88,6 +62,14 @@
             <revision>
                 <revnumber>xvidcap V0.2</revnumber>
                 <date>2007</date>
+                <revdescription>
+                    <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email></para>
+                    <para role="publisher">Karl H. Beckers</para>
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>xvidcap V0.3</revnumber>
+                <date>2008</date>
                 <revdescription>
                     <para role="author">Karl H. Beckers <email>karl.h.beckers@gmx.net</email></para>
                     <para role="publisher">Karl H. Beckers</para>
@@ -327,7 +309,7 @@
                                 </screenshot>			
                             </entry>
                             <entry>
-                                <para>Die <guibutton>Sperre des Auswahlrahmens</guibutton> lässt die Aufnahmeauswahl den Bewegungen des zentralen Bedienfensters folgen. Ist sie abgewählt, bleibt der Auswahlrahmen wo er ist, wenn sich das Bedienfenster bewegt.</para>
+                                <para>Die <guibutton>Sperre des Auswahlrahmens</guibutton> lässt die Aufnahmeauswahl den Bewegungen des zentralen Bedienfensters folgen. Ist sie abgewählt, bleibt der Auswahlrahmen wo er ist, wenn sich das Bedienfenster bewegt. Haben Sie im <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-cmd">Einstellungen Dialog</ulink> die Einstellung "Aufnahme-Bereich folgt Mauszeiger" gewählt, folgt der Rahmen stattdessen dem Mauszeiger.</para>
                             </entry>
                         </row>
                         <row id="xvidcap-get-started-u-start-TBL-selector">
@@ -499,6 +481,28 @@
                                 <para>Diese Funktion ist nur bei Film-Aufnahme wählbar und auch dann nur, wenn der Dateiname hochzählbar ist. Vergleichen Sie bitte die Informationen zu den <ulink type="help" url="ghelp:xvidcap?xvidcap-prefs-TBL-autocontinue">Aufnahmefortsetzungseinstellungen</ulink>.</para>
                             </entry>
                         </row>
+                        <row id="xvidcap-menu-TBL-show-frame">
+                            <entry>
+                                <screenshot>
+                                    <mediaobject>
+                                        <imageobject>
+                                            <imagedata fileref="figures/menu-show-frame.png" format="PNG"/>
+                                        </imageobject>
+                                        <textobject> <phrase>Rahmen Anzeigen</phrase>
+                                        </textobject>
+                                    </mediaobject>
+                                </screenshot>
+                            </entry>
+                            <entry>
+                                <para>zeigt den Rahmen um den Aufnahme-Bereich (ja/nein)</para>
+                                <para>Ist dies abgewählt, wird der Rahmen um den Aufnahme-Bereich nicht angezeigt.</para>
+                                <tip>
+                                    <title>Verbergen des Rahmens um den Aufnahmebereich</title>
+                                    <para>Dies ist besonders hilfreich, wenn Sie einen "compositing" Fenstermanager wie compiz verwenden und Effekte eingeschaltet haben, die die Bewegungen des Rahmens verzögern (z. B. wackelnde Fenster). In einem solchen Fall kann die Verzögerung Teile des Rahmens in den Aufnahme-Bereich bewegen, wodurch sie im fertigen Video sichbar werden.</para>
+				    <para>Die sauberere Lösung ist jedoch, die Effekte für Fenster der Klasse "Xvidcap" abzuschalten. Das macht das Verbergen des Rahmens unnötig.</para>
+                                </tip>
+                            </entry>
+                        </row>
                         <row id="xvidcap-menu-TBL-make-video">
                             <entry>
                                 <screenshot>
@@ -641,6 +645,22 @@
                             </entry>
                             <entry>
                                 <para>Machen Sie hier einen Haken, wenn Sie Größe und Position des aktuell ausgewählten Aufnahmebereichs zusammen mit den anderen Einstellungen abspeichern möchten sobald Sie <quote>Einstellungen Speichern</quote> aus dem Hauptmenü auswählen.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-frame-follows-mouse">
+                            <entry>
+                                <para>Aufnahme-Bereich folgt Mauszeiger</para>
+                            </entry>
+                            <entry>
+                                <para>Wählen Sie dies, wenn ein angehängter Rahmen der Bewegung des Mauszeigers folgen soll statt der des Haupt-Fensters.</para>
+                            </entry>
+                        </row>
+                        <row id="xvidcap-prefs-TBL-hide-frame">
+                            <entry>
+                                <para>Rahmen Verbergen</para>
+                            </entry>
+                            <entry>
+                                <para>Wählen Sie dies, wenn der Rahmen um den Aufnahme-Bereich verborgen werden soll. Vergleichen Sie <ulink type="help" url="ghelp:xvidcap?xvidcap-menu-TBL-show-frame">Rahmen Anzeigen</ulink> für weitere Informationen. Bedenken Sie aber, dass diese Einstellung hier anders herum wirkt, d. h. ein Haken verbirgt den Rahmen.</para>
                             </entry>
                         </row>
                         <row id="xvidcap-prefs-TBL-use-shm">
