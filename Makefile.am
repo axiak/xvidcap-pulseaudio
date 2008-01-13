@@ -35,7 +35,8 @@ EXTRA_DIST = $(xvidcapdoc_DATA) \
     xvidcap.desktop \
     ppm2mpeg.sh \
     TODO.tasks \
-    INSTALL
+    INSTALL \
+    net.jarre_de_the.Xvidcap.service.in
 
 
 # Copy all the spec files. Of cource, only one is actually used.

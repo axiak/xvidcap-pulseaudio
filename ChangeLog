@@ -1,4 +1,8 @@
 
+2008-01-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* Makefile.am, Changelog: added EXTRA_DIST
+		net.jarre_de_the.Xvidcap.service.in
+
 2007-12-16  Benjamin Larsson  <banan@ludd.ltu.se>
 	* src: codecs.c, codecs.h: added codecs
 		"Flash Screen Video" and "FFmpeg
