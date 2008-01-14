@@ -1,4 +1,9 @@
 
+2008-01-14  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: gnome_frame.c, gnome_ui.c: fix capture
+		type radio button in menu and some
+		debug statements.
+
 2008-01-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* Makefile.am, Changelog: added EXTRA_DIST
 		net.jarre_de_the.Xvidcap.service.in

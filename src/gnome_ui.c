@@ -515,8 +515,8 @@ do_record_thread ()
     long pause = 1000;
 
 #ifdef DEBUG
-    printf ("%s %s: Entering with state = %i and tid = %i\n", DEBUGFILE,
-            DEBUGFUNCTION, job->state, job->recording_thread);
+    printf ("%s %s: Entering with state = %i\n", DEBUGFILE,
+            DEBUGFUNCTION, job->state);
 #endif     // DEBUG
 
     app->recording_thread_running = TRUE;
@@ -1213,7 +1213,7 @@ start_recording_nongui_stuff ()
 #ifdef USE_XDAMAGE
         if (job->flags & FLG_USE_XDAMAGE) {
             GdkDisplay *gdpy = gdk_x11_lookup_xdisplay (app->dpy);
-            Window *children, root_return, parent_return, root;
+            Window *children, root_return, parent_return;
             XWindowAttributes root_attrs;
             unsigned int nchildren, i;
 
@@ -1507,13 +1507,23 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     g_return_if_fail (w != NULL);
     gtk_widget_hide (GTK_WIDGET (w));
 #else      // USE_FFMPEG
+    
     if (app->current_mode == 0) {
+        w = NULL;
+        w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_mitem_mf_capture");
+        g_return_if_fail (w != NULL);
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), FALSE);
+
         w = NULL;
         w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_mitem_sf_capture");
         g_return_if_fail (w != NULL);
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
-
     } else {
+        w = NULL;
+        w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_mitem_sf_capture");
+        g_return_if_fail (w != NULL);
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), FALSE);
+
         w = NULL;
         w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_mitem_mf_capture");
         g_return_if_fail (w != NULL);
@@ -2865,7 +2875,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
 
     if (gtk_toggle_tool_button_get_active (togglebutton)) {
         Cursor cursor;
-        Window root = None, target_win = None, temp = None;
+        Window target_win = None, temp = None;
         XEvent event;
         int buttons = 0;
         int x_down, y_down, x_up, y_up, x, y;

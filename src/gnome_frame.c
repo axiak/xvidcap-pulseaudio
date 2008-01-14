@@ -231,7 +231,6 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
 {
 #define DEBUGFUNCTION "xvc_change_gtk_frame()"
     extern GtkWidget *xvc_ctrl_main_window;
-    Display *dpy;
     XRectangle *x_rect = xvc_get_capture_area ();
     XVC_AppData *app = xvc_appdata_ptr ();
     struct timeval curr_time;
@@ -279,7 +278,7 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     // we have to adjust it to viewable areas
 #ifdef DEBUG
     printf ("%s %s: screen = %dx%d selection=%dx%d\n", DEBUGFILE,
-            DEBUGFUNCTION, max_width, max_height, width, height);
+            DEBUGFUNCTION, app->max_width, app->max_height, width, height);
 #endif
 
     if (x < 0)
@@ -804,8 +803,6 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     int flags = app->flags;
     XRectangle *x_rect = xvc_get_capture_area ();
     GladeXML *xml = NULL;
-    int max_width, max_height;
-    Display *dpy;
 
 #ifdef DEBUG
     printf ("%s %s: x %d y %d width %d height %d\n", DEBUGFILE,
