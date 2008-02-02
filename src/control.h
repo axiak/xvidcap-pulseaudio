@@ -41,7 +41,7 @@ Boolean xvc_init_pre (int argc, char **argv);
 Boolean xvc_ui_create ();
 Boolean xvc_frame_create ();
 void xvc_frame_change (int x, int y, int width, int height,
-                  Boolean reposition_control, Boolean show_dimensions);
+                       Boolean reposition_control, Boolean show_dimensions);
 void xvc_check_start_options ();
 Boolean xvc_ui_init (XVC_ErrorListItem * errors);
 int xvc_ui_run (void);

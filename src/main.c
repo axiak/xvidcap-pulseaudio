@@ -216,7 +216,7 @@ cleanup ()
     xvc_frame_drop_capture_display ();
 
     if (app)
-	xvc_appdata_free (app);
+        xvc_appdata_free (app);
 #ifdef USE_FFMPEG
     av_free_static ();
 #endif

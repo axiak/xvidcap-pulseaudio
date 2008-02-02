@@ -94,7 +94,8 @@ xvc_frame_get_capture_display ()
 #define DEBUGFUNCTION "xvc_frame_get_capure_display()"
     XVC_AppData *app = xvc_appdata_ptr ();
 
-    if (!(app->flags & FLG_NOGUI) && !(app->flags & FLG_NOFRAME) && gtk_frame_top) {
+    if (!(app->flags & FLG_NOGUI) && !(app->flags & FLG_NOFRAME)
+        && gtk_frame_top) {
         xvc_dpy = GDK_DRAWABLE_XDISPLAY (GTK_WIDGET (gtk_frame_top)->window);
     } else {
         if (!xvc_dpy)
@@ -401,7 +402,7 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
             job->frame_moved_x = x - app->area->x;
             job->frame_moved_y = y - app->area->y;
         }
-    } 
+    }
     return FALSE;
 #undef DEBUGFUNCTION
 }
@@ -1178,12 +1179,12 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
                           G_CALLBACK (on_gtk_frame_button_release_event), NULL);
 
     }
-        // connect event-handler to configure event of gtk control window
-        // to redraw the selection frame if the control is moved and the
-        // frame is locked
-        // this is also required with FLG_NOFRAME
-        g_signal_connect (G_OBJECT (toplevel), "configure-event",
-                          G_CALLBACK (on_gtk_frame_configure_event), NULL);
+    // connect event-handler to configure event of gtk control window
+    // to redraw the selection frame if the control is moved and the
+    // frame is locked
+    // this is also required with FLG_NOFRAME
+    g_signal_connect (G_OBJECT (toplevel), "configure-event",
+                      G_CALLBACK (on_gtk_frame_configure_event), NULL);
 
     xvc_set_frame_locked (1);
 

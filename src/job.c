@@ -124,8 +124,6 @@ static Job *
 job_new ()
 {
 #define DEBUGFUNCTION "job_new()"
-    XVC_AppData *app = xvc_appdata_ptr ();
-
     job = (Job *) malloc (sizeof (Job));
     if (!job) {
         fprintf (stderr, "%s %s: malloc failed?!?", DEBUGFILE, DEBUGFUNCTION);
@@ -159,7 +157,6 @@ job_new ()
 
 #ifdef USE_XDAMAGE
     job->dmg_region = XCreateRegion ();
-//    job->dmg_region = XFixesCreateRegion (app->dpy, NULL, 0);
 #endif     // USE_XDAMAGE
 
     job->capture_returned_errno = 0;
@@ -177,15 +174,12 @@ void
 xvc_job_free ()
 {
 #define DEBUGFUNCTION "xvc_job_free()"
-    XVC_AppData *app = xvc_appdata_ptr ();
-
     if (job != NULL) {
         if (job->color_table)
             free (job->color_table);
 
 #ifdef USE_XDAMAGE
         XDestroyRegion (job->dmg_region);
-//        XFixesDestroyRegion (app->dpy, job->dmg_region);
 #endif     // USE_XDAMAGE
 
         if (job->c_info)

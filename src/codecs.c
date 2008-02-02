@@ -970,7 +970,7 @@ xvc_get_index_of_fps_array_element (int size,
  * @return the fps value read from the string or { 0, 1}
  */
 XVC_Fps
-xvc_read_fps_from_string (char *fps_string)
+xvc_read_fps_from_string (const char *fps_string)
 {
     struct lconv *loc = localeconv ();
     XVC_Fps fps = { 0, 1 };

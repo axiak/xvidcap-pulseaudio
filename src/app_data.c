@@ -424,7 +424,8 @@ xvc_appdata_set_defaults (XVC_AppData * lapp)
  * @see XVC_CapTypeOptions
  */
 void
-xvc_captypeoptions_copy (XVC_CapTypeOptions * topts, XVC_CapTypeOptions * sopts)
+xvc_captypeoptions_copy (XVC_CapTypeOptions * topts,
+                         const XVC_CapTypeOptions * sopts)
 {
     topts->file = strdup (sopts->file);
     topts->target = sopts->target;
@@ -457,7 +458,7 @@ xvc_captypeoptions_copy (XVC_CapTypeOptions * topts, XVC_CapTypeOptions * sopts)
  * @see XVC_AppData
  */
 void
-xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp)
+xvc_appdata_copy (XVC_AppData * tapp, const XVC_AppData * sapp)
 {
     tapp->use_xdamage = sapp->use_xdamage;
     tapp->verbose = sapp->verbose;
@@ -525,8 +526,6 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
     XVC_CapTypeOptions *target = NULL;
     XVC_ErrorListItem *errors = NULL;
     int t_codec, t_format;
-    Display *dpy;
-    int max_width, max_height;
 
 #ifdef USE_FFMPEG
     XVC_CapTypeOptions *non_target = NULL;
@@ -903,7 +902,7 @@ xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc)
                 *rc = -1;
                 return NULL;
             }
-            
+
         }
     } else if (lapp->current_mode == 0 && !XVC_FPS_GT_ZERO (target->fps)) {
         errors = errorlist_append (28, errors, lapp);
@@ -1447,7 +1446,7 @@ xvc_appdata_merge_captypeoptions (XVC_CapTypeOptions * cto, XVC_AppData * lapp)
 static void
 error_exit_action (XVC_ErrorListItem * err)
 {
-    raise(SIGINT);
+    raise (SIGINT);
 }
 
 /**
@@ -2451,9 +2450,10 @@ xvc_error_write_msg (int code, int print_action_or_not)
             break;
         }
     }
-    if (a == 0) return;
+    if (a == 0)
+        return;
     err = &(xvc_errors[a]);
-    
+
     switch (err->type) {
     case 1:
         type = _("FATAL ERROR");
@@ -2585,13 +2585,14 @@ error_write_action_msg (int code)
  *      - 2 : replace number pattern by the number passed as number
  */
 void
-xvc_command_execute (char *command, int flag, int number, char *file,
-                     int fframe, int lframe, int width, int height, XVC_Fps fps)
+xvc_command_execute (const char *command, int flag, int number,
+                     const char *file, int fframe, int lframe, int width,
+                     int height, XVC_Fps fps)
 {
 #define DEBUGFUNCTION "xvc_command_execute()"
 #define BUFLENGTH ((PATH_MAX * 5) + 1)
     char buf[BUFLENGTH];
-    char *myfile = NULL;
+    const char *myfile = NULL;
     int k;
 
 #ifdef DEBUG
@@ -2604,10 +2605,10 @@ xvc_command_execute (char *command, int flag, int number, char *file,
         break;
     case 1:
         {
-            char file_buf[PATH_MAX + 1], *p;
+            char file_buf[PATH_MAX + 1];
+            const char *p = file;
             int i = 0, n = 0;
 
-            p = file;
             while (*p && (p - file) <= PATH_MAX && (p - file) <= strlen (file)) {
                 if (*p == '%') {
                     p++;
@@ -2702,6 +2703,8 @@ xvc_command_execute (char *command, int flag, int number, char *file,
     // sf-edit: flag 2
     // gimp "${XVFILE}" &
 
+    free ((void *) myfile);
+
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
 #endif     // DEBUG
@@ -2716,7 +2719,7 @@ xvc_command_execute (char *command, int flag, int number, char *file,
  * @return has pattern TRUE or FALSE
  */
 Boolean
-xvc_is_filename_mutable (char *filename)
+xvc_is_filename_mutable (const char *filename)
 {
     char file[PATH_MAX + 1];
 

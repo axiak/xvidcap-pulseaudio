@@ -1142,7 +1142,6 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
         }
     }
-
     // capture area follows mouse pointer
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_follow_mouse_checkbutton");
@@ -1153,7 +1152,6 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
         }
     }
-
     // hide frame around capture area
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_hide_frame_checkbutton");
@@ -1164,7 +1162,6 @@ xvc_create_pref_dialog (XVC_AppData * lapp)
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), FALSE);
         }
     }
-
     // shared memory
     w = NULL;
     w = glade_xml_get_widget (xml, "xvc_pref_shared_mem_checkbutton");

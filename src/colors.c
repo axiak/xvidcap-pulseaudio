@@ -41,7 +41,8 @@
  * @return the number of colors retrieved
  */
 int
-xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors)
+xvc_get_colors (Display * dpy, const XWindowAttributes * winfo,
+                XColor ** colors)
 {
 # define lowbit(x) ((x) & (~(x) + 1))
     int ncolors, i;
@@ -104,7 +105,7 @@ xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors)
  * @param ci pointer to a ColorInfo struct
  */
 ColorInfo *
-xvc_get_color_info (XImage * image)
+xvc_get_color_info (const XImage * image)
 {
 #define DEBUGFUNCTION "xvc_get_color_info"
 

@@ -146,8 +146,10 @@ static uint8_t *scratchbuf8bit;
 static XVC_CapTypeOptions *target = NULL;
 
 #ifdef DEBUG
-static void dump8bit (XImage * image, u_int32_t * ct);
-static void dump32bit (XImage * input, ColorInfo * c_info);
+static void dump8bit (const XImage * image, const u_int32_t * ct);
+static void dump32bit (const XImage * input, const ColorInfo * c_info);
+
+/** \todo: what about const-correctness for the next line */
 static void x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp);
 #endif     // DEBUG
 
@@ -513,7 +515,7 @@ add_audio_stream (Job * job)
  */
 static void
 do_audio_out (AVFormatContext * s, AVOutputStream * ost,
-              AVInputStream * ist, unsigned char *buf, int size)
+              const AVInputStream * ist, unsigned char *buf, int size)
 {
 #define DEBUGFUNCTION "do_audio_out()"
     uint8_t *buftmp;
@@ -1132,7 +1134,7 @@ prepareOutputFile (char *jFileName, AVFormatContext * oc, int number)
  * @return pointer to the AVStream that has been added to the output format
  */
 static AVStream *
-add_video_stream (AVFormatContext * oc, XImage * image,
+add_video_stream (AVFormatContext * oc, const XImage * image,
                   int input_pixfmt, int codec_id, Job * job)
 {
 #define DEBUGFUNCTION "add_video_stream()"
@@ -1277,7 +1279,7 @@ add_video_stream (AVFormatContext * oc, XImage * image,
  * @return libavcodec's picture format
  */
 static int
-guess_input_pix_fmt (XImage * image, ColorInfo * c_info)
+guess_input_pix_fmt (const XImage * image, const ColorInfo * c_info)
 {
 #define DEBUGFUNCTION "guess_input_pix_fmt()"
     int input_pixfmt;
@@ -1939,7 +1941,7 @@ x2ffmpeg_dump_ximage_info (XImage * img, FILE * fp)
  * @param input XImage to dump to pnm
  */
 static void
-dump32bit (XImage * input, ColorInfo * c_info)
+dump32bit (const XImage * input, const ColorInfo * c_info)
 {
 #define DEBUGFUNCTION "dump32bit()"
 
@@ -2006,7 +2008,7 @@ dump32bit (XImage * input, ColorInfo * c_info)
  * @param ct pointer to color table
  */
 static void
-dump8bit (XImage * image, u_int32_t * ct)
+dump8bit (const XImage * image, const u_int32_t * ct)
 {
 #define DEBUGFUNCTION "dump8bit()"
 

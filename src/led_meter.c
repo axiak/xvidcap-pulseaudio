@@ -231,7 +231,7 @@ led_meter_set_percent (LedMeter * lm, int percent)
  * @param tip string to set as tooltip
  */
 void
-led_meter_set_tip (LedMeter * lm, char *tip)
+led_meter_set_tip (LedMeter * lm, const char *tip)
 {
     static GtkTooltips *tooltips;
 

@@ -54,7 +54,8 @@ typedef struct
     u_int32_t alpha_mask;
 } ColorInfo;
 
-ColorInfo *xvc_get_color_info (XImage * image);
-int xvc_get_colors (Display * dpy, XWindowAttributes * winfo, XColor ** colors);
+ColorInfo *xvc_get_color_info (const XImage * image);
+int xvc_get_colors (Display * dpy, const XWindowAttributes * winfo,
+                    XColor ** colors);
 
 #endif     // __COLORS_H__

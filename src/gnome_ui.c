@@ -1507,7 +1507,7 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     g_return_if_fail (w != NULL);
     gtk_widget_hide (GTK_WIDGET (w));
 #else      // USE_FFMPEG
-    
+
     if (app->current_mode == 0) {
         w = NULL;
         w = glade_xml_get_widget (menuxml, "xvc_ctrl_m1_mitem_mf_capture");

@@ -1,4 +1,14 @@
 
+2008-02-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* aclocal.m4, src: led_meter.c, codecs.c, 
+		colors.c, led_meter.h, codecs.h, 
+		colors.h, control.h, xtoffmpeg.c, 
+		gnome_ui.c, capture.c, app_data.c, 
+		job.c, app_data.h, gnome_frame.c, 
+		gnome_options.c, main.c, options.c: 
+		indentation and fix for bug # 1880627,
+		thanks Markus for the original patch.
+
 2008-01-14  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_frame.c, gnome_ui.c: fix capture
 		type radio button in menu and some

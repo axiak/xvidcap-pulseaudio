@@ -226,6 +226,6 @@ int xvc_codec_is_valid_fps (XVC_Fps fps, XVC_CodecID codec, int exact);
 int xvc_get_index_of_fps_array_element (int size,
                                         const XVC_Fps * haystack,
                                         XVC_Fps needle, int exact);
-XVC_Fps xvc_read_fps_from_string (char *fps_string);
+XVC_Fps xvc_read_fps_from_string (const char *fps_string);
 
 #endif     // __CODECS_H__

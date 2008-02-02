@@ -349,23 +349,23 @@ void xvc_appdata_free (XVC_AppData * lapp);
 XVC_AppData *xvc_appdata_ptr (void);
 void xvc_appdata_init (XVC_AppData * lapp);
 void xvc_appdata_set_defaults (XVC_AppData * lapp);
-void xvc_appdata_copy (XVC_AppData * tapp, XVC_AppData * sapp);
+void xvc_appdata_copy (XVC_AppData * tapp, const XVC_AppData * sapp);
 void xvc_appdata_merge_captypeoptions (XVC_CapTypeOptions * cto,
                                        XVC_AppData * lapp);
 XVC_ErrorListItem *xvc_appdata_validate (XVC_AppData * lapp, int mode, int *rc);
 void xvc_appdata_set_window_attributes (Window win);
 
 void xvc_captypeoptions_copy (XVC_CapTypeOptions * topts,
-                              XVC_CapTypeOptions * sopts);
+                              const XVC_CapTypeOptions * sopts);
 void xvc_captypeoptions_init (XVC_CapTypeOptions * cto);
 
 XVC_ErrorListItem *xvc_errorlist_delete (XVC_ErrorListItem * err);
 void xvc_error_write_msg (int code, int print_action_or_not);
 
-Boolean xvc_is_filename_mutable (char *);
+Boolean xvc_is_filename_mutable (const char *);
 int xvc_get_number_of_fraction_digits_from_float_string (const char *input);
-void xvc_command_execute (char *command, int flag, int number, char *file,
-                          int fframe, int lframe, int width, int height,
-                          XVC_Fps fps);
+void xvc_command_execute (const char *command, int flag, int number,
+                          const char *file, int fframe, int lframe, int width,
+                          int height, XVC_Fps fps);
 
 #endif     // __APP_DATA_H__

@@ -72,7 +72,7 @@ extern "C"
     GtkType led_meter_get_type (void);
     GtkWidget *led_meter_new (void);
     void led_meter_set_percent (LedMeter *, int);
-    void led_meter_set_tip (LedMeter * lm, char *tip);
+    void led_meter_set_tip (LedMeter * lm, const char *tip);
 
 #ifdef __cplusplus
 }

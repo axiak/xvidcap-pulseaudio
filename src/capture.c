@@ -274,12 +274,11 @@ paintMousePointer (XImage * image, int x, int y)
     int cursor_width = 16, cursor_height = 20;
     XVC_AppData *app = xvc_appdata_ptr ();
     Job *job = xvc_job_ptr ();
-    XRectangle pArea;
+    XRectangle pArea = { 0, 0, 0, 0 };
 
 #ifdef HAVE_LIBXFIXES
     unsigned char topp, botp;
     unsigned long applied;
-    XFixesCursorImage *x_cursor = NULL;
 #endif     // HAVE_LIBXFIXES
 
     // only paint a mouse pointer into the dummy frame if the position of
@@ -290,7 +289,6 @@ paintMousePointer (XImage * image, int x, int y)
 #ifdef USE_XDAMAGE
         // if we use xfixes, we want a cursor image
         if (!my_x_cursor) {
-            pArea.x = pArea.y = pArea.width, pArea.height = 0;
             return pArea;
         }
 #else      // USE_XDAMAGE
@@ -1176,7 +1174,6 @@ commonCapture (enum captureFunctions capfunc)
 #endif     // USE_FFMPEG
         target = &(app->single_frame);
 
-
     // we really cannot have external state changes 
     // while we're reacting on state
     // frame moves, too, are evil
@@ -1193,8 +1190,8 @@ commonCapture (enum captureFunctions capfunc)
         // capture to avoid capturing the frame (this is not a guarantee with
         // compositing window managers, though)
         XSync (app->dpy, False);
-    } else if ((app->flags & FLG_LOCK_FOLLOWS_MOUSE) != 0 && 
-        xvc_is_frame_locked()) {
+    } else if ((app->flags & FLG_LOCK_FOLLOWS_MOUSE) != 0 &&
+               xvc_is_frame_locked ()) {
         int px = 0, py = 0;
         int x = app->area->x, y = app->area->y;
         int width = app->area->width, height = app->area->height;
@@ -1221,7 +1218,6 @@ commonCapture (enum captureFunctions capfunc)
             XSync (app->dpy, False);
         }
     }
-
     // wait for next iteration if pausing
     if (job->state & VC_REC) {         // if recording ...
 
@@ -1358,7 +1354,7 @@ commonCapture (enum captureFunctions capfunc)
             }
 
             if (app->mouseWanted > 0) {
-#ifdef HAVE_LIBXFIXES_NONE
+#ifdef HAVE_LIBXFIXES
                 if (app->flags & FLG_USE_XFIXES)
                     x_cursor = getCurrentPointerImage ();
                 else
@@ -1520,9 +1516,11 @@ commonCapture (enum captureFunctions capfunc)
                 // reference during capture of next frame, only get it here
                 // for minimizing locking
                 if (app->mouseWanted > 0) {
+#ifdef HAVE_LIBXFIXES
                     if (app->flags & FLG_USE_XFIXES)
                         x_cursor = getCurrentPointerImage ();
                     else
+#endif     // HAVE_LIBXFIXES
                         getCurrentPointer (&pointer_x, &pointer_y);
                 }
                 // now we can release the lock on the display again
