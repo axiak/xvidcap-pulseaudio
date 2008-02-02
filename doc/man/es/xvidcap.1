@@ -5,7 +5,7 @@
 \\$2 \(la\\$1\(ra\\$3
 ..
 .if \n(.g .mso www.tmac
-.TH xvidcap 1 "11 January 2008" "Septiembre 2006" ""
+.TH xvidcap 1 "2 February 2008" "Septiembre 2006" ""
 .SH NAME
 XVidCap \- Graba porciones de una ventana X11 a video
 .SH SYNOPSIS
@@ -15,43 +15,43 @@ XVidCap \- Graba porciones de una ventana X11 a video
 \fBxvidcap\fR \kx
 .if (\nx>(\n(.l/2)) .nr x (\n(.l/5)
 'in \n(.iu+\nxu
-[-v] [ --mf | --sf ] [--file\fI nombre de fichero\fR |- ] [--fps\fI frames por segundo\fR] [--cap_geometry\fI geometr\('ia\fR] [--rescale\fI tama\(~no en porcentaje\fR] [--quality\fI calidad en porcentaje\fR] [--source x11|shm ] [--time\fI duraci\('on m\('axima en segundos\fR] [--frames\fI n\('umero m\('aximo de frames\fR] [--start_no\fI n\('umero del frame de inicio\fR] [--continue yes|no ] [--gui yes|no ] [--auto] [--codec\fI codec de video\fR] [--codec-help] [--format\fI formato de fichero de salida\fR] [--format-help] [--audio yes|no ] [--aucodec\fI codec de audio\fR] [--aucodec-help] [--audio_in\fI dispositivo de captura de audio\fR |- ] [--audio_bits\fI bit rate de audio\fR] [--audio_rate\fI sample rate de audio\fR] [--audio_channels\fI canales de audio\fR]
+[-v] [ --mf | --sf ] [--file\fI nombre de fichero\fR |- ] [--fps\fI frames por segundo\fR] [--cap_geometry\fI geometr\(~A\%a\fR] [--rescale\fI tama\(~A\(+-o en porcentaje\fR] [--quality\fI calidad en porcentaje\fR] [--source x11|shm ] [--time\fI duraci\(~A\(S3n m\(~A\(r!xima en segundos\fR] [--frames\fI n\(~A\(Ommero m\(~A\(r!ximo de frames\fR] [--start_no\fI n\(~A\(Ommero del frame de inicio\fR] [--continue yes|no ] [--gui yes|no ] [--auto] [--codec\fI codec de video\fR] [--codec-help] [--format\fI formato de fichero de salida\fR] [--format-help] [--audio yes|no ] [--aucodec\fI codec de audio\fR] [--aucodec-help] [--audio_in\fI dispositivo de captura de audio\fR |- ] [--audio_bits\fI bit rate de audio\fR] [--audio_rate\fI sample rate de audio\fR] [--audio_channels\fI canales de audio\fR]
 'in \n(.iu-\nxu
 .ad b
 'hy
-.SH INTRODUCCI\('oN
-xvidcap es una herramienta que captura a fichero el movimiento en un \('area seleccionada 
+.SH INTRODUCCI\(~A\(S3N
+xvidcap es una herramienta que captura a fichero el movimiento en un \(~A\(r!rea seleccionada 
 de la pantalla. Puede operar en dos modos distintos: (1) captura \fIsingle-frame\fR
 o (2) captura \fImulti-frame\fR. En modo de captura single-frame 
-xvidcap saca un n\('umero configurable de capturas por segundo y 
+xvidcap saca un n\(~A\(Ommero configurable de capturas por segundo y 
 los guarda como ficheros individuales. En modo de captura multi-frame xvidcap 
-tambi\('en saca un n\('umero de capturas por segundo, pero las codifica en un solo fichero de video en tiempo real. 
-La captura de audio solo est\('a disponible con formatos multi-frame.
+tambi\(~A\(con saca un n\(~A\(Ommero de capturas por segundo, pero las codifica en un solo fichero de video en tiempo real. 
+La captura de audio solo est\(~A\(r! disponible con formatos multi-frame.
 .PP
 Es conveniente grabar en modo de captura single-frame si se pretende preprocesar las 
-im\('agenes antes de codificarlas a video, o si necesita otros codecs de video que xvidcap 
-no soporta. Las im\('agenes individuales pueden posteriormente ser codificadas utilizando herramientas como ffmpeg, mencoder
+im\(~A\(r!genes antes de codificarlas a video, o si necesita otros codecs de video que xvidcap 
+no soporta. Las im\(~A\(r!genes individuales pueden posteriormente ser codificadas utilizando herramientas como ffmpeg, mencoder
 o transcode.
 .PP
-Para ayuda, nuevas caracter\('isticas, o reportar bugs por favor dir\('ijase a 
+Para ayuda, nuevas caracter\(~A\%sticas, o reportar bugs por favor dir\(~A\%jase a 
 .URL //www.sourceforge.net/projects/xvidcap/ http://www.sourceforge.net/projects/xvidcap/
 .SH OPCIONES
 Estos programas siguen la sintaxis de la linea de comandos GNU, 
 con opciones de nombre largo comenzando por dos guiones (\*(T<\-\-\*(T>). 
-Un sumario de las opciones puede verse a continuaci\('on.
+Un sumario de las opciones puede verse a continuaci\(~A\(S3n.
 .TP 
 \*(T<\fB\-v\fR\*(T>
-Ejecuta xvidcap en modo verbose. Esto proporciona m\('as informaci\('on sobre
+Ejecuta xvidcap en modo verbose. Esto proporciona m\(~A\(r!s informaci\(~A\(S3n sobre
 ajustes de usuario, codecs de entrada y salida, rendimiento, ... Mensajes 
-como \(oq"missing XX milli secs .."\(cq durante la captura significa que est\('a perdiendo 
+como \(^a€˜"missing XX milli secs .."\(^a€™ durante la captura significa que est\(~A\(r! perdiendo 
 frames debido a la falta de recursos (frames perdidos). Esto resulta en un video 
-que se reproducir\('a acelerado. Tenga en cuenta que el modo verbose ralentiza 
-xvidcap y podr\('ia ser el \fIcausante\fR de perdidas de frames. Pruebe a ejeutarlo sin 
+que se reproducir\(~A\(r! acelerado. Tenga en cuenta que el modo verbose ralentiza 
+xvidcap y podr\(~A\%a ser el \fIcausante\fR de perdidas de frames. Pruebe a ejeutarlo sin 
 modo verbose y observe el contador de frames perdidos.
 .TP 
 \*(T<\fB\-\-mf\fR\*(T> | \*(T<\fB\-\-sf\fR\*(T>
 xvidcap intenta adivinar el modo de captura que desea. Si usted 
-especifica \*(T<\-\-file test.avi\*(T> xvidcap asumir\('a que usted desea una captura multi-frame.
+especifica \*(T<\-\-file test.avi\*(T> xvidcap asumir\(~A\(r! que usted desea una captura multi-frame.
 Puede especificar explicitamente el modo de captura deseado en la linea de comandos con este 
 modificador. Si, por ejemplo, usted tiene sus ajustes correctamente configurados y 
 guardados con captura multi-frame como modo por defecto, ejecutar \*(T<xvidcap \-\-sf\*(T>

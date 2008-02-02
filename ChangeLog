@@ -8,6 +8,13 @@
 		gnome_options.c, main.c, options.c: 
 		indentation and fix for bug # 1880627,
 		thanks Markus for the original patch.
+	* configure.in, config.h.in, acinclude.m4,
+		aclocal.m4: fix for rfe # 1880629
+	* doc/xvidcap/it/xvidcap.xml, doc:  
+		C/xvidcap-dbus-client.1, C/xvidcap.1, 
+		es/xvidcap.1, de/xvidcap-dbus-client.1, 
+		de/xvidcap.1, it/xvidcap.1.xml, 
+		it/xvidcap.1: regenerated docs
 
 2008-01-14  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: gnome_frame.c, gnome_ui.c: fix capture

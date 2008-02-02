@@ -4,7 +4,7 @@
     <refmeta>
         <refentrytitle>xvidcap</refentrytitle>
         <manvolnum>1</manvolnum>
-        <refmiscinfo>November 2007</refmiscinfo>
+        <refmiscinfo>January 2008</refmiscinfo>
     </refmeta>
     <refnamediv id="name">
         <refname>XVidCap</refname>
@@ -53,7 +53,9 @@
     <refsect1 id="intro"><title>Introduzione</title>
         <para><application>xvidcap</application> è uno strumento che acquisisce su file il movimento presente in un'area selezionata di uno schermo X11. Può essere usato in due diverse modalità: (1) acquisizione a <emphasis>fotogramma singolo</emphasis> e (2) acquisizione a <emphasis>fotogrammi multipli</emphasis>. In modalità di acquisizione a fotogramma singolo <application>xvidcap</application> cattura un numero configurabile di schermate per secondo e le salva in file distinti. Anche in modalità di acquisizione a fotogrammi multipli <application>xvidcap</application> cattura un numero di schermate per secondo, ma le codifica in un singolo video in tempo reale. L'acquisizione audio è disponibile solo con i formati a fotogrammi multipli.</para>
         <para>La registrazione in modalità di acquisizione a fotogramma singolo potrebbe essere più conveniente se si desidera preprocessare le immagini prima della codifica, o se si vuole usare codificatori video che <application>xvidcap</application> non supporta. Le singole immagini possono essere successivamente codificate con strumenti quali ffmpeg, mencoder, o transcode.</para>
-        <para>Per aiuto, richieste di nuove funzionalità, o segnalazione di bug, visitare il sito <ulink url="//www.sourceforge.net/projects/xvidcap/">http://www.sourceforge.net/projects/xvidcap/</ulink></para>
+        <para>
+            For help, feature requests, or bug-reports please turn to http://www.sourceforge.net/projects/xvidcap/
+        </para>
     </refsect1>
 
     <refsect1 id="options"><title>Opzioni</title>

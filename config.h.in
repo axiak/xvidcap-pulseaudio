@@ -66,9 +66,6 @@
 /* Define to 1 if you have the `ogg' library (-logg). */
 #undef HAVE_LIBOGG
 
-/* Define to 1 if you have the `pthread' library (-lpthread). */
-#undef HAVE_LIBPTHREAD
-
 /* Define to 1 if you have the `swscale' library (-lswscale). */
 #undef HAVE_LIBSWSCALE
 
@@ -111,6 +108,9 @@
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #undef HAVE_NETINET_IN_H
+
+/* Define if you have POSIX threads libraries and header files. */
+#undef HAVE_PTHREAD
 
 /* Define to 1 if your system has a GNU libc compatible `realloc' function,
    and to 0 otherwise. */
@@ -184,6 +184,10 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* Define to necessary symbol if this constant uses a non-standard name on
+   your system. */
+#undef PTHREAD_CREATE_JOINABLE
 
 /* define if building on Solaris */
 #undef SOLARIS
