@@ -2703,7 +2703,12 @@ xvc_command_execute (const char *command, int flag, int number,
     // sf-edit: flag 2
     // gimp "${XVFILE}" &
 
-    free ((void *) myfile);
+    switch (flag) {
+        case 1:
+        case 2:
+            free ((void *) myfile);
+            break;
+    }
 
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
