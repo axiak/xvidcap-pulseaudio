@@ -2,6 +2,8 @@
 2008-02-03  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/app_data.c: fix for but #1885105 was
 		incomplete
+	* src/app_data.c: fix for but #1885105 was
+		still flawed
 
 2008-02-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* aclocal.m4, src: led_meter.c, codecs.c, 

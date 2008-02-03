@@ -2703,12 +2703,9 @@ xvc_command_execute (const char *command, int flag, int number,
     // sf-edit: flag 2
     // gimp "${XVFILE}" &
 
-    switch (flag) {
-        case 1:
-        case 2:
-            free ((void *) myfile);
-            break;
-    }
+    // in case we constructed a filename pattern, we need to free it again
+    if (myfile != file)
+        free ((void *) myfile);
 
 #ifdef DEBUG
     printf ("%s %s: Leaving\n", DEBUGFILE, DEBUGFUNCTION);
