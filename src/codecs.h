@@ -38,7 +38,7 @@
  *      the AVRational struct ... and copy it because we might build without
  *      ffmpeg
  */
-typedef struct _XVC_Fps
+typedef struct _xvc_Fps
 {
     int num;
     int den;
@@ -49,7 +49,7 @@ typedef struct _XVC_Fps
  *      about those, so we wrap the XVC_Fps struct in XVC_FpsRange structs
  *      with a defined start and end
  */
-typedef struct _XVC_FpsRange
+typedef struct _xvc_FpsRange
 {
     XVC_Fps start;
     XVC_Fps end;
@@ -94,7 +94,7 @@ typedef enum
 #endif     // USE_FFMPEG
 
 /** \brief struct containing codec properties */
-typedef struct _XVC_Codec
+typedef struct _xvc_Codec
 {
     const char *name;
     const char *longname;
@@ -129,7 +129,7 @@ typedef enum
 } XVC_AuCodecID;
 
 /** \brief struct containing audio codec properties */
-typedef struct _XVC_AuCodec
+typedef struct _xvc_AuCodec
 {
     const char *name;
     const char *longname;
@@ -174,7 +174,7 @@ typedef enum
 #endif     // USE_FFMPEG
 
 /** \brief struct containing file format properties */
-typedef struct _XVC_FFormat
+typedef struct _xvc_FFormat
 {
     const char *name;
     const char *longname;

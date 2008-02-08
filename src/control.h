@@ -30,7 +30,7 @@
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <X11/Intrinsic.h>
-#include "xv_error_item.h"
+#include "xvc_error_item.h"
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 // the following defines the xvc interface for UIs

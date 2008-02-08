@@ -284,13 +284,13 @@ enum XVC_ErrorType
     XVC_ERR_INFO
 };
 
-struct _XVC_ErrorListItem;
+struct _xvc_ErrorListItem;
 
 /**
  * \brief all information about a given error related to an inconsistency
  *      regarding user preferences is contained here.
  */
-typedef struct _XVC_Error
+typedef struct _xvc_Error
 {
     /** \brief error code */
     const enum XVC_ErrorType code;
@@ -305,7 +305,7 @@ typedef struct _XVC_Error
     /** \brief long description in full sentences */
     const char *long_msg;
     /** \brief default action */
-    void (*action) (struct _XVC_ErrorListItem *);
+    void (*action) (struct _xvc_ErrorListItem *);
     /**
      * \brief describes what the default action does
      *
@@ -330,16 +330,16 @@ extern const XVC_Error xvc_errors[NUMERRORS];
  * \brief wraps an xv_Error in an XVC_ErrorListItem to create a double-linked
  *      list of errors.
  */
-typedef struct _XVC_ErrorListItem
+typedef struct _xvc_ErrorListItem
 {
     /** \brief pointer to actual error */
-    const struct _XVC_Error *err;
+    const struct _xvc_Error *err;
     /** \brief pointer to app_data that threw error */
     XVC_AppData *app;
     /** \brief previous element in the double-linked list */
-    struct _XVC_ErrorListItem *previous;
+    struct _xvc_ErrorListItem *previous;
     /** \brief next element in the double-linked list */
-    struct _XVC_ErrorListItem *next;
+    struct _xvc_ErrorListItem *next;
 } XVC_ErrorListItem;
 
 /*

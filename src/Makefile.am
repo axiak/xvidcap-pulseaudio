@@ -48,8 +48,8 @@ xvidcap_SOURCES = \
     xtoxwd.h \
     job.c \
     job.h \
-    xv_error_item.c \
-    xv_error_item.h \
+    xvc_error_item.c \
+    xvc_error_item.h \
     xvidcap-intl.h \
         eggtrayicon.h \
         eggtrayicon.c

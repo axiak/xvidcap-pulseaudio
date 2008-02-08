@@ -47,7 +47,7 @@
 #include "control.h"
 #include "gnome_options.h"
 #include "gnome_ui.h"
-#include "xv_error_item.h"
+#include "xvc_error_item.h"
 #include "app_data.h"
 
 /*
@@ -213,7 +213,7 @@ xvc_create_warning_with_errors (XVC_ErrorListItem * elist, int from_where)
                 || (app->flags & FLG_RUN_VERBOSE)) {
                 if (err->err->type == XVC_ERR_FATAL)
                     count_fatal_messages++;
-                eitem = xv_error_item_new_with_error (err->err);
+                eitem = xvc_error_item_new_with_error (err->err);
                 gtk_box_pack_start (GTK_BOX (vbox), eitem, FALSE, FALSE, 0);
                 gtk_widget_show (eitem);
             }

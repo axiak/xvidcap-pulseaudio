@@ -2302,7 +2302,7 @@ errorlist_append (int code, XVC_ErrorListItem * err, XVC_AppData * app)
     // could not find error to add to list
     if (a < 0)
         return NULL;
-    new_err = malloc (sizeof (struct _XVC_ErrorListItem));
+    new_err = malloc (sizeof (struct _xvc_ErrorListItem));
     if (!new_err)
         return NULL;
 

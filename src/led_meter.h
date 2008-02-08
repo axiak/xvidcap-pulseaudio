@@ -50,10 +50,10 @@ extern "C"
         LM_HIGH
     };
 
-    typedef struct _LedMeter LedMeter;
-    typedef struct _LedMeterClass LedMeterClass;
+    typedef struct _ledMeter LedMeter;
+    typedef struct _ledMeterClass LedMeterClass;
 
-    struct _LedMeter
+    struct _ledMeter
     {
         GtkVBox vbox;
         GtkWidget *ebox;
@@ -62,7 +62,7 @@ extern "C"
         gint max_da, old_max_da;
     };
 
-    struct _LedMeterClass
+    struct _ledMeterClass
     {
         GtkVBoxClass parent_class;
 

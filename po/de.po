@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-13 22:19+0100\n"
+"POT-Creation-Date: 2008-02-08 13:37+0100\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: German\n"
@@ -31,7 +31,7 @@ msgstr ""
 "xterm -e \"echo Bei Echtzeit-Enkodierung nicht erforderlich; echo Enter "
 "schliesst diese Meldung; read\""
 
-#: ../src/app_data.c:560 ../src/app_data.c:1384
+#: ../src/app_data.c:559 ../src/app_data.c:1383
 #, c-format
 msgid ""
 "%s %s: Capture mode not single_frame (%i) but we don't have ffmpeg ... "
@@ -42,13 +42,13 @@ msgstr ""
 
 # user selected capture from a V4L device but V4L support is not present
 # this is the error's short name
-#: ../src/app_data.c:1889
+#: ../src/app_data.c:1888
 msgid "No V4L available"
 msgstr "V4L nicht verfügbar"
 
 # user selected capture from a V4L device but V4L support is not present
 # this is the error's description
-#: ../src/app_data.c:1891
+#: ../src/app_data.c:1890
 msgid ""
 "Video for Linux is selected as the capture source but V4L is not available "
 "with this binary."
@@ -57,48 +57,48 @@ msgstr ""
 "Unterstützung ist in diese Anwendung nicht hineinkompiliert."
 
 # error action message
-#: ../src/app_data.c:1893
+#: ../src/app_data.c:1892
 msgid "Set capture source to 'x11'"
 msgstr "\"X11\" als Aufnahmequelle auswählen"
 
 # selected V4L device not accessible
 # this is the error's short name
-#: ../src/app_data.c:1898
+#: ../src/app_data.c:1897
 msgid "V4L device inaccessible"
 msgstr "V4L Gerät nicht verwendbar"
 
 # selected V4L device not accessible
 # this is the error's description
-#: ../src/app_data.c:1899
+#: ../src/app_data.c:1898
 msgid "Can't open the specified Video for Linux device."
 msgstr "Kann das angegebene \"Video for Linux\" Gerät nicht ansprechen."
 
 # selected V4L device not accessible ... and other errors
 # this is the error's action message
-#: ../src/app_data.c:1901 ../src/app_data.c:1909 ../src/app_data.c:1960
-#: ../src/app_data.c:1969 ../src/app_data.c:2120
+#: ../src/app_data.c:1900 ../src/app_data.c:1908 ../src/app_data.c:1959
+#: ../src/app_data.c:1968 ../src/app_data.c:2119
 msgid "Quit"
 msgstr "Beenden"
 
 # error short name
-#: ../src/app_data.c:1906
+#: ../src/app_data.c:1905
 msgid "V4L can't capture"
 msgstr "Kann nicht per V4L aufnehmen"
 
 # error description
-#: ../src/app_data.c:1907
+#: ../src/app_data.c:1906
 msgid "The specified Video for Linux device can't capture to memory."
 msgstr ""
 "Das angegebene \"Video for Linux\" Gerät kann nicht in Hauptspeicher "
 "aufnehmen."
 
 # error short name
-#: ../src/app_data.c:1914
+#: ../src/app_data.c:1913
 msgid "Capture size exceeds V4L limits"
 msgstr "Aufnahme-Bereichs jenseits V4L Beschränkungen"
 
 # error description
-#: ../src/app_data.c:1916
+#: ../src/app_data.c:1915
 msgid ""
 "The specified capture size exceeds the limits for Video for Linux capture."
 msgstr ""
@@ -106,35 +106,35 @@ msgstr ""
 "Beschränkungen für die Aufnahme von \"Video for Linux\" Geräten."
 
 # error action message
-#: ../src/app_data.c:1918
+#: ../src/app_data.c:1917
 msgid "Increase or decrease the capture area to conform to V4L's limits"
 msgstr ""
 "Den Aufnahme-Bereich vergrößern oder verkleinern, um den V4L Beschränkungen "
 "gerecht zu werden"
 
 # error short name
-#: ../src/app_data.c:1923
+#: ../src/app_data.c:1922
 msgid "Capture area outside screen"
 msgstr "Aufnahme-Bereich ausserhalb des Bildschirms"
 
 # error description
-#: ../src/app_data.c:1924
+#: ../src/app_data.c:1923
 msgid "The specified capture area reaches beyond the visible screen."
 msgstr ""
 "Der angegebene Aufnahme-Bereich ragt aus dem sichtbaren Bildbereich heraus."
 
 # error action message
-#: ../src/app_data.c:1926
+#: ../src/app_data.c:1925
 msgid "Clip capture size to visible screen"
 msgstr "Aufnahme-Bereich auf sichtbaren Bereich beschränken"
 
 # error short name
-#: ../src/app_data.c:1931
+#: ../src/app_data.c:1930
 msgid "Invalid Mouse Capture Option"
 msgstr "Ungültige Einstellung für Mauszeiger"
 
 # error description
-#: ../src/app_data.c:1933
+#: ../src/app_data.c:1932
 msgid ""
 "The specified value for the mouse capture option is not one of the valid "
 "values (0 = no capture, 1 = white mouse pointer, 2 = black mouse pointer)."
@@ -144,32 +144,32 @@ msgstr ""
 "Mauszeiger, 2 = schwarzer Mauszeiger."
 
 # error action name
-#: ../src/app_data.c:1935
+#: ../src/app_data.c:1934
 msgid "Set Mouse Capture Option to '1' for a white mouse pointer"
 msgstr "Aufnahme eines weissen Mauszeigers wählen"
 
 # error short name
-#: ../src/app_data.c:1940
+#: ../src/app_data.c:1939
 msgid "Invalid Capture Source"
 msgstr "Ungültige Aufnahmequelle"
 
 # error description
-#: ../src/app_data.c:1941
+#: ../src/app_data.c:1940
 msgid "An unsupported capture source was selected."
 msgstr "Eine nicht unterstützte Aufnahmequelle wurde ausgewählt."
 
 # error action message
-#: ../src/app_data.c:1943
+#: ../src/app_data.c:1942
 msgid "Reset capture source to fail-safe 'x11'"
 msgstr "\"X11\" als Aufnahmequelle auswählen"
 
 # error short name
-#: ../src/app_data.c:1948
+#: ../src/app_data.c:1947
 msgid "Invalid default capture mode"
 msgstr "Ungültiger Standard für Art der Aufnahme"
 
 # error description
-#: ../src/app_data.c:1950
+#: ../src/app_data.c:1949
 msgid ""
 "The default capture mode specified is neither \"single-frame\" nor \"mult-"
 "frame\"."
@@ -178,17 +178,17 @@ msgstr ""
 "noch \"Film\"."
 
 # error action name
-#: ../src/app_data.c:1952
+#: ../src/app_data.c:1951
 msgid "Reset default capture mode to \"single-frame\""
 msgstr "Als Standard für die Art der Aufnahme \"Einzelbild\" wählen"
 
 # error short names
-#: ../src/app_data.c:1965
+#: ../src/app_data.c:1964
 msgid "File name is NULL"
 msgstr "Dateiname ist NULL"
 
 # error description
-#: ../src/app_data.c:1967
+#: ../src/app_data.c:1966
 msgid ""
 "The filename string variable used for multi-frame capture is a null pointer. "
 "This should never be possible at this stage."
@@ -197,18 +197,18 @@ msgstr ""
 "NULL. Dies sollte hier niemals möglich sein."
 
 # error short name
-#: ../src/app_data.c:1974
+#: ../src/app_data.c:1973
 msgid "File name empty"
 msgstr "Fehlender Dateiname"
 
 # error description
-#: ../src/app_data.c:1975
+#: ../src/app_data.c:1974
 msgid "You selected single-frame capture without specifying a filename."
 msgstr ""
 "Sie haben Einzelbild-Aufnahme ohne Angabe eines Dateinamens ausgewählt."
 
 # error action message
-#: ../src/app_data.c:1978
+#: ../src/app_data.c:1977
 msgid ""
 "Set the filename used for single-frame capture to a default value based on "
 "the current capture mode and target"
@@ -217,12 +217,12 @@ msgstr ""
 "entsprechend der gewählten Art der Aufnahme und dem Ausgabeformat"
 
 # error short name
-#: ../src/app_data.c:1983
+#: ../src/app_data.c:1982
 msgid "File format Auto-detection with empty file name"
 msgstr "Erkennung des Ausgabeformats ohne Dateinamen nicht möglich"
 
 # error description
-#: ../src/app_data.c:1985
+#: ../src/app_data.c:1984
 msgid ""
 "You want to be asked for a filename to save your video to after recording "
 "and also want to auto-detect the file type based on filename. That won't "
@@ -233,7 +233,7 @@ msgstr ""
 "anhand des Dateinamens eingestellt. Dies kann nicht funktionieren."
 
 # error action message
-#: ../src/app_data.c:1988
+#: ../src/app_data.c:1987
 msgid ""
 "Set the filename used for multi-frame capture to a default value based on "
 "the current capture mode and target"
@@ -242,12 +242,12 @@ msgstr ""
 "der gewählten Art der Aufnahme und dem Ausgabeformat"
 
 # error short names
-#: ../src/app_data.c:1993 ../src/app_data.c:2003
+#: ../src/app_data.c:1992 ../src/app_data.c:2002
 msgid "File name empty, ask user"
 msgstr "Frage Anwender nach Dateinamen"
 
 # error description
-#: ../src/app_data.c:1995
+#: ../src/app_data.c:1994
 msgid ""
 "You specified an empty filename for multi-frame capture. Since you have "
 "configured a fixed output file-format xvidcap can ask you for a filename to "
@@ -261,7 +261,7 @@ msgstr ""
 "jedoch abgeschaltet werden."
 
 # error action message
-#: ../src/app_data.c:1998
+#: ../src/app_data.c:1997
 msgid ""
 "Enable \"ask user for filename\" mode for multi-frame capture and disable "
 "autocontinue"
@@ -270,7 +270,7 @@ msgstr ""
 "Fortsetzung abstellen"
 
 # error description
-#: ../src/app_data.c:2005
+#: ../src/app_data.c:2004
 msgid ""
 "You specified an empty filename for multi-frame capture. Since you have "
 "configured a fixed output file-format xvidcap can ask you for a filename to "
@@ -282,17 +282,17 @@ msgstr ""
 "Dateinamen fragen."
 
 # error action message
-#: ../src/app_data.c:2007
+#: ../src/app_data.c:2006
 msgid "Ignore, everything is set up alright"
 msgstr "Nichts tun, denn alles ist in Ordnung"
 
 # error short names
-#: ../src/app_data.c:2012 ../src/app_data.c:2021
+#: ../src/app_data.c:2011 ../src/app_data.c:2020
 msgid "Invalid file format"
 msgstr "Ungültiges Ausgabeformat"
 
 # error description
-#: ../src/app_data.c:2014
+#: ../src/app_data.c:2013
 msgid ""
 "You selected an unknown or invalid file format for single-frame capture. "
 "Check the --format-help option."
@@ -302,12 +302,12 @@ msgstr ""
 "format-help."
 
 # error action message
-#: ../src/app_data.c:2016
+#: ../src/app_data.c:2015
 msgid "Reset to default format for single-frame capture (XWD)"
 msgstr "Standard Ausgabeformat für Einzelbild-Aufnahme einstellen (XWD)"
 
 # error description
-#: ../src/app_data.c:2023
+#: ../src/app_data.c:2022
 msgid ""
 "You selected an unknown or invalid file format for multi-frame capture. "
 "Check the --format-help option."
@@ -316,17 +316,17 @@ msgstr ""
 "ausgewählt. Bitte prüfen Sie valide Optionen mithilfe von --format-help."
 
 # error action message
-#: ../src/app_data.c:2025
+#: ../src/app_data.c:2024
 msgid "Reset to default format for multi-frame caputre (MPEG4)"
 msgstr "Standard Ausgabeformat für Film-Aufnahme einstellen (XWD)"
 
 # error short name
-#: ../src/app_data.c:2030
+#: ../src/app_data.c:2029
 msgid "Single-Frame Capture with Multi-Frame File Format"
 msgstr "Einzelbild-Aufnahme mit Film-Aufnahme Ausgabeformat"
 
 # error description
-#: ../src/app_data.c:2032
+#: ../src/app_data.c:2031
 msgid ""
 "You selected single-frame capture mode but specified a target file format "
 "which is used for multi-frame capture."
@@ -335,19 +335,19 @@ msgstr ""
 "welches nur für Film-Aufnahme geeignet ist."
 
 # error action message
-#: ../src/app_data.c:2034
+#: ../src/app_data.c:2033
 msgid "Reset file format to default for single-frame capture"
 msgstr ""
 "Für das Ausgabeformat den Standard-Wert für Einzelbild-Aufnahme einstellen "
 "(XWD)"
 
 # error short name
-#: ../src/app_data.c:2040
+#: ../src/app_data.c:2039
 msgid "Multi-Frame Capture with Single-Frame File Format"
 msgstr "Film-Aufnahme mit Einzelbild-Aufnahme Ausgabeformat"
 
 # error description
-#: ../src/app_data.c:2042
+#: ../src/app_data.c:2041
 msgid ""
 "You selected multi-frame capture mode but specified a target file format "
 "which is used for single-frame capture."
@@ -356,18 +356,18 @@ msgstr ""
 "welches nur für Einzelbild-Aufnahme geeignet ist."
 
 # error action message
-#: ../src/app_data.c:2044
+#: ../src/app_data.c:2043
 msgid "Reset file format to default for multi-frame capture"
 msgstr ""
 "Für das Ausgabeformat den Standard-Wert für Film-Aufnahme einstellen (MPEG4)"
 
 # error short name
-#: ../src/app_data.c:2050
+#: ../src/app_data.c:2049
 msgid "Single-Frame Capture with invalid target codec"
 msgstr "Einzelbild-Aufnahme mit ungültigem Codec"
 
 # error description
-#: ../src/app_data.c:2052
+#: ../src/app_data.c:2051
 msgid ""
 "You selected single-frame capture mode and specified a target codec not "
 "valid with the file format."
@@ -376,7 +376,7 @@ msgstr ""
 "ungültigen Codec angegeben."
 
 # error action message
-#: ../src/app_data.c:2055
+#: ../src/app_data.c:2054
 msgid ""
 "Ignore because single-frame capture types always have a well-defined codec"
 msgstr ""
@@ -384,14 +384,14 @@ msgstr ""
 "Codec zugeordnet haben"
 
 # error short names
-#: ../src/app_data.c:2060 ../src/app_data.c:2069
+#: ../src/app_data.c:2059 ../src/app_data.c:2068
 msgid "File Format auto-detection may conflict with explicit codec"
 msgstr ""
 "Automatische Erkennung des Ausgabeformats kann mit explizit angegebenem "
 "Codec kollidieren"
 
 # error description
-#: ../src/app_data.c:2062
+#: ../src/app_data.c:2061
 msgid ""
 "For single-frame capture you requested auto-detection of the output file "
 "format and explicitly specified a target codec. Your codec selection may not "
@@ -404,12 +404,12 @@ msgstr ""
 "diesem Fall wird stattdessen ein Standard-Wert für das Ausgabeformat gewählt."
 
 # error action messages
-#: ../src/app_data.c:2064 ../src/app_data.c:2073 ../src/app_data.c:2100
+#: ../src/app_data.c:2063 ../src/app_data.c:2072 ../src/app_data.c:2099
 msgid "Ignore"
 msgstr "Nichts tun"
 
 # error description
-#: ../src/app_data.c:2071
+#: ../src/app_data.c:2070
 msgid ""
 "For multi-frame capture you requested auto-detection of the output file "
 "format and explicitly specified a target codec. Your codec selection may not "
@@ -422,12 +422,12 @@ msgstr ""
 "wird stattdessen ein Standard-Wert für das Ausgabeformat gewählt."
 
 # error short name
-#: ../src/app_data.c:2079
+#: ../src/app_data.c:2078
 msgid "Multi-Frame Capture with invalid codec"
 msgstr "Film-Aufnahme mit ungültigem Codec"
 
 # error description
-#: ../src/app_data.c:2081
+#: ../src/app_data.c:2080
 msgid ""
 "You selected multi-frame capture mode and specified a target codec not valid "
 "with the file format."
@@ -436,19 +436,19 @@ msgstr ""
 "Ausgabeformat passt."
 
 # error action message
-#: ../src/app_data.c:2083
+#: ../src/app_data.c:2082
 msgid "Reset multi-frame target codec to default for file format"
 msgstr "Codec für Film-Aufnahme auf Standard-Wert für Ausgabeformat setzen"
 
 # error short name
-#: ../src/app_data.c:2096
+#: ../src/app_data.c:2095
 msgid "File Format auto-detection may conflict with explicit audio codec"
 msgstr ""
 "Automatische Erkennung des Ausgabeformats kann mit explizit angegebenem "
 "Audio Codec kollidieren"
 
 # error description
-#: ../src/app_data.c:2098
+#: ../src/app_data.c:2097
 msgid ""
 "For multi-frame capture you requested auto-detection of the output file "
 "format and explicitly specified a target audio codec. Your audio codec "
@@ -461,12 +461,12 @@ msgstr ""
 "wird stattdessen ein Standard-Wert für das Ausgabeformat gewählt."
 
 # error short name
-#: ../src/app_data.c:2105
+#: ../src/app_data.c:2104
 msgid "Multi-Frame Capture with invalid audio codec"
 msgstr "Film-Aufnahme mit ungültigem Audio Codec"
 
 # error description
-#: ../src/app_data.c:2107
+#: ../src/app_data.c:2106
 msgid ""
 "You selected multi-frame capture mode and specified a target audio codec not "
 "valid with the file format."
@@ -475,19 +475,19 @@ msgstr ""
 "zum Ausgabeformat passt."
 
 # error action message
-#: ../src/app_data.c:2109
+#: ../src/app_data.c:2108
 msgid "Reset multi-frame target audio codec to default for file format"
 msgstr ""
 "Den Audio Codec für die Film-Aufnahme auf einen Standard-Wert für das "
 "Ausgabeformat setzen"
 
 # error short name
-#: ../src/app_data.c:2116
+#: ../src/app_data.c:2115
 msgid "Invalid frame-rate for selected codec"
 msgstr "Ungültige Bildrate für ausgewählten Codec"
 
 # error description
-#: ../src/app_data.c:2118
+#: ../src/app_data.c:2117
 msgid ""
 "You selected multi-frame capture mode but the requested frame-rate is not "
 "valid for the selected codec. This would result in the video playing back "
@@ -498,12 +498,12 @@ msgstr ""
 "oder zu langsam laufenden Video führen."
 
 # error short name
-#: ../src/app_data.c:2125
+#: ../src/app_data.c:2124
 msgid "Requested Frame Rate <= zero"
 msgstr "Geforderte Bildrate kleiner/gleich Null"
 
 # error description
-#: ../src/app_data.c:2127
+#: ../src/app_data.c:2126
 msgid ""
 "You selected single-frame capture but the frame rate you requested is not "
 "greater than zero."
@@ -512,17 +512,17 @@ msgstr ""
 "nicht größer als Null."
 
 # error action message
-#: ../src/app_data.c:2129
+#: ../src/app_data.c:2128
 msgid "Set frame rate to '1'"
 msgstr "Bildrate auf minimalen gülitgen Wert \"1\" setzen"
 
 # error short names
-#: ../src/app_data.c:2134 ../src/app_data.c:2143
+#: ../src/app_data.c:2133 ../src/app_data.c:2142
 msgid "Requested Maximum Capture Time < zero"
 msgstr "Gewählte, maximale Aufnahme-Dauer kleiner Null"
 
 # error description
-#: ../src/app_data.c:2136
+#: ../src/app_data.c:2135
 msgid ""
 "For single-frame capture you specified a maximum capture time which is less "
 "than zero seconds."
@@ -531,12 +531,12 @@ msgstr ""
 "angegeben. Diese ist jedoch kleiner als 0 Sekunden."
 
 # error short name
-#: ../src/app_data.c:2138
+#: ../src/app_data.c:2137
 msgid "Set the maximum capture time for single-frame capture to unlimited"
 msgstr "Die Begrenzung der Aufnahme-Dauer für Einzelbild-Aufnahme aufheben"
 
 # error description
-#: ../src/app_data.c:2145
+#: ../src/app_data.c:2144
 msgid ""
 "For multi-frame capture you specified a maximum capture time which is less "
 "than zero seconds."
@@ -544,17 +544,17 @@ msgstr ""
 "Für die Film-Aufnahme haben Sie eine maximale Aufnahme-Dauer angegeben. "
 "Diese ist jedoch kleiner als 0 Sekunden."
 
-#: ../src/app_data.c:2147
+#: ../src/app_data.c:2146
 msgid "Set the maximum capture time for multi-frame capture to unlimited"
 msgstr "Die Begrenzung der Aufnahme-Dauer für Film-Aufnahme aufheben"
 
 # error short names
-#: ../src/app_data.c:2152 ../src/app_data.c:2161
+#: ../src/app_data.c:2151 ../src/app_data.c:2160
 msgid "Requested Maximum Frames < zero"
 msgstr "Gewählte, maximale Anzahl von Einzelbildern kleiner Null"
 
 # error description
-#: ../src/app_data.c:2154
+#: ../src/app_data.c:2153
 msgid ""
 "For single-frame capture you specified a maximum number of frames which is "
 "less than zero."
@@ -563,14 +563,14 @@ msgstr ""
 "angegeben. Diese Anzahl ist jedoch kleiner Null."
 
 # error action message
-#: ../src/app_data.c:2156
+#: ../src/app_data.c:2155
 msgid "Set maximum number of frames to unlimited for single-frame capture"
 msgstr ""
 "Die Begrenzung hinsichtlich Anzahl von Einzelbildern für Einzelbild-Aufnahme "
 "aufheben"
 
 # error description
-#: ../src/app_data.c:2163
+#: ../src/app_data.c:2162
 msgid ""
 "For multi-frame capture you specified a maximum number of frames which is "
 "less than zero."
@@ -579,19 +579,19 @@ msgstr ""
 "angegeben. Diese Anzahl ist jedoch kleiner Null."
 
 # error action message
-#: ../src/app_data.c:2165
+#: ../src/app_data.c:2164
 msgid "Set maximum number of frames to unlimited for multi-frame capture"
 msgstr ""
 "Die Begrenzung hinsichtlich Anzahl von Einzelbildern für Film-Aufnahme "
 "aufheben"
 
 # error short names
-#: ../src/app_data.c:2170 ../src/app_data.c:2179
+#: ../src/app_data.c:2169 ../src/app_data.c:2178
 msgid "Requested Start Number < zero"
 msgstr "Eingestellte Nummer des ersten Einzelbilds kleiner Null"
 
 # error description
-#: ../src/app_data.c:2172
+#: ../src/app_data.c:2171
 msgid ""
 "For single-frame capture you specified a start number for frame numbering "
 "which is less than zero."
@@ -600,14 +600,14 @@ msgstr ""
 "der Einzelbilder auf eine Zahl kleiner Null gesetzt."
 
 # error action message
-#: ../src/app_data.c:2174
+#: ../src/app_data.c:2173
 msgid "Set start number for frame numbering of single-frame capture to '0'"
 msgstr ""
 "Den Anfangswert für die Nummerierung der Einzelbilder für Einzelbild-"
 "Aufnahme auf \"0\" setzen"
 
 # error description
-#: ../src/app_data.c:2181
+#: ../src/app_data.c:2180
 msgid ""
 "For multi-frame capture you specified a start number for frame numbering "
 "which is less than zero."
@@ -616,20 +616,20 @@ msgstr ""
 "Einzelbilder auf eine Zahl kleiner Null gesetzt."
 
 # error action message
-#: ../src/app_data.c:2183
+#: ../src/app_data.c:2182
 msgid "Set start number for frame numbering of multi-frame capture to '0'"
 msgstr ""
 "Den Anfangswert für die Nummerierung der Einzelbilder für Film-Aufnahme auf "
 "\"0\" setzen"
 
 # error short name
-#: ../src/app_data.c:2188
+#: ../src/app_data.c:2187
 msgid "Requested Frame Increment <= zero"
 msgstr ""
 "Eingestellter Wert für das Hochzählen von Einzelbildern kleiner/gleich Null"
 
 # error description
-#: ../src/app_data.c:2190
+#: ../src/app_data.c:2189
 msgid ""
 "For single-frame capture you specified an increment for frame numbering "
 "which is not greater than zero."
@@ -639,20 +639,20 @@ msgstr ""
 "ist kleiner oder gleich Null."
 
 # error action message
-#: ../src/app_data.c:2192
+#: ../src/app_data.c:2191
 msgid "Set increment for frame numbering of single-frame capture to '1'"
 msgstr ""
 "Den Inkrement Wert für das Hochzählen der Einzelbilder für Einzelbild-"
 "Aufnahme auf \"1\" setzen"
 
 # error  short name
-#: ../src/app_data.c:2197
+#: ../src/app_data.c:2196
 msgid "Requested Frame Increment <> one"
 msgstr ""
 "Eingestellter Wert für das Hochzählen von Einzelbildern nicht gleich \"1\""
 
 # error description
-#: ../src/app_data.c:2199
+#: ../src/app_data.c:2198
 msgid ""
 "For multi-frame capture you specified an increment for frame numbering which "
 "is not exactly one."
@@ -661,19 +661,19 @@ msgstr ""
 "der Nummerierung der Einzelbilder eingestellt. Dieser Wert ist nicht gleich "
 "\"1\"."
 
-#: ../src/app_data.c:2201
+#: ../src/app_data.c:2200
 msgid "Set increment for frame numbering of multi-frame capture to '1'"
 msgstr ""
 "Den Inkrement Wert für das Hochzählen der Einzelbilder für Film-Aufnahme auf "
 "\"1\" setzen"
 
-#: ../src/app_data.c:2206
+#: ../src/app_data.c:2205
 msgid "Requested invalid Rescale Percentage"
 msgstr ""
 "Ungültiger Prozent-Wert als relative Zielgröße für Ausgabe-Verkleinerung "
 "angegeben"
 
-#: ../src/app_data.c:2208
+#: ../src/app_data.c:2207
 msgid ""
 "You requested rescaling of the input area to a relative size but did not "
 "specify a valid percentage. Valid values are between 1 and 100 "
@@ -683,15 +683,15 @@ msgstr ""
 "zwischen \"1\" und \"100\" angegeben."
 
 # error action message
-#: ../src/app_data.c:2210
+#: ../src/app_data.c:2209
 msgid "Set rescale percentage to '100'"
 msgstr "Relative Ausgabegröße auf \"100\" Prozent setzen"
 
-#: ../src/app_data.c:2217 ../src/app_data.c:2226
+#: ../src/app_data.c:2216 ../src/app_data.c:2225
 msgid "Vorbis needs stereo audio"
 msgstr "Vorbis erfordert Stereo Ton"
 
-#: ../src/app_data.c:2219
+#: ../src/app_data.c:2218
 msgid ""
 "You selected mono vorbis audio output for single-frame capture, but this "
 "version of xvidcap can only encode stereo vorbis audio streams."
@@ -700,11 +700,11 @@ msgstr ""
 "eingestellt, aber diese Version von xvidcap kann nur Stereo Audio Streams "
 "mit Vorbis kodieren."
 
-#: ../src/app_data.c:2221 ../src/app_data.c:2230
+#: ../src/app_data.c:2220 ../src/app_data.c:2229
 msgid "Set number of audio channels to '2'"
 msgstr "Anzahl der Audio Kanäle auf \"2\" setzen"
 
-#: ../src/app_data.c:2228
+#: ../src/app_data.c:2227
 msgid ""
 "You selected mono vorbis audio output for multi-frame capture, but this "
 "version of xvidcap can only encode stereo vorbis audio streams."
@@ -714,12 +714,12 @@ msgstr ""
 "mit Vorbis kodieren."
 
 # error short names
-#: ../src/app_data.c:2237 ../src/app_data.c:2246
+#: ../src/app_data.c:2236 ../src/app_data.c:2245
 msgid "Quality value not a valid percentage"
 msgstr "Aufnahme-Qualität kein gültiger Prozent-Wert"
 
 # error description
-#: ../src/app_data.c:2239
+#: ../src/app_data.c:2238
 msgid ""
 "For single-frame capture the value for recording quality is not a percentage "
 "between 1 and 100."
@@ -728,12 +728,12 @@ msgstr ""
 "Prozent-Wert zwischen \"1\" und \"100\"."
 
 # error action message
-#: ../src/app_data.c:2241 ../src/app_data.c:2250
+#: ../src/app_data.c:2240 ../src/app_data.c:2249
 msgid "Set recording quality to '75'"
 msgstr "Aufnahme-Qualität auf \"75\" Prozent setzen"
 
 # error description
-#: ../src/app_data.c:2248
+#: ../src/app_data.c:2247
 msgid ""
 "For multi-frame capture the value for recording quality is not a percentage "
 "between 1 and 100."
@@ -742,24 +742,24 @@ msgstr ""
 "Wert zwischen \"1\" und \"100\"."
 
 # error short names
-#: ../src/app_data.c:2256 ../src/app_data.c:2265
+#: ../src/app_data.c:2255 ../src/app_data.c:2264
 msgid "Audio Capture not supported by File Format"
 msgstr "Aufnahme von Ton wird von Ausgabeformat nicht unterstützt"
 
 # error description
-#: ../src/app_data.c:2258
+#: ../src/app_data.c:2257
 msgid "You selected audio capture but single-frame captures do not support it."
 msgstr ""
 "Sie haben die Aufnahme von Ton ausgewählt, aber die Einzelbild-Aufnahme "
 "unterstützt dies nicht."
 
 # error action message
-#: ../src/app_data.c:2260
+#: ../src/app_data.c:2259
 msgid "Disable audio capture for single-frame capture"
 msgstr "Für Einzelbild-Aufnahme die Aufnahme von Ton abstellen"
 
 # error description
-#: ../src/app_data.c:2267
+#: ../src/app_data.c:2266
 msgid ""
 "For multi-frame capture you selected audio support but picked a file format "
 "without support for audio."
@@ -768,7 +768,7 @@ msgstr ""
 "Ausgabeformat gewählt, welches Audio nicht unterstützt."
 
 # error action message
-#: ../src/app_data.c:2269
+#: ../src/app_data.c:2268
 msgid "Disable audio capture for multi-frame capture"
 msgstr "Für Film-Aufnahme die Aufnahme von Ton abstellen"
 
@@ -974,7 +974,7 @@ msgstr "Ausrichtung"
 msgid "The orientation of the tray."
 msgstr "Die Ausrichtung des Benachrichtigungsbereichs"
 
-#: ../src/gnome_options.c:1605
+#: ../src/gnome_options.c:1602
 msgid "C_apture"
 msgstr "_Aufnahme"
 
@@ -1035,12 +1035,12 @@ msgstr ""
 msgid "Edit current movie"
 msgstr "Aktuellen Film bearbeiten"
 
-#: ../src/gnome_ui.c:2828 ../src/gnome_ui.c:2829
+#: ../src/gnome_ui.c:2838 ../src/gnome_ui.c:2839
 #: ../src/gnome-xvidcap.glade.h:48
 msgid "Detach selection frame"
 msgstr "Aufnahmebereich von Steuerungsfenster abhängen "
 
-#: ../src/gnome_ui.c:2852 ../src/gnome_ui.c:2853
+#: ../src/gnome_ui.c:2862 ../src/gnome_ui.c:2863
 msgid "Attach selection frame"
 msgstr "Aufnahmebereich an Steuerungsfenster anhängen"
 
@@ -1487,23 +1487,23 @@ msgstr ""
 msgid "#general options ...\n"
 msgstr "# Allgemeine Einstellungen ...\n"
 
-#: ../src/options.c:76
+#: ../src/options.c:75
 #, c-format
 msgid "# default capture mode (0 = single-frame, 1 = multi-frame)\n"
 msgstr ""
 "# Standard-Einstellung für die Art der Aufnahme (0 = Einzelbild, 1 = Film)\n"
 
-#: ../src/options.c:83
+#: ../src/options.c:82
 #, c-format
 msgid "# capture source\n"
 msgstr "# Aufnahmequelle\n"
 
-#: ../src/options.c:87
+#: ../src/options.c:86
 #, c-format
 msgid "# take screenshots using the XDamage extension for efficiency.\n"
 msgstr "# Screenshots mithilfe der XDamage Erweiterung aufnehmen.\n"
 
-#: ../src/options.c:90
+#: ../src/options.c:89
 #, c-format
 msgid ""
 "# this does not work well for 3D compositing window managers like compiz or "
@@ -1512,7 +1512,7 @@ msgstr ""
 "# Dies funktioniert mit 3D Fenster-Managern, die die Xorg composite "
 "Erweiterung verwenden, z. B. beryl oder compiz, nicht gut.\n"
 
-#: ../src/options.c:93
+#: ../src/options.c:92
 #, c-format
 msgid ""
 "# therefore xvidcap disables this by default for those window managers.\n"
@@ -1520,7 +1520,7 @@ msgstr ""
 "# Daher verwendet xvidcap für diese Fenster-Manager keine XDamage "
 "Funktionen.\n"
 
-#: ../src/options.c:96
+#: ../src/options.c:95
 #, c-format
 msgid ""
 "# set this to \"-1\" for auto-detection, \"0\" for disabled, or \"1\" for "
@@ -1529,22 +1529,22 @@ msgstr ""
 "# Setzen Sie dies auf \"-1\" für automatische Einstellung, \"0\" für keine "
 "Verwendung oder \"1\" für fallunabhängige Verwendung.\n"
 
-#: ../src/options.c:98
+#: ../src/options.c:97
 #, c-format
 msgid "# hide GUI\n"
 msgstr "# GUI verstecken\n"
 
-#: ../src/options.c:101
+#: ../src/options.c:99
 #, c-format
 msgid "# hide frame around capture area\n"
 msgstr "# Rahmen um Aufnahme-Bereich verbergen\n"
 
-#: ../src/options.c:105
+#: ../src/options.c:102
 #, c-format
 msgid "# device to grab audio from\n"
 msgstr "# Eingangsgerät für Ton-Aufnahme\n"
 
-#: ../src/options.c:111
+#: ../src/options.c:108
 #, c-format
 msgid ""
 "# what kind of mouse pointer should be recorded? 0 = none, 1 = white, 2 = "
@@ -1553,50 +1553,50 @@ msgstr ""
 "# Welche Art Mauszeiger soll aufgenommen werden? 0 = keiner, 1 = ein "
 "weisser, 2 = ein schwarzer\n"
 
-#: ../src/options.c:113
+#: ../src/options.c:110
 #, c-format
 msgid "# should cap_geometry be saved to prefs?\n"
 msgstr ""
 "# Soll der angegebene Aufnahmebereich mit den Einstellungen gespeichert "
 "werden?\n"
 
-#: ../src/options.c:117
+#: ../src/options.c:114
 #, c-format
 msgid "# area to capture as in --capture_geometry\n"
 msgstr "# Aufnahmebereich wie beim Parameter --capture_geometry\n"
 
-#: ../src/options.c:125
+#: ../src/options.c:122
 #, c-format
 msgid "# locked frame follows mouse not window\n"
 msgstr "# angehängter Rahmen folgt Mauszeiger nicht Hauptfenster\n"
 
-#: ../src/options.c:129
+#: ../src/options.c:126
 #, c-format
 msgid "# show time rather than frame count\n"
 msgstr "# Statt Zahl der Einzelbilder Aufnahmedauer anzeigen\n"
 
-#: ../src/options.c:133
+#: ../src/options.c:129
 #, c-format
 msgid "# toggle autocontinue (0/1) \n"
 msgstr "# Autocontinue an/aus (0/1) \n"
 
-#: ../src/options.c:136
+#: ../src/options.c:132
 #, c-format
 msgid "# always show results dialog (0/1)\n"
 msgstr "# Ergebnisdialog immer anzeigen (0/1) \n"
 
-#: ../src/options.c:140
+#: ../src/options.c:136
 #, c-format
 msgid "# rescale the captured area to n percent of the original\n"
 msgstr "# Verkleinere den aufgenommenen Bereich auf n Prozent des Originals\n"
 
-#: ../src/options.c:144
+#: ../src/options.c:140
 #, c-format
 msgid "# minimize the main control to the system tray while recording\n"
 msgstr ""
 "# Verstecke das Bedienfenster im Benachrichtigungsfeld während der Aufnahme\n"
 
-#: ../src/options.c:148
+#: ../src/options.c:144
 #, c-format
 msgid ""
 "\n"
@@ -1605,7 +1605,7 @@ msgstr ""
 "\n"
 "# Einstellungen für Einzelbild-Aufnahme ...\n"
 
-#: ../src/options.c:151 ../src/options.c:249
+#: ../src/options.c:147 ../src/options.c:246
 #, c-format
 msgid ""
 "# file pattern\n"
@@ -1615,37 +1615,37 @@ msgstr ""
 "# Wenn automatische Erkennung des Ausgabeformats aktiviert ist, bestimmt die "
 "Erweiterung das Format.\n"
 
-#: ../src/options.c:152 ../src/options.c:250
+#: ../src/options.c:148 ../src/options.c:247
 #, c-format
 msgid "# valid extensions are: "
 msgstr "# Gültige Erweiterungen sind: "
 
-#: ../src/options.c:176 ../src/options.c:263
+#: ../src/options.c:172 ../src/options.c:260
 #, c-format
 msgid "# file format - use AUTO to select format through file extension\n"
 msgstr ""
 "# Ausgabeformat - verwenden Sie \"AUTO\", um das Ausgabeformat anhand der "
 "Erweiterung des Dateinamens zu wählen.\n"
 
-#: ../src/options.c:177 ../src/options.c:196 ../src/options.c:264
-#: ../src/options.c:274 ../src/options.c:285
+#: ../src/options.c:173 ../src/options.c:193 ../src/options.c:261
+#: ../src/options.c:272 ../src/options.c:283
 #, c-format
 msgid "# Otherwise specify one of the following: "
 msgstr "# Anderenfalls wählen Sie eine der folgenden Möglichkeiten: "
 
-#: ../src/options.c:195 ../src/options.c:273
+#: ../src/options.c:192 ../src/options.c:271
 #, c-format
 msgid "# video codec used by ffmpeg - use AUTO to auto-detect codec\n"
 msgstr ""
 "# Video Codec - verwenden Sie \"AUTO\" für automatische Bestimmung des "
 "Codecs\n"
 
-#: ../src/options.c:213
+#: ../src/options.c:210
 #, c-format
 msgid "# audio codec (for future use)\n"
 msgstr "# Audio Codec (z. Zt. nicht verwendet)\n"
 
-#: ../src/options.c:217 ../src/options.c:298
+#: ../src/options.c:214 ../src/options.c:296
 #, c-format
 msgid ""
 "# frames per second\n"
@@ -1655,62 +1655,62 @@ msgstr ""
 "# Tragen Sie eine normale Dezimalzahl oder einen Bruch ein wie \"30000/10001"
 "\"\n"
 
-#: ../src/options.c:220 ../src/options.c:301
+#: ../src/options.c:217 ../src/options.c:299
 #, c-format
 msgid "# max time (0 = unlimited)\n"
 msgstr "# Maximale Aufnahmedauer (0 = unbegrenzt)\n"
 
-#: ../src/options.c:222 ../src/options.c:303
+#: ../src/options.c:219 ../src/options.c:301
 #, c-format
 msgid "# max frames (0 = unlimited)\n"
 msgstr "# Maximale Anzahl Einzelbilder (0 = unbegrenzt)\n"
 
-#: ../src/options.c:224
+#: ../src/options.c:221
 #, c-format
 msgid "# number to start counting individual frames from\n"
 msgstr "# Startnummer für die Nummerierung der Einzelbilder\n"
 
-#: ../src/options.c:226 ../src/options.c:309
+#: ../src/options.c:223 ../src/options.c:307
 #, c-format
 msgid "# quality (JPEG/MPEG)\n"
 msgstr "# Qualität\n"
 
-#: ../src/options.c:228
+#: ../src/options.c:225
 #, c-format
 msgid "# toggle audio capture (0/1) (for future use)\n"
 msgstr "# Ton-Aufnahme ja/nein (0/1) (z. Zt. nicht verwendet)\n"
 
-#: ../src/options.c:230
+#: ../src/options.c:227
 #, c-format
 msgid "# sample rate for audio capture (for future use)\n"
 msgstr "# Abtastrate für Ton-Aufnahme (z. Zt. nicht verwendet)\n"
 
-#: ../src/options.c:232
+#: ../src/options.c:229
 #, c-format
 msgid "# bit rate for audio capture (for future use)\n"
 msgstr "# Bit Rate für Ton-Aufnahme (z. Zt. nicht verwendet)\n"
 
-#: ../src/options.c:236
+#: ../src/options.c:233
 #, c-format
 msgid "# number of channels to use in audio capture (for future use)\n"
 msgstr "# Anzahl Audio-Kanäle für Ton-Aufnahme (z. Zt. nicht verwendet)\n"
 
-#: ../src/options.c:238 ../src/options.c:321
+#: ../src/options.c:235 ../src/options.c:320
 #, c-format
 msgid "# command to display captured frames as animation\n"
 msgstr "# Befehl zum Anzeigen der aufgenommenen Einzelbilder als Animation\n"
 
-#: ../src/options.c:240
+#: ../src/options.c:237
 #, c-format
 msgid "# command to edit current frame\n"
 msgstr "# Befehl zum Bearbeiten des aktuellen Einzelbilds\n"
 
-#: ../src/options.c:242
+#: ../src/options.c:239
 #, c-format
 msgid "# command to encode captured frames\n"
 msgstr "# Befehl zum Enkodieren der aufgenommenen Einzelbilder\n"
 
-#: ../src/options.c:246
+#: ../src/options.c:243
 #, c-format
 msgid ""
 "\n"
@@ -1719,52 +1719,52 @@ msgstr ""
 "\n"
 "# Einstellungen für Film-Aufnahme ...\n"
 
-#: ../src/options.c:284
+#: ../src/options.c:282
 #, c-format
 msgid "# audio codec used by ffmpeg - use AUTO to auto-detect audio codec\n"
 msgstr ""
 "# Audio Codec - verwenden Sie \"AUTO\" für automatische Bestimmung des Audio "
 "Codecs.\n"
 
-#: ../src/options.c:307
+#: ../src/options.c:305
 #, c-format
 msgid "# number to start counting individual frames from (for future use)\n"
 msgstr ""
 "# Startnummer für die Nummerierung der Einzelbilder (z. Zt. nicht "
 "verwendet)\n"
 
-#: ../src/options.c:312
+#: ../src/options.c:310
 #, c-format
 msgid "# toggle audio capture (0/1)\n"
 msgstr "# Ton-Aufnahme ja/nein (0/1)\n"
 
-#: ../src/options.c:314
+#: ../src/options.c:313
 #, c-format
 msgid "# sample rate for audio capture\n"
 msgstr "# Abtastrate für Audio-Aufnahme\n"
 
-#: ../src/options.c:316
+#: ../src/options.c:315
 #, c-format
 msgid "# bit rate for audio capture\n"
 msgstr "[--audio_bits #] Bit-Rate für Audio-Aufnahme\n"
 
-#: ../src/options.c:318
+#: ../src/options.c:317
 #, c-format
 msgid "# number of channels to use in audio capture\n"
 msgstr "# Anzahl Audio-Kanäle für Ton-Aufnahme\n"
 
-#: ../src/options.c:323
+#: ../src/options.c:322
 #, c-format
 msgid "# command to edit current movie\n"
 msgstr "# Befehl zum Bearbeiten des aktuellen Films\n"
 
-#: ../src/options.c:326
+#: ../src/options.c:325
 #, c-format
 msgid "# command to encode captured frames (subject to change)\n"
 msgstr ""
 "# Befehl zum Enkodieren der aufgenommenen Einzelbilder (nicht benötigt)\n"
 
-#: ../src/options.c:431
+#: ../src/options.c:430
 #, c-format
 msgid ""
 "reading unsupported GUI preferences from options file\n"
@@ -1773,7 +1773,7 @@ msgstr ""
 "Unbekannte GUI Option aus Einstellungs-Datei gelesen\n"
 "Wähle sichtbares GUI\n"
 
-#: ../src/options.c:442
+#: ../src/options.c:441
 #, c-format
 msgid ""
 "reading unsupported noframe preferences from options file\n"
@@ -1782,7 +1782,7 @@ msgstr ""
 "Unbekannte GUI Option aus Einstellungs-Datei gelesen\n"
 "Wähle sichtbares GUI\n"
 
-#: ../src/options.c:461
+#: ../src/options.c:460
 #, c-format
 msgid ""
 "reading unsupported save_geometry preferences from options file\n"
@@ -1792,7 +1792,7 @@ msgstr ""
 "gelesen\n"
 "Speichere Aufnahmebereich nicht\n"
 
-#: ../src/options.c:472
+#: ../src/options.c:471
 #, c-format
 msgid ""
 "reading unsupported follow_mouse preferences from options file\n"
@@ -1801,7 +1801,7 @@ msgstr ""
 "Unbekannte follow_mouse Option aus Einstellungs-Datei gelesen\n"
 "Wähle Aufnahmebereich, der Hauptfenster folgt\n"
 
-#: ../src/options.c:488
+#: ../src/options.c:487
 #, c-format
 msgid ""
 "reading unsupported show_time value from options file\n"
@@ -1810,7 +1810,7 @@ msgstr ""
 "Unbekannte Option für Zeitanzeige aus Einstellungs-Datei gelesen\n"
 "Wähle Anzeige der Nummer des Einzelbilds\n"
 
-#: ../src/options.c:499
+#: ../src/options.c:498
 #, c-format
 msgid ""
 "reading unsupported auto_continue value from options file\n"
@@ -1820,7 +1820,7 @@ msgstr ""
 "Datei gelesen\n"
 "Schalte automatische Aufnahmefortsetzung ein.\n"
 
-#: ../src/options.c:510
+#: ../src/options.c:509
 #, c-format
 msgid ""
 "reading unsupported always_show_results value from options file\n"
@@ -1830,7 +1830,7 @@ msgstr ""
 "Einstellungs-Datei gelesen\n"
 "Wähle wiederholte Anzeige des Ergebnisdialogs\n"
 
-#: ../src/options.c:524
+#: ../src/options.c:523
 #, c-format
 msgid ""
 "reading unsupported minimize_to_tray value from options file\n"
@@ -1840,7 +1840,7 @@ msgstr ""
 "Datei gelesen\n"
 "Verwende Benachrichtigungsfeld nicht.\n"
 
-#: ../src/options.c:615
+#: ../src/options.c:614
 #, c-format
 msgid ""
 "reading unsupported target from options file\n"
@@ -1850,7 +1850,7 @@ msgstr ""
 "gelesen\n"
 "Wähle automatische Erkennung des Ausgabeformats\n"
 
-#: ../src/options.c:632
+#: ../src/options.c:631
 #, c-format
 msgid ""
 "reading unsupported target codec (%i) from options file\n"
@@ -1859,7 +1859,7 @@ msgstr ""
 "Unbekannter oder ungültiger Video Codec (%i) aus Einstellungs-Datei gelesen\n"
 "Wähle automatische Bestimmung des Video Codecs\n"
 
-#: ../src/options.c:651
+#: ../src/options.c:650
 #, c-format
 msgid ""
 "reading unsupported target audio codec (%i) from options file\n"
@@ -1868,127 +1868,127 @@ msgstr ""
 "Unbekannter oder ungültiger Audio Codec (%i) aus Einstellungs-Datei gelesen\n"
 "Wähle automatische Bestimmung des Audio Codecs\n"
 
-#: ../src/options.c:686
+#: ../src/options.c:685
 #, c-format
 msgid "Invalid parameter 'audio: %s' in preferences file\n"
 msgstr "Ungülitger Parameter \"audio: %s\" in Einstellungs-Datei\n"
 
-#: ../src/options.c:690
+#: ../src/options.c:689
 #, c-format
 msgid "Disabling audio capture unless overridden by command line\n"
 msgstr ""
 "Deaktiviere Ton-Aufnahme wenn nicht explizit per Kommando-Zeile gewählt\n"
 
-#: ../src/xtoffmpeg.c:312
+#: ../src/xtoffmpeg.c:314
 #, c-format
 msgid "%s %s: error opening input file %s: %i\n"
 msgstr "%s %s: Fehler beim Öffnen der Datei %s: %i\n"
 
-#: ../src/xtoffmpeg.c:319
+#: ../src/xtoffmpeg.c:321
 #, c-format
 msgid "%s %s: Could not alloc input stream ... aborting\n"
 msgstr ""
 "%s %s: Konnte den Speicher für den Eingangs-Stream nicht reservieren ... "
 "breche ab\n"
 
-#: ../src/xtoffmpeg.c:329
+#: ../src/xtoffmpeg.c:331
 #, c-format
 msgid "%s %s: could not find codec parameters\n"
 msgstr "%s %s: Konnte Codec Parameter nicht finden\n"
 
-#: ../src/xtoffmpeg.c:351
+#: ../src/xtoffmpeg.c:353
 #, c-format
 msgid "%s %s: could not allocate audio output codec context\n"
 msgstr "%s %s: Konnte den Speicher für den Ausgabe-Stream nicht reservieren\n"
 
-#: ../src/xtoffmpeg.c:371
+#: ../src/xtoffmpeg.c:373
 #, c-format
 msgid "%s %s: Could not alloc stream ... aborting\n"
 msgstr ""
 "%s %s: Konnte den Speicher für den Stream nicht reservieren ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:381
+#: ../src/xtoffmpeg.c:383
 #, c-format
 msgid "%s %s: Could not alloc stream\n"
 msgstr "%s %s: Konnte den Speicher für den Stream nicht reservieren\n"
 
-#: ../src/xtoffmpeg.c:393
+#: ../src/xtoffmpeg.c:395
 #, c-format
 msgid "%s %s: Can't initialize fifo for audio recording\n"
 msgstr "%s %s: Kann FIFO für Ton-Aufnahme nicht initialisieren\n"
 
-#: ../src/xtoffmpeg.c:431 ../src/xtoffmpeg.c:450
+#: ../src/xtoffmpeg.c:433 ../src/xtoffmpeg.c:452
 #, c-format
 msgid "%s %s: Can't resample. Aborting.\n"
 msgstr "%s %s: Neu Sampeln nicht möglich. Breche ab.\n"
 
-#: ../src/xtoffmpeg.c:467
+#: ../src/xtoffmpeg.c:469
 #, c-format
 msgid "%s %s: Error while opening codec for output stream\n"
 msgstr "%s %s: Fehler beim Öffnen des Codecs für den Ausgabe Stream\n"
 
-#: ../src/xtoffmpeg.c:479
+#: ../src/xtoffmpeg.c:481
 #, c-format
 msgid "%s %s: Unsupported codec (id=%d) for input stream\n"
 msgstr "%s %s: Ungültiger Codec (id=%d) für Eingangs-Stream\n"
 
-#: ../src/xtoffmpeg.c:489
+#: ../src/xtoffmpeg.c:491
 #, c-format
 msgid "%s %s: Error while opening codec for input stream\n"
 msgstr "%s %s: Fehler beim Öffnen des Codecs für den Eingangs-Stream\n"
 
-#: ../src/xtoffmpeg.c:575
+#: ../src/xtoffmpeg.c:577
 #, c-format
 msgid "%s %s: Error while writing audio frame\n"
 msgstr "%s %s: Fehler beim Schreiben der Audio Daten\n"
 
-#: ../src/xtoffmpeg.c:584
+#: ../src/xtoffmpeg.c:586
 #, c-format
 msgid "%s %s: Couldn't unlock mutex lock for writing audio frame\n"
 msgstr ""
 "%s %s: Konnte Mutex zum Schreiben der Audio Daten nicht wieder freigeben\n"
 
-#: ../src/xtoffmpeg.c:770
+#: ../src/xtoffmpeg.c:772
 #, c-format
 msgid "%s %s: error reading audio packet\n"
 msgstr "%s %s: Fehler beim Lesen des Audio Pakets\n"
 
-#: ../src/xtoffmpeg.c:793
+#: ../src/xtoffmpeg.c:795
 #, c-format
 msgid "%s %s: couldn't decode captured audio packet\n"
 msgstr "%s %s: Konnte aufgenommenes Audio Paket nicht dekodieren\n"
 
-#: ../src/xtoffmpeg.c:804
+#: ../src/xtoffmpeg.c:806
 #, c-format
 msgid "%s %s: no audio frame\n"
 msgstr "%s %s: Keine lesbaren Audio Daten\n"
 
-#: ../src/xtoffmpeg.c:836
+#: ../src/xtoffmpeg.c:838
 #, c-format
 msgid "error reading audio packet\n"
 msgstr "Fehler beim Lesen des Audio Pakets\n"
 
-#: ../src/xtoffmpeg.c:839
+#: ../src/xtoffmpeg.c:841
 #, c-format
 msgid "%s %s: dropping audio frame %f %f\n"
 msgstr "%s %s: Verwerfe Audio Daten %f %f\n"
 
-#: ../src/xtoffmpeg.c:913
+#: ../src/xtoffmpeg.c:915
 #, c-format
 msgid "%s %s: Error while writing video frame\n"
 msgstr "%s %s: Fehler beim Schreiben der Video Daten\n"
 
-#: ../src/xtoffmpeg.c:1151
+#: ../src/xtoffmpeg.c:1153
 #, c-format
 msgid "%s %s: Could not alloc output stream\n"
 msgstr "%s %s: Konnte den Speicher für den Ausgabe-Stream nicht reservieren\n"
 
-#: ../src/xtoffmpeg.c:1162
+#: ../src/xtoffmpeg.c:1164
 #, c-format
 msgid "%s %s: video codec not found\n"
 msgstr "%s %s: Konnte Video Codec nicht finden\n"
 
-#: ../src/xtoffmpeg.c:1229
+#: ../src/xtoffmpeg.c:1231
 #, c-format
 msgid ""
 "%s %s: The picture format you are grabbing (%i) is not supported by "
@@ -1997,53 +1997,53 @@ msgstr ""
 "%s %s: Das Bildformat, das Sie aufnehmen (%i) wird von libswscale nicht "
 "unterstützt ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1309 ../src/xtoffmpeg.c:1329
+#: ../src/xtoffmpeg.c:1311 ../src/xtoffmpeg.c:1331
 #, c-format
 msgid "%s %s: rgb ordering at image depth %i not supported ... aborting\n"
 msgstr "%s %s: Ungültige RGB Reihendfolge bei Farbtiefe %i ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1350 ../src/xtoffmpeg.c:1357
+#: ../src/xtoffmpeg.c:1352 ../src/xtoffmpeg.c:1359
 #, c-format
 msgid "%s %s: image depth %i not supported ... aborting\n"
 msgstr "%s %s: Ungültige Farbtiefe %i ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1449
+#: ../src/xtoffmpeg.c:1451
 #, c-format
 msgid "%s %s: Couldn't determin output format ... aborting\n"
 msgstr "%s %s: Konnte kein Ausgabeformat bestimmen ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1469
+#: ../src/xtoffmpeg.c:1471
 #, c-format
 msgid "%s %s: Error allocating memory for format context ... aborting\n"
 msgstr ""
 "%s %s: Konnte den Speicher für den Format Context nicht reservieren ... "
 "breche ab\n"
 
-#: ../src/xtoffmpeg.c:1481
+#: ../src/xtoffmpeg.c:1483
 #, c-format
 msgid "%s %s: Error allocating private data for format context ... aborting\n"
 msgstr ""
 "%s %s: Konnte den privaten Speicherbereich für den Format Context nicht "
 "reservieren ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1511
+#: ../src/xtoffmpeg.c:1513
 #, c-format
 msgid "%s %s: Invalid encoding parameters ... aborting\n"
 msgstr "%s %s: Ungültige Parameter für das Enkodieren ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1517
+#: ../src/xtoffmpeg.c:1519
 #, c-format
 msgid "%s %s: could not open video codec\n"
 msgstr "%s %s: Konnte Video Codec nicht öffnen\n"
 
-#: ../src/xtoffmpeg.c:1583
+#: ../src/xtoffmpeg.c:1585
 #, c-format
 msgid "%s %s: Could not allocate buffer for output frame! ... aborting\n"
 msgstr ""
 "%s %s: Konnte keinen Zwischenspeicher für die Ausgangs-Daten "
 "reservieren! ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1602
+#: ../src/xtoffmpeg.c:1604
 #, c-format
 msgid ""
 "%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"
@@ -2051,12 +2051,12 @@ msgstr ""
 "%s %s: Konnte keinen Speicher für die kodierten Daten (outbuf) "
 "reservieren! ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1631 ../src/xtoffmpeg.c:1679
+#: ../src/xtoffmpeg.c:1633 ../src/xtoffmpeg.c:1681
 #, c-format
 msgid "%s %s: Could not open '%s' ... aborting\n"
 msgstr "%s %s: Konnte \"%s\" nicht öffnen ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1640 ../src/xtoffmpeg.c:1688
+#: ../src/xtoffmpeg.c:1642 ../src/xtoffmpeg.c:1690
 #, c-format
 msgid ""
 "%s %s: Could not write header for output file (incorrect codec "
@@ -2065,7 +2065,7 @@ msgstr ""
 "%s %s: Konnte Kopf-Daten für die Ausgabe-Datei nicht schreiben (ungültige "
 "Codec Parameter?) ... breche ab\n"
 
-#: ../src/xtoffmpeg.c:1718
+#: ../src/xtoffmpeg.c:1720
 #, c-format
 msgid ""
 "%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
@@ -2074,59 +2074,59 @@ msgstr ""
 "%s %s: Fehler beim Konvertieren oder Abtasten des Einzelbilds: context %p, "
 "iwidth %i, iheight %i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
 
-#: ../src/xtoffmpeg.c:1740
+#: ../src/xtoffmpeg.c:1742
 #, c-format
 msgid "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"
 msgstr ""
 "%s %s: Fehler beim Enkodieren der Video Daten: c %p, outbuf %p, Größe %i, "
 "frame %p\n"
 
-#: ../src/xtoffmpeg.c:1750
+#: ../src/xtoffmpeg.c:1752
 #, c-format
 msgid "mutex lock for writing video frame failed ... aborting\n"
 msgstr ""
 "Reservieren des Mutex zum Schreiben der Video Daten fehlgeschlagen ... "
 "breche ab\n"
 
-#: ../src/xtoffmpeg.c:1774
+#: ../src/xtoffmpeg.c:1776
 #, c-format
 msgid "couldn't release the mutex for writing video frame ... aborting\n"
 msgstr ""
 "Konnte Mutex zum Schreiben der Video Daten nicht wieder freigeben ... breche "
 "ab\n"
 
-#: ../src/xv_error_item.c:142 ../src/xv_error_item.c:264
+#: ../src/xvc_error_item.c:142 ../src/xvc_error_item.c:264
 #, c-format
 msgid ""
 "FATAL\n"
 "ERROR (%i):"
 msgstr "ABBRUCH (%i):"
 
-#: ../src/xv_error_item.c:145 ../src/xv_error_item.c:270
+#: ../src/xvc_error_item.c:145 ../src/xvc_error_item.c:270
 #, c-format
 msgid "ERROR (%i):"
 msgstr "FEHLER (%i):"
 
-#: ../src/xv_error_item.c:148 ../src/xv_error_item.c:276
+#: ../src/xvc_error_item.c:148 ../src/xvc_error_item.c:276
 #, c-format
 msgid "WARNING (%i):"
 msgstr "WARNUNG (%i):"
 
-#: ../src/xv_error_item.c:151 ../src/xv_error_item.c:282
+#: ../src/xvc_error_item.c:151 ../src/xvc_error_item.c:282
 #, c-format
 msgid "INFO (%i):"
 msgstr "INFO (%i):"
 
-#: ../src/xv_error_item.c:154
+#: ../src/xvc_error_item.c:154
 #, c-format
 msgid "???? (%i):"
 msgstr "???? (%i):"
 
-#: ../src/xv_error_item.c:189
+#: ../src/xvc_error_item.c:189
 msgid "Details:"
 msgstr "Details:"
 
-#: ../src/xv_error_item.c:215
+#: ../src/xvc_error_item.c:215
 msgid "Action:"
 msgstr "Aktion:"
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
-"POT-Creation-Date: 2008-01-14 00:00+0100\n"
+"POT-Creation-Date: 2008-01-15 11:03+0100\n"
 "PO-Revision-Date: 2006-10-09 21:24+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: German\n"
@@ -96,7 +96,6 @@ msgstr "dummy"
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:537(None)
-#, fuzzy
 msgid "@@image: 'figures/menu.png'; md5=1314cbb85b1d730f9cf2190cc2448e0e"
 msgstr "dummy"
 
@@ -184,7 +183,6 @@ msgstr "dummy"
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:834(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/prefs-general.png'; md5=8e40a684da2fbbb56fd28c0b808c2969"
 msgstr "dummy"
@@ -192,21 +190,18 @@ msgstr "dummy"
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:1073(None)
-#, fuzzy
 msgid "@@image: 'figures/prefs-sf.png'; md5=033da1acc8bc90f961aef3043a79eebf"
 msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:1239(None)
-#, fuzzy
 msgid "@@image: 'figures/prefs-mf.png'; md5=ba356b824c080df3cbc7205a65f2776e"
 msgstr "dummy"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: ../C/xvidcap.xml:1499(None)
-#, fuzzy
 msgid ""
 "@@image: 'figures/prefs-commands.png'; md5=5e36a322e9af3f4933541d56a7845384"
 msgstr "dummy"

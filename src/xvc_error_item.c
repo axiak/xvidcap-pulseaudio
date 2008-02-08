@@ -1,5 +1,5 @@
 /**
- * \file xv_error_item.c
+ * \file xvc_error_item.c
  *
  * this file contains the widget used for displaying an individual error in
  * the warning dialog.
@@ -34,62 +34,62 @@
 #include <gtk/gtksignal.h>
 #include <math.h>
 
-#include "xv_error_item.h"
+#include "xvc_error_item.h"
 #include "xvidcap-intl.h"
 
 enum
 {
-    XV_ERROR_ITEM_SIGNAL,
+    XVC_ERROR_ITEM_SIGNAL,
     LAST_SIGNAL
 };
 
-static void xv_error_item_class_init (XvErrorItemClass * klass);
-static void xv_error_item_init (XvErrorItem * ei);
+static void xvc_error_item_class_init (XVC_ErrorItemClass * klass);
+static void xvc_error_item_init (XVC_ErrorItem * ei);
 
-static gint xv_error_item_signals[LAST_SIGNAL] = { 0 };
+static gint xvc_error_item_signals[LAST_SIGNAL] = { 0 };
 
 GType
-xv_error_item_get_type ()
+xvc_error_item_get_type ()
 {
     static GType ei_type = 0;
 
     if (!ei_type) {
         static const GTypeInfo ei_info = {
-            sizeof (XvErrorItemClass),
+            sizeof (XVC_ErrorItemClass),
             NULL,
             NULL,
-            (GClassInitFunc) xv_error_item_class_init,
+            (GClassInitFunc) xvc_error_item_class_init,
             NULL,
             NULL,
-            sizeof (XvErrorItem),
+            sizeof (XVC_ErrorItem),
             0,
-            (GInstanceInitFunc) xv_error_item_init,
+            (GInstanceInitFunc) xvc_error_item_init,
         };
 
         ei_type =
-            g_type_register_static (GTK_TYPE_HBOX, "XvErrorItem", &ei_info, 0);
+            g_type_register_static (GTK_TYPE_HBOX, "XVC_ErrorItem", &ei_info, 0);
     }
 
     return ei_type;
 }
 
 static void
-xv_error_item_class_init (XvErrorItemClass * class)
+xvc_error_item_class_init (XVC_ErrorItemClass * class)
 {
     GtkObjectClass *object_class;
 
     object_class = (GtkObjectClass *) class;
 
-    xv_error_item_signals[XV_ERROR_ITEM_SIGNAL] =
-        g_signal_new ("xv_error_item", G_TYPE_FROM_CLASS (object_class),
+    xvc_error_item_signals[XVC_ERROR_ITEM_SIGNAL] =
+        g_signal_new ("xvc_error_item", G_TYPE_FROM_CLASS (object_class),
                       G_SIGNAL_RUN_FIRST, 0, NULL, NULL,
                       g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0, NULL);
 
-    class->xv_error_item = NULL;
+    class->xvc_error_item = NULL;
 }
 
 static void
-xv_error_item_init (XvErrorItem * ei)
+xvc_error_item_init (XVC_ErrorItem * ei)
 {
     GdkColor g_col;
     GtkWidget *frame;
@@ -234,24 +234,24 @@ xv_error_item_init (XvErrorItem * ei)
 }
 
 GtkWidget *
-xv_error_item_new ()
+xvc_error_item_new ()
 {
-    return GTK_WIDGET (g_object_new (xv_error_item_get_type (), NULL));
+    return GTK_WIDGET (g_object_new (xvc_error_item_get_type (), NULL));
 }
 
 GtkWidget *
-xv_error_item_new_with_error (const XVC_Error * err)
+xvc_error_item_new_with_error (const XVC_Error * err)
 {
     GtkWidget *wid;
 
-    wid = GTK_WIDGET (g_object_new (xv_error_item_get_type (), NULL));
-    xv_error_item_set_error (XV_ERROR_ITEM (wid), err);
+    wid = GTK_WIDGET (g_object_new (xvc_error_item_get_type (), NULL));
+    xvc_error_item_set_error (XVC_ERROR_ITEM (wid), err);
 
     return wid;
 }
 
 void
-xv_error_item_set_error (XvErrorItem * ei, const XVC_Error * err)
+xvc_error_item_set_error (XVC_ErrorItem * ei, const XVC_Error * err)
 {
     if (err != NULL && ei != NULL) {
         char ttag[128];

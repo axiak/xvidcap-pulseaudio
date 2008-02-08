@@ -1,4 +1,19 @@
 
+2008-02-08  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: led_meter.h, codecs.h, control.h, 
+		gnome_warning.c, app_data.c, app_data.h, 
+		job.h, eggtrayicon.h, xv_error_item.c, 
+		xvc_error_item.c, Makefile.am, 
+		xv_error_item.h, xvc_error_item.h,
+		../po: en.po, ru.po, es.po, de.po, it.po, 
+		POTFILES.in, zh_CN.po: fix bug # 1885088 
+		and also change XvError* to match the 
+		XVC_* naming scheme now used elsewhere
+	* doc/xvidcap/de: xvidcap.xml-de.po, 
+		figures/menu.png, figures/prefs-commands.png, 
+		figures/prefs-mf.png, figures/prefs-sf.png, 
+		figures/prefs-general.png: docs l10n
+
 2008-02-03  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/app_data.c: fix for but #1885105 was
 		incomplete
