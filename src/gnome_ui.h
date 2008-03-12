@@ -20,8 +20,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __XVC_GNOME_UI_H__
-#define __XVC_GNOME_UI_H__
+#ifndef _xvc_XVC_GNOME_UI_H__
+#define _xvc_XVC_GNOME_UI_H__
 
 #include <glib.h>
 
@@ -497,4 +497,4 @@ void xvc_toggle_cap_type ();
 void xvc_undo_toggle_cap_type ();
 void xvc_reset_ctrl_main_window_according_to_current_prefs ();
 
-#endif     // __XVC_GNOME_UI_H__
+#endif     // _xvc_XVC_GNOME_UI_H__

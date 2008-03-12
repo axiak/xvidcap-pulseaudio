@@ -22,8 +22,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __JOB_H__
-#define __JOB_H__
+#ifndef _xvc_JOB_H__
+#define _xvc_JOB_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <X11/Intrinsic.h>
@@ -164,4 +164,4 @@ void xvc_job_keep_and_merge_state (int merge_state, int remove_state);
 //XserverRegion xvc_get_damage_region ();
 Region xvc_get_damage_region ();
 #endif     // USE_XDAMAGE
-#endif     // __JOB_H__
+#endif     // _xvc_JOB_H__

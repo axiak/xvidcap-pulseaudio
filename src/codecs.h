@@ -22,8 +22,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __CODECS_H__
-#define __CODECS_H__
+#ifndef _xvc_CODECS_H__
+#define _xvc_CODECS_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
@@ -228,4 +228,4 @@ int xvc_get_index_of_fps_array_element (int size,
                                         XVC_Fps needle, int exact);
 XVC_Fps xvc_read_fps_from_string (const char *fps_string);
 
-#endif     // __CODECS_H__
+#endif     // _xvc_CODECS_H__

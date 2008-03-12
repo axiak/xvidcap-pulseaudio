@@ -21,8 +21,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __APP_DATA_H__
-#define __APP_DATA_H__
+#ifndef _xvc_APP_DATA_H__
+#define _xvc_APP_DATA_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
@@ -368,4 +368,4 @@ void xvc_command_execute (const char *command, int flag, int number,
                           const char *file, int fframe, int lframe, int width,
                           int height, XVC_Fps fps);
 
-#endif     // __APP_DATA_H__
+#endif     // _xvc_APP_DATA_H__

@@ -20,8 +20,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __COLORS_H__
-#define __COLORS_H__
+#ifndef _xvc_COLORS_H__
+#define _xvc_COLORS_H__
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -58,4 +58,4 @@ ColorInfo *xvc_get_color_info (const XImage * image);
 int xvc_get_colors (Display * dpy, const XWindowAttributes * winfo,
                     XColor ** colors);
 
-#endif     // __COLORS_H__
+#endif     // _xvc_COLORS_H__

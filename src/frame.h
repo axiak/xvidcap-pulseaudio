@@ -21,8 +21,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __XVC_FRAME_H__
-#define __XVC_FRAME_H__
+#ifndef _xvc_XVC_FRAME_H__
+#define _xvc_XVC_FRAME_H__
 
 XRectangle *xvc_get_capture_area (void);
 int xvc_is_frame_locked (void);
@@ -35,4 +35,4 @@ void xvc_get_window_attributes (Display * dpy, Window win,
 void xvc_frame_drop_capture_display ();
 Display *xvc_frame_get_capture_display ();
 
-#endif     // __XVC_FRAME_H__
+#endif     // _xvc_XVC_FRAME_H__

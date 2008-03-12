@@ -25,8 +25,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __XVC_CONTROL_H__
-#define __XVC_CONTROL_H__
+#ifndef _xvc_XVC_CONTROL_H__
+#define _xvc_XVC_CONTROL_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <X11/Intrinsic.h>
@@ -57,4 +57,4 @@ Boolean xvc_frame_monitor ();
 Boolean xvc_read_options_file ();
 Boolean xvc_write_options_file ();
 
-#endif     // __XVC_CONTROL_H__
+#endif     // _xvc_XVC_CONTROL_H__

@@ -21,8 +21,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __CAPTURE_H__
-#define __CAPTURE_H__
+#ifndef _xvc_CAPTURE_H__
+#define _xvc_CAPTURE_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
@@ -72,4 +72,4 @@ long TCbCaptureV4L ();
 #define TCbCaptureV4L xvc_capture_x11
 #endif
 
-#endif     // __CAPTURE_H__
+#endif     // _xvc_CAPTURE_H__

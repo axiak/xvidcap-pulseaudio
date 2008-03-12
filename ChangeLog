@@ -1,4 +1,14 @@
 
+2008-03-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src: frame.h, xtoxwd.h, led_meter.h, codecs.h, 
+		colors.h, xvidcap-intl.h, dbus-server-object.h, 
+		control.h, gnome_warning.h, xtoffmpeg.h, 
+		gnome_ui.h, capture.h, app_data.h, job.h, 
+		eggtrayicon.h, gnome_frame.h, gnome_options.h, 
+		xvc_error_item.h: complete fix for bug # 1885088
+		(only _XReadPad and __cplusplus remain which
+		are only used here, defined elsewhere)
+
 2008-02-08  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: led_meter.h, codecs.h, control.h, 
 		gnome_warning.c, app_data.c, app_data.h, 

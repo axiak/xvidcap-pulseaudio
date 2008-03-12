@@ -19,8 +19,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __LED_METER_H__
-#define __LED_METER_H__
+#ifndef _xvc_LED_METER_H__
+#define _xvc_LED_METER_H__
 
 #include <gdk/gdk.h>
 #include <gtk/gtkvbox.h>
@@ -77,4 +77,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif     /* __cplusplus */
-#endif     /* __LED_METER_H__ */
+#endif     /* _xvc_LED_METER_H__ */

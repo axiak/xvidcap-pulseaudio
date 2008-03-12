@@ -19,8 +19,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __GNOME_WARNING_H__
-#define __GNOME_WARNING_H__
+#ifndef _xvc_GNOME_WARNING_H__
+#define _xvc_GNOME_WARNING_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include "app_data.h"
@@ -29,4 +29,4 @@
 GtkWidget *xvc_create_warning_with_errors (XVC_ErrorListItem * elist,
                                            int from_where);
 
-#endif     // __GNOME_WARNING_H__
+#endif     // _xvc_GNOME_WARNING_H__

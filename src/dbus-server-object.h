@@ -1,5 +1,5 @@
-#ifndef __DBUS_SERVER_OBJECT__
-#define __DBUS_SERVER_OBJECT__
+#ifndef _xvc_DBUS_SERVER_OBJECT__
+#define _xvc_DBUS_SERVER_OBJECT__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
@@ -44,4 +44,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif     // __cplusplus
-#endif     // __DBUS_SERVER_OBJECT__
+#endif     // _xvc_DBUS_SERVER_OBJECT__

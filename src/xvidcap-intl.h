@@ -1,8 +1,8 @@
 /**
  * \file xvidcap-intl.h
  */
-#ifndef __XVIDCAP_INTL_H__
-#define __XVIDCAP_INTL_H__
+#ifndef _xvc_XVIDCAP_INTL_H__
+#define _xvc_XVIDCAP_INTL_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifdef HAVE_CONFIG_H
@@ -29,4 +29,4 @@
 #define bind_textdomain_codeset(Domain,Codeset) (Codeset)
 #endif     /* ENABLE_NLS */
 
-#endif     /* __XVIDCAP_INTL_H__ */
+#endif     /* _xvc_XVIDCAP_INTL_H__ */

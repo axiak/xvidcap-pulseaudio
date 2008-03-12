@@ -20,8 +20,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __XVC_ERROR_ITEM_H__
-#define __XVC_ERROR_ITEM_H__
+#ifndef _xvc_XVC_ERROR_ITEM_H__
+#define _xvc_XVC_ERROR_ITEM_H__
 
 #include <gdk/gdk.h>
 #include <gtk/gtkhbox.h>
@@ -68,4 +68,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif     /* __cplusplus */
-#endif     /* __XVC_ERROR_ITEM_H__ */
+#endif     /* _xvc_XVC_ERROR_ITEM_H__ */

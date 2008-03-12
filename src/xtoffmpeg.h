@@ -20,11 +20,11 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __X_TO_FFMPEG_H__
-#define __X_TO_FFMPEG_H__
+#ifndef _xvc_X_TO_FFMPEG_H__
+#define _xvc_X_TO_FFMPEG_H__
 
 void xvc_ffmpeg_save_frame (FILE * fp, XImage * image);
 void *xvc_ffmpeg_get_color_table (XColor * colors, int ncolors);
 void xvc_ffmpeg_clean ();
 
-#endif     // __X_TO_FFMPEG_H__
+#endif     // _xvc_X_TO_FFMPEG_H__

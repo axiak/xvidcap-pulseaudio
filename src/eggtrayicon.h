@@ -18,8 +18,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __EGG_TRAY_ICON_H__
-#define __EGG_TRAY_ICON_H__
+#ifndef _xvc_EGG_TRAY_ICON_H__
+#define _xvc_EGG_TRAY_ICON_H__
 
 #include <gtk/gtkplug.h>
 #ifdef GDK_WINDOWING_X11
@@ -71,4 +71,4 @@ void egg_tray_icon_cancel_message (EggTrayIcon * icon, guint id);
 GtkOrientation egg_tray_icon_get_orientation (EggTrayIcon * icon);
 
 G_END_DECLS
-#endif     /* __EGG_TRAY_ICON_H__ */
+#endif     /* _xvc_EGG_TRAY_ICON_H__ */

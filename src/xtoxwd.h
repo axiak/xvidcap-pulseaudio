@@ -19,10 +19,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __X_TO_XWD_H__
-#define __X_TO_XWD_H__
+#ifndef _xvc_X_TO_XWD_H__
+#define _xvc_X_TO_XWD_H__
 
 void xvc_xwd_save_frame (FILE * fp, XImage * image);
 void *xvc_xwd_get_color_table (XColor * colors, int ncolors);
 
-#endif     // __X_TO_XWD_H__
+#endif     // _xvc_X_TO_XWD_H__

@@ -20,8 +20,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __GNOME_OPTIONS_H__
-#define __GNOME_OPTIONS_H__
+#ifndef _xvc_GNOME_OPTIONS_H__
+#define _xvc_GNOME_OPTIONS_H__
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include <gtk/gtk.h>
@@ -32,4 +32,4 @@ void xvc_create_pref_dialog (XVC_AppData * lapp);
 void xvc_pref_do_OK ();
 void xvc_pref_reset_OK_attempts ();
 
-#endif     // __GNOME_OPTIONS_H__
+#endif     // _xvc_GNOME_OPTIONS_H__

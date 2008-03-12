@@ -21,8 +21,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef __XVC_GNOME_FRAME_H__
-#define __XVC_GNOME_FRAME_H__
+#ifndef _xvc_XVC_GNOME_FRAME_H__
+#define _xvc_XVC_GNOME_FRAME_H__
 
 #define FRAME_WIDTH 3
 #define FRAME_OFFSET (4*FRAME_WIDTH)
@@ -37,4 +37,4 @@ void xvc_change_gtk_frame (int x, int y, int width, int height,
 void xvc_create_gtk_frame (GtkWidget * w, int width, int height, int x, int y);
 void xvc_destroy_gtk_frame (void);
 
-#endif     // __XVC_GNOME_FRAME_H__
+#endif     // _xvc_XVC_GNOME_FRAME_H__
