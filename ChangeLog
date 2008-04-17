@@ -1,4 +1,11 @@
 
+2008-04-17  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	* src/xtoffmpeg.c, configure.in, config.h.in, ffmpeg:
+		update for current ffmpeg
+
+2008-04-17  Jacques Blouin  <jacdex@gmail.com>
+	* po/fr.po: added French translation
+
 2008-03-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src: frame.h, xtoxwd.h, led_meter.h, codecs.h, 
 		colors.h, xvidcap-intl.h, dbus-server-object.h, 

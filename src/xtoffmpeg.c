@@ -58,6 +58,7 @@
 // ffmpeg stuff
 #include <ffmpeg/avcodec.h>
 #include <ffmpeg/avformat.h>
+#include <ffmpeg/avdevice.h>
 //#include <ffmpeg/dsputil.h>
 #include <ffmpeg/swscale.h>
 #include <ffmpeg/rgb2rgb.h>
@@ -291,13 +292,13 @@ add_audio_stream (Job * job)
 
     // prepare input stream
     memset (ap, 0, sizeof (*ap));
-    ap->device = job->snd_device;
+//    ap->device = job->snd_device;
 
     if (grab_audio) {
         ap->sample_rate = target->sndrate;
         ap->channels = target->sndchannels;
 
-        grab_iformat = av_find_input_format ("audio_device");
+        grab_iformat = av_find_input_format ("oss");
 #ifdef DEBUG
         printf ("%s %s: grab iformat %p\n", DEBUGFILE, DEBUGFUNCTION,
                 grab_iformat);
@@ -308,7 +309,7 @@ add_audio_stream (Job * job)
     }
 
     err =
-        av_open_input_file (&ic, ap->device, (grab_audio ? grab_iformat : NULL),
+        av_open_input_file (&ic, job->snd_device, (grab_audio ? grab_iformat : NULL),
                             0, ap);
     if (err < 0) {
         fprintf (stderr, _("%s %s: error opening input file %s: %i\n"),
@@ -1432,7 +1433,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         input_pixfmt = guess_input_pix_fmt (image, job->c_info);
 
         // register all libav* related stuff
-        av_register_all ();
+	avdevice_register_all();
+        av_register_all();
 
         // guess AVOutputFormat
         if (job->target >= CAP_MF)
@@ -1763,7 +1765,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
     }
 
     if (job->target < CAP_MF)
-        url_fclose (&output_file->pb);
+        url_fclose (output_file->pb);
 
 #ifdef HAVE_FFMPEG_AUDIO
     /*
@@ -1828,7 +1830,7 @@ xvc_ffmpeg_clean ()
          * close file if multi-frame capture ... otherwise closed already
          */
         if (job->target >= CAP_MF)
-            url_fclose (&output_file->pb);
+            url_fclose (output_file->pb);
         /*
          * free streams
          */
