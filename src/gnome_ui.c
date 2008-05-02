@@ -2190,7 +2190,7 @@ on_xvc_ctrl_main_window_delete_event (GtkWidget * widget,
         xvc_capture_stop_signal (TRUE);
     }
 
-    xvc_destroy_gtk_frame ();
+    xvc_destroy_gtk_frame ();    
     gtk_main_quit ();                  /** \todo why does this seem to be
 necessary with libglade where it was not previously */
     return FALSE;
@@ -2883,7 +2883,7 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
         XGCValues gcv;
         GC gc;
         XVC_CapTypeOptions *target = NULL;
-
+        
 #ifdef USE_FFMPEG
         if (app->current_mode > 0)
             target = &(app->multi_frame);

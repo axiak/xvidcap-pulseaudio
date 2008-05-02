@@ -1380,7 +1380,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 #define DEBUGFUNCTION "xvc_ffmpeg_save_frame()"
     Job *job = xvc_job_ptr ();
     XVC_AppData *app = xvc_appdata_ptr ();
-
+    
     /* size of the encoded frame to write to file */
     int out_size = -1;
 
@@ -1595,10 +1595,10 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         /*
          * prepare output buffer for encoded frames
          */
-        if ((image_size + 200) < FF_MIN_BUFFER_SIZE)
+        if ((image_size + 10000) < FF_MIN_BUFFER_SIZE)
             outbuf_size = FF_MIN_BUFFER_SIZE;
         else
-            outbuf_size = image_size + 200;
+            outbuf_size = image_size + 10000;
         outbuf = malloc (outbuf_size);
         if (!outbuf) {
             fprintf (stderr,

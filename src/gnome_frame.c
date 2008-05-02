@@ -343,7 +343,7 @@ xvc_change_gtk_frame (int x, int y, int width, int height,
     if (((app->flags & FLG_NOGUI) == 0) && reposition_control)
         do_reposition_control (xvc_ctrl_main_window);
 
-    if (show_dimensions) {
+    if (show_dimensions && ((app->flags & FLG_NOFRAME) == 0)) {
         xml = glade_get_widget_tree (GTK_WIDGET (xvc_frame_dimensions_window));
         g_assert (xml);
         w = glade_xml_get_widget (xml, "xvc_frame_size_label");
@@ -1183,8 +1183,10 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
     // to redraw the selection frame if the control is moved and the
     // frame is locked
     // this is also required with FLG_NOFRAME
-    g_signal_connect (G_OBJECT (toplevel), "configure-event",
+    if (!(flags & FLG_NOGUI)){        
+        g_signal_connect (G_OBJECT (toplevel), "configure-event",
                       G_CALLBACK (on_gtk_frame_configure_event), NULL);
+    }
 
     xvc_set_frame_locked (1);
 
