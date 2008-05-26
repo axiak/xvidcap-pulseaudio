@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-17 10:07+0200\n"
+"POT-Creation-Date: 2008-05-26 22:58+0200\n"
 "PO-Revision-Date: 2008-04-15 20:45-0500\n"
 "Last-Translator: Jacques Blouin <jacdex@gmail.com>\n"
 "Language-Team: French\n"
@@ -2095,7 +2095,7 @@ msgid "couldn't release the mutex for writing video frame ... aborting\n"
 msgstr ""
 "n`a pas pu relâcher le mutex pour l`écriture de la trame vidéo ... abandon\n"
 
-#: ../src/xvc_error_item.c:142 ../src/xvc_error_item.c:264
+#: ../src/xvc_error_item.c:143 ../src/xvc_error_item.c:265
 #, c-format
 msgid ""
 "FATAL\n"
@@ -2104,31 +2104,31 @@ msgstr ""
 "FATAL\n"
 "ERREUR (%i):"
 
-#: ../src/xvc_error_item.c:145 ../src/xvc_error_item.c:270
+#: ../src/xvc_error_item.c:146 ../src/xvc_error_item.c:271
 #, c-format
 msgid "ERROR (%i):"
 msgstr "ERREUR (%i):"
 
-#: ../src/xvc_error_item.c:148 ../src/xvc_error_item.c:276
+#: ../src/xvc_error_item.c:149 ../src/xvc_error_item.c:277
 #, c-format
 msgid "WARNING (%i):"
 msgstr "AVERTISSEMENT (%i):"
 
-#: ../src/xvc_error_item.c:151 ../src/xvc_error_item.c:282
+#: ../src/xvc_error_item.c:152 ../src/xvc_error_item.c:283
 #, c-format
 msgid "INFO (%i):"
 msgstr "INFO (%i):"
 
-#: ../src/xvc_error_item.c:154
+#: ../src/xvc_error_item.c:155
 #, c-format
 msgid "???? (%i):"
 msgstr "???? (%i):"
 
-#: ../src/xvc_error_item.c:189
+#: ../src/xvc_error_item.c:190
 msgid "Details:"
 msgstr "Détails:"
 
-#: ../src/xvc_error_item.c:215
+#: ../src/xvc_error_item.c:216
 msgid "Action:"
 msgstr "Action:"
 

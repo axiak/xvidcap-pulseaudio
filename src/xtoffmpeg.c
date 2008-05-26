@@ -309,8 +309,8 @@ add_audio_stream (Job * job)
     }
 
     err =
-        av_open_input_file (&ic, job->snd_device, (grab_audio ? grab_iformat : NULL),
-                            0, ap);
+        av_open_input_file (&ic, job->snd_device,
+                            (grab_audio ? grab_iformat : NULL), 0, ap);
     if (err < 0) {
         fprintf (stderr, _("%s %s: error opening input file %s: %i\n"),
                  DEBUGFILE, DEBUGFUNCTION, job->snd_device, err);
@@ -1380,7 +1380,7 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 #define DEBUGFUNCTION "xvc_ffmpeg_save_frame()"
     Job *job = xvc_job_ptr ();
     XVC_AppData *app = xvc_appdata_ptr ();
-    
+
     /* size of the encoded frame to write to file */
     int out_size = -1;
 
@@ -1433,8 +1433,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         input_pixfmt = guess_input_pix_fmt (image, job->c_info);
 
         // register all libav* related stuff
-	avdevice_register_all();
-        av_register_all();
+        avdevice_register_all ();
+        av_register_all ();
 
         // guess AVOutputFormat
         if (job->target >= CAP_MF)
@@ -1595,10 +1595,10 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
         /*
          * prepare output buffer for encoded frames
          */
-        if ((image_size + 10000) < FF_MIN_BUFFER_SIZE)
+        if ((image_size + 20000) < FF_MIN_BUFFER_SIZE)
             outbuf_size = FF_MIN_BUFFER_SIZE;
         else
-            outbuf_size = image_size + 10000;
+            outbuf_size = image_size + 20000;
         outbuf = malloc (outbuf_size);
         if (!outbuf) {
             fprintf (stderr,

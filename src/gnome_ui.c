@@ -2190,7 +2190,7 @@ on_xvc_ctrl_main_window_delete_event (GtkWidget * widget,
         xvc_capture_stop_signal (TRUE);
     }
 
-    xvc_destroy_gtk_frame ();    
+    xvc_destroy_gtk_frame ();
     gtk_main_quit ();                  /** \todo why does this seem to be
 necessary with libglade where it was not previously */
     return FALSE;
@@ -2883,7 +2883,10 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
         XGCValues gcv;
         GC gc;
         XVC_CapTypeOptions *target = NULL;
-        
+        int toggled_frame_on = FALSE;
+        GladeXML *menuxml = NULL;
+        GtkWidget *show_frame_mitem = NULL;
+
 #ifdef USE_FFMPEG
         if (app->current_mode > 0)
             target = &(app->multi_frame);
@@ -2892,6 +2895,17 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
             target = &(app->single_frame);
 
         g_assert (app->dpy);
+
+        if ((app->flags & FLG_NOFRAME)) {
+            // if "show_frame" is off we have to switch it
+            // on before using the non existing frame
+            menuxml = glade_get_widget_tree (xvc_ctrl_m1);
+            g_assert (menuxml);
+
+            show_frame_mitem = glade_xml_get_widget (menuxml,
+                                                     "xvc_ctrl_m1_show_frame");
+            g_assert (show_frame_mitem);
+        }
 
         cursor = XCreateFontCursor (app->dpy, XC_crosshair);
 
@@ -2934,6 +2948,28 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                     target_win = app->root_window;
                 }
                 buttons++;
+
+                // in case the frame is off, set it on and store the fact that
+                // we did so
+                if ((app->flags & FLG_NOFRAME)) {
+                    app->area->x = x_down;
+                    app->area->y = y_down;
+                    app->area->width = app->area->height = 0;
+
+                    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM
+                                                    (show_frame_mitem), TRUE);
+                    while (gtk_events_pending ()) {
+                        gtk_main_iteration ();
+                    }
+                    toggled_frame_on = TRUE;
+                } else {
+                    xvc_destroy_gtk_frame ();
+                    xvc_create_gtk_frame (xvc_ctrl_main_window, 0, 0,
+                                          x_down, y_down);
+                    while (gtk_events_pending ()) {
+                        gtk_main_iteration ();
+                    }
+                }
                 break;
             case ButtonRelease:
                 x_up = event.xbutton.x;
@@ -3014,6 +3050,16 @@ on_xvc_ctrl_select_toggle_toggled (GtkToggleToolButton *
                      DEBUGFILE, DEBUGFUNCTION,
                      *(u_int32_t *) jobp->color_table);
         }
+        // in case the frame is off, set it on and store the fact that
+        // we did so
+        if (toggled_frame_on) {
+            gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM
+                                            (show_frame_mitem), FALSE);
+            while (gtk_events_pending ()) {
+                gtk_main_iteration ();
+            }
+        }
+
         xvc_job_set_save_function (jobp->target);
 
 #ifdef DEBUG

@@ -68,7 +68,7 @@ usage (char *prog)
 /**
  * \brief main function of the application to do the remote function invocation
  *
- * @return completion status 
+ * @return completion status
  */
 
 int
@@ -111,9 +111,9 @@ main (int argc, char *argv[])
     if (connection == NULL) {
         g_warning ("Unable to connect to dbus: %sn", error->message);
         g_error_free (error);
-        // Basically here, there is a problem, since there is no dbus :) 
+        // Basically here, there is a problem, since there is no dbus :)
     }
-    // This won't trigger activation! 
+    // This won't trigger activation!
     proxy = dbus_g_proxy_new_for_name (connection,
                                        "net.jarre_de_the.Xvidcap",
                                        "/net/jarre_de_the/Xvidcap",
@@ -146,11 +146,11 @@ main (int argc, char *argv[])
         break;
     }
 
-    // Cleanup 
+    // Cleanup
     g_object_unref (proxy);
 
-    // The DBusGConnection should never be unreffed, it lives once and is 
-    // shared amongst the process 
+    // The DBusGConnection should never be unreffed, it lives once and is
+    // shared amongst the process
 
     return 0;
 }

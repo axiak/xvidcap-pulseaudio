@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap.xml-it\n"
-"POT-Creation-Date: 2008-01-14 00:05+0100\n"
+"POT-Creation-Date: 2008-05-03 09:34+0200\n"
 "PO-Revision-Date: 2007-05-18 07:22+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
@@ -327,8 +327,8 @@ msgid "xvidcap V0.3"
 msgstr "xvidcap V0.1"
 
 #: ../C/xvidcap.xml:87(releaseinfo)
-msgid "This manual describes version 1.1.6 of xvidcap."
-msgstr "Questo manuale descrive la versione 1.1.6 di xvidcap."
+msgid "This manual describes version 1.1.7 of xvidcap."
+msgstr "Questo manuale descrive la versione 1.1.7 di xvidcap."
 
 #: ../C/xvidcap.xml:90(title)
 msgid "Feedback"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.1.7\n"
-"POT-Creation-Date: 2008-01-13 22:36+0100\n"
+"POT-Creation-Date: 2008-05-03 09:39+0200\n"
 "PO-Revision-Date: 2007-11-04 23:03+0100\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: DE <xvidcap-l10n@lists.sourceforge.net>\n"
@@ -19,8 +19,8 @@ msgid "1"
 msgstr "1"
 
 #: ../C/xvidcap-dbus-client.1.xml:8(refmiscinfo)
-msgid "January 2008"
-msgstr "Januar 2008"
+msgid "May 2008"
+msgstr "Mai 2008"
 
 #: ../C/xvidcap-dbus-client.1.xml:11(refname)
 msgid "XVidCap D-BUS Client"
@@ -60,8 +60,8 @@ msgstr ""
 "Zur Kommunikation zwischen Prozessen wird hier D-BUS verwendet. Falls "
 "xvidcap noch nicht läuft, wenn dieses Programm verwendet wird, um eine "
 "Aktion auszulösen, wird xvidcap durch D-BUS gestartet. Für weitere Hilfe, "
-"Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an "
-"http://www.sourceforge.net/projects/xvidcap/"
+"Verbesserungsvorschläge oder Fehlerberichte wenden Sie sich bitte an http://"
+"www.sourceforge.net/projects/xvidcap/"
 
 #: ../C/xvidcap-dbus-client.1.xml:36(title)
 msgid "Options"

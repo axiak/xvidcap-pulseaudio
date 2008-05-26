@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-08 13:37+0100\n"
+"POT-Creation-Date: 2008-05-26 22:58+0200\n"
 "PO-Revision-Date: 2006-03-02 20:55+0200\n"
 "Last-Translator: Imanol García <imanol.garcia.c@gmail.com>\n"
 "Language-Team: Español\n"
@@ -1867,163 +1867,163 @@ msgid "Disabling audio capture unless overridden by command line\n"
 msgstr ""
 "Deshabilitando captura de audio salvo comando que indique lo contrario\n"
 
-#: ../src/xtoffmpeg.c:314
+#: ../src/xtoffmpeg.c:315
 #, c-format
 msgid "%s %s: error opening input file %s: %i\n"
 msgstr "%s %s: error al abrir fichero de entrada %s: %i\n"
 
-#: ../src/xtoffmpeg.c:321
+#: ../src/xtoffmpeg.c:322
 #, c-format
 msgid "%s %s: Could not alloc input stream ... aborting\n"
 msgstr "%s %s: No se puede aqsignar stream de entrada ... abortando\n"
 
-#: ../src/xtoffmpeg.c:331
+#: ../src/xtoffmpeg.c:332
 #, fuzzy, c-format
 msgid "%s %s: could not find codec parameters\n"
 msgstr "%s %s: %s: No se puede encontrar parámetros de codec\n"
 
-#: ../src/xtoffmpeg.c:353
+#: ../src/xtoffmpeg.c:354
 #, fuzzy, c-format
 msgid "%s %s: could not allocate audio output codec context\n"
 msgstr "%s %s: No se puede asignar stream de salida\n"
 
-#: ../src/xtoffmpeg.c:373
+#: ../src/xtoffmpeg.c:374
 #, c-format
 msgid "%s %s: Could not alloc stream ... aborting\n"
 msgstr "%s %s: No se puede asignar stream ... abortando\n"
 
-#: ../src/xtoffmpeg.c:383
+#: ../src/xtoffmpeg.c:384
 #, c-format
 msgid "%s %s: Could not alloc stream\n"
 msgstr "%s %s: No se puede asignar stream\n"
 
-#: ../src/xtoffmpeg.c:395
+#: ../src/xtoffmpeg.c:396
 #, c-format
 msgid "%s %s: Can't initialize fifo for audio recording\n"
 msgstr "%s %s: No se puede iniciar fifo para grabación de audio\n"
 
-#: ../src/xtoffmpeg.c:433 ../src/xtoffmpeg.c:452
+#: ../src/xtoffmpeg.c:434 ../src/xtoffmpeg.c:453
 #, c-format
 msgid "%s %s: Can't resample. Aborting.\n"
 msgstr "%s %s: No se puede resamplear. Abortado.\n"
 
-#: ../src/xtoffmpeg.c:469
+#: ../src/xtoffmpeg.c:470
 #, c-format
 msgid "%s %s: Error while opening codec for output stream\n"
 msgstr "%s %s: Error al abrir codec para stream de salida\n"
 
-#: ../src/xtoffmpeg.c:481
+#: ../src/xtoffmpeg.c:482
 #, c-format
 msgid "%s %s: Unsupported codec (id=%d) for input stream\n"
 msgstr "%s %s: Codec no soportado (id=%d) para stream de entrada\n"
 
-#: ../src/xtoffmpeg.c:491
+#: ../src/xtoffmpeg.c:492
 #, c-format
 msgid "%s %s: Error while opening codec for input stream\n"
 msgstr "%s %s: Error al abrir codec para stream de entrada\n"
 
-#: ../src/xtoffmpeg.c:577
+#: ../src/xtoffmpeg.c:578
 #, c-format
 msgid "%s %s: Error while writing audio frame\n"
 msgstr "%s %s: Error al escribir frame de audio\n"
 
-#: ../src/xtoffmpeg.c:586
+#: ../src/xtoffmpeg.c:587
 #, c-format
 msgid "%s %s: Couldn't unlock mutex lock for writing audio frame\n"
 msgstr "%s %s: No se puede desbloquear mutex para escribir frame de audio\n"
 
-#: ../src/xtoffmpeg.c:772
+#: ../src/xtoffmpeg.c:773
 #, c-format
 msgid "%s %s: error reading audio packet\n"
 msgstr "%s %s: error leyendo paquete de audio\n"
 
-#: ../src/xtoffmpeg.c:795
+#: ../src/xtoffmpeg.c:796
 #, c-format
 msgid "%s %s: couldn't decode captured audio packet\n"
 msgstr "%s %s: no se puede decodificar paquete de audio capturado\n"
 
-#: ../src/xtoffmpeg.c:806
+#: ../src/xtoffmpeg.c:807
 #, c-format
 msgid "%s %s: no audio frame\n"
 msgstr "%s %s: no hay frame de audio\n"
 
-#: ../src/xtoffmpeg.c:838
+#: ../src/xtoffmpeg.c:839
 #, c-format
 msgid "error reading audio packet\n"
 msgstr "error al leer paquete de audio\n"
 
-#: ../src/xtoffmpeg.c:841
+#: ../src/xtoffmpeg.c:842
 #, c-format
 msgid "%s %s: dropping audio frame %f %f\n"
 msgstr "%s %s: descartando frame de audio %f %f\n"
 
-#: ../src/xtoffmpeg.c:915
+#: ../src/xtoffmpeg.c:916
 #, c-format
 msgid "%s %s: Error while writing video frame\n"
 msgstr "%s %s: Error al escribir frame de video\n"
 
-#: ../src/xtoffmpeg.c:1153
+#: ../src/xtoffmpeg.c:1154
 #, c-format
 msgid "%s %s: Could not alloc output stream\n"
 msgstr "%s %s: No se puede asignar stream de salida\n"
 
-#: ../src/xtoffmpeg.c:1164
+#: ../src/xtoffmpeg.c:1165
 #, c-format
 msgid "%s %s: video codec not found\n"
 msgstr "%s %s: codec de video no encontrado\n"
 
-#: ../src/xtoffmpeg.c:1231
+#: ../src/xtoffmpeg.c:1232
 #, fuzzy, c-format
 msgid ""
 "%s %s: The picture format you are grabbing (%i) is not supported by "
 "libswscale ... aborting\n"
 msgstr "%s %s: rgb ordering at image depth %i no soportado ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1311 ../src/xtoffmpeg.c:1331
+#: ../src/xtoffmpeg.c:1312 ../src/xtoffmpeg.c:1332
 #, c-format
 msgid "%s %s: rgb ordering at image depth %i not supported ... aborting\n"
 msgstr "%s %s: rgb ordering at image depth %i no soportado ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1352 ../src/xtoffmpeg.c:1359
+#: ../src/xtoffmpeg.c:1353 ../src/xtoffmpeg.c:1360
 #, c-format
 msgid "%s %s: image depth %i not supported ... aborting\n"
 msgstr "%s %s: profundidad de imagen %i no souportada ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1451
+#: ../src/xtoffmpeg.c:1453
 #, fuzzy, c-format
 msgid "%s %s: Couldn't determin output format ... aborting\n"
 msgstr ""
 "%s %s: No se puede asignar buffer para frame de salida! ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1471
+#: ../src/xtoffmpeg.c:1473
 #, c-format
 msgid "%s %s: Error allocating memory for format context ... aborting\n"
 msgstr ""
 "%s %s: Error asignando memoria para el contexto de formato ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1483
+#: ../src/xtoffmpeg.c:1485
 #, c-format
 msgid "%s %s: Error allocating private data for format context ... aborting\n"
 msgstr ""
 "%s %s: Error allocating private data for format context ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1513
+#: ../src/xtoffmpeg.c:1515
 #, c-format
 msgid "%s %s: Invalid encoding parameters ... aborting\n"
 msgstr "%s %s: Parámetros de codificación inválidos ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1519
+#: ../src/xtoffmpeg.c:1521
 #, c-format
 msgid "%s %s: could not open video codec\n"
 msgstr "%s %s: no se puede abrir codec de video\n"
 
-#: ../src/xtoffmpeg.c:1585
+#: ../src/xtoffmpeg.c:1587
 #, c-format
 msgid "%s %s: Could not allocate buffer for output frame! ... aborting\n"
 msgstr ""
 "%s %s: No se puede asignar buffer para frame de salida! ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1604
+#: ../src/xtoffmpeg.c:1606
 #, c-format
 msgid ""
 "%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"
@@ -2031,12 +2031,12 @@ msgstr ""
 "%s %s: No se puede asignar buffer para el frame codificado (outbuf)! ... "
 "abortando\n"
 
-#: ../src/xtoffmpeg.c:1633 ../src/xtoffmpeg.c:1681
+#: ../src/xtoffmpeg.c:1635 ../src/xtoffmpeg.c:1683
 #, c-format
 msgid "%s %s: Could not open '%s' ... aborting\n"
 msgstr "%s %s: No se puede abrir '%s' ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1642 ../src/xtoffmpeg.c:1690
+#: ../src/xtoffmpeg.c:1644 ../src/xtoffmpeg.c:1692
 #, c-format
 msgid ""
 "%s %s: Could not write header for output file (incorrect codec "
@@ -2045,29 +2045,29 @@ msgstr ""
 "%s %s: No se puede escribir cabecera para el fichero de salida (parametros "
 "de codec incorrectos ?) ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1720
+#: ../src/xtoffmpeg.c:1722
 #, c-format
 msgid ""
 "%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
 "i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
 msgstr ""
 
-#: ../src/xtoffmpeg.c:1742
+#: ../src/xtoffmpeg.c:1744
 #, c-format
 msgid "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"
 msgstr "%s %s: error codificando frame: c %p, outbuf %p, tamaño %i, frame %p\n"
 
-#: ../src/xtoffmpeg.c:1752
+#: ../src/xtoffmpeg.c:1754
 #, c-format
 msgid "mutex lock for writing video frame failed ... aborting\n"
 msgstr "Falló el bloqueo mutex para escribir el frame de video ... abortando\n"
 
-#: ../src/xtoffmpeg.c:1776
+#: ../src/xtoffmpeg.c:1778
 #, c-format
 msgid "couldn't release the mutex for writing video frame ... aborting\n"
 msgstr "No se puede liberar mutex para escribir frame de video ... abortando\n"
 
-#: ../src/xvc_error_item.c:142 ../src/xvc_error_item.c:264
+#: ../src/xvc_error_item.c:143 ../src/xvc_error_item.c:265
 #, c-format
 msgid ""
 "FATAL\n"
@@ -2076,31 +2076,31 @@ msgstr ""
 "FATAL\n"
 "ERROR (%i):"
 
-#: ../src/xvc_error_item.c:145 ../src/xvc_error_item.c:270
+#: ../src/xvc_error_item.c:146 ../src/xvc_error_item.c:271
 #, c-format
 msgid "ERROR (%i):"
 msgstr "ERROR (%i):"
 
-#: ../src/xvc_error_item.c:148 ../src/xvc_error_item.c:276
+#: ../src/xvc_error_item.c:149 ../src/xvc_error_item.c:277
 #, c-format
 msgid "WARNING (%i):"
 msgstr "ATENCIÓN (%i):"
 
-#: ../src/xvc_error_item.c:151 ../src/xvc_error_item.c:282
+#: ../src/xvc_error_item.c:152 ../src/xvc_error_item.c:283
 #, c-format
 msgid "INFO (%i):"
 msgstr "INFO (%i):"
 
-#: ../src/xvc_error_item.c:154
+#: ../src/xvc_error_item.c:155
 #, c-format
 msgid "???? (%i):"
 msgstr "???? (%i):"
 
-#: ../src/xvc_error_item.c:189
+#: ../src/xvc_error_item.c:190
 msgid "Details:"
 msgstr ""
 
-#: ../src/xvc_error_item.c:215
+#: ../src/xvc_error_item.c:216
 msgid "Action:"
 msgstr ""
 

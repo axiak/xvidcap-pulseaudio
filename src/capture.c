@@ -145,7 +145,7 @@ getCurrentPointer (int *x, int *y)
 #ifdef HAVE_LIBXFIXES
 /**
  * \brief function to return mouse pointer shape.
- *      This is only used with XFixes. Previously we did this inside 
+ *      This is only used with XFixes. Previously we did this inside
  *      paintMousePointer. I've split this to be able to do the getting inside
  *      a lock and the painting outside it.
  *
@@ -1174,7 +1174,7 @@ commonCapture (enum captureFunctions capfunc)
 #endif     // USE_FFMPEG
         target = &(app->single_frame);
 
-    // we really cannot have external state changes 
+    // we really cannot have external state changes
     // while we're reacting on state
     // frame moves, too, are evil
     pthread_mutex_lock (&(app->capturing_mutex));
@@ -1274,7 +1274,7 @@ commonCapture (enum captureFunctions capfunc)
                 // we react on errno when cleaning up
                 job->capture_returned_errno = errno;
                 // we may or may not need a full cleanup (for movie we need
-                // one only if we have actually started, i. e. proceeded 
+                // one only if we have actually started, i. e. proceeded
                 // beyond frame 0
                 if (app->current_mode > 0 || job->pic_no == target->start_no)
                     full_cleanup = FALSE;

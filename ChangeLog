@@ -1,4 +1,31 @@
 
+2008-05-26  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	src: xtoffmpeg.c, gnome_ui.c, capture.c, 
+		xvidcap-dbus-client.c, app_data.h, job.h, 
+		gnome_frame.c, gnome_frame.h: fix 
+		bug # 1952636
+	debian/changelog, debian/rules, Doxyfile, 
+		src/xvc_error_item.c, src/gnome-xvidcap.glade,
+		doc: man/C/xvidcap-dbus-client.1.xml,
+		man/C/xvidcap-dbus-client.1, 
+		man/C/xvidcap-dbus-client.1.xml.pot,
+		man/C/xvidcap.1.xml, man/C/xvidcap.1,
+		man/C/xvidcap.1.xml.pot, man/es/xvidcap.1,
+		man/de/xvidcap.1-de.po, 
+		man/de/xvidcap-dbus-client.1.xml,
+		man/de/xvidcap-dbus-client.1, 
+		man/de/xvidcap-dbus-client.1-de.po,
+		man/de/xvidcap.1.xml, man/de/xvidcap.1,
+		man/it/xvidcap.1-it.po, 
+		man/it/xvidcap-dbus-client.1-it.po,
+		man/it/xvidcap.1.xml, man/it/xvidcap.1,
+		xvidcap/C/xvidcap.xml, xvidcap/C/xvidcap.xml.pot,
+		xvidcap/de/xvidcap.xml-de.po,
+		xvidcap/de/xvidcap.xml, xvidcap/it/xvidcap.xml-it.po,
+		xvidcap/it/xvidcap.xml, po: en.po, ru.po, es.po,
+		fr.po, de.po, it.po, zh_CN.po: version bump
+	configure.in, aclocal.m4: build host upgrade
+
 2008-05-02  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	* src/xtoffmpeg.c, src/gnome_ui.c, src/gnome_frame.c:
 		preliminary fix for bug # 1952636 and for

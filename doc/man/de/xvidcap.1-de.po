@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.1.7\n"
-"POT-Creation-Date: 2008-01-13 22:32+0100\n"
+"POT-Creation-Date: 2008-05-03 09:38+0200\n"
 "PO-Revision-Date: 2007-05-17 23:09+0200\n"
 "Last-Translator: Karl H. Beckers <karl.h.beckers@gmx.net>\n"
 "Language-Team: DE <xvidcap-l10n@lists.sourceforge.net>\n"
@@ -18,8 +18,8 @@ msgid "1"
 msgstr "1"
 
 #: ../C/xvidcap.1.xml:8(refmiscinfo)
-msgid "January 2008"
-msgstr "Januar 2008"
+msgid "May 2008"
+msgstr "Mai 2008"
 
 #: ../C/xvidcap.1.xml:11(refname)
 msgid "XVidCap"
@@ -654,4 +654,3 @@ msgstr ""
 #: ../C/xvidcap.1.xml:0(None)
 msgid "translator-credits"
 msgstr "Karl H. Beckers <karl.h.beckers@gmx.net>, 2006, 2007"
-

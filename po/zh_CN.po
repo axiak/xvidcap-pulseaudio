@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-08 13:37+0100\n"
+"POT-Creation-Date: 2008-05-26 22:58+0200\n"
 "PO-Revision-Date: 2007-08-21 17:01+0800\n"
 "Last-Translator: lon <lon83129@126.com>\n"
 "Language-Team: xxlinux_i18n Chinese Simplified <xxlinux_i18n@list.cn99.com>\n"
@@ -1718,177 +1718,177 @@ msgstr "无效的音频参数：“%s”在配置文件中\n"
 msgid "Disabling audio capture unless overridden by command line\n"
 msgstr "禁止抓取音频除非排除无效的命令行\n"
 
-#: ../src/xtoffmpeg.c:314
+#: ../src/xtoffmpeg.c:315
 #, c-format
 msgid "%s %s: error opening input file %s: %i\n"
 msgstr "%s %s：错误在打开输入文件 %s：%i\n"
 
-#: ../src/xtoffmpeg.c:321
+#: ../src/xtoffmpeg.c:322
 #, c-format
 msgid "%s %s: Could not alloc input stream ... aborting\n"
 msgstr "%s %s：不能分配输入流... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:331
+#: ../src/xtoffmpeg.c:332
 #, c-format
 msgid "%s %s: could not find codec parameters\n"
 msgstr "%s %s：没有发现编码器参数\n"
 
-#: ../src/xtoffmpeg.c:353
+#: ../src/xtoffmpeg.c:354
 #, c-format
 msgid "%s %s: could not allocate audio output codec context\n"
 msgstr "%s %s：不能分配音频输出编码的上下文\n"
 
-#: ../src/xtoffmpeg.c:373
+#: ../src/xtoffmpeg.c:374
 #, c-format
 msgid "%s %s: Could not alloc stream ... aborting\n"
 msgstr "%s %s：不能分配数据流... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:383
+#: ../src/xtoffmpeg.c:384
 #, c-format
 msgid "%s %s: Could not alloc stream\n"
 msgstr "%s %s：不能分配数据流\n"
 
-#: ../src/xtoffmpeg.c:395
+#: ../src/xtoffmpeg.c:396
 #, c-format
 msgid "%s %s: Can't initialize fifo for audio recording\n"
 msgstr "%s %s：不能为音频记录初始化先进先出(fifo)\n"
 
-#: ../src/xtoffmpeg.c:433 ../src/xtoffmpeg.c:452
+#: ../src/xtoffmpeg.c:434 ../src/xtoffmpeg.c:453
 #, c-format
 msgid "%s %s: Can't resample. Aborting.\n"
 msgstr "%s %s：不能重复取样，异常退出。\n"
 
-#: ../src/xtoffmpeg.c:469
+#: ../src/xtoffmpeg.c:470
 #, c-format
 msgid "%s %s: Error while opening codec for output stream\n"
 msgstr "%s %s：当打开输出流编码器时错误\n"
 
-#: ../src/xtoffmpeg.c:481
+#: ../src/xtoffmpeg.c:482
 #, c-format
 msgid "%s %s: Unsupported codec (id=%d) for input stream\n"
 msgstr "%s %s：不支持的编码在 (id=%d) 输入流\n"
 
-#: ../src/xtoffmpeg.c:491
+#: ../src/xtoffmpeg.c:492
 #, c-format
 msgid "%s %s: Error while opening codec for input stream\n"
 msgstr "%s %s：当打开输入流编码器时错误\n"
 
-#: ../src/xtoffmpeg.c:577
+#: ../src/xtoffmpeg.c:578
 #, c-format
 msgid "%s %s: Error while writing audio frame\n"
 msgstr "%s %s：记录音频帧错误\n"
 
-#: ../src/xtoffmpeg.c:586
+#: ../src/xtoffmpeg.c:587
 #, c-format
 msgid "%s %s: Couldn't unlock mutex lock for writing audio frame\n"
 msgstr "%s %s：不能解开记录音频帧互斥锁\n"
 
-#: ../src/xtoffmpeg.c:772
+#: ../src/xtoffmpeg.c:773
 #, c-format
 msgid "%s %s: error reading audio packet\n"
 msgstr "%s %s：读取音频包错误\n"
 
-#: ../src/xtoffmpeg.c:795
+#: ../src/xtoffmpeg.c:796
 #, c-format
 msgid "%s %s: couldn't decode captured audio packet\n"
 msgstr "%s %s：不能解码抓取的音频包\n"
 
-#: ../src/xtoffmpeg.c:806
+#: ../src/xtoffmpeg.c:807
 #, c-format
 msgid "%s %s: no audio frame\n"
 msgstr "%s %s：无音频帧\n"
 
-#: ../src/xtoffmpeg.c:838
+#: ../src/xtoffmpeg.c:839
 #, c-format
 msgid "error reading audio packet\n"
 msgstr "读取音频信息错误\n"
 
-#: ../src/xtoffmpeg.c:841
+#: ../src/xtoffmpeg.c:842
 #, c-format
 msgid "%s %s: dropping audio frame %f %f\n"
 msgstr "%s %s：遗失音频帧 %f %f\n"
 
-#: ../src/xtoffmpeg.c:915
+#: ../src/xtoffmpeg.c:916
 #, c-format
 msgid "%s %s: Error while writing video frame\n"
 msgstr "%s %s：记录视频帧时错误\n"
 
-#: ../src/xtoffmpeg.c:1153
+#: ../src/xtoffmpeg.c:1154
 #, c-format
 msgid "%s %s: Could not alloc output stream\n"
 msgstr "%s %s：不能分配输出流\n"
 
-#: ../src/xtoffmpeg.c:1164
+#: ../src/xtoffmpeg.c:1165
 #, c-format
 msgid "%s %s: video codec not found\n"
 msgstr "%s %s：视频编码没有发现\n"
 
-#: ../src/xtoffmpeg.c:1231
+#: ../src/xtoffmpeg.c:1232
 #, c-format
 msgid ""
 "%s %s: The picture format you are grabbing (%i) is not supported by "
 "libswscale ... aborting\n"
 msgstr "%s %s：您抓取的图像格式 (%i) 不被libswscale支持... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1311 ../src/xtoffmpeg.c:1331
+#: ../src/xtoffmpeg.c:1312 ../src/xtoffmpeg.c:1332
 #, c-format
 msgid "%s %s: rgb ordering at image depth %i not supported ... aborting\n"
 msgstr "%s %s：在图像深度RGB调整时 %i 不被支持... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1352 ../src/xtoffmpeg.c:1359
+#: ../src/xtoffmpeg.c:1353 ../src/xtoffmpeg.c:1360
 #, c-format
 msgid "%s %s: image depth %i not supported ... aborting\n"
 msgstr "%s %s：图像深度 %i 不被支持... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1451
+#: ../src/xtoffmpeg.c:1453
 #, c-format
 msgid "%s %s: Couldn't determin output format ... aborting\n"
 msgstr "%s %s：不能决定输出格式... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1471
+#: ../src/xtoffmpeg.c:1473
 #, c-format
 msgid "%s %s: Error allocating memory for format context ... aborting\n"
 msgstr "%s %s：分配格式化范围的内存错误... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1483
+#: ../src/xtoffmpeg.c:1485
 #, c-format
 msgid "%s %s: Error allocating private data for format context ... aborting\n"
 msgstr "%s %s：分配格式化范围的专用数据错误... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1513
+#: ../src/xtoffmpeg.c:1515
 #, c-format
 msgid "%s %s: Invalid encoding parameters ... aborting\n"
 msgstr "%s %s：无效的编码参数... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1519
+#: ../src/xtoffmpeg.c:1521
 #, c-format
 msgid "%s %s: could not open video codec\n"
 msgstr "%s %s：不能打开视频编码器\n"
 
-#: ../src/xtoffmpeg.c:1585
+#: ../src/xtoffmpeg.c:1587
 #, c-format
 msgid "%s %s: Could not allocate buffer for output frame! ... aborting\n"
 msgstr "%s %s：不能为输出帧分配缓冲区！... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1604
+#: ../src/xtoffmpeg.c:1606
 #, c-format
 msgid ""
 "%s %s: Could not allocate buffer for encoded frame (outbuf)! ... aborting\n"
 msgstr "%s %s：不能为编码帧分配缓冲区(输出缓冲区)！... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1633 ../src/xtoffmpeg.c:1681
+#: ../src/xtoffmpeg.c:1635 ../src/xtoffmpeg.c:1683
 #, c-format
 msgid "%s %s: Could not open '%s' ... aborting\n"
 msgstr "%s %s：不能打开“%s”... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1642 ../src/xtoffmpeg.c:1690
+#: ../src/xtoffmpeg.c:1644 ../src/xtoffmpeg.c:1692
 #, c-format
 msgid ""
 "%s %s: Could not write header for output file (incorrect codec "
 "paramters ?) ... aborting\n"
 msgstr "%s %s：输出文件不能写入磁盘(不正确的编码参数？)... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1720
+#: ../src/xtoffmpeg.c:1722
 #, c-format
 msgid ""
 "%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
@@ -1897,22 +1897,22 @@ msgstr ""
 "%s %s: error converting or resampling frame: context %p, iwidth %i, iheight %"
 "i, owidth %i, oheight %i, inpfmt %i opfmt %i\n"
 
-#: ../src/xtoffmpeg.c:1742
+#: ../src/xtoffmpeg.c:1744
 #, c-format
 msgid "%s %s: error encoding frame: c %p, outbuf %p, size %i, frame %p\n"
 msgstr "%s %s：错误的帧编码：音频通道 %p， 输出缓冲 %p，尺寸 %i，帧 %p\n"
 
-#: ../src/xtoffmpeg.c:1752
+#: ../src/xtoffmpeg.c:1754
 #, c-format
 msgid "mutex lock for writing video frame failed ... aborting\n"
 msgstr "记录视频帧互斥锁失败... 异常退出\n"
 
-#: ../src/xtoffmpeg.c:1776
+#: ../src/xtoffmpeg.c:1778
 #, c-format
 msgid "couldn't release the mutex for writing video frame ... aborting\n"
 msgstr "记录视频帧时不能释放互斥... 异常退出\n"
 
-#: ../src/xvc_error_item.c:142 ../src/xvc_error_item.c:264
+#: ../src/xvc_error_item.c:143 ../src/xvc_error_item.c:265
 #, c-format
 msgid ""
 "FATAL\n"
@@ -1921,31 +1921,31 @@ msgstr ""
 "致命\n"
 "错误(%i)："
 
-#: ../src/xvc_error_item.c:145 ../src/xvc_error_item.c:270
+#: ../src/xvc_error_item.c:146 ../src/xvc_error_item.c:271
 #, c-format
 msgid "ERROR (%i):"
 msgstr "错误 (%i)："
 
-#: ../src/xvc_error_item.c:148 ../src/xvc_error_item.c:276
+#: ../src/xvc_error_item.c:149 ../src/xvc_error_item.c:277
 #, c-format
 msgid "WARNING (%i):"
 msgstr "警告(%i)："
 
-#: ../src/xvc_error_item.c:151 ../src/xvc_error_item.c:282
+#: ../src/xvc_error_item.c:152 ../src/xvc_error_item.c:283
 #, c-format
 msgid "INFO (%i):"
 msgstr "提示(%i)："
 
-#: ../src/xvc_error_item.c:154
+#: ../src/xvc_error_item.c:155
 #, c-format
 msgid "???? (%i):"
 msgstr "未知(%i)："
 
-#: ../src/xvc_error_item.c:189
+#: ../src/xvc_error_item.c:190
 msgid "Details:"
 msgstr "详细资料："
 
-#: ../src/xvc_error_item.c:215
+#: ../src/xvc_error_item.c:216
 msgid "Action:"
 msgstr "动作："
 

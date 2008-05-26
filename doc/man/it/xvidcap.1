@@ -1,11 +1,11 @@
-.\" -*- coding: iso8859-1 -*-
+'\" -*- coding: iso8859-1 -*-
 .if \n(.g .ds T< \\FC
 .if \n(.g .ds T> \\F[\n[.fam]]
 .de URL
 \\$2 \(la\\$1\(ra\\$3
 ..
 .if \n(.g .mso www.tmac
-.TH xvidcap 1 "2 February 2008" "January 2008" ""
+.TH xvidcap 1 "23 May 2008" "May 2008" ""
 .SH NAME
 XVidCap \- Registra in video porzioni di schermo X11
 .SH SYNOPSIS
@@ -15,24 +15,24 @@ XVidCap \- Registra in video porzioni di schermo X11
 \fBxvidcap\fR \kx
 .if (\nx>(\n(.l/2)) .nr x (\n(.l/5)
 'in \n(.iu+\nxu
-[-v] [ --mf | --sf ] [--file \fImodello di nome file\fR |- ] [--fps \fIfotogrammi al secondo\fR] [--cap_geometry \fIgeometria\fR] [--rescale \fIpercentuale della dimensione\fR] [--quality \fIpercentuale della qualit\(~A\ \fR] [--source x11|shm ] [--time \fIdurata massima in secondi\fR] [--frames \fInumero massimo fotogrammi\fR] [--start_no \fInumero fotogramma iniziale\fR] [--continue yes|no ] [--gui yes|no ] [--auto] [--codec \fIcodificatore video\fR] [--codec-help] [--format \fIformato del file di uscita\fR] [--format-help] [--audio yes|no ] [--aucodec \fIcodificatore audio\fR] [--aucodec-help] [--audio_in \fIdispositivo di acquisizione audio\fR |- ] [--audio_bits \fIbitrate audio\fR] [--audio_rate \fIcampionamento audio\fR] [--audio_channels \fIcanali audio\fR]
+[-v] [ --mf | --sf ] [--file \fImodello di nome file\fR |- ] [--fps \fIfotogrammi al secondo\fR] [--cap_geometry \fIgeometria\fR] [--rescale \fIpercentuale della dimensione\fR] [--quality \fIpercentuale della qualit\(`a\fR] [--source x11|shm ] [--time \fIdurata massima in secondi\fR] [--frames \fInumero massimo fotogrammi\fR] [--start_no \fInumero fotogramma iniziale\fR] [--continue yes|no ] [--gui yes|no ] [--auto] [--codec \fIcodificatore video\fR] [--codec-help] [--format \fIformato del file di uscita\fR] [--format-help] [--audio yes|no ] [--aucodec \fIcodificatore audio\fR] [--aucodec-help] [--audio_in \fIdispositivo di acquisizione audio\fR |- ] [--audio_bits \fIbitrate audio\fR] [--audio_rate \fIcampionamento audio\fR] [--audio_channels \fIcanali audio\fR]
 'in \n(.iu-\nxu
 .ad b
 'hy
 .SH INTRODUZIONE
-xvidcap \(~A\(ad uno strumento che acquisisce su file il movimento presente in un'area selezionata di uno schermo X11. Pu\(~A\(S2 essere usato in due diverse modalit\(~A\ : (1) acquisizione a \fIfotogramma singolo\fR e (2) acquisizione a \fIfotogrammi multipli\fR. In modalit\(~A\  di acquisizione a fotogramma singolo xvidcap cattura un numero configurabile di schermate per secondo e le salva in file distinti. Anche in modalit\(~A\  di acquisizione a fotogrammi multipli xvidcap cattura un numero di schermate per secondo, ma le codifica in un singolo video in tempo reale. L'acquisizione audio \(~A\(ad disponibile solo con i formati a fotogrammi multipli.
+xvidcap \(`e uno strumento che acquisisce su file il movimento presente in un'area selezionata di uno schermo X11. Pu\(`o essere usato in due diverse modalit\(`a: (1) acquisizione a \fIfotogramma singolo\fR e (2) acquisizione a \fIfotogrammi multipli\fR. In modalit\(`a di acquisizione a fotogramma singolo xvidcap cattura un numero configurabile di schermate per secondo e le salva in file distinti. Anche in modalit\(`a di acquisizione a fotogrammi multipli xvidcap cattura un numero di schermate per secondo, ma le codifica in un singolo video in tempo reale. L'acquisizione audio \(`e disponibile solo con i formati a fotogrammi multipli.
 .PP
-La registrazione in modalit\(~A\  di acquisizione a fotogramma singolo potrebbe essere pi\(~A\(S1 conveniente se si desidera preprocessare le immagini prima della codifica, o se si vuole usare codificatori video che xvidcap non supporta. Le singole immagini possono essere successivamente codificate con strumenti quali ffmpeg, mencoder, o transcode.
+La registrazione in modalit\(`a di acquisizione a fotogramma singolo potrebbe essere pi\(`u conveniente se si desidera preprocessare le immagini prima della codifica, o se si vuole usare codificatori video che xvidcap non supporta. Le singole immagini possono essere successivamente codificate con strumenti quali ffmpeg, mencoder, o transcode.
 .PP
 For help, feature requests, or bug-reports please turn to http://www.sourceforge.net/projects/xvidcap/
 .SH OPZIONI
-Questo programma segue la solita sintassi della linea di comando GNU, con opzioni lunghe che iniziano con due trattini (\*(T<\-\-\*(T>). Un riepilogo delle opzioni \(~A\(ad incluso di seguito.
+Questo programma segue la solita sintassi della linea di comando GNU, con opzioni lunghe che iniziano con due trattini (\*(T<\-\-\*(T>). Un riepilogo delle opzioni \(`e incluso di seguito.
 .TP 
 \*(T<\fB\-v\fR\*(T>
-Esegue xvidcap in modalit\(~A\  prolissa. Ci\(~A\(S2 fornir\(~A\  ulteriori informazioni su impostazioni utente, codificatori audio e video, prestazioni ed altro. Messaggi del tipo "XX millisecondi mancanti .." durante l'acquisizione indicano una perdita di fotogrammi per mancanza di risorse (fotogrammi scartati). Ci\(~A\(S2 dovrebbe manifestarsi con un'anomala velocit\(~A\  di riproduzione dei video. Occorre notare, che la modalit\(~A\  prolissa rallenta xvidcap e potrebbe \fIcausare\fR perdita di fotogrammi. Provare ad eseguirlo senza la modalit\(~A\  prolissa e guardare l'indicatore dei fotogrammi scartati.
+Esegue xvidcap in modalit\(`a prolissa. Ci\(`o fornir\(`a ulteriori informazioni su impostazioni utente, codificatori audio e video, prestazioni ed altro. Messaggi del tipo "XX millisecondi mancanti .." durante l'acquisizione indicano una perdita di fotogrammi per mancanza di risorse (fotogrammi scartati). Ci\(`o dovrebbe manifestarsi con un'anomala velocit\(`a di riproduzione dei video. Occorre notare, che la modalit\(`a prolissa rallenta xvidcap e potrebbe \fIcausare\fR perdita di fotogrammi. Provare ad eseguirlo senza la modalit\(`a prolissa e guardare l'indicatore dei fotogrammi scartati.
 .TP 
 \*(T<\fB\-\-mf\fR\*(T> | \*(T<\fB\-\-sf\fR\*(T>
-xvidcap prova ad determinare autonomamente la modalit\(~A\  di acquisizione desiderata. Se si specifica \*(T<\-\-file test.avi\*(T>, xvidcap supporr\(~A\  la scelta dell'acquisizione a fotogrammi multipli. Si pu\(~A\(S2 specificare espressamente la modalit\(~A\  di acquisizione dalla linea di comando con questa opzione. Se, per esempio, si ha una configurazione appropriata e salvata con la modalit\(~A\  di acquisizione a fotogrammi multipli quale modalit\(~A\  predefinita, l'esecuzione di \*(T<xvidcap \-\-sf\*(T> avvier\(~A\  xvidcap in modalit\(~A\  di acquisizione a fotogramma singolo con tutte le impostazioni memorizzate. La modalit\(~A\  predefinita \(~A\(ad l'acquisizione a fotogrammi multipli.
+xvidcap prova ad determinare autonomamente la modalit\(`a di acquisizione desiderata. Se si specifica \*(T<\-\-file test.avi\*(T>, xvidcap supporr\(`a la scelta dell'acquisizione a fotogrammi multipli. Si pu\(`o specificare espressamente la modalit\(`a di acquisizione dalla linea di comando con questa opzione. Se, per esempio, si ha una configurazione appropriata e salvata con la modalit\(`a di acquisizione a fotogrammi multipli quale modalit\(`a predefinita, l'esecuzione di \*(T<xvidcap \-\-sf\*(T> avvier\(`a xvidcap in modalit\(`a di acquisizione a fotogramma singolo con tutte le impostazioni memorizzate. La modalit\(`a predefinita \(`e l'acquisizione a fotogrammi multipli.
 .TP 
 \*(T<\fB\-\-file \fR\*(T>\fImodello di nome file\fR
 Nome file o modello da usare per il salvataggio dei fotogrammi acquisiti. Un modello di nome file contiene formattazioni alla maniera di printf() (rif. \*(T<man printf\*(T>) informazioni per rendere incrementabile il nome file, ad es. \*(T<\-\-file out\-%02d.xwd\*(T>. Ci\(`o \(`e necessario per l'acquisizione a fotogramma singolo. xvidcap sostituir\(`a la prima stringa di formato printf() con il numero dei fotogrammi attualmente acquisiti. Nell'esempio dato, creer\(`a i file \*(T<\fIout\-00.xwd\fR\*(T>, \*(T<\fIout\-01.xwd\fR\*(T>, \*(T<\fIout\-02.xwd\fR\*(T>, ecc. Il numero del fotogramma iniziale pu\(`o essere specificato con \*(T<\-\-start_no\*(T>, vedere sopra.

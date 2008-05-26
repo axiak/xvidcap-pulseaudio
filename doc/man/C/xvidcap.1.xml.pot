@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-01-13 22:29+0100\n"
+"POT-Creation-Date: 2008-05-03 09:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgid "1"
 msgstr ""
 
 #: xvidcap.1.xml:8(refmiscinfo) 
-msgid "January 2008"
+msgid "May 2008"
 msgstr ""
 
 #: xvidcap.1.xml:11(refname) 

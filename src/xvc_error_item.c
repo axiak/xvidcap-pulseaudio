@@ -67,7 +67,8 @@ xvc_error_item_get_type ()
         };
 
         ei_type =
-            g_type_register_static (GTK_TYPE_HBOX, "XVC_ErrorItem", &ei_info, 0);
+            g_type_register_static (GTK_TYPE_HBOX, "XVC_ErrorItem", &ei_info,
+                                    0);
     }
 
     return ei_type;

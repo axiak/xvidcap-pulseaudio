@@ -93,7 +93,7 @@ enum XVC_Flags
     FLG_USE_XDAMAGE = 2048,
 /** \brief minimize xvidcap to the system tray while recording */
     FLG_TO_TRAY = 4096,
-/** 
+/**
  * \brief this will make the frame follow the mouse when the lock is locked
  *      rather than have it follow the main control window
  */

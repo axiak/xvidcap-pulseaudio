@@ -7,7 +7,7 @@
         Purpose of the document follows.
 -->
 <!DOCTYPE article PUBLIC "PUBLIC:-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY appversion "1.1.6">
+<!ENTITY appversion "1.1.7">
 <!ENTITY manrevision "0.3">
 <!ENTITY date "April 2007">
 <!ENTITY app "xvidcap">
@@ -77,7 +77,7 @@
             </revision>
 
         </revhistory>
-        <releaseinfo>Dieses Handbuch beschreibt Version 1.1.6 von xvidcap</releaseinfo>
+        <releaseinfo>Dieses Handbuch beschreibt Version 1.1.7 von xvidcap</releaseinfo>
         <legalnotice>
             <title>Rückmeldungen</title>
             <para>Um einen Fehlerbericht abzugeben oder Verbesserungsvorschläge bezüglich <application>xvidcap</application> oder dieses Handuchs zu machen, folgen Sie bitte den Hinweisen auf <ulink url="http://www.sourceforge.net/projects/xvidcap">xvidcap's SourceForge Seite</ulink>.</para>

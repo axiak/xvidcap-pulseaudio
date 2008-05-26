@@ -65,7 +65,7 @@ enum JobStates
  * preferences, but here we need the final (potentially autodetected)
  * target.
  */
-typedef struct //_job
+typedef struct  //_job
 {
     /** \brief filename */
     char *file;

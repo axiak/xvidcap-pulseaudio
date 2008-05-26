@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-01-13 23:46+0100\n"
+"POT-Creation-Date: 2008-05-03 09:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -256,7 +256,7 @@ msgid "xvidcap V0.3"
 msgstr ""
 
 #: xvidcap.xml:87(releaseinfo) 
-msgid "This manual describes version 1.1.6 of xvidcap."
+msgid "This manual describes version 1.1.7 of xvidcap."
 msgstr ""
 
 #: xvidcap.xml:90(title) 

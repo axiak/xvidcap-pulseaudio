@@ -57,7 +57,7 @@ install: build
 
 #	dh_movefiles --sourcedir=debian/xvidcap
 
-	rm -rf debian/xvidcap/usr/share/doc/xvidcap_1.1.6
+	rm -rf debian/xvidcap/usr/share/doc/xvidcap_1.1.7
 
 #	cp src/XVidcap.ad debian/xvidcap/etc/X11/app-defaults/XVidcap
 	cp debian/bts debian/xvidcap/usr/share/bug/xvidcap/control

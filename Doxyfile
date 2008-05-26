@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = xvidcap
-PROJECT_NUMBER         = 1.1.6
+PROJECT_NUMBER         = 1.1.7
 OUTPUT_DIRECTORY       = /tmp/xvidcap/trunk/doc/api/
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English

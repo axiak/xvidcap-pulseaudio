@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-01-13 22:30+0100\n"
+"POT-Creation-Date: 2008-05-03 09:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,80 +9,100 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: xvidcap-dbus-client.1.xml:6(refentrytitle) xvidcap-dbus-client.1.xml:17(command) 
+#: ../C/xvidcap-dbus-client.1.xml:6(refentrytitle)
+#: ../C/xvidcap-dbus-client.1.xml:17(command)
 msgid "xvidcap-dbus-client"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:7(manvolnum) 
+#: ../C/xvidcap-dbus-client.1.xml:7(manvolnum)
 msgid "1"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:8(refmiscinfo) 
-msgid "January 2008"
+#: ../C/xvidcap-dbus-client.1.xml:8(refmiscinfo)
+msgid "May 2008"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:11(refname) 
+#: ../C/xvidcap-dbus-client.1.xml:11(refname)
 msgid "XVidCap D-BUS Client"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:12(refpurpose) 
+#: ../C/xvidcap-dbus-client.1.xml:12(refpurpose)
 msgid "Remote Control Utility for XVidCap"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:18(arg) 
+#: ../C/xvidcap-dbus-client.1.xml:18(arg)
 msgid "--action <arg choice=\"plain\">start|stop|pause</arg>"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:23(title) 
+#: ../C/xvidcap-dbus-client.1.xml:23(title)
 msgid "Introduction"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:24(para) 
-msgid "<application>xvidcap-dbus-client</application> is a small utility to allow for manipulating an xvidcap capture session from outside xvidcap. Its main purpose is to be used from the command line or key bindings."
+#: ../C/xvidcap-dbus-client.1.xml:24(para)
+msgid ""
+"<application>xvidcap-dbus-client</application> is a small utility to allow "
+"for manipulating an xvidcap capture session from outside xvidcap. Its main "
+"purpose is to be used from the command line or key bindings."
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:29(para) 
-msgid "For inter process communication this utility uses D-BUS. If xvidcap is not running when this program is invoked to trigger an action, xvidcap is started through D-BUS activation. For help, feature requests, or bug-reports please turn to http://www.sourceforge.net/projects/xvidcap/"
+#: ../C/xvidcap-dbus-client.1.xml:29(para)
+msgid ""
+"For inter process communication this utility uses D-BUS. If xvidcap is not "
+"running when this program is invoked to trigger an action, xvidcap is "
+"started through D-BUS activation. For help, feature requests, or bug-reports "
+"please turn to http://www.sourceforge.net/projects/xvidcap/"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:36(title) 
+#: ../C/xvidcap-dbus-client.1.xml:36(title)
 msgid "Options"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:38(para) 
-msgid "This program follows the usual GNU command line syntax, with long options starting with two dashes (<literal>--</literal>). A summary of options is included below."
+#: ../C/xvidcap-dbus-client.1.xml:38(para)
+msgid ""
+"This program follows the usual GNU command line syntax, with long options "
+"starting with two dashes (<literal>--</literal>). A summary of options is "
+"included below."
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:45(term) 
+#: ../C/xvidcap-dbus-client.1.xml:45(term)
 msgid "<option>--action </option>start|stop|pause"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:47(para) 
-msgid "This sends a command to xvidcap to either start or stop a capturing session or to pause or resume one. If xvidcap is not running it will be started."
+#: ../C/xvidcap-dbus-client.1.xml:47(para)
+msgid ""
+"This sends a command to xvidcap to either start or stop a capturing session "
+"or to pause or resume one. If xvidcap is not running it will be started."
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:56(title) 
+#: ../C/xvidcap-dbus-client.1.xml:56(title)
 msgid "Authors"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:57(para) 
-msgid "<application>xvidcap-dbus-client</application> was written by Karl H. Beckers."
+#: ../C/xvidcap-dbus-client.1.xml:57(para)
+msgid ""
+"<application>xvidcap-dbus-client</application> was written by Karl H. "
+"Beckers."
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:60(para) 
-msgid "This manual page was written by Karl H. Beckers <email>karl.h.beckers@gmx.net</email> for the <application>xvidcap</application> project."
+#: ../C/xvidcap-dbus-client.1.xml:60(para)
+msgid ""
+"This manual page was written by Karl H. Beckers <email>karl.h.beckers@gmx."
+"net</email> for the <application>xvidcap</application> project."
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:64(para) 
+#: ../C/xvidcap-dbus-client.1.xml:64(para)
 msgid "This translation was done by TRANSLATOR-CREDITS HERE!!!"
 msgstr ""
 
-#: xvidcap-dbus-client.1.xml:67(para) 
-msgid "Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.1 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts and no Back-Cover Texts."
+#: ../C/xvidcap-dbus-client.1.xml:67(para)
+msgid ""
+"Permission is granted to copy, distribute and/or modify this document under "
+"the terms of the GNU Free Documentation License, Version 1.1 or any later "
+"version published by the Free Software Foundation; with no Invariant "
+"Sections, no Front-Cover Texts and no Back-Cover Texts."
 msgstr ""
 
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2.
-#: xvidcap-dbus-client.1.xml:0(None) 
+#: ../C/xvidcap-dbus-client.1.xml:0(None)
 msgid "translator-credits"
 msgstr ""
-
