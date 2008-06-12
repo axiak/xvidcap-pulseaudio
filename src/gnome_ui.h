@@ -24,6 +24,7 @@
 #define _xvc_XVC_GNOME_UI_H__
 
 #include <glib.h>
+#include <gdk/gdkx.h>
 
 static const gchar xvc_logo_small[] = {
     0x2f, 0x2a, 0x20, 0x58, 0x50, 0x4d, 0x20, 0x2a, 0x2f, 0x0a, 0x73, 0x74,
@@ -496,5 +497,6 @@ static const gchar xvc_logo_small[] = {
 void xvc_toggle_cap_type ();
 void xvc_undo_toggle_cap_type ();
 void xvc_reset_ctrl_main_window_according_to_current_prefs ();
+void xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect);
 
 #endif     // _xvc_XVC_GNOME_UI_H__

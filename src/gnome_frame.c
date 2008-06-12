@@ -38,7 +38,6 @@
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 #include <X11/Intrinsic.h>
-#include <X11/Xatom.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <glade/glade.h>
@@ -50,6 +49,7 @@
 #include "job.h"
 #include "frame.h"
 #include "gnome_frame.h"
+#include "gnome_ui.h"
 
 #define XVC_FRAME_DIM_SHOW_TIME 2
 
@@ -76,111 +76,6 @@ static int button_press_rel_y = 0;
 static gint frame_drag_cursor = GDK_X_CURSOR;
 static long frame_dimensions_hide_time = 0;
 static GdkDisplay *gdpy;
-
-// partly taken from patch for gnome bug 524110
-void
-get_frame_extents (GdkWindow * window, GdkRectangle * rect)
-{
-#define DEBUGFUNCTION "get_frame_extents()"
-    XVC_AppData *app = xvc_appdata_ptr ();
-    Window xwindow;
-    Atom type_return;
-    gint format_return;
-    gulong nitems_return;
-    gulong bytes_after_return;
-    guchar *data;
-    gboolean got_frame_extents = FALSE;
-    Window root;
-    guint ww, wh, wb, wd;
-    gint wx, wy;
-
-    xwindow = GDK_WINDOW_XID (window);
-
-    Window *wm_child = NULL;
-    Atom nwm_atom, utf8_string, wm_name_atom, rt;
-    unsigned long nbytes, nitems;
-    char *wm_name_str = NULL;
-    int fmt;
-
-    utf8_string = XInternAtom (app->dpy, "UTF8_STRING", False);
-
-    nwm_atom = XInternAtom (app->dpy, "_NET_SUPPORTING_WM_CHECK", True);
-    wm_name_atom = XInternAtom (app->dpy, "_NET_WM_NAME", True);
-
-    if (nwm_atom != None && wm_name_atom != None) {
-        if (XGetWindowProperty (app->dpy, app->root_window,
-                                nwm_atom, 0, 100,
-                                False, XA_WINDOW,
-                                &rt, &fmt, &nitems, &nbytes,
-                                (unsigned char **) ((void *)
-                                                    &wm_child))
-            != Success) {
-            fprintf (stderr,
-                     "%s %s: Error while trying to get a window to identify the window manager.\n",
-                     DEBUGFILE, DEBUGFUNCTION);
-        }
-        if ((wm_child == NULL) ||
-            (XGetWindowProperty
-             (app->dpy, *wm_child, wm_name_atom, 0, 100, False,
-              utf8_string, &rt, &fmt, &nitems, &nbytes,
-              (unsigned char **) ((void *)
-                                  &wm_name_str))
-             != Success)) {
-            fprintf (stderr,
-                     "%s %s: Warning!!!\nYour window manager appears to be non-compliant!\n",
-                     DEBUGFILE, DEBUGFUNCTION);
-        }
-    }
-    // Right now only wm's that I know of performing 3d compositing
-    // are beryl and compiz. names can be compiz for compiz and
-    // beryl/beryl-co/beryl-core for beryl (so it's strncmp )
-    if (wm_name_str && (!strcmp (wm_name_str, "compiz") ||
-                        !strncmp (wm_name_str, "beryl", 5))) {
-
-        /* first try: use _NET_FRAME_EXTENTS */
-        if (XGetWindowProperty (app->dpy, xwindow,
-                                XInternAtom (app->dpy,
-                                             "_NET_FRAME_EXTENTS", TRUE),
-                                0, G_MAXLONG, False, XA_CARDINAL, &type_return,
-                                &format_return, &nitems_return,
-                                &bytes_after_return, &data)
-            == Success) {
-
-            if ((type_return == XA_CARDINAL) && (format_return == 32) &&
-                (nitems_return == 4) && (data)) {
-                guint32 *ldata = (guint32 *) data;
-
-                got_frame_extents = TRUE;
-
-                /* try to get the real client window geometry */
-                if (XGetGeometry (app->dpy, xwindow,
-                                  &root, &wx, &wy, &ww, &wh, &wb, &wd)) {
-                    rect->x = wx;
-                    rect->y = wy;
-                    rect->width = ww;
-                    rect->height = wh;
-                }
-
-                /* _NET_FRAME_EXTENTS format is left, right, top, bottom */
-                rect->x -= ldata[0];
-                rect->y -= ldata[2];
-                rect->width += ldata[0] + ldata[1];
-                rect->height += ldata[2] + ldata[3];
-            }
-
-            if (data)
-                XFree (data);
-        }
-
-        if (wm_name_str)
-            XFree (wm_name_str);
-    }
-
-    if (got_frame_extents == FALSE) {
-        gdk_window_get_frame_extents (window, rect);
-    }
-#undef DEBUGFUNCTION
-}
 
 /**
  * \brief gets the Display to capture from
@@ -254,7 +149,7 @@ do_reposition_control (GtkWidget * toplevel)
     max_width = gdk_screen_get_width (GDK_SCREEN (myscreen));
     max_height = gdk_screen_get_height (GDK_SCREEN (myscreen));
 
-    get_frame_extents (GDK_WINDOW (toplevel->window), &rect);
+    xvc_get_ctrl_frame_extents (GDK_WINDOW (toplevel->window), &rect);
 //    gdk_window_get_frame_extents (GDK_WINDOW (toplevel->window), &rect);
     pwidth = rect.width + FRAME_OFFSET;
     pheight = rect.height + FRAME_OFFSET;
@@ -493,7 +388,7 @@ on_gtk_frame_configure_event (GtkWidget * w, GdkEventConfigure * e)
     if ((app->flags & FLG_LOCK_FOLLOWS_MOUSE) == 0 && xvc_is_frame_locked ()) {
         GdkRectangle rect;
 
-        get_frame_extents (GDK_WINDOW (w->window), &rect);
+        xvc_get_ctrl_frame_extents (GDK_WINDOW (w->window), &rect);
 //        gdk_window_get_frame_extents (GDK_WINDOW (w->window), &rect);
 
         x = rect.x;
@@ -983,7 +878,7 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
 
         if (px < 0 && py < 0) {
             // compute position for frame
-            get_frame_extents (GDK_WINDOW (toplevel->window), &rect);
+            xvc_get_ctrl_frame_extents (GDK_WINDOW (toplevel->window), &rect);
 //            gdk_window_get_frame_extents (GDK_WINDOW (toplevel->window), &rect);
 
             if (x < 0)

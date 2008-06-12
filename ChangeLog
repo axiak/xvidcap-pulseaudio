@@ -1,4 +1,9 @@
 
+2008-06-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	src: gnome_ui.c, gnome_ui.h, gnome_frame.c: fix remaining
+		problem with capture frame positioning with 
+		compiz
+
 2008-05-26  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	src: xtoffmpeg.c, gnome_ui.c, capture.c, 
 		xvidcap-dbus-client.c, app_data.h, job.h, 
