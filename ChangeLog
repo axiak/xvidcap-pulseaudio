@@ -1,4 +1,11 @@
 
+2008-07-09  Vincenzo Reale <smart2128@baslug.org>
+	po/it.po: updated Italian l10n
+
+2008-07-09  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	po: en.po, ru.po, es.po, fr.po, de.po, zh_CN.po: 
+		updated code line references
+
 2008-06-12  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	src: gnome_ui.c, gnome_ui.h, gnome_frame.c: fix remaining
 		problem with capture frame positioning with 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-26 22:58+0200\n"
-"PO-Revision-Date: 2007-05-18 07:12+0200\n"
+"POT-Creation-Date: 2008-07-09 09:26+0200\n"
+"PO-Revision-Date: 2008-06-29 10:49+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128@baslug.org>\n"
 "Language-Team: Italian <kde-i18n-it@mail.kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -716,7 +716,7 @@ msgid "ACTION:"
 msgstr "AZIONE:"
 
 #: ../src/codecs.c:100 ../src/codecs.c:269 ../src/codecs.c:497
-#: ../src/gnome_ui.c:828
+#: ../src/gnome_ui.c:940
 msgid "NONE"
 msgstr "NESSUNA"
 
@@ -758,16 +758,15 @@ msgstr "Microsoft DIVX 3"
 
 #: ../src/codecs.c:194
 msgid "FFmpeg Video 1"
-msgstr ""
+msgstr "FFmpeg Video 1"
 
 #: ../src/codecs.c:203
 msgid "Flash Video"
 msgstr "Flash Video"
 
 #: ../src/codecs.c:213
-#, fuzzy
 msgid "Flash Screen Video"
-msgstr "Flash Video"
+msgstr "Flash Screen Video"
 
 #: ../src/codecs.c:222
 msgid "DV Video"
@@ -799,7 +798,7 @@ msgstr "Ogg Vorbis"
 
 #: ../src/codecs.c:289
 msgid "Dolby Digital AC-3"
-msgstr ""
+msgstr "Dolby Digital AC-3"
 
 #: ../src/codecs.c:293
 msgid "PCM"
@@ -846,19 +845,16 @@ msgid "DV Video Format"
 msgstr "Formato DV Video"
 
 #: ../src/codecs.c:697
-#, fuzzy
 msgid "MPEG1 System Format (VCD)"
-msgstr "Formato MPEG1 System"
+msgstr "MPEG1 System Format (VCD)"
 
 #: ../src/codecs.c:715
-#, fuzzy
 msgid "MPEG2 PS Format (SVCD)"
-msgstr "Formato MPEG2 PS"
+msgstr "MPEG2 PS Format (SVCD)"
 
 #: ../src/codecs.c:733
-#, fuzzy
 msgid "MPEG2 PS format (DVD VOB)"
-msgstr "Formato MPEG2 PS"
+msgstr "MPEG2 PS format (DVD VOB)"
 
 #: ../src/codecs.c:751
 msgid "Quicktime Format"
@@ -866,36 +862,38 @@ msgstr "Formato Quicktime"
 
 #: ../src/eggtrayicon.c:134
 msgid "Orientation"
-msgstr ""
+msgstr "Orientamento"
 
 #: ../src/eggtrayicon.c:136
 msgid "The orientation of the tray."
-msgstr ""
+msgstr "L'orientamento del vassoio."
 
 #: ../src/gnome_options.c:1602
 msgid "C_apture"
 msgstr "_Acquisisci"
 
-#: ../src/gnome_ui.c:770
+#: ../src/gnome_ui.c:882
 msgid "Error Capturing"
-msgstr ""
+msgstr "Errore di acquisizione"
 
-#: ../src/gnome_ui.c:772
+#: ../src/gnome_ui.c:884
 #, c-format
 msgid ""
 "File used: %s\n"
 "Error: %s"
 msgstr ""
+"File utilizzato: %s\n"
+"Errore: %s"
 
-#: ../src/gnome_ui.c:1416 ../src/gnome_ui.c:1417
+#: ../src/gnome_ui.c:1528 ../src/gnome_ui.c:1529
 msgid "Move cursor back one frame"
 msgstr "Sposta il cursore indietro di un fotogramma"
 
-#: ../src/gnome_ui.c:1426 ../src/gnome_ui.c:1427
+#: ../src/gnome_ui.c:1538 ../src/gnome_ui.c:1539
 msgid "Move cursor to next frame"
 msgstr "Sposta il cursore al fotogramma successivo"
 
-#: ../src/gnome_ui.c:1434 ../src/gnome_ui.c:1436
+#: ../src/gnome_ui.c:1546 ../src/gnome_ui.c:1548
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -903,23 +901,23 @@ msgstr ""
 "Tasto sinistro: Ripristina contatore dei fotogrammi e nome file\n"
 "Tasto destro: Menu a comparsa"
 
-#: ../src/gnome_ui.c:1441 ../src/gnome_ui.c:1442
+#: ../src/gnome_ui.c:1553 ../src/gnome_ui.c:1554
 msgid "Edit current individual frame"
 msgstr "Modifica il singolo fotogramma attuale"
 
-#: ../src/gnome_ui.c:1447 ../src/gnome_ui.c:1448
+#: ../src/gnome_ui.c:1559 ../src/gnome_ui.c:1560
 msgid "Capture single frame"
 msgstr "Acquisisci fotogramma singolo"
 
-#: ../src/gnome_ui.c:1472 ../src/gnome_ui.c:1473
+#: ../src/gnome_ui.c:1584 ../src/gnome_ui.c:1585
 msgid "Move cursor to previous movie"
 msgstr "Sposta il cursore al precedente filmato"
 
-#: ../src/gnome_ui.c:1475 ../src/gnome_ui.c:1476
+#: ../src/gnome_ui.c:1587 ../src/gnome_ui.c:1588
 msgid "Move cursor to next movie"
 msgstr "Sposta il cursore al prossimo filmato"
 
-#: ../src/gnome_ui.c:1480 ../src/gnome_ui.c:1482
+#: ../src/gnome_ui.c:1592 ../src/gnome_ui.c:1594
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -927,16 +925,16 @@ msgstr ""
 "Tasto sinistro: Ripristina contatore del filmato a zero\n"
 "Tasto destro: Menu a comparsa"
 
-#: ../src/gnome_ui.c:1487 ../src/gnome_ui.c:1488
+#: ../src/gnome_ui.c:1599 ../src/gnome_ui.c:1600
 msgid "Edit current movie"
 msgstr "Modifica il filmato attuale"
 
-#: ../src/gnome_ui.c:2838 ../src/gnome_ui.c:2839
+#: ../src/gnome_ui.c:2952 ../src/gnome_ui.c:2953
 #: ../src/gnome-xvidcap.glade.h:48
 msgid "Detach selection frame"
 msgstr "Sgancia l'area di selezione"
 
-#: ../src/gnome_ui.c:2862 ../src/gnome_ui.c:2863
+#: ../src/gnome_ui.c:2985 ../src/gnome_ui.c:2986
 msgid "Attach selection frame"
 msgstr "Aggancia l'area di selezione"
 
@@ -956,9 +954,9 @@ msgid "Error accessing sound input from %s\n"
 msgstr "Errore di accesso al dispositivo sonoro da %s\n"
 
 #: ../src/main.c:80
-#, fuzzy, c-format
+#, c-format
 msgid "Usage: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"
-msgstr "Uso: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+msgstr "Uso: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"
 
 #: ../src/main.c:83
 #, c-format
@@ -1149,9 +1147,9 @@ msgid "Audio support not present in this binary.\n"
 msgstr "Supporto audio non presente in questo binario.\n"
 
 #: ../src/main.c:465 ../src/main.c:559 ../src/main.c:620
-#, fuzzy, c-format
+#, c-format
 msgid "%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"
-msgstr "%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+msgstr "%s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003-07\n"
 
 #: ../src/main.c:469 ../src/main.c:495
 #, c-format
@@ -1396,19 +1394,16 @@ msgid "#general options ...\n"
 msgstr "#opzioni generali...\n"
 
 #: ../src/options.c:75
-#, fuzzy, c-format
+#, c-format
 msgid "# default capture mode (0 = single-frame, 1 = multi-frame)\n"
 msgstr ""
 "# modalità di acquisizione predefinita (0 = fotogramma singolo, 1 = "
 "fotogrammi multipli\n"
-"default_mode: %i\n"
 
 #: ../src/options.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "# capture source\n"
-msgstr ""
-"# fonte di acquisizione\n"
-"fonte: %s\n"
+msgstr "# fonte di acquisizione\n"
 
 #: ../src/options.c:86
 #, c-format
@@ -1442,23 +1437,19 @@ msgstr ""
 "disabilitata, o \"1\" per abilitata.\n"
 
 #: ../src/options.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "# hide GUI\n"
-msgstr ""
-"# nascondi l'interfaccia grafica\n"
-"nogui: %d\n"
+msgstr "# nascondi l'interfaccia grafica\n"
 
 #: ../src/options.c:99
 #, c-format
 msgid "# hide frame around capture area\n"
-msgstr ""
+msgstr "# nascondi la cornice intorno all'area di acquisizione\n"
 
 #: ../src/options.c:102
-#, fuzzy, c-format
+#, c-format
 msgid "# device to grab audio from\n"
-msgstr ""
-"# dispositivo di cattura dell'audio\n"
-"audio_in: %s\n"
+msgstr "# dispositivo di cattura dell'audio\n"
 
 #: ../src/options.c:108
 #, c-format
@@ -1470,11 +1461,9 @@ msgstr ""
 "= bianco, 2 = nero\n"
 
 #: ../src/options.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "# should cap_geometry be saved to prefs?\n"
-msgstr ""
-"# Si vuole salvare cap_geometry nelle preferenze?\n"
-"save_geometry: %d\n"
+msgstr "# si vuole salvare cap_geometry nelle preferenze?\n"
 
 #: ../src/options.c:114
 #, c-format
@@ -1484,28 +1473,22 @@ msgstr "# area da acquisire come in --capture_geometry\n"
 #: ../src/options.c:122
 #, c-format
 msgid "# locked frame follows mouse not window\n"
-msgstr ""
+msgstr "# la cornice bloccata segue il mouse non la finestra\n"
 
 #: ../src/options.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "# show time rather than frame count\n"
-msgstr ""
-"# mostra tempo al posto del conteggio dei fotogrammi\n"
-"show_time: %d\n"
+msgstr "# mostra tempo al posto del conteggio dei fotogrammi\n"
 
 #: ../src/options.c:129
-#, fuzzy, c-format
+#, c-format
 msgid "# toggle autocontinue (0/1) \n"
-msgstr ""
-"# commuta continuazione automatica (0/1) \n"
-"auto_continue: %i\n"
+msgstr "# commuta continuazione automatica (0/1) \n"
 
 #: ../src/options.c:132
-#, fuzzy, c-format
+#, c-format
 msgid "# always show results dialog (0/1)\n"
-msgstr ""
-"# mostra sempre la finestra dei risultati (0/1) \n"
-"always_show_results: %i\n"
+msgstr "# mostra sempre la finestra dei risultati (0/1) \n"
 
 #: ../src/options.c:136
 #, c-format
@@ -1563,11 +1546,9 @@ msgstr ""
 "il codificatore\n"
 
 #: ../src/options.c:210
-#, fuzzy, c-format
+#, c-format
 msgid "# audio codec (for future use)\n"
-msgstr ""
-"# codificatore audio (per usi futuri)\n"
-"sf_au_codec: %s\n"
+msgstr "# codificatore audio (per usi futuri)\n"
 
 #: ../src/options.c:214 ../src/options.c:296
 #, c-format
@@ -1580,18 +1561,14 @@ msgstr ""
 "\"30000/10001\"\n"
 
 #: ../src/options.c:217 ../src/options.c:299
-#, fuzzy, c-format
+#, c-format
 msgid "# max time (0 = unlimited)\n"
-msgstr ""
-"# tempo massimo (0 = illimitato)\n"
-"sf_max_time: %i\n"
+msgstr "# tempo massimo (0 = illimitato)\n"
 
 #: ../src/options.c:219 ../src/options.c:301
-#, fuzzy, c-format
+#, c-format
 msgid "# max frames (0 = unlimited)\n"
-msgstr ""
-"# num. massimo di fotogrammi (0 = illimitato)\n"
-"sf_max_frames: %d\n"
+msgstr "# num. massimo di fotogrammi (0 = illimitato)\n"
 
 #: ../src/options.c:221
 #, c-format
@@ -1599,32 +1576,24 @@ msgid "# number to start counting individual frames from\n"
 msgstr "# numero dal quale iniziare il conteggio dei singoli fotogrammi\n"
 
 #: ../src/options.c:223 ../src/options.c:307
-#, fuzzy, c-format
+#, c-format
 msgid "# quality (JPEG/MPEG)\n"
-msgstr ""
-"# qualità (JPEG/MPEG)\n"
-"sf_quality: %d\n"
+msgstr "# qualità (JPEG/MPEG)\n"
 
 #: ../src/options.c:225
-#, fuzzy, c-format
+#, c-format
 msgid "# toggle audio capture (0/1) (for future use)\n"
-msgstr ""
-"# commuta l'acquisizione audio (0/1) (per usi futuri)\n"
-"sf_audio: 0\n"
+msgstr "# commuta acquisizione audio (0/1) (per usi futuri)\n"
 
 #: ../src/options.c:227
-#, fuzzy, c-format
+#, c-format
 msgid "# sample rate for audio capture (for future use)\n"
-msgstr ""
-"# campionamento per l'acquisizione audio (per usi futuri)\n"
-"sf_audio_rate: 0\n"
+msgstr "# campionamento per l'acquisizione audio (per usi futuri)\n"
 
 #: ../src/options.c:229
-#, fuzzy, c-format
+#, c-format
 msgid "# bit rate for audio capture (for future use)\n"
-msgstr ""
-"# bitrate per l'acquisizione audio (per usi futuri)\n"
-"sf_audio_bits: 0\n"
+msgstr "# bitrate per l'acquisizione audio (per usi futuri)\n"
 
 #: ../src/options.c:233
 #, c-format
@@ -1671,21 +1640,19 @@ msgstr ""
 "futuri)\n"
 
 #: ../src/options.c:310
-#, fuzzy, c-format
+#, c-format
 msgid "# toggle audio capture (0/1)\n"
-msgstr ""
-"# commuta acquisizione audio (0/1)\n"
-"mf_audio: %i\n"
+msgstr "# commuta acquisizione audio (0/1)\n"
 
 #: ../src/options.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "# sample rate for audio capture\n"
-msgstr "[--audio_rate #] campionamento per l'acquisizione audio\n"
+msgstr "# campionamento per l'acquisizione audio\n"
 
 #: ../src/options.c:315
-#, fuzzy, c-format
+#, c-format
 msgid "# bit rate for audio capture\n"
-msgstr "[--audio_bits #] bitrate per l'acquisizione audio\n"
+msgstr "# bitrate per l'acquisizione audio\n"
 
 #: ../src/options.c:317
 #, c-format
@@ -1714,14 +1681,13 @@ msgstr ""
 "ripristino la visualizzazione dell'interfaccia grafica.\n"
 
 #: ../src/options.c:441
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "reading unsupported noframe preferences from options file\n"
 "resetting to frame not hidden\n"
 msgstr ""
-"lettura di impostazioni dell'interfaccia grafica non supportate dal file "
-"delle opzioni\n"
-"ripristino la visualizzazione dell'interfaccia grafica.\n"
+"lettura di impostazioni noframe non supportate dal file delle opzioni\n"
+"ripristino fotgrammi non nascosti.\n"
 
 #: ../src/options.c:460
 #, c-format
@@ -1734,14 +1700,13 @@ msgstr ""
 "ripristino il non salvataggio della geometria di acquisizione.\n"
 
 #: ../src/options.c:471
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "reading unsupported follow_mouse preferences from options file\n"
 "resetting lock to follow control window\n"
 msgstr ""
-"lettura di impostazioni dell'interfaccia grafica non supportate dal file "
-"delle opzioni\n"
-"ripristino la visualizzazione dell'interfaccia grafica.\n"
+"lettura di impostazioni follow_mouse non supportate dal file delle opzioni\n"
+"ripristino il blocco per seguire la finestra di controllo.\n"
 
 #: ../src/options.c:487
 #, c-format
@@ -2080,29 +2045,29 @@ msgid "Action:"
 msgstr "Azione:"
 
 #: ../src/xvidcap-dbus-client.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Usage: %s, ver %s, khb (c) 2003-07\n"
-msgstr "Uso: %s, ver %s, (c) rasca, berlin 1997,98,99, khb (c) 2003,04,05,06\n"
+msgstr "Uso: %s, ver %s, khb (c) 2003-07\n"
 
 #: ../src/xvidcap-dbus-client.c:63
 #, c-format
 msgid "[--action #]      action to perform (\"start\"|\"stop\"|\"pause\")\n"
-msgstr ""
+msgstr "[--action #]      azione da eseguire (\"start\"|\"stop\"|\"pause\")\n"
 
 #: ../src/xvidcap-dbus-client.c:126
 #, c-format
 msgid "Could not send start command to xvidcap: %s"
-msgstr ""
+msgstr "Impossibile inivare il comando start a xvidcap: %s"
 
 #: ../src/xvidcap-dbus-client.c:134
 #, c-format
 msgid "Could not send stop command to xvidcap: %s"
-msgstr ""
+msgstr "Impossibile inivare il comando stop a xvidcap: %s"
 
 #: ../src/xvidcap-dbus-client.c:142
 #, c-format
 msgid "Could not pause/unpause xvidcap: %s"
-msgstr ""
+msgstr "Impossibile mettere in pausa xvidcap: %s"
 
 #: ../src/gnome-xvidcap.glade.h:1
 msgid "(select)"
@@ -2229,9 +2194,8 @@ msgid "C_ommands"
 msgstr "C_omandi"
 
 #: ../src/gnome-xvidcap.glade.h:32
-#, fuzzy
 msgid "Capture Area Follows Mouse"
-msgstr "L'area di acquisizione eccede le dimensioni dello schermo"
+msgstr "L'area di acquisizione segue il mouse"
 
 #: ../src/gnome-xvidcap.glade.h:33
 msgid "Capture Results"
@@ -2409,9 +2373,8 @@ msgid "G_eneral"
 msgstr "G_enerale"
 
 #: ../src/gnome-xvidcap.glade.h:72
-#, fuzzy
 msgid "Hide Frame"
-msgstr "Fotogramma singolo"
+msgstr "Nascondi cornice"
 
 #: ../src/gnome-xvidcap.glade.h:73
 msgid "Increment the counter for frame numbering by the number provided."
@@ -2558,7 +2521,7 @@ msgstr ""
 
 #: ../src/gnome-xvidcap.glade.h:108
 msgid "Show Frame"
-msgstr ""
+msgstr "Mostra cornice"
 
 #: ../src/gnome-xvidcap.glade.h:109
 msgid "Show this dialog next time"

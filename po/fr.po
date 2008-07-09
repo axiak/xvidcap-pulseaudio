@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-26 22:58+0200\n"
+"POT-Creation-Date: 2008-07-09 09:26+0200\n"
 "PO-Revision-Date: 2008-04-15 20:45-0500\n"
 "Last-Translator: Jacques Blouin <jacdex@gmail.com>\n"
 "Language-Team: French\n"
@@ -814,7 +814,7 @@ msgstr "ACTION:"
 # the following are long codec names
 #
 #: ../src/codecs.c:100 ../src/codecs.c:269 ../src/codecs.c:497
-#: ../src/gnome_ui.c:828
+#: ../src/gnome_ui.c:940
 msgid "NONE"
 msgstr "AUCUN"
 
@@ -976,11 +976,11 @@ msgstr "L`orientation de la boîte."
 msgid "C_apture"
 msgstr "C_apture"
 
-#: ../src/gnome_ui.c:770
+#: ../src/gnome_ui.c:882
 msgid "Error Capturing"
 msgstr "Erreur lors de la Capture"
 
-#: ../src/gnome_ui.c:772
+#: ../src/gnome_ui.c:884
 #, c-format
 msgid ""
 "File used: %s\n"
@@ -989,15 +989,15 @@ msgstr ""
 "Fichier utilisé: %s\n"
 "Erreur: %s"
 
-#: ../src/gnome_ui.c:1416 ../src/gnome_ui.c:1417
+#: ../src/gnome_ui.c:1528 ../src/gnome_ui.c:1529
 msgid "Move cursor back one frame"
 msgstr "Déplacer le curseur à l`image précédente"
 
-#: ../src/gnome_ui.c:1426 ../src/gnome_ui.c:1427
+#: ../src/gnome_ui.c:1538 ../src/gnome_ui.c:1539
 msgid "Move cursor to next frame"
 msgstr "Déplacer le curseur à l`image suivante"
 
-#: ../src/gnome_ui.c:1434 ../src/gnome_ui.c:1436
+#: ../src/gnome_ui.c:1546 ../src/gnome_ui.c:1548
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -1005,23 +1005,23 @@ msgstr ""
 "Clique Gauche: Réinitialiser le compteur d`images et le nom de fichier\n"
 "Clique Droit: Menu Contextuel"
 
-#: ../src/gnome_ui.c:1441 ../src/gnome_ui.c:1442
+#: ../src/gnome_ui.c:1553 ../src/gnome_ui.c:1554
 msgid "Edit current individual frame"
 msgstr "Éditer l`image individuelle actuelle"
 
-#: ../src/gnome_ui.c:1447 ../src/gnome_ui.c:1448
+#: ../src/gnome_ui.c:1559 ../src/gnome_ui.c:1560
 msgid "Capture single frame"
 msgstr "Capturer image par image"
 
-#: ../src/gnome_ui.c:1472 ../src/gnome_ui.c:1473
+#: ../src/gnome_ui.c:1584 ../src/gnome_ui.c:1585
 msgid "Move cursor to previous movie"
 msgstr "Déplacer le curseur au film précédent"
 
-#: ../src/gnome_ui.c:1475 ../src/gnome_ui.c:1476
+#: ../src/gnome_ui.c:1587 ../src/gnome_ui.c:1588
 msgid "Move cursor to next movie"
 msgstr "Déplacer le curseur au film suivant"
 
-#: ../src/gnome_ui.c:1480 ../src/gnome_ui.c:1482
+#: ../src/gnome_ui.c:1592 ../src/gnome_ui.c:1594
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -1029,16 +1029,16 @@ msgstr ""
 "Clique Gauche: Réinitialiser le compteur de films à zéro\n"
 "Clique Droit: Menu Contextuel"
 
-#: ../src/gnome_ui.c:1487 ../src/gnome_ui.c:1488
+#: ../src/gnome_ui.c:1599 ../src/gnome_ui.c:1600
 msgid "Edit current movie"
 msgstr "Editer le film actuel"
 
-#: ../src/gnome_ui.c:2838 ../src/gnome_ui.c:2839
+#: ../src/gnome_ui.c:2952 ../src/gnome_ui.c:2953
 #: ../src/gnome-xvidcap.glade.h:48
 msgid "Detach selection frame"
 msgstr "Détacher le cadre de sélection"
 
-#: ../src/gnome_ui.c:2862 ../src/gnome_ui.c:2863
+#: ../src/gnome_ui.c:2985 ../src/gnome_ui.c:2986
 msgid "Attach selection frame"
 msgstr "Attacher le cadre de sélection"
 

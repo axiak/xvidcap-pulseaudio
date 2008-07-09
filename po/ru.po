@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Xvidcap HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-26 22:58+0200\n"
+"POT-Creation-Date: 2008-07-09 09:26+0200\n"
 "PO-Revision-Date: 2007-05-30 00:13+0400\n"
 "Last-Translator: Alexander Kraev <alexander.kraev@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -683,7 +683,7 @@ msgid "ACTION:"
 msgstr "Действие:"
 
 #: ../src/codecs.c:100 ../src/codecs.c:269 ../src/codecs.c:497
-#: ../src/gnome_ui.c:828
+#: ../src/gnome_ui.c:940
 msgid "NONE"
 msgstr "NONE"
 
@@ -843,26 +843,26 @@ msgstr ""
 msgid "C_apture"
 msgstr "Запись"
 
-#: ../src/gnome_ui.c:770
+#: ../src/gnome_ui.c:882
 msgid "Error Capturing"
 msgstr ""
 
-#: ../src/gnome_ui.c:772
+#: ../src/gnome_ui.c:884
 #, c-format
 msgid ""
 "File used: %s\n"
 "Error: %s"
 msgstr ""
 
-#: ../src/gnome_ui.c:1416 ../src/gnome_ui.c:1417
+#: ../src/gnome_ui.c:1528 ../src/gnome_ui.c:1529
 msgid "Move cursor back one frame"
 msgstr "Перейти к предыдущему кадру"
 
-#: ../src/gnome_ui.c:1426 ../src/gnome_ui.c:1427
+#: ../src/gnome_ui.c:1538 ../src/gnome_ui.c:1539
 msgid "Move cursor to next frame"
 msgstr "Перейти к следующему кадру"
 
-#: ../src/gnome_ui.c:1434 ../src/gnome_ui.c:1436
+#: ../src/gnome_ui.c:1546 ../src/gnome_ui.c:1548
 msgid ""
 "Left Click: Reset frame counter and filename\n"
 "Right Click: Popup Menu"
@@ -870,23 +870,23 @@ msgstr ""
 "Левая клавиша мыши: обнулить счетчик кадров и имя файла\n"
 "Правая клавиша мыши: всплывающие меню"
 
-#: ../src/gnome_ui.c:1441 ../src/gnome_ui.c:1442
+#: ../src/gnome_ui.c:1553 ../src/gnome_ui.c:1554
 msgid "Edit current individual frame"
 msgstr "Редактировать текущий кадр"
 
-#: ../src/gnome_ui.c:1447 ../src/gnome_ui.c:1448
+#: ../src/gnome_ui.c:1559 ../src/gnome_ui.c:1560
 msgid "Capture single frame"
 msgstr "Захват одного кадра"
 
-#: ../src/gnome_ui.c:1472 ../src/gnome_ui.c:1473
+#: ../src/gnome_ui.c:1584 ../src/gnome_ui.c:1585
 msgid "Move cursor to previous movie"
 msgstr "Перейти к предыдущему видео"
 
-#: ../src/gnome_ui.c:1475 ../src/gnome_ui.c:1476
+#: ../src/gnome_ui.c:1587 ../src/gnome_ui.c:1588
 msgid "Move cursor to next movie"
 msgstr "Перейти к следующему видео"
 
-#: ../src/gnome_ui.c:1480 ../src/gnome_ui.c:1482
+#: ../src/gnome_ui.c:1592 ../src/gnome_ui.c:1594
 msgid ""
 "Left Click: Reset movie counter to zero\n"
 "Right Click: Popup Menu"
@@ -894,16 +894,16 @@ msgstr ""
 "Левая клавиша мыши: обнулить счетчик видео\n"
 "Правая клавиша мыши: всплывающие меню"
 
-#: ../src/gnome_ui.c:1487 ../src/gnome_ui.c:1488
+#: ../src/gnome_ui.c:1599 ../src/gnome_ui.c:1600
 msgid "Edit current movie"
 msgstr "Редактировать текущее видео"
 
-#: ../src/gnome_ui.c:2838 ../src/gnome_ui.c:2839
+#: ../src/gnome_ui.c:2952 ../src/gnome_ui.c:2953
 #: ../src/gnome-xvidcap.glade.h:48
 msgid "Detach selection frame"
 msgstr "Отсоединить область для захвата"
 
-#: ../src/gnome_ui.c:2862 ../src/gnome_ui.c:2863
+#: ../src/gnome_ui.c:2985 ../src/gnome_ui.c:2986
 msgid "Attach selection frame"
 msgstr "Присоединить область для захвата"
 
