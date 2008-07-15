@@ -2,6 +2,12 @@
 2008-07-15  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	src: gnome_ui.c, gnome_frame.c, frame.c: fix for the frame
 		repositioning issue from bug # 1707493
+	src/gnome_ui.c: add the lock toggle to the GUI elements
+		reset according to the current state of the model.
+		This prepares for starting xvidcap with the lock
+		disabled. For now, the only way to effect that is 
+		to change the start value for xvc_frame_lock in
+		src/frame.c to 0 and recompile.
 
 2008-07-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	doc/xvidcap/de/figures/menu-show-frame.png: added

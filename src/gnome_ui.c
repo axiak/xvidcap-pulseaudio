@@ -1664,6 +1664,19 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     }
 #endif     // USE_FFMPEG
 
+    //
+    // the frame lock
+    //
+    // make the lock be unselected if the lock is off
+    w = NULL;
+    w = glade_xml_get_widget (mwxml, "xvc_ctrl_lock_toggle");
+    g_return_if_fail (w != NULL);
+    if (xvc_is_frame_locked()) {
+        gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), TRUE);
+    } else {
+        gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), FALSE);
+    }
+
 #undef DEBUGFUNCTION
 }
 
