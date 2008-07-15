@@ -34,7 +34,7 @@
 #endif     // DOXYGEN_SHOULD_SKIP_THIS
 
 /** \brief stores the state of the frame lock */
-static int xvc_frame_lock;
+static int xvc_frame_lock = 1;
 
 /** \brief stores the area enclosed by the frame as an XRectangle */
 static XRectangle xvc_frame_rectangle;

@@ -357,6 +357,12 @@ xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect)
                      DEBUGFILE, DEBUGFUNCTION);
         }
     }
+
+#if DEBUG
+    printf("%s %s: Your window manager is: %s\n",
+                     DEBUGFILE, DEBUGFUNCTION, wm_name_str);
+#endif // DEBUG
+
     // Right now only wm's that I know of performing 3d compositing
     // are beryl and compiz. names can be compiz for compiz and
     // beryl/beryl-co/beryl-core for beryl (so it's strncmp )
@@ -385,6 +391,10 @@ xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect)
                     rect->y = wy;
                     rect->width = ww;
                     rect->height = wh;
+#if DEBUG
+    printf("%s %s: got wx %i wy %i, ww %i, wh %i, wb %i, wd %i\n",
+                     DEBUGFILE, DEBUGFUNCTION, wx, wy, ww, wh, wb, wd);
+#endif // DEBUG
                 }
 
                 /* _NET_FRAME_EXTENTS format is left, right, top, bottom */
@@ -392,11 +402,22 @@ xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect)
                 rect->y -= ldata[2];
                 rect->width += ldata[0] + ldata[1];
                 rect->height += ldata[2] + ldata[3];
+#if DEBUG
+    printf("%s %s: got x %i y %i w %i h %i \n",
+                     DEBUGFILE, DEBUGFUNCTION, ldata[0], ldata[2], ldata[0] + ldata[1],
+		     ldata[2] + ldata[3]);
+#endif // DEBUG
             }
 
             if (data)
                 XFree (data);
         }
+
+#if DEBUG
+    printf("%s %s: got XA_CARDINAL %i, format %i, nitems %li, bytes %li, data %p\n",
+                     DEBUGFILE, DEBUGFUNCTION, (type_return == XA_CARDINAL ? 1: 0), 
+		     format_return, nitems_return, bytes_after_return, data);
+#endif // DEBUG
 
         if (wm_name_str)
             XFree (wm_name_str);

@@ -1,4 +1,8 @@
 
+2008-07-15  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	src: gnome_ui.c, gnome_frame.c, frame.c: fix for the frame
+		repositioning issue from bug # 1707493
+
 2008-07-13  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	doc/xvidcap/de/figures/menu-show-frame.png: added
 		image for German doc l10n
