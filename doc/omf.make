@@ -44,7 +44,7 @@ install-data-local-omf:
 	done
 
 #install-data-hook-omf:
-install-doc-omf:
+install-doc-omf: omf install-data-local-omf
 	-scrollkeeper-update -p $(scrollkeeper_localstate_dir) -o $(DESTDIR)$(omf_dest_dir)
 
 uninstall-local-omf:

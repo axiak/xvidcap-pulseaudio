@@ -1,4 +1,12 @@
 
+2008-08-24  Karl H. Beckers  <karl.h.beckers@gmx.net>
+	configure.in, doc: xmldocs.make, man/man.make, omf.make, 
+		xvidcap/C/xvidcap-C.omf, xvidcap/es/xvidcap-es.omf, 
+		xvidcap/de/xvidcap-de.omf, 
+		xvidcap/it/xvidcap-it.omf: removed scrollkeeper
+		dependency before "make install-doc"
+	po: en.po, es.po, de.po, it.po: automatic update
+
 2008-07-15  Karl H. Beckers  <karl.h.beckers@gmx.net>
 	src: gnome_ui.c, gnome_frame.c, frame.c: fix for the frame
 		repositioning issue from bug # 1707493

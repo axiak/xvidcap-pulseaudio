@@ -44,11 +44,11 @@ xml_files = $(entities) $(docname).xml
 omf_dir=$(top_srcdir)/omf-install
 
 EXTRA_DIST = $(xml_files) $(omffile)
-CLEANFILES = omf_timestamp
+CLEANFILES = omf_timestamp $(omffile).out
 
 include $(top_srcdir)/doc/omf.make
 
-all: omf
+#all: omf
 
 $(docname).xml: $(entities)
 	-ourdir=`pwd`;  \
@@ -64,9 +64,9 @@ app-dist-hook:
 	  done \
 	fi
 
-install-data-local: omf install-data-local-omf
+#install-data-local: omf install-data-local-omf
 #install-doc-local: omf 
-	if test x$(XML2PO) = xno ; then \
+install-doc-local: if test x$(XML2PO) = xno ; then \
 		echo "Cannot find xml2po to create current, translated user manual. Trying to use previous translation" ; \
 	else \
 		for i in $(xml_files) ; do \

@@ -66,4 +66,8 @@ uninstall:
 	fi ; \
 	done
 
+install-doc:
+
+uninstall-doc:
+
 

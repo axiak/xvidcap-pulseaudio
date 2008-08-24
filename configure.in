@@ -33,7 +33,7 @@ AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
 
 AC_PATH_PROG(SK_CONFIG,scrollkeeper-config,no)
 if test x$SK_CONFIG = xno; then
-  AC_MSG_ERROR(Couldn't find scrollkeeper-config. Please install the scrollkeeper package: http://scrollkeeper.sourceforge.net)
+  AC_MSG_NOTICE(Couldn't find scrollkeeper-config. Please install the scrollkeeper package: http://scrollkeeper.sourceforge.net if you plan to install the documentation through the install-doc target.)
 fi
 
 # here follows a hack to get the docs installed in a separate, recursive install-doc target
