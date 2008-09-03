@@ -68,27 +68,39 @@ typedef enum
     CODEC_PPM,
     CODEC_PNG,
     CODEC_JPEG,
+#ifndef DISABLE_PATENTED
     CODEC_MPEG1,
     CODEC_MJPEG,
     CODEC_MPEG4,
     CODEC_MSDIV2,
     CODEC_MSDIV3,
+#endif     // DISABLE_PATENTED
     CODEC_FFV1,
+#ifndef DISABLE_PATENTED
     CODEC_FLV,
     CODEC_FLASHSV,
+#endif     // DISABLE_PATENTED
     CODEC_DV,
+#ifndef DISABLE_PATENTED
     CODEC_MPEG2,
+#endif     // DISABLE_PATENTED
 #ifdef HAVE_LIBTHEORA
     CODEC_THEORA,
 #endif     // HAVE_LIBTHEORA
+#ifndef DISABLE_PATENTED
     CODEC_SVQ1,
+#endif     // DISABLE_PATENTED
 #endif     // USE_FFMPEG
     NUMCODECS
 } XVC_CodecID;
 
 #ifdef USE_FFMPEG
 /** \brief CODEC_MF is the first codec for multi-frame capture */
+#ifndef DISABLE_PATENTED
 #define CODEC_MF CODEC_MPEG1
+#else      // DISABLE_PATENTED
+#define CODEC_MF CODEC_DV
+#endif     // DISABLE_PATENTED
 #else      // USE_FFMPEG
 #define CODEC_ID_NONE CODEC_NONE
 #endif     // USE_FFMPEG
@@ -117,13 +129,17 @@ typedef enum
 {
     AU_CODEC_NONE,
 #ifdef HAVE_FFMPEG_AUDIO
+#ifndef DISABLE_PATENTED
     AU_CODEC_MP2,
 #ifdef HAVE_LIBMP3LAME
     AU_CODEC_MP3,
 #endif     // HAVE_LIBMP3LAME
+#endif     // DISABLE_PATENTED
     AU_CODEC_VORBIS,
+#ifndef DISABLE_PATENTED
     AU_CODEC_AC3,
     AU_CODEC_PCM16,
+#endif     // DISABLE_PATENTED
 #endif     // HAVE_FFMPEG_AUDIO
     NUMAUCODECS
 } XVC_AuCodecID;
@@ -152,16 +168,21 @@ typedef enum
     CAP_PPM,
     CAP_PNG,
     CAP_JPG,
+#ifndef DISABLE_PATENTED
     CAP_AVI,
     CAP_DIVX,
     CAP_ASF,
     CAP_FLV,
     CAP_SWF,
+#endif     // DISABLE_PATENTED
     CAP_DV,
+#ifndef DISABLE_PATENTED
     CAP_MPG,
     CAP_SVCD,
     CAP_DVD,
     CAP_MOV,
+#endif     // DISABLE_PATENTED
+    CAP_OGG,
 #endif     // USE_FFMPEG
     NUMCAPS
 } XVC_FFormatID;
@@ -170,7 +191,11 @@ typedef enum
 /** \brief CAP_FFM is the first file format using libav* */
 #define CAP_FFM CAP_PGM
 /** \brief CAP_MF is the first file format for multi-frame capture */
+#ifndef DISABLE_PATENTED
 #define CAP_MF CAP_AVI
+#else      // DISABLE_PATENTED
+#define CAP_MF CAP_DV
+#endif     // DISABLE_PATENTED
 #endif     // USE_FFMPEG
 
 /** \brief struct containing file format properties */

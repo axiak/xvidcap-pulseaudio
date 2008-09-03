@@ -298,7 +298,6 @@ warning_submit ()
 #undef DEBUGFUNCTION
 }
 
-
 /**
  * \brief retrieves the main controls window's extent rectangle. This is needed
  *      because of bug # 524110 in gdk_window_get_frame_extents.
@@ -357,11 +356,10 @@ xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect)
                      DEBUGFILE, DEBUGFUNCTION);
         }
     }
-
 #if DEBUG
-    printf("%s %s: Your window manager is: %s\n",
-                     DEBUGFILE, DEBUGFUNCTION, wm_name_str);
-#endif // DEBUG
+    printf ("%s %s: Your window manager is: %s\n",
+            DEBUGFILE, DEBUGFUNCTION, wm_name_str);
+#endif     // DEBUG
 
     // Right now only wm's that I know of performing 3d compositing
     // are beryl and compiz. names can be compiz for compiz and
@@ -392,9 +390,10 @@ xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect)
                     rect->width = ww;
                     rect->height = wh;
 #if DEBUG
-    printf("%s %s: got wx %i wy %i, ww %i, wh %i, wb %i, wd %i\n",
-                     DEBUGFILE, DEBUGFUNCTION, wx, wy, ww, wh, wb, wd);
-#endif // DEBUG
+                    printf
+                        ("%s %s: got wx %i wy %i, ww %i, wh %i, wb %i, wd %i\n",
+                         DEBUGFILE, DEBUGFUNCTION, wx, wy, ww, wh, wb, wd);
+#endif     // DEBUG
                 }
 
                 /* _NET_FRAME_EXTENTS format is left, right, top, bottom */
@@ -403,21 +402,21 @@ xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect)
                 rect->width += ldata[0] + ldata[1];
                 rect->height += ldata[2] + ldata[3];
 #if DEBUG
-    printf("%s %s: got x %i y %i w %i h %i \n",
-                     DEBUGFILE, DEBUGFUNCTION, ldata[0], ldata[2], ldata[0] + ldata[1],
-		     ldata[2] + ldata[3]);
-#endif // DEBUG
+                printf ("%s %s: got x %i y %i w %i h %i \n",
+                        DEBUGFILE, DEBUGFUNCTION, ldata[0], ldata[2],
+                        ldata[0] + ldata[1], ldata[2] + ldata[3]);
+#endif     // DEBUG
             }
 
             if (data)
                 XFree (data);
         }
-
 #if DEBUG
-    printf("%s %s: got XA_CARDINAL %i, format %i, nitems %li, bytes %li, data %p\n",
-                     DEBUGFILE, DEBUGFUNCTION, (type_return == XA_CARDINAL ? 1: 0), 
-		     format_return, nitems_return, bytes_after_return, data);
-#endif // DEBUG
+        printf
+            ("%s %s: got XA_CARDINAL %i, format %i, nitems %li, bytes %li, data %p\n",
+             DEBUGFILE, DEBUGFUNCTION, (type_return == XA_CARDINAL ? 1 : 0),
+             format_return, nitems_return, bytes_after_return, data);
+#endif     // DEBUG
 
         if (wm_name_str)
             XFree (wm_name_str);
@@ -428,7 +427,6 @@ xvc_get_ctrl_frame_extents (GdkWindow * window, GdkRectangle * rect)
     }
 #undef DEBUGFUNCTION
 }
-
 
 #ifdef USE_FFMPEG
 /**
@@ -1671,7 +1669,7 @@ xvc_reset_ctrl_main_window_according_to_current_prefs ()
     w = NULL;
     w = glade_xml_get_widget (mwxml, "xvc_ctrl_lock_toggle");
     g_return_if_fail (w != NULL);
-    if (xvc_is_frame_locked()) {
+    if (xvc_is_frame_locked ()) {
         gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), TRUE);
     } else {
         gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), FALSE);
@@ -2979,7 +2977,7 @@ on_xvc_ctrl_lock_toggle_toggled (GtkToggleToolButton *
         XRectangle *frame_rectangle = NULL;
         GdkRectangle ctrl_rect;
         int x, y, height;
-        
+
         xvc_set_frame_locked (1);      /* button pressed = move frame with
                                         * control */
         gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (togglebutton), tooltips,
@@ -2998,13 +2996,13 @@ on_xvc_ctrl_lock_toggle_toggled (GtkToggleToolButton *
         gtk_window_get_size (GTK_WINDOW (xvc_ctrl_main_window), &pwidth,
                              &pheight);
 */
-        xvc_get_ctrl_frame_extents(GDK_WINDOW(xvc_ctrl_main_window->window),
-                &ctrl_rect);
+        xvc_get_ctrl_frame_extents (GDK_WINDOW (xvc_ctrl_main_window->window),
+                                    &ctrl_rect);
         x = ctrl_rect.x;
         y = ctrl_rect.y;
         height = ctrl_rect.height;
 //        width = ctrl_rect.width;
-        
+
         if (x < 0)
             x = 0;
         y += height + FRAME_OFFSET + FRAME_WIDTH;

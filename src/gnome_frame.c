@@ -161,7 +161,7 @@ do_reposition_control (GtkWidget * toplevel)
     if ((y - pheight - FRAME_WIDTH) >= 0) {
         gtk_window_move (GTK_WINDOW (toplevel), x, (y - pheight - FRAME_WIDTH));
     } else {
-        if (xvc_is_frame_locked()) {
+        if (xvc_is_frame_locked ()) {
             GladeXML *xml = NULL;
             GtkWidget *w = NULL;
 
@@ -171,7 +171,8 @@ do_reposition_control (GtkWidget * toplevel)
             w = glade_xml_get_widget (xml, "xvc_ctrl_lock_toggle");
             g_assert (w);
 
-            gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w), FALSE);
+            gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w),
+                                               FALSE);
         }
 
         if ((y + pheight + height + FRAME_WIDTH) < max_height) {
@@ -1196,15 +1197,14 @@ xvc_create_gtk_frame (GtkWidget * toplevel, int pwidth, int pheight,
         g_signal_connect (G_OBJECT (toplevel), "configure-event",
                           G_CALLBACK (on_gtk_frame_configure_event), NULL);
     }
-
     // only reposition
-    if (!(flags & FLG_NOGUI) && (px >= 0 || py >= 0) && xvc_is_frame_locked())
-       do_reposition_control (toplevel);
+    if (!(flags & FLG_NOGUI) && (px >= 0 || py >= 0) && xvc_is_frame_locked ())
+        do_reposition_control (toplevel);
 
 #if DEBUG
     printf ("%s %s: is frame locked: %i\n",
-            DEBUGFILE, DEBUGFUNCTION, xvc_is_frame_locked());
-#endif // DEBUG
+            DEBUGFILE, DEBUGFUNCTION, xvc_is_frame_locked ());
+#endif     // DEBUG
 
 #undef DEBUGFUNCTION
 }

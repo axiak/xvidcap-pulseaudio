@@ -1610,7 +1610,11 @@ error_16_action (XVC_ErrorListItem * err)
     if (err->app->current_mode == 0) {
         err->app->single_frame.target = CAP_XWD;
     } else {
+#ifndef DISABLE_PATENTED
         err->app->multi_frame.target = CAP_DIVX;
+#else      // DISABLE_PATENTED
+        err->app->multi_frame.target = CAP_OGG;
+#endif     // DISABLE_PATENTED
     }
 #else      // USE_FFMPEG
     err->app->current_mode = 0;
@@ -1633,7 +1637,11 @@ error_18_action (XVC_ErrorListItem * err)
 static void
 error_19_action (XVC_ErrorListItem * err)
 {
-    err->app->multi_frame.target = CAP_MPG;
+#ifndef DISABLE_PATENTED
+    err->app->multi_frame.target = CAP_DIVX;
+#else      // DISABLE_PATENTED
+    err->app->multi_frame.target = CAP_OGG;
+#endif     // DISABLE_PATENTED
 }
 
 static void
@@ -2021,7 +2029,7 @@ const XVC_Error xvc_errors[NUMERRORS] = {
      N_
      ("You selected an unknown or invalid file format for multi-frame capture. Check the --format-help option."),
      error_16_action,
-     N_("Reset to default format for multi-frame caputre (MPEG4)")
+     N_("Reset to default format for multi-frame caputre")
      },
     {
      18,

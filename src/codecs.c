@@ -141,6 +141,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      len_one_to_hundred_range,
      NULL,
      0},
+#ifndef DISABLE_PATENTED
     {
      "MPEG1",
      N_("MPEG 1"),
@@ -189,6 +190,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      len_mpeg4_range,
      NULL,
      0},
+#endif     // DISABLE_PATENTED
     {
      "FFV1",
      N_("FFmpeg Video 1"),
@@ -198,6 +200,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      len_one_to_hundred_range,
      NULL,
      0},
+#ifndef DISABLE_PATENTED
     {
      "FLASH_VIDEO",
      N_("Flash Video"),
@@ -217,6 +220,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      len_one_to_hundred_range,
      NULL,
      0},
+#endif     // DISABLE_PATENTED
     {
      "DV",
      N_("DV Video"),
@@ -226,6 +230,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      0,
      dv_fps,
      len_dv_fps},
+#ifndef DISABLE_PATENTED
     {
      "MPEG2",
      N_("MPEG2 Video"),
@@ -235,6 +240,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      0,
      mpeg1_fps,
      len_mpeg1_fps},
+#endif     // DISABLE_PATENTED
 #ifdef HAVE_LIBTHEORA
     {
      "THEORA",
@@ -247,6 +253,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      NULL,
      0},
 #endif     // HAVE_LIBTHEORA
+#ifndef DISABLE_PATENTED
     {
      "SVQ1",
      N_("Soerensen VQ 1"),
@@ -257,6 +264,7 @@ const XVC_Codec xvc_codecs[NUMCODECS] = {
      len_mpeg4_range,
      NULL,
      0}
+#endif     // DISABLE_PATENTED
 #endif     // USE_FFMPEG
 };
 
@@ -270,6 +278,7 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
      CODEC_ID_NONE}
 #ifdef USE_FFMPEG
 #ifdef HAVE_FFMPEG_AUDIO
+#ifndef DISABLE_PATENTED
     , {
        "MP2",
        N_("MPEG2"),
@@ -280,10 +289,12 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
        N_("MPEG2 Layer 3"),
        CODEC_ID_MP3}
 #endif     // HAVE_LIBMP3LAME
+#endif     // DISABLE_PATENTED
     , {
        "VORBIS",
        N_("Ogg Vorbis"),
        CODEC_ID_VORBIS}
+#ifndef DISABLE_PATENTED
     , {
        "AC3",
        N_("Dolby Digital AC-3"),
@@ -292,6 +303,7 @@ const XVC_AuCodec xvc_audio_codecs[NUMAUCODECS] = {
        "PCM16",
        N_("PCM"),
        CODEC_ID_PCM_S16LE}
+#endif     // DISABLE_PATENTED
 #endif     // HAVE_FFMPEG_AUDIO
 #endif     // USE_FFMPEG
 };
@@ -321,6 +333,7 @@ static const char *extension_jpg[] = { "jpg", "jpeg" };
 
 #define len_extension_jpg (sizeof(extension_jpg) / sizeof(char*))
 
+#ifndef DISABLE_PATENTED
 static const char *extension_avi[] = { "avi" };
 
 #define len_extension_avi (sizeof(extension_avi) / sizeof(char*))
@@ -340,11 +353,13 @@ static const char *extension_flv[] = { "flv", "flv1" };
 static const char *extension_swf[] = { "swf" };
 
 #define len_extension_swf (sizeof(extension_swf) / sizeof(char*))
+#endif     // DISABLE_PATENTED
 
 static const char *extension_dv[] = { "dv" };
 
 #define len_extension_dv (sizeof(extension_dv) / sizeof(char*))
 
+#ifndef DISABLE_PATENTED
 static const char *extension_m1v[] = { "m1v", "vcd" };
 
 #define len_extension_m1v (sizeof(extension_m1v) / sizeof(char*))
@@ -360,6 +375,11 @@ static const char *extension_dvd[] = { "vob", "dvd" };
 static const char *extension_mov[] = { "mov", "qt" };
 
 #define len_extension_mov (sizeof(extension_mov) / sizeof(char*))
+#endif     // DISABLE_PATENTED
+
+static const char *extension_ogg[] = { "ogg" };
+
+#define len_extension_ogg (sizeof(extension_ogg) / sizeof(char*))
 
 static const XVC_CodecID allowed_vid_codecs_pgm[] = { CODEC_PGM };
 
@@ -381,15 +401,21 @@ static const XVC_CodecID allowed_vid_codecs_jpg[] = { CODEC_JPEG };
 #define len_allowed_vid_codecs_jpg (sizeof(allowed_vid_codecs_jpg) / \
     sizeof(XVC_CodecID))
 
+static const XVC_CodecID allowed_vid_codecs_ogg[] = { CODEC_THEORA };
+
+#define len_allowed_vid_codecs_ogg (sizeof(allowed_vid_codecs_ogg) / \
+    sizeof(XVC_CodecID))
+
+#ifndef DISABLE_PATENTED
 static const XVC_CodecID allowed_vid_codecs_avi[] = {
     CODEC_MPEG1,
     CODEC_MJPEG,
     CODEC_MPEG4,
     CODEC_MSDIV2,
     CODEC_MPEG2,
-#ifdef HAVE_LIBTHEORA
+//#ifdef HAVE_LIBTHEORA
     CODEC_THEORA,
-#endif     // HAVE_LIBTHEORA
+//#endif     // HAVE_LIBTHEORA
     CODEC_DV,
     CODEC_FFV1
 };
@@ -414,10 +440,14 @@ static const XVC_CodecID allowed_vid_codecs_swf[] = { CODEC_FLV, CODEC_MJPEG };
     sizeof(XVC_CodecID))
 
 static const XVC_CodecID allowed_vid_codecs_dv[] = { CODEC_DV, CODEC_MJPEG };
+#else      // DISABLE_PATENTED
+static const XVC_CodecID allowed_vid_codecs_dv[] = { CODEC_DV };
+#endif     // DISABLE_PATENTED
 
 #define len_allowed_vid_codecs_dv (sizeof(allowed_vid_codecs_dv) / \
     sizeof(XVC_CodecID))
 
+#ifndef DISABLE_PATENTED
 static const XVC_CodecID allowed_vid_codecs_mpeg1[] = { CODEC_MPEG1 };
 
 #define len_allowed_vid_codecs_mpeg1 (sizeof(allowed_vid_codecs_mpeg1) / \
@@ -483,6 +513,15 @@ static const XVC_AuCodecID au_codecs_mp2[] = { AU_CODEC_MP2 };
 static const XVC_AuCodecID au_codecs_ac3[] = { AU_CODEC_AC3 };
 
 #define len_au_codecs_ac3 (sizeof(au_codecs_ac3) / \
+    sizeof(XVC_AuCodecID))
+
+#endif     // HAVE_FFMPEG_AUDIO
+#endif     // DISABLE_PATENTED
+#ifdef HAVE_FFMPEG_AUDIO
+
+static const XVC_AuCodecID allowed_au_codecs_ogg[] = { AU_CODEC_VORBIS };
+
+#define len_allowed_au_codecs_ogg (sizeof(allowed_au_codecs_ogg) / \
     sizeof(XVC_AuCodecID))
 
 #endif     // HAVE_FFMPEG_AUDIO
@@ -565,6 +604,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
      extension_jpg,
      len_extension_jpg},
+#ifndef DISABLE_PATENTED
     {
      "avi",
      N_("Microsoft Audio Video Interleaved File"),
@@ -674,6 +714,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
 #endif     // HAVE_FFMPEG_AUDIO
      extension_swf,
      len_extension_swf},
+#endif     // DISABLE_PATENTED
     {
      "dv",
      N_("DV Video Format"),
@@ -682,9 +723,15 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      allowed_vid_codecs_dv,
      len_allowed_vid_codecs_dv,
 #ifdef HAVE_FFMPEG_AUDIO
+#ifndef DISABLE_PATENTED
      AU_CODEC_MP2,
      au_codecs_mp2_and_pcm,
      len_au_codecs_mp2_and_pcm,
+#else      // DISABLE_PATENTED
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // DISABLE_PATENTED
 #else      // HAVE_FFMPEG_AUDIO
      AU_CODEC_NONE,
      NULL,
@@ -692,6 +739,7 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
 #endif     // HAVE_FFMPEG_AUDIO
      extension_dv,
      len_extension_dv},
+#ifndef DISABLE_PATENTED
     {
      "mpeg",
      N_("MPEG1 System Format (VCD)"),
@@ -763,7 +811,26 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      0,
 #endif     // HAVE_FFMPEG_AUDIO
      extension_mov,
-     len_extension_mov}
+     len_extension_mov},
+#endif     // DISABLE_PATENTED
+    {
+     "ogg",
+     N_("Ogg Format"),
+     "ogg",
+     CODEC_THEORA,
+     allowed_vid_codecs_ogg,
+     len_allowed_vid_codecs_ogg,
+#ifdef HAVE_FFMPEG_AUDIO
+     AU_CODEC_VORBIS,
+     allowed_au_codecs_ogg,
+     len_allowed_au_codecs_ogg,
+#else      // HAVE_FFMPEG_AUDIO
+     AU_CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_FFMPEG_AUDIO
+     extension_ogg,
+     len_extension_ogg}
 #endif     // USE_FFMPEG
 };
 

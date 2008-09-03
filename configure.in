@@ -239,6 +239,11 @@ dnl AC_ARG_ENABLE(libvorbis,AC_HELP_STRING([--enable-libvorbis],
 dnl 			[use libvorbis if found (default=disabled)]),
 dnl 			[ac_cv_enable_libvorbis=$enableval],
 dnl 			[ac_cv_enable_libvorbis=no])
+AC_ARG_ENABLE(patented,AC_HELP_STRING([--disable-patented],
+			[disable patented codecs and file formates (default=enabled)]),
+			[ac_cv_enable_patented=$enableval],
+			[ac_cv_enable_patented=yes])
+
 #########################################################
 #########################################################
 
@@ -286,9 +291,11 @@ AC_CHECK_LIB(m,pow,,echo "libm required by ffmpeg"; static_avcodec=no; static_av
 # check for libmp3lame et. al.
 ################################################################
 
-if test "${ac_cv_enable_libmp3lame}" = "yes"; then 
+if test "${ac_cv_enable_patented}" = "yes"; then 
+    if test "${ac_cv_enable_libmp3lame}" = "yes"; then 
 	AC_CHECK_LIB(mp3lame, lame_init,,
 					[echo "To use mp3 audio codecs you need liblame/liblame-dev"])
+    fi
 fi
 AM_CONDITIONAL(HAVE_LIBMP3LAME, test x$ac_cv_lib_mp3lame_lame_init = xyes)
 
@@ -350,9 +357,12 @@ dnl 	AC_CHECK_LIB_STATIC(avutil, av_rescale,,[unset ac_cv_lib_avutil_av_rescale]
 dnl 	static_avutil=$ac_my_static_avutil_save
 dnl fi
 
-test x$ac_cv_lib_mp3lame_lame_init = xyes && ac_my_ffmpeg_cfg_lib_switch="--enable-libmp3lame"
-dnl test x$ac_cv_lib_vorbisenc_vorbis_encode_init = xyes && ac_my_ffmpeg_cfg_lib_switch="${ac_my_ffmpeg_cfg_lib_switch} --enable-libvorbis"
-test x$ac_cv_lib_theora_theora_encode_init = xyes && ac_my_ffmpeg_cfg_lib_switch="${ac_my_ffmpeg_cfg_lib_switch} --enable-libogg --enable-libtheora"
+if test "${ac_cv_enable_patented}" = "yes"; then 
+    test x$ac_cv_lib_mp3lame_lame_init = xyes && ac_my_ffmpeg_cfg_lib_switch="--enable-libmp3lame"
+else
+    ac_my_ffmpeg_cfg_lib_switch="${ac_my_ffmpeg_cfg_lib_switch} --disable-decoders --enable-decoder=vorbis --disable-encoders --enable-encoder=vorbis --enable-encoder=libtheora --enable-encoder=dvvideo --disable-muxers --enable-muxer=ogg --enable-muxer=dv --disable-demuxers --enable-demuxer=ogg --disable-parsers --disable-protocol=rtp --disable-bsfs"
+fi
+test x$ac_cv_lib_theora_theora_encode_init = xyes && ac_my_ffmpeg_cfg_lib_switch="${ac_my_ffmpeg_cfg_lib_switch} --enable-libtheora"
 
 # if cache empty (not tested or failed) and want static avcodec (then it failed) ...
 if ( `test \( \( x${ac_cv_lib_avutil_av_rescale+set} = x \) -a \( x$static_avutil = xyes \) \)` ) ; then
@@ -528,7 +538,8 @@ test x${ac_cv_lib_Xfixes_XFixesGetCursorImage} = "xyes" &&
 AC_DEFINE([USE_XDAMAGE], [1])
 AH_TEMPLATE([USE_DBUS], [define if libdbus-1 and libdbus-glib-1 are usable])
 test x${ac_my_dbus_usable} = "xyes" && AC_DEFINE([USE_DBUS], [1])
-
+AH_TEMPLATE([DISABLE_PATENTED], [define if patented codecs/file formats should be disabled])
+test x${ac_cv_enable_patented} = "xno" && AC_DEFINE([DISABLE_PATENTED], [1])
 
 ################################################################
 ################################################################

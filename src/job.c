@@ -390,7 +390,7 @@ xvc_job_set_save_function (XVC_FFormatID type)
     if (type >= CAP_MF) {
         job->clean = xvc_ffmpeg_clean;
         if (job->targetCodec == CODEC_NONE) {
-            job->targetCodec = CODEC_MPEG1;
+            job->targetCodec = CODEC_MF;
         }
         job->get_colors = xvc_ffmpeg_get_color_table;
         job->save = xvc_ffmpeg_save_frame;
