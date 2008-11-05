@@ -423,7 +423,7 @@ test x`(uname -s)` = xSunOS && ac_my_avdevice_libs="-lz -lnsl -lsocket"
 AC_CHECK_LIB_STATIC(avdevice, avdevice_register_all,,[unset ac_cv_lib_avdevice_avdevice_register_all ; static_avdevice=no ; AC_CHECK_LIB(avdevice, avdevice_register_all,,,[$ac_my_avdevice_libs])],[$ac_my_avdevice_libs])
 
 # only use ffmpeg if ALL required libs are present
-if ( `test x$ac_cv_lib_avcodec_avcodec_encode_video = xyes -a x$ac_cv_lib_avformat_av_write_header = xyes -a x$ac_cv_lib_avutil_av_rescale = xyes -a x$ac_cv_lib_swscale_sws_scale = xyes` ) ; then
+if ( `test x$ac_cv_lib_avcodec_avcodec_encode_video = xyes -a x$ac_cv_lib_avformat_av_write_header = xyes -a x$ac_cv_lib_avutil_av_rescale = xyes -a x$ac_cv_lib_swscale_sws_scale = xyes` -a x$ac_cv_lib_avdevice_avdevice_register_all = xyes ) ; then
     ac_cv_lib_avcodec_avcodec_encode_video=yes
 else
     ac_cv_lib_avcodec_avcodec_encode_video=no
