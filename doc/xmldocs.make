@@ -66,7 +66,8 @@ app-dist-hook:
 
 #install-data-local: omf install-data-local-omf
 #install-doc-local: omf 
-install-doc-local: if test x$(XML2PO) = xno ; then \
+install-doc-local: 
+	if test x$(XML2PO) = xno ; then \
 		echo "Cannot find xml2po to create current, translated user manual. Trying to use previous translation" ; \
 	else \
 		for i in $(xml_files) ; do \
