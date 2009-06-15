@@ -1339,7 +1339,9 @@ guess_input_pix_fmt (const XImage * image, const ColorInfo * c_info)
         }
         break;
     case 32:
-        if (c_info->alpha_mask == 0xFF000000 && image->green_mask == 0xFF00) {
+        if ((c_info->alpha_mask == 0xFF000000 || c_info->alpha_mask == 0) && 
+                (image->red_mask == 0xFF0000 || image->red_mask == 0xFF) &&
+                image->green_mask == 0xFF00) {
             // byte order is relevant here, not endianness endianness is
             // handled by avcodec, but atm no such thing as having ABGR,
             // instead of ARGB in a word. Since we need this for
@@ -1707,7 +1709,8 @@ xvc_ffmpeg_save_frame (FILE * fp, XImage * image)
 
     /** \todo test if the special image conversion for Solaris is still
      *      necessary */
-    if (input_pixfmt == PIX_FMT_ARGB32 && job->c_info->alpha_mask == 0xFF000000
+    if (input_pixfmt == PIX_FMT_ARGB32 && 
+        (job->c_info->alpha_mask == 0xFF000000 || job->c_info->alpha_mask == 0)
         && image->red_mask == 0xFF && image->green_mask == 0xFF00
         && image->blue_mask == 0xFF0000) {
         myABGR32toARGB32 (image);

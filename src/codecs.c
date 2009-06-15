@@ -401,7 +401,9 @@ static const XVC_CodecID allowed_vid_codecs_jpg[] = { CODEC_JPEG };
 #define len_allowed_vid_codecs_jpg (sizeof(allowed_vid_codecs_jpg) / \
     sizeof(XVC_CodecID))
 
+#ifdef HAVE_LIBTHEORA
 static const XVC_CodecID allowed_vid_codecs_ogg[] = { CODEC_THEORA };
+#endif // HAVE_LIBTHEORA
 
 #define len_allowed_vid_codecs_ogg (sizeof(allowed_vid_codecs_ogg) / \
     sizeof(XVC_CodecID))
@@ -413,9 +415,9 @@ static const XVC_CodecID allowed_vid_codecs_avi[] = {
     CODEC_MPEG4,
     CODEC_MSDIV2,
     CODEC_MPEG2,
-//#ifdef HAVE_LIBTHEORA
+#ifdef HAVE_LIBTHEORA
     CODEC_THEORA,
-//#endif     // HAVE_LIBTHEORA
+#endif     // HAVE_LIBTHEORA
     CODEC_DV,
     CODEC_FFV1
 };
@@ -817,9 +819,15 @@ const XVC_FFormat xvc_formats[NUMCAPS] = {
      "ogg",
      N_("Ogg Format"),
      "ogg",
+#ifdef HAVE_LIBTHEORA
      CODEC_THEORA,
      allowed_vid_codecs_ogg,
      len_allowed_vid_codecs_ogg,
+#else
+     CODEC_NONE,
+     NULL,
+     0,
+#endif     // HAVE_LIBTHEORA
 #ifdef HAVE_FFMPEG_AUDIO
      AU_CODEC_VORBIS,
      allowed_au_codecs_ogg,
